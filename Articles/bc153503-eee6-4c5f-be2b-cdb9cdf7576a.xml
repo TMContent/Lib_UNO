@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>bc153503-eee6-4c5f-be2b-cdb9cdf7576a</Id>
+    <Id_History>57f0990c-06b9-4f94-ac1e-063773c7988d,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Lock Accounts After Consecutive Failed Login Attempts</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Lock Accounts After Consecutive Failed Login Attempts</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+<br /></p>
+  <h1>What to Do</h1>
+  <p>Lock users' accounts after consecutive failed login attempts.</p>
+  <h1>Why</h1>
+  <p>Multiple consecutive failed authentication attempts over a short period of time are a symptom used to detect an account under attack. Locking out the account can prevent&amp;nbsp;an attacker from compromising and accessing the account.</p>
+  <h1>When</h1>
+  <p>Your application should lock an account if the user has unsuccessfully tried to authenticate multiple times within a small period of time.</p>
+  <h1>How</h1>
+  <p>Use the following steps to successfully lock accounts after consecutive failed login attempts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Determine a lockout policy.&amp;nbsp;</strong>There are two variables to consider when determining a lockout policy:</p>
+      <ul>
+        <li>Number of allowed consecutive failed login attempts</li>
+        <li>Amount of time that a locked account will remain locked</li>
+      </ul>
+      <p>A simple policy would be to lock an account after&amp;nbsp;five failed login attempts for the duration of 15 minutes. Although this is an effective method for blocking a brute force attack, it exposes your application to denial of service as an attacker can easily keep an account locked through a small stream of authentication requests.<br /><br />When determining the lockout policy, it is important to evaluate the risk of attacks against the user and the support costs associated with reactivating a locked account. For example, requiring the user to contact your organization's support staff&amp;nbsp;to reactivate a locked account will have a direct impact on support costs and would add general user frustration.&amp;nbsp;However, it is important to use extra care when designing more sophisticated variations of your application's lockout policy, such as correlating a single or multiple user login attempts with a source IP. When adding extra levels of complexity, carefully consider and evaluate the scenarios where your application's lockout policy can be circumvented or can harm your business. For instance, consider scenarios where an attacker would attempt to compromise a user through the use of multiple hosts, or multiple users would authenticate using a shared office IP.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Track login attempts. </strong>
+        <strong>
+        </strong>Use a login counter. Increment the counter when a user 
+tries to log in. Reset the counter to 0 after a successful login. 
+Example:</p>
+      <pre>-- Authenticate the user<br />sql&gt; select login_attempts from users<br />      where user = {{username}} and pass = {{passDigest}};<br /> -- Reset the login counter<br />sql&gt; update users set login_attempts = 0 where user = {{username}};</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce the lockout policy.&amp;nbsp;</strong>Enforce the policy at all points in the application where authentication is necessary. Example:</p>
+      <pre>String dbStatement = "select login_attempts from users"<br />                   + "where user = ? and pass = ?;";<br />PreparedStatement st = dbConnection.prepareStatement(dbStatement);<br />st.setString(1, user);st.setString(2, passDigest);<br />ResultSet rs = st.executeQuery();<br /><br />if (rs.first())<br />{      <br />userIsValid = true;<br />      loginCount = rs.getInt(1);<br />}<br />else<br />{<br />      userIsValid = false;<br />}<br /><br />rs.close();<br /><br />if(userIsValid)<br />{<br />      if(loginCount &gt; 3)<br />      {<br />            throw new AccountIsLockedException();<br />      }<br /><br />      // The application checks the password's maturity<br />      checkPasswordMaturity(user);<br />}<br />else<br />{<br />      updateLastLoginAttempt(user);<br />}</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Set an unlocking mechanism.&amp;nbsp;</strong>Keep track of the lockout period. Based on your application's lockout policy, unlock the account after the lockout period has expired. Example:</p>
+      <pre>-- Unlock all locked accounts whose 45 minute lockout period has expired<br />sql&gt; update users set login_attempts = 0<br />      where last_login </pre>
+    </li>
+  </ol>
+  <p>
+    <strong>Note:</strong>&amp;nbsp;PCI DSS requirements state that an account should be locked out for at least 30 minutes after no more than six failed login attempts.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authentication Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="452eaf9a-e3e9-4d9e-ac3e-0f435af837a1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Centralize Authentication Controls</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ceb2d5c2-fa01-4fc3-bb5a-3cd14c4cf604" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Server-side Authentication</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="f2f4b099-d01d-4d93-96a2-93ba6e5d085a" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Make Sure Authentication Controls Fail Securely</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="479b9ff4-f0fb-4870-8929-8b63b2b7d0b3" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Force Re-authentication When Executing Critical Functionality</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ba64e4ba-9d14-4054-a99e-b6594f9698d6" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Usernames Before Processing Them</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="57f0990c-06b9-4f94-ac1e-063773c7988d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Lock Accounts After Consecutive Failed Login Attempts</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="6d74a22d-31d2-4584-9d93-85687ea4a637" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Enforce Strong Passwords</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="9d80865a-ddc8-49bd-be15-0f17a0e34383" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Force Password Renewal</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="15e9d2b8-445b-4163-88f8-a705e14a5804" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Mask All Password Fields</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="5534db32-d558-4e7a-af11-f11e0829c41a" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Place Logout Links on All Pages that Require Authentication</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3142c504-e433-4f9b-bd54-28a11e04877d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Consider Using Two Factor Authentication</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authentication Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="452eaf9a-e3e9-4d9e-ac3e-0f435af837a1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication Controls Are Centralized</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="6d6ecd62-253b-47b1-84a4-f9e112ee3623" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Server-side Authentication Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="a4e8cb3e-1bd0-474f-853a-4226a4354262" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication Controls Fail Securely</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="fbb4cdda-8c2e-4099-8e57-e4a9c491775f" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Re-authentication Is Enforced When Executing Critical Functionality</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="33fb64e2-51e1-499e-adde-8ac5bae15b26" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Usernames Are Validated Before Use</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="40ed1ed0-8081-4675-9e8e-8b83ffbfd7b9" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Accounts Are Locked After Consecutive Failed Login Attempts</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="2643951d-7530-4c34-a4a9-3111095dedb6" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Passwords Are Enforced</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="5381c4aa-09b2-44f0-bae5-32b9d0230420" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Password Renewal Is Enforced</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="bfadd27f-8ade-45cb-8b3d-6e53ff319ed8" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Password Fields Are Masked</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="9dbf9073-871e-4614-9fbf-5b542226d211" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Pages that Use Authentication Have Logout Links</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="acf6c265-cd3a-470f-bd85-24b1907d3eb1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Access to the Credential Store Is Limited</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authentication Testing</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="d4fbf960-c790-4244-9e40-470d382c5b36" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">How to Test for Account Lockout Bugs in Scala</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

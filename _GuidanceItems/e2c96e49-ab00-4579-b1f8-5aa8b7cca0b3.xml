@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e2c96e49-ab00-4579-b1f8-5aa8b7cca0b3</Id>
+    <Id_History>00000000-0000-0000-0000-0000002f59fd,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Data Received by Web Workers Is Validated</Title>
+    <Category>Web Workers</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Data Received by Web Workers Is Validated</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Check For==
+
+Verify that data exchanged between the server and the Web Workers is validated on the server.
+
+==Why==
+
+Validate data received by Web Workers to make it harder for an attacker to manipulate the Web Worker's activity via a Man-in-the-middle attack.
+
+==How to Check==
+
+To verify that data exchanged between the server and the Web Workers is validated:
+
+# **Identify all code that exchanges data between Web Workers and the server.** Create a spreadsheet of all code that is used to exchange messages between the Web Worker and the server. This code will be within the script that is used by the Web Worker.
+# **Verify that validator functions are called before processing data.** Examine each piece of code that exchanges data between Web Workers and the server to make sure that validator functions are called before the received data is processed. Data that does not pass validation should not be processed. Create a spreadsheet to list the validator functions and the types of data that they validate.
+# **Examine validator functions.** Examine each validator function used by Web Workers and make sure that they effectively check whether data matches the expected length, characters (for text data), format (for formatted data), and range (for numerical data). 
+
+==How to Fix==
+
+To validate data exchanged between the Web Worker and the server:
+
+# **Identify all data types exchanged between the Web Workers and the server.** Create a spreadsheet of all data types that are exchanged between the Web Workers and the server.
+# **Define valid data formats.** For each type of data in the spreadsheet, define valid characters, length, format, and range (for numerical values).
+# **Define validator functions.** Define a set of validator functions that should be used to validate each type of data exchanged between the server and the Web Workers. Data should be validated on the server. 
+# **Validate length.** Add code to check that the length of the data is valid.
+# **Validate characters.** Use regular expressions to restrict the acceptable range of characters in text data.
+# **Validate format.** If the data type has a specific pattern, such as a date or a phone number, add code to use regular expressions to make sure data matches the correct type. Use regular expressions to enforce strong password requirements.
+# **Validate range.** To restrict the acceptable range of numerical input, compare the data to maximum and minimum acceptable values.
+# **Find code that exchanges data between the server and the Web Workers.** Create a spreadsheet of all the code used by the Web Workers that receives data from the server.
+# **Use the validator functions.** Identify all code that handles messages received by Web Workers. Add code to use the validator functions before actually processing the messages. If data is not valid, it should not be processed. 
+
+==Web Worker Guidelines==
+
+* [[00000000-0000-0000-0000-00000083c4cc|Do Not Pass Code to Web Workers to eval()]]
+* [[00000000-0000-0000-0000-00000006a783|Validate Data Received by Web Workers]]
+
+==Web Worker Checklist Items==
+
+* [[00000000-0000-0000-0000-000000392041|Web Workers Do Not eval() Data Pased to Them]]
+* [[00000000-0000-0000-0000-0000002f59fd|Data Received by Web Workers Is Validated]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

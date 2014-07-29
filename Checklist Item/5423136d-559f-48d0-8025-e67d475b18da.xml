@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1805425646" Content_Hash="-1848354815">
+  <Metadata>
+    <Id>5423136d-559f-48d0-8025-e67d475b18da</Id>
+    <Id_History>20b0fd6d-bfc8-4a26-96e7-f698a8065ce5,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Dynamically Allocated Memory Is Only Freed Once</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Dynamically Allocated Memory Is Only Freed Once</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that dynamically allocated memory is only freed once.</p>
+  <h1>Why</h1>
+  <p>Freeing the same memory twice corrupts the memory management structures of the program and may result in a buffer overflow, leading to an arbitrary code execution vulnerability.</p>
+  <h1>How to Check</h1>
+  <p>Identify all code that frees memory and pay particular attention to memory being freed from loops or from conditional statements. Verify that there are no conditions that result in the same memory being freed multiple times. The usual sources of double-free bugs are handling of error conditions and lack of uniform approach to allocating and deallocating memory.</p>
+  <h1>How to Fix</h1>
+  <p>If code that might free the same memory multiple times is detected, it has to be rewritten. Use a centralized approach to allocating and deallocating memory by writing utility functions that handle these tasks.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the double-free vulnerability, please see <a href="http://www.owasp.org/index.php/Double_Free">http://www.owasp.org/index.php/Double_Free</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/73c9c4be-a26e-4d66-8067-cea0862f086b">Free Dynamically Allocated Memory Once</a>
+      <li>
+        <a href="/article/7bee103a-a3e8-4053-b9cc-1ca16d3f4eea">How to Test for Double Free Bugs</a>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

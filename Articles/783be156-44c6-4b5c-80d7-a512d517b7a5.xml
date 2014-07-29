@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>783be156-44c6-4b5c-80d7-a512d517b7a5</Id>
+    <Id_History>1a4d7984-11a7-4d95-9c48-3d44cc22800b,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Mapping Values Are Used for Redirects And Forwards</Title>
+    <Category>Redirects and Forwards</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Mapping Values Are Used for Redirects And Forwards</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to&amp;nbsp;&amp;nbsp;</h1>
+  <p>Scala and Play Framework 2.1.0+</p>
+  <ul>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that mapping values are used to determine destinations of redirects and forwards</p>
+  <h1>Why</h1>
+  <p>Using mapping values when performing redirects or forwards prevents malicious users from creating hyperlinks that use the redirects or forwards to point to pages other than those intended by the application design.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to make sure that mapping values are used for redirects and forwards:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify redirects and forwards.</strong>&amp;nbsp;Review code to find all redirects and forwards.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Examine redirects and forwards.</strong>&amp;nbsp;Look for code that handles parameters. Verify that this code does not accept fully qualified URLs as input for calculating destinations of redirects or forwards. If code uses parameters to calculate destinations of redirects or forwards, verify that only short-hand keywords defined by the application are accepted as input to map to valid and authorized destinations.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to calculate destinations of redirects and forwards based on mapping values:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify redirects and forwards.</strong>&amp;nbsp;Review code to find all redirects and forwards.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enumerate destinations.</strong>&amp;nbsp;Make a list of all destinations pointed to by redirects and forwards.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define mapping values.</strong>&amp;nbsp;Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Rewrite redirects and forwards.</strong>&amp;nbsp;Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards.</p>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about unvalidated redirects and forwards, please see&amp;nbsp;<a href="http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards">http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards</a></li>
+  </ul>
+  <div>
+    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Redirects and Forwards Guidelines</h1>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="b12f2cc4-e6ee-4577-9b13-84763a721803">Calculate Destinations of Redirects and Forwards Without User Input</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="353bbdfb-3d1e-494f-978c-e581f128ed4a">Use Mapping Values When Redirecting on User Input</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="a9d0919d-9630-4cce-87b0-5861662dfd2a">Validate Destinations of Redirects and Forwards</a>
+        </b>
+      </li>
+    </ul>
+    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Redirects and Forwards Checklists</h1>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="3df8ba30-ea80-426f-b30a-5737a601a206">Redirects and Forwards Are Not Used Unless Necessary</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="29aab3c9-027a-4d80-9963-79ea6077a61d">Destinations of Redirects and Forwards Are Calculated Without User Input</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="1a4d7984-11a7-4d95-9c48-3d44cc22800b">Mapping Values Are Used for Redirects and Forwards</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b>
+          <a href="3e73a590-557d-49d8-be77-09fdea2cb64c">Destinations of Redirects and Forwards Are Validated</a>
+        </b>
+      </li>
+    </ul>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

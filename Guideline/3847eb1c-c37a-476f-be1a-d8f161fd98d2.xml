@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-548353790" Content_Hash="1013889980">
+  <Metadata>
+    <Id>3847eb1c-c37a-476f-be1a-d8f161fd98d2</Id>
+    <Id_History>88ee6d3b-633f-412b-a515-082045865300,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>With Dynamic SQL, Use Character Escaping to Handle Special Input Characters</Title>
+    <Category>SQL Injection</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>With Dynamic SQL, Use Character Escaping to Handle Special Input Characters</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you must use dynamic SQL and need to deal with input characters that have special meaning to SQL Server such as the single quote character, you need to use character escaping.</p>
+  <p>
+    <strong>Note</strong>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you use parameters with dynamic SQL or stored procedures, no further effort is required to handle special characters. Special characters do not pose a problem because the parameters are strongly typed and are not treated as executable SQL.</p>
+  <h1>Why</h1>
+  <p>Database queries constructed dynamically&amp;nbsp;from user input&amp;nbsp;are susceptible to SQL injection. A successful SQL injection attack enables a malicious user to execute commands&amp;nbsp;on the&amp;nbsp;application's database instance by using the privileges granted to&amp;nbsp;the application's login. By using character escaping for special inputs characters, application safe guard from SQL injection attacks.</p>
+  <h1>When</h1>
+  <p>This is sometimes necessary because in some situations, you may not be able to use parameterized SQL. For example, you might need to accept a table name or column name as a parameter.</p>
+  <h1>How</h1>
+  <p>Start by creating a list of known acceptable characters. Use a regular expression to reject any input that contains characters other than those defined in the list. Then, use an escape routine that inserts an escape character or character sequence in front of the special character to make it harmless. The escaping technique ensures that the character no longer has meaning to SQL Server and is considered to be normal text. The following code is an example of an escaping routine.</p>
+  <pre>private string SafeSqlLiteral(string inputSQL){<br />   return inputSQL.Replace("'", "''"); }  </pre>
+  <p>The following example shows how to use this routine to dynamically construct a query. Notice that the dynamic SQL statement is wrapped inside single quotation marks.</p>
+  <pre>string strSQL =<br />   "SELECT * FROM authors WHERE au_id = '" +<br />   SafeSqlLiteral(Request.QueryString("input")) + "'";</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

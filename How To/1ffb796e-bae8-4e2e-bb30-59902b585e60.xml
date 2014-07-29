@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1800684835" Content_Hash="-1723178699">
+  <Metadata>
+    <Id>1ffb796e-bae8-4e2e-bb30-59902b585e60</Id>
+    <Id_History>f8dbed9c-0870-4964-9cac-8ac2817a751a,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Use Crypto Algorithms To Encrypt Data</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can use classes in the <b>System.Security.Cryptography</b> namespace to encrypt data with the various cryptography algorithms. Use symmetric algorithms, such as RC2, TripleDES, and Rijndael to encrypt large chunks of data. Use asymmetric algorithms, such as RSA, to encrypt small amounts of data. Also, consider using asymmetric encryption to encrypt symmetric encryption keys. </p>
+  <p>The following code shows how to encrypt data using symmetric encryption with the <b>RijndaelManaged</b> class: </p>
+  <pre>using System.Security.Cryptography;<br />using System.IO;<br />RijndaelManaged myRijndael = new RijndaelManaged();<br />// Create a new key and initialization vector.<br />// If a key is not provided, a key of appropriate length is<br />// automatically generated. You can retrieve its value through the Key<br />// property. Similarly, an initialization vector is automatically<br />// generated if you do not specify one.myRijndael.GenerateKey();<br />myRijndael.GenerateIV();<br />// Get the key and IV.<br />byte&#91;&#93; key = myRijndael.Key;<br />byte&#91;&#93; iv = myRijndael.IV;<br />// Get the encryptor.<br />ICryptoTransform encryptor = myRijndael.CreateEncryptor(key, IV);<br />// Define a new <b>CryptoStream</b> object to hold the encrypted bytes<br />// and encrypt the data.MemoryStream msEncrypt = new MemoryStream();<br />CryptoStream csEncrypt = new CryptoStream(msEncrypt,<br />                                    encryptor, CryptoStreamMode.Write);<br />// Convert the data to a byte array.ASCIIEncoding textConverter = new ASCIIEncoding();<br />byte&#91;&#93; toEncrypt = textConverter.GetBytes("Secret data to encrypt");<br />// Encrypt the data by writing it to the <b>CryptoStream</b> object.<br />// Write all data to the crypto stream and flush it.<br />csEncrypt.Write(toEncrypt, 0, toEncrypt.Length);<br />csEncrypt.FlushFinalBlock(); <br />// Get encrypted array of bytes from the memory stream.<br />byte&#91;&#93; encrypted = msEncrypt.ToArray();<br />// Pass the encrypted data to a recipient. The recipient needs to know the<br />// key and initialization vector used for encryption. You can also <br />// encrypt your secret key by using a public key algorithm, and then <br />// pass it to the message recipient with the encrypted message.<br />// Get a decryptor that uses the same key and IV as the encryptor.<br />ICryptoTransform decryptor = myRijndael.CreateDecryptor(key, iv);<br />// Now decrypt the previously encrypted data using the decryptor.<br />MemoryStream msDecrypt = new MemoryStream(encrypted);<br />CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor,<br />                                            CryptoStreamMode.Read);<br />byte&#91;&#93; fromEncrypt = new byte&#91;encrypted.Length&#93;;<br />// Read the data out of the crypto stream.csDecrypt.Read(fromEncrypt, 0, fromEncrypt.Length);<br />// Convert the byte array back into a string.<br />string roundtrip = textConverter.GetString(fromEncrypt);<br />// Display the original data and the decrypted data.<br />Console.WriteLine("Original:   &#123;0&#125;", original);<br />Console.WriteLine("Round Trip: &#123;0&#125;", roundtrip);</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see, "Security Practices: .NET Framework 2.0 Security Practices at a Glance" at <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/PAGPractices0002.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/PAGPractices0002.asp</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

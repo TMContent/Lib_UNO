@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1976426479" Content_Hash="-635918949">
+  <Metadata>
+    <Id>772e0002-b65e-4077-83d0-86bb7419f103</Id>
+    <Id_History>10ae09e5-8136-496c-9772-2390f5eff84c,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Encrypt Configuration Sections with RSA</Title>
+    <Category>Other</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Encrypt Configuration Sections with RSA</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to shows how to use the RSA Protected Configuration provider and the Aspnet_regiis.exe tool to encrypt sections of your configuration files. You can use Aspnet_regiis.exe tool to encrypt sensitive data, such as connection strings, held in the Web.config and Machine.config files. You can easily export and import RSA keys from server to server. This makes RSA encryption particularly effective for encrypting configuration files used on multiple servers in a Web farm.</p>
+  <h1>Instructions</h1>
+  <p>Perform the following actions to encrypt configuration sections using RSA in a web farm environment:</p>
+  <ol>
+    <li>
+      <p />
+      <strong>Create a custom RSA key container.</strong> Run the following command from a command prompt to create a custom RSA encryption key container: <pre>aspnet_regiis -pc "CustomKeys" -exp </pre><p>The <strong>-</strong>exp switch indicates that the keys are exportable. If the command is successful, you will see the following output: </p><div><pre>Creating RSA Key container...Succeeded!  </pre></div><p>You can verify that a custom key container exists by looking for the file and checking timestamps in the following location: </p><pre>\Documents and Settings\All Users\Application Data\Microsoft\Crypto\RSA\MachineKeys </pre></li>
+    <li>
+      <p>
+        <strong>Create a demo project.</strong> Create a new Web project named WebFarmRSA. Make sure that this directory is configured as a virtual directory. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Create a test configuration.</strong> Add a Web.config configuration file to this directory. Add a sample connectionString similar to the following example: </p>
+      <div>
+        <pre>&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Initial Catalog=aspnetdb;data source=localhost;Integrated Security=SSPI;" <br />       providerName="System.Data.SqlClient" /&gt;<br />&lt;/connectionStrings&gt;  </pre>
+      </div>
+    </li>
+    <li>
+      <p />
+      <strong>Add and configure a custom protected configuration provider.</strong> To do this, add the following &lt;configProtectedData&gt; section to the Web.config file. Note that the key container name is set to "CustomKeys", which is the name of the key container created previously. <div><pre>...<br />&lt;configProtectedData&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp; &lt;add keyContainerName="CustomKeys" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;useMachineContainer="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;description="Uses RsaCryptoServiceProvider to encrypt and decrypt"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;name="CustomProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Configuration.RsaProtectedConfigurationProvider,System.Configuration,<br />             Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/configProtectedData&gt;<br />...  </pre></div></li>
+    <li>
+      <p />
+      <strong>Encrypt connection strings.</strong> Run the following command from an SDK Command Prompt to encrypt the connectionStrings section using the custom RSA key: <pre>aspnet_regiis -pe "connectionStrings" -app "/WebFarmRSA" -prov "CustomProvider" </pre><p>If the encryption is successful, you will see the following output: </p><div><pre>Encrypting configuration section...Succeeded!  </pre></div></li>
+    <li>
+      <p />
+      <strong>Review the Web.config file and examine the changes.</strong> The following elements are modified: <ul><li>&lt;EncryptedData&gt; </li><li>&lt;CipherData&gt; </li><li>&lt;CipherValue&gt; </li></ul><p>Your modified Web.Config file, with the connectionStrings section encrypted, should be similar to the following example: </p><div><pre>...<br />  &lt;connectionStrings configProtectionProvider="CustomProvider"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;EncryptedData Type="http://www.w3.org/2001/04/xmlenc#Element"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;              xmlns="http://www.w3.org/2001/04/xmlenc#"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;EncryptedKey xmlns="http://www.w3.org/2001/04/xmlenc#"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;KeyName&gt;Rsa Key&lt;/KeyName&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/KeyInfo&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherValue&gt;MWOaFwkByLRrvoGYeFUPMmN7e9uwC0D7gFEeyxs3Obll710dLQvD5XaMWcRxg1WwtOE9nysPQRrIJUaCm0b26LGUoa/<br />                         giGEfvWnslU2kig9SPICzsQAqUSB/inhRckWceb2xdy7TT+EI/vfsu6itJwE2AicMCTwx5I828mP8lV4=<br />            &lt;/CipherValue&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/CipherData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/EncryptedKey&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/KeyInfo&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherValue&gt;IKO9jezdlJ/k1snyw5+e11cd9IVTlVfHBHSiYLgICf1EnMNd5WxVDZWP1uOW2UaY3Muv7HrSZCRbqq6hfA2uh2rxy5qAzFP+iu7Sg/<br />                     ku1Zvbwfq8p1UWHvPCukeyrBypiv0wpJ9Tuif7oP4Emgaoa+ewLnETSN411Gow28EKcLpbKWJDOC/<br />                     9o7g503YM4cnIvkQOomkYlL+MzMb3Rc1FSLiM9ncKQLZi+<br />                     JkRhlDIxFlsrFpKJhdNf5A0Sq2P71ZLI6G6QDCehHyn3kCZyBmVWJ0ueoGWXV4y<br />        &lt;/CipherValue&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/CipherData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/EncryptedData&gt;<br />&amp;nbsp; &lt;/connectionStrings&gt;<br />...</pre></div></li>
+    <li>
+      <p />
+      <strong>Export the RSA key.</strong> Run the following command from a .NET command prompt to export the custom RSA encryption key: <pre>aspnet_regiis -px "CustomKeys" "C:\CustomKeys.xml" -pri </pre><p>The -pri switch causes the private and public key to be exported. This enables both encryption and decryption. Without the-pri switch, you would only be able to encrypt data with the exported key. If the command is successful, you will see the following output: </p><div><pre>Exporting RSA Keys to file...Succeeded!  </pre></div></li>
+    <li>
+      <p>
+        <strong>Move the RSA keys to another server.</strong> Deploy the application and the encrypted Web.config file on a different server computer. Also copy the CustomKeys.xml file to a local directory on the other server, for example to the C:\ directory. On the destination server, run the following command from a command prompt to import the custom RSA encryption keys: </p>
+      <pre>aspnet_regiis -pi "CustomKeys" "C:\CustomKeys.xml" </pre>
+      <p>If the command is successful, you will see the following output: </p>
+      <div>
+        <pre>Importing RSA Keys from file..Succeeded!  </pre>
+      </div>
+      <p>
+        <strong>Note:</strong> After you have finished exporting and importing the RSA keys, it is important for security reasons to delete the CustomsKeys.xml file from both machines. </p>
+    </li>
+    <li>
+      <p />
+      <strong>Grant access to the ASP.NET application identity.</strong> The account used to run your Web application must be able to read the RSA key container. If you are not sure which identity your application uses, you can check this by adding the following code to a Web page: <div><pre>using System.Security.Principal;<br />...<br />protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Write(WindowsIdentity.GetCurrent().Name);<br />}  </pre></div><p>By default, ASP.NET applications on Windows Server 2003 run using the NT Authority\Network Service account. The following command grants this account access to the CustomKeys store: </p><pre>aspnet_regiis -pa "CustomKeys" "NT Authority\Network Service" </pre><p>If the command runs successfully, you will see the following output. </p><div><pre>Adding ACL for access to the RSA Key container...Succeeded!  </pre></div><p>You can check the ACL of the file in the following folder: </p><div><pre>\Documents and Settings\All Users\Application Data\Microsoft\Crypto\RSA\MachineKeys  </pre></div><p>Your RSA key container file will be the one in this folder with the most recent timestamp. </p></li>
+    <li>
+      <p />
+      <strong>Test the settings.</strong> Add the following Default.aspx Web page to your application's virtual directory, and then browse to this page to verify that encryption and decryption work correctly. <div><pre>&lt;%@ Page Language="C#" %&gt;<br />&lt;script runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; protected void Page_Load(object sender, EventArgs e)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Write("Clear text connection string is: " + <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;       ConfigurationManager.ConnectionStrings["MyLocalSQLServer"].ConnectionString);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&lt;/script&gt;<br />&lt;html&gt;<br />&amp;nbsp; &lt;body/&gt;<br />&lt;/html&gt;  </pre></div><p><i>MyLocalSQLServer </i>is the name of the connection string you specified previously in the Web.config file. </p></li>
+  </ol>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

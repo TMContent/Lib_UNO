@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-934531510" Content_Hash="543647798">
+  <Metadata>
+    <Id>5bb5a6c7-0fb7-4769-a3b9-5ae4ee3c0fe2</Id>
+    <Id_History>139a7494-0670-4c4e-a817-e6ad7b8a48f0,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Log Files Are Protected</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Log Files Are Protected</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure access to your application's log files is restricted. </p>
+  <h1>Why</h1>
+  <p>Logged events often contain internal application details that could enable an attacker to more effectively target your application.</p>
+  <h1>How To Check</h1>
+  <p>If your application generates multiple log files, use your application to generate all the log files and follow these steps to ensure they are protected:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify location of logs is not disclosed. </strong>Scan your application's code base to verify that the location of the log files is known only to the internal logging framework.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure appropriate Access Control Lists (ACL) are set. </strong>Verify that:</p>
+      <ul>
+        <li>Logs are set with the appropriate file system permissions. </li>
+        <li>All entities, excluding your application and its administrators/developers, are prohibited access to the logs. </li>
+        <li>If your application logs are backed up, verify that the backups are stored in an environment that is secure. </li>
+        <li>Log files are located on a non-system NTFS volume and not on the same volume where the Web site content resides.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that proper log management is in place. </strong>Verify that your application enforces your organization's audit policy with respect to managing its logs. Check that:</p>
+      <ul>
+        <li>Your application does not erase older log entries before they are deemed expired by your organization's audit policy. </li>
+        <li>If your application performs log rotation, ensure that older logs are stored by a unique identifier to prevent unintentional deletion of older log entries. </li>
+        <li>Your application logs user activity but not user-supplied data. For example, log the event that a user changed their password, but not the password itself. </li>
+        <li>Your application does not append user-supplied data to an exception's message and/or details.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that ASP.NET health monitoring is secured. </strong>If your application uses ASP.NET health monitoring (a feature that is enabled by default), check if the following measures are set in place:</p>
+      <ul>
+        <li>
+          <strong>Logs are throttled:</strong> Depending on your application's requirements, ensure that your application's logs are properly throttled.&amp;nbsp; </li>
+        <li>
+          <strong>Connection strings are secured:</strong> Ensure that all connection strings that are used by your application's logging framework are properly secured. </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Perform the following actions to secure the log files:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Consider sending logs to a centralized log server.</strong> Using a centralized log server has many advantages. A centralized log server greatly simplifies securing and monitoring logs on a network that has many log-generating devices.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid disclosing location of logs.</strong> The location of the log files should be known only by your application and its administrators. Avoid disclosing the location of the logs to users.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Set appropriate file permissions. </strong>Set the filesystem permissions so that only your application and its administrators/developers have access to its logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Keep logging framework away from users.</strong> Do not allow your application's users to interact directly with the logging framework. The logging framework should log information regarding the performance of the application, but should avoid storing user supplied data inside the logs. Some user-supplied information can aid an attacker into poisoning your application's logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Consider using log rotation.</strong> Log rotation prevents your application from working with large log files. It allows you to manage and audit your application's logged events without interfering in your application's workings. Use the following steps when utilizing log rotation:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Define a rotation period.</strong> Schedule your log rotation on a regular basis. For example, rotate your logs every Monday.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Create a new log file.</strong> Create a new log file when your application needs to rotate its log files. It is recommended to associate the new log file to the period of its creation. For example, the log file corresponding to the week of October 16, 2010 would be named 20101016.log.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Back up the existing log files.</strong> Back up the existing log files when your application needs to rotate its log files. Consult your internal auditing policy to determine the period for which logs should be backed up. If your application backs up its logs, store them into an environment that is as secure as the storage environment for the current logs.</p>
+        </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">
+      </a>
+      <a href="/article/abc6bfbd-93a8-48d5-92a7-5427b155f69a">Secure the Log Files</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

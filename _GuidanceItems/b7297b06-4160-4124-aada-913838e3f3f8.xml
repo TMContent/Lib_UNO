@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b7297b06-4160-4124-aada-913838e3f3f8</Id>
+    <Id_History>00000000-0000-0000-0000-00000069528c,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Validate URLs Passed to the EventSource Constructor</Title>
+    <Category>Server-Sent Events</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate URLs Passed to the EventSource Constructor</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5 and JavaScript
+
+==What to Do==
+
+Validate a URL before it is passed to the EventSource constructor to ensure that messages are being sent from servers you expect, and not from a potentially malicious source.
+
+==Why==
+
+If you fail to validate a URL passed to the EventSource constructor, you could potentially receive messages that contain malicious or incorrect data.
+
+==When==
+
+Always validate a URL passed to the EventSource constructor.
+
+==How==
+
+When using the EventSource object, use a regular expression (RegEx object) to make sure that no scheme is included in the URL. This will force the URL to be relative to the current web page or script, which will also ensure that the event source is not from another site. To perform this validation, follow these steps:
+
+# **Locate the instances in your JavaScript that use the EventSource constructor.** The usage of the EventSource constructor is as follows: {{{ var source = new EventSource("eventsource.php"); }}} Pay particular attention if this code is inside a function where the URL of the source may be provided as an argument from other code. 
+# **Determine a policy for allowing sources.** Do not allow an EventSource that includes a scheme (“http:” or “https:”) at the beginning of the value, because this means the EventSource may come from a different site. Instead, you should consider only allowing relative URLs, which will not start with the scheme.
+# **Check the length of the URL before validating it.** Use the length property to ensure the size of the domain is not so large that it will cause a RegEx denial of service (DoS). 
+# **Write a regular expression that validates the URL.** Make sure that no scheme is included in the URL, and make sure it is a relative path. The following example uses a negative look-ahead group in the format {{{(?!<expression>) }}}. {{{ ^(?!https?:) }}}
+The {{{s?}}} part of this expression allows it to capture both HTTP and HTTPS over Secure Sockets Layer (HTTPS). The {{{?}}} character matches if the preceding expression(s) occurs either not at all or at most one time.
+# **Include the expression to validate URLs before they are passed to the EventSource constructor.** For example, the following code validates the {{{sourceUrl}}} variable to make sure it is valid before using it:\\ {{{ if (pattern.test(sourceUrl)) }}}
+# **Test the expression thoroughly to make sure only relative URLs are allowed.** Perform thorough testing using both positive and negative conditions to verify the functionality.
+
+==Problem Example==
+
+The following code calls the constructor on the {{{EventSource}}} object with no validation of any kind:
+
+{{{
+var source = new EventSource("someserver.php");
+}}}
+\\
+==Solution Example==
+
+The following code validates that the browser supports {{{EventSource}}}, and it uses a regular expression to validate the string passed into the {{{EventSource}}} constructor:
+
+{{{
+var pattern = new RegExp(/^(?!https?:)/);
+var sourceUrl = "http://hacker.example.com";
+
+if (pattern.test(sourceUrl)) {
+	var source = new EventSource(sourceUrl);
+} else {
+	alert("Bad URL!");
+}
+}}}
+
+\\
+==Additional Resources==
+
+* For information about the JavaScript RegExp object, see http://www.w3schools.com/jsref/jsref_obj_regexp.asp
+* For information about Server-Sent Events, see http://www.w3.org/TR/eventsource
+
+==Server-sent Events Guideline==
+
+* [[00000000-0000-0000-0000-00000069528c|Validate URLs Passed to the EventSource Constructor]]
+
+==Server-sent Events Checklist Item==
+
+* [[00000000-0000-0000-0000-000000010f15|URLs Passed to the EventSource Constructor are Validated]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

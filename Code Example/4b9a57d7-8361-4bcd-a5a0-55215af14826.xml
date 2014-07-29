@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1993407969" Content_Hash="-1629535028">
+  <Metadata>
+    <Id>4b9a57d7-8361-4bcd-a5a0-55215af14826</Id>
+    <Id_History>8e60ba05-bc07-4315-bcca-92fe34eb9b2d,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Generate RSA Keys And Store in the Registry Using DPAPI</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Generate RSA Keys And Store in the Registry Using DPAPI</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C# </li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to illustrate how to generate and securely store a public key pair in .NET using RSA and the DPAPI.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Create a encryption key that can be publicly distributed without fearing that encrypted messages could become compromised <li>Securely store the private key material without needing to implement additional encryption operations or relying on file system on database security </li></li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Distributed client-server architecture where clients need to send confidential encrypted messages to the server but don't need to ever read those messages <li>Application does not want to maintain a dedicated key store for encryption purposes </li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>// Define some useful globals<br />public int RSA_KEY_SIZE = 2048;<br />public RSACryptoServiceProvider myRSA;<br />public void GenerateAndStoreRSAKeys()&amp;#123;<br />    ///// Generate RSA Key Public and Private Pairs /////<br />    // The RSA CSP class automatically generates public and private key material<br />    // during constructions using the provided key size (or 1024bits if blank)<br />    myRSA = new RSACryptoServiceProvider(RSA_KEY_SIZE);<br />    ///// Store in the registry using DPAPI and a Registry ACL /////<br />    // Serialize the RSA key pair as an XML string for registry storage<br />    string keyPairXml = myRSA.ToXmlString(true);<br />    // Convert the RSA key pair to a byte array and encrypt the data by using<br />    // the DPAPI ProtectedData class. We're using the CurrentUser scope instead<br />     // of the MachineKey scope so that other, potentially malicious applications<br />     // cannot access this key in the registry and decrypt. This provides additional<br />    // security but sacrifices interoperability with other applications. Consider<br />    // using the MachineKey scope if you have a need to share keys between<br />     // applications.<br />    byte&amp;#91;&amp;#93; encryptedKeyPair = ProtectedData.Protect(<br />            UnicodeEncoding.ASCII.GetBytes(keyPairXml),<br />             null,<br />             DataProtectionScope.CurrentUser);<br />    // Create a security context for a new key that we will use to store<br />    // our RSA key pair. The security context will restrict access to only<br />     // our user.<br />    string user = Environment.UserDomainName &amp;#43; "\\" &amp;#43; Environment.UserName;<br />    RegistrySecurity security = new RegistrySecurity();<br />    RegistryAccessRule rule = new RegistryAccessRule(user,<br />            RegistryRights.FullControl,<br />            InheritanceFlags.ContainerInherit,<br />            PropagationFlags.None,<br />            AccessControlType.Allow);<br />    security.AddAccessRule(rule);<br />    // Actually create the new registry key and apply the security context<br />     // we just came up with.<br />    Registry.CurrentUser.CreateSubKey("RSAKeyPair",<br />         RegistryKeyPermissionCheck.ReadWriteSubTree,<br />         security);<br />    // Write the encrypted connection string into the registry<br />    Registry.SetValue(&amp;#64;"HKEY_CURRENT_USER\RSAKeyPair",<br />         "KeyData",<br />        encryptedKeyPair);<br />&amp;#125;</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates the generation of an RSA key pair and storage of those keys on the file system. </p>
+  <pre>// The RSA CSP class automatically generates public and private key material<br />// during construction<br />myRSA = new RSACryptoServiceProvider();<br />///// Store in the registry using DPAPI and a Registry ACL /////<br />// Convert the RSA public key to an xml string (passing "true" retrieves<br />// both the private and public key datastring <br />keyPairXml = myRSA.ToXmlString(true);/<br />/ Open up the key pair file and read into a string<br />StreamWriter keyWriter = new StreamWriter(&amp;#64;"C:\temp\rsakeypair.xml");<br />keyWriter.Write(keyPairXml);<br />keyWriter.Close();</pre>
+  <ul>
+    <li>If the file system is compromised the private key may be exposed and the encrypted messages can be compromised. <li>Default key size provides degraded strength and diminishes security </li></li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.IO;<br />using System.Security;<br />using System.Security.AccessControl;<br />using System.Security.Cryptography;<br />using System.Text;<br />using Microsoft.Win32;</pre>
+  <p>Execute the following code and then open "regedit" and look in the registry under the key "HKEY_CURRENT_USER\RSAKeyPair" to see the RSA key pair data encrypted in the registry.</p>
+  <pre>static void Main(string&amp;#91;&amp;#93; args)&amp;#123;<br />            // Generate an RSA key pair and store using the DPAPI<br />            GenerateAndStoreRSAKeys();<br />&amp;#125;</pre>
+  <h1>Expected Result</h1>
+  <p>The RSA key is encrypted using DPAPI and stored in the registry key.</p>
+  <h1>More Information</h1>
+  <p>RSA is an algorithm for public key (also knows as asymmetric) cryptography in which distinct public and private keys are created. Encryption operations makes use of the public key while decryption requires the private key. This offers an advantage over symmetric cryptography because the secret key used to decrypt a message does not need to be shared in order to support encryption of messages to a recipient.</p>
+  <p>The RSA private key must be securely stored in order to maintain the confidentiality of data encrypted using an individual's public RSA key. However, the public key can be freely distributed by the owner of the key pair to anyone who wishes to send an encrypted message to that owner. </p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>RSACryptoServiceProvider (.NET): <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemsecuritycryptographyrsacryptoserviceproviderclassctortopic.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemsecuritycryptographyrsacryptoserviceproviderclassctortopic.asp</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1453475332" Content_Hash="1330336111">
+  <Metadata>
+    <Id>670da8aa-6a0d-4777-a415-839c7b0b8b00</Id>
+    <Id_History>bb3ba78a-8d27-41c2-8cf6-b84c3d2bd99d,</Id_History>
+    <Library_Id>47a10a30-15ad-4cfd-bf82-00e9bb2037f6</Library_Id>
+    <Title>Configure a Wireless Access Point for PCI DSS</Title>
+    <Category>Networking</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>Configure a Wireless Access Point for PCI DSS</DirectLink>
+    <Tag />
+    <Security_Demand />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 2.1.1</li>
+    <li>PCI DSS Requirement 2.1.1.a</li>
+    <li>PCI DSS Requirement 2.1.1.b</li>
+    <li>PCI DSS Requirement 2.1.1.c&amp;nbsp;</li>
+    <li>PCI DSS Requirement 2.1.1.d</li>
+    <li>PCI DSS Requirement 4.1.1</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>
+    <span>Configure wireless access points for security. To comply with PCI DSS, the wireless access points must support and use strong encryption, and have strong passwords.</span>
+  </p>
+  <h1>Why</h1>
+  <p>
+    <span>Strong encryption and authentication protocols for wireless communications prevent both unauthorized access to the network and eavesdropping on wireless communications. An earlier implementation of wireless encryption and authentication, known as WEP,
+ has proven to be insecure. Wireless network attacks have been used in several high profile compromises.</span>
+  </p>
+  <h1>When</h1>
+  <p>
+    <span>Wireless access points should be configured for security when wireless networks are deployed.</span>
+  </p>
+  <h1>How</h1>
+  <p>
+    <span>Perform the following tasks to configure wireless access points for security in compliance with PCI DSS:</span>
+  </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Choose wireless devices that support strong encryption. </strong>Make sure the firmware or Operating System of the wireless access point supports strong encryption and authentication such as WPA or WPA2. Unacceptable options are WEP or unencrypted.
+ More complex options, such as RADIUS, are acceptable, so long as they go together with a strong encryption protocol, such as WPA or WPA2. Check available options by going to the web administration interface and browsing to the page that allows choosing the
+ encryption and authentication protocols. If the firmware or Operating System of the wireless device does not support strong encryption and authentication, update the firmware or Operating System to the latest version by going to the vendor's web site and following
+ the vendor's instructions. Usually, this involves logging into the web administration interface of the access point and browsing to a page that allows updating the firmware. If there is no update available to support WPA or WPA2, the wireless access point
+ is deemed unacceptable and should not be used.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Change the default passwords. </strong>Wireless access points should have strong administrator passwords to prevent potential attackers from changing the wireless network settings. The default wireless access point passwords are public knowledge
+ and therefore are not secure. Please refer to the vendor's documentation and technical support for detailed instructions on how to change the administrator password on your wireless access point. Usually, a wireless access point has a web-based administration
+ interface, which is accessed by using a web browser to go to the IP of the access point. The web administration interface should then ask for the username and password. After successful authentication, the administrator is presented with several pages, usually
+ few enough to go through all of them quickly and find the available features. One of the pages should have user management functions. Use the user management page to change the default administrator password. If possible, rename the administrator account and
+ remove all other accounts.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Configure the wireless devices to use strong encryption.&amp;nbsp;</strong>Enable WPA or WPA2 on the wireless access point. Please refer to the vendor's manual or technical support for the exact instructions on enabling WPA or WPA2 on your wireless device.&amp;nbsp;WPA
+ is more widely supported than WPA2, although WPA2 is considered to be more secure than WPA. Both WPA and WPA2 are acceptable. To enable WPA or WPA2, login to the web administration interface and browse to the page that allows choosing the encryption and authentication
+ protocols. There are several common options of WPA and WPA2. WPA uses TKIP. TKIP has some known vulnerabilities, but they are not serious. Considering the cost advantage, WPA is still acceptable. WPA2 uses CCMP, which uses AES encryption. WPA2 is a modern
+ and secure encryption protocol. PSK means "pre-shared key" and is a basic setup that has a password (the pre-shared key) to access the wireless network. The advantage of PSK is that it does not require an additional&amp;nbsp;authentication server. WPA/PSK requires
+ strong passwords. WPA/PSK is vulnerable to password cracking attacks if a weak key is used. There are rainbow tables available for cracking WPA/PSK. To make the rainbow tables ineffective, do not use an SSID that is included in the rainbow tables. That can
+ be accomplished by using a complex and unique SSID. RADIUS is an authentication protocol that makes it possible to manage multiple accounts for using the wireless network and it requires a RADIUS server. Some wireless access points have a RADIUS server built-in.
+ The difference between PSK and RADIUS is that PSK has one key for everyone and RADIUS generates a separate key for each session. In an environment where there are many wireless users, RADIUS is recommended. PSK is less expensive because it doesn't require
+ a RADIUS server and is acceptable for small wireless networks.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use strong encryption keys.&amp;nbsp;</strong>Strong encryption keys should be used to prevent password cracking attacks. This is more relevant for PSK because there is only one key for the entire network. The usernames and passwords used for RADIUS authentication
+ should also be strong and should comply with the company's password policy. A strong key or password has lower- and upper-case alphanumeric characters and is 13 characters long.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Change the default SNMP community strings. </strong>If SNMP is used on the wireless network, the default community strings should be changed. An SNMP community string acts as a password, and should be treated as such. A default community string is
+ public knowledge and may allow an attacker to change network settings or discover sensitive network information. To use SNMP, an attacker would have to be already on the network, so this applies mostly to insider attacks. To prevent an attacker from abusing
+ SNMP, change the SNMP community string on the wireless access points. Please refer to the vendor's manual or technical support for detailed instructions on how to configure SNMP on your hardware.</p>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <p>
+        <span>For the list of the 1000 SSIDs included in the public rainbow tables, please see "SSID List" at
+<a href="http://www.renderlab.net/projects/WPA-tables/SSID.zip">http://www.renderlab.net/projects/WPA-tables/SSID.zip</a>.</span>
+      </p>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

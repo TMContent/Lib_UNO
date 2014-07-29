@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>4b2ae6aa-9d22-4f3e-a436-ddf8757744f8</Id>
+    <Id_History>7483018c-19dc-41a4-88f6-d149513f1b6d,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>The Application Authenticity Is Verified to the User</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Application Authenticity Is Verified to the User</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+<br /></p>
+  <h1>What to Check For</h1>
+  <p>Ensure the application always proves its credential to its users.</p>
+  <h1>Why</h1>
+  <p>Some applications are targets for phishing attacks. Failure to 
+authenticate against the user allows attackers to spoof the application.
+ This can&amp;nbsp;fool the users into submitting their credentials or other 
+sensitive information into an attacker's malicious application.</p>
+  <h1>How to Check</h1>
+  <p>To ensure the application is capable of proving its authenticity to its users:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Check if your application uses SSL to identify itself to the user.&amp;nbsp;</strong>Verify that when your application's users are performing transactions of a sensitive nature, your application uses SSL&amp;nbsp;with the following&amp;nbsp;considerations in place:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Certificate Validity</strong>: Your application's SSL certificate has not reached its expiration date.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Certificate Version</strong>: Your application uses SSL version 3.0 certificate.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Domain Name</strong>: The domain name for your application is the same as the domain name listed in the SSL certificate.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Chain of Trust</strong>: Your application's users can verify your application's SSL certificate based on the root certificates that are stored in their browsers. If your application uses self-signed SSL certificates, ensure that your organization's root certificate is securely imported into the users' browsers.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Server Configuration</strong>: Your application's environment has enabled HTTPS, and transactions of a&amp;nbsp;sensitive nature are transmitted only over HTTPS connections in the configuration files.</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Check if your application displays a shared secret with its users.&amp;nbsp;</strong>Check if your application has a personal shared secret for each of its users. Shared secrets include, but are not limited to, combinations of any of the following:</p>
+      <ul>
+        <li>
+          <strong>Layout</strong>: a user-defined layout/color scheme.</li>
+        <li>
+          <strong>Picture</strong>: a user-defined image</li>
+        <li>
+          <strong>Word/Phrase</strong>: a user-defined word, phrase, or question</li>
+      </ul>
+      <p>Verify that the shared secret is displayed to the user after providing their ID and before providing their credentials.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following measures to authenticate your application to its users:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use SSL.&amp;nbsp;</strong>Due to the nature of the SSL certificates, SSL can be used to certify the remote host's name. Because of SSL's chain of trust and DNS limitations, it is very difficult to spoof a host that uses SSL.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Display personalized and identifiable content.&amp;nbsp;</strong>Do not ask the user for credentials in one step. Instead,&amp;nbsp;after the user&amp;nbsp;enters a valid username, display personal and identifiable content to which the user can relate, such as:&amp;nbsp;a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is a financial application with a public web interface. Because the application does not use SSL to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of identifying the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface, they may be fooled into providing their credentials to the attacker.</p>
+  <h1>Solution Example</h1>
+  <p>MyApp is a financial application with a public web interface. Because the application uses SSL to certify its identity in front of the user, the user's browser uses the SSL chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and&amp;nbsp;the user will be warned that they are not accessing the real MyApp interface.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

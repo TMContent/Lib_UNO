@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1158234715" Content_Hash="388905395">
+  <Metadata>
+    <Id>ea093eb2-f528-4d52-bab1-2ab58d74f440</Id>
+    <Id_History>54026187-bcbd-433b-a895-21d66b543052,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Only Trusted Hosts Are Allowed to Connect to Database Server</Title>
+    <Category>Data Access</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Only Trusted Hosts Are Allowed to Connect to Database Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that your application specifies the hosts that can connect to its database servers during its deployment procedures. </p>
+  <h1>Why</h1>
+  <p>Restricting the number of production servers that can connect to the backend database can help minimize the risk of unauthorized access to the database server.</p>
+  <h1>How to Check</h1>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that your application&amp;nbsp;has completed&amp;nbsp;its testing cycle. </strong>Apply this checklist and&amp;nbsp;the corresponding guideline linked at the end of the article&amp;nbsp;if and only if your application is ready for a release.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure no test hosts are left in the database. </strong>During development, test hosts are often used for testing or demonstration purposes. Leaving these host entries in the database increases the risk of a host being used by an attacker as a backdoor for accessing the database server. Enumerate all allowed hosts from the database and ensure those that were used only&amp;nbsp;for testing are deleted. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure only intended hosts are allowed database access. </strong>Review your application's design and requirements to determine the hosts that need access to your application's database servers.<br /></p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following steps when restricting the list of hosts that can connect to the backend database:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Wait until product is in its final release. </strong>Applying this guideline during the testing phase of your application's development cycle can lead to leaving unintended backdoors to your application's backend database server. Apply this guideline only after your product is in its final release. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all production servers that require database access. </strong>Enumerate all hosts of your application. Identify the hosts that would require access to your backend database server. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Apply the restrictions. </strong>After obtaining the list of hosts that will connect to the database server, consult your database server's manual regarding applying such restrictions.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following snippet shows a list of database accounts and some of their permissions. Because the application's account is not restricted to connections from a specific host, it is possible for an attacker to connect directly to the database from any other host on the network.</p>
+  <blockquote>
+    <pre>sql&gt; select host, user, select_priv, drop_priv, shutdown_priv from user;<br />+----------------+-------+-------------+-----------+---------------+<br />| host           | user  | select_priv | drop_priv | shutdown_priv |<br />+----------------+-------+-------------+-----------+---------------+<br />| localhost      | root  | Y           | Y         | Y             |<br />|                | myapp | Y           | N         | N             |<br />+----------------+-------+-------------+-----------+---------------+</pre>
+  </blockquote>
+  <h1>Solution Example</h1>
+  <p>The following snippet shows a list of database accounts and some of their permissions. Because the application's account is restricted to connections from a specific host, it is impossible for an attacker to connect directly to the database from any other host on the network.</p>
+  <blockquote>
+    <pre>sql&gt; select host, user, select_priv, drop_priv, shutdown_priv from user;<br />+----------------+-------+-------------+-----------+---------------+<br />| host           | user  | select_priv | drop_priv | shutdown_priv |<br />+----------------+-------+-------------+-----------+---------------+<br />| localhost      | root  | Y           | Y         | Y             |<br />| 192.168.10.220 | myapp | Y           | N         | N             |<br />+----------------+-------+-------------+-----------+---------------+</pre>
+  </blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about securing your database server, see: <a href="http://www.oracle.com/technetwork/database/security/twp-security-checklist-database-1-132870.pdf">Oracle Database Security Checklist</a>.</li>
+  </ul>
+  <h1>Java Data Access Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/d2809cce-1af2-4896-a45c-b4b56deae282">Use Parameterized APIs for Data Access</a>
+    </li>
+    <li>
+      <a href="/article/bcfcbcbb-4bd6-4011-9e24-efa70d4a3724">Parameterize Dynamic SQL in Stored Procedures</a>
+    </li>
+    <li>
+      <a href="/article/5427d358-17f6-4ef6-948f-d670c5aefc38">Enforce Strong SQL Passwords</a>
+    </li>
+    <li>
+      <a href="/article/697891eb-5d97-44fa-a6eb-625f247f622d">Use Least Privileged Accounts for Database Access</a>
+    </li>
+    <li>
+      <a href="/article/159a8710-263c-4612-b9d8-ba3943f8286f">Allow Only Trusted Hosts to Connect to Database Server</a>
+    </li>
+    <li>
+      <a href="/article/0aaa1b15-8bdb-4486-9171-4eb3c2159829">Protect Connection Strings</a>
+    </li>
+  </ul>
+  <h1>Java Data Access Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/d5a1c94b-601e-4e2a-9ad8-33461792a8bb">Parameterized APIs Are Used for Data Access</a>
+    </li>
+    <li>
+      <a href="/article/93d15ca4-c950-4370-8de5-cdb2cc2974fe">Dynamic SQL in Stored Procedures Is Parameterized</a>
+    </li>
+    <li>
+      <a href="/article/73c2f6fa-3c97-452e-8163-7215bd995d58">Strong SQL Passwords Are Enforced</a>
+    </li>
+    <li>
+      <a href="/article/61af51d9-58f8-4ddf-a373-0b67ea8e6d4b">Least Privileged Accounts Are Used for Database Access</a>
+    </li>
+    <li>
+      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">
+      </a>
+      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">Only Trusted Hosts Are Allowed to Connect to Database Server</a>
+    </li>
+    <li>
+      <a href="/article/9fdc12bc-4208-4d0e-a56c-62e12b660bc0">Connection Strings Are Protected</a>
+    </li>
+  </ul>
+  <h1>Java Data Access Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/5f55ac00-bb90-439e-a5fd-a85e9a327175">Use Stored Procedures</a>
+    </li>
+    <li>
+      <a href="/article/e3d7a7be-68a1-47ab-a515-54053d9171a4">Use Named Queries with Hibernate</a>
+    </li>
+    <li>
+      <a href="/article/d4645b55-6da1-4c3c-9e9f-bed1d021ed56">Use Named Queries with Java Persistence API (JPA)</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

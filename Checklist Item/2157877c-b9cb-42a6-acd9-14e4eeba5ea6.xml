@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-131452444" Content_Hash="-418869240">
+  <Metadata>
+    <Id>2157877c-b9cb-42a6-acd9-14e4eeba5ea6</Id>
+    <Id_History>1b9bf857-319c-43ce-9bf8-251a7ab3a777,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Passwords Are Stored Securely</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Passwords Are Stored Securely</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that passwords are stored in a secure fashion and that they are not stored in plain text or using an easy-to-crack encryption scheme.</p>
+  <h1>Why</h1>
+  <p>Storing passwords in plaintext or using weak encryption can aid an attacker&amp;nbsp;who managed to&amp;nbsp;steal them. Compromised passwords may aid an attacker into accessing, modifying, and deleting sensitive data.</p>
+  <h1>How to Check</h1>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that a machineKey is generated. </strong>Check the &lt;<strong>system.web</strong>&gt; element inside your application's web.config. Verify that it contains a &lt;<strong>machineKey</strong>&gt; element. Example:</p>
+      <pre>&lt;system.web&gt;<br />   &lt;machineKey validationKey="..." decryptionKey="..." validation="SHA1" /&gt;</pre>
+      <li>
+        <p>
+          <strong>Ensure your application uses a membership provider. </strong>Verify that your application uses a membership provider for its authentication needs. Check the following parts of your provider's configuration:</p>
+        <ul>
+          <li>
+            <p>
+              <strong>Connection string:</strong> Using the <a href="/article/c496b051-72f3-48f2-aaea-2edf7745e9c7">Access to the Credential Store is Limited</a> checklist, ensure that your provider's connection string is stored securely.</p>
+            <li>
+              <p>
+                <strong>Credential store configuration:</strong> If your provider is SQL-based, verify that the backend SQL server has the appropriate tables and procedures in place to handle your application's authentication needs. To detect whether your backend SQL is configured properly, examine your application's authentication database for the following tables:</p>
+              <ul>
+                <li>aspnet_Applications <li>aspnet_Membership <li>aspnet_SchemaVersions <li>aspnet_Users</li></li></li></li>
+              </ul>
+              <li>
+                <p>
+                  <strong>Deployment of provider:</strong> Ensure that your provider is properly configured to work with your application. For example:</p>
+                <pre>&lt;system.web&gt;<br />  &lt;membership defaultProvider="MyAppSqlMembershipProvider"&gt;<br />    &lt;providers&gt;<br />      &lt;add name="MyAppSqlMembershipProvider"<br />            type="System.Web.Security.SqlMembershipProvider"<br />            connectionStringName="MyAppSqlConnection"<br />           .../&gt;</pre>
+              </li>
+            </li>
+          </li>
+        </ul>
+        <li>
+          <p>
+            <strong>Verify that passwords are stored securely. </strong>Ensure that your application stores passwords using one of the following approaches:</p>
+          <ul>
+            <li>
+              <p>
+                <strong>Hashing:</strong> Set the <strong>passwordFormat</strong> attribute to <strong>hashed</strong>. For example:</p>
+              <pre>&lt;system.web&gt;<br />  &lt;membership defaultProvider="MyAppSqlMembershipProvider"&gt;<br />    &lt;providers&gt;<br />      &lt;add name="MyAppSqlMembershipProvider"<br />            type="System.Web.Security.SqlMembershipProvider"<br />            connectionStringName="MyAppSqlConnection"<br /><strong>           passwordFormat="Hashed"<br /></strong>           .../&gt;</pre>
+              <li>
+                <p>
+                  <strong>Encryption:</strong> Set the <strong>passwordFormat</strong> attribute to <strong>encrypted</strong>. For example:</p>
+                <pre>&lt;system.web&gt;<br />  &lt;membership defaultProvider="MyAppSqlMembershipProvider"&gt;<br />    &lt;providers&gt;<br />      &lt;add name="MyAppSqlMembershipProvider"<br />            type="System.Web.Security.SqlMembershipProvider"<br />            connectionStringName="MyAppSqlConnection"<br /><strong>           passwordFormat="Encrypted"<br /></strong>           .../&gt; </pre>
+              </li>
+            </li>
+          </ul>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code authenticates a user based on username and password. The supplied credentials are compared to the credentials stored in the backend database. Unfortunately, the credentials in the database are in plaintext and could be stolen if the database is compromised.</p>
+  <p />
+  <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="true"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/de3e4477-e2b0-40a5-91f6-b3dab65667fb">Guideline: Store Passwords Securely</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

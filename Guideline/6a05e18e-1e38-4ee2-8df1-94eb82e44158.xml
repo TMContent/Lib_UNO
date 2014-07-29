@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2113465277" Content_Hash="-2144496410">
+  <Metadata>
+    <Id>6a05e18e-1e38-4ee2-8df1-94eb82e44158</Id>
+    <Id_History>cf9e691f-d091-4b46-8177-ce1a3bda24f8,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Validate User&amp;#39;s Login Credentials Before Processing Them</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate User&amp;amp;amp;amp;amp;#39;s Login Credentials Before Processing Them</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Validate user credentials before processing them.</p>
+  <h1>Why</h1>
+  <p>Validating user-provided login information can help prevent cross site scripting attacks, SQL injections, and other potential problems depending on system architecture. All input should always be validated before use and encoded before display, but login information is especially critical as it interacts with high-value data stores.</p>
+  <h1>When</h1>
+  <p>All applications with login functionality should validate all user submitted or user modifiable login information.</p>
+  <h1>How</h1>
+  <p>Use the following steps when validating user credentials:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Establish username requirements: </strong>Establish the acceptable character set and minimum length that should be allowed for a username. For instance, usernames should be at least 6 characters long and must contain alpha-numeric characters only.</p>
+      <li>
+        <p>
+          <strong>Use whitelist validation:</strong> Whitelisting involves defining what input is acceptable. Once valid input is defined, compare all input against the established list. If the input does not match an item from the list, your application should discard it. This technique can be implemented using regular expressions. Example:</p>
+        <pre>public bool ValidateUsername(string username)<br />&amp;#123;<br />    Regex rx = new Regex("(\\w&amp;#124;\\d)&amp;#123;6,&amp;#125;");<br />    return rx.IsMatch(username);<br />&amp;#125;</pre>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code authenticates a user for a web application. Unfortunately, it fails to validate the user login info therefore allowing an attacker to break the authentication mechanism and gain unauthorized access.</p>
+  <pre>&lt;asp:Login ID="Login1" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE" BorderPadding="4"<br />    BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"<br />    ForeColor="#333333" MembershipProvider="MyAppMembershipProvider" /&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>The following code authenticates a user for a web application. It validates the user login info; therefore making it much more difficult for an attacker to exploit the authentication mechanism.</p>
+  <pre>&lt;asp:Login ID="Login1" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE" BorderPadding="4"<br />    BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"<br />    ForeColor="#333333" OnLoggingIn="ValidateUsername" MembershipProvider="MyAppMembershipProvider"<br /> /&gt;</pre>
+  <pre>protected void ValidateUsername(object sender, LoginCancelEventArgs e)<br />&amp;#123;<br />    Regex rx = new Regex("(\\w&amp;#124;\\d)&amp;#123;6,&amp;#125;");<br />    e.Cancel = &amp;#33;(rx.IsMatch(Login1.UserName));<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>A tutorial on regular expressions is available at <a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>. </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/6e981095-84bd-4158-a212-8f9937bcb336">Guideline: Do Not Rely on Client-Side Validation </a>
+      <li>
+        <a href="/article/c392a633-2f74-4557-94ba-9fd6eeeefb95">Attack: Client-side Validation Attack</a>
+        <li>
+          <a href="/article/500ae131-3373-4246-b6f5-b90128ab8e3c">Checklist Item: User's Login Credentials are Validated Before Use </a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

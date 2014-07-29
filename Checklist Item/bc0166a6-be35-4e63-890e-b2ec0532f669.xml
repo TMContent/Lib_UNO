@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2032874162" Content_Hash="-980206881">
+  <Metadata>
+    <Id>bc0166a6-be35-4e63-890e-b2ec0532f669</Id>
+    <Id_History>4b2f7d92-3c71-43de-bbf6-634f9210e651,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Passwords Have a Minimum Length Requirement</Title>
+    <Category>Configuration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Passwords Have a Minimum Length Requirement</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 8.5.10 <li>Microsoft Active Directory </li></li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Only passwords that are at least seven characters long should be allowed.</p>
+  <h1>Why</h1>
+  <p>Using long passwords ensures that the passwords are hard to crack.</p>
+  <h1>How to Check</h1>
+  <p>Verify that the password length requirement is enforced by performing the following steps:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Launch the "Group Policy Management" console. </strong>The "Group Policy Management" console is included in Windows 2008, but has to be downloaded and installed on Windows 2003 and 2000. The link to the download is available at the bottom of this page. To launch the "Group Policy Management" console, execute the "gpmc.msc" command.</p>
+      <li>
+        <p>
+          <strong>Launch the Group Policy Object Editor.</strong>&amp;nbsp;Navigate to the "Group Policy Objects" folder under the current domain, right click on the GPO and select "Edit".</p>
+        <li>
+          <p>
+            <strong>Verify that the "Minimum password length" policy is used.</strong> For each relevant domain, check that there is a linked group policy object that enables the "Minimum password length" policy. The "Minimum password length" policy is enabled by default on Windows 2003 and 2008 and is configured to require passwords to be at least 7 characters long. Verify that it has not been changed. The "Minimum password length" policy is included in the default GPO called &amp;#8220;Default Domain Policy.&amp;#8221; The "Minimum password length" policy&amp;nbsp;can be&amp;nbsp;found under &amp;#8220;Windows Settings&amp;#8221;, &amp;#8220;Security Settings&amp;#8221;, &amp;#8220;Account Policies&amp;#8221;, &amp;#8220;Password Policy&amp;#8221;, &amp;#8220;Password must meet complexity requirements&amp;#8221;.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following steps to configure the Active Directory to enforce the minimum password length requirement:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Launch the "Group Policy Management" console. </strong>The "Group Policy Management" console is included in Windows 2008, but has to be downloaded and installed on Windows 2003 and 2000. The link to the download is available at the bottom of this page. To launch the "Group Policy Management" console, execute the "gpmc.msc" command.</p>
+      <li>
+        <p>
+          <strong>Edit or create a Group Policy Object (GPO).</strong> To create and activate a new Group Policy Object (GPO), launch "The Group Policy Management" console, right click on the domain and select "Create and Link a GPO Here."&amp;nbsp;To edit an existing GPO, navigate to the "Group Policy Objects" folder under the current domain, right click on the GPO and select "Edit" - this will open the "Group Policy Object Editor."</p>
+        <li>
+          <p>
+            <strong>Configure the &amp;#8220;Minimum password length&amp;#8221; policy.</strong> Set the &amp;#8220;Minimum password length&amp;#8221; policy requirement to 7 characters or more. This setting is included in the default GPO called "Default Domain Policy." It is found under &amp;#8220;Windows Settings&amp;#8221;, &amp;#8220;Security Settings&amp;#8221;, &amp;#8220;Account Policies&amp;#8221;, &amp;#8220;Password Policy&amp;#8221;, &amp;#8220;Password must meet complexity requirements&amp;#8221;. The "Minimum password length" policy is enabled on Windows 2003 and 2008 by default and is configured to require passwords to be at least 7 characters long.</p>
+          <li>
+            <p>
+              <strong>Link the GPO to the domain.</strong> Link an active group policy object that enables the "Minimum password length" policy to each relevant domain .</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about enforcing password policy in a Microsoft AD environment, please see "Enforcing Strong Password Usage Throughout Your Organization" at <a href="http://technet.microsoft.com/en-us/library/cc875814.aspx">http://technet.microsoft.com/en-us/library/cc875814.aspx</a><li>To download the "Group Policy Management Console," please see "Group Policy Management Console with Service Pack 1" at <a href="http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=0a6d4c24-8cbd-4b35-9272-dd3cbfc81887">http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=0a6d4c24-8cbd-4b35-9272-dd3cbfc81887</a></li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/1b1e78bf-bbf4-4f41-96d6-3b1c2fcfbd6b">Formulate the User Authentication and Password Policies</a>
+      <li>
+        <a href="/article/bb6b2abe-a754-4105-966e-cfb0bd138dc8">Implement the Password Policy Using Group Policy Objects</a>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

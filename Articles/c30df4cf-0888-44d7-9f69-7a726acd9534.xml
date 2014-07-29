@@ -1,0 +1,281 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>c30df4cf-0888-44d7-9f69-7a726acd9534</Id>
+    <Id_History>0613eecd-af9d-4c69-bb9f-7a2cb3dfc2b8,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Security Misconfiguration</Title>
+    <Category>OWASP</Category>
+    <Phase>Any</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>Security Misconfiguration</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<br />
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; line-height: normal; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">Description</h2>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 1.5em; margin: 0.5em 0px 1em; padding: 0px; color: rgb(17, 17, 17);"> Security misconfiguration, such as unnecessarily enabled services, unnecessary open ports, and other known vulnerabilities may arise not only in frameworks, but also in configuration files such as&amp;nbsp; <font face="Courier New">Web.config</font> and database connectivity files. If an application makes use of web servers, databases, or any application 
+framework, or even if it contains any network configuration, there exists a possibility of security misconfiguration.<br /></p>
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; line-height: normal; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">Impact</h2>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 1.5em; margin: 0.5em 0px 1em; padding: 0px; color: rgb(17, 17, 17);">Security misconfiguration can be remotely exploited by an attacker to gain access to the server. The attacker can then perform privilege-escalation to gain root access to the server.<br /></p>
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; line-height: normal; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">Countermeasures</h2>
+  <p style="margin: 0.5em 0px 1em; padding: 0px;">
+    <font face="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" size="2">
+      <span style="line-height: 1.5em;">
+        Automated scanners can perform configuration audits of the servers and other tests to detect unnecessary services, open ports,&amp;nbsp;</span>
+      <span style="line-height: 19.5px;">and other</span>
+      <span style="line-height: 1.5em;"> known vulnerabilities.</span>
+    </font>
+  </p>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 1.5em; margin: 0.5em 0px 1em; padding: 0px; color: rgb(17, 17, 17);">
+    Countermeasures are primarily on the server side, and must include proper server configuration, secure coding, testing, and scanning: <br /></p>
+  <ul>
+    <li style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;">
+      <span style="line-height: 1.5em;">
+        <span style="line-height: 1.5em;">Disable unnecessary services, and close unnecessary ports.</span>
+      </span>
+    </li>
+    <li style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;">
+      <span style="line-height: 1.5em;">
+        <span style="line-height: 1.5em;">
+        </span>Properly harden the servers to ensure that only the necessary individuals have access. See more information on secure logging below.<br /></span>
+    </li>
+    <li style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;">
+      <span style="line-height: 1.5em;">Do not give unnecessary root access to users who do not require it. Avoid remote connection as "root." <br /></span>
+    </li>
+    <li>
+      <font face="Arial, Verdana" size="2">
+        <span style="line-height: 1.5em;">Ensure that the frameworks used for coding are up to date.&amp;nbsp; Avoid deprecated API's and libraries.</span>
+        <span style="line-height: 1.5em;">
+        </span>
+      </font>
+    </li>
+    <li style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;">
+      <span style="line-height: 1.5em;">For testing purposes, the UAT environment should be an exact mirror replica of the live one, so that vulnerabilities will be fixed before moving to production.</span>
+    </li>
+    <li style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;">
+      <span style="line-height: 1.5em;">
+        <span style="line-height: 1.5em;">Separate the </span>live and testing environments both </span>
+      <span style="line-height: 1.5em;">
+        <span style="line-height: 1.5em;">
+          <span style="line-height: 1.5em;">physically and logically.</span>
+        </span>
+      </span>
+    </li>
+    <li style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;">
+      <span style="line-height: 1.5em;">Perform regular scans on the servers, and update all servers in a timely manner. Apply all vendor patches when the are released.</span>
+    </li>
+  </ul>
+  <div>
+    <font face="Arial" size="2">The specific methods to implement these countermeasures may differ in different frameworks. </font>
+    <font face="Arial" size="2">
+      <font face="Arial" size="2">For detailed information related to secure server deployment and configuration, r</font>efer
+ to the security considerations provided in the RPM deployment review 
+and the architecture review document. Additional information from OWASP 
+may be found <a href="https://www.owasp.org/index.php/Top_10_2010-A6-Security_Misconfiguration">here</a>.</font>
+    <font face="Arial" size="2">
+    </font>
+    <font face="Arial" size="2">
+    </font>
+    <font face="Arial" size="2">
+    </font>
+    <ul style="font-size: medium;">
+    </ul>
+    <font face="Arial" size="2">
+      <b>Hardening the servers: Secure logging.&amp;nbsp;</b>
+    </font>
+    <font face="Arial" size="2">
+      <font color="#ff0000">
+      </font>The default error reporting process is safe. Sensitive information must never be logged. However, for production it’s a good idea to use rolling log files. Do not send logging to the console, since it will be written to the&amp;nbsp; <font face="Courier New">logs/system.out</font> &amp;nbsp; file and it will grow without bound. Also, make sure no sensitive content is stored in the log files.</font>
+    <br />
+    <font face="Arial" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Arial" size="2">Create a custom&amp;nbsp; <font face="Courier New">log4j.properties</font>&amp;nbsp; in the <font face="Courier New">conf/</font> directory with following content:</font>
+    </p>
+    <font face="Arial" size="2">
+    </font>
+    <font face="Courier New" size="2">log4j.rootLogger=ERROR, Rolling</font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.logger.play=INFO</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2"># Rolling files</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.appender.Rolling=org.apache.log4j.RollingFileAppender</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.appender.Rolling.File=application.log</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.appender.Rolling.MaxFileSize=1MB</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.appender.Rolling.MaxBackupIndex=100</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.appender.Rolling.layout=org.apache.log4j.PatternLayout</font>
+    </p>
+    <font face="Courier New" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Courier New" size="2">log4j.appender.Rolling.layout.ConversionPattern=%d{ABSOLUTE} %-5p ~ %m%n</font>
+    </p>
+    <font face="Arial" size="2">
+    </font>
+    <ul style="font-size: medium;">
+    </ul>
+    <b>
+      <font face="Arial" size="2">“Catch all” in <font face="Courier New">conf/routes.</font></font>
+    </b>
+    <font face="Arial" size="2">
+      <font face="Courier New">
+        <b>
+        </b>
+      </font>The&amp;nbsp; <font face="Courier New">conf/routes</font>&amp;nbsp; file is the configuration file used by the router. This file lists all the routes needed by the application. Each route consists of an HTTP method and a URI pattern associated with a Java call by the Play Framework. To maintain route priorities, make sure that the “catch all” in the routes is commented out before going live.&amp;nbsp;</font>
+    <font face="Arial" size="2">
+    </font>
+    <p style="font-size: medium;">
+      <font face="Arial" size="2">Refer to the following Guidelines to help implement a deployment strategy with proper security configuration:</font>
+    </p>
+    <ul style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="8e5263d3-3fc8-43a9-9636-57094c58f4c4" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Remove Test Accounts</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="5a36d20f-d8e0-4a86-8776-1f3e95a9da9c" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Disable Directory Browsing</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="15ccde50-5626-4d85-872d-7ea4ee50e749" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Do Not Store Plaintext Data</a>
+        </b>
+      </li>
+    </ul>
+    <div>
+      <font face="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" size="2">
+        <font face="Arial" size="2">
+          <br />Refer to the following Guidelines to help ensure</font> a secure design:</font>
+    </div>
+    <div>
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="c54e8e29-768f-4260-8bc9-0702c59efc59" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Design a Strong Application Architecture</a>
+          </b>
+        </li>
+      </ul>
+      <div>
+        <font face="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" size="2">
+          <font face="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" size="2">
+            <font face="Arial" size="2">
+              <br />Refer to the following Guidelines to help implement</font>
+          </font> a proper server-hardening process:</font>
+      </div>
+    </div>
+    <div>
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="70a384dd-380b-4061-970c-d50b2e573899" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Establish a Repeatable Hardening Process</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="d00da3bd-2b3e-4d1d-b92f-98ce7230cd6f" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Keep Up with Security Updates</a>
+          </b>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-family: Arial, Verdana; font-size: 10pt; line-height: normal;" />
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; line-height: normal; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">
+    <br />
+  </h2>
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">Application Check</h2>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17);">To check for adequate protection against this vulnerability, refer to the following Checklist Items:<span class="Apple-tab-span" style="white-space: pre;"></span></p>
+  <ul style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: normal; margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ebe0ff95-10a5-4243-a77c-7e07a7381470" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Test Accounts Are Removed</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="9e6c8b45-6078-466a-9390-3aacc7fc8ff5" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Directory Browsing Is Disabled</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="cb451e8e-26e2-4a4d-8396-3ebd52b52fa9">Sensitive Data is Not Stored as Plaintext</a>
+        <br />
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="15ccde50-5626-4d85-872d-7ea4ee50e749" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Sensitive Data Inside Configuration Files Is Protected</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ab8f162e-df8c-4fb5-a084-40be7194b6e2">A Repeatable Hardening Process Is Established</a>
+        <br />
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="f4a42c40-6f37-4994-835a-a29ad228af49" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Latest Security Updates Are Installed</a>
+      </b>
+    </li>
+  </ul>
+  <div>
+    <font color="#111111" face="Segoe UI, Helvetica Neue, Helvetica, Arial, sans-serif" size="2">
+      <br />
+    </font>
+  </div>
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; line-height: normal; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">Web-Based Training</h2>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 1.5em; margin: 0.5em 0px 1em; padding: 0px; color: rgb(17, 17, 17);">
+    <a href="https://vulnerabilities.teammentor.net/article/279ad567-2b34-44ce-8e56-8d96770ba500" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-weight: bold;">AWA 101 Fundamentals of Application Security</a>
+  </p>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 1.5em; margin: 0.5em 0px 1em; padding: 0px; color: rgb(17, 17, 17);">This two-part course is ideal for security and development practitioners that want to understand software security risk and seek specific implementation guidance on how to build and deploy more secure software applications. It starts off describing why software security is critical and the risk that software vulnerabilities represent, and proceeds to lay the foundation for secure software development by presenting specific security controls and principles that development teams can implement immediately to reduce software risk.</p>
+  <p style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 1.5em; margin: 0.5em 0px 1em; padding: 0px; color: rgb(17, 17, 17);">
+    <br />
+  </p>
+  <h2 style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; line-height: normal; margin: 0px; padding: 0px; color: rgb(17, 17, 17);">Additional Resources</h2>
+  <ul style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: normal; margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17);">
+    <li style="margin: 0px; padding: 0px;">For more information about Security Misconiguration vulnerabilities, please see&amp;nbsp;<a href="https://www.owasp.org/index.php/Top_10_2010-A6-Security_Misconfiguration">https://www.owasp.org/index.php/Top_10_2010-A6-Security_Misconfiguration</a></li>
+  </ul>
+  <p>
+    <br />
+  </p>
+  <p>
+    <br />
+  </p>
+  <ul style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: normal; margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17);">
+  </ul>
+  <p>
+    <br />
+  </p>
+  <ul style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: normal; margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17);">
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1813350903" Content_Hash="1639223952">
+  <Metadata>
+    <Id>bce1f2ec-a3a1-4148-9d8d-a698e6211ade</Id>
+    <Id_History>d32ffce9-c51a-42e7-b9a9-2863b50aab48,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Avoid Losing Impersonation Tokens</Title>
+    <Category>Threading</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Losing Impersonation Tokens</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>In .NET Framework 2.0, by default the impersonation token does not flow across threads, but for ASP.NET applications you can change this default behavior by configuring the ASPNET.config file in the <b>%Windir%Microsoft.NET\Framework\{Version} </b>directory.</p>
+  <h1>Why</h1>
+  <p>This situation could lead to security vulnerabilities because new threads assume the security context of the process.</p>
+  <h1>When</h1>
+  <p>When spinning off new thread while using impersonation.</p>
+  <h1>How</h1>
+  <p>If you need to flow the impersonation token to new threads, set the <b>enabled</b> attribute to <b>true</b> on the <b>alwaysFlowImpersonationPolicy</b> element in the ASPNET.config file, as shown in the following example.</p>
+  <pre>&lt;configuration&gt;<br />&amp;nbsp; &lt;runtime&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;alwaysFlowImpersonationPolicy enabled="true"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/runtime&gt;<br />&lt;/configuration&gt;  </pre>
+  <p>If you need to prevent impersonation tokens from being passed to new threads programmatically, you can use the <b>ExecutionContext.SuppressFlow</b> method.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

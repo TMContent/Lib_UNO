@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-159417425" Content_Hash="-1798598860">
+  <Metadata>
+    <Id>1aa46692-b07e-4a8c-ad05-484a2d8823ca</Id>
+    <Id_History>71a94b49-d3fa-4427-8721-03305501b441,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Isolate Unmanaged API Calls in a Wrapper Assembly</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Isolate Unmanaged API Calls in a Wrapper Assembly</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>.NET 2.0</p>
+  <h1>What to Do</h1>
+  <p>To make it easier maintain and review your code, place all unmanaged API calls in a wrapper assembly</p>
+  <h1>Why</h1>
+  <p>his allows you to: </p>
+  <ul>
+    <li>Easily determine the set of unmanaged APIs your application is dependant on. </li>
+    <li>Isolate your unmanaged calls in a single assembly. </li>
+    <li>Isolate the <b>UnmanagedCodePermission </b>to a single assembly.</li>
+  </ul>
+  <h1>How</h1>
+  <p>Isolate all unmanaged API calls in a wrapper assembly.&amp;nbsp;Use naming conventions to keep native code risks in mind when you develop and review code. Categorize your unmanaged code and use a prefix to indicate the types that you use to encapsulate the unmanaged APIs. </p>
+  <p>Use the word <i>Safe </i>to identify code that poses no possible security threat and is harmless for any code, malicious or otherwise, to call. You can annotate safe classes with the <b>SuppressUnmanagedCodeSecurity</b> attribute, which turns off the code-access security permission's demand for full trust. </p>
+  <pre>[SuppressUnmanagedCodeSecurity]<br />class SafeNativeMethods {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; DllImport("user32")]<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; internal static extern void MessageBox(string text);<br />}  </pre>
+  <p>Use the word <i>Native</i> to identify unmanaged code that is potentially unsafe but is protected with a full stack-walking demand for the unmanaged code permission. These are implicitly made by the interop layer unless they have been suppressed with the <b>SuppressUnmanagedCodeSecurity</b> attribute. </p>
+  <pre>class NativeMethods {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; [DllImport("user32")]<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; internal static extern void FormatDrive(string driveLetter);<br />}  </pre>
+  <p>Use the word <i>Unsafe</i> to identify unmanaged code that is potentially unsafe and that has the security demand for the unmanaged code permission declaratively suppressed. Any caller of these methods must do a full security review to ensure that the usage is safe because no stack walk is performed. </p>
+  <pre>[SuppressUnmanagedCodeSecurity]<br />class UnsafeNativeMethods {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; [DllImport("user32")]<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; internal static extern void CreateFile(string fileName);<br />}</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

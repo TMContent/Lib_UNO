@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-147926972" Content_Hash="-637381042">
+  <Metadata>
+    <Id>d5c9025d-be7e-4f00-abde-ac873a2d4337</Id>
+    <Id_History>693c4ed2-b8d0-45b8-9122-cbee83f7e1c0,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Check the State of Channel in WCF Proxy Client</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Check the State of Channel in WCF Proxy Client</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can check the state of channel during proxy invocation by checking the value or proxy.state. You avoid this way throwing exception on the proxy, due to channel being closed due to an unhandled exception on service. </p>
+  <div>
+    <p />
+    <pre>try<br />{<br />ServiceClient proxy = new ServiceClient();<br />proxy.ClientCredentials.UserName.UserName = "user";</pre>
+    <pre>proxy.ClientCredentials.UserName.Password = "password"; proxy.GetData(2);                <br />if (proxy.State = CommunicationState.Opened) {                    <br />      proxy.GetData("data");                <br />    }<br /> proxy.Close();         <br />}<br />catch (FaultException ex)            <br />{}</pre>
+    <p />
+  </div>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

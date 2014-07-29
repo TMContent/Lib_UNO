@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1900562522" Content_Hash="1741132740">
+  <Metadata>
+    <Id>585a09b4-7cfc-4e75-88f1-ae4b28634e18</Id>
+    <Id_History>38d2ba16-2356-418e-86ed-1be78cf7daf5,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Manage Keys And Other Sensitive Data</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Manage Keys And Other Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>To avoid key management, consider using DPAPI encryption where possible. With DPAPI, the operating system manages the key. For example, a good use for DPAPI is to encrypt symmetric encryption keys used to encrypt data in a database. </p>
+  <p>Cycle keys periodically. Change your encryption keys regularly because a static secret is more likely to be discovered over time. Do not overuse keys. </p>
+  <p>Protect exported private keys. Use the <b>PasswordDeriveBytes</b> class when you export an RSA or DSA private key. The RSA and DSA classes contain a <b>ToXmlString</b> method, which enables you to export the public key or private key (or both) from the key container. This method exports the private key in plain text. If you export the private key to be installed on multiple servers in a Web farm, you should encrypt the key after exporting the private key by using <b>PasswordDeriveBytes</b> to generate a symmetric key, as shown in the following code example. </p>
+  <pre>using System.Security.Cryptography;<br />...<br />PasswordDeriveBytes deriver = new PasswordDeriveBytes(&lt;strong password&gt;, null);<br />byte[] ivZeros = new byte[8];<br />//This is not actually used but is currently required.<br />//Derive key from the password<br />byte[] pbeKey = deriver.CryptDeriveKey("TripleDES", "SHA1", 192, ivZeros);</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

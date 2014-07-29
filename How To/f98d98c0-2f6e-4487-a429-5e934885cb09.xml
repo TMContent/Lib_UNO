@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1928598211" Content_Hash="1899140047">
+  <Metadata>
+    <Id>f98d98c0-2f6e-4487-a429-5e934885cb09</Id>
+    <Id_History>34724084-b7cb-446d-8548-80a9b172da2a,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Validate Inbound Messages on a Service</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Validate Inbound Messages on a Service</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Implement the AfterReceiveRequest of the interface IDispatchMessageInspector of a message inspector to validate inbound messages on a service. This allows you to validate the message after the request has arrived but before service operation invocation and deserialization. </p>
+  <pre>object IDispatchMessageInspector.AfterReceiveRequest(ref System.ServiceModel.Channels.Message request, System.ServiceModel.IClientChannel channel, System.ServiceModel.InstanceContext instanceContext)<br />{<br />    try<br />    {<br />        validateMessage(ref request);<br />    }      <br />    catch (FaultException e)<br />    {<br />        throw new FaultException&lt;string&gt;(e.Message);<br />    }<br />    return null;   <br />}</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see “Message Inspectors” at <a href="http://msdn.microsoft.com/en-us/library/aa717047.aspx">http://msdn.microsoft.com/en-us/library/aa717047.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

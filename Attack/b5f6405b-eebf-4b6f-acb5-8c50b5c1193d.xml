@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="659199505" Content_Hash="1324058813">
+  <Metadata>
+    <Id>b5f6405b-eebf-4b6f-acb5-8c50b5c1193d</Id>
+    <Id_History>1b2b2ca9-d35e-4119-b9d0-707b7cf127c0,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Sniff Memory for Secrets Attack</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Sniff Memory for Secrets Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Local applications that deal with secret data such as passwords, encryption keys, etc.</p>
+  <h1>Description</h1>
+  <p>Attackers often scan the memory space of a locally running application if they need to find certain secrets that the application contains. This is because developers are usually lax when dealing with sensitive data securely when the data is inside the application's own memory space.</p>
+  <p>It is common knowledge that in most modern operating systems, an application's memory space is protected and is not accessible by other applications on the same system. However, reading and modifying another application's memory is also essential for debuggers to work. For this purpose, operating systems contain workarounds to accomodate reading and writing to another application's memory. This allows any application on the system to debug another process and read its memory content. Although operating systems do require the debugger process to have special permissions in order to debug another application, this still remains a problem in situations where users have administrative privileges on their local machines.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Disclosure of sensitive information to an attacker: This could be a an encryption key, another user's personal information or any other data that an attacker should not have access to.</li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Storing clear-text sensitive information in memory. <li>Using obfuscation techniques instead of stronger protection mechanisms for sensitive information in memory.</li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <strong>Encrypt secret data</strong>: When sensitive data is present in application memory, it should be encrypted and the clear-text data should be overwritten as soon as possible. Freeing a variable does not clear the data it holds from memory; therefore it is important to remember to explicitly overwrite the memory segment where sensitive information was stored. <li><strong>Store sensitive data in mutable objects</strong>: Mutable objects allow the data in them to be overwritten. This is especially useful in managed languages as objects are required to be deallocated through the garbage collector. Therefore there is no certainty when the sensitive data will be deallocated from the current process space. <li><strong>Clear all sensitive data instances</strong>: Make sure that all memory locations, where sensitive data has been stored, are cleared/overwritten after their use. Losing a pointer to a sensitive data instance can result in not cleaning that particular memory and allowing the sensitive data to leak.</li></li></li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on secrets in memory, see: <a href="http://msdn2.microsoft.com/en-us/library/aa480477.aspx#pagguidelines0003_sens2">Minimize the exposure of secrets in memory</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/98cde44d-25b5-4262-a4f0-aada5fd31318">Attack: Reflection Injection Attack</a>
+      <li>
+        <a href="/article/22722eaf-f317-4b81-aecb-22c5caebfc97">Attack: Local Machine Credential Sniffing Attack</a>
+        <li>
+          <a href="/article/e55c7c81-d80f-4943-9464-80da64d31fe3">Attack: Luring Attack</a>
+          <li>
+            <a href="/article/0cfe0913-550f-4bf5-a66a-71cffdbbcac3">Attack: API Hijacking Attack</a>
+            <li>
+              <a href="/article/2120b3fe-34c6-47bf-be83-d9756e512d02">Guideline: Do Not Leave Passwords in Memory </a>
+              <li>
+                <a href="/article/23c21386-b64a-4872-8727-714977ba84a4">Guideline: Clear Sensitive Data from Memory when No Longer Used </a>
+                <li>
+                  <a href="/article/e3bdbea7-92cb-4407-998a-eaa95cb955e9">Guideline: Do Not Cache Sensitive Data </a>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

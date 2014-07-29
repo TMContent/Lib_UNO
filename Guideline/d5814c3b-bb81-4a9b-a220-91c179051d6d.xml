@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="356845194" Content_Hash="1441995915">
+  <Metadata>
+    <Id>d5814c3b-bb81-4a9b-a220-91c179051d6d</Id>
+    <Id_History>798666c4-9a37-49f5-b0ec-0af66ede1baf,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Be Careful with Canonicalization Issues</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Design</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Be Careful with Canonicalization Issues</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Web Application</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Determine whether your application uses names such as user names, file names, or URLs&amp;nbsp;that are based on input to make security decisions. If it does, your code is susceptible to canonicalization issues. </p>
+  <h1>Why</h1>
+  <p>These are notorious for canonicalization issues because of the many ways that the names can be represented. If your application does accept names as input, make sure that they are validated and converted to their canonical representation before processing. </p>
+  <h1>When</h1>
+  <p>If your application does accept file names or URLs as input, make sure that they are validated and converted to their canonical representation before processing. </p>
+  <h1>How</h1>
+  <p>Data in canonical form is in its most standard or simplest form. Canonicalization is the process of converting data to its canonical form. File paths and URLs are particularly prone to canonicalization issues and many well-known exploits are a direct result of canonicalization bugs. For example, consider the following string that contains a file and path in its canonical form.</p>
+  <pre>c:\temp\somefile.dat</pre>
+  <p>The following strings could also represent the same file.</p>
+  <pre>somefile.dat<br />c:\temp\subdir\..\somefile.dat<br />c:\temp\somefile.dat..\somefile.dat<br />c%3A%5Ctemp%5Csubdir%5C%2E%2E%5Csomefile.dat</pre>
+  <p />In the last example, characters have been specified in hexadecimal form: <ul><li>%3A is the colon character. </li><li>%5C is the backslash character. </li><li>%2E is the dot character. </li></ul><p>You should generally try to avoid designing applications that accept input file names from the user to avoid canonicalization issues. Consider alternative designs instead. For example, let the application determine the file name for the user.</p><p>If you do need to accept input file names, make sure they are strictly formed before making security decisions such as granting or denying access to the specified file.</p><h1>Additional Resources</h1><ul><li>For more information see, "Chapter 4 - Design Guidelines for Secure Web Applications" at <a href="http://msdn2.microsoft.com/en-us/library/aa302420.aspx">http://msdn2.microsoft.com/en-us/library/aa302420.aspx</a></li></ul><hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

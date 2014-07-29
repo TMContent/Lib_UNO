@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d5357586-f165-4080-a54c-988c7395327a</Id>
+    <Id_History>62ea2ac6-66d8-47b1-a2c0-7b63bd70b581,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Parameterized APIs Are Used to Execute External Commands</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Parameterized APIs Are Used to Execute External Commands</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Check For==
+
+Verify that parameterized APIs are used to execute external commands.
+
+==Why==
+
+Use pcntl_exec to execute operating system commands, because this function passes arguments to the operating system command being executed separately from the name of the command to execute. Keeping the name of the executed command separate from the arguments helps prevent command injection vulnerabilities.
+
+==How to Check==
+
+To verify that pcntl_exec is used to execute operating system commands:
+
+# **Find all code that executes operating system commands.** To identify potential trouble spots, find all the code in the application that executes operating system commands by searching for use of the following functions: exec, passthru, shell_exec, system, proc_open, popen, curl_exec, curl_multi_exec, pcntl_exec, dl. Make a spreadsheet of all this code.
+# **Identify whether calling operating system commands is necessary.** With the spreadsheet of potentially dangerous code in hand, examine each piece of code that executes operating system commands and determine whether it is absolutely necessary to the application. If possible, rewrite that code to use only PHP functions, thus removing the possibility that it contains a command injection vulnerability.
+# **Verify that pcntl_exec is used to execute external commands.** For each piece of code that executes external commands that is absolutely necessary for the application to work properly, make sure that pcntl_exec is used to execute external commands. 
+# **Verify that pcntl_exec is used correctly.** For each piece of code that uses pcntl_exec, make sure that code can't be manipulated to execute programs other than the one intended. The correct way to use pcntl_exec is to not allow the user to supply the path of the program to execute, to supply a full path to the program that needs to be executed, and to make sure that the program being executed cannot execute any other programs based on the arguments that it receives. The path of the program to execute can usually be determined without any user input and that should be done. The user should never be allowed to arbitrarily decide what program to run - that is the very definition of a command injection vulnerability. If it is absolutely necessary to choose what program to run based on user input, define a list of allowed and safe programs to run, place the paths to these programs in an array, and then choose the index of the array based on the user input to correspond to the program that needs to be executed based on the user's choice. All paths passed to pcntl_exec should be fully qualified paths from the file-system root. It is recommended to use the realpath function to determine the fully qualified path of the program to run. Most of the time, if user data is needed for executing an external program, user data is passed in the arguments to the application. Most user data should be safe to pass to external programs using pcntl_exec, however it is important to consider whether the external command itself can be somehow abused. One particular thing to watch out for is whether the external program can execute other programs based on the arguments that are sent to it - one obvious example would be passing arguments to a shell. For most practical scenarios, this should not be an issue, but it's something to be aware of. 
+
+
+==How to Fix==
+
+To use pcntl_exec to execute operating system commands:
+
+# **Find all code that executes operating system commands.** To identify potential trouble spots, find all the code in the application that executes operating system commands by searching for use of the following functions: exec, passthru, shell_exec, system, proc_open, popen, curl_exec, curl_multi_exec, pcntl_exec, dl. Make a spreadsheet of all this code.
+# **Identify whether calling operating system commands is necessary.** With the spreadsheet of potentially dangerous code in hand, examine each piece of code that executes operating system commands and determine whether it is absolutely necessary to the application. If possible, rewrite that code to use only PHP functions, thus removing the possibility that it contains a command injection vulnerability.
+# **Use pcntl_exec to execute operating system commands.** If application functionality requires executing operating system commands, this should be done using parameterized APIs. In PHP this is done using the pcntl_exec function. The reference for this function is available at http://php.net/manual/en/function.pcntl-exec.php. The pcntl_exec function is the safest command execution function in PHP, but it has some drawbacks and should still be used with care. One of the main drawbacks of the pcntl_exec function is that it doesn't return the output of the executed process. On the bright side, the executed program is not executed via a shell, so it is very hard to trick pcntl_exec into executing a program other than the one that is intended. The key point is that the arguments passed to the program being executed are passed via a separate variable from the path of the program - this is the "parameterization" part. Because the arguments are passed in a separate variable, the arguments cannot be manipulated into causing PHP to execute some other application in typical scenarios. It is possible to craft a scenario where pcntl_exec is used to execute a shell and pass it the name of some other command as the argument, but that is a crazy thing to do - don't do that. 
+# **Use pcntl_exec correctly.** The correct way to use pcntl_exec is to not allow the user to supply the path of the program to execute, to supply a full path to the program that needs to be executed, and to make sure that the program being executed cannot execute any other programs based on the arguments that it receives. The path of the program to execute can usually be determined without any user input and that should be done. The user should never be allowed to arbitrarily decide what program to run - that is the very definition of a command injection vulnerability. If it is absolutely necessary to choose what program to run based on user input, define a list of allowed and safe programs to run, place the paths to these programs in an array, and then choose the index of the array based on the user input to correspond to the program that needs to be executed based on the user's choice. All paths passed to pcntl_exec should be fully qualified paths from the file-system root. It is recommended to use the realpath function to determine the fully qualified path of the program to run. Most of the time, if user data is needed for executing an external program, user data is passed in the arguments to the application. Most user data should be safe to pass to external programs using pcntl_exec, however it is important to consider whether the external command itself can be somehow abused. One particular thing to watch out for is whether the external program can execute other programs based on the arguments that are sent to it - one obvious example would be passing arguments to a shell. For most practical scenarios, this should not be an issue, but it's something to be aware of. 
+]]></Data>
+  </Content>
+</TeamMentor_Article>

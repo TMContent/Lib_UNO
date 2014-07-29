@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1261781487" Content_Hash="-1990481217">
+  <Metadata>
+    <Id>dd8b154d-7810-47fb-bba9-566761b52149</Id>
+    <Id_History>fc09f570-5d26-4b90-8645-fca659381b26,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>ViewStates That Contain Sensitive Data Are Encrypted</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>ViewStates That Contain Sensitive Data Are Encrypted</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>If sensitive information must be stored in ViewState, verify that it is encrypted.</p>
+  <h1>Why</h1>
+  <p>ViewState is protected against tampering by default with an HMAC integrity check, and SSL can be used to protect ViewState on the network. However, unless ViewState encryption is used, any sensitive data stored in ViewState is vulnerable on the local machine.</p>
+  <h1>How To Check</h1>
+  <p>The easiest way to check if ViewState encryption is turned on is to review the HTML source returned by your application on the client-side and scan for the __<em>VIEWSTATE</em> and __<em>VIEWSTATEENCRYPTED</em>&amp;nbsp;hidden fields:</p>
+  <pre>&lt;form name="testForm" method="post" action="viewstate.aspx" id="testForm"&gt;<br />&lt;input type="hidden" name="__VIEWSTATE"<br />...<br />&lt;input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" /&gt;</pre>
+  <h1>How To Fix</h1>
+  <p>The default ASP.NET settings ensure that ViewState is tamper proof. This ensures that any modification of the ViewState either on the client's computer or over the network is detected when the server processes the data. If you need to use round trips for potentially sensitive data, you can force encryption of ViewState for a specific page by following these steps:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Check the &lt;pages&gt; element.</strong> Check that the <em>viewStateEncryptionMode</em> attribute of the &lt;<em>pages</em>&gt; element is set to <em>Always</em>, as shown in the following example.</p>
+      <pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Always"<br /> ...<br /> /&gt;</pre>
+      <p>If you do not want every page to used encrypted ViewState, check that the <em>viewStateEncryptionMode</em> attribute of the &lt;<em>pages</em>&gt; element is set to <em>Auto</em>, as shown in the following example.</p>
+      <pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Auto"<br /> ...<br /> /&gt;</pre>
+      <p>Then, from within your code, call the <em>RegisterRequiresViewStateEncryption</em> method as shown in the following example.</p>
+      <pre>Page.RegisterRequiresViewStateEncryption();</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Specify the encryption algorithm.</strong> Specify the encryption algorithm to use on the validation attribute, as shown in the following example.</p>
+      <pre>&lt;machineKey<br /> ...<br /> validation="AES"<br /> ...<br /> /&gt;</pre>
+      <p>The validation attribute is overloaded and can be used to specify either the hashing algorithm or the encryption algorithm. You can specify either 3DES or AES. Because AES offers larger key sizes (128 bits, 192 bits, or 256 bits) than 3DES (56 bits), it is considered more secure and should be used.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check the &lt;machineKey&gt; element.</strong> Review the <em>decryptionKey</em> and <em>validationKey</em> attribute of the &lt;<em>machineKey</em>&gt; element:</p>
+      <pre>&lt;machineKey validationKey="AutoGenerate,IsolateApps"<br /> decryptionKey="AutoGenerate,IsolateApps"<br /> ...<br /> /&gt;</pre>Unless your application is installed in a Web farm, you should leave the <em>decryptionKey</em> and <em>validationKey</em> attribute with the default values shown in the example. To encrypt ViewState in a web farm, you need to manually set the <em>validationKey</em> and <em>decryptionKey</em> value—these values should be same across all machines in the web farm. </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/aa7c35a0-08c6-4858-be58-25d91315f301">Encrypt ViewStates that Contain Sensitive Data</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-721611653" Content_Hash="1604963601">
+  <Metadata>
+    <Id>4bcd85ec-bfae-49b9-a296-dc7b9e773e8c</Id>
+    <Id_History>e21e25aa-2a51-454a-b2cf-f770c0481589,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Avoid Proxy Spoofing</Title>
+    <Category>Networking</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Avoid Proxy Spoofing</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>To avoid proxy spoofing at the time of adding a WCF Service Reference:</p>
+  <ul>
+    <li>Publish metadata securely, over https. Use the mexHttpsBinding and configure a server certificate for the service. The following configuration shows how to publish metadata securely: 
+<ul><pre>&lt;serviceMetadata httpGetEnabled="False" httpsGetEnabled="True"/&gt;</pre></ul><li>If you are required to use mex endpoint instead of exposing your service reference using httpGet, use a secure binding. Use any standard binding (which has security features) you want for the MEX service endpoint, the only requirement is to use the IMetadataExchange contract. It will require to use a custom serviceutil.exe.config file to generate the proxy</li></li>
+  </ul>
+  <p>To avoid proxy spoofing at runtime </p>
+  <ul>
+    <li>Make sure your WCF service’s uses mutual authentication, mutual authentication is enforced when using either message or transport security. 
+<li>If you are using basicHttpBinding by default it does not use any security, make sure its configured to use either transport or message security. 
+<li>Do not rely on NTLM protocol for authentication. NTLM does not provide with mutual authentication.</li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

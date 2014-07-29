@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1979925540" Content_Hash="2053369933">
+  <Metadata>
+    <Id>16db6e0e-fa8c-4a9a-9def-2f267c252526</Id>
+    <Id_History>2dab0801-ac96-48b0-a33a-2bd3555e04e8,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Application Logs to a Separate Protected Server</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Application Logs to a Separate Protected Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure your application logs application events to a seperate protected server.</p>
+  <h1>Why</h1>
+  <p>This helps to ensure that logs cannot be tampered with by attackers</p>
+  <h1>How to Check</h1>
+  <p>Review the web.config file for your application to ensure logs are being sent to a seperate server.&amp;nbsp; Use the following steps:</p>
+  <p>
+    <strong>1. Make sure you are reviewing the correct config file</strong>
+  </p>
+  <p>Look at both application-level web.config and machine-level web.config.&amp;nbsp; Application-level settings override machine-level settings.</p>
+  <p>
+    <strong>2. Ensure your application uses HealthMonitoring </strong>
+  </p>
+  <p>If your application is using HealthMonitoring, you will find a &lt;<strong>HealthMonitoring</strong>&gt; element in web.config with <strong>enabled </strong>attribute set to true.</p>
+  <pre>&lt;healthMonitoring heartbeatInterval="0" enabled="true"&gt;</pre>
+  <p>
+    <strong>3. Check for SqlWebEventProvider</strong>
+  </p>
+  <p>Within the &lt;<strong>HealthMonitoring</strong>&gt; element look for the &lt;<strong>Providers</strong>&gt; element configured to send events to the SqlWebEventProvider:</p>
+  <pre>&lt;providers&gt;<br />   &lt;add connectionStringName="MySqlConnection"<br />      maxEventDetailsLength="1073741823"<br />      buffer="true"<br />      bufferMode="Extra Critical Notification"<br />      name="MySqlWebEventProvider"<br />      type="System.Web.Management.SqlWebEventProvider,System.Web,Version=2.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br />&lt;/providers&gt; </pre>
+  <p>
+    <strong>4. Check connection string</strong>
+  </p>
+  <p>For the SqlWebEventProvider to work, there must be a valid connection string within web.config.&amp;nbsp; Check the &lt;<strong>ConnectionStrings</strong>&gt; element to ensure the ConnectionStringName attribute value within the &lt;<strong>Providers</strong>&gt; element described above maps to a valid connection string instance.</p>
+  <p>
+    <strong>5. Check the remote server</strong>
+  </p>
+  <p>Start the application and perform some functionality that will generate logs. Check the remote server to ensure the logs show up.</p>
+  <h1>How to Fix</h1>
+  <p>Use the following steps to log to a seperate server:</p>
+  <p>
+    <strong>1. Ensure your application uses Health Monitoring</strong>
+  </p>
+  <p>By default, health monitoring is enabled for ASP.NET applications. You can see the default configuration in the machine-level Web.config.comments file in the <b>%windir%\Microsoft .NET\Framework\{version}\CONFIG </b>configuration file directory.</p>
+  <p>
+    <strong>2. Configure SqlWebEventProvider</strong>
+  </p>
+  <p>If you want to configure an event provider that writes to a SQL Server instance, you must create the database used by the <b>SqlWebEventProvider</b>, configure a connection string, and configure a provider definition. </p>
+  <ol>
+    <li>Install the Web event database by running the following command from the Visual Studio 2005 command prompt: <p /><b>aspnet_regsql.exe -E -S </b>&lt;<b>ServerName</b>&gt;<b> -A w</b><p />This command uses the following switches: <ul><li><b>-E.</b> This switch indicates to use Windows authentication to connect to the database. </li><li><b>-S</b> &lt;<b>ServerName</b>&gt;<b>.</b> This switch indicates the name of the server where the database will be installed, or is already installed. </li><li><b>-A w. </b>This switch indicates to add Web event support. This creates the relevant tables and stored procedures required by the <b>SqlWebEventProvider</b>. </li></ul></li>
+    <li>Create a SQL Server logon for your Web application's identity. For example, create a network service and then create a database user for this logon in the Aspnetdb database. </li>
+    <li>Grant the database user <b>execute</b> permission on the <b>aspnet_WebEvent_LogEvent</b> stored procedure. </li>
+    <li>Add the following connection string to your application's Web.config file. <br /><pre>&lt;connectionStrings&gt;<br /> &amp;nbsp;&amp;nbsp; &lt;add name="MySqlConnection" connectionString="Data Source=remotehost;Initial Catalog=aspnetdb;Integrated Security=SSPI;"/&gt;<br />&lt;/connectionStrings&gt;</pre></li>
+    <li>Add the following &lt;<b>providers</b>&gt; configuration within the &lt;<b>healthMonitoring</b>&gt; section in Web.config. <br /><pre>&lt;providers&gt;<br />   &lt;add connectionStringName="MySqlConnection"<br />      maxEventDetailsLength="1073741823"<br />      buffer="true"<br />      bufferMode="Extra Critical Notification"<br />      name="MySqlWebEventProvider"<br />      type="System.Web.Management.SqlWebEventProvider,System.Web,Version=2.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br />&lt;/providers&gt; </pre></li>
+  </ol>
+  <p />The following list describes the most important attributes you can set when configuring event providers: <ul><li><b>name. </b>This is a name for the buffer mode used to reference it from other elements. </li><li><b>type.</b> This is a fully-qualified assembly reference to the provider class. This class should implement the <b>System.Configuration.Provider.ProviderBase</b> class. </li><li><b>buffer.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to enable event buffering. If this attribute is <b>true</b>, you must configure the <b>bufferMode</b> attribute. The default value is <b>false</b>. </li><li><b>bufferMode.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to specify the friendly name of the buffer mode to be used for buffering the events. </li><li><b>connectionStringName.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to specify the friendly name of the connection string used for connecting to the SQL Server database. </li><li><b>maxEventDetailsLength.</b> This is the maximum length of the event details. </li></ul><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you want to use the <b>SqlWebEventProvider</b> to write to a local or remote SQL Server instance, use the Aspnet_regsql tool to configure the necessary database tables and roles as described in "Step 3. Configure Health Monitoring."<b></b></blockquote><h1>Problem Example</h1><p>An e-commerce site with a two-tier web server/database model is built using file-based logging, and each machine keeps its logs on local disk.&amp;nbsp; When several of the web servers are compromised, the attackers wipe the logs and the owners are unable to determine how they got in.&amp;nbsp; The attacks re-occur several times before the hole is finally found and patched.</p><h1>Solution Example</h1><p>An e-commerce site with a two-tier web server/database model is built using remote logging server, with communication occuring over an encrypted channel.&amp;nbsp; When several of the web servers are compromised, the attackers are unable to break into the remote logging machine and cannot wipe the logs.&amp;nbsp; The owners find the hole quickly, thanks to the information in the log files, and the machines are patched immediately.</p><pre>&lt;healthMonitoring heartbeatInterval="0" enabled="true"&gt;<br /> &lt;providers&gt;<br />    &lt;add connectionStringName="MySqlConnection"<br />       maxEventDetailsLength="1073741823"<br />       buffer="true"<br />       bufferMode="Extra Critical Notification"<br />       name="MySqlWebEventProvider"<br />       type="System.Web.Management.SqlWebEventProvider,System.Web,Version=2.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br /> &lt;/providers&gt;<br />&lt;/healthMonitoring&gt; </pre><h1>Additional Resources</h1><ul><li>For more information Health Monitoring see, <a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/paght000011.asp">How To: Use Health Monitoring in ASP.NET 2.0</a></li></ul><hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

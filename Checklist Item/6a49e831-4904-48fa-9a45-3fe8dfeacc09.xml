@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1848371223" Content_Hash="-959921425">
+  <Metadata>
+    <Id>6a49e831-4904-48fa-9a45-3fe8dfeacc09</Id>
+    <Id_History>f9c1e6b0-1bc4-4108-9c9a-55dca84749ac,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Sensitive Data Inside Configuration Files Is Protected</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Inside Configuration Files Is Protected</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure all sensitive data stored within configuration files&amp;nbsp;is protected.</p>
+  <h1>Why</h1>
+  <p>Configuration files are a likely target for any attacker. If an attacker compromises the configuration files, any unprotected sensitive data inside them will also be compromised.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to ensure that your application protects all sensitive data in its configuration files:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Ensure that&amp;nbsp;sensitive data is encrypted. </strong>Verify that the following pieces are in place when encrypting the configuration file:</p>
+      <ul>
+        <li>
+          <strong>Encryption Key</strong>: The encryption key is securely stored inside your application's key store. <li><strong>Function</strong>: Your application uses AES, 3DES or any other strong symmetric encryption function. <li><strong>Invocation</strong>: Your application invokes the <em>Cipher.init</em> and <em>Cipher.doFinal</em> methods to perform the encryption procedure. </li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Ensure that the configuration file has the appropriate filesystem permissions. </strong>Ensure that the configuration file can be accessed only by your application and its administrators.</p>
+        <li>
+          <p>
+            <strong>Verify that the configuration directory is not web accessible. </strong>Verify that the configuration file is not placed into a web-accessible directory.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To protect sensitive data inside configuration files use the following steps:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the sensitive data. </strong>Locate all sensitive data that is stored inside configuration files. Examples of sensitive data include, but are not limited to, credentials, connection strings and directory paths.</p>
+      <li>
+        <p>
+          <strong>Encrypt sensitive data inside the configuration files. </strong>Encrypt the sensitive data inside the configuration file to ensure its confidentiality in case this file is compromised. Once the application accesses the configuration file, it should decrypt the sensitive data just before use. Example:</p>
+        <pre>public Properties loadDatabaseCredentials()<br />      throws GeneralSecurityException, IOException&amp;#123;<br />      // Set the decryption mechanism<br />      byte&amp;#91;&amp;#93; rawKey = getEncryptionKey();<br />      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");<br />      Cipher cipher = Cipher.getInstance("AES");<br />      cipher.init(Cipher.DECRYPT_MODE, skeySpec);<br /><br />      // Decrypt config file<br /><br />      File configFile = new File("../../config/testProp.config");<br />      byte&amp;#91;&amp;#93; tempBuff = new byte&amp;#91;(int)configFile.length()&amp;#93;;<br />      FileInputStream fileStream = new FileInputStream(configFile);<br />      fileStream.read(tempBuff, 0, tempBuff.length);<br /><br />      InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));<br />      prop.load(propStream);<br />      propStream.close();<br />      fileStream.close();<br /><br />      return prop;&amp;#125;</pre>
+        <li>
+          <p>
+            <strong>Protect configuration files.</strong>
+          </p>
+          <ul>
+            <li>
+              <p>
+                <strong>Choose a configuration directory</strong>: Dedicate a directory for storing your application's configuration files. Make sure the directory is not web-accessible. This limits the scope of users&amp;nbsp;who can potentially compromise the contents inside the directory.</p>
+              <li>
+                <p>
+                  <strong>Set appropriate permissions</strong>: Apply the appropriate filesystem permissions such that the configuration files can be only accessed by your application and its administrators.</p>
+              </li>
+            </li>
+          </ul>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code retrieves database credentials from a configuration file. Unfortunately, the credentials are not encrypted; therefore, anybody with access to the configuration file can retrieve the credentials and access the database on behalf of the application.</p>
+  <pre>public Properties loadDatabaseCredentials() throws IOException&amp;#123;<br />      Properties prop = new Properties();<br />      InputStream propStream = new FileInputStream("../../config/testProp.config");<br />      prop.load(propStream);<br />      propStream.close();<br /><br />      return prop;&amp;#125;</pre>
+  <h1>Solution Example</h1>
+  <p>The following code retrieves database credentials from a configuration file. Because the credentials are encrypted, the application decrypts them in real time, protecting the credentials' confidentiality in case the local access to the configuration file is not properly secured.</p>
+  <pre>public Properties loadDatabaseCredentials()<br />      throws GeneralSecurityException, IOException&amp;#123;<br />      // Set the decryption mechanism<br />      byte&amp;#91;&amp;#93; rawKey = getEncryptionKey();<br />      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");<br />      Cipher cipher = Cipher.getInstance("AES");<br />      cipher.init(Cipher.DECRYPT_MODE, skeySpec);<br /><br />      // Decrypt config file<br /><br />      File configFile = new File("../../config/testProp.config");<br />      byte&amp;#91;&amp;#93; tempBuff = new byte&amp;#91;(int)configFile.length()&amp;#93;;<br />      FileInputStream fileStream = new FileInputStream(configFile);<br />      fileStream.read(tempBuff, 0, tempBuff.length);<br /><br />      InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));<br />      prop.load(propStream);<br />      propStream.close();<br />      fileStream.close();<br /><br />      return prop;&amp;#125;</pre>
+  <h1>Java Deployment Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/f21f5350-826d-44dd-b758-fd824d52f592">Remove Test Accounts</a>
+      <li>
+        <a href="/article/df860f3d-2185-4939-be4b-ef26d8891855">Remove Test Interfaces</a>
+        <li>
+          <a href="/article/fd675679-e8ad-40fc-bac4-d56fc440bc00">Disable Directory Browsing</a>
+          <li>
+            <a href="/article/aebb10ce-aeb6-45e5-b159-e2bc76b012bf">Use a Least-Privileged Account for Running Applications</a>
+            <li>
+              <a href="/article/47e80747-3e12-4dd1-a522-ea5c33154a86">Protect the JAAS Policy and Configuration Files</a>
+              <li>
+                <a href="/article/3f301ff9-098d-46cb-ac53-cb3fa6897cdf">Protect Sensitive Data Inside Configuration Files</a>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Deployment Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/256b4884-9ff0-4a33-960c-305b824bab68">Test Accounts Are Removed</a>
+      <li>
+        <a href="/article/fe7941bc-b986-48f9-9fa3-422c34db36bd">Test Interfaces Are Removed</a>
+        <li>
+          <a href="/article/65e70f79-645d-415c-9e71-9cff045cc1c4">Directory Browsing Is Disabled</a>
+          <li>
+            <a href="/article/a2000bc9-7e22-4d0c-91b8-a9ec623985d3">A Least Privileged Account Is Used for Running Applications</a>
+            <li>
+              <a href="/article/4bc8430f-b950-455a-80c1-8cbdb524c1e3">JAAS Policy and Configuration Files Are Protected</a>
+              <li>
+                <a href="/article/f9c1e6b0-1bc4-4108-9c9a-55dca84749ac">Sensitive Data Inside Configuration Files Is Protected</a>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

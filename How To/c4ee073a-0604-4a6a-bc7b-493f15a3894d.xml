@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="168655165" Content_Hash="-1015980013">
+  <Metadata>
+    <Id>c4ee073a-0604-4a6a-bc7b-493f15a3894d</Id>
+    <Id_History>ad85f476-fc0f-4f33-a934-51380c24856e,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Session Prediction Bugs in ASP .NET</Title>
+    <Category>Authentication</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to:</span>
+  </h1>
+  <ul>
+    <li>ASP .NET applications </li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>ASP .NET applications use sessions to relate authentication and authorization decisions with the following activities of a user.<span>&nbsp; </span>Sessions are tracked with session identifiers (or session IDs), ensuring they have been authenticated before allowing access certain areas of an application or performing particular transactions. <span>&nbsp;</span>For example, an online banking application requires a valid session ID before its clients can access their account details or make transfers.<span>&nbsp; </span>An application commonly creates and assigns a session ID to its clients at login time, after their credentials have been checked.<span>&nbsp; </span>Later, before allowing the clients to browse through different pages or execute specific functionality, the application checks the session ID sent in the client’s request against a server copy of the client’s session ID and allows the request if they match. </p>
+  <p>During a session prediction attack, an attacker observes the algorithm the application uses to create new session identifiers in an attempt of discovering a pattern.<span>&nbsp; </span>The attacker’s goal is being able to predict a valid session ID corresponding to another user in order to impersonate or spoof the user.<span>&nbsp; </span></p>
+  <p>It is recommended to follow these steps to test for session prediction bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios
+<li>Step 2: Analyze causes and countermeasures
+<li>Step 3: Start testing and exploring
+<li>Step 4: Execute additional testing</li></li></li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>The first step in testing for session prediction bugs is to identify its attack scenario.<span>&nbsp;&nbsp; </span></p>
+  <p>Before reviewing a session prediction it is important to understand how and why Internet applications use session identifiers.<span>&nbsp; </span>Internet applications such as e-commerce sites require their clients to enter valid usernames and passwords to log in to the application.<span>&nbsp; </span>To avoid prompting clients to re-enter their credentials as they navigate through the application and execute transactions, the application creates a session ID for the logged in client and periodically checks it to verify the client’s authenticity with every request.<span>&nbsp;&nbsp; </span></p>
+  <p>After successful logins, new session IDs are usually sent to clients as a cookie (using the Set-Cookie header) or in the URL.<span>&nbsp; </span>Once the client receives the session ID, it sends it in future HTTP requests.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>A client enters valid username and password in response to an application request 
+<li>The application creates a session ID and sends it to client 
+<li>The client receives session ID
+<li>The client makes an HTTP(s) request to application that requires authentication, it includes session ID received in step 4
+<li>The application checks if the session ID sent by the client is valid and replies to the request based on value of the valid session ID</li></li></li></li></li>
+  </ol>
+  <p>A session prediction attack begins with an attacker selecting a target Internet application.<span>&nbsp; </span>The attacker starts by monitoring the application’s session ID generation scheme.<span>&nbsp; </span>The attacker looks for a pattern in the session IDs collected, such as incrementing characters, time stamps, or parts of the client’s name used in the session ID.<span>&nbsp; </span>If the attacker discovers a weak session ID generation algorithm, they may be able to predict a valid session during a session hijacking attack, allowing them to replace their current session ID with the value of the predicted one.<span>&nbsp; </span>If the application is vulnerable to session hijacking, the attacker will be able to impersonate another logged in user.<span>&nbsp;&nbsp; </span></p>
+  <p>In detail:</p>
+  <ol>
+    <li>An attacker starts monitoring network traffic
+<li>The attacker logs in to the target application by entering valid username and password
+<li>The application creates a session ID and sends it to client 
+<li>The attacker repeats steps 2 and 3 until a valid session ID until determining if predicting future session IDs is possible.
+<li>If step 4 shows that session prediction is possible, continue with a <i>session hijacking</i> attack. </li></li></li></li></li>
+  </ol>
+  <p>Note that the attack ends in step 4, after determining the feasibility of predicting a valid session ID.<span>&nbsp; </span>To test the exploitability of attack it is necessary to hijack a session.<span>&nbsp; </span></p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The next step in testing for session prediction bugs is to understand what causes them and how to protect against them.</p>
+  <h2>
+    <span>
+      <em>Session Prediction Causes</em>
+    </span>
+  </h2>
+  <p>ASP .NET provides a framework for authentication and session-id management using the <i>Session</i> object.<span>&nbsp; </span>However, developers might also implement their own using cookies.<span>&nbsp; </span>First, a session ID is set:</p>
+  <pre>
+    <span>Response.Cookies["Session-ID"].Value = "user01";</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>Then, before allowing the client to perform a request, the code checks the value of the cookie against the expected value:</p>
+  <pre>
+    <span>if (Request.Cookies["Session-ID"].Value == "user01")<br />{<br />	Response.Write("authenticated");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />}</span>
+    <span>&nbsp;</span>
+  </pre>
+  <p>Developers <span>&nbsp;</span>should not implement their own session ID generation scheme, as they can suffer from low entropy and similar insecurities that make them easy to predict.</p>
+  <h2>
+    <em>Low entropy session IDs</em>
+  </h2>
+  <p>The principal cause of session prediction bugs is that sessions are not random enough—they have low entropy.<span>&nbsp; </span>For instance, a session ID generation algorithm might create user sessions like this:</p>
+  <pre>
+    <span>AWEG00013BCD<br />AWFG00014BCD<br />AWGG00015BCD<br />AWHG00016BCD<br />AWIG00017BCD</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>By analyzing the above session IDs, an attacker can easily predict the following ones:</p>
+  <pre>
+    <span>AWJG00018BCD<br />AWKG00019BCD<br />AWLG00019BCD&nbsp;</span>
+  </pre>
+  <p>Low entropy session IDs include sessions that are too short in length or use predictable time stamps.</p>
+  <h2>
+    <em>Using client credentials as session IDs</em>
+  </h2>
+  <p>Some applications construct their session IDs using client’s credentials.<span>&nbsp; </span>For instance, an application might build its sessions IDs by using the client’s email address:</p>
+  <pre>
+    <span>sid=user01@example.com</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>An attacker might be able to execute a successful attack by replacing its session ID with the email of the target client.<span>&nbsp; </span>Applications should use client credentials as part of the session ID only if they are combined with an additional high entropy string:</p>
+  <pre>
+    <span>session-id:<span>&nbsp; </span>user01<span>&nbsp;&nbsp;&nbsp;&nbsp; </span><strong>Wrong</strong></span>
+  </pre>
+  <pre>
+    <span>session-id: AA932n90f20dfwuih1QAxxy-user01<span>&nbsp; </span><span>&nbsp;&nbsp;&nbsp; </span><strong>OK</strong></span>
+  </pre>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Session Prediction Countermeasures</em>
+    </span>
+  </h2>
+  <p>To protect against session prediction attacks in ASP .NET applications, developers should take advantage of the ASP.NET built in session functionality.<span>&nbsp; </span>ASP.NET can automatically create a session ID with enough entropy (120 bits) to protect it against session prediction attacks.<span>&nbsp; </span><span>&nbsp;&nbsp;</span></p>
+  <p>Note that protecting against session prediction is different from protecting against session hijacking.<span>&nbsp; </span>Session prediction protection focuses on creating high entropy session IDs, while session hijacking protection includes using additional defenses like authentication and SSL.<span>&nbsp; </span>For more information about session hijacking vulnerabilities, refer to the <i>Testing for Session Hijacking Bugs</i> article.</p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 3: Start Testing and Exploring</span>
+  </h1>
+  <p>Now that you have understood session prediction attack scenarios, as well as what causes and how to protect against them, it is necessary to execute basic test cases and explore their results.</p>
+  <p>
+    <b>
+      <i>Test for low entropy session IDs</i>
+    </b>
+  </p>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Download and run the Burp suite, turning intercept off 
+<li>Open a web browser and set connection options to use the Burp proxy 
+<li>Log in to the target application with a valid username and password
+<li>Wait for application to reply with a session ID (can be in cookie, URL, or body)
+<li>In the Burp suite, click on the “Proxy” tab and the “History” sub-tab
+<li>Identify the HTTP authentication request, right-click on it, and select “Send to Sequencer”
+<li>In the Burp suite click on the “Sequencer” tab and the “Live capture” sub-tab
+<li>Select the request and identify the session ID
+<li>Click “start capture” and wait for the Burp sequencer to give a report</li></li></li></li></li></li></li></li></li>
+  </ol>
+  <p>Expected results: The session ID should be at least 128 bits, with at least 64 bits of effective entropy.<span>&nbsp; </span>If the Burp sequencer reports a rating of medium or poor, the application is vulnerable to session prediction.</p>
+  <p>For detailed information about using the Burp sequencer to test session ID entropy, refer to the Burp Sequencer Help page, which has simple instructions and screenshots:<span>&nbsp; </span><a href="http://portswigger.net/sequencer/help.html">http://portswigger.net/sequencer/help.html</a></p>
+  <h2>
+    <em>Test for client credentials in session IDs</em>
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Download and run Wireshark 
+<li>Open a web browser 
+<li>Log in to the target application with a valid username and password
+<li>In Wireshark, identify the session ID
+<li>Look for client credentials in the session ID</li></li></li></li></li>
+  </ol>
+  <p>Expected results:<span>&nbsp; </span>The session ID should not consist of client credentials, usernames, or any other fixed strings unless a sufficient amount of random data is also present, as fixed strings are easy to predict.<span>&nbsp; </span><span></span></p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 4: Execute Additional Testing</span>
+  </h1>
+  <p>Make sure you cover all entry points for session prediction attacks.<span>&nbsp; </span>Although many applications commonly send session IDs in cookies, some applications use other methods such as hidden variables or parameters in the URL.<span>&nbsp; </span>In either case, it is necessary for attackers to identify the location used by the application.<span>&nbsp; </span>Below are two examples of URLs containing a session ID:</p>
+  <pre>
+    <span>http://example.com/<strong>34i77i2af12xxz</strong>/example.aspx</span>
+  </pre>
+  <pre>
+    <span>http://example.com/example.aspx?sid=<strong>34i77i2af12xxz</strong></span>
+  </pre>
+  <p>The first example uses the session ID as a URL directory mapping such as the one used by cookieless ASP.NET, while the second employs a URL parameter.</p>
+  <p>The code below shows a session ID passed as a POST request variable using a hidden input tag:</p>
+  <pre>&lt;form action="/example.aspx" method="post"&gt;</pre>
+  <pre>....<br />&nbsp;<br />&lt;input type="hidden" name="session-id" value="user01" /&gt;<br />&lt;input type="hidden" name="user-account" value="324802581" /&gt;<br />&nbsp;<br />&lt;input type="submit" name="Continue"&gt;<br />&lt;/form&gt;<br />&nbsp;</pre>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Session prediction bugs affect ASP .NET applications that implement their own session ID generation scheme instead of using ASP.NET built in sessions.<span>&nbsp; </span>To test for session prediction vulnerabilities in ASP.NET applications it is necessary to understand how a session prediction attack is executed as well as what causes and how to protect against it in ASP.NET.<span>&nbsp; </span>Then, you must measure the entropy of the session ID generation and test for the session IDs consisting of only fixed strings like client credentials .<span>&nbsp; </span>Finally, make sure to cover all the different entry points for session prediction bugs, including URLs and hidden input tags.</p>
+  <p>&nbsp;</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

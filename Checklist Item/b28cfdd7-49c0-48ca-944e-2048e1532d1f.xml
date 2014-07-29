@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1695546619" Content_Hash="-479232759">
+  <Metadata>
+    <Id>b28cfdd7-49c0-48ca-944e-2048e1532d1f</Id>
+    <Id_History>db6a687e-b4f1-48e6-9288-6e9536e65742,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Secrets Are Held in Memory for Only a Limited Time</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Secrets Are Held in Memory for Only a Limited Time</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>.NET 2.0</div>
+      <div>
+      </div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that secrets are held in memory for only a limited time as it is vulnerable if an attacker is able to probe your application's address space.</p>
+  <h1>How to Check</h1>
+  <p>When manipulating secrets, consider how the secret data is stored in memory. How long is the secret data retained in clear text format? Clear text secrets held in your process address space are vulnerable if an attacker is able to probe your application's address space. Also, if the page of memory containing the secret is swapped out to the page file, the secret data is vulnerable if someone gains access to the page file. Similarly, clear text secrets held in memory appear in the crash dump file if a process crashes.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>To minimize the exposure of secrets in memory, consider the following measures: </p>
+  <ul>
+    <li>
+      <b>Avoid creating multiple copies of the secret</b>. Having multiple copies of the secret data increases your attack surface. Pass references to secret data instead of making copies of the data. Also realize that if you store secrets in immutable <b>System.String</b> objects, after each string manipulation, a new copy is created. <li><b>Keep the secret encrypted for as long as possible</b>. Decrypt the data at the last possible moment before you need to use the secret. <li><b>Clean the clear text version of the secret as soon as you can</b>. Replace the clear text copy of the secret data with zeros as soon as you have finished with it. </li></li></li>
+  </ul>
+  <p>Prior to .NET Framework 2.0, the use of byte arrays was recommended to help implement these guidelines. Byte arrays can be pinned in memory, encrypted, and replaced with zeros. In .NET Framework 2.0, use <b>SecureString</b> instead.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

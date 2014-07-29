@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1445196893" Content_Hash="-1525372766">
+  <Metadata>
+    <Id>284062df-3eba-4490-9f89-f89e2df4bf6a</Id>
+    <Id_History>6b88d5a5-7b02-44e1-96ee-9703ecf83706,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Temporary Files Are Created Securely on UN*X</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Temporary Files Are Created Securely on UN*X</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;<li>UN&amp;#42;X</li></li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that temporary files are created securely on UN&amp;#42;X.</p>
+  <h1>Why</h1>
+  <p>Create temporary files securely to prevent time-of-check/time-of-use (TOCTOU) issues when checking permissions on files and directories, allowing access to secured objects.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that temporary files are created securely on UN&amp;#42;X:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Review code.</strong> Search code for all occasions when temporary files are created.</p>
+      <li>
+        <p>
+          <strong>Check name generation. </strong>Verify that either /dev/random or mkstemp() is used to generate random names for temporary files.</p>
+        <li>
+          <p>
+            <strong>Check access controls.</strong> Verify that the directory where temporary files are created is secured with filesystem permissions.</p>
+          <li>
+            <p>
+              <strong>Verify that temporary files are deleted.</strong> Review code to make sure that temporary files are deleted immediately after being used.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to create temporary files securely on UN&amp;#42;X:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use random names.</strong> Use a secure random generator (such as /dev/random) to generate temporary names.</p>
+      <li>
+        <p>
+          <strong>Protect temporary files.</strong> Create temporary files in secure directories.</p>
+        <li>
+          <p>
+            <strong>Use mkstemp().</strong> Use mkstemp() to generate a temporary file name and create the file at the same time. This practice atomically checks whether the file exists and then creates it.</p>
+          <li>
+            <p>
+              <strong>Clean up.</strong> Delete temporary files immediately after use. If temporary files are used to store sensitive data, it is recommended to encrypt this data when storing it in temporary files and to overwrite it with random data before deleting the files.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/f8bcba2a-45a7-4dfb-9750-293c9784332d">Create Temporary Files Securely on UN&amp;#42;X</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

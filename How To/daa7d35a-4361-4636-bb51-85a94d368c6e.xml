@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-788228423" Content_Hash="-1962311276">
+  <Metadata>
+    <Id>daa7d35a-4361-4636-bb51-85a94d368c6e</Id>
+    <Id_History>3fd17dc9-126d-4e1c-b4a4-383fa66f914b,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Implement An Integrity Check</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Implement An Integrity Check</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can use integrity checking to verify that data sent via an unsecured communication channel has not been modified. You can implement integrity checks on your data with a data hash or a digital signature. A data hash alone does not ensure integrity because both the data and the hash could be modified by a malicious user. </p>
+  <p>Use a digital signature or the <b>System.Security.Cryptography.HMACSHA1</b> hashing class to help ensure data integrity. An integrity check is performed by verifying that the hash value of the received data matches the hash value of the data that was sent. The Hash-based Message Authentication Code (HMAC) verifies that both the hashed data and the hash itself have not been altered. </p>
+  <p>When you perform an integrity check with an HMAC, follow these guidelines: </p>
+  <ul>
+    <li>The sender and receiver must both have knowledge of a private key that will be used to calculate the HMAC. </li>
+    <li>Generate an HMAC from the data by using the <b>HMACSHA1 </b>class. </li>
+    <li>Send the data and the HMAC to the recipient. </li>
+    <li>Verify the integrity of received data by computing an HMAC on the data and comparing it to the HMAC sent. If the private key has not been stolen and the HMAC values match, you can be sure that the data has not been modified.</li>
+  </ul>
+  <p>The following code example shows how to compute an HMAC: </p>
+  <pre>using System; using System.IO;using System.Security.Cryptography; <br />public class ComputeHMAC <br />{     <br />	public static void Main (string[] args)     <br />	{         <br />		byte[] key = new byte[KEY_SIZE];        <br />		byte[] data = new byte[DATA_SIZE];        <br />		// Key should contain the value of the private shared key.        <br />		HMACSHA1 hmac = new HMACSHA1(key);        <br />		CryptoStream cs = new CryptoStream(Stream.Null, hmac,<br />	                                           CryptoStreamMode.Write);        <br />		cs.Write(data, 0, data.Length);        <br />		cs.Close();        <br />		byte[] result = hmac.Hash;      <br />	}<br />}</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

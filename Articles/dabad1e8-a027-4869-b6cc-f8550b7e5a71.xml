@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>dabad1e8-a027-4869-b6cc-f8550b7e5a71</Id>
+    <Id_History>41a04d3f-0bb5-4904-bb28-134a109f9ce0,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>The Application Is Partitioned into Public And Private Domains</Title>
+    <Category>Authorization</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Application Is Partitioned into Public And Private Domains</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala with Play Framework 2.1.0+<br /></p>
+  <h1>What to Check For</h1>
+  <p>Ensure that your application clearly defines the boundaries between its public and restricted (protected) resources.</p>
+  <h1>Why</h1>
+  <p>Defining a boundary between public and restricted content helps 
+establish the check points that will allow access to the restricted 
+content.</p>
+  <h1>How to Check</h1>
+  <span>To ensure your application is partitioned into public and restricted domains:</span>
+  <ol>
+    <li>
+      <p>
+        <strong>Enumerate all web accessible resources. </strong>Identify the public resources and the <span>restricted</span> resources. Common <span>restricted</span> resources include but are not limited to:</p>
+      <ul>
+        <li>Resources that require authentication</li>
+        <li>Critical application resources</li>
+        <li>Sensitive/confidential data</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that restricted resources have the appropriate access controls.&amp;nbsp;</strong>Determine if all <span>restricted</span> resources have the appropriate access controls assigned to them.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check if there is separation on disk between public and restricted resources.&amp;nbsp;</strong>Examine the local filesystem structure. Check if a restricted resource is located inside a public directory and vice versa.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify the local system permissions for all resources.&amp;nbsp;</strong>For
+ each resource, check that the local system permissions are set 
+accordingly. If the resource is public, verify that anonymous users can 
+access it. If the resource is restricted, verify that only authorized 
+users can access it.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To define the boundary between public and restricted content:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Determine roles.&amp;nbsp;</strong>Define the various types of 
+users and their rights. Build a security policy for the restricted 
+content and base the user groups' privileges around it.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define the boundary.&amp;nbsp;</strong>Structure the content according to access and logical orders. Try to use a modular approach when establishing the boundary.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Separate on disk.&amp;nbsp;</strong>Once the boundaries have been
+ established, reflect these boundaries onto the local file system. 
+Separate the restricted content from the public content on disk.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Set proper permissions.&amp;nbsp;</strong>Set proper permissions 
+to the restricted content. Dedicate a special directory for the 
+restricted content and require valid access before accessing content 
+within this directory. These permissions can be enforced at the 
+application, server and operating system levels, depending on the 
+environment in use.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">
+    <br />
+  </h1>
+  <p />
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authorization Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="b7176093-9004-4b9f-8b6b-4a56c6e9cb87" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Require Authentication and Authorization for All Sensitive Pages</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="08b369bf-b2ff-47e1-92c7-11c8607fbe00" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Make Authentication and Authorization Policies Configurable</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="10a459c4-4a39-4325-b3a9-a3458ac43b0c" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Deny All Access by Default</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="be7b255c-ce4b-427b-8b02-66e78481179e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Check Access Control Permissions When Referencing Objects</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="0cdb8ff4-a9f0-47d8-b32c-b72e2da858d9" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Indirect Object References</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="42892132-de71-41b9-8c35-8f8ee23cb758" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Partition the Application Between Public and Private Domains</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="52ea4336-7d99-47b3-bea2-2ac33da6e1a2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Secure the Account Administration Functionality</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="4a62104f-8abf-4d1f-8959-04b59b6db3b4" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Automatically Lock Inactive User Accounts</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authorization Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="001453f0-a647-4307-ad94-4077307f71a1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication and Authorization Are Required for All Sensitive Pages</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="a1310a50-1c9f-49f1-ad3e-ae1002e51b00" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication and Authorization Policies Are Configurable</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="e118152a-8a32-455d-b8ee-4b5d4c66742e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Access Is Denied by Default</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="b01e90c6-bf52-4db8-b2ce-2b5a89a40815" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Access Control Permissions Are Checked When Referencing Objects</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="42ff8254-15b9-4e5c-af6e-0ea617354b4f" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Indirect Object References Are Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="41a04d3f-0bb5-4904-bb28-134a109f9ce0" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Application Is Partitioned into Public and Private Domains</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="02b0be6c-99ed-4ff6-8805-8fc0a7402ae5" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Account Administration Functionality Is Secured</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="1a839a80-f801-4bcd-895b-a62cddac93bc" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Inactive User Accounts Are Automatically Locked</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

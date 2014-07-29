@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="571596583" Content_Hash="1513783384">
+  <Metadata>
+    <Id>49643cb6-79dd-4440-8f87-9f6b7e49a892</Id>
+    <Id_History>5d895784-a43d-488e-a0d3-464403f77d7e,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Use Declarative And Imperative Permission Requests</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Declarative And Imperative Permission Requests</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Description</h1>
+  <p>You can use declarative principal-permission demands on methods when you want to authorize access to those methods. The following attribute ensures that only users who are members of the Manager role can call the <b>GetCustomerDetails</b> method. </p>
+  <pre>using System.Security.Permissions;using System.Threading;...<br />&amp;#91;PrincipalPermissionAttribute(SecurityAction.Demand, Role="Manager")&amp;#93;<br />public void GetCustomerDetails(int CustId)&amp;#123;&amp;#125;  </pre>
+  <p>If you need more detailed control and you need to perform authorization within a method, then you can perform imperative principal-permission demands or explicit role checks on a block of code. The following code example shows how to perform an imperative principal-permission demand. </p>
+  <pre>using System.Security;<br />using System.Security.Permissions;<br />public void GetCustomerDetails(int CustId)&amp;#123;<br />    try<br />    &amp;#123;<br />        // Imperative principal permission role check to verify<br />        // that the caller is a manager.<br />        PrincipalPermission principalPerm = new PrincipalPermission(null,<br />                                                 "Manager");<br />        principalPerm.Demand();<br />        // Code that follows is only executed if the caller is a<br />        // member of the "Manager" role.<br />    &amp;#125;<br />    catch( SecurityException ex )<br />    &amp;#123;<br />   . . .<br />    &amp;#125;&amp;#125;  </pre>
+  <p>The following code example uses explicit role checks. </p>
+  <pre>public void GetCustomerDetails(int CustId)&amp;#123;<br />    if(&amp;#33;Thread.CurrentPrincipal.IsInRole("Manager"))<br />    &amp;#123;    . . .    &amp;#125;&amp;#125;</pre>
+  <h1>&amp;nbsp;</h1>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

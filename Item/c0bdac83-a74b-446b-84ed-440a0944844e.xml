@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1622051647" Content_Hash="773721411">
+  <Metadata>
+    <Id>c0bdac83-a74b-446b-84ed-440a0944844e</Id>
+    <Id_History>4711babd-71d0-44d3-882c-db8f370710be,</Id_History>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Set the HTTPOnly Flag on Cookies</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Set the HTTPOnly Flag on Cookies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>To help mitigate XSS attacks against the user's session cookie, set the session cookie to be
+<em>HttpOnly</em>. In browsers that support the <em>HttpOnly</em> feature (such as more recent versions of Internet Explorer and Firefox), this attribute can prevent the user's session cookie from being accessible to malicious client-side scripts that use document.cookie.
+ This is not a complete solution, since <em>HttpOnly</em> is not supported by all browsers. More importantly,
+<em>XMLHTTPRequest</em> and other powerful browser technologies provide read access to HTTP headers, including the<em> Set-Cookie</em> header in which the
+<em>HttpOnly</em> flag is set.</p>
+  <h1>Why</h1>
+  <span>
+    <p>Set the "<em>Secure</em>" flag on all sensitive cookies to protect the contents of the sensitive cookies from eavesdropping attacks. Setting the "<em>Secure</em>" flag on sensitive cookies ensures they are only transferred over connections that are secured
+ by SSL. The "<em>HTTPOnly</em>" flag prevents the contents of the marked cookie from being accessed by client-side script - this measure helps reduce the potential damage of Cross-Site Scripting attacks.</p>
+  </span>
+  <h1>How</h1>
+  <p>To set the "<em>Secure</em>" and "<em>HTTPOnly</em>" flags on all sensitive cookies:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that SSL is available.</strong> The "<em>Secure</em>" flag forces cookies to be sent over SSL. SSL has to be available for this to work.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify sensitive cookies.</strong> Session cookies should always be considered sensitive. Enumerate all cookies used by the application. Make a list of cookies that may contain sensitive information.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify code that creates sensitive cookies. </strong>For each sensitive cookie in the list, find the code that creates that cookie.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Set the "S<em>ecure</em>" and "<em>HTTPOnly</em>" flags for each sensitive cookie.</strong> For each piece of code that creates a sensitive cookie, add code that sets the "S<em>ecure</em>" and "<em>HTTPOnly</em>" flags for the cookie.&amp;nbsp;Make sure,
+ that when the <i>Secure </i>attribute is set for a cookie, it is in response to a request that was made over HTTPS and not HTTP.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Configure the platform.</strong> Many platform have configuration options that allow setting the "<em>Secure"</em> and "<em>HTTPOnly"</em> flags for session cookies. Please refer to your platform's documentation for information about whether this
+ functionality is available and how to use it.</p>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="231488828" Content_Hash="1946051120">
+  <Metadata>
+    <Id>7fc0e04c-00fb-4b24-a047-e9bb53c38630</Id>
+    <Id_History>e859cfe2-7e35-46ed-9888-e9fcf692d7b8,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Denial of Service Attack</Title>
+    <Category>Application State</Category>
+    <Phase>Design</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Denial of Service Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>All applications and all networking devices.</p>
+  <h1>Description</h1>
+  <p>Attackers attempt to create a denial of service situation by causing the application or device to cease responding to valid requests from users. The attacker can do this either by sending malicious input to the application or by utilizing application features to exploit a design flaw, which leads to a denial of service to legitimate users.</p>
+  <p>Malicious input causes the application to either:</p>
+  <ol>
+    <li>Process a single set of data indefinitely or enter a state of deadlock, thereby making the service too busy or unable to respond to other legitimate requests <li>Consume large amounts of resources - low resources on a system may cause it to attend to a very low number of or no other legitimate requests <li>Terminate due to an error - if a crash occurs, the service will not be able to serve other legitimate requests</li></li></li>
+  </ol>
+  <p>It is also possible for a denial of service situation to occur with perfectly legitimate input. If a non-malicious user accidentally inputs large amounts of legitimate data, this may cause the application to stop responding to other legitimate requests. Another case where legitimate input may lead to a Denial of Service is when a malicious user repeatedly sends large volumes of acceptable input in order to compromise the availability of the service.</p>
+  <p>An example of an attack where application features are used to exploit a design flaw is the <a href="/article/fa63d623-c6fb-4917-87e8-b0d5604729ce">Account Lockout Attack</a>.</p>
+  <p>Another type of the Denial of Service Attack is the DDoS or Distributed Denial of Service attack. In this attack the malicious user takes control over many machines and attempts to consume all the resources of a service using large amounts of legitimate requests. This attack is extremely difficult to protect against because the attacker is successively simulating a heavy load in such a way that the system cannot distinguish legitimate requests from maliciously generated requests .</p>
+  <h1>Impact</h1>
+  <p>The direct impact of a Denial of Service attack is that the application or service becomes unavailable to other users, leading to a potential loss of business. The impact of a Denial of Service attack is frequently underestimated. It is true that these attacks cannot be used to steal data or impersonate more privileged users, making them ineffective at providing the attacker with a direct economic gain. Many people therefore assume that Denial of Service attacks are merely a nuisance; however, nothing could be further from the truth. Historically, Denial of Service attacks have been very effective at extorting millions of dollars from applications that depend heavily on a web presence.</p>
+  <h1>Vulnerabilities</h1>
+  <p>Depending on the nature of your application or device, there could be numerous causes which may lead to a DoS problem. Some of the most common vulnerabilities that might lead to a DoS are:</p>
+  <ul>
+    <li>
+      <p>
+        <strong>Lack of or inadequate input validation.</strong> Lack of appropriate input validation may allow an attacker to submit data to your application that could lead to a Denial of Service. Examples of attacks which could lead to a DoS situation due to lack of input validation are:</p>
+      <ul>
+        <li>
+          <b>Buffer Overflow Attack</b> can lead to application termination or code execution <li><a href="/article/c063b66e-9332-467d-a13c-76ac1c8e2881">SQL Injection Attack</a> can corrupt the database in such a way that renders the service useless <li><a href="/article/79717ecf-2a2b-497b-b52c-758e48ace4fb">Command Injection Attack</a> could cause the application to loop indefinitely or enter a state of deadlock <li>Integer Underflow Attack can cause the application to consume excessive amount of memory on a system</li></li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Inappropriate use of shared resources.</strong> Allowing low privileged users (such as anonymous or guest users) or processes to share limited resources used by other users (authenticated or member users) or processes with a higher level of privilege can lead to resource contention, which in turn may result in denying the service to the privileged users or processes. Some examples of limited resources are:</p>
+        <ul>
+          <li>Storage: If unauthenticated users can somehow cause the application to store some form of data on the server storage, they may be able to rob other authorized users of this resource. If the host server runs out of disk space, operating system instability, degraded performance, and even system crashes can result. If the process either exhausts the available memory of the system or available process memory, host or process instability, at least, is likely. If the system doesn't crash, no new requests will be handled until memory is made available. <li>Processor Time: Many denial of service attacks simply find a route through the system which consumes an inordinate amount of CPU time and take that route multiple times. On networking devices, this happens when higher level packet filtration is being used which forces the device to route packets via the CPU, instead of doing so in hardware accelerators. Applications that accept data with a complicated format or that interpret the data they've been sent are particularly vulnerable to these kind of attacks; it is often possible to cause an application of this type to spend a very large amount of time on a small amount of data. Even input validation can be a concern here - complicated regexes often have very bad pessimal cases for matching input which can take orders of magnitude longer than the average. <li>TCP Ports: The number of concurrent connections that a network port can serve is limited. Given this, the availability of a service can be compromised by an attacker who repeatedly makes very large number of connections to the port simultaneously. Without even authenticating, the anonymous connection on the port will be active for a given amount of time (whatever the timeout value of the port is set to). This will allow the attacker to keep connecting to the port continuously and robbing other legitimate users of the service. <li>Connection Pools and other Resources: There are a number of higher level resources which are typically constrained in most systems, connection pools to a database server being a primary example. Other examples include inodes in a file system, named pipes, and similar system-constrained resources.</li></li></li></li>
+        </ul>
+        <li>
+          <p>
+            <strong>Not failing securely.</strong> Services should be configured to expect and handle failures. The aim of an enterprise is to reduce downtime due to attacks. Having a design strategy that allows your service to be automatically restarted in the event of a crash will significantly reduce downtime.</p>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Proper validation of input type, length and format will help bolster your application against attacks which lead to Denial of Service. Please refer to the guidelines for input validation mentioned in the Related Items section below. <li>Shared resources should be monitored to ensure that the level of resource for a particular request directly relates to the privilege level of the user making that request. Anonymous users should be able to consume little or no shared resources while highly-privileged users should have no restriction. Depending on the nature of the application, explicitly logging resource utilization inside the application may be useful.</li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>One example of this type of attack is the SYN flood attack in which an attacker uses an automated program to send a large number of TCP SYN requests to the server to fill the pending connection queue on the server. When the server's connection queue has been filled legitimate connections cannot be made.</p>
+  <p>Another example is if the application allows a user to submit script or other interpreted text. The attacker may be able to submit a script, which causes the application to enter into an infinite loop and consume all the resources on the machine, thereby rendering it incapable of performing legitimate tasks.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://en.wikipedia.org/wiki/Denial-of-service_attack">http://en.wikipedia.org/wiki/Denial-of-service_attack</a>
+      <li>
+        <a href="http://www.cert.org/tech_tips/denial_of_service.html">http://www.cert.org/tech_tips/denial_of_service.html</a>
+      </li>
+    </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/9ceb60ab-dc0a-47c1-ac60-3d1a9bef854a">Attack: ARP Spoofing Attack</a>
+      <li>
+        <a href="/article/a4eca46a-b863-4e52-97cb-53d96829362d">Attack: Wireless Packet Injection Attack</a>
+        <li>
+          <a href="/article/3b11ae62-7981-45f9-afbd-59e792c3a141">Attack: DNS Cache Poisoning</a>
+          <li>
+            <a href="/article/ff73a6a6-a4f2-4917-9a83-67d0be040f30">Attack: VLAN Spoofing Attack</a>
+            <li>
+              <a href="/article/c063b66e-9332-467d-a13c-76ac1c8e2881">Attack: SQL Injection Attack</a>
+              <li>
+                <a href="/article/79717ecf-2a2b-497b-b52c-758e48ace4fb">Attack: Command Injection Attack</a>
+                <li>
+                  <a href="/article/fa63d623-c6fb-4917-87e8-b0d5604729ce">Attack: Account Lockout Attack</a>
+                  <li>
+                    <a href="/article/1d74f9da-94a7-42b1-9f01-0b06bf2ae15b">Attack: Creation of False Transaction Attack</a>
+                    <li>
+                      <a href="/article/6a691e18-00f1-4a65-aa28-d3e55ccc6ea9">Attack: Client-side Validation Attack</a>
+                      <li>
+                        <a href="/article/fc33dfc5-5210-4656-bc27-e43b16c3c89e">Guideline: Consider Log Throttling </a>
+                        <li>
+                          <a href="/article/f29fac90-c626-41d6-9184-acd6007696cf">Guideline: Validate Input for Length, Range, Format, and Type </a>
+                          <li>
+                            <a href="/article/aebb10ce-aeb6-45e5-b159-e2bc76b012bf">Guideline: Use a Least-Privileged Account for Running Applications </a>
+                            <li>
+                              <a href="/article/fab1733c-61d7-46a8-88c6-2617a643c0d9">Guideline: Use Least Privileged Accounts for Database Access </a>
+                            </li>
+                          </li>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

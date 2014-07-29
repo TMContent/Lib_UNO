@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-958749743" Content_Hash="1832754268">
+  <Metadata>
+    <Id>ce307bf0-b542-48bb-8109-583ad5e323aa</Id>
+    <Id_History>f9999659-3883-4ee5-9111-18e493e856a2,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Decrypt a String via a Block Cipher Using 3DES</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Decrypt a String via a Block Cipher Using 3DES</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C#</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code is to demonstrate the proper use of a symmetric block cipher to decrypt strings of text within an application. This code sample demonstrates the use of Triple DES, which should primarily be used for backwards compatibility with other applications and replaced with AES in newer implementations of code.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>To provide confidentiality of data which is transmitted over insecure or untrusted communication channels. <li>To provide confidentiality of data in storage until it is needed by a user or application</li></li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application developer desires confidentiality for data in storage or in transit. <li>3DES should only be used in implementations which require backwards compatibility for interaction with applications that do not implement the new NIST encryption standard, AES.</li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>public static string DecryptString(string ciphertext, byte&amp;#91;&amp;#93; sKey, byte&amp;#91;&amp;#93; sIV)&amp;#123;<br />    // The default 3DES key size under the .NET framework is 192 (168).  The following<br />    // call will create a 3DES crypto provider and create a random initialization<br />    // vector and key. The crypto mode defaults to CBC ensuring the proper chaining<br />     // of data to mitigate repetition of cipher text blocks.<br />    TripleDESCryptoServiceProvider tdes = (TripleDESCryptoServiceProvider)TripleDESCryptoServiceProvider.Create();<br />    //Set secret key For 3DES algorithm.<br />    tdes.Key = sKey;<br />    //Set initialization vector.<br />    tdes.IV = sIV;<br />    //Create a memorystream to which we'll decrypt our input string<br />    MemoryStream ms = new MemoryStream();<br />    CryptoStream ecs = new CryptoStream(ms, tdes.CreateDecryptor(), CryptoStreamMode.Write);<br />    //Because the input string is passed in as a Base64 encoded value we decode prior writing to<br />     //the decryptor stream.<br />    ecs.Write(Convert.FromBase64String(ciphertext), 0, Convert.FromBase64String(ciphertext).Length);<br />    ecs.Close();<br />    return ASCIIEncoding.ASCII.GetString(ms.ToArray());<br />&amp;#125;</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates an implementation of a Decryption routine containing several common secure coding issues.</p>
+  <pre>public static string ProblematicDecryptString(string ciphertext)<br />&amp;#123;<br />    TripleDESCryptoServiceProvider tdes = (TripleDESCryptoServiceProvider)TripleDESCryptoServiceProvider.Create();<br />    //Set secret key For 3DES algorithm.<br />    tdes.Key = ASCIIEncoding.ASCII.GetBytes("ASAMPLEKEYWEUSETOENCRYPT");<br />    //We don't use an IV because the book doesn't show us an example using a<br />     //more secure, chained mode&amp;#33;<br />    // tdes.IV = ASCIIEncoding.ASCII.GetBytes("SAMPLEIV");<br />    //Set encryption mode to an unchained value (because the book says so&amp;#33;)<br />    tdes.Mode = CipherMode.ECB;<br />    //Create a memorystream to which we'll decrypt our input string<br />    MemoryStream ms = new MemoryStream();<br />    CryptoStream ecs = new CryptoStream(ms, tdes.CreateDecryptor(), CryptoStreamMode.Write);<br />    //Because the input string is passed in as a Base64 encoded value we decode prior writing to<br />     //the decryptor stream.<br />    ecs.Write(Convert.FromBase64String(ciphertext), 0, Convert.FromBase64String(ciphertext).Length);<br />    ecs.Close();    return ASCIIEncoding.ASCII.GetString(ms.ToArray());<br />&amp;#125;</pre>
+  <ul>
+    <li>Cleartext encryption key can be extracted by any user with access to the source code or compiled code <li>Use of a weak encryption (non-random) key, which can be brute-forced using a dictionary attack <li>Insecure cipher mode (ECB), performs encryption of each block 64 bits independently with no feedback into subsequent blocks as CBC and other chained modes do. An attacker can rearrange or replace blocks with previous blocks they observe. <li>ECB mode does not utilize an initialization vector, yielding the same encrypted value for each plaintext value. An attacker can thus observe patterns in the encrypted blocks and perform known plaintext attacks (Note: Initialization vectors need not remain secret however they should be random for each encrypted value of the plaintext)</li></li></li></li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System;<br />using System.Text;<br />using System.IO;<br />using System.Security.Cryptography;</pre>
+  <p>The following test case demonstrates the use of the DecryptString function</p>
+  <pre>static void Main(string&amp;#91;&amp;#93; args)<br />&amp;#123;<br />    string enc, p2, probenc, probp2 = null;<br />    TripleDESCryptoServiceProvider tdes = (TripleDESCryptoServiceProvider)TripleDESCryptoServiceProvider.Create();<br />    // Test case for string encryption routines<br />    string p1 = "the quick brown fox jumped over the lazy dog";<br />    // Run our test case multiple times to demonstrate different IV / encrypted text for each<br />    // iteration in when using proper crypto modes.<br />    Console.Out.WriteLine("Solution test cases - notice varied output for static input");<br />    Console.Out.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");<br />    for (int i = 0; i &lt; 5; i&amp;#43;&amp;#43;)<br />    &amp;#123;<br />        tdes.GenerateIV();<br />        enc = EncryptString(p1, tdes.Key, tdes.IV);<br />        Console.WriteLine("Encrypted text #&amp;#123;0&amp;#125;: " &amp;#43; enc, i);<br />        p2 = DecryptString(enc, tdes.Key, tdes.IV);<br />        Console.WriteLine("Plaintext #&amp;#123;0&amp;#125;: " &amp;#43; p2, i);<br />        if (&amp;#33;p1.Equals(p2))<br />        &amp;#123;<br />            Console.Error.WriteLine("Decryption failed");<br />        &amp;#125;<br />    &amp;#125;<br />    // Now run out problem test cases<br />    Console.Out.WriteLine("Problem test cases - notice repetitive encrypted value");<br />    Console.Out.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");<br />    for (int i = 0; i &lt; 5; i&amp;#43;&amp;#43;)<br />    &amp;#123;<br />        probenc = ProblematicEncryptString(p1);<br />        probp2 = ProblematicDecryptString(probenc);<br />        Console.WriteLine("Encrypted text #&amp;#123;0&amp;#125;: " &amp;#43; probenc, i);<br />        Console.WriteLine("Plaintext #&amp;#123;0&amp;#125;: " &amp;#43; probp2, i);<br />    &amp;#125;<br />&amp;#125;</pre>
+  <ul>
+    <li>In this test case 3DES encryption keys and initialization vectors are chosen at random during the call to TripleDESCryptoServiceProvider.Create(). <li>In a real-world implementation Key and IV should be retrieved from the Data Protection API within application code please refer to code sample demonstrating use of Data Protection API.</li></li>
+  </ul>
+  <h1>Expected Result</h1>
+  <pre>Solution test cases - notice varied output for static input-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-<br />Encrypted text #0: f9n80d72AC1oD2b9a8yux/66UKaquzQLvQIV0A5xmtqded6hOKY5WFmcqtXOa0KH<br />Plaintext #0: the quick brown fox jumped over the lazy dog<br />Encrypted text #1: jloSmkMYW7TWXgnNKiNw/JCzzjIwm1K9DeyaFBbMfO9IOMMFcg9s0x917Bm0mBgg<br />Plaintext #1: the quick brown fox jumped over the lazy dog<br />Encrypted text #2: zpRBQWz8ntpONAS&amp;#43;4tJKgEC88ntgj5esTizWUH4h9sQKkZDxxJ4qM6Y9yEugGH8c<br />Plaintext #2: the quick brown fox jumped over the lazy dog<br />Encrypted text #3: 4ssPSATxEbOBucRtbDcHq7SLurzknsZijpcMTg0puMthnPmI93mrbRQgfvOzbJEk<br />Plaintext #3: the quick brown fox jumped over the lazy dog<br />Encrypted text #4: sxKZ3VDJP6SZw/IwznpH1VgR&amp;#43;rEYozcsntVJ6pnw75YqD7xb/WW&amp;#43;3&amp;#43;3xeT4Q7Pf&amp;#43;<br />Plaintext #4: the quick brown fox jumped over the lazy dog<br />Problem test cases - notice repetitive encrypted value-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-<br />Encrypted text #0: z&amp;#43;0N6RlMZ2FLwaSQLDkyIHaxEsirAX&amp;#43;68xE2cwZcHqh2CyE1zjjoGfMSTnnxOIVO<br />Plaintext #0: the quick brown fox jumped over the lazy dog<br />Encrypted text #1: z&amp;#43;0N6RlMZ2FLwaSQLDkyIHaxEsirAX&amp;#43;68xE2cwZcHqh2CyE1zjjoGfMSTnnxOIVO<br />Plaintext #1: the quick brown fox jumped over the lazy dog<br />Encrypted text #2: z&amp;#43;0N6RlMZ2FLwaSQLDkyIHaxEsirAX&amp;#43;68xE2cwZcHqh2CyE1zjjoGfMSTnnxOIVO<br />Plaintext #2: the quick brown fox jumped over the lazy dog<br />Encrypted text #3: z&amp;#43;0N6RlMZ2FLwaSQLDkyIHaxEsirAX&amp;#43;68xE2cwZcHqh2CyE1zjjoGfMSTnnxOIVO<br />Plaintext #3: the quick brown fox jumped over the lazy dog<br />Encrypted text #4: z&amp;#43;0N6RlMZ2FLwaSQLDkyIHaxEsirAX&amp;#43;68xE2cwZcHqh2CyE1zjjoGfMSTnnxOIVO<br />Plaintext #4: the quick brown fox jumped over the lazy dog</pre>
+  <h1>More Information</h1>
+  <ul>
+    <li>The test case assumes use of the DataProtection API implemented within the user code to securely store and retrieve encryption keys.</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1450997991" Content_Hash="-1684594659">
+  <Metadata>
+    <Id>6f3ba315-bd83-422a-8296-b4bc59ed4a22</Id>
+    <Id_History>35bde9da-b8f2-4f8d-9a3f-48a3ededed4b,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Consider Using JAAS for Authorization</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Using JAAS for Authorization</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications written using Servlets or JSP.</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Consider using Java Authentication and Authorization Services for authorization.</p>
+  <h1>Why</h1>
+  <p>As part of Java's security model, JAAS is proven to work with stand-alone and web-based applications. JAAS is fully integrated into the Java platform and requires minimal overhead when deploying within stand-alone and web-based applications.</p>
+  <h1>When</h1>
+  <p>If your application uses access control and authorizes its users to determine which roles can gain access to which resources, then consider using JAAS rather than devoting resources to creating your own design.</p>
+  <h1>How</h1>
+  <p>To authorize using JAAS:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Create a JAAS policy. </strong>The JAAS policy stores the rights associated with the different types of users. It is loaded into the Java Virtual Machine (JVM) by using the <em>-Djava.security.auth.policy</em> flag when loading the JVM instance that hosts your application. The JAAS policy can be created using a typical text editor or the Java Policy Tool. An example policy file looks like:</p>
+      <pre>grant Principal application.auth.UserToken "joe"<br />{<br />   permission java.security.SecurityPermission "AccessApp";<br />};</pre>To provide extra flexibility in managing access controls, JAAS allows an application to append additional permissions to the current&amp;nbsp;JAAS policy as well as to fully modify the JAAS policy during runtime.
+      <ul><li><p><strong>Appending to the JAAS policy:</strong> To append additional permissions,&amp;nbsp;the application component that is&amp;nbsp;responsible for modifying the policy must have a <em>getPolicy</em> permission granted within the application's security policy. <br /></p><p>Example of appending additional permissions to a given user:</p><pre>CodeSigner[] csign = null;<br />CodeSource csource = new CodeSource(null, csign);<br />Principal[] principals = new Principal[1];<br />principals[0] = new application.auth.UserToken("joe");<br />ProtectionDomain pDomain = new ProtectionDomain(csource, null, null, principals);<br />java.security.Policy policy = java.security.Policy.getPolicy();<br />PermissionCollection permCollect = policy.getPermissions(pDomain);<br />SecurityPermission secPerm = new SecurityPermission("ModifyUser");<br />permCollect.add(secPerm);</pre></li><li><p><strong>Amending the&amp;nbsp;JAAS policy:</strong> To amend the policy,&amp;nbsp;the application component responsible for modifying the policy must have a <em>setPolicy</em> permission granted within the application's security policy. Example:</p><pre>java.security.Policy policy = new ApplicationPolicy();<br /><br />// Add the appropriate permissions<br /><br />java.security.Policy.setPolicy(policy);</pre><p>Note that the <em>ApplicationPolicy</em> class is a custom implementation of Java's abstract Policy class.</p></li></ul></li>
+    <li>
+      <p>
+        <strong>Implement the PrivilegedExceptionAction. </strong>The <em>PrivilegedExceptionAction</em> invokes the authorization process. Using the Java Security Manager, the application verifies whether the current user is allowed to perform the desired task. Example:</p>
+      <pre>import java.security.*;<br />import javax.security.auth.*;<br />public final class AuthException implements PrivilegedExceptionAction<br />{<br />      private String name;<br />      public AuthException(String name)<br />      {<br />            // Set the name of the requested action<br />            this.name = name;<br />      }<br />       public Object run()<br />      {<br />            Permission perm = new SecurityPermission(name);<br />            SecurityManager secMan = System.getSecurityManager();<br />            if(secMan == null)<br />            {<br />                  secMan = new SecurityManager();<br />            }<br />            secMan.checkPermission(perm);<br />            return null;<br />      }<br />}</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce the JAAS policy. </strong>Because JAAS is an entity-oriented model, it requires the impersonation of users when performing authorization. As such, the application impersonates the user when trying to perform a given task. If the user does not have sufficient permissions, the Java Security Manager will throw a security exception. Example:</p>
+      <pre>PrivilegedExceptionAction action = new AuthException("NameOfAction");<br />Subject.doAsPrivileged(subject, action, null);</pre>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is a multi-user financial tool. The application's developers have designed the application's access control mechanisms in-house, investing a lot of resources into designing, developing and testing a secure and reliable access control for MyApp and its complement products.</p>
+  <h1>Solution Example</h1>
+  <p>MyApp is a multi-user financial tool. The application's developers use JAAS as the application's access control mechanism. Because JAAS is fully integrated into the Java platform, the developers can invest more resources into the actual application while still meeting the application's access control requirements.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about JAAS, visit: <a href="http://java.sun.com/products/jaas/">Java Authentication and Authorization Service</a> available from Sun. </li>
+    <li>For information about handling Policies in Java, see: Documentation for <a href="http://download.oracle.com/javase/1.4.2/docs/api/java/security/Policy.html">Class Policy</a> in Java SDK.</li>
+  </ul>
+  <h1>Authorization Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/127d98e8-d628-40b7-8522-d903f4bf7927">Perform Role-based Security Checks</a>
+    </li>
+    <li>
+      <a href="/article/afa2d020-9b18-4861-9d4f-cb81cbcb1f2e">Require Authentication and Authorization for All Sensitive Pages</a>
+    </li>
+    <li>
+      <a href="/article/12096ed3-d1e3-47e1-834d-f59dcaf4110f">Make Authentication and Authorization Policies Configurable</a>
+    </li>
+    <li>
+      <a href="/article/c0ff64c5-cf7f-4855-b039-81d2a298e3bb">Deny All Access by Default</a>
+    </li>
+    <li>
+      <a href="/article/92839e91-8f79-45fb-9b8d-76fc9c814fea">Check Access Control Permissions When Referencing Objects</a>
+    </li>
+    <li>
+      <a href="/article/b4a87891-a19a-41be-a1a3-f8a13c7f4881">Use Indirect Object References</a>
+    </li>
+    <li>
+      <a href="/article/58e80d4a-410a-47c9-b3c5-f13cc79a3e00">Partition the Application Between Public and Private Domains</a>
+    </li>
+    <li>
+      <a href="/article/4b9647f2-644f-48bf-b2b5-cd025261450d">Secure the Account Administration Functionality</a>
+    </li>
+    <li>
+      <a href="/article/4f3147c2-7ca1-487c-9144-56630e5a6f80">Automatically Lock Inactive User Accounts</a>
+    </li>
+    <li>
+      <a href="/article/35bde9da-b8f2-4f8d-9a3f-48a3ededed4b">Consider Using JAAS for Authorization</a>
+    </li>
+  </ul>
+  <h1>Authorization Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/14f55778-8227-4d0d-85ca-41d80853bc58">Role-based Security Checks Are Performed</a>
+    </li>
+    <li>
+      <a href="/article/0d7d5d60-33bc-4fac-a088-f0be84d37cef">Authentication and Authorization Are Required for All Sensitive Pages</a>
+    </li>
+    <li>
+      <a href="/article/fb22da6b-bf1c-4315-83a5-7bc3486bf9ab">Authentication and Authorization Policies Are Configurable</a>
+    </li>
+    <li>
+      <a href="/article/98e8c0d1-d95a-4eb7-a39b-630c40c7adaf">All Access Is Denied by Default</a>
+    </li>
+    <li>
+      <a href="/article/f3747faf-6e0b-43af-ae92-ed3736be390a">Access Control Permissions Are Checked When Referencing Objects</a>
+    </li>
+    <li>
+      <a href="/article/54ea1759-e5e8-4eee-84cc-67607fef0c30">Indirect Object References Are Used</a>
+    </li>
+    <li>
+      <a href="/article/3e451992-d7aa-43fd-ade8-656a87b787f8">The Application Is Partitioned into Public and Private Domains</a>
+    </li>
+    <li>
+      <a href="/article/7cc251c5-6e57-47a6-976e-365e8830f958">Account Administration Functionality Is Secured</a>
+    </li>
+    <li>
+      <a href="/article/a4f21cca-3db6-4eae-88d2-5d6b5f7ad2bb">Inactive User Accounts Are Automatically Locked</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

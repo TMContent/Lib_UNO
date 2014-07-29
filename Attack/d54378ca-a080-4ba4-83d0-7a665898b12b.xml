@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="207492231" Content_Hash="1605053844">
+  <Metadata>
+    <Id>d54378ca-a080-4ba4-83d0-7a665898b12b</Id>
+    <Id_History>fdcd5cb2-43e3-4e8b-b483-e87a6f31228e,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>API Hijacking Attack</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>API Hijacking Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>All applications.</p>
+  <h1>Description</h1>
+  <p>An API Injection Attack involves intercepting the method calls made by an application to an external library. This attack can be used to screen or modify parameter values or execute malicious code with elevated privileges. The interception of methods usually involves tricking the application into loading a trojan external library. This can be accomplished by replacing the external library with a malicious counterpart on the file system or tricking the application into loading a malicious library from an alternate location on the file system.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Disclosure of sensitive information by screening parameter values. <li>Encryption Key Theft. <li>Modification of application behavior by changing parameter values. <li>Execution of code by the malicious library, possibly with elevated privileges.</li></li></li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Loading external libraries without explicitly specifying the full path to the library. <li>Loading external libraries without verifying their integrity. <li>Passing clear-text sensitive information as parameters to method calls in external libraries. <li>Improper file permissions on external libraries which make them prone to deletion or replacement.</li></li></li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <strong>Use explicit paths</strong>: Do not depend on environment path variables to locate the library for you, be explicit in specifying the full path to the library you intend to load. <li><strong>File Permissions</strong>: Use proper directory and file permissions on external libraries so that they can not be modified or replaced by an attacker. <li><strong>Binary Verification</strong>: All non-system external libraries should be verified for authenticity before being loaded. This can be accomplished by digitally signing the libraries and verifying the signature before loading the library. <li><strong>Encryption</strong>: If none of the above countermeasures can be employed, then the application must encrypt all sensitive information before passing them as parameter values to external libraries. This will not prevent an attacker from executing malicious code, but will prevent the leakage of sensitive information.</li></li></li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>For a real-world example, consider a vulnerability of the popular web browser, Internet Explorer 7. When released, it was vulnerable to a DLL-load hijacking attack. It failed to provide the full path to a DLL that was loaded at runtime. Although Internet Explorer does not run with elevated privileges, this has become a serious issue as malware authors have abused this vulnerability to attack and steal information from the browser while a user surfs the web.</p>
+  <p>Read more about this problem at <a href="http://www.securityfocus.com/archive/1/450393">http://www.securityfocus.com/archive/1/450393</a></p>
+  <h1>Additional Resources</h1>
+  <p>Keyjacking: The Surprising Insecurity of Client-side SSL at <a href="http://www.ists.dartmouth.edu/library/ksi0204.pdf">http://www.ists.dartmouth.edu/library/ksi0204.pdf</a></p>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/79717ecf-2a2b-497b-b52c-758e48ace4fb">Attack: Command Injection Attack</a>
+      <li>
+        <a href="/article/2d8ba94a-02ef-4554-a642-64b01deb9bbb">Attack: Local Machine Credential Sniffing Attack</a>
+        <li>
+          <a href="/article/f1387416-3e24-43fe-bea6-7338b990eb51">Attack: Reflection Injection Attack</a>
+          <li>
+            <a href="/article/5348b935-ab2c-4e06-bc59-36d172fee6b5">Attack: Sniff Memory for Secrets Attack</a>
+            <li>
+              <a href="/article/946a5edb-e8f8-4365-8675-b8a5032c201b">Guideline: Validate All Data Passed Between Native and Java Code </a>
+              <li>
+                <a href="/article/43e09871-01a1-4b24-af9f-31e275b91b2f">Guideline: Protect Libraries Loaded Through JNI </a>
+                <li>
+                  <a href="/article/70b53138-faf7-410a-a966-16f3088fca63">Guideline: Minimize the Number of Times Language Boundaries are Crossed </a>
+                  <li>
+                    <a href="/article/351b69c8-b40b-4c13-899e-a8399b85a0ea">Guideline: Do Not Utilize Functionality Through JNI if Java Already Supports It </a>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

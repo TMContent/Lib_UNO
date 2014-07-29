@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1064654123" Content_Hash="1580807653">
+  <Metadata>
+    <Id>0d472354-b71c-4b93-a3e2-167c636fbb53</Id>
+    <Id_History>60802624-5588-4c8f-aac3-baa27cd28187,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Enforce Strong Passwords</Title>
+    <Category>Forms Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Ensure that your passwords are complex enough to prevent users guessing other users' passwords and to prevent successful dictionary attacks against your user credential store. </p>
+  <h1>Why</h1>
+  <p>Insufficiently complex passwords may be guessed by attackers, allowing them to compromise user accounts.&nbsp; Strong passwords help to prevent dictionary attacks in the event your password store is compromised.&nbsp; Most users will not choose sufficiently strong passwords without help from the application. </p>
+  <h1>When</h1>
+  <p>All systems which utilize passwords should enforce strong passwords.&nbsp; The strength of the password and its frequency of change will depend on the security needs of the application, but all applications should enforce basic strong password rules.</p>
+  <h1>How</h1>
+  <p>Enforcing strong passwords is very simple, and it's one of the easiest ways to improve the security of your site.&nbsp; Follow these steps to do so:</p>
+  <h2>1. Understand Password Strength Requirements</h2>
+  <p>By default, the ASP.NET membership providers enforce strong passwords.&nbsp; For example, <b>SqlMembershipProvider</b> and <b>ActiveDirectoryMembershipProvider</b> ensure that passwords are at least seven characters in length with at least one non-alphanumeric character.&nbsp; This is a reasonable baseline for applications with light security requirements, and there are very few cases where passwords should be permitted to be weaker than this.</p>
+  <p>When considering password strength, it's important to ensure that you're matching your strength requirements to the security needs of the application.&nbsp; Requiring very strong passwords for sites with trivial security needs will frustrate your users.&nbsp; On the other hand, don't restrict your users from chosing stronger passwords if they want&#8212;maximum password lengths should be at least 20 characters, and all printable characters should be legal in the password.</p>
+  <h2>2. Enforce Password Strength Requirements </h2>
+  <h3>Using SqlMembershipProvider</h3>
+  <p>There are three attributes which you can use to configure the precise password complexity rules enforced by your provider:</p>
+  <ul>
+    <li>
+      <b>passwordStrengthRegularExpression</b>.&nbsp; The default is blank.&nbsp; All passwords must satisfy this expression. <li><b>minRequiredPasswordLength</b>.&nbsp; The default is 7.&nbsp; All passwords must contain at least this many characters. <li><b>minRequiredNonalphanumericCharacters</b>.&nbsp; The default is 1.&nbsp; All passwords must contain this many non-letter, non-number characters.</li></li></li>
+  </ul>
+  <p>Here's an example of a <b>SqlMembershipProvider</b> configured to require stronger passwords:</p>
+  <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&nbsp; &lt;providers&gt;<br />    &lt;add name="MySqlMembershipProvider"<br />          connectionStringName="MyLocalSQLServer"<br />          applicationName="MyAppName"<br />         minRequiredPasswordLength="9"<br />         minRequiredNonalphanumericCharacters="2"<br />         passwordStrengthRegularExpression="&#94;(?=.&#42;\d)(?=.&#42;&#91;&#94;\w\d&#93;.&#123;9,20&#125;&#36;"<br />         .../&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <h3>Using ActiveDirectoryMembershipProvider</h3>
+  <p>
+    <strong>ActiveDirectoryMembershipProvider</strong> supports the same three attributes as <strong>SqlMembershipProvider</strong>, plus three&nbsp;extra attributes that control account lockouts for failed authentication attempts:</p>
+  <ul>
+    <li>
+      <b>passwordStrengthRegularExpression</b>.&nbsp; The default is blank. <li><b>minRequiredPasswordLength</b>.&nbsp; The default is 7. <li><b>minRequiredNonalphanumericCharacters</b>.&nbsp; The default is 1. <li><b>maxInvalidPasswordAttempts</b>.&nbsp; The default is 5.&nbsp; An account is temporarily locked out if more than this many password attempts fail in the tracking window. <li><b>passwordAttemptWindow</b>.&nbsp; The default is 10 (minutes).&nbsp; Failed password attempts are tracked for the length of this window. <li><b>passwordAnswerAttemptLockoutDuration</b>.&nbsp; The default is 30 (minutes).&nbsp; Accounts with too many failed password attempts are locked out for this long.</li></li></li></li></li></li>
+  </ul>
+  <p>Furthermore, the <b>ActiveDirectoryMembershipProvider</b> also verifies passwords against the default domain password policy, and users must choose passwords which satisfy both sets of requirements.&nbsp; Here's an example of an <b>ActiveDirectoryMembershipProvider</b> configured to require stronger passwords:</p>
+  <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&nbsp; &lt;providers&gt;<br />    &lt;add name="MyADMembershipProvider"<br />         connectionStringName="ADConnectionString"<br />         minRequiredPasswordLength="9"<br />         minRequiredNonalphanumericCharacters="2"<br />         passwordStrengthRegularExpression="&#94;(?=.&#42;\d)(?=.&#42;&#91;&#94;\w\d&#93;.&#123;9,20&#125;&#36;"<br />         maxInvalidPasswordAttempts=3<br />         passwordAttemptWindow=20<br />         passwordAnswerAttemptLockoutDuration=60<br />         requiresUniqueEmail="true"<br />          .../&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <h3>When Not Using&nbsp;a Membership Provider</h3>
+  <p>If you're not using a membership provider for your authentication, you'll need to manually check the strength of passwords.&nbsp; At a minimum, you should: </p>
+  <ul>
+    <li>Check that the password is at least 7 characters long. <li>Check that the password contains at least one nonalphanumeric character.</li></li>
+  </ul>
+  <h2>3. Improve Your Security Further</h2>
+  <p>For improved strength you can:</p>
+  <ul>
+    <li>Check that the password contains both upper and lowercase characters as well as nonalphanumeric characters. <li>Check that the password does not contain the username, the user's first or last name (if known), or the host name/site name. <li>Regularly expire passwords and force users to choose new ones.&nbsp; The amount of time between password changes should be determined by your security needs, but every three months is a reasonable default. <li>Prevent users from reusing old passwords.</li></li></li></li>
+  </ul>
+  <p>If you have a site with very strong security requirements, simply requiring and enforcing strong passwords may not be enough, in which case you should look into two factor authentication, for which a number of schemes exist, including smartcards, USB dongles, clock-synched external devices, and software-only solutions like client-side SSL certificates.</p>
+  <h1>Problem Example</h1>
+  <p>An online banking web site is using the SqlMembershipProvider for their authentication.&nbsp; They only require very simple passwords on the site, and suggest that people use their ATM card PIN as a password.&nbsp; As a result, an attacker is able to brute force user's passwords very quickly, gaining access to both online accounts and many ATM cards.&nbsp; Here's their membership provider configuration:</p>
+  <p />
+  <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&nbsp; &lt;providers&gt;<br />    &lt;add name="MySqlMembershipProvider"<br />          connectionStringName="MyLocalSQLServer"<br />          applicationName="MyAppName"<br />         minRequiredPasswordLength="4"<br />         minRequiredNonalphanumericCharacters="0"<br />         passwordStrengthRegularExpression=""<br />         .../&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>An online banking web site is using the SqlMembershipProvider for their authentication.&nbsp; They require fairly complicated passwords on the site, and remind people not to use passwords they use anywhere else.&nbsp; As a result, an attackers are unable to crack passwords in reasonable numbers of attempts, and the site operations staff can easily detect and lock out intruders by watching their security log.&nbsp; Here's their membership provider configuration:</p>
+  <p />
+  <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&nbsp; &lt;providers&gt;<br />    &lt;add name="MySqlMembershipProvider"<br />          connectionStringName="MyLocalSQLServer"<br />          applicationName="MyAppName"<br />         minRequiredPasswordLength="9"<br />         minRequiredNonalphanumericCharacters="2"<br />         passwordStrengthRegularExpression="&#94;(?=.&#42;\d)(?=.&#42;&#91;&#94;\w\d&#93;.&#123;9,20&#125;&#36;"<br />         .../&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

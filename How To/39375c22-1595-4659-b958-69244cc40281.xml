@@ -1,0 +1,375 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="581012042" Content_Hash="919829761">
+  <Metadata>
+    <Id>39375c22-1595-4659-b958-69244cc40281</Id>
+    <Id_History>efc93e8f-42b4-4e45-9bfd-f6de1e6c8079,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Use Forms Authentication with Active Directory</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Forms Authentication with Active Directory</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to shows you how to use forms authentication with Microsoft® Active Directory® directory service by using the <em>ActiveDirectoryMembershipProvider</em>. The How to shows you how to configure the provider and create and authenticate users. It also shows you how to enforce the password complexity rules defined by your domain policy and how you can extend your Active Directory schema to store password questions and answers. This allows you to support password resets if users forget their passwords.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>Objectives </li>
+    <li>Overview </li>
+    <li>Summary of Steps </li>
+    <li>Step 1. Create a Web Application with a Logon Page </li>
+    <li>Step 2. Configure the Web Application for Forms Authentication </li>
+    <li>Step 3. Configure ASP.NET for Membership </li>
+    <li>Step 4. Test Forms Authentication </li>
+    <li>Security Considerations </li>
+    <li>Additional Considerations </li>
+    <li>Configuration Attributes </li>
+    <li>Additional Resources</li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Use the <em>ActiveDirectoryMembershipProvider</em> with forms authentication. </li>
+    <li>Manage application user accounts and passwords that are stored in Active Directory. </li>
+    <li>Use the <em>ActiveDirectoryMembershipProvider</em> to enforce password complexity rules. </li>
+    <li>Learn key production considerations when using membership and forms authentication. </li>
+    <li>Learn key security considerations when using membership and forms authentication. </li>
+  </ul>
+  <h1>Overview</h1>
+  <p>The ASP.NET&amp;nbsp;membership feature provides an abstraction for the underlying data store that is used to maintain user credentials, such as user names and passwords. The membership feature includes an API that helps you to easily validate user credentials and manage the user database. Supported membership providers include the <em>SqlMembershipProvider</em> for Microsoft SQL Server™ user store databases and <em>ActiveDirectoryMembershipProvider</em> for Active Directory and Active Directory Application Mode (ADAM) user stores.</p>
+  <p>This How to shows you how to develop a simple Web site that uses forms authentication with Active Directory. It shows you how to configure the <em>ActiveDirectoryMembershipProvider</em>, create users, authenticate users, and establish password complexity rules. It also shows you how to use questions and answers to support password reset functionality.</p>
+  <h1>Summary of Steps</h1>
+  <p>To use forms authentication with Active Directory in ASP.NET, complete the following steps: </p>
+  <ul>
+    <li>Step 1. Create a Web application with a logon page. </li>
+    <li>Step 2. Configure the Web application for forms authentication. </li>
+    <li>Step 3. Configure ASP.NET for membership. </li>
+    <li>Step 4. Test forms authentication. </li>
+  </ul>
+  <h1>Step 1. Create a Web Application with a Logon Page</h1>
+  <p>In this step, you create a simple Web application with a default page and a logon page. Existing users can use the logon page to log on to the site, and new users can use the logon page to register and create new accounts.</p>
+  <h2>To create a Web application with a logon page </h2>
+  <ol>
+    <li>Start Microsoft Visual Studio .NET, and then create a new ASP.NET Web site called <em>FormsAuthAD</em>. </li>
+    <li>Use Solution Explorer to add a new Web form to the site called <em>Login.aspx</em>. </li>
+    <li>Add a <em>Login</em> control to <em>Login.aspx</em>. <p>By default, this control displays a user name field, a password field, and a <em>Remember me next time</em> checkbox. If the user selects this checkbox, a persistent authentication cookie is created and the user's browser stores the cookie on the user's computer. For security reasons, you should avoid creating persistent authentication cookies; therefore, disable this feature by setting the <em>DisplayRememberMe</em> property of the <em>Login</em> control to <em>false</em>. </p><p>Note that when a user clicks <em>Login</em> on the <em>Login</em> control, it automatically validates the user by calling the configured membership provider, creates a forms authentication ticket, and then redirects the user back to the page he or she originally requested. </p></li>
+    <li>If you are working in a test environment and have a service account with permissions to create new user accounts in Active Directory, add a <em>CreateUserWizard</em> control beneath the <em>Login</em> control so that users can register with your site and create new accounts. <p><b>Note:</b>&amp;nbsp;If you do not have the permissions to create new users, you will need to test authentication with an existing account.<b></b></p></li>
+  </ol>
+  <h1>Step 2. Configure the Web Application for Forms Authentication </h1>
+  <p>In this step, you configure your ASP.NET application to use forms authentication.</p>
+  <h2>To configure the Web application for forms authentication </h2>
+  <ol>
+    <li>Use Solution Explorer to add a <em>Web.config</em> file to your project. </li>
+    <li>Locate the &lt;<em>authentication</em>&gt; element, and then change the <em>mode</em> attribute to <em>Forms</em>. </li>
+    <li>Add the following &lt;<em>forms</em>&gt; element as a child of the &lt;<em>authentication</em>&gt; element, and then set the <em>name</em> and <em>timeout</em> attributes as shown in the following example. <pre>&lt;authentication mode="Forms"&gt;<br />&amp;nbsp; &lt;forms<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name=".ADAuthCookie"&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="10" /&gt;<br />&lt;/authentication&gt;  </pre><p>If you only set the <em>mode</em> attribute on the &lt;<em>authentication</em>&gt; element, and omit setting the attribute on the &lt;<em>forms</em>&gt; element, the &lt;<em>forms</em>&gt; configuration will use the default settings. You should configure only those attributes that you want to overwrite. The default settings for forms authentication as defined in the <em>Machine.config.comments</em> file are shown in the following example. </p><pre>&lt;forms name=".ASPXAUTH" loginUrl="login.aspx" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultUrl="default.aspx" protection="All" timeout="30" path="/" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="false" slidingExpiration="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieless="UseDeviceProfile" domain="" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enableCrossAppRedirects="false"&gt;<br />&amp;nbsp; &lt;credentials passwordFormat="SHA1" /&gt;<br />&lt;/forms&gt;  </pre></li>
+    <li>Add the following &lt;<em>authorization</em>&gt; element beneath the &lt;<em>authentication</em>&gt; element in your <em>Web.config</em> file. <pre>&lt;authorization&gt; <br />&amp;nbsp; &lt;deny users="?" /&gt;<br />&amp;nbsp; &lt;allow users="*" /&gt;<br />&lt;/authorization&gt;  </pre><p>This configuration allows only authenticated users to access the application. The <em>"?"</em> indicates unauthenticated users and the <em>"*"</em> indicates all users. By denying access to unauthenticated users, any requests made by unauthenticated users are redirected to your logon page. The <em>loginUrl</em> attribute on the &lt;<em>forms</em>&gt; element determines the name of the logon page. The default setting of this attribute in <em>Machine.config.comments</em> is <em>"Login.aspx"</em>. </p></li>
+  </ol>
+  <h1>Step 3. Configure ASP.NET for Membership</h1>
+  <p>In this step, you configure the Active Directory membership provider by specifying membership settings in your application's <em>Web.config</em> file.</p>
+  <h3>To configure ASP.NET for membership </h3>
+  <ol>
+    <li>In the <em>Web.config</em> file, add a connection string similar to the following, and modify it so that it points to your Active Directory users container. <pre>&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="ADConnectionString" connectionString="LDAP://testdomain.test.com/CN=Users,DC=testdomain,DC=test,DC=com" /&gt;<br />&amp;nbsp;&lt;/connectionStrings&gt;  </pre><p><b>Note:</b>&amp;nbsp;The connection string shown above connects to the user's container within a domain called <i>testdomain.test.com</i>. Update this string to point to the relevant users container within your domain.<b></b></p></li>
+    <li>Add a &lt;<em>membership</em>&gt; element after your &lt;<em>authorization</em>&gt; element, as shown in the following example. <pre>&lt;membership defaultProvider="MyADMembershipProvider"&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="MyADMembershipProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.ActiveDirectoryMembershipProvider, System.Web, Version=2.0.0.0, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="ADConnectionString"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionUsername="testdomain\administrator" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionPassword="password"/&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&amp;nbsp;&lt;/membership&gt;  </pre><p>Make sure that you set the <em>connectionStringName</em> attribute to the same name (<em>"ADConnectionString"</em>) you specified earlier in your <em>connectionStrings</em> section. </p><p>Make sure to set the <em>defaultProvider</em> attribute value to <em>MyADMembershipProvider</em>, because this needs to be overwritten. The machine-level default value points to <em>SQLMembershipProvider</em> type, using the local SqlExpress instance. If you do not overwrite this attribute, ASP.NET uses the default provider. </p><p><b>Note:</b>&amp;nbsp;In the example above, it is assumed that you are working in a test domain and have the password of an administrator account capable of creating new accounts. The administrator name and password must be supplied in plain text. As a result, you should encrypt this configuration section as well as the &lt;<em>connectionStrings</em>&gt; section. </p></li>
+  </ol>
+  <p>For the full list of attribute settings for the <em>ActiveDirectoryMembershipProvider</em>, see the section, "Configuration Attributes."</p>
+  <h2>Connecting to Active Directory</h2>
+  <p>When the <em>ActiveDirectoryMembership</em> provider connects to Active Directory, it uses the account whose credentials are specified on the <em>connectionUsername</em> property (note the lower-case <i>n</i>, which is different from the <em>connectionStringName</em> property). If you specify the <em>connectionUsername</em> property, you must also specify the <em>connectionPassword</em> property, otherwise an exception is thrown. If you do not specify account credentials, Active Directory uses your ASP.NET Web application's process account.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp;The service account that you use to connect to Active Directory must have sufficient permissions in Active Directory. If you place your user accounts in an Active Directory organizational unit (OU), you can create and use a service account that has only read, write, and delete access on that OU (and, optionally, reset password privilege).<b></b></p>
+  <h1>Step 4. Test Forms Authentication</h1>
+  <p>In this step, you test forms authentication.</p>
+  <h2>Add a Page_Load Event Handler</h2>
+  <p>Add the following code to the <em>Page_Load</em> event handler of your <em>Default.aspx</em> page. This page should be displayed only to authenticated users. To prove that this is the case, the code displays information obtained from the forms authentication ticket that is issued to authenticated users.</p>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp; Response.Write("Hello, " + Server.HtmlEncode(User.Identity.Name));<br />&amp;nbsp; FormsIdentity id = (FormsIdentity)User.Identity;<br />&amp;nbsp; FormsAuthenticationTicket ticket = id.Ticket;<br />&amp;nbsp; Response.Write("&lt;p/&gt;TicketName: " + ticket.Name );<br />&amp;nbsp; Response.Write("&lt;br/&gt;Cookie Path: " + ticket.CookiePath);<br />&amp;nbsp; Response.Write("&lt;br/&gt;Ticket Expiration: " +&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ticket.Expiration.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;Expired: " + ticket.Expired.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;Persistent: " + ticket.IsPersistent.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;IssueDate: " + ticket.IssueDate.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;UserData: " + ticket.UserData);<br />&amp;nbsp; Response.Write("&lt;br/&gt;Version: " + ticket.Version.ToString());<br />}</pre>
+  <h2>Logon as an Existing User</h2>
+  <p>You can test the authentication by logging on with an existing domain account.</p>
+  <h3>To logon as an existing user </h3>
+  <ol>
+    <li>
+      <p>Browse to your application's <em>Default.aspx</em> page. The earlier configuration of the &lt;<em>authorization</em>&gt; element prevents unauthenticated users from accessing any pages in your application. They are redirected to your <em>Login.aspx</em> page. </p>
+    </li>
+    <li>
+      <p />Enter valid credentials for an account in your domain, and then click <em>Login</em>. The format of the user name depends on the <em>attributeMapUsername</em> attribute of the &lt;<em>membership</em>&gt; element. The default configuration for the <em>ActiveDirectoryMembershipProvider</em> uses User Principal Names (UPNs) for name mapping as shown in the following example. <pre>attributeMapUsername="userPrincipalName"  </pre><p>Because of this, all user names must have the format <em>UserName@DomainName</em>; for example: mary@testdomain.com or steve@testdomain.com. </p><p>You can change the name mapping so that it uses simple user name format by setting the following attribute in the Membership Provider configuration in the <em>Web.config</em> file. </p><pre>attributeMapUsername="sAMAccountName"  </pre><p>With this configuration, you can use simple user names, for example: Mary or Steve. </p></li>
+  </ol>
+  <h2>Logon as a New User</h2>
+  <p>You can create a new user to test the logon functionality. You will only be able to perform this step if you are working in a test domain environment or if you have configured an administration account that has the privileges to create new users in Active Directory.</p>
+  <h3>To create a new user </h3>
+  <ol>
+    <li>
+      <p>Browse to your application's <em>Default.aspx</em> page. </p>
+    </li>
+    <li>
+      <p />Create a new user with a strong password. The Active Directory membership provider has the following default password rules: <ul><li>The password must be at least seven characters. </li><li>The password must contain at least one non-alphanumeric character. </li></ul><p>You must supply a password that conforms to either the policy defined by the provider or the policy defined by your Active Directory, whichever is stronger. Active Directory checks the membership configuration first; if that succeeds, then the provider attempts to create the account in Active Directory. If the supplied password does not meet the domain password policy criteria, then the provider will not create the account. </p></li>
+    <li>
+      <p>Log on with your new user account. If you log on successfully, you should be redirected back to the <em>Default.aspx</em> page that you initially requested, and the page should display details from the forms authentication ticket. </p>
+    </li>
+  </ol>
+  <p>
+    <b>Note:</b>&amp;nbsp;If you used the default settings when the user account was created, then you will need to supply the user name in the format <i>UserName@DomainName.</i></p>
+  <p>In addition to using the <em>CreateUserWizard</em> control, you can create users in the following ways: </p>
+  <ul>
+    <li>Use the ASP.NET Web site administration tool, which provides a wizard-like interface for creating new users. </li>
+    <li>Use an ASP.NET Web page that has <em>TextBox</em> controls to obtain the user name and password (and optionally an e-mail address), and then use the <em>Membership.CreateUser()</em> method to programmatically create new users. </li>
+  </ul>
+  <h1>Security Considerations</h1>
+  <p>Failing to protect authentication tickets is a common vulnerability that can lead to unauthorized spoofing and impersonation, session hijacking, and elevation of privilege. When you use forms authentication, consider the following recommendations to help ensure a secure authentication approach: </p>
+  <ul>
+    <li>
+      <b>Restrict the authentication cookie to HTTPS connections.</b> To prevent forms authentication cookies from being captured and tampered with while crossing the network, ensure that you use Secure Sockets Layer (SSL) with all pages that require authenticated access and restrict forms authentication tickets to SSL channels. </li>
+    <li>
+      <b>Partition the site for SSL.</b> This allows you to avoid using SSL for the entire site.<b></b></li>
+    <li>
+      <b>Do not persist forms authentication cookies. </b>Do not persist authentication cookies because they are stored in the user's profile on the client computer and can be stolen if an attacker gets physical access to the user's computer. </li>
+    <li>
+      <b>Consider reducing ticket lifetime.</b> Consider reducing the cookie lifetime to reduce the time window in which an attacker can use a captured cookie to gain access to your application with a spoofed identity. </li>
+    <li>
+      <b>Consider using a fixed expiration.</b> In scenarios where you cannot use SSL, consider setting <em>slidingExpiration="false"</em>. </li>
+    <li>
+      <b>Enforce strong user management policies.</b> Use and enforce strong passwords for all user accounts to ensure that people cannot guess one another's passwords and to mitigate the risk posed by dictionary attacks. </li>
+    <li>
+      <b>Enforce password complexity rules.</b> Validate passwords entered through the <em>CreateUserWizard</em> control, by setting its <em>PasswordRegularExpression</em> property to an appropriate regular expression. Also configure the membership provider on the server to use the same regular expression.<b></b></li>
+    <li>
+      <b>Perform effective data validation on all requests. </b>Perform strict data validation to minimize the possibilities of SQL injection and cross-site scripting. </li>
+    <li>
+      <b>Use distinct cookie names and paths.</b> By ensuring unique cookie names and paths, you prevent possible problems that can occur when hosting multiple applications on the same server. </li>
+    <li>
+      <b>Keep authentication and personalization cookies separate.</b> Keep personalization cookies that contain user-specific preferences and non-sensitive data separate from authentication cookies. </li>
+    <li>
+      <b>Use absolute URLs for navigation.</b> This is to avoid potential issues caused by redirecting from HTTP to HTTPS pages. </li>
+  </ul>
+  <h1>Additional Considerations</h1>
+  <p>When you use forms authentication with Active Directory, consider using the following additional security mechanisms: </p>
+  <ul>
+    <li>
+      <b>Password reset</b>
+    </li>
+    <li>
+      <b>Account lockout</b>
+    </li>
+  </ul>
+  <h2>Password Reset</h2>
+  <p>The <em>ActiveDirectoryMembershipProvider</em> class supports password reset security by requiring the user to answer a security question. The user provides this question and its answer when he or she creates the account. </p>
+  <h3>To enable password reset </h3>
+  <ol>
+    <li>Extend your Active Directory schema to add new attributes to the built-in <em>User</em> class. <p>Add the following two new attributes to store the question and answer: </p><ul><li>A single-value attribute of type <em>string</em> to hold a password question. </li><li>A single-value attribute of type <em>string</em> to hold a password answer. </li></ul><p>Add the following three new attributes to store tracking data that will be used to manage account lockout: </p><ul><li>A single-value attribute of type <em>integer</em> to track the failed answer count. </li><li>A single-value attribute of type <em>Large integer/interval</em> to hold the last time at which the user supplied an invalid answer while attempting to reset the password. </li><li>A single-value attribute of type <em>Large integer/interval</em> to hold the time at which the account was locked out because the user provided several bad password answers in succession. Note that the account is not locked out with Active Directory; therefore, the user could still log on to Windows with the account. However, the <em>ActiveDirectoryMembershipProvider</em> treats the account as locked out, so that the user cannot log on to an application that uses the provider until the lockout duration elapses. </li></ul><p><b>Note:</b>&amp;nbsp;To edit the Active Directory schema on Windows Server 2003, use <em>Regsvr32.exe</em> to register <em>schmmgmt.dll</em>, and then load the <em>Active Directory Schema</em> Microsoft Management Console (MMC) snap-in. You can use the <em>ADSIEdit</em> MMC snap-in to view and edit attribute values within Active Directory.<b></b></p></li>
+    <li>Set the following configuration attributes by using the &lt;<em>add</em>&gt; element for your &lt;<em>providers</em>&gt; section in the <em>Web.config</em> file: <ul><li>Set <em>enablePasswordReset</em> to <em>true</em>. </li><li>Set <em>requiresQuestionAndAnswer</em> to <em>true</em>. </li><li>Set <em>attributeMapPasswordQuestion</em> to the name of the Active Directory attribute on the <em>User</em> class that contains the password security question. </li><li>Set <em>attributeMapPasswordAnswer</em> to the name of the Active Directory attribute on the <em>User</em> class that contains the answer to the password security question. </li><li>Set <em>attributeMapFailedPasswordAnswerCount</em> to the name of the Active Directory attribute on the <em>User</em> class that tracks the number of failed answers to the password security question. </li><li>Set <em>attributeMapFailedPasswordAnswerTime</em> to the name of the Active Directory attribute on the <em>User</em> class that tracks the times at which the user enters an incorrect answer to the password security question. </li><li>Set <em>attributeMapFailedPasswordAnswerLockoutTime</em> to the name of the Active Directory attribute on the <em>User</em> class that tracks how long the account is locked out. </li></ul><p><b>Note: </b>You cannot reset passwords unless the credentials that are used to connect to Active Directory have either <em>Domain Administrator</em> rights (not recommended) or the <em>Reset password</em> privilege.<b></b></p><p>Your provider configuration to support password resets should be similar to the following example. </p><pre>&lt;add<br />&amp;nbsp; name="MyADMembershipProvider"<br />&amp;nbsp; type="System.Web.Security.ActiveDirectoryMembershipProvider, System.Web, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"<br />&amp;nbsp; connectionStringName="ADConnectionString"<br />&amp;nbsp; connectionUsername="dc\administrator" <br />&amp;nbsp; connectionPassword="P@ssw0rd"<br />&amp;nbsp; attributeMapUsername="sAMAccountName"<br />&amp;nbsp; enablePasswordReset="true"<br />&amp;nbsp; requiresQuestionAndAnswer="true"<br />&amp;nbsp; attributeMapPasswordQuestion="passwordQuestion"<br />&amp;nbsp; attributeMapPasswordAnswer="passwordAnswer"<br />&amp;nbsp; attributeMapFailedPasswordAnswerCount="badPasswordAnswerCount" <br />&amp;nbsp; attributeMapFailedPasswordAnswerTime="badPasswordAnswerTime"<br />&amp;nbsp; attributeMapFailedPasswordAnswerLockoutTime=<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "badPasswordAnswerLockoutTime" <br />&amp;nbsp; requiresUniqueEmail="true" /&gt;  </pre><p><b>Note:</b>&amp;nbsp;You should also set the optional attribute<em> requiresUniqueEmail="true"</em>, to ensure that users have unique e-mail IDs.</p></li>
+    <li>Set the <em>PasswordRecoveryText</em> and <em>PasswordRecoveryURL</em> on your <em>Login</em> control. Set the URL to a page that contains a <em>PasswordRecovery</em> control. <p>If a user forgets a password, he or she can click the forgotten password link on the <em>Login</em> control and then enter a user name. The <em>PasswordRecovery</em> control then prompts the user with the predetermined question. When the user submits the correct answer, the <em>ActiveDirectoryMembershipProvider</em> resets the user's password to a randomly created password value of an appropriate strength, and then sends the new password in an e-mail message to the user. </p><p><b>Note:</b>&amp;nbsp;For an e-mail message to be sent successfully, the user must have supplied a valid e-mail address when the account was created, and the &lt;<em>mailSettings</em>&gt; configuration within the &lt;<em>system.net</em>&gt; section of the <em>Machine.config</em> file must be appropriately configured with the details of the SMTP server.<b></b></p></li>
+  </ol>
+  <h2>Account Lockout</h2>
+  <p>To mitigate the risks posed by password guessing attacks, the <em>ActiveDirectoryMembershipProvider</em> supports account lockout and account lockout time periods. However, it does so separately from Active Directory. The <em>ActiveDirectoryMembershipProvider</em> tracks the number of failed password attempts and failed password answer attempts in a specified time period, and will lock out an account if a user exceeds the configured thresholds.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp;If the <em>ActiveDirectoryMembershipProvider</em> locks out an account, it does not appear as locked out in Active Directory. As a result, a user could still log on to Windows with an Active Directory account, but not be able to log on through any application that uses the <em>ActiveDirectoryMembershipProvider</em>.<b></b></p>
+  <p>You can configure account lockout policy with the following two provider attributes: </p>
+  <ul>
+    <li>
+      <b>maxInvalidPasswordAttempts. </b>This attribute defines the number of failed password attempts or failed password answers that are allowed before the provider locks out a user's account. When the number of failed attempts equals the value set in this attribute, the provider treats the user's account as locked out. The default value is 5. </li>
+    <li>
+      <b>passwordAttemptWindow.</b> This attribute defines how long the provider tracks failed password attempts and password answer attempts, in minutes. The default value is 10. </li>
+  </ul>
+  <p>If you use the defaults, the provider will treat the account as locked out if there are 5 failed log on attempts or 5 failed password answer attempts within 10 minutes.,</p>
+  <h3>Unlocking an Account</h3>
+  <p>To unlock a locked account, you can either call the <em>UnlockUser</em> method on the <em>MembershipUser</em> object, or you can wait until the time limit specified by the <em>attributeMapFailedPasswordAnswerLockoutTime</em> attribute elapses. After that amount of time has passed, the account automatically unlocks and is available for log on again.</p>
+  <h2>Configuration Attributes</h2>
+  <p>The <em>ActiveDirectoryMembershipProvider</em> has the following attributes, which you can optionally override in your <em>Web.config</em> configuration.</p>
+  <p>
+    <b>Table 1: ActiveDirectoryMembershipProvider Attributes and Default Values</b>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <th>Attribute</th>
+        <th>Default Value</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>
+          <b>connectionProtection</b>
+        </td>
+        <td>
+          <b>Secure</b>
+        </td>
+        <td>Specifies the transport layer security options that are used when opening connections to the directory. You can set this attribute to either <em>Secure</em> or <em>None</em>. If you set it to <em>Secure</em>, the <em>ActiveDirectoryMembershipProvider</em> attempts to connect to Active Directory by using SSL. If SSL fails, the provider makes a second connection attempt by using sign-and-seal. If both attempts fail, a <em>ProviderException</em> exception is generated. <p>This attribute supports both process credentials and explicit credentials.</p></td>
+      </tr>
+      <tr>
+        <td>
+          <b>enablePasswordReset</b>
+        </td>
+        <td>
+          <b>true</b>
+        </td>
+        <td>Specifies whether the provider is configured to allow users to reset their passwords.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>enableSearchMethods</b>
+        </td>
+        <td>
+          <b>false</b>
+        </td>
+        <td>Allows an administrator to set whether or not search-oriented methods can be called in the provider instance. </td>
+      </tr>
+      <tr>
+        <td>
+          <b>requiresQuestionAndAnswer</b>
+        </td>
+        <td>
+          <b>false</b>
+        </td>
+        <td>Specifies whether or not a security question and answer need to be provided.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>applicationName</b>
+        </td>
+        <td>
+          <b>/</b>
+        </td>
+        <td>Specifies the name of the application that is using the membership provider.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>requiresUniqueEmail</b>
+        </td>
+        <td>
+          <b>false</b>
+        </td>
+        <td>Specifies whether a unique e-mail address is required from the user when creating an account. </td>
+      </tr>
+      <tr>
+        <td>
+          <b>maxInvalidPasswordAttempts</b>
+        </td>
+        <td>
+          <b>5</b>
+        </td>
+        <td>Specifies the number of failed logon attempts a user is allowed before the user is locked out.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>passwordAttemptWindow</b>
+        </td>
+        <td>
+          <b>10</b>
+        </td>
+        <td>Specifies the number of minutes during which a user is allowed to make logon attempts before he or she is locked out.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>passwordAnswerAttemptLockout</b>
+          <br />
+          <b>Duration</b>
+        </td>
+        <td>
+          <b>30</b>
+        </td>
+        <td>Specifies the length of time a user is locked out after exceeding the maximum number of invalid password attempts.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>minRequiredPasswordLength</b>
+        </td>
+        <td>
+          <b>7</b>
+        </td>
+        <td>Specifies the minimum acceptable length for a password, in characters.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>minRequiredNonalphanumeric</b>
+          <br />
+          <b>Characters</b>
+        </td>
+        <td>
+          <b>1</b>
+        </td>
+        <td>Specifies the minimum number of non-alphanumeric characters that a password must contain.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>passwordStrengthRegular</b>
+          <br />
+          <b>Expression</b>
+        </td>
+        <td>
+          <b>""</b>
+        </td>
+        <td>Specifies a regular expression that can be used to create a strong password. By default, a strong password should contain at least seven characters, including one non-alphanumeric character.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapUsername</b>
+        </td>
+        <td>
+          <b>userPrincipal</b>
+          <br />
+          <b>Name</b>
+        </td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute defines how user names must be supplied when users create new accounts or log on through the <em>CreateUserWizard</em> and <em>Login</em> controls.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapEmail</b>
+        </td>
+        <td>
+          <b>mail</b>
+        </td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute holds the user's e-mail address.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapPasswordQuestion</b>
+        </td>
+        <td>&amp;nbsp;</td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute holds a question that the user must answer correctly to reset his or her password. This attribute is populated by the <em>CreateUserWizard</em> control when the account is created. </td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapPasswordAnswer</b>
+        </td>
+        <td>&amp;nbsp;</td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute holds the answer to the password security question. This attribute is populated by the <em>CreateUserWizard</em> control when the account is created.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapFailedPassword</b>
+          <br />
+          <b>AnswerCount</b>
+        </td>
+        <td>&amp;nbsp;</td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute holds the maximum number of times that a user can supply an incorrect password answer before the account is locked out.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapFailedPassword</b>
+          <br />
+          <b>AnswerTime</b>
+        </td>
+        <td>&amp;nbsp;</td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute holds the length of time in minutes during which Active Directory tracks password answers.</td>
+      </tr>
+      <tr>
+        <td>
+          <b>attributeMapFailedPassword</b>
+          <br />
+          <b>AnswerLockoutTime</b>
+        </td>
+        <td>&amp;nbsp;</td>
+        <td>Defines the mapping from a property on a <em>MembershipUser</em> object to an attribute within Active Directory. This attribute holds the length of time in minutes that an account will be locked out if the user supplies a succession of incorrect answers.</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>1af2c633-12a1-48b8-81c4-11fc6c4e196a</Id>
+    <Id_History>fb6e2a2e-7d42-46e6-99bd-a728c1e95453,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Valuable Information Is Not Disclosed During Authentication Errors</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Valuable Information Is Not Disclosed During Authentication Errors</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[=Applies to=
+
+Scala and Play Framework 2.1.0+
+
+=What to Check For=
+
+Ensure your application displays a generic message when authentication fails.
+
+=Why=
+
+Disclosing information about invalid usernames and passwords can help an 
+attacker obtain a list of valid users.
+
+=How to Check=
+
+To ensure that your application displays generic messages upon failed 
+authentication:
+# **Identify all segments of code that handle failed authentication.** Identify all 
+functions that handle login and perform access control on resources. Trace your 
+application's code base to locate the origin of each failed authentication 
+message. Good places to start are if-else statements, throw statements and 
+exception handlers. It is a common practice for developers to group messages 
+into resource files instead of hard-coding them into your application's source 
+code
+# **Review the error messages.** Review the returned error messages. Verify that:
+*Structure: Error messages are brief and direct.
+*Contents: Error messages do not contain unnecessary contents such as internal debug information.
+*Variety: All error messages that pertain to failed authentication are identical.
+
+
+=How to Fix=
+
+To provide secure error messages when authentication fails, use the following 
+steps:
+# **Choose an error message.** The message should be very generic. It should 
+signify "yes" or "no" to the authentication attempt. For example: "Authentication 
+failed."
+# **Display only one message.** Your application should provide feedback only 
+after all credentials have been verified. Structure your code in a manner that 
+allows all checks to be executed at once. For example:
+
+{{{
+           if (!validUser() || !validPass()) 
+              { 
+                throw new AuthenticationException("Authentication failed."); 
+               }
+}}}
+
+
+Because it is sometimes impossible to structure the code in a manner where all 
+checks are performed at once, it is important that all error messages contain the 
+exact same information. Any variation in the error messages can give away the 
+information that a username is valid.
+
+	
+
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

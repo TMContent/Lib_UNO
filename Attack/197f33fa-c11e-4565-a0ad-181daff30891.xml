@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1744414103" Content_Hash="-1870347480">
+  <Metadata>
+    <Id>197f33fa-c11e-4565-a0ad-181daff30891</Id>
+    <Id_History>805c290e-da18-4c81-862e-d77b86ed81e2,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>HTTP Replay Attack</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Any web application.</p>
+  <h1>Description</h1>
+  <p>In an HTTP Replay attack, the attacker first performs <a href="/article/4162fafb-2975-4398-b895-672158f310c5">Network Eavesdropping Attack</a> on the communication between a client and a server. The captured packets can then be sent by the attacker to the host in an attempt to impersonate the user that caused the original request. The attacker may have to modify certain characteristics of the replayed messages in order to trick the server into believing that the message originated from the original user.</p>
+  <p>The <a href="/article/6ce03806-c25d-4dbc-8df0-3343085d31d0">HTTP Session Hijacking Attack</a> is a specific type of a HTTP Replay Attack where the attacker attempts to impersonate the client by replaying the client session identifier.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Authentication Spoofing <li>Client Impersonation</li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <p>If the server does not employ any secure means to verify the origin of received messages, then the server will be vulnerable to these attacks. Even if the server employs methods to verify the identity of the client sending the messages, but the verification is based on information in the messages that can be spoofed by an attacker, the server will be vulnerable to this attack. Some of the main causes are: </p>
+  <ul>
+    <li>
+      <strong>Unprotected Sessions.</strong> An attacker may be able to impersonate the session of another user because of any of the following reasons: <ul><li>Reuse of session IDs <li>Long or infinite session timeouts <li>Poor or predictable session identifiers </li></li></li></ul><li><strong>Insecure communication channel.</strong> If the channel of communication is secured using encryption, then the attacker will find it extremely difficult to conduct this attack.</li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Use sessions securely. Please see <a href="/article/6ce03806-c25d-4dbc-8df0-3343085d31d0">HTTP Session Hijacking Attack</a> for more information. <li>Utilize SSL or IPSec with encryption to establish a secure communication channel. <li>Consider Timestamping. To learn more about this please see the <a href="http://en.wikipedia.org/wiki/Timestamp">Wikiepedia Timestamp</a> article.</li></li></li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about hijacking mechanics and attack prevention see: <a href="http://www.microsoft.com/technet/technetmag/issues/2005/01/SessionHijacking/">Theft on the Web: Prevent Session Hijacking</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/4162fafb-2975-4398-b895-672158f310c5">Attack: Network Eavesdropping Attack</a>
+      <li>
+        <a href="/article/6ce03806-c25d-4dbc-8df0-3343085d31d0">Attack: HTTP Session Hijacking Attack</a>
+        <li>
+          <a href="/article/3b7512c0-23cf-48f4-8b77-3e0658c3006b">Attack: Session Prediction Attack</a>
+          <li>
+            <a href="/article/0054c741-8668-49df-a3f2-815e3fb82f79">Attack: Network Credential Sniffing Attack</a>
+            <li>
+              <a href="/article/8049f087-514e-4f31-b587-c83f466547d3">Attack: Cross Site Scripting Attack</a>
+              <li>
+                <a href="/article/7dfbe9c9-481e-46d2-b1a5-9a776578d6c2">Attack: Man in the Middle Attack</a>
+                <li>
+                  <a href="/article/740a1606-d091-4a93-bfd8-f0d4226adbf1">Guideline: Force Re-Authentication When Executing Critical Functionality </a>
+                  <li>
+                    <a href="/article/b070122f-f1d1-47da-a378-57f845d5db61">Guideline: Encrypt Communication Links </a>
+                    <li>
+                      <a href="/article/254ddab5-ecd2-4e05-a2b0-861e970bc0d9">Guideline: Protect Session Cookies </a>
+                      <li>
+                        <a href="/article/8e0aea9c-322b-4b3f-9c61-a670c1fcd3e3">Guideline: Use Page.ViewStateUserKey to Counter Cross Site Request Forgery Attacks </a>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

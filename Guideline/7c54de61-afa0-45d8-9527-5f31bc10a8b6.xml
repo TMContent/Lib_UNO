@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="896898867" Content_Hash="966217277">
+  <Metadata>
+    <Id>7c54de61-afa0-45d8-9527-5f31bc10a8b6</Id>
+    <Id_History>f21f5350-826d-44dd-b758-fd824d52f592,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Remove Test Accounts</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Java</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Remove Test Accounts</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications written using Servlets or JSP.</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Remove all test accounts from deployed applications.</p>
+  <h1>Why</h1>
+  <p>Test accounts provide access to the application's functionality during development. Since they are often poorly secured, they are a common target for attackers and removing them before deployment is the best&amp;nbsp;option.</p>
+  <h1>When</h1>
+  <p>If you use test accounts during application testing, be sure they are removed before deployment.</p>
+  <h1>How</h1>
+  <p>Use the following steps when removing test accounts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Enumerate all accounts. </strong>List all the users&amp;nbsp;of your application. This should be a comprehensive list that includes, but is not limited to, active users, inactive users, users pending confirmation and test accounts.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the use of each account. </strong>Examine the use/status of each account. Sort the accounts into groups according to their use/status.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Remove the accounts that will no longer be used. </strong>Once the accounts are sorted into groups, list all accounts that are used for test purposes. After identifying all test accounts, remove them from your application's database.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce strong passwords on the remaining accounts. </strong>After removing all test accounts, enforce strong passwords for the remaining accounts in your application. Strong passwords decrease the probability of compromising valid users.</p>
+    </li>
+  </ol>
+  <p>
+    <strong>Note:</strong> PCI DSS requirements state that passwords should be at least seven characters in length, use both letters and numbers, expire after no more than 90 days and that new passwords should not be the same as the previous four by the same user.</p>
+  <h1>Problem Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. The problem with the user database is the existence of test accounts after the deployment of the application:</p>
+  <blockquote>
+    <pre>sql&gt; select username from users;<br />+----------+<br />| username |<br />+----------+<br />| joe      |<br />| adam     |<br />| john     |<br />| bob      |<br />| jim      |<br />| sean     |<br />| ellen    |<br />| mary     |<br />| susan    |<br />| julie    |<br />| test01   |<br />| test02   |<br />| test03   |<br />+----------+</pre>
+  </blockquote>
+  <h1>Solution Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. The user database is populated with active users and no test accounts:</p>
+  <blockquote>
+    <pre>sql&gt; select username from users;<br />+----------+<br />| username |<br />+----------+<br />| joe      |<br />| adam     |<br />| john     |<br />| bob      |<br />| jim      |<br />| sean     |<br />| ellen    |<br />| mary     |<br />| susan    |<br />| julie    |<br />+----------+</pre>
+  </blockquote>
+  <h1>Java Deployment Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/f21f5350-826d-44dd-b758-fd824d52f592">Remove Test Accounts</a>
+    </li>
+    <li>
+      <a href="/article/df860f3d-2185-4939-be4b-ef26d8891855">Remove Test Interfaces</a>
+    </li>
+    <li>
+      <a href="/article/fd675679-e8ad-40fc-bac4-d56fc440bc00">Disable Directory Browsing</a>
+    </li>
+    <li>
+      <a href="/article/aebb10ce-aeb6-45e5-b159-e2bc76b012bf">Use a Least-Privileged Account for Running Applications</a>
+    </li>
+    <li>
+      <a href="/article/47e80747-3e12-4dd1-a522-ea5c33154a86">Protect the JAAS Policy and Configuration Files</a>
+    </li>
+    <li>
+      <a href="/article/3f301ff9-098d-46cb-ac53-cb3fa6897cdf">Protect Sensitive Data Inside Configuration Files</a>
+    </li>
+  </ul>
+  <h1>Java Deployment Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/256b4884-9ff0-4a33-960c-305b824bab68">Test Accounts Are Removed</a>
+    </li>
+    <li>
+      <a href="/article/fe7941bc-b986-48f9-9fa3-422c34db36bd">Test Interfaces Are Removed</a>
+    </li>
+    <li>
+      <a href="/article/65e70f79-645d-415c-9e71-9cff045cc1c4">Directory Browsing Is Disabled</a>
+    </li>
+    <li>
+      <a href="/article/a2000bc9-7e22-4d0c-91b8-a9ec623985d3">A Least Privileged Account Is Used for Running Applications</a>
+    </li>
+    <li>
+      <a href="/article/4bc8430f-b950-455a-80c1-8cbdb524c1e3">JAAS Policy and Configuration Files Are Protected</a>
+    </li>
+    <li>
+      <a href="/article/f9c1e6b0-1bc4-4108-9c9a-55dca84749ac">Sensitive Data Inside Configuration Files Is Protected</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

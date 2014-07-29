@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1746138541" Content_Hash="43779475">
+  <Metadata>
+    <Id>65a93131-59ae-48da-b7a4-e55b498c7dff</Id>
+    <Id_History>5c54bba4-5654-4c08-8257-5e2259c0a92d,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Restrict All Role Caching Cookies to HTTPS Connections</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Restrict All Role Caching Cookies to HTTPS Connections</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority> J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use the <b>cookieRequireSSL</b> attribute to restrict role caching cookies to HTTPS connections if role caching is being used. </p>
+  <h1>Why</h1>
+  <p>Sending cookies out exclusively over SSL makes it much harder for an attacker to sniff the cookie values off the wire.&amp;nbsp; If an attacker can get a copy of an authorization cookie, they can potentially emulate that role, allowing them to elevate their privilege in the system. </p>
+  <h1>When</h1>
+  <p>All systems which use authorization cookies should use SSL for those cookies if at all possible.&amp;nbsp; Systems which deal with any personally identifiable information or monetary transaction should use SSL in all circumstances without exception. </p>
+  <h1>How</h1>
+  <p>Set the <b>cookieRequireSSL</b> attribute to true to specify that the authorization cookie with the role information should only be returned to the server over HTTPS connections.&amp;nbsp; The following example shows a <b>&lt;roleManager&gt;</b> element configured to protect the authorization cookie. </p>
+  <pre>&lt;roleManager enabled="true"             <br />	cacheRolesInCookie="true"             <br />	cookieName=".ASPROLES"             <br />	cookieTimeout="30"             <br />	cookiePath="/"             <br />	cookieRequireSSL="true"             <br />	cookieSlidingExpiration="true"             <br />	cookieProtection="All"              <br />	createPersistentCookie="false"&gt;<br />&lt;/roleManager&gt;</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

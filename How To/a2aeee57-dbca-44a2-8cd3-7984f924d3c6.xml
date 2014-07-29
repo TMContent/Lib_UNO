@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-108500157" Content_Hash="1608392831">
+  <Metadata>
+    <Id>a2aeee57-dbca-44a2-8cd3-7984f924d3c6</Id>
+    <Id_History>1fbad112-4872-470b-b138-f84d277a554d,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Local Machine Credential Theft Bugs in ASP .NET</Title>
+    <Category>Information Disclosure</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>ASP .NET applications</li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>ASP .NET applications that authenticate their clients using a username and password combination must store these credentials somewhere within the application&#8217;s realm.<span>&nbsp; </span>Some ASP .NET applications directly store credentials in a file or a database server while others allow browser&#8217;s to store client credentials in the cache or browser&#8217;s history for future logins.<span>&nbsp;&nbsp; </span>During a local machine credential attack, the attacker first gets access to the computer where credentials are stored and then reads the credentials to execute further attacks on the application.</p>
+  <p>Follow these steps to test for local machine credential theft bugs in ASP .NET:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios</li>
+    <li>Step 2: Analyze causes and countermeasures</li>
+    <li>Step 3: Execute test cases</li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, it is necessary to understand the anatomy of an attack scenario for local credential theft bugs in ASP .NET applications.</p>
+  <p>ASP .NET applications that deal with authentication keep a record of valid credentials in a credential store such as a file or a database in a local computer.<span>&nbsp; </span>During local machine credential theft attacks, attacker logs in to the computer used to store the target client&#8217;s J2EE application credentials and uses different methods to steal the credentials from the target computer.<span>&nbsp; </span><span>&nbsp;</span>Depending on how ASP .NET applications implement authentication, credentials may be stored in a file, SQL Server database, Microsoft&#8217;s Active Directory, or the Security Account Manager (SAM) user store.<span>&nbsp; </span>Additional credentials might be found in cache history and browser&#8217;s store.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker logs in to target computer (computer storing client credentials).</li>
+    <li>The attacker grabs the target client&#8217;s credentials from the credentials store, the cache history, or the browser&#8217;s store.</li>
+    <li>The attacker uses the target client&#8217;s credentials to access the ASP .NET application.</li>
+  </ol>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>Next, it is necessary to review the different causes and countermeasures for local credential theft bugs.</p>
+  <h2>
+    <span>
+      <em>Permissions on Credential Stores</em>
+    </span>
+  </h2>
+  <p>ASP .NET applications that store credentials in a location accessible to any low privileged users of the host computer are vulnerable to local machine credential attacks.<span>&nbsp; </span>For instance, an application that stores credentials in the <i>c:\user_files</i> folder must make sure to set the appropriate permissions or Access Control Lists (ACLs) on this folder.<span>&nbsp; </span>If the application uses the credential file <i>c:\user_files\credentials.txt</i> and doesn&#8217;t restrict access to it to administrators or a low privileged account that used only by the ASP .NET application (and not any logged in user), the application allows any logged in attacker to read the file and steal the credentials.<span>&nbsp; </span>The same applies to a database table; an ASP .NET application that doesn&#8217;t set the permissions on the table used to store username and passwords allows any SQL server guest user to read and steal credentials from the database.</p>
+  <p>
+    <b>
+      <i>
+        <span>&nbsp;</span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Credentials in Clear Text</em>
+    </span>
+  </h2>
+  <p>Applications that need to store credentials must take the appropriate precautions so that if attackers steal a client credentials they can&#8217;t use them to log in to the target application.<span>&nbsp;&nbsp; </span>Thus, it is recommended to store password verifiers in their encryption version as one way hashes with an added cryptographic salt.<span>&nbsp;&nbsp; </span>As a result, if the attacker executes a successful local credential theft attack, he or she will only be able to get the password&#8217;s hash but fail to get the actual password required to log in to the target application. &#91;i&#93; </p>
+  <p>ASP .NET applications can choose to use Forms authentication with a SQL server or Active Directory provider.<span>&nbsp;&nbsp; </span>Developers who choose these authentication options must be sure to verify if the final credentials store is encrypted.</p>
+  <p>
+    <b>
+      <i>
+        <span>&nbsp;</span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Keeping Credentials in the browser&#8217;s cache</em>
+    </span>
+  </h2>
+  <p>ASP .NET applications can choose to allow their clients to remember the password for future uses.<span>&nbsp; </span>This option commonly appears as the &#8220;remember me next time&#8221; check box in the login form.<span>&nbsp; </span>To avoid credential theft attacks, developers are encouraged to disallow this option by default and always require its clients to enter valid credentials.<span>&nbsp; </span>This will avoid credentials to be stored in the browser&#8217;s cache for future use.</p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you&#8217;ve reviewed the theoretical aspects of local credential theft bugs, it is necessary to execute the following test cases to check if your application is vulnerable.</p>
+  <h2>
+    <span>
+      <em>Test for insecure credential stores in file system/registry</em>
+    </span>
+  </h2>
+  <p>This test varies depending on where credentials are stored (file system vs. registry). <span>&nbsp;</span>Follow these steps:</p>
+  <ol>
+    <li>Log in to machine where credentials are stored using a low privileged account.</li>
+    <li>Browse to folder/registry key used to store credentials.</li>
+    <li>Read credentials.</li>
+  </ol>
+  <p>Expected results:<span>&nbsp; </span>The application is vulnerable if it allows a low privileged user to read client credentials from the file system or registry.</p>
+  <p>&nbsp;</p>
+  <h2>
+    <span>
+      <em>Test for insecure credential stores in Active Directory</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for insecure credentials in Active Directory:</p>
+  <ol>
+    <li>Log in to machine running Active Directory using a low privileged account.</li>
+    <li>Browse to the folder used to store Active Directory database files.<span>&nbsp;&nbsp; </span>This folder is by default <i>&#37;SystemRoot&#37;\ntds</i> but can be a different one in insecure configuration.</li>
+    <li>Dump database files.</li>
+    <li>Find username and password in output of dump files.</li>
+  </ol>
+  <p>Expected results:<span>&nbsp; </span>The application is vulnerable if it allows a low privileged to access the Active Directory database files folder.</p>
+  <p>&nbsp;</p>
+  <h2>
+    <span>
+      <em>Test for credentials in browser&#8217;s cache</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for local credential theft in browser&#8217;s cache.</p>
+  <ol>
+    <li>Log in to target machine using a low privileged account.</li>
+    <li>Download an HTTP proxy tool such as Burp proxy.</li>
+    <li>Open web browser, and set web browser connection options to use HTTP proxy.</li>
+    <li>In proxy, turn intercept off.</li>
+    <li>Browse to application&#8217;s log in page.</li>
+    <li>In proxy, turn intercept on.</li>
+    <li>Type the username of the target client.<span>&nbsp; </span>A password may appear in hidden characters. </li>
+    <li>Submit login request.</li>
+  </ol>
+  <p>Expected results:<span>&nbsp; </span>The application is vulnerable if the HTTP proxy shows the target client username and password in the intercepted login request.</p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>ASP .NET applications that use authentication must be careful not to store credentials with poor permissions and in clear text as this allows for local machine credential theft attacks.<span>&nbsp; </span>This attack consists of logging to the target computer (used to store credentials) and trying to recover the credentials of a legitimate user.<span>&nbsp;&nbsp;&nbsp; </span>To test for credential theft attacks in your ASP .NET application be sure to understand well the details of this bug&#8217;s attack scenarios as well as what causes it and how to protect against it.<span>&nbsp; </span>Then, execute the appropriate test cases depending on what credential store your ASP .NET application uses.<span>&nbsp;&nbsp;&nbsp; </span>Make sure to execute an additional test case to attempt to recover credentials in the browser&#8217;s history using a low privileged account.</p>
+  <p>&#91;i&#93; <b>Chapter 2 - Threats and Countermeasures</b>.<span>&nbsp; </span>.NET Framework Security. MSDN.<span>&nbsp; </span><a href="http://msdn.microsoft.com/en-us/library/aa302418.aspx">http://msdn.microsoft.com/en-us/library/aa302418.aspx</a></p>
+  <div>
+    <div>
+      <p>&nbsp;</p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

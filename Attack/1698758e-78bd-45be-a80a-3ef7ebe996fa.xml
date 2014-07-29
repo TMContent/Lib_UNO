@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-359205175" Content_Hash="-122696765">
+  <Metadata>
+    <Id>1698758e-78bd-45be-a80a-3ef7ebe996fa</Id>
+    <Id_History>226cd058-712c-4c26-b760-3e7f32f06201,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Command Injection Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Command Injection Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>All applications.</p>
+  <h1>Description</h1>
+  <p>Command injection problems are a subset of injection problems in which the process is tricked into either executing code or calling external processes of the attacker's choice through the injection of control information into the data stream.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>
+      <strong>Elevation of Privilege:</strong> Command injection can allow for the execution of arbitrary commands and code by the attacker. </li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>
+      <strong>Failure to Validate User Input:</strong> Situations where control information and data are mixed create opportunities for command injection.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <strong>Validate user input</strong>. Prevent commands from being included in data by validating input for type, length, range, and format. Whitelist acceptable input and reject everything else. Escape meta characters and be aware of canonicalization issues. Remember that data may be changed as it flows through the program, so validating at multiple stages is often appropriate. <li><strong>Do not use input data in commands directly</strong>. Clever formatting may be used so that the user's input is treated as its own separate command instead of as data. Therefore, validate the input and explicitly type it as data so that it cannot be interpreted as a command even if it contains one. <li><strong>Avoid using command interpreters</strong>. Although not always practical, using a well maintained API will have better results than invoking commands through an interpreter or external process.</li></li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>The following code is wrapper around the UNIX command cat which prints the contents of a file to standard out. It is also injectable: </p>
+  <pre>#include &lt;stdio.h&gt;#include &lt;unistd.h&gt;int main(int argc, char &amp;#42;&amp;#42;argv) &amp;#123;  char cat&amp;#91;&amp;#93; = "cat ";  char &amp;#42;command;  size_t commandLength;  commandLength = strlen(cat) &amp;#43; strlen(argv&amp;#91;1&amp;#93;) &amp;#43; 1;  command = (char &amp;#42;) malloc(commandLength);  strncpy(command, cat, commandLength);  strncat(command, argv&amp;#91;1&amp;#93;, (commandLength - strlen(cat)) ); system(command);  return (0);&amp;#125;</pre>
+  <p>Used normally, the output is simply the contents of the file requested: </p>
+  <pre>&amp;#36; ./catWrapper Story.txtWhen last we left our heroes...</pre>
+  <p>However, if we add a semicolon and another command to the end of this line, the command is executed by catWrapper with no complaint: </p>
+  <pre>&amp;#36; ./catWrapper Story.txt; lsWhen last we left our heroes...Story.txt doubFree.c nullpointer.cunstosig.c www&amp;#42; a.out&amp;#42;format.c strlen.c useFree&amp;#42;catWrapper&amp;#42; misnull.c strlength.c useFree.c commandinjection.c nodefault.c trunc.c writeWhatWhere.c</pre>
+  <p>If catWrapper had been set to have a higher privilege level than the standard user or could be executed anonymously, arbitrary commands could be executed with that higher privilege. </p>
+  <p>Another example of this type of behavior can be seen with XSL, the style sheet language for XML. The primary purpose of XSL is to provide an easy and modular way to transform XML documents into other XML documents such as HTML. In particular, different XSL styles can be attached to the same XML and are sometimes supplied by the user. Microsoft extended the functionality of XSL to allow scripting code to be embedded in the style sheets with the &lt;msxsl:script&gt; tag. If an attacker has the ability to modify or replace the XSL style sheet in use, they can therefore inject any command to the system running the application simply by including it in the style sheet.</p>
+  <p>In many programming languages there is an eval() function that, as the name suggests, evaluates a string as an expression. Among the members of this list are the commonly used JavaScript, ASP, Python, Perl, Ruby, and PHP. Blurring the distinction between data and code presents a huge security risk; this case is no different. User input is sometimes used in eval() expressions allowing arbitrary code to be executed. Consider an example where eval() is used in a php application to join strings:</p>
+  <pre>&amp;#36;name; // ask the user for their name and store it here&amp;#36;str = '&amp;#36;user stole my coffee&amp;#33;';&amp;#36;str_after_eval = eval("&amp;#36;str;");echo &amp;#36;str. "\n";echo &amp;#36;str_after_eval. "\n";</pre>
+  <p>If the user enters the name "Alice", this code will output the following:</p>
+  <pre>&amp;#36;user stole my coffee&amp;#33;Alice stole my coffee&amp;#33;</pre>
+  <p>However, if the user enters the name "echo exec('whoami'); echo" then the application will return the name of the system user running the php/html application. Any system command or external program in the path could be run in this fashion.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Command Injection, see the <a href="http://www.e-articles.info/e/a/title/Command-Injection/">Command Injection </a>article at e-articles.info. <li>For more information on the Javascript Eval function, see the Wikipedia Eval article at <a href="http://en.wikipedia.org/wiki/Eval">http://en.wikipedia.org/wiki/Eval</a>. <li>For more information on script blocks in XSL, see <a href=" http://msdn2.microsoft.com/en-us/library/wxaw5z5e.aspx">Script Blocks Using msxsl:script </a>on MSDN. <li>For more information on XSL transformations, see <a href="http://en.wikipedia.org/wiki/XSL_Transformations">XSL Transformations</a> on wikipedia. </li></li></li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/5fc61d60-4afa-4f2e-80a5-05d7a656f3ac">Attack: Canonicalization Attack</a>
+      <li>
+        <a href="/article/eaa90597-a420-410b-a7e7-2527dba65649">Attack: Server-Side Code Injection Attack</a>
+        <li>
+          <a href="/article/5c86d31c-18bf-45e8-9fd1-9214a285022e">Attack: SQL Injection Attack</a>
+          <li>
+            <a href="/article/d2cd0955-4493-48de-81aa-c46f681fad0a">Attack: XML Injection Attack</a>
+            <li>
+              <a href="/article/875fb915-a91b-4190-b383-23dc81474136">Attack: Xpath-XQuery Attack</a>
+              <li>
+                <a href="/article/fb8f74de-9fbf-4c04-afa4-08f79fbf491f">Attack: Client-side Validation Attack</a>
+                <li>
+                  <a href="/article/80751518-9e6f-467f-83bc-33bac6b94ef5">Attack: Cross Site Scripting Attack</a>
+                  <li>
+                    <a href="/article/e08f0f58-ccd3-4e52-8a43-51a4675d6119">Attack: AJAX Injection Attack</a>
+                    <li>
+                      <a href="/article/a89508a7-130f-4622-b167-10fdaeab5cf8">Attack: LDAP Injection Attack</a>
+                      <li>
+                        <a href="/article/20bcb937-7d89-4d4d-a174-11490f75785a">Attack: Man in the Middle Attack</a>
+                        <li>
+                          <a href="/article/88f49e05-f101-4764-b8e3-b31cd7507071">Guideline: Do Not Rely on Request Validation </a>
+                          <li>
+                            <a href="/article/946a5edb-e8f8-4365-8675-b8a5032c201b">Guideline: Validate All Data Passed Between Native and Java Code </a>
+                            <li>
+                              <a href="/article/ce899ba6-8ae2-4494-8706-ce863fae58e7">Guideline: Filter All User-Supplied Filename and Path Input </a>
+                              <li>
+                                <a href="/article/40eea61e-c8bd-494a-b75d-c18c2074c752">Guideline: Validate Input from All Sources </a>
+                                <li>
+                                  <a href="/article/f29fac90-c626-41d6-9184-acd6007696cf">Guideline: Validate Input for Length, Range, Format, and Type </a>
+                                  <li>
+                                    <a href="/article/9f21442f-2aee-4573-8be6-a5b51d9c89b8">Guideline: Do Not Rely on Client-Side Validation </a>
+                                  </li>
+                                </li>
+                              </li>
+                            </li>
+                          </li>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

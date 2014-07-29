@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="586523150" Content_Hash="1186201747">
+  <Metadata>
+    <Id>4160061f-ec10-4ea2-b0b2-e07bc3421761</Id>
+    <Id_History>8724888f-f79c-4c96-8fe7-2d3abe28f4f4,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Restrict Unauthorized Callers</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Restrict Unauthorized Callers</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Application code should authorize a user based on a role or identity before the application allows the user to connect to the database. Ideally, role checks should be performed in the business logic layer.</p>
+  <h1>Why</h1>
+  <p>With inadequate authorization, a user might be able to see or modify the data of another user or an unauthorized user may be able to access restricted data.</p>
+  <h1>When</h1>
+  <p>When application requirement is to determine who can retrieve and manipulate specific data, this guideline should be applied.</p>
+  <h1>How</h1>
+  <p>Data access code can perform authorization by using a variety of techniques, including those outlined below.</p>
+  <p>You can use principal permission demands on data access methods when you want method-level authorization. The following attribute ensures that only users who are members of the Manager role can call the <b>GetCustomerDetails</b> method.</p>
+  <pre>using System.Security.Permissions;<br />...</pre>
+  <pre>[PrincipalPermissionAttribute(SecurityAction.Demand, Role="Manager")]<br />public void GetCustomerDetails(int CustId)<br />{<br />}</pre>
+  <p>If finer granularity is required and authorization needs to be performed within a method, then you can perform imperative principal permission demands or explicit role checks on a block of code. The following code example shows how to perform an imperative principal permission demand.</p>
+  <pre>using System.Security;<br />using System.Security.Permissions;</pre>
+  <pre>public void GetCustomerDetails(int CustId)<br />{<br />&amp;nbsp; try<br />&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Imperative principal permission role check to verify<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // that the caller is a manager<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; PrincipalPermission principalPerm = new PrincipalPermission(null, "Manager");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; principalPerm.Demand();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Code that follows is only executed if the caller is a<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // member of the "Manager" role<br />&amp;nbsp; }<br />&amp;nbsp; catch( SecurityException ex )<br />&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp; . . .<br />&amp;nbsp; }<br />} </pre>
+  <p>The following code example uses explicit role checks.</p>
+  <pre>public void GetCustomerDetails(int CustId)<br />{<br />&amp;nbsp; if(!Thread.CurrentPrincipal.IsInRole("Manager"))<br />&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; . . .<br />&amp;nbsp; }<br />}</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

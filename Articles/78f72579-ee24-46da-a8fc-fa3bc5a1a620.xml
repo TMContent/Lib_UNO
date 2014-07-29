@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>78f72579-ee24-46da-a8fc-fa3bc5a1a620</Id>
+    <Id_History>2bc9593d-0510-49c8-ba25-1280823ae824,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Account Management Functions Are Protected</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Account Management Functions Are Protected</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Check For==
+
+Ensure that the account administration interface is separate from the main application interface.
+
+==Why==
+
+Account administration requires higher privileges than the main application interface. Separating the two interfaces decreases the risk of a normal user being able to escalate privileges to that of an administrator.
+
+==How to Check==
+
+Use the following steps to verify that the account administration interface is separate from the main application interface: 
+
+# **Verify that your application has a separate administrative interface.** Review your application's design and verify that your application's design specifies separation of administrative and main application interfaces. Verify that all administrative functionality is clearly identified and separated from the rest of your application's functionality. Exceptions are allowed only when your application allows users to modify their own accounts. 
+# **Verify that account administration code is organized.** Ensure all administrative functionality is structured as a single module and not scattered throughout your application. 
+# **Verify that re-authentication is required for administrative functions.** Verify that privileged users are forced to re-authenticate before accessing the administrative interface. Check if your application's administrative interface uses a separate authentication module from the rest of your application. 
+# **Verify that appropriate access controls are used.** Verify that only valid, privileged users can access your application's administrative interface. 
+# **Verify that SSL is used.** Check if your application's administrative interface is utilizing SSL. 
+
+==How to Fix==
+
+Use the following steps when designing an administrative interface:
+
+# **Only privileged users can administer all accounts.** Design your application such that the administrative module is separate from the main application interface. Since the separation requires using separate authentication mechanisms for the application and administration, there is a reduced risk of escalation-of-privilege attacks. 
+# **Users may be allowed to administer their own accounts.** It may be necessary to allow users to administer their own accounts. This involves the ability to change passwords, account details, etc. Such administration can be done through the main application interface.
+# **Force re-authentication.** Enforce re-authentication when modifying the user's password. This helps verify that the user is aware of the password change and is not a victim of a session hijacking. 
+# **Modify accounts in sections.** Do not modify all account information at once. Split the account modification procedure in sections. For example, group the account information into credentials, personal data, contact information and additional information. Modifying the account information in groups reduces the risk of information leakage when the user is updating his/her account. 
+# **Use SSL when modifying accounts.** The use of SSL provides encryption when transmitting sensitive data over the network. SSL also certifies the authenticity of the application against the user.
+
+==Additional Resources==
+
+* For information about implementing the ubiquitous "forgot password" feature, please see https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet]]></Data>
+  </Content>
+</TeamMentor_Article>

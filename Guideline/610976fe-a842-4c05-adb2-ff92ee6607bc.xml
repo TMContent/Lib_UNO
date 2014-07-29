@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2062612752" Content_Hash="386632264">
+  <Metadata>
+    <Id>610976fe-a842-4c05-adb2-ff92ee6607bc</Id>
+    <Id_History>3146b014-76e7-4d77-882d-a6458bd768ed,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Expect Strong Names to Make Your Assembly Tamper Proof</Title>
+    <Category>Strong Naming and Signing </Category>
+    <Phase>Deployment</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Expect Strong Names to Make Your Assembly Tamper Proof</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not expect strong naming you assembly makes it tamper proof.</p>
+  <h1>Why</h1>
+  <p>The strong name does not make your assembly tamper proof. It is still possible to remove a strong name, modify the IL code, and then reapply a different strong name.</p>
+  <h1>When</h1>
+  <p>This is an important guideline which should be followed all the time.</p>
+  <h1>How</h1>
+  <p>By adding a strong name to an assembly, you ensure that it cannot be modified and still retain your strong name signature. </p>
+  <p>An attacker cannot recreate a valid signature from your original publisher's key unless your publisher's private key has been compromised. Because the key is part of the strong name identity, if an attacker strips a strong name signature, signs the code, and then installs the code in the global assembly cache, the code will have a different identity. Any callers looking for the original assembly will not bind to an assembly signed with a different private key. Strong names prevent this type of substitution attack.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Both Authenticode and strong name signing ensure that if the signed code is tampered with, the signature will be invalidated. However, neither technology prevents an attacker from stripping off the signature, modifying the IL, and signing the code with the attacker's key.</blockquote>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

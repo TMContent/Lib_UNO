@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1595953278" Content_Hash="315647089">
+  <Metadata>
+    <Id>cbe44004-fea6-446c-bacd-1e17a625db79</Id>
+    <Id_History>e3d7a7be-68a1-47ab-a515-54053d9171a4,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Use Named Queries with Hibernate</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Use Named Queries with Hibernate</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Java web-based applications using Hibernate</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>Executing Named Queries using Hibernate.</p>
+  <h1>Objectives</h1>
+  <p>Use Hibernate named queries to perform database operations safely.</p>
+  <h1>Scenarios</h1>
+  <p>Hibernate named queries provide a data access and manipulation mechanism that closely ties the query content to the Java code defining the objects that the query is executing against. It also removes the actual query language from Java code, which is a common tactic and creates certain maintainability issues. A security related advantage to named queries is that dynamic data must be bound, which prevents SQL injection attacks. The code below shows how to both define and use named queries in Hibernate.</p>
+  <h1>Solution Example</h1>
+  <p>To use named queries with Hibernate:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define the entity class and the named queries.</strong> Define your entity class and use the &amp;#64;NamedQuery (or &amp;#64;NamedQueries with multiple &amp;#64;NamedQuery's) annotation to define each named query. The examples below are straightforward.</p>
+      <pre>
+        <p>&amp;#64;Entity</p>
+        <p>&amp;#64;NamedQuery(</p>
+        <p>&amp;#9;name="Product.findAllProductsByProductName",</p>
+        <p>&amp;#9;queryString="from Product pro WHERE pro.name = :productName"</p>
+        <p>)</p>
+        <p>&amp;nbsp;</p>
+        <p>public class Product &amp;#123;</p>
+        <p>&amp;#9;...</p>
+        <p>&amp;#125;</p>
+        <p>&amp;nbsp;</p>
+        <p>&amp;#64;Entity</p>
+        <p>&amp;#64;NamedQueries(&amp;#123;</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProducts", queryString="from Product pro"),</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProductsByProductId", queryString="from Product pro where pro.id = :productId"),</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProductsByProductName", queryString="from Product pro where pro.name = :productName"),</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProductsByProductPrice", queryString="from Product pro where pro.price between :minPrice and :maxPrice")</p>
+        <p>&amp;#125;)</p>
+        <p>&amp;nbsp;</p>
+        <p>public class Product &amp;#123;</p>
+        <p>&amp;#9;...</p>
+        <p>&amp;#125;</p>
+      </pre>
+      <li>
+        <p>
+          <strong>Consider defining named queries in XML configuration files.</strong> An alternative to using the Entity and NamedQuery annotations is to define the named queries in the hibernate XML configuration mapping files. An example is below.</p>
+        <pre>
+          <p>&lt;&amp;#33;-- product.hbm.xml --&gt;</p>
+          <p>&lt;hibernate-mapping&gt;</p>
+          <p>&amp;#9;&lt;class name="com.myapp.domain.Product" table="Product"&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;id ...&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;property ...&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;property ...&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;property ...&gt;</p>
+          <p>&amp;#9;&amp;#9;...</p>
+          <p>&amp;#9;&lt;/class&gt;</p>
+          <p />
+          <p>&amp;#9;&lt;query name="Product.findAllProductsByProductName"&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;&amp;#33;&amp;#91;CDATA&amp;#91;from Product pro where pro.name = :productName&amp;#93;&amp;#93;&gt;</p>
+          <p>&amp;#9;&lt;/query&gt;</p>
+          <p>&amp;#9;&lt;query name="Product.findAllProductsByProductPrice"&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;&amp;#33;&amp;#91;CDATA&amp;#91;from Product pro where pro.price between :minPrice and :maxPrice&amp;#93;&amp;#93;&gt;</p>
+          <p>&amp;#9;&lt;/query&gt;</p>
+          <p>&amp;#9;....</p>
+          <p>&lt;/hibernate-mapping&gt;</p>
+        </pre>
+        <li>
+          <p>
+            <strong>Use the defined named queries in code.</strong> If there is a need for dynamic data, use the parameter binding mechanism included in the query implementation. </p>
+          <pre>
+            <p>--------------------------</p>
+            <p>Example using dynamic data</p>
+            <p>--------------------------</p>
+            <p>//get hibernate session</p>
+            <p>Session session = ...;</p>
+            <p>//get dynamic data</p>
+            <p>//request parameters should be validated before use - this is a simple example</p>
+            <p>String productName = request.getParameter("product_name"); </p>
+            <p>//use entity manager to retrieve named query</p>
+            <p>Query queryProductsByName = session.createNamedQuery("Product.findAllProductsByProductName");</p>
+            <p>//set dynamic data for query</p>
+            <p>queryProductsByName.setString("productName", productName);</p>
+            <p>//execute query and get results</p>
+            <p>List products = queryProductsByName.list();</p>
+            <p>--------------------------</p>
+            <p>Example without using dynamic data</p>
+            <p>--------------------------</p>
+            <p>//get hibernate session</p>
+            <p>Session session = ...;</p>
+            <p>//use entity manager to retrieve named query</p>
+            <p>Query queryProducts = session.createNamedQuery("Product.findAllProducts", Product.class);</p>
+            <p>//execute query and get results</p>
+            <p>List products = queryProducts.list();</p>
+          </pre>
+          <p>The examples above show how to use named queries within Hibernate to create an environment where the queries are defined closely with the data they are operating against and that are safely used by requiring bound parameters for dynamic data. The use of other types of queries works in an identical manner, such as delete, update, insert, etc.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>See Also</h1>
+  <ul>
+    <li>For more information about externalizing Hibernate Query Language queries, please see <a href="http://www.javalobby.org/java/forums/m91885316.html">http://www.javalobby.org/java/forums/m91885316.html</a><li>For more examples of named queries in Hibernate, please see <a href="http://www.mkyong.com/hibernate/hibernate-named-query-examples/">http://www.mkyong.com/hibernate/hibernate-named-query-examples/</a><li>For reference documents about the Hibernate Query Language, please see <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/queryhql.html">http://docs.jboss.org/hibernate/core/3.3/reference/en/html/queryhql.html</a></li></li></li>
+  </ul>
+  <h1>Java Data Access Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/d2809cce-1af2-4896-a45c-b4b56deae282">Use Parameterized APIs for Data Access</a>
+    </li>
+    <li>
+      <a href="/article/bcfcbcbb-4bd6-4011-9e24-efa70d4a3724">Parameterize Dynamic SQL in Stored Procedures</a>
+    </li>
+    <li>
+      <a href="/article/5427d358-17f6-4ef6-948f-d670c5aefc38">Enforce Strong SQL Passwords</a>
+    </li>
+    <li>
+      <a href="/article/697891eb-5d97-44fa-a6eb-625f247f622d">Use Least Privileged Accounts for Database Access</a>
+    </li>
+    <li>
+      <a href="/article/159a8710-263c-4612-b9d8-ba3943f8286f">Allow Only Trusted Hosts to Connect to Database Server</a>
+    </li>
+    <li>
+      <a href="/article/0aaa1b15-8bdb-4486-9171-4eb3c2159829">Protect Connection Strings</a>
+    </li>
+  </ul>
+  <h1>Java Data Access Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/d5a1c94b-601e-4e2a-9ad8-33461792a8bb">Parameterized APIs Are Used for Data Access</a>
+    </li>
+    <li>
+      <a href="/article/93d15ca4-c950-4370-8de5-cdb2cc2974fe">Dynamic SQL in Stored Procedures Is Parameterized</a>
+    </li>
+    <li>
+      <a href="/article/73c2f6fa-3c97-452e-8163-7215bd995d58">Strong SQL Passwords Are Enforced</a>
+    </li>
+    <li>
+      <a href="/article/61af51d9-58f8-4ddf-a373-0b67ea8e6d4b">Least Privileged Accounts Are Used for Database Access</a>
+    </li>
+    <li>
+      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">
+        <a href="/article/54026187-bcbd-433b-a895-21d66b543052">Only Trusted Hosts Are Allowed to Connect to Database Server</a>
+      </a>
+    </li>
+    <li>
+      <a href="/article/9fdc12bc-4208-4d0e-a56c-62e12b660bc0">Connection Strings Are Protected</a>
+    </li>
+  </ul>
+  <h1>Java Data Access Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/5f55ac00-bb90-439e-a5fd-a85e9a327175">Use Stored Procedures</a>
+    </li>
+    <li>
+      <a href="/article/e3d7a7be-68a1-47ab-a515-54053d9171a4">Use Named Queries with Hibernate</a>
+    </li>
+    <li>
+      <a href="/article/d4645b55-6da1-4c3c-9e9f-bed1d021ed56">Use Named Queries with Java Persistence API (JPA)</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

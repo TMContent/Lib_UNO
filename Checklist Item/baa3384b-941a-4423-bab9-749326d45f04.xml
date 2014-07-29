@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2065333840" Content_Hash="272043732">
+  <Metadata>
+    <Id>baa3384b-941a-4423-bab9-749326d45f04</Id>
+    <Id_History>5b3ce05c-80cd-4452-ad01-8a6a5e6627f5,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>To Prevent SQL Injection, Input Is Validated And Parameterized Stored Procedures Are Used.</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>To Prevent SQL Injection, Input Is Validated And Parameterized Stored Procedures Are Used.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that SQL injection is prevented by validating input and by&amp;nbsp;using parameterized stored procedures.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>To help prevent SQL injection, you should validate input and use parameterized stored procedures for data access. The use of parameters (for example, <b>SqlParameterCollection</b>) ensures that input values are checked for type and length and values outside the range throw an exception. Parameters are also treated as safe literal values and not as executable code within the database. The following code shows how to use <b>SqlParameterCollection</b> when calling a stored procedure.</p>
+  <div>
+    <pre>using System.Data;<br />using System.Data.SqlClient;<br />using (SqlConnection connection = new SqlConnection(connectionString))&amp;#123;<br />  DataSet userDataset = new DataSet();<br />  SqlDataAdapter myCommand = new SqlDataAdapter(<br />              "LoginStoredProcedure", connection);<br />  myCommand.SelectCommand.CommandType = CommandType.StoredProcedure;<br />  myCommand.SelectCommand.Parameters.Add("&amp;#64;au_id", SqlDbType.VarChar, 11);<br />  myCommand.SelectCommand.Parameters&amp;#91;"&amp;#64;au_id"&amp;#93;.Value = SSN.Text;<br />  myCommand.Fill(userDataset);<br />&amp;#125;  </pre>
+  </div>
+  <p>Avoid stored procedures that accept a single parameter as an executable query. Instead, pass query parameters only.</p>
+  <p>Use structured exception handling to catch errors that occur during database access, and prevent them from being returned to the client. A detailed error message may reveal valuable information such as the connection string, SQL server name, or table and database naming conventions. Attackers can use this information to construct more precise attacks.</p>
+  <p>As an additional precaution, use a least privileged account to access the database, so that even if your application is compromised, the impact will be reduced.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

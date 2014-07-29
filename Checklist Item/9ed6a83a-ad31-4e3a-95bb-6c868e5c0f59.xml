@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1159135149" Content_Hash="1627814068">
+  <Metadata>
+    <Id>9ed6a83a-ad31-4e3a-95bb-6c868e5c0f59</Id>
+    <Id_History>db6938c1-d962-449a-9d4f-3cc3776993c2,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Authentication Events Are Logged</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Authentication Events Are Logged</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PHP</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that authentication events are logged.</p>
+  <h1>Why</h1>
+  <p>Logging authentication events helps detect suspicious behavior, such as an attacker trying to guess passwords.</p>
+  <h1>How to Check</h1>
+  <p>Perform the following actions to verify that authentication events are logged:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify authentication events.</strong> Make a list of authentication events that may occur when using your application. Typical authentication events include: </p>
+      <ul>
+        <li>Successful or failed authentication <li>Password changes <li>Account lockouts <li>User creation or removal <li>Changes in user privilege level, such as assigning a user to the Administrators group </li></li></li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Identify code that is used for authentication.</strong> Use the list of authentication events to find functions that are responsible for those events. Make a list of these functions.</p>
+        <li>
+          <p>
+            <strong>Verify that authentication events are logged.</strong> Use the list of functions that implement authentication to review each one. Make sure that each authentication function generates log entries for both successful and failed events. </p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to assure that your application logs authentication events:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify authentication events.</strong> Make a list of authentication events that may occur when using your application. Typical authentication events include: </p>
+      <ul>
+        <li>Successful or failed authentication <li>Password changes <li>Account lockouts <li>User creation or removal <li>Changes in user privilege level, such as assigning a user to the Administrators group </li></li></li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Identify code that is used for authentication.</strong> Use the list of authentication events to find functions that are responsible for those events.</p>
+        <li>
+          <p>
+            <strong>Identify the logging subsystem.</strong> The logging subsystem should provide an API that allows generating log entries from application code. If this API or the logging subsystems don't exist, it is recommended to write them. PHP provides a function for generating log entries, however writing a custom logging subsystem helps make sure that all the relevant event details are always logged. Make a list of functions that may be used to generate log entries and collect documentation about how to use them.</p>
+          <li>
+            <p>
+              <strong>Add code that generates log entries.</strong> Use the list of functions that perform authentication and add code to each one to generate log entries. Generate log entries for both successful and failed events. Use the list of functions in the logging subsystem when adding code that generates log entries.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the <em>error_log</em> function,&amp;nbsp;please see&amp;nbsp;<a href="http://www.php.net/manual/en/function.error-log.php">http://www.php.net/manual/en/function.error-log.php</a></li>
+  </ul>
+  <h1>Logging Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/2121fb95-1840-401b-98c7-4fb14b23730f">Centralize Logging</a>
+      <li>
+        <a href="/article/235c0d6e-2aa8-4b14-892e-d71790937c98">Protect Log Files</a>
+        <li>
+          <a href="/article/3aef9249-12f2-44cd-bffa-2d88bcf3ce13">Log Important Event Details</a>
+          <li>
+            <a href="/article/6430ffee-d18e-42d4-bf3d-53fd7b21846e">Do Not Log Sensitive Information</a>
+            <li>
+              <a href="/article/599dd454-45b6-4b28-a528-f61830cb4181">Log Important Security Operations</a>
+              <li>
+                <a href="/article/1af37399-b9ca-4d4d-af0b-83f4676c2b5a">Log Unusual Activity</a>
+                <li>
+                  <a href="/article/6672a0ec-f74d-4039-b6cd-1c268f87d680">Log Important Business Operations</a>
+                  <li>
+                    <a href="/article/ca55d261-5ee5-45a4-9fd7-6738364ef470">Monitor the Use of Privileged Accounts</a>
+                    <li>
+                      <a href="/article/322f3f59-a0bc-4056-9657-3d3ac2a60140">Log Authentication Events</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Logging Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/5f786a98-c099-4762-8d14-71909fe5a6a0">Logging Is Centralized</a>
+      <li>
+        <a href="/article/a73d5b9a-26db-48cd-b743-2ab9e6a62b8f">Log Files Are Protected</a>
+        <li>
+          <a href="/article/b675b081-1681-481a-a72e-ba19775fbd80">Important Event Details Are Logged</a>
+          <li>
+            <a href="/article/a7b0a818-7af1-4a1b-8bed-f99e1c7280ed">Sensitive Information Is Not Logged</a>
+            <li>
+              <a href="/article/fe193f22-c665-4a66-bbdb-c3597c517b3c">Important Security Operations Are Logged</a>
+              <li>
+                <a href="/article/c45bfc8a-0b24-43ad-993f-fc9facd5e6ff">Unusual Activity Is Logged</a>
+                <li>
+                  <a href="/article/7da7f6b6-21ff-4a51-b57b-c5345dc46716">Important Business Operations Are Logged</a>
+                  <li>
+                    <a href="/article/2414f5c5-3a50-4a85-9305-e64260e8421e">The Use of Privileged Accounts Is Monitored</a>
+                    <li>
+                      <a href="/article/db6938c1-d962-449a-9d4f-3cc3776993c2">Authentication Events Are Logged</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

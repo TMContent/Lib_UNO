@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="88956433" Content_Hash="-1120581269">
+  <Metadata>
+    <Id>f656a1a7-bf1c-4b7c-9923-e347da6f7994</Id>
+    <Id_History>a29e01a7-c2d4-41d0-9b1b-9657b48cfb9c,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Consider Restricting the Permissions of Dynamically Generated Assemblies</Title>
+    <Category>Reflection</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Restricting the Permissions of Dynamically Generated Assemblies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Restrict the permissions available to dynamically created assemblies by using the overload of the <b>AppDomain.DefineDynamicAssembly</b> method.</p>
+  <h1>Why</h1>
+  <p>If an attacker can influence the code generation, the attacker could coerce your application into generating malicious code. This is particularly significant if your code uses user-supplied input to generate code dynamically.</p>
+  <h1>When</h1>
+  <p>When your application dynamically generates code.</p>
+  <h1>How</h1>
+  <p>Restrict the permissions available to dynamically created assemblies by using the overload of the <b>AppDomain.DefineDynamicAssembly</b> method, which accepts three permission sets and evidence, as shown in the following example.</p>
+  <pre>public sealed AssemblyBuilder DefineDynamicAssembly(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; AssemblyName name, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; AssemblyBuilderAccess access, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Evidence evidence, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; PermissionSet requiredPermissions, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; PermissionSet optionalPermissions, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; PermissionSet refusedPermissions<br />);  </pre>
+  <p>This overload allows you to pass required, optional, and refused permission sets to apply specific security policy to the dynamically created assembly. Passing the evidence forces the CLR to evaluate the permission set for dynamic created code.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you use an overload that does not accept evidence, then the CLR does not evaluate the permission set for the created dynamic assembly. Instead, the permission set granted to the generated code is inherited from the permission set of the assembly that is emitting it.</blockquote>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

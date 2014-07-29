@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1845344597" Content_Hash="201686471">
+  <Metadata>
+    <Id>513edc87-0e18-49a8-aa0a-4de1997f4bd3</Id>
+    <Id_History>4fa0d699-fb20-46bc-b0d5-04d9bb49a987,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Consider Using ACLs to Restrict Access to Data Stored in HKLM</Title>
+    <Category>Registry</Category>
+    <Phase>Deployment</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Using ACLs to Restrict Access to Data Stored in HKLM</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you store sensitive data in the HKEY_LOCAL_MACHINE section of the registry, consider applying an ACL to the registry key that restricts access to a specific account, such as the account under which your application runs.</p>
+  <h1>Why</h1>
+  <p>This is important because any process running on your computer has access to the HKEY_LOCAL_MACHINE section of the registry. By isolating your application and running it under a dedicated custom account, only your application can access the data from the ACL-protected key.</p>
+  <h1>When</h1>
+  <p>This guideline should be followed when storing sensitive data in the registry.</p>
+  <h1>How</h1>
+  <p>Use of HKEY_LOCAL_MACHINE makes it easier to store configuration data at installation time and maintain it later on.</p>
+  <p>Here are the steps which you can use to configure the ACLs on the registry key:</p>
+  <ol>
+    <li>
+      <p>Open the registry by running <strong>regedit.exe</strong> from the commandline </p>
+    </li>
+    <li>
+      <p>Locate the regitsry where the data is stored e.g. <strong>My Computer\HKEY_LOCAL_MACHINE\SOFTWARE\TestAppData</strong></p>
+    </li>
+    <li>
+      <p>Right click on the registry key and select <strong>Permissions.</strong></p>
+    </li>
+    <li>
+      <p>Add the required user account which needs the permission and remove all the irrelevant accounts and permissions for them. </p>
+    </li>
+    <li>
+      <p>Click <strong>Apply</strong> and then <strong>Ok</strong> on the <strong>Permission For...</strong> dialog box and close the <strong>Registry Editor</strong>.</p>
+    </li>
+  </ol>
+  <p>If your security requirements dictate an even less accessible storage solution, use a key under HKEY_CURRENT_USER. This approach means that you do not have to explicitly configure ACLs because access to the current user key is automatically restricted based on process identity.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp;HKEY_CURRENT_USER allows more restrictive access because a process can access the current user key only if the user profile associated with the current thread or process token is loaded.</p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

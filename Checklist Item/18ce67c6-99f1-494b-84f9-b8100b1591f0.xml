@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1076740150" Content_Hash="-1897468106">
+  <Metadata>
+    <Id>18ce67c6-99f1-494b-84f9-b8100b1591f0</Id>
+    <Id_History>76be88a1-dbce-498a-bee2-05795b61ff7d,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Account Administration Is Separated from the Main Application Interface</Title>
+    <Category>Administration</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Account Administration Is Separated from the Main Application Interface</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure your application separates the account administration from the main application interface.</p>
+  <h1>Why</h1>
+  <p>Account administration requires higher privileges than the main application interface. Separating the two interfaces decreases the risk of a normal user being able to escalate privileges to that of an administrator.</p>
+  <h1>How To Check</h1>
+  <p>Take the following steps to verify that the account administration interface is separate from the main application interface: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that your application allows only privileged users to administer all accounts. </strong>Review your application's design and verify that it specifies separation of administrative and main application interfaces.</p>
+      <ul>
+        <li>Check that only valid privileged users can access your application's administrative interface. </li>
+        <li>Ensure that your application's administrative interface uses a separate authentication module than the rest of your application, as this decreases the risk of privilege escalation attacks. </li>
+        <li>Check that different session IDs are used for the administrative and main application interfaces.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that your application allows users to administer their own accounts. </strong>Check that your application has been designed to let users administer their own accounts. Verify the following to enforce extra security precautions as users are allowed access to sensitive data:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>User ID is tracked on server</strong>: Ensure that a user is tracked using a unique, randomly generated session ID, which is verified on the server side.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Re-authentication is enforced</strong>: Verify that privileged users are forced to re-authenticate when performing actions such as changing passwords.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Account is modified in sections</strong>: Check that account information is split into separate sections such as credentials, personal data, contact information, and additional information, and is modified on a per-section basis to reduce the risk of information leakage when the user is updating his or her account.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Connection is secure</strong>: Verify that your application uses SSL when privileged users are performing transactions of sensitive nature.</p>
+        </li>
+        <li>
+          <p />
+          <strong>Server Configuration</strong>: Verify that your application's environment has enabled HTTPS so that transactions of a&amp;nbsp;sensitive nature are transmitted only over HTTPS connections. Check if the <em><forms></forms></em> element in your application's web.config file has the <em>requireSSL</em> attribute set to <em>true</em> when performing forms-based authentication:<br /><pre><authentication mode="Forms"><br />&amp;nbsp; <forms loginurl="login.aspx"></forms><br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; protection="All"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="20"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="true"&gt;<br />&amp;nbsp; <br /></authentication></pre><p /></li>
+      </ul>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Use the following steps when designing an administrative interface:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Allow only privileged users to administer all accounts.</strong> Design your application such that the administrative module is separate from the main application interface. Using separate authentication mechanisms in the application and the administration interface will reduce the risk for escalation of privilege attacks. Even if a privileged user account is compromised via session hijacking in the main application interface, the attacker will not be able to access the administrative interface and compromise other user accounts.</p>
+      <p>Use session IDs for the administrative module that are different than the session IDs for the main interface. Modify the <em>cookieName</em> attribute inside the <em>sessionState</em> element of the respective <em>web.config</em> to differentiate the session names for each interface. Example:</p>
+      <pre>
+        <system.web>
+          <br /> ...<br /><sessionstate cookiename="MyAppAdminSess"></sessionstate><br /> ...<br /></system.web>
+      </pre>
+    </li>
+    <li>
+      <p>
+        <strong>Allow users to administer their own accounts. </strong>It may be necessary to allow users to administer their own accounts. This involves the ability to change passwords, account details, etc. Such administration can be done through the main application interface. Because the user is modifying sensitive data, extra security precautions must be enforced:</p>
+      <ul>
+        <li>
+          <strong>Track the user ID on the server-side</strong>: The user should always be tracked on the server-side. Store the user ID inside a session. The only data the client needs to know is the session identifier. This reduces the risk of an attacker modifying another user's account information. </li>
+        <li>
+          <strong>Force re-authentication</strong>: Enforce re-authentication when modifying the user's password. This helps verify that the user is aware of the password change and is not a victim of a session hijacking.&amp;nbsp; </li>
+        <li>
+          <strong>Modify account in sections</strong>: Do not modify all account information at once. Split the account modification procedure in sections. For example, group the account information into credentials, personal data, contact information, and additional information. Modifying the account information in groups reduces the risk of information leakage when the user is updating his or her account. </li>
+        <li>
+          <strong>Use SSL when modifying account</strong>: The use of SSL provides encryption when transmitting sensitive data over the network and verifies the authenticity of the application to the user. </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/82b37aec-65f1-49d7-a0eb-548107cdd1b0">Separate Account Administration from the Main Application Interface</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2085992682" Content_Hash="1738119380">
+  <Metadata>
+    <Id>03cb11a2-9ced-470d-9b5a-054fb42e7a6d</Id>
+    <Id_History>28125c83-991b-4bc0-ad4b-7efc4e0d6df8,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Setting Application And ASP.NET 2.0 Cookies Securely</Title>
+    <Category>Cookies</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Setting Application And ASP.NET 2.0 Cookies Securely</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, George Gal,  Prashant Bansode</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+    <li>C#</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This code illustrates the use of secure cookie modes within both application cookies and the ASP.NET session identifier cookie. Properly setting modes and attributes for application cookies is often vital in protecting against session hijacking.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Provide confidentiality of application cookies, ensuring that they are not exposed to unauthorized users which may often lead to session hijacking </li>
+    <li>Restricting access to both application cookies and ASP.NET session identifiers to HTTPS </li>
+    <li>Limit cookie scope to only desired applications and use scenarios </li>
+    <li>Prevent cookies from being accessible from JavaScript (which can lead to session hijacking in the presence of cross-site scripting</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Cookies are used to maintain a session state </li>
+    <li>Application uses cookies (either internal ASP.NET session id, or application specific cookies) and collects information from user such as authentication, or other form data at some point during session lifetime. </li>
+    <li>Application requires SSL, but also is configured with an HTTP instance. </li>
+  </ul>
+  <h1>Solution Example</h1>
+  <p>
+    <strong>Scenario #1: HTTP alone is configured and multiple applications deployed on host (Restricting Cookie Path Example)</strong>
+  </p>
+  <pre>protected void SetAppCookie(string name, string value, string path)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; HttpCookie appCookie = new HttpCookie(name);</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Provide a specific path under which our cookies are permitted<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // to be accessed<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Application paths should be as specific as possible:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; a sample application path might be: /secure/<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Path = path;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The following cookie setting ensures that cookies are not made available within client-side<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // script code thus mitigating the risk of unsafe access through attacks such as XSS.</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // This feature is generally available in versions of Internet Explorer 6 and above<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.HttpOnly = true;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set our cookie value<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Value = value;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies.Add(appCookie);<br />}</pre>
+  <p>
+    <br />With Page_Load containing the following code</p>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; SetAppCookie("GUID", Guid.NewGuid().ToString(), "/secure/");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />}</pre>
+  <p>
+    <strong>Scenario #2: HTTP alone is configured and multiple applications need to share cookie values (Restricting cookie domain example)</strong>
+  </p>
+  <p>The following example assumes our application is deployed on www.codesamples.microsoft.com and we need to set a cookie that will be accessible from secure.codesamples.microsoft.com</p>
+  <pre>protected void SetAppCookie(string name, string value, string path, string domain)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; HttpCookie appCookie = new HttpCookie(name);</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Provide a specific path under which our cookies are permitted<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // to be accessed<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Application paths should be as specific as possible:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; a sample application path might be: /secure/<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Path = path;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The following cookie setting ensures that cookies are not made available within client-side<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // script code thus mitigating the risk of unsafe access through attacks such as XSS.</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // This feature is generally available in versions of Internet Explorer 6 and above<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.HttpOnly = true;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set our cookie domain. This should only be used when applications deployed<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // in a particular domain need to share values for some purpose (E.g. single sign-on)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Domain = domain;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set our cookie value<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Value = value;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies.Add(appCookie);<br />}</pre>
+  <p>
+    <br />With Page_Load containing the following code</p>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; SetAppCookie("GUID", Guid.NewGuid().ToString(), "/secure/", ".codesamples.microsoft.com");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />}</pre>
+  <p>
+    <strong>Scenario #3: HTTP and HTTPS co-exist on same host, users must login under HTTPS instance</strong>
+  </p>
+  <p>The following example assumes a site primarily for use under HTTPS with a welcome page deployed under HTTP. From the landing page users are redirected to the SSL site instance for login and the remainder of their session.</p>
+  <pre>protected void SetAppCookie(string name, string value, string path,<br />				 string domain, bool httponly, bool secure)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; HttpCookie appCookie = new HttpCookie(name);</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Provide a specific path under which our cookies are permitted<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // to be accessed<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Application paths should be as specific as possible:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; a sample application path might be: /secure/<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (path != null)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Path = path;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The following cookie setting ensures that cookies are not made available within client-side<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // script code thus mitigating the risk of unsafe access through attacks such as XSS.</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // This feature is generally available in versions of Internet Explorer 6 and above<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.HttpOnly = httponly;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The secure cookie mode ensures that cookies are set with the "secure" mode cookie flag,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // which makes cookies unavailable through standard HTTP. On sites where both HTTP and HTTPS<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // is enabled non-secure cookies may be leaked in the event a user browses to the non-HTTPS<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // instance of the site.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Secure = secure;</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set our cookie domain. This should only be used when applications deployed<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // in a particular domain need to share values for some purpose (E.g. single sign-on)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (domain != null)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Domain = domain;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set our cookie value<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; appCookie.Value = value;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies.Add(appCookie);</pre>
+  <pre>
+    <br />}</pre>
+  <p>
+    <br />With Page_Load containing the following code</p>
+  <pre>
+    <br />protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // We need not set the application host as it will default to the current host<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; SetAppCookie("GUID", Guid.NewGuid().ToString(), null, null, true, true);&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />}</pre>
+  <h1>Problem Example</h1>
+  <p>
+    <strong>Scenario #1: HTTP alone is configured and multiple applications deployed on host (Restricting Cookie Path Example)</strong>
+  </p>
+  <p>The following example demonstrates setting a cookie without a default path value:</p>
+  <pre>Guid guid = Guid.NewGuid();<br />HttpCookie chocolateChip = new HttpCookie("GUID");</pre>
+  <pre>
+    <br />// Set our cookie value<br />chocolateChip.Value = guid.ToString();<br />Response.Cookies.Add(chocolateChip);</pre>
+  <ul>
+    <li>In the event that Cross-site scripting exists within the deployed application, a user's session may be hijacked as the cookie wasn't set with the HttpOnly cookie flag which limits access to the cookie within client scripting languages such as JavaScript and VBScript </li>
+    <li>Cookies are set in the context of /, meaning any site deployed on the same virtual host may access values stored by our application deployed in /secure/ </li>
+    <li>Cross-site scripting, if present on other pages outside of our application directory deployed on the same virtual host may be used to hijack a user's session through luring attacks.</li>
+  </ul>
+  <p>
+    <strong>Scenario #2: HTTP alone is configured and multiple applications need to share cookie values (Restricting cookie domain example)</strong>
+  </p>
+  <p>The following example demonstrates setting a cookie without an overly permissive</p>
+  <p>domain value:</p>
+  <pre>Guid guid = Guid.NewGuid();<br />HttpCookie chocolateChip = new HttpCookie("GUID");<br />chocolateChip.Domain = ".microsoft.com";</pre>
+  <pre>
+    <br />// Set our cookie value<br />chocolateChip.Value = guid.ToString();<br />Response.Cookies.Add(chocolateChip);</pre>
+  <ul>
+    <li>In the event that Cross-site scripting exists within the deployed application, a user's session may be hijacked as the cookie wasn't set with the HttpOnly cookie flag which limits access to the cookie within client scripting languages such as JavaScript and VBScript </li>
+    <li>Cookies are set in the context of .microsoft.com, meaning any site such as xss.microsoft.com, which may contain application vulnerabilities will be able to access cookies set by our application potentially leading to session hijacking. </li>
+    <li>Cookies should be set to a domain which is as restrictive as possible. If two applications must share cookie values it may be beneficial to provision a dedicated sub-domain for use by the application servers.</li>
+  </ul>
+  <p>
+    <strong>Scenario #3: HTTP and HTTPS co-exist on same host, users must login under HTTPS instance</strong>
+  </p>
+  <p>The following example demonstrates setting a cookie which fails to get set using the secure cookie flag.</p>
+  <pre>Guid guid = Guid.NewGuid();<br />HttpCookie chocolateChip = new HttpCookie("GUID");</pre>
+  <pre>
+    <br />// Set our cookie value<br />chocolateChip.Value = guid.ToString();<br />Response.Cookies.Add(chocolateChip);</pre>
+  <ul>
+    <li>In the event that Cross-site scripting exists within the deployed application, a user's session may be hijacked as the cookie wasn't set with the HttpOnly cookie flag which limits access to the cookie within client scripting languages such as JavaScript and VBScript </li>
+    <li>Cookies are not set using the secure cookie flag potentially leading to session hijacking. In the event a user has bookmarked or visits the HTTP instance of the site after he/she has logged in, their session identifier will be sent in the clear to the web server. An eavesdropper who intercepts the communication may use the session cookie to bypass authentication and hijack the victim's session.</li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Web;</pre>
+  <p>Please refer to Solution examples for invoking the SetAppCookie method depending on the scenario that best meets the application need.</p>
+  <h1>Expected Result</h1>
+  <p>The following expected results may be observed by monitoring the raw TCP connection:</p>
+  <p>
+    <strong>Scenario 1 - HTTP response (Restricting Cookie Path)</strong>
+  </p>
+  <p>Solution</p>
+  <pre>Set-Cookie: GUID=3de49a03-9957-4a37-ae37-bd3be473b9cf; path=/secure/; HttpOnly</pre>
+  <p>Problem</p>
+  <pre>Set-Cookie: GUID=459d96d9-4b96-4251-9fcf-82a7a769d2f8; path=/</pre>
+  <p>
+    <strong>Scenario 2 - HTTP response (Restricting cookie domain, but requires sharing cookies between hosts)</strong>
+  </p>
+  <p>Solution</p>
+  <pre>Set-Cookie: GUID=4453386a-92b1-4e95-a8d7-99e5b828ebcd;<br /> domain=.codesamples.microsoft.com; path=/secure/; HttpOnly</pre>
+  <p>Problem</p>
+  <pre>Set-Cookie: GUID=173705aa-a1cc-494b-92f3-e83cd0e8fe30; domain=.microsoft.com; path=/</pre>
+  <p>''' Scenario 3 - HTTP response (Restricting cookie to SSL only)</p>
+  <p>Solution:</p>
+  <pre>Set-Cookie: GUID=e4eeedb4-c3a1-44bb-af11-251c3cb10c37; secure; HttpOnly</pre>
+  <p>Problem:</p>
+  <pre>Set-Cookie: GUID=7328f6ba-ad56-4327-9cbd-ae4c8e516d17; path=/</pre>
+  <h1>More Information</h1>
+  <p>In addition to solution 3, it may be advantageous to set the ASP.NET session cookie securely when it is used to maintain session state for the application</p>
+  <p>The "secure" and "httponly" cookie flags may be set within the ASP.net web.config file for the specific site in consideration. When relying on the ASP.NET built-in session object it is important to ensure both application and application server cookies operate similarly. As such the following code sample from a web.config demonstrates setting the ASP.NET session identifier with the "secure" mode and "httponly" cookie flags:</p>
+  <pre>   &lt;!-- The following configuration entry ensures that the ASP.NET session identifier is set<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; within the context of a specified domain (ensure that the domain is a fully qualified host<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; whenever possible.</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; httpOnlyCookies ensures that cookies are unavailable to client script code <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; (JavaScript/VBScript). This functionality is provided by newer web browser software<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; including Internet Explorer 6 and above</pre>
+  <pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL ensures that the ASP.NET session cookie is not transmitted in the clear when<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; a user accesses the site via the plaintext HTTP instance of the site. --&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;httpCookies domain="codesamples.microsoft.com"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; httpOnlyCookies="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="true"/&gt;<br /></pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

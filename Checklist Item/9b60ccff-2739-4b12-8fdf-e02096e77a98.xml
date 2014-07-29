@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1525824615" Content_Hash="-1743206730">
+  <Metadata>
+    <Id>9b60ccff-2739-4b12-8fdf-e02096e77a98</Id>
+    <Id_History>e3774b88-15d9-4a85-8daf-019d797dede6,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Files Are Created Safely on Windows</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Files Are Created Safely on Windows</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;<li>Windows</li></li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that files are created safely on Windows.</p>
+  <h1>Why</h1>
+  <p>Allowing user input in the lpFileName parameter of CreateFile() can lead to the creation or opening of unexpected objects.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that files are created safely on Windows:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Review code.</strong> Search for all calls to the CreateFile() function.</p>
+      <li>
+        <p>
+          <strong>Check if returned handles are validated.</strong> Verify that GetFileType() is used to validate the handles returned by the calls to the CreateFile() function.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to assure that files are created safely on Windows:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Review code.</strong> Search for all calls to the CreateFile() function.</p>
+      <li>
+        <p>
+          <strong>Validate file handles.</strong> Use GetFileType() to ensure that you are creating a file instead of some other unexpected object. By calling GetFileType on hfile (the return value of CreateFile()), you can ensure that only a file is created.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/81f61d02-6521-4d0e-9c4b-7f96889cef76">Create Files Safely on Windows</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

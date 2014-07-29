@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1721931007" Content_Hash="1270536750">
+  <Metadata>
+    <Id>246cbdfa-5360-4c6b-bc01-3058cf28667c</Id>
+    <Id_History>bb14e1b4-65d9-4d65-9c46-fd4941a9827b,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Indirect Object References Are Used</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Indirect Object References Are Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PHP</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that per-user or per-session indirect object references are used instead of direct object references.</p>
+  <h1>Why</h1>
+  <p>Indirect object references are an effective method for limiting users to accessing resources for which they are explicitly authorized whenever the application lets the user choose what objects to access. Using direct object references may expose sensitive data to attackers. Direct object references often expose sensitive data, such as files, database entries, or personal information. Direct object reference attacks are very simple to execute and have been used in high profile, low-skill attacks. Indirect object references should be used to prevent direct object reference vulnerabilities. </p>
+  <h1>How to Check</h1>
+  <p>To verify that indirect object references are used:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify pages that use object references.</strong> Make a list of all pages in the application. Go through the list and identify all pages that use object references by examining each page.</p>
+      <li>
+        <p>
+          <strong>Verify that indirect object references are used.</strong> Examine each page that uses object references to make sure that indirect object references are used instead of direct object references.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To use indirect object references:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify pages that use direct object references.</strong> Make a list of all pages in the application. Go through the list and identify all pages that use direct object references by examining each page.</p>
+      <li>
+        <p>
+          <strong>Identify objects that are being referenced.</strong> For each page that uses direct object references, make a list of all objects that are being referenced.</p>
+        <li>
+          <p>
+            <strong>Consider alternatives.</strong> Using indirect object references may require significant changes to the application. Please, consider not using object references at all or performing access control checks each time an object is referenced. Not using object references means replacing all code that performs object references. Performing access control checks means adding code that performs access control checks to code that performs object references.</p>
+          <li>
+            <p>
+              <strong>Define object reference maps.</strong> Object reference maps are arrays or hashes of objects that are being referenced. The web application exposes the index of the array or the key of the hash that matches the required resource, rather than exposing the object itself. This approach ensures that only objects in the array may be accessed. For this approach to work, reference maps should only include objects for which access is authorized. It is possible to use per-user or per-session object mappings. Per-user mappings define objects that may be accessed by each user. Per-session mappings define objects that may be accessed by each user for the current session. Per-session references may offer additional security or flexibility, but require more work. Mappings should be generated dynamically and that means that code has to be written that defines objects that may be accessed by each user. </p>
+            <li>
+              <p>
+                <strong>Use reference maps instead of direct object references.</strong> Once the code that defines object reference maps is written, all the pages that reference objects have to be updated to use the reference maps.</p>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>Insecure direct object reference vulnerabilities are best explained with an example. Consider a social networking web site that allows a user to view the contact information of his friends. The contact information is stored in a database. For the purposes of this example, let's consider that the user has friends with the following contact information:</p>
+  <pre>UID: 1234234513; NAME: Joe; EMAIL: <a href="mailto:joe&amp;#64;yahoo.com">joe&amp;#64;yahoo.com</a>;<br />UID: 1234123412; NAME: Brad; EMAIL: <a href="mailto:brad&amp;#64;gmail.com">brad&amp;#64;gmail.com</a>;<br />UID: 4244324332; NAME: Jack; EMAIL: <a href="mailto:jack&amp;#64;hotmail.com">jack&amp;#64;hotmail.com</a>;</pre>
+  <p />The database also has users that are not friends of the user, such as: <pre>UID: 43243544434; Name: Jill; EMAIL: <a href="mailto:jill&amp;#64;home.com">jill&amp;#64;home.com</a>;</pre><p />The web site can then provide links to the user to view the contact information of his friends, such as: <pre><a href="http://socialnet.com/viewprofile.php?id=1234234513">http://socialnet.com/viewprofile.php?id=1234234513</a><br /><a href="http://socialnet.com/viewprofile.php?id=1234123412">http://socialnet.com/viewprofile.php?id=1234123412</a><br /><a href="http://socialnet.com/viewprofile.php?id=4244324332">http://socialnet.com/viewprofile.php?id=4244324332</a></pre><p>After viewing the web page source and discovering the vulnerability, the user can access Jill's contact information by going to <a href="http://socialnet.com/viewprofile.php?id=43243544434">http://socialnet.com/viewprofile.php?id=43243544434</a></p><p>The user probably won't know Jill's UID in the database, but can write a simple script that downloads contact information for all valid UIDs and then use it as he sees fit. This might not sound very serious in this example, but it is a lot more serious for things like banking applications that display account or transaction information.</p><h1>Solution Example</h1><p>Indirect object references are best explained with an example. Consider a social networking web site that allows a user to view the contact information of his friends. The contact information is stored in a database. For the purposes of this example, let's consider that the user has friends with the following contact information:</p><pre>UID: 1234234513; NAME: Joe; EMAIL: <a href="mailto:joe&amp;#64;yahoo.com">joe&amp;#64;yahoo.com</a>;<br />UID: 1234123412; NAME: Brad; EMAIL: <a href="mailto:brad&amp;#64;gmail.com">brad&amp;#64;gmail.com</a>;<br />UID: 4244324332; NAME: Jack; EMAIL: <a href="mailto:jack&amp;#64;hotmail.com">jack&amp;#64;hotmail.com</a>;</pre><p />The database also has users that are not friends of the user, such as: <pre>UID: 43243544434; Name: Jill; EMAIL: <a href="mailto:jill&amp;#64;home.com">jill&amp;#64;home.com</a>;</pre><p>The web site should create a reference table programmatically before displaying options to the user. The reference table should not be available to the user, it should be used entirely on the back-end. The reference table can look something like the following:</p><pre>1 -&gt; 1234234513<br />2 -&gt; 1234123412<br />3 -&gt; 4244324332</pre><p />The web site can then provide links to the user to view the contact information of his friends, such as: <pre><a href="http://socialnet.com/viewprofile.php?id=1">http://socialnet.com/viewprofile.php?id=1</a><br /><a href="http://socialnet.com/viewprofile.php?id=2">http://socialnet.com/viewprofile.php?id=2</a><br /><a href="http://socialnet.com/viewprofile.php?id=3">http://socialnet.com/viewprofile.php?id=3</a></pre><p>Note, that because the links use reference numbers, instead of database keys, the user can only view the authorized information. Trying to view Jill's profile by using the URL <a href="http://socialnet.com/viewprofile.php?id=43243544434">http://socialnet.com/viewprofile.php?id=43243544434</a> is not going to work, because that id is not in the reference table. Thus, reference tables a.k.a. indirect object references are effective at limiting user access to application data, especially in databases.</p><h1>Additional Resources</h1><ul><li>For more information about protecting your application from Insecure Direct Object References, please see <a href="http://www.enterprisenetworkingplanet.com/netsecur/article.php/10952_3927401_1/Protect-Your-Web-Apps-From-Insecure-Direct-Object-References.htm">http://www.enterprisenetworkingplanet.com/netsecur/article.php/10952_3927401_1/Protect-Your-Web-Apps-From-Insecure-Direct-Object-References.htm</a></li><li>For an example of an implementation of an access reference map, please see <a href="http://owasp-esapi-java.googlecode.com/svn/trunk_doc/latest/org/owasp/esapi/AccessReferenceMap.html">http://owasp-esapi-java.googlecode.com/svn/trunk_doc/latest/org/owasp/esapi/AccessReferenceMap.html</a></li></ul><h1>Related Items</h1><ul><li><a href="/article/62aa729a-fafa-4327-a3b7-dc5747aed610">Use Indirect Object References</a></li><li><a href="/article/3f546271-6ecc-499e-bbf1-c221fdecc222">Check Access Control Permissions When Referencing Objects</a></li><li><a href="/article/9a2923bd-0501-4a2c-867f-09fbc054c840">Access Control Permissions Are Checked When Referencing Objects<br /></a></li></ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

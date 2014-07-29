@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>689b4dcf-51b7-4e1e-9a95-9edfd7406852</Id>
+    <Id_History>00000000-0000-0000-0000-0000005b7235,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Include Unique Tokens in Redirects</Title>
+    <Category>Redirects and Forwards</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Include Unique Tokens in Redirects</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Add unique tokens to pages that initiate redirection and then validate these tokens at the target of the redirection.
+
+==Why==
+
+Include unique tokens in redirects to prevent Cross-Site History Manipulation (XSHM) attacks. XSHM are actually web browser vulnerabilities, but it's possible to protect against them within the application. XSHM should really be prevented by the web browser. This guidance article exists more for informational purposes, because adding this security control might not justify the overhead that it creates.
+
+==How==
+
+To include unique tokens in redirects:
+
+# **Consider the threat of XSHM.** Cross-Site History Manipulation is a web browser vulnerability that revolves around the fact that a web site may access the amount of items in web browser history via JavaScript. A malicious site may load a URL in a hidden frame and then check the history count again. If the history count didn't change, then the page has been loaded before and the malicious site knows about it. Thus confidentiality of the user is breached. XSHM should really be mitigated by the web browser and is a low-risk vulnerability. Mitigation of XSHM on the server-side is possible and is described below. Consider whether implementing this security control is worth the effort that it takes.
+# **Find all pages that use redirection.** Review the application to find all pages that initiate redirection. Make a list of these pages.
+# **Add unique tokens to redirection URLs.** For each page that initiates redirection, find the code that generates the target URL. Make a list of all possible target pages. Add code that creates a random and unique token and appends it as a parameter to the redirection URL. The unique token will also need to be stored in the session state so that it can be validated as having originated from the server. Add code that stores the unique token in the session state for the user. It is best to use the same method for generating and passing these unique tokens for all pages that use redirection.
+# **Add validation code to the targets of the redirection.** Use the list of redirection targets from the previous step to add code that validates the unique redirection token when the page loads. Check the unique token passed in the request against the token stored in the session state. Display an error message if the security token is not valid. Since there may be many redirection targets and they may not all be a part of the same application, this step might become quite cumbersome.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

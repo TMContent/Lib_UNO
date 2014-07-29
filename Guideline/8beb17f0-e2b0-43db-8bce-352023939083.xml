@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1449736641" Content_Hash="1499703071">
+  <Metadata>
+    <Id>8beb17f0-e2b0-43db-8bce-352023939083</Id>
+    <Id_History>bec4020c-c684-48f9-861a-67a212a71747,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Protect Sensitive Data in Your Configuration Files</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Protect Sensitive Data in Your Configuration Files</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Protect the sensitive data, such as SQL connection strings, in your configuration files by encrypting it.&amp;nbsp;</p>
+  <h1>Why</h1>
+  <p>Connection strings stored in plaintext are dangerous, because an attacker that can compromise a server will be able to read those connection strings. Even if a machine is not compromised, connection strings stored in plaintext are accessible to administrators and any other users with sufficient privileges on the host machine and/or Windows domain.</p>
+  <h1>How</h1>
+  <p>Use DPAPI to encrypt the sensitive data in the configuration file on your WCF server machine. To encrypt the &lt;connectionStrings&gt; section by using the DPAPI provider with the machine-key store (the default configuration), run the following command from a command window:</p>
+  <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider"</pre>
+  <p>The aspnet_regiis options are:</p>
+  <ul>
+    <li>-pe - Specifies the configuration section to encrypt.</li>
+    <li>-app - Specifies your Web application&amp;#8217;s virtual path. If your application is nested, you need to specify the nested path from the root directory; for example, "/test/aspnet/MachineDPAPI".</li>
+    <li>-prov - Specifies the provider name.<br /></li>
+  </ul>
+  <p>If you need to encrypt configuration file data on multiple servers in a Web farm, use the RSA protected configuration provider because of the ease with which you can export RSA key containers.<br /></p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on using DPAPI, see &amp;#8220;How To: Encrypt Configuration Sections in ASP.NET 2.0 Using DPAPI&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998280.aspx">http://msdn2.microsoft.com/en-us/library/ms998280.aspx</a><li>For more information on using RSA, see &amp;#8220;How To: Encrypt Configuration Sections in ASP.NET 2.0 Using RSA&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998283.aspx">http://msdn2.microsoft.com/en-us/library/ms998283.aspx</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

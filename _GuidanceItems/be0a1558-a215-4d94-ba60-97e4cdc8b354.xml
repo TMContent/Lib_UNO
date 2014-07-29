@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>be0a1558-a215-4d94-ba60-97e4cdc8b354</Id>
+    <Id_History>00000000-0000-0000-0000-00000086cf99,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Provide a Secure Administrative Interface that Allows Managing Cryptographic Keys</Title>
+    <Category>Administration</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Provide a Secure Administrative Interface that Allows Managing Cryptographic Keys</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Web applications usually have an admin page that allows managing application settings. If the application uses encryption, the admin page should allow managing the encryption keys. Because the admin page has functionality that attackers would like to abuse, extra care has to be taken to protect the admin page.
+
+==Why==
+
+The customer should have the ability to manage cryptographic keys to be able to change the keys as necessary. Being able to change the keys allows replacing the keys if any are compromised. Information Security standards, such as PCI DSS, usually require the keys to be changed regularly. Being able to change the keys also prevents hard-coded key vulnerabilities.
+
+==How==
+
+To add a page that allows managing cryptographic keys:
+
+# **Define encryption requirements.** Find out what data is encrypted by your application, how encrypted data is stored, what encryption algorithms are used, and how encryption keys are managed. Review encryption capabilities of your application and consider whether they can be made more secure. The exact encryption requirements depend on your application and compliance standards that your application is subject to. Define the desired encryption functionality and choose which options should be configurable by the users.
+# **Identify encryption options.** Identify all the configurable encryption options that are provided by your application. At the very least, the application should allow changing encryption keys. The application may also allow the user to change what encryption algorithms are being used, where data is stored, etc.
+# **Implement key management functions.** Write code that satisfies the encryption requirements. Make sure that the code includes functions for controlling all the user configurable encryption options. Some options that can be provided to the users are choosing the encryption algorithms, choosing where to store encrypted data, etc. At the very least, the client should be able to change the encryption keys.
+# **Identify the administrative interface.** Web applications usually have an admin page that is used to configure the application. Determine if your application has such a page. If your application does not have such a page, make one for it. This page is necessary to provide an interface for the clients to manage their encryption keys. Make sure this administrative interface has adequate controls such that it is only available to users with administrative privilege.
+# **Add key management options to the admin page.** Add controls to the admin page that allow configuring the encryption options provided by the application.]]></Data>
+  </Content>
+</TeamMentor_Article>

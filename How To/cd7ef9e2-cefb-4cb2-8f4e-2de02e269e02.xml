@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2030776026" Content_Hash="-295538148">
+  <Metadata>
+    <Id>cd7ef9e2-cefb-4cb2-8f4e-2de02e269e02</Id>
+    <Id_History>5e2f19e9-3329-48d3-be37-faa3dadc2e65,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Use the Network Service Account to Access Resources</Title>
+    <Category>Configuration</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use the Network Service Account to Access Resources</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 4.0&amp;nbsp;</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to shows you how you can use the <em>NT AUTHORITY\Network Service</em> machine account to access local and network resources. By default, ASP.NET applications run using this account's identity. It is a least privileged account with limited user rights and permissions. It does have network credentials. This means that you can use it to authenticate against network resources in a domain. This How to describes how you can use the <em>Network Service</em> account to access server resources such as the Windows event log, Windows registry, file system, and local and remote SQL Server databases. </p>
+  <h1>Contents</h1>
+  <ul>
+    <li>Objectives <li>Overview <li>Event Log Access <li>Registry Access <li>File Access <li>SQL Server</li></li></li></li></li></li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Learn the restrictions imposed by using the Network Service account to access resources. <li>Use the Network Service account to access the following resource types: <ul><li>Windows event log <li>Windows registry <li>Local file system <li>Local and remote databases </li></li></li></li></ul></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>By default, Microsoft Internet Information Services (IIS) runs ASP.NET applications in application pools that use the <em>NT AUTHORITY\Network Service</em> account identity. This account is a least privileged machine account with limited permissions. An application that runs using this account has restricted access to the event log, registry, and file system. The account does have network credentials, which means you can use it to access network resources and remote databases by using Windows authentication. The network resources must be in the same domain as your Web server or in a trusted domain.</p>
+  <p>In some scenarios, using a custom domain service account is a better approach than using the <em>Network Service</em> account. You should use a custom domain service account if: </p>
+  <ul>
+    <li>You want to isolate multiple applications on a single server from one another. <li>You need different access controls for each application on local and remote resources. For example, other applications cannot access your application's databases if access is restricted to your application's account. <li>You want to use Windows auditing to track the activity of each application separately. <li>You want to prevent any accidental or deliberate changes to the access controls or permissions associated with the general purpose Network Service account from affecting your application. </li></li></li></li>
+  </ul>
+  <p>This How to shows you how you can use the <em>Network Service</em> account to access a variety of resources types including the event log, registry, file system, and databases.</p>
+  <h1>Event Log Access</h1>
+  <p>Applications that run using the <em>Network Service</em> identity can write to the event log by using existing event sources, but they cannot create new event sources because of insufficient registry permissions. When you use the <em>EventLog.Write</em> method, if the specified event source does not exist, this method attempts to create the event source and a security exception is generated.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp;It is useful to use application specific event sources so that your application's events can easily be differentiated from other applications' events.<b></b></p>
+  <p>To enable your ASP.NET application to write to the event log using an event source that does not already exist, you have two options: </p>
+  <ul>
+    <li>Create new event sources at application install time <li>Manually create new event source entry in the registry. </li></li>
+  </ul>
+  <h2>Creating a New Event Source at Install Time</h2>
+  <p>With this option, you create a specialized installer class that you run by using the install utility to create a new event source at install time when administrator privileges are available. You run the install utility using an administrator account so it has permission to create the new event source.</p>
+  <h3>To create an installer class to create event sources </h3>
+  <ol>
+    <li>Use Visual Studio to create a class library project named <em>InstallerClass.dll</em>. Add a reference of <em>System.Configuration.Install</em> to the <em>InstallerClass</em> project. <li>Name the class <em>CustomEventLogInstaller</em>, and derive it from <em>System.Configuration.Install.Installer</em>. <li>Set the <em>RunInstaller</em> attribute for the class to <em>true</em>. <li>Create a <em>System.Diagnostics.EventLogInstaller</em> instance for each new event log your application needs, and call <em>Installers.Add</em> to add the instance to your project installer class. The following sample class adds one new event source named customLog to the Application Event Log. <pre>using System;<br />using System.Configuration.Install;<br />using System.Diagnostics;<br />using System.ComponentModel;<br />&amp;nbsp;<br />&amp;#91;RunInstaller(true)&amp;#93;<br />public class CustomEventLogInstaller: Installer<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp; private EventLogInstaller customEventLogInstaller;<br />&amp;nbsp;&amp;nbsp; public CustomEventLogInstaller() <br />&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create an instance of 'EventLogInstaller'.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; customEventLogInstaller = new EventLogInstaller();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set the 'Source' of the event log, to be created.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; customEventLogInstaller.Source = "customLog";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set the 'Event Log' that the source is created in.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; customEventLogInstaller.Log = "Application";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Add myEventLogInstaller to 'InstallerCollection'.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Installers.Add(customEventLogInstaller);&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp; public static void Main()<br />&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;  </pre><li>Compile the code for the <em>InstallerClass.dll</em> library. <li>Use an account with administrative privileges to run the InstallUtil.exe utility, supplying the name of the DLL on the command line. For example, open the Visual Studio command prompt and enter the following command. <pre>InstallUtil.exe &lt;dll path&gt;\InstallerClass.dll  </pre></li></li></li></li></li></li>
+  </ol>
+  <p>When the install utility is called with the installer class, it examines the <em>RunInstallerAttribute</em>. If this is <em>true</em>, the utility installs all the items in the <em>Installers</em> collection. This creates the specified event sources for your ASP.NET application.</p>
+  <h2>Manually Creating New Event Source Entry in the Registry</h2>
+  <p>If you are unable to create a event source at installation time, and you are in deployment, the administrator should manually create a new event source entry beneath the following registry key</p>
+  <pre>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\&lt;LogName&gt;</pre>
+  <h3>To manually create a new event source entry beneath this registry key </h3>
+  <ol>
+    <li>Start the <em>Registry Editor</em> tool <em>Regedit.exe</em>. <li>Expand the outline list in the left panel to locate the following registry subkey: <p><em>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Application </em></p><li>Right-click the <em>Application</em> subkey, point to <em>New</em>, and then click <em>Key</em>. <li>Type a new event source name for the key name and press <em>Enter</em>. </li></li></li></li>
+  </ol>
+  <p>The <em>Network Service</em> account can use the new event source for writing events. </p>
+  <p>
+    <b>Note:</b>&amp;nbsp;You should not grant write permission to the ASP.NET process account (or any impersonated account if your application uses impersonation) on the <em>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\</em><strong></strong>registry key. If you allow write access to this key and the account is compromised, the attacker can modify any log-related setting, including access control to the log, for any log on the system.</p>
+  <h2>Health Monitoring</h2>
+  <p>ASP.NET health monitoring writes to the Windows application event log to report significant lifetime and security events, if configured to do so. You can raise custom events in your code to write to the event log by using ASP.NET health monitoring. This approach does not use <em>EventLog.WriteEntry</em>, but you are restricted to using a predefined event source. </p>
+  <h1>Registry Access</h1>
+  <p>The Network Service account does not have write access to the registry. If your application needs to write to the registry, you must configure the necessary access control lists (ACLs) on the required registry keys.</p>
+  <h2>Granting Registry Access to Network Service</h2>
+  <p>In the following example, an application needs to change and display the name of the Internet time server that Windows is automatically synchronized with. An operator can change this setting by using the <em>Internet Time</em> tab from the Date and Time item in the Control Panel. </p>
+  <p>Your application needs to modify the following registry key:<strong><br /></strong><em>HKLM\SOFTWARE\ Microsoft\Windows\CurrentVersion\DateTime\Servers</em></p>
+  <p>
+    <b>To allow the Network Service account write access to the preceding registry key</b>
+  </p>
+  <p>You need to use an administrator account with permission to alter the registry security to perform the following steps: </p>
+  <ol>
+    <li>On the taskbar, click <em>Start</em>, and then click <em>Run</em>. Type <em>regedit</em> in the <em>Open</em> box, and then click <em>OK</em>. <li>Expand the outline list in the left panel to locate <em>the</em> DateTime folder icon at the preceding registry path. <li>Right-click the <em>DateTime</em> folder, and then click <em>Permissions</em>. <li>In the <em>Permission for Servers</em> dialog box, click the <em>Add</em> button. <li>In the <em>Select Users, Computers, or Groups</em> dialog box, type <em>NETWORK SERVICE</em> in the text box, and then click <em>Check Names</em>. The <em>Network Service</em> name will be underlined; this indicates that it is a valid security principal. Click <em>OK</em>. <li>In the <em>Permissions for Servers</em> dialog box, click the <em>Network Service</em> user name from the list, and in the <em>Permissions for NETWORK SERVICE</em> section, click <em>Advanced</em>. <li>In the <em>Advanced Security Settings for Servers</em> dialog box, click <em>Network Service</em>, and then click <em>Edit</em>. <li>In the <em>Permission Entry for Servers</em> dialog box, select the <em>Set Value</em> and <em>Create Subkey</em> check boxes in the <em>Allow</em> column to permit write access. Click <em>OK</em> several times until the <em>Permissions</em> dialog box closes. </li></li></li></li></li></li></li></li>
+  </ol>
+  <blockquote>
+    <b>Note:</b>&amp;nbsp;You should be careful while editing the registry because any mistake can lead to system instability.</blockquote>
+  <p>Your ASP.NET application could now use code similar to the following sample to change and display the name of the Internet time server.</p>
+  <pre>using Microsoft.Win32;<br />...<br />protected void Button1_Click(object sender, EventArgs e)<br />&amp;#123;<br />&amp;nbsp; //change the time server<br />&amp;nbsp; RegistryKey rk = Registry.LocalMachine.OpenSubKey(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#64;"SOFTWARE\Microsoft\Windows\CurrentVersion\DateTime\Servers", <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; true); //writable - this will fail without proper access<br />&amp;nbsp; string sDefault = (String)rk.GetValue("");<br />&amp;nbsp; int iDefault = Convert.ToInt32(sDefault);<br /><br />&amp;nbsp; //this an array of all the server names<br />&amp;nbsp; string&amp;#91;&amp;#93; sServers = rk.GetValueNames(); //requires enumerate sub keys<br />&amp;nbsp; iDefault&amp;#43;&amp;#43;;<br />&amp;nbsp; if (iDefault &gt;= sServers.Length) <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; iDefault=1;<br />&amp;nbsp; rk.SetValue("", iDefault.ToString());<br /><br />&amp;nbsp; // update display<br />&amp;nbsp; Response.write(rk.GetValue(sServers&amp;#91;iDefault&amp;#93;).ToString());<br />&amp;nbsp;&amp;#125;  </pre>
+  <h1>File Access</h1>
+  <p>The <em>Network Service</em> account has <em>Read</em> and <em>Execute</em> permissions on the IIS server root folder by default. The IIS server root folder is named <em>Wwwroot</em>. This means that an ASP.NET application deployed inside the root folder already has <em>Read</em> and <em>Execute</em> permissions to its application folders. However, if your ASP.NET application needs to use files or folders in other locations, you must specifically enable access. </p>
+  <h2>Granting File Access to Network Service</h2>
+  <p>To provide access to an ASP.NET application running as <em>Network Service</em>, you must grant access to the <em>Network Service</em> account. </p>
+  <h3>To grant read, write, and modify permissions to a specific file </h3>
+  <ol>
+    <li>In <em>Windows Explorer</em>, locate and select the required file. <li>Right-click the file, and then click <em>Properties</em>. <li>In the <em>Properties</em> dialog box, click the <em>Security</em> tab. <li>On the <em>Security</em> tab, examine the list of users. If the <em>Network Service</em> account is not listed, add it. <li>In the <em>Properties</em> dialog box, click the <em>Network Service</em> user name, and in the <em>Permissions for NETWORK SERVICE</em> section, select the <em>Read, Write, </em>and <em>Modify</em> permissions. <li>Click <em>Apply</em>, and then click <em>OK.</em></li></li></li></li></li></li>
+  </ol>
+  <p>Your ASP.NET application can now write to the specified file.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp;If you need to allow the same level of access to a file resource for all accounts that run ASP.NET applications (<em>Network Service</em> or a custom service account), you can grant access to the <em>IIS_WPG</em> group instead of specifically to the <em>Network Service</em> account. Any account used to run ASP.NET is required to be a member of the <em>IIS_WPG</em> group.</p>
+  <h1>SQL Server</h1>
+  <p>ASP.NET applications should use Windows authentication while connecting to a database. By using Windows authentication, you avoid storing database credentials in connection strings and you avoid passing passwords over the network to the database server. </p>
+  <p>With Windows authentication, your application's process account is used by default for authentication. To be able to access a database, your account requires: </p>
+  <ul>
+    <li>A SQL Server login on the database server. <li>Permissions to the required objects (for example, stored procedures, views, or tables) in the required database. </li></li>
+  </ul>
+  <h2>Granting Access to a Local SQL Server</h2>
+  <p>When the SQL Server is on the Web server, you must create a database login for the <em>NT AUTHORITY\Network Service</em> account. </p>
+  <h3>To access a local SQL Server database using Network Service </h3>
+  <ol>
+    <li>Start <em>SQL Server Enterprise Manager</em>. <li>Expand the folders in the left panel and locate the <em>Security</em> folder for your local SQL Server. <li>Right-click <em>Logins</em> in the <em>Security</em> folder, and then click <em>New Login</em>. <li>In the <em>SQL Server Login Properties - New Login</em> dialog box, in the <em>Name</em> box, enter <em>NT AUTHORITY\NETWORK SERVICE</em>. Accept the defaults for the other settings, and then click <em>OK</em>. <li>Expand the <em>Databases</em> folders, and then expand the <em>Pubs</em> (or equivalent) database. <li>Right-click <em>Users</em>, and then click<em> New Database User</em>. <li>In the <em>Database User Properties - New User</em> dialog box, select the <em>NT&amp;nbsp;AUTHORITY\NETWORK&amp;nbsp;SERVICE</em> account. <li>In the <em>Permit in Database Role</em> list, select the <em>db_datareader</em> check box. <li>Click <em>OK</em>, and then close the SQL Server Enterprise Manager. </li></li></li></li></li></li></li></li></li>
+  </ol>
+  <p>The <em>Network Service</em> account now has permission to read the data in the tables of the designated database. </p>
+  <p>In practice, your application's requirements may be more complex. For example, you might want to allow read access to certain tables and allow update access to others. The recommended approach to help mitigate the risk posed by SQL injection is to grant execute permissions to the <em>Network Service</em> account on a selected set of stored procedures and provide no direct table access.</p>
+  <h2>Granting Access to a Remote SQL Server</h2>
+  <p>If you are accessing a database on another server in the same domain (or in a trusted domain), the <em>Network Service</em> account's network credentials are used to authenticate to the database. The <em>Network Service</em> account's credentials are of the form<em> DomainName\AspNetServer&amp;#36;</em>, where <i>DomainName</i> is the domain of the ASP.NET server and <i>AspNetServer</i> is your Web server name.</p>
+  <p>For example, if your ASP.NET application runs on a server named <em>SVR1</em> in the domain <em>CONTOSO</em>, the SQL Server sees a database access request from <em>CONTOSO\SVR1&amp;#36;</em>.</p>
+  <h3>To access a remote SQL Server using Network Service</h3>
+  <p>To grant access to a remote database server in the same domain or a trusted domain, follow the steps described earlier for a local database, except in step 4, use the <em>DomainName\AspNetServer&amp;#36;</em> account to create the database login.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp;In production environments, you should place the network service account into a Windows group and create a SQL Server login for the Windows group.<b></b></p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

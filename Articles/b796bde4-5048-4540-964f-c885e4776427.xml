@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b796bde4-5048-4540-964f-c885e4776427</Id>
+    <Id_History>bdc25bf3-44cc-4bd5-a47a-9f5080144fb6,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Send Authentication Credentials over Encrypted Tunnels</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Send Authentication Credentials over Encrypted Tunnels</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Send authentication credentials over encrypted communication tunnels. Use SSL/TLS to send authentication credentials over the network, even the local network. For PHP applications, using SSL/TLS or not isn't really up to the developer. The server hosting the application has to be configured to use SSL/TLS for the application and this has to be done by the administrator of the server.
+
+==Why==
+
+Using encrypted communication tunnels prevents the credentials from being sniffed or tampered with as they are transmitted over the network. 
+
+==How==
+
+To protect authentication credentials in transit:
+
+# **Get a valid certificate.** Purchase a valid certificate from a trusted Certificate Authority. This must be done for each separate domain that hosts the application.
+# **Set up the server to use SSL/TLS.** Configuring the server to use SSL/TLS is different for different server platforms, but this process is always very well documented. Consult documentation or search the Internet for instructions on how to set up your server(s) to use SSL/TLS. The valid certificate that you purchased is going to be necessary for setting up SSL/TLS properly.
+# **Configure the server to use SSL/TLS for the application.** The server has to also be configured to use SSL/TLS for your specific application. Again, follow the instructions for your platform to make sure that SSL/TLS is used by your application. It is best to use SSL/TLS for the entire application and to redirect plain HTTP requests to the SSL/TLS version of the site.
+# **Document the SSL/TLS requirement.** Since configuring the server to use SSL/TLS for the application is ultimately done by the end-user, the developers might not have direct control over whether that is actually being done. It is recommended to document the fact that SSL/TLS should be used by the application for security reasons and include this together with the rest of the application documentation, for example in the installation instructions.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

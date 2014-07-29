@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>0118bb17-12c3-4d03-a635-1bd15241a2a3</Id>
+    <Id_History>e9bb3e68-cce4-4412-8834-e4cb7861be00,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Do Not Store Sensitive Data in Persistent Cookies</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Store Sensitive Data in Persistent Cookies</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Do==
+
+Avoid storing sensitive data in cookies. If have to, make sure the cookie is encrypted and is not persisted on the client computer. 
+
+==Why==
+
+If you store plaintext data, the end user is able to see and modify the data. If you encrypt the data, key management can be a problem. hence the better option is not to store sensitive data in persistent cookies. 
+
+==When==
+
+Avoid storing sensitive data in persistent cookies. If you store plaintext data, the end user is able to see and modify the data. If you encrypt the data, key management can be a problem. For example, if the key used to encrypt the data in the cookie has expired and been recycled, the new key cannot decrypt the persistent cookie passed by the browser from the client.
+
+==How=
+
+To prevent storing sensitive data in persistent cookies:
+
+# **Identify all cookies used by the application.** Search application code for references to setcookie. This should help find all the cookies created by the application.
+# **Find code that handles sensitive cookies.** Examine code that handles each cookie and see if it stores sensitive information in the cookie.
+# **Don't make sensitive cookies persistent.** Review all code that handles sensitive cookies. Make sure that the expire property of sensitive cookies is never set, because that makes them persistent. Remove code that sets the expire property of sensitive cookies, if such code exists.]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-509034394" Content_Hash="2116856757">
+  <Metadata>
+    <Id>7d6dc5c1-9ffd-417c-97ef-abf231f3c7c7</Id>
+    <Id_History>bda367a6-6463-40a9-a6ef-e1414801c591,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Man-in-the-Middle Bugs</Title>
+    <Category>Networking</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Man-in-the-Middle Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>Computer networks</li>
+  </ul>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>In <span>&amp;nbsp;</span>a Man-in-the-Middle (MitM) attack, an attacker inserts himself between two network nodes. For example, in a successful attack, if Bob sends a packet to Alice, the packet passes through the attacker Eve first and Eve decides to forward it to Alice with or without any modifications; when Alice receives the packet, she thinks it comes from Bob. The attack is bidirectional, so the same scenario applies when Alice sends a packet to Bob. Initially developed to attack public key encryption systems, this attack has expanded to include any form of eavesdropping in which the attacker acts as a proxy and controls the packets exchanged by the two target nodes. <span>&amp;nbsp;</span><span>&amp;nbsp;</span></p>
+  <p>Follow these steps to test for MitM bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios</li>
+    <li>Step 2: Analyze causes and countermeasures</li>
+    <li>Step 3: Start testing and exploring</li>
+    <li>Step 4: Execute additional testing</li>
+  </ul>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, it is necessary to understand the basic attack scenario related to MitM attacks:</p>
+  <ul>
+    <li>Public-key encryption MitM attack</li>
+    <li>Network MitM attack</li>
+  </ul>
+  <h2>
+    <span>
+      <em>Public-key encryption MitM attack</em>
+    </span>
+  </h2>
+  <p>The first scenario relates to public-key cryptography and <span>&amp;nbsp;</span>key exchanges. An attacker needs to get the public key of one of the two victims in order to start the attack. For instance, eavesdropper Eve gets Alice’s public key when she is sending it to Bob. Now Eve constructs a malicious message that says she is Alice, includes Eve’s public key, and sends it to Bob. When Bob receives this message, he replies by sending Alice a message that is encrypted with Eve’s key. Since Eve is intercepting the conversation, she gets the message from Bob and <span>&amp;nbsp;</span>deciphers it (using her [Eve’s] key) and enciphers it again (using Alice’s public key that she initially intercepted) before sending it back to Alice. In this way, neither of the attacked parties, Alice or Bob, realize that there is an attacker altering the messages they are exchanging. </p>
+  <p>In detail:</p>
+  <ol>
+    <li>Attacker (Eve) intercepts a conversation between two users (Alice and Bob).</li>
+    <li>Attacker reads Alice’s public key.</li>
+    <li>Attacker crafts a message claiming that it comes from Alice, but using Eve’s key.</li>
+    <li>Attacker sends message to Bob.</li>
+    <li>Bob receives message, and sends reply encrypted with attacker’s key (Eve’s key).</li>
+    <li>Attacker receives the message from Bob and decrypts it.</li>
+    <li>Attacker uses Alice’s key (intercepted in step 2) and encrypts the message with that key.</li>
+    <li>Attacker forwards encrypted message to Alice. </li>
+  </ol>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Network MitM attack</em>
+    </span>
+  </h2>
+  <p>MitM attacks are not limited to cryptographic system; they include any network attack in which the attacker makes independent connections with two victims and starts relaying messages between the two victims without their knowledge. In other words, the attacker becomes an invisible proxy between the two victims. Common ways to execute network MitM attacks include:</p>
+  <ul>
+    <li>ARP poisoning</li>
+    <li>DHCP spoofing</li>
+    <li>DNS poisoning&amp;nbsp;</li>
+  </ul>
+  <p>
+    <b>
+      <i>ARP poisoning</i>
+    </b>
+  </p>
+  <p>One way for an attacker to execute a network MitM attack is to send gratuitous Address Resolution Protocol (ARP) packets (unsolicited ARP replies) to each victim node, thereby attempting to poison their ARP cache. The attacker specifically wants to replace the MAC address of the remote victim’s IP address with the attacker’s MAC address. <span>&amp;nbsp;</span></p>
+  <p>In a common MitM attack, one of the target nodes is in the attacker’s LAN, while other is in the Internet, such as when attacking computers in a wireless network. In order to execute the attack on the two victims, the attacker sends gratuitous ARP packets to the local victim and the local gateway, to ARP poison these two caches. The ARP cache of the local victim must have the attacker’s MAC address for the gateway’s IP address, and the ARP cache of the gateway must have the attacker’s MAC address for the local target’s IP address. This way, all communication from the target node to the Internet (via the gateway) passes through the attacker. </p>
+  <p>Note that ARP poisoning attacks are bidirectional: the attacker can insert himself between the Internet server and the victim host. While the attack is in progress, the victim host in the LAN thinks that it’s talking to the Internet server directly, while the Internet server thinks that it’s talking to the LAN host directly -- when in reality an attacker is intercepting the network traffic.</p>
+  <p>ARP poisoning in detail:</p>
+  <ol>
+    <li>Attacker selects two target nodes on the same local subnet (for example, a client and the gateway).</li>
+    <li>Attacker sends gratuitous ARP packets to the local node with the IP address of the default gateway but the attacker’s MAC address.</li>
+    <li>Attacker sends gratuitous ARP packets to the default gateway with the IP address of the client node but the attacker’s MAC address.</li>
+    <li>Attacker starts filtering IP packets so that only those coming from the local client node and local gateway targets are intercepted; this is necessary so that the attacker can differentiate traffic from the victim and other Internet-bound traffic.<b><i>&amp;nbsp;</i></b></li>
+  </ol>
+  <p>
+    <b>
+      <i>DHCP spoofing</i>
+    </b>
+  </p>
+  <p>A DHCP server provides IP information such as the default gateway IP address to network nodes that join a local network. An attacker can pose as a DHCP server and send forged DHCP acknowledgments to any connecting nodes. If the connecting node receives the DHCP acknowledgment from the attacker before the real DHCP server, it uses the information provided by the attacker to resolve its IP configuration. The attacker can supply its own IP address for the default gateway address in forged DHCP requests in order to execute MitM attacks between the connecting node and either a local network node or a remote one. <span>&amp;nbsp;</span></p>
+  <p>
+    <i>This attack is unidirectional: Packets sent from the victim node to the Internet victim will be intercepted, but packets sent back to the local victim will not be intercepted.</i>
+  </p>
+  <p>In detail (victim A is local and victim B is remote):</p>
+  <ol>
+    <li>Attacker starts DHCP server that sends the attacker’s IP address for the default gateway IP address.</li>
+    <li>Victim A connects to the network (note that the victim must obtain their IP information via DHCP).</li>
+    <li>Attacker beats race condition against the real DHCP server and sends a forged DHCP acknowledgment to victim A. </li>
+    <li>Victim A receives the attacker’s IP as the default gateway in the DHCP response message.</li>
+    <li>Attacker starts intercepting IP packets sent from victim A to victim B, as the attacker is now the gateway for victim A.</li>
+  </ol>
+  <p>
+    <b>
+      <i>DNS Poisoning </i>
+    </b>
+  </p>
+  <p>A DNS server provides the IP address associated with a given domain/host name. It is possible for an attacker to replace a valid domain name’s IP with an attacker-controlled IP address. By doing so, any victim that resolves the given domain/host name will receive a response that includes the attacker’s address. <span>&amp;nbsp;</span>Attackers can use this technique to execute MitM attacks on any of the DNS server’s clients. Thus, this technique can be used to execute MitM attacks on different users simultaneously to, for example, execute phishing attacks.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>Attacker finds the DNS server of one of the victim clients.</li>
+    <li>Attacker sets up a malicious DNS server that sends malicious IP address information for a valid domain/host name (<i>DN</i>).</li>
+    <li>Attacker tricks any of the clients of the DNS server found in step 1 to make a request to their malicious DNS server.</li>
+    <li>Attacker waits until server client makes a request to their malicious DNS server.</li>
+    <li>Attacker responds with a DNS response that indicates that domain name <i>DN</i> corresponds to an attacker’s IP address.</li>
+    <li>Attacker waits until victim client connects to the domain name <i>DN</i>. If the attack succeeds, the attacker is able to intercept this connection, because the victim is actually connecting to the attacker-controlled server.</li>
+  </ol>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The next step in testing for MitM vulnerabilities is to understand what causes them and how to defend against them.</p>
+  <h2>
+    <em>Trusting Keys and Certificates </em>
+  </h2>
+  <p>Let’s go back to the first scenario <span>&amp;nbsp;</span>above. The reason <span>&amp;nbsp;</span>that attacker Eve can can execute the MitM attack is because Bob accepts Eve’s key as if it were Alice’s. The problem arises because Bob is <span>&amp;nbsp;</span>too trustful of the key. The same problem applies to PKI (Public Key Infrastructure), but with certificates instead of keys. For instance, a client that wants to connect to an application site starts using the certificate sent by the site. An attacker can intercept the conversation and send the client a fake certificate, claiming that it comes from the application site. If the client trusts the fake certificate, the MitM attack becomes possible. </p>
+  <p>The solution to this problem is to use a trusted Certificate Authority (CA) to verify that the certificate, digital signature, or key belongs to the person using it. By adding strong authentication on PKI systems, any certificate coming from a non-trusted CA will be revoked, including the attacker’s fake certificate.</p>
+  <p>It is important to note that common methods used to sign and encrypt Internet communications (SSL/TSL/SSH) can be vulnerable to MitM attacks as they implement PKI. An attacker that intercepts traffic between a victim browser and an application site using SSL can create a fake SSL certificate and send it to the victim as described above. Most browsers will show a warning indicating that the connection requires a new, and in most cases unverified, certificate. If the Internet user accepts the certificate, the MitM attack can begin. Furthermore, vulnerabilities in past versions of Internet Explorer and other popular browsers <span>&amp;nbsp;</span>can allow for transparent MitM SSL attacks in which <span>&amp;nbsp;</span>this warning is not shown <span>&amp;nbsp;</span>if the fake certificate is trusted by <i>any</i> certificate authority. [i] </p>
+  <h2>
+    <em>Allowing Malicious Network Packets</em>
+  </h2>
+  <p>Network MitM attacks exist because attackers can send arbitrary packets over computer networks such as wireless LANs to execute attacks such as ARP poisoning or DHCP spoofing. Network administrators can help to mitigate the risk of such attacks by properly configuring networks and deploying the appropriate tools.</p>
+  <p>For instance, administrators can protect computers against both DHCP spoofing and ARP poisoning using the <i>DHCP snooping</i> functionality built into some network switches [ii]. To protect against DHCP spoofing, this functionality differentiates network ports that are allowed to make DHCPs requests and acknowledgments from those that are only allowed to make DHCP requests. This means that it denies any possible forged DHCP acknowledgements sent by an attacker posing as a DHCP server. In addition, DHCP snooping monitors ARP packets and checks if they are legitimate by comparing them to a MAC-to-IP table built during DHCP snooping. Other tools to protect against ARP poisoning include the Unix-based Arpwatch and Windows-based XArp.</p>
+  <p>To defend against DNS poisoning, it is necessary to add the appropriate network protection at the DNS server and to be less trustful of DNS responses. A solution is to use a secure version of DNS called <i>DNSSEC</i> that uses cryptographic certificates to validate the authenticity of DNS messages. <span>&amp;nbsp;</span><span>&amp;nbsp;</span>After deploying DNSSEC, any fake DNS server will not be able to impersonate ownership over a domain that it does not rightfully control.</p>
+  <p>It is important to note that defenses against MitM attacks are constantly revised and updated. Readers are encouraged to update to the latest MitM defense methods.</p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 3: Start testing and exploring</span>
+  </h1>
+  <p>Now that common MitM attack scenarios and <span>&amp;nbsp;</span>their causes and countermeasures have been reviewed, it is necessary to start using available network security tools to test for the presence of MitM vulnerabilities in your environment.</p>
+  <p>
+    <b>
+      <i>Test for MitM through ARP poisoning </i>
+    </b>
+  </p>
+  <p>Follow these steps to test for susceptibility to MitM attacks via ARP poisoning:</p>
+  <ol>
+    <li>Download and install Cain (<a href="http://www.oxid.it/cain.html">http://www.oxid.it/cain.html</a>) and Wireshark<span></span>(<a href="http://www.wireshark.org/download.html">http://www.wireshark.org/download.html</a>) on the attacker’s box.</li>
+    <li>Run Cain. </li>
+    <li>Click <b>Configure</b> in the menu and select the network interface (it can be a wireless interface).</li>
+    <li>Click the <b>Sniffer</b> tab and then the <b>Hosts</b> sub-tab.</li>
+    <li>Start the sniffer and click the plus (<b>+</b>) sign.</li>
+    <li>Select a range of IPs to scan their MAC addresses (include the target box in the range), and then click <b>OK</b>. Both the gateway’s and the victim’s IPs (and their MACs) should appear in the hosts list.</li>
+    <li>Click the <b>ARP poisoning</b> sub-tab.</li>
+    <li>Click on the plus (<b>+</b>) sign and add an ARP route from the victim to the gateway.</li>
+    <li>Start the ARP poisoning attack by pressing the ARP button. As soon as the victim becomes active, its status changes from “idle” to “poisoning.” The lower pane will begin to show the packets being intercepted.<br /></li>
+    <li>Start Wireshark and start capturing network traffic from the same interface selected in Cain.</li>
+  </ol>
+  <p>Expected results: The first check you can conduct to see if the ARP poisoning attack was successful is to run the <i>arp -a</i> command on the victim’s box (Windows or UNIX). After executing the attack, the entry for the gateway should be that of the attacker’s box, rather than the real MAC of the gateway. For instance, in Windows running <i>arp -a </i>before the attack gives this:</p>
+  <pre>
+    <span>C:\&gt;arp -a</span>
+  </pre>
+  <pre>
+    <span>Interface: 192.168.1.33 --- 0x8<br />&amp;nbsp;Internet Address&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; IP Address&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Type<br />&amp;nbsp;192.168.1.1&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 00-13-49-5c-e3-de&amp;nbsp; dynamic<br />&amp;nbsp;192.168.1.255&amp;nbsp;&amp;nbsp;&amp;nbsp;ff-ff-ff-ff-ff-ff&amp;nbsp; static<br />&amp;nbsp;224.0.0.22&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 01-00-5e-00-00-16&amp;nbsp; static</span>&amp;nbsp;</pre>
+  <p>After a successful attack, the gateway entry in the victim’s ARP cache will be different; it will equal to the attacker’s MAC:</p>
+  <pre>
+    <span>C:\&gt;arp -a<br />&amp;nbsp;<br />Interface: 192.168.1.33 --- 0x8<br />&amp;nbsp;Internet Address&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; IP Address&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Type<br />&amp;nbsp;192.168.1.1&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<strong> 00-1b-77-b2-73-f2</strong>&amp;nbsp; dynamic<br />&amp;nbsp;192.168.1.255&amp;nbsp;&amp;nbsp; ff-ff-ff-ff-ff-ff&amp;nbsp; static<br />&amp;nbsp;224.0.0.22&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 01-00-5e-00-00-16&amp;nbsp; static</span>&amp;nbsp;</pre>
+  <p>A successful ARP poisoning attack will be visible both in Cain and Wireshark. In Cain, the lower pane of the Sniffer-&gt;ARP tab shows the packets being sniffed. You can use Wireshark to see the actual contents of the packets.<br /></p>
+  <h2>
+    <em>Test for MitM through DHCP spoofing</em>
+  </h2>
+  <p>Follow these steps <span>&amp;nbsp;</span>to test susceptibility to MitM attacks via DHCP spoofing (tested from a UNIX system): </p>
+  <ol>
+    <li>On the attacker’s system, run the <span>ifconfig</span> command and note the current IP address and network mask. Take note of the system’s DNS resolver IP as well. (On UNIX systems, DNS server information generally resides in the file /etc/resolv.conf.) </li>
+    <li>Download and install Ettercap (<a href="http://ettercap.sourceforge.net/download.php">http://ettercap.sourceforge.net/download.php</a>) on the attacker’s system.</li>
+    <li>Run Ettercap with the GUI option for simplicity: <span>ettercap -G.</span></li>
+    <li>Remove any targets from Ettercap (this is required for DHCP spoofing).</li>
+    <li>Use the main menu to navigate to <span>Mitm-&gt;DHCP Spoofing</span>.</li>
+    <li>Fill in DHCP spoofing server information, providing an IP pool with a range of 15 IPs.</li>
+    <li>Click OK to start the attack.</li>
+    <li>On the victim’s computer (Windows), use ipconfig /release to release the current DHCP lease.</li>
+    <li>Execute ipconfig /renew to request a lease from the DHCP server; this triggers the attack.</li>
+    <li>On the victim’s computer, attempt to connect to an FTP server and supply login credentials.</li>
+  </ol>
+  <p>Expected result: The MitM attack succeeds if executing the <i>ipconfig /renew</i> command in step 8 sets the default gateway on the victim’s machine to the attacker’s IP address. In addition, if the attack succeeds, Ettercap (or other tools on the attacker’s machine) can capture the username and password provided in step 9, as well as any other IP traffic destined for the Internet or networks other than the local subnet.</p>
+  <h2>
+    <em>Test for MitM through DNS spoofing</em>
+  </h2>
+  <p>Follow these steps to test susceptibility to MitM attacks via DNS server spoofing, thus poisoning the client’s resolver:</p>
+  <ol>
+    <li>Select the target DNS server.</li>
+    <li>Set up a client to use the target DNS server.</li>
+    <li>Set up an attacker-controlled DNS server to send specially crafted responses (see step 6).</li>
+    <li>Set up an attacker-controlled web server. </li>
+    <li>Set up a trigger that starts a DNS lookup query from within the target DNS server to the attacker DNS sever. </li>
+    <li>Use the attacker DNS server to reply to the query with extra information in the DNS packets. Set the <b><span>Answers</span></b>, <b><span>Authoritative nameservers, </span></b>and <b><span>Additional records</span></b> fields of the DNS packets to direct all futures requests to a .COM domain to resolve to the IP address of the attacker web server (from step 4). </li>
+    <li>Open the web browser from step 2 and navigate to any .COM domain.</li>
+  </ol>
+  <p>Expected result: The MitM attack succeeds if the web browser displays the content from the attacker-controlled web server.</p>
+  <p>Note: For more information about DNS poisoning, refer to the <i>How to Test for DNS Poisoning</i> article.</p>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <p>
+    <b>
+      <i>Sniffing an HTTPS connection</i>
+    </b>
+  </p>
+  <p>SSL and SSH MitM tests can also be run using Ettercap and Cain. Both programs automatically create a fake certificate on the fly to substitute for the real certificate.</p>
+  <p>In Ettercap, follow these instructions to sniff an HTTPS connection: </p>
+  <ol>
+    <li>Download and install Ettercap on the attacker’s box (UNIX/Linux).</li>
+    <li>Open <i>/usr/local/etc/etter.conf</i> configuration file in text editor.</li>
+    <li>Uncomment both <i>redir</i> commands (as shown in the table below).</li>
+    <li>Execute MitM attack using ARP poisoning. Select the victim’s IP and the default gateway’s IP in the Ettercap hosts.</li>
+    <li>Execute the ARP poisoning attack.</li>
+    <li>On the victim’s computer, log into Gmail, which uses HTTPS for logins, or any SSL host.</li>
+    <li>Click OK when prompted by any certificate warning boxes.</li>
+    <li>Enter a user name and password and submit the login form.</li>
+  </ol>
+  <p />
+  <table>
+    <tbody>
+      <tr>
+        <td>#redir_command_on = "iptables -t nat -A PREROUTING -i %iface -p tcp --dport %port -j REDIRECT --to-port %rport"<br />#redir_command_off = "iptables -t nat -D PREROUTING -i %iface -p tcp --dport %port -j REDIRECT --to-port %rport"<br />to<br />&amp;nbsp;<br />redir_command_on = "iptables -t nat -A PREROUTING -i %iface -p tcp --dport %port -j REDIRECT --to-port %rport"<br />redir_command_off = "iptables -t nat -D PREROUTING -i %iface -p tcp --dport %port -j REDIRECT --to-port %rport"</td>
+      </tr>
+    </tbody>
+  </table>
+  <p />
+  <p>
+    <span>
+      <strong>
+      </strong>
+    </span> Expected result: The MitM attack succeeds if Ettercap captures the victim’s username and password. Examining the SSL certificate that the web browser prompted you to accept can also reveal if the attack succeeded.</p>
+  <p>&amp;nbsp;</p>
+  <span>
+    <h1>
+      <span>Step 4: Execute Additional Testing</span>
+    </h1>
+    <p>As the final step in testing for MitM attacks, it is necessary to cover additional attack methods and decide what to do after the attack has succeeded.</p>
+    <h2>
+      <span>
+        <em>Use Different Attack Methods</em>
+      </span>
+    </h2>
+    <p>This article has covered three popular forms of network MitM attacks: ARP poisoning, DNS spoofing (made more effective by employing DNS cache poisoning techniques), and DHCP spoofing. Make sure to address any additional MitM attacks, such as port stealing. Port stealing consists of flooding a network switch with gratuitous ARP packets, flooding the switch’s CAM table so that the switch forwards packets destined to the victim to all computers on the switch (thus effectively turning the switch in toa hub). It is possible to execute port-stealing attacks using <i>Ettercap</i>, and another utility called <i>macoff</i>. Other attacks include ICMP redirection, route mangling, traffic tunneling, and IP spoofing [i].</p>
+    <p>
+      <i>
+        <span>
+          <strong>
+          </strong>
+        </span>
+      </i>
+    </p>
+    <h2>
+      <span>
+        <em>What to do After Attack Succeeds</em>
+      </span>
+    </h2>
+    <p>Once you successfully execute an MitM attack and are between the two victim nodes, there are different attacks that you can try, including network sniffing, hijacking, packet injection, and packet filtering. Ettercap provides a set of filters that can be used for different attacks, such as dropping packets from certain users and executing Denial of Service attacks, or downgrading SSH versions in order to use a less-secure connection. For more information, view Full Disclosure’s video about MitM attacks in Ettercap [ii]. </p>
+    <p>
+      <span>
+        <strong>&amp;nbsp;</strong>
+      </span>
+    </p>
+    <h1>
+      <span>Conclusions</span>
+    </h1>
+    <p>Man-in-the-Middle attacks are generally network-related attacks used to sniff network connections or to act as a proxy and hijack a network connection without either of the victims being aware of this. To test for the presence of this vulnerability in a computer network, it is first necessary to understand the common attack scenarios involved. Then, learn the causes of and the defenses against <span>&amp;nbsp;</span>MitM attacks. Network MitM tools such as Cain and Ettercap should be used to execute the different attack scenarios, including sniffing HTTPS communications. Once positioned between two hosts, an attacker can use appropriate tools to execute multiple attack types, such as sniffing, hijacking, and command injection.<span></span></p>
+    <p>
+      <u>
+        <span>
+          <span>
+            <strong>
+            </strong>
+          </span>
+        </span>
+      </u>
+    </p>
+    <div>
+      <br />
+      <strong>
+        <hr />
+      </strong>
+      <div>
+        <p>[i] <span><strong>Man-in-the-Middle Attacks</strong>. Alberto Ornaghi and Marco Valleri. </span><span>Blackhat Europe 2003, </span><a href="http://www.blackhat.com/presentations/bh-europe-03/bh-europe-03-valleri.pdf">http://www.blackhat.com/presentations/bh-europe-03/bh-europe-03-valleri.pdf</a></p>
+      </div>
+      <div>
+        <p>[ii]&amp;nbsp; <strong>Episode 20 - Ettercap</strong>. Full Disclosure. <a href="http://infinityexists.com/videos/episode20/">http://infinityexists.com/videos/episode20/</a></p>
+        <p>&amp;nbsp;</p>
+      </div>
+    </div>
+  </span>
+  <div>&amp;nbsp;</div>
+  <div>&amp;nbsp;</div>]]></Data>
+  </Content>
+</TeamMentor_Article>

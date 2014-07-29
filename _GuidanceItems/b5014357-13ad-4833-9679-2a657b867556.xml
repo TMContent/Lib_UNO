@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b5014357-13ad-4833-9679-2a657b867556</Id>
+    <Id_History>00000000-0000-0000-0000-0000001bfead,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Injection</Title>
+    <Category>OWASP</Category>
+    <Phase>Any</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Injection</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Applications written using Scala and Play Framework 2.1.0.</p>
+  <h1>Vulnerability Description</h1>
+  <p>
+  </p>
+  <p>Injection flaws allow attackers to relay malicious code through a web application to another system. These attacks include calls to the operating system via system calls, the use of external programs via shell commands, as well as calls to a backend database via querying process (SQL/NoSQL). Whole scripts written in perl, python, and other languages can be injected into poorly designed web applications and executed. <strike><br /></strike></p>
+  <p>Databases use SQL/NoSQL queries to retrieve or modify data in the database tables. In most applications, the input entered by the user is used to dynamically construct the query to be sent to the database.&amp;nbsp; When an attacker enters ' OR 1=1;-- in the Username field of the Login page, the input (' OR 1=1) becomes a part of the query, which will look something like:</p>
+  <p>
+  </p>
+  <pre>SELECT * FROM _tablename_ WHERE username = '' OR 1=1;--' AND password = 'somepassword' ;--</pre>
+  <p />
+  <p>
+  </p>
+  <p>
+    The rest of the statement after –- is commented out, and the OR condition has been evaluated to true. So, the database returns all rows and the application authenticates the user as the first user in the database. <br /></p>
+  <p>Alternatively, an attacker can enter&amp;nbsp; &lt;validusername&gt;' or '1'='1;--&amp;nbsp; to log in to the application as the specified &lt;validusername&gt;, even when a wrong password is entered. Thus, the attacker can enter username as admin' or '1'='1;--&amp;nbsp; to log in as "admin." <br /></p>
+  <p>NoSQL database engines that process JavaScript containing user specified parameters can also be vulnerable. MongoDB, for example, supports the use of JavaScript functions for query specifications and map/reduce operations. Since MongoDB databases, like other NoSQL databases, do not have strictly defined database schemas, developers can use JavaScript query syntax to write arbitrarily complex queries against disparate document structures.&amp;nbsp;</p>
+  <p>For example, say a MongoDB collection contains some documents that represent books, some that represent movies, and some that represent music albums. The following JavaScript query function will select all documents in the specified collection that were written, filmed, or recorded in the specified year:</p>
+  <p>
+  </p>
+  <pre>function() {
+
+var search_year = input_value;
+
+return this.publicationYear == search_year ||
+
+this.filmingYear == search_year ||
+
+this.recordingYear == search_year;
+
+}</pre>
+  <p />
+  <div>If the developer were building this application using a given programming language, the source code might look like this:<br /><br /></div>
+  <div>
+    <pre>$query = 'function() {var search_year = \'' .
+
+$_GET['year'] . '\';' .
+
+'return this.publicationYear == search_year || ' .
+
+' this.filmingYear == search_year || ' .
+
+' this.recordingYear == search_year;}';
+
+$cursor = $collection-&gt;find(array('$where' =&gt; $query));</pre>
+  </div>
+  <div>
+    <br />This code uses the value of the request parameter “year” as the search parameter. Just as in a traditional SQL injection attack, since the query syntax is constructed in an ad-hoc fashion (i.e. query syntax concatenated along with user input), this code is vulnerable to a server-side JavaScript injection attack. For example, the following request would be an effective DoS attack against the system:<br /><br /></div>
+  <div>
+    <pre>http://server/app?year=1995';while(1);var%20foo='bar</pre>
+  </div>
+  <div>
+    <p>Also, if the application displays error messages when certain input is entered, these error messages would reveal a lot of sensitive information about the database such as the name of the database, names of tables (e.g.: Users) names of the columns (e.g. :userID) and the type of values in the column. Using this information, an attacker can elicit the content of the database by SQL Injection.</p>
+  </div>
+  <div>
+    <div>
+      Some injection attacks can be very easy to discover and exploit, but others can<strike></strike> be extremely obscure. The consequences can run the gamut from trivial to complete system compromise or destruction. In any case, the use of external calls is quite widespread, so the likelihood of a web application having a command injection flaw should be considered high.</div>
+    <div>
+      <br />In addition to SQL injection, there are other ways of compromising the server through injection attacks. For example a malicious parameter could modify a system call: By including path traversal “../” characters as part of a filename request, a call which normally retrieves the current user’s file would instead access another user’s file.&amp;nbsp; Or, a command such as “; rm –r *” could be tacked on to the end of a parameter passed to a shell script to execute an additional shell command along with the intended command.</div>
+    <div>
+      <br />The following shows how easy it is to run external commands in Scala if “sys.process” is imported in the application:</div>
+    <div>
+      <pre>scala&gt; import sys.process._
+
+import sys.process._
+
+scala&gt; "ls -al" !
+
+total 64
+
+drwxr-xr-x 10 Al staff 340 May 18 18:00 .
+
+drwxr-xr-x 3 Al staff 102 Apr 4 17:58 ..
+
+-rw-r--r-- 1 Al staff 118 May 17 08:34 Foo.sh
+
+-rw-r--r-- 1 Al staff 2727 May 17 08:34 Foo.sh.jar
+
+res0: Int = 0
+
+</pre>
+    </div>
+  </div>
+  <div>
+    <p>Similarly, the following shows how assigning user input to the parameter directly without any sanitization can lead to OS level injection.</p>
+    <p>
+    </p>
+    <pre>scala&gt; val result = "ls -al" !!
+
+result: String =
+
+"total 64
+
+drwxr-xr-x 10 Al staff 340 May 18 18:00 .
+
+drwxr-xr-x 3 Al staff 102 Apr 4 17:58 ..
+
+-rw-r--r-- 1 Al staff 118 May 17 08:34 Foo.sh
+
+-rw-r--r-- 1 Al staff 2727 May 17 08:34 Foo.sh.jar"
+
+scala&gt; println(result)
+
+total 64
+
+drwxr-xr-x 10 Al staff 340 May 18 18:00 .
+
+drwxr-xr-x 3 Al staff 102 Apr 4 17:58 ..
+
+-rw-r--r-- 1 Al staff 118 May 17 08:34 Foo.sh
+
+-rw-r--r-- 1 Al staff 2727 May 17 08:34 Foo.sh.jar</pre>
+    <p />
+  </div>
+  <p />
+  <p />
+  <p />
+  <h1>How to Fix</h1>
+  <p>
+  </p>
+  <p>There are two main causes for injection attack vulnerabilities: 1) input is not validated before constructing the query, and 2) input is used to build dynamic queries.&amp;nbsp; To address these issues, follow these security measures:</p>
+  1.
+  
+    <b>Use parameterized SQL queries.</b>
+   Whenever you build your own queries, do not construct SQL queries directly from input, including form fields, query string parameters, and cookies. Always use parameterized SQL queries. <br /><br />2.<b> Use strong input validation</b> to prevent SQL/NoSQL injection attacks<strike></strike>. <br /><br />3. <b>Use prepared statements.</b><br /><br />4.<b> Use pre-compiled queries,</b> and<strike></strike> make sure that the internal queries do not contain dynamic content.<br /><br />5. <b>Use Bind parameters.</b> Bind parameters are the best way to pass data to the database. Instead of putting the values directly into the SQL statement, you use a placeholder like ?, :name or @name and provide the actual values using a separate API call. The following example shows a secure implementation using the Bind variable in Play Framework:
+  <p /><pre>public static void searchString(String keyword) {
+
+String trimedkeyword = keyword.trim();
+
+String keypattern = "%"+trimedkeyword+"%";
+
+String query="select distinct item from Item where item.name like :keypattern";
+
+List&lt;Item&gt; items = Item.find(query).bind("keypattern", keypattern).fetch();
+
+...
+
+}</pre><p /><p /><p /><p>6.<b> Use Anorm.</b> Play Framework supports Anorm to access the database. According to the Play Framework source code <font color="#000000"><a href="https://github.com/playframework/Play20/blob/master/framework/src/anorm/src/main/scala/anorm/Anorm.scala">here</a>, Anorm builds only <a href="http://docs.oracle.com/javase/6/docs/api/java/sql/PreparedStatement.html">java.sql.PreparedStatements</a>, which prevents SQL injection attacks. Below is an example of how Anorm can be safely used in Play Framework:</font></p><p /><pre>object Person {
+
+def save(p:Person) {
+
+DB.withConnection ("default") { implicit connection =&gt;
+
+SQL("""
+
+INSERT INTO person(firstName,lastName)
+
+values ({firstName}, {lastName})
+
+"""
+
+).on(
+
+"firstName" -&gt; p.firstName,
+
+"lastName" -&gt; p.lastName
+
+).executeUpdate()
+
+}
+
+}
+
+}
+
+</pre><p /><p /><p>NOTE: While there are many <a href="http://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf">reported</a> instances of NoSQL injection when using a language like PHP, there have not been many reported instances of NoSQL injection in Play Framework. Still, for defense in depth and as a best coding practice, always use the mitigations mentioned above along with input sanitization.</p><p>7. <b>To protect against other injection-based attacks</b> like OS command injection, file traversal etc, use the following two security measures:</p><ul><li><b>Carefully escape special characters when passing user inputs to operations</b>. Use OWASP ESAPI for this purpose. Make sure that user input is passed through <font color="#000000"><a href="http://www.playframework.com/documentation/api/2.0/scala/play/api/templates/HtmlFormat$.html">HtmlFormat.escape()</a> before being used in any other function.</font></li></ul><ul><li><b>Use</b><b> positive (or <i>whitelist</i>) input validation with appropriate canonicalization. </b>Note that this helps protect against injection but is not a complete defense, as many applications require special characters in their input. <font color="#000000"><a href="https://www.owasp.org/index.php/ESAPI">OWASP's ESAPI</a> has an extensible library of <a href="http://owasp-esapi-java.googlecode.com/svn/trunk_doc/latest/org/owasp/esapi/Validator.html">white list input validation routines</a>.</font></li></ul><p /><p />]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-579436428" Content_Hash="-91371118">
+  <Metadata>
+    <Id>4b2d7387-8507-4700-8fc9-5f5e59d16718</Id>
+    <Id_History>77231e1c-bb5a-414b-a9e7-f760cf0b3384,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Configure MachineKey in ASP.NET 2.0</Title>
+    <Category>Configuration</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET version 2.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to explains the &lt;machineKey&gt; element in the Web.config file and shows how to configure the &lt;<b>machineKey</b>&gt; element to control tamper proofing and encryption of ViewState, forms authentication tickets, and role cookies. ViewState is signed and tamper proof by default. You can request encryption for pages that contain sensitive items in their ViewState by using the <b>ViewStateEncryptionMode</b> attribute. Forms authentication and role cookies are signed and encrypted by default. You do not need to modify the default settings unless your application is in a Web farm or if you need to share authentication tickets across applications. In these cases, you need to manually generate encryption and hashing keys.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>
+      <div>Objectives</div>
+      <li>
+        <div>Overview</div>
+        <li>
+          <div>What's New in 2.0</div>
+          <li>
+            <div>Machine Key Explained</div>
+            <li>
+              <div>ViewState</div>
+              <li>
+                <div>Forms Authentication Tickets</div>
+                <li>
+                  <div>Membership</div>
+                  <li>
+                    <div>Anonymous Identification</div>
+                    <li>
+                      <div>Role Cookies</div>
+                      <li>
+                        <div>Web Farm Deployment Considerations</div>
+                        <li>
+                          <div>Sharing Authentication Tickets Across Applications</div>
+                          <li>
+                            <div>Upgrading ASP.NET Versions</div>
+                            <li>
+                              <div>Additional Resources</div>
+                            </li>
+                          </li>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Learn key changes in ASP.NET version 2.0. <li>Verify ViewState is configured to be tamper proof. <li>Configure the &lt;<b>machineKey</b>&gt; to encrypt ViewState. <li>Verify forms authentication tickets are configured to be tamper proof. <li>Configure &lt;<b>machineKey</b>&gt; to encrypt forms authentication tickets. <li>Learn to configure the membership feature to use an encrypted password instead of a hashed password by using <b>machineKey</b>. <li>Learn to protect an anonymous identification cookie by using <b>machineKey</b>. <li>Learn to protect role cookies by using <b>machineKey</b>. <li>Generate random key values for use in a Web farm. </li></li></li></li></li></li></li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>The default ASP.NET settings ensure that forms authentication tickets are tamper proof and encrypted, and that ViewState is tamper proof. This ensures that any modification of the ViewState or authentication tickets either on the client's computer or over the network is detected when the server processes the data.</p>
+  <p>To provide tamper proof ViewState, a hashed message authentication code (HMAC) is generated from the ViewState content and the hash is compared on subsequent requests. The <b>validation</b> attribute of the &lt;<b>machineKey</b>&gt; indicates which hashing algorithm to use, and it defaults to SHA1, which uses the HMACSHA1 algorithm. Valid choices for hashing include SHA1 or MD5, although SHA1 is preferable because it produces a larger hash and is considered cryptographically stronger than MD5. The <b>validationKey</b> attribute of &lt;<b>machineKey</b>&gt; is used in conjunction with the ViewState content to produce the HMAC. If your application is installed in a Web farm, you need to change the <b>validationKey</b> from <b>AutoGenerate,IsolateApps</b> to a specific manually generated key value.</p>
+  <p>If you need to use round trips for potentially sensitive data, you can force encryption of ViewState for a specific page. To do this, set <b>ViewStateEncryptionMode="Always"</b> on the <b>&#64;Page</b> directive for that page. Alternatively, you can use a control to request that the page's ViewState be encrypted by calling the <b>Page.RegisterRequiresViewStateEncryption</b> method. Using this method in conjunction with the default setting of <b>ViewStateEncryptionMode="Auto"</b> ensures that ViewState is only encrypted for those pages that need it.</p>
+  <p>To encrypt ViewState in a Web farm, you need to manually set the <b>validationKey</b> value. The encryption algorithm is determined by the <b>validation</b> attribute of the &lt;<b>machineKey</b>&gt;. The <b>validation</b> attribute defaults to <b>SHA1</b>, which provides tamper proofing but not encryption. To support ViewState encryption, you should set the <b>validation</b> attribute to <b>AES</b>, the recommended symmetric encryption algorithm.</p>
+  <p>Forms authentication tickets are tamper proof and encrypted by default. The <b>decryption</b> and <b>decryptionKey</b> attributes control the encryption. The <b>validationKey</b> controls the hashing. If your application is in a Web farm, you need to manually set the <b>validationKey</b> and <b>decryptionKey</b>. Also, if you need to share forms authentication tickets across applications in separate virtual directories, you need to manually set the keys to ensure that they match in each application's Web.config file.</p>
+  <p>If you use the Role Manage feature, and choose to cache roles, a roles cookie is created. The roles cookie is also signed and encrypted by default, using the same mechanisms as forms authentication tickets.</p>
+  <h1>What's New in 2.0</h1>
+  <p>ASP.NET version 2.0 introduces the following new features: </p>
+  <ul>
+    <li>
+      <b>Decryption</b>
+      <b>attribute.</b> The <b>decryption </b>attribute of the &lt;<b>machineKey</b>&gt; element is introduced in ASP.NET version 2.0. It specifies the symmetric encryption algorithm used to encrypt and decrypt forms authentication tickets. Previously, the <b>validation</b> attribute was overloaded and used to specify the hashing algorithm used to generate HMACs to provide tamper proofing for ViewState and forms authentication tickets, and also to specify the encryption algorithm to use for ViewState and forms authentication encryption. Now, the <b>validation</b> attribute only determines the algorithm used for ViewState encryption and ViewState HMAC generation. <li><b>AES symmetric encryption.</b> ASP.NET 2.0 introduces support for AES symmetric encryption. <li><b>Role cookie protection. </b>ASP.NET now uses the &lt;<b>machineKey</b>&gt; settings to protect the role cookie, if you enable the Role Manager feature and if you elect to cache role names in a roles cookie. The role cookie is signed and protected by default. <li><b>Anonymous identification.</b> If this feature is enabled, the anonymous identification cookie can be signed and encrypted using values from the &lt;<b>machineKey</b>&gt;. If you use anonymous identification in cookieless mode, the data on the URL is also signed using &lt;<b>machineKey</b>&gt; settings, <li><b>Cookieless forms authentication.</b> The cookieless ticket is protected by using values from the &lt;<b>machineKey</b>&gt;. <li><b>Encrypted password storage. </b>The<b></b>membership system uses the &lt;<b>machineKey</b>&gt; encryption settings if you choose to store passwords in encrypted format. By default, the membership system stores password hashes. <li><b>viewStateEncryptionMode</b><b>attribute.</b> This is a new attribute on the &lt;<b>pages</b>&gt; element, and is used to control how ViewState is encrypted. To specify ViewState encryption settings for an individual page, you can use an equivalent <b>ViewStateEncryptionMode</b> attribute on the <b>&#64;Page </b>directive. </li></li></li></li></li></li></li>
+  </ul>
+  <h1>Machine Key Explained</h1>
+  <p>The default settings for the &lt;<b>pages</b>&gt; and &lt;<b>machineKey</b>&gt; elements are defined in the machine-level web.config.comments file. The relevant default settings are shown here for reference.</p>
+  <div>
+    <pre>&lt;pages enableViewStateMac="true" viewStateEncryptionMode="Auto" ... /&gt;</pre>
+    <pre>&lt;machineKey validationKey="AutoGenerate,IsolateApps"&nbsp; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; decryptionKey="AutoGenerate,IsolateApps" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validation="SHA1" decryption="Auto" /&gt;</pre>
+  </div>
+  <p>When you configure ViewState, the &lt;<b>pages</b>&gt; element is used in conjunction with the &lt;<b>machineKey</b>&gt; element.</p>
+  <p>The &lt;<b>machineKey</b>&gt; attributes are as follows: </p>
+  <ul>
+    <li>
+      <b>validationKey.</b> This specifies the key that the HMAC algorithm uses to make ViewState tamper proof. The ViewState MAC is checked at the server when either the <b>enableViewStateMAC</b> attribute of the &lt;<b>pages</b>&gt; element or the <b>EnableViewStateMac</b> attribute of the <b>&#64;Page</b> directive is set to <b>true</b>. <div><pre>&lt;pages enableViewStateMAC="true" ... /&gt; <br />or<br />&lt;<a href="mailto:&#37;&#64;Page">&#37;&#64;Page</a> EnableViewStateMac="true" ... &#37;&gt;</pre></div><p>Forms authentication also uses this key for signing the authentication ticket. Role manager and anonymous identification if enabled also uses this key for signing their cookies. If you use anonymous identification in cookieless mode, the data on the URL is also signed with this value, </p><li><b>decryptionKey.</b> This specifies the key used to encrypt and decrypt data. Forms authentication, role manager and anonymous identification features use this key to encrypt and decrypt the authentication ticket, roles cookie and anonymous identification cookie. ASP.NET uses the key to encrypt and decrypt ViewState, but only if the <b>validation </b>attribute is set to AES or 3DES. <li><b>decryption.</b> This specifies the symmetric encryption algorithm used to encrypt and decrypt forms authentication tickets. <li><b>validation.</b> This specifies the hashing algorithm used to generate HMACs to make ViewState and forms authentication tickets tamper proof. This attribute is also used to specify the encryption algorithm used for ViewState encryption. This attribute supports the following options: <ul><li><b>SHA1</b>-SHA1 is used to tamper proof ViewState and, if configured, the forms authentication ticket. When SHA1 is selected for the <b>validation</b> attribute, the algorithm used is HMACSHA1. <li><b>MD5</b>-MD5 is used to tamper proof ViewState and, if configured, the forms authentication ticket. <li><b>AES</b>-AES is used to encrypt ViewState with the key specified in the <b>decryptionKey</b> attribute. <li><b>3DES</b>-3DES is used to encrypt ViewState with the key specified in the <b>decryptionKey</b> attribute. This is the only way to encrypt ViewState in ASP.NET 1.1. Both the forms authentication ticket and the ViewState are tamper-proofed using SHA-1 and the key specified in the <b>validationKey</b> attribute. Because the <b>validation</b> attribute is overloaded in ASP.NET 1.1, ASP.NET 2.0 introduces a new <b>decryption</b> attribute. </li></li></li></li></ul></li></li></li></li>
+  </ul>
+  <p />
+  <p>In general, you should choose SHA1 over MD5 for tamper-proofing because this produces a larger hash than MD5 and is considered cryptographically stronger.</p>
+  <p>Forms authentication defaults to SHA1 for tamper proofing (if &lt;<b>forms protection="validation"</b> or "<b>All</b>"). When &lt;<b>forms protection="All"</b>&gt; or &lt;<b>forms protection = "Encryption"</b>&gt;, then forms authentication hashes the forms authentication ticket by using either MD5 or HMACSHA1 (HMACSHA1 is used even if validation is set to AES or 3DES). Forms authentication then encrypts the ticket using the algorithm specified in the <b>decryption</b> attribute. (The <b>decryption</b> attribute was introduced in ASP.NET 2.0.)</p>
+  <h1>ViewState</h1>
+  <p>You can protect ViewState in the following ways: </p>
+  <ul>
+    <li>Use an HMAC to make ViewState tamper proof. <li>Use encryption to turn ViewState into unintelligible cipher text. This ensures that any sensitive data in ViewState cannot be viewed. </li></li>
+  </ul>
+  <p>To enable hashing of ViewState, you must use one of the following configurations.</p>
+  <div>
+    <pre>&lt;pages enableViewStateMAC="true" ... /&gt; </pre>
+  </div>
+  <p>or</p>
+  <div>
+    <pre>&lt;&#37;&#64;Page EnableViewStateMac="true" ... &#37;&gt;</pre>
+  </div>
+  <p>To enable encryption of ViewState, you must use one of the following configurations.</p>
+  <div>
+    <pre>&lt;pages viewStateEncryptionMode="Auto" ... /&gt;<br />&lt;pages viewStateEncryptionMode="Always" ... /&gt;</pre>
+  </div>
+  <p>or</p>
+  <div>
+    <pre>&lt;&#37;&#64;Page ViewStateEncryptionMode="Auto" ... &#37;&gt;<br />&lt;&#37;&#64;Page ViewStateEncryptionMode="Always" ... &#37;&gt;</pre>
+  </div>
+  <p>With <b>viewStateEncryptionMode</b> set to <b>Auto</b>, the page is only encrypted if a control has specifically asked for it by calling the <b>Page.RegisterRequiresViewStateEncryption</b> method to request encryption. If it set to <b>Always</b>, this forces encryption even if a control does not request it. </p>
+  <blockquote>
+    <b>Note:</b> Do not encrypt ViewState unless it contains sensitive data. To avoid the performance overhead of encryption, consider storing sensitive data on the server and not in ViewState.</blockquote>
+  <h2>Verifying that ViewState Is Tamper Proof</h2>
+  <p>ViewState is tamper proof by default. ViewState tamper proofing is enabled by the <b>enableViewStateMac</b> attribute on the &lt;<b>pages</b>&gt; element and the <b>validationKey</b> and <b>validation </b>attributes on the &lt;<b>machineKey</b>&gt; element.</p>
+  <blockquote>
+    <b>Note:</b> You can see the default &lt;<b>machineKey</b>&gt; setting in the Machine.config.comments file.</blockquote>
+  <p>
+    <b>To verify that tamper proofing is enabled for ViewState</b>
+  </p>
+  <ol>
+    <li>Verify the <b>enableViewStateMac</b> attribute of the &lt;<b>pages</b>&gt; element is set to <b>true</b>, as shown in the following example. <div><pre>&lt;pages enableViewStateMac="true" ... /&gt;</pre></div><blockquote><b>Note:</b> You can<b></b>override the machine's<b> enableViewStateMac</b> setting at the application or page level.</blockquote><li>Verify that the <b>validation</b> attribute of the &lt;<b>machineKey</b>&gt; element is set to SHA1, as shown in the following example. <div><pre>&lt;machineKey ...  validation="SHA1" ... /&gt;</pre></div><p>The <b>validation</b> attribute specifies the hashing algorithm used to tamper proof ViewState. The default value is <b>"SHA1"</b>, and you should use this rather than MD5 because it produces a larger hash than MD5 and is cryptographically stronger. </p><li>Review the <b>validationKey</b> setting of the &lt;<b>machineKey</b>&gt; element. <div><pre>&lt;machineKey validationKey="AutoGenerate,IsolateApps" ... /&gt;</pre></div><p>In the default settings shown above, the <b>AutoGenerate</b> setting instructs ASP.NET to generate a random key. The <b>IsolateApps</b> modifier causes ASP.NET to generate a unique key for each application on your server by using the application ID of each application. </p><p>The default value is correct for a single server deployment. You do not need to change the default settings unless your application is deployed in a Web farm. In a Web farm, you must manually generate the <b>validationKey</b> value and make sure that it is the same on all servers in the farm. For more information, see the section, <a href="http://msdn2.microsoft.com/en-us/library/ms998288.aspx#paght000007_webfarmdeploymentconsiderations">Web Farm Deployment Considerations</a> in this document. </p></li></li></li>
+  </ol>
+  <h2>Configuring &lt;machineKey&gt; to Encrypt ViewState</h2>
+  <p>By default, information in ViewState is encoded, but not encrypted. A user could decode and view the ViewState data.</p>
+  <p>To encrypt ViewState, either a control on a page needs to explicitly request ViewState encryption or the <b>viewStateEncryptionMode</b> attribute of the &lt;<b>pages</b>&gt; element must be set to <b>Always</b>. To request encryption, a control must call the <b>RegisterRequiresViewStateEncryption</b> method of the <b>Page</b> class.</p>
+  <p>The <b>viewStateEncryptionMode</b> attribute can take one of three possible attributes: </p>
+  <ul>
+    <li>
+      <b>Auto.</b> This is the default setting, which means the ViewState on the page is only encrypted if a control has specifically asked for it. <blockquote><b>Note:</b> If a control on the page requests encryption, then the entire ViewState is encrypted (not just the ViewState for the control).</blockquote><li><b>Always.</b> This forces encryption even if a control does not ask for it. <li><b>Never.</b> This disables encryption even if a control does ask for it. </li></li></li>
+  </ul>
+  <p>Ideally, you should not store sensitive data in ViewState and thereby avoid the need to encrypt it. If you do need to encrypt ViewState, then you need to specify the encryption algorithm to use on the <b>validation</b> attribute.</p>
+  <p>
+    <b>To encrypt ViewState</b>
+  </p>
+  <ol>
+    <li>Check that the <b>viewStateEncryptionMode</b> attribute of the &lt;<b>pages</b>&gt; element is set to <b>Always</b>, as shown in the following example. <div><pre>&lt;pages ... viewStateEncryptionMode="Always" ... /&gt;</pre></div><p>If you do not want every page to used encrypted ViewState, check that the <b>viewStateEncryptionMode</b> attribute of the &lt;<b>pages</b>&gt; element is set to <b>Auto</b>, as shown in the following example. </p><div><pre>&lt;pages ... viewStateEncryptionMode="Auto" ... /&gt;   </pre></div><p>Then, from within your code, call the <b>RegisterRequiresViewStateEncryption</b> method as shown in the following example. </p><div><pre>Page.RegisterRequiresViewStateEncryption();</pre></div><li>Specify the encryption algorithm to use on the <b>validation </b>attribute, as shown in the following example. <div><pre>&lt;machineKey ... validation="AES" ... /&gt;</pre></div><p>The <b>validation</b> attribute is overloaded and can be used to specify either the hashing algorithm or the encryption algorithm. You can specify either <b>3DES</b> or <b>AES</b>. (ASP.NET 2.0 introduces support for <b>AES</b>.) Because <b>AES</b> offers larger key sizes (128 bits, 192 bits, or 256 bits) than <b>3DES</b> (56 bits), it is considered more secure and should be used. </p><li>Review the <b>decryptionKey</b> attribute of the &lt;<b>machineKey</b>&gt; element: <div><pre>&lt;machineKey decryptionKey="AutoGenerate,IsolateApps" ... /&gt;</pre></div><p>Unless your application is installed in a Web farm, you should leave the <b>decryptionKey</b> attribute with the default values shown in the example. In a Web farm, you must manually generate the <b>decryptionKey</b> value and ensure that the value is the same across all servers in the farm. For more information, see the section, <a href="http://msdn2.microsoft.com/en-us/library/ms998288.aspx#paght000007_webfarmdeploymentconsiderations">Web Farm Deployment Considerations</a> in this document. </p></li></li></li>
+  </ol>
+  <p>For ViewState encryption, your &lt;<b>machineKey</b>&gt; configuration should resemble the following example</p>
+  <div>
+    <pre>&lt;machineKey <br />&nbsp;&nbsp;&nbsp; validationKey="AutoGenerate,IsolateApps"&nbsp;&nbsp; <br />&nbsp;&nbsp;&nbsp; decryptionKey="AutoGenerate,IsolateApps" <br />&nbsp;&nbsp;&nbsp; validation="AES" <br />&nbsp;&nbsp;&nbsp; decryption="Auto" /&gt;</pre>
+  </div>
+  <blockquote>
+    <b>Note:</b> By default, ViewState is transmitted as a Base64 encoded string. Although at first glance it is unintelligible, Base64 encoding provides no security because it is easily decoded. If you need to ensure that ViewState contents remain confidential, you must use encryption.</blockquote>
+  <h1>Forms Authentication Tickets</h1>
+  <p>You can protect forms authentication tickets in two ways: </p>
+  <ul>
+    <li>Use an HMAC to make the ticket tamper proof. <li>Use encryption to turn the ticket contents into unintelligible cipher text. This ensures that the data stored in the ticket, such as user names, cannot be viewed on the client or between the browser and server if the ticket is sent in a cookie. </li></li>
+  </ul>
+  <p>To ensure that forms authentication tickets are encrypted and protected against tampering, set the <b>protection</b> attribute of the &lt;<b>forms</b>&gt; element to <b>All</b>, as shown in the following example.</p>
+  <div>
+    <pre>&lt;system.web&gt;<br />&nbsp; &lt;authentication mode="Forms"&gt;<br />&nbsp;&nbsp;&nbsp; &lt;forms name=".AuthCookie" loginUrl="login.aspx" protection="All"/&gt;<br />&nbsp; &lt;/authentication&gt;<br />&lt;/system.web&gt;</pre>
+  </div>
+  <h2>Verifying that Forms Authentication Tickets Are Tamper Proof</h2>
+  <p>By default, forms authentication tickets are configured for tamper proofing by using the <b>validationKey</b> and <b>validation </b>attributes of the &lt;<b>machineKey</b>&gt; element.</p>
+  <p>
+    <b>To review forms authentication ticket configuration for tamper proofing</b>
+  </p>
+  <ol>
+    <li>Check that the <b>protection</b> attribute of the &lt;<b>forms</b>&gt; element to <b>All</b>, as shown in the following example. <div><pre>&lt;forms ... protection="All" ... /&gt;</pre></div><p>You can<b></b>override the <b>protection</b> attribute setting for all Web applications on the server by using the machine-level Web.config file or, for a specific application, by using its Web.config file. </p><li>Review the <b>validation</b> attribute of the &lt;<b>machineKey</b>&gt; element, as shown in the following example. <div><pre>&lt;machineKey ... validation="SHA1" ... /&gt;</pre></div><p>The <b>validation</b> attribute specifies the hashing algorithm used by the HMAC algorithm used to tamper proof the forms authentication ticket. You should use the default SHA1 setting because this produces a larger hash than MD5 and is cryptographically stronger. </p><p>You do not need to change the default settings unless your application is deployed in a Web farm. In a Web farm, you must manually generate the <b>validationKey</b> value and make sure that the same value is used across all servers in the farm. For more information, see the section, <a href="http://msdn2.microsoft.com/en-us/library/ms998288.aspx#paght000007_webfarmdeploymentconsiderations">Web Farm Deployment Considerations</a> in this document. </p><li>Review the <b>validationKey</b> attribute of the &lt;<b>machineKey</b>&gt; element , as shown in the following example. <div><pre>&lt;machineKey validationKey="AutoGenerate,IsolateApps" ... /&gt;</pre></div><p>The example configuration shows the default settings. The <b>AutoGenerate</b> setting instructs ASP.NET to generate a random key. The <b>IsolateApps</b> modifier causes ASP.NET to generate a unique key for each application on your server by using the application ID of each application. </p></li></li></li>
+  </ol>
+  <h2>Configuring &lt;machineKey&gt; to Encrypt Forms Authentication Tickets</h2>
+  <p>To encrypt forms authentication tickets, ASP.NET 2.0 uses the <b>decryptionKey </b>and the new <b>decryption</b> attribute of the &lt;<b>machineKey</b>&gt; element. The <b>decryption</b> attribute lets you specify the encryption algorithm to use. ASP.NET 1.1 and 1.0 use 3DES encryption, which is not configurable.</p>
+  <p>
+    <b>To encrypt Form authentication tickets</b>
+  </p>
+  <ol>
+    <li>Check that the <b>protection</b> attribute of the &lt;<b>forms</b>&gt; element is set to <b>All</b>, as shown in the following example. <div><pre>&lt;forms protection="All" ... /&gt;</pre></div><li>Use the <b>decryption </b>attribute of the &lt;<b>machineKey</b>&gt; element to specify the encryption algorithm as shown in the following example. <div><div><div></div><div><a class="copyCode" href="javascript:CopyCode('ctl00_LibFrame_ctl24');"></a>&nbsp;</div></div><pre>&lt;machineKey decryption="Auto" ... /&gt;</pre></div><p>With the default <b>Auto </b>setting, if the value of the <b>decryptionKey</b> attribute is 8 bytes long (16 characters) then <b>Auto</b> defaults to DES. Otherwise, <b>Auto</b> defaults to AES. ASP.NET 2.0 supports AES, 3DES and DES algorithms. You should use AES because it offers larger key sizes (128 bits, 192 bits, 256 bits) than 3DES (56 bits). </p><li>Review the <b>decryptionKey </b>attribute of the &lt;<b>machineKey</b>&gt; element. <div><pre>&lt;machineKey decryptionKey="AutoGenerate,IsolateApps" ... /&gt;</pre></div><p>Unless your application is installed in a Web farm or you need to share authentication tickets across two or more applications, you should leave the <b>decryptionKey</b> attribute with the default values shown in the example. In a Web farm or if you need to share authentication tickets across applications, you must manually generate the <b>decryptionKey</b> value and make sure that the same value is used for all servers in the farm. For more information, see the sections, <a href="http://msdn2.microsoft.com/en-us/library/ms998288.aspx#paght000007_webfarmdeploymentconsiderations">Web Farm Deployment Considerations</a> and <a href="http://msdn2.microsoft.com/en-us/library/ms998288.aspx#paght000007_sharingauthenticationtickets">Sharing Authentication Tickets Across Applications</a> in this document. </p></li></li></li>
+  </ol>
+  <p>For forms authentication ticket encryption, the &lt;<b>machineKey</b>&gt; settings should resemble the following example.</p>
+  <div>
+    <pre>&lt;machineKey <br />&nbsp; validationKey="AutoGenerate,IsolateApps" <br />&nbsp; decryptionKey="AutoGenerate,IsolateApps" <br />&nbsp; validation="AES" <br />&nbsp; decryption="Auto" /&gt;</pre>
+  </div>
+  <h1>Membership</h1>
+  <p>If you use the membership feature, password hashes are stored in the membership database by default. The membership system also supports encrypted passwords. If you select encrypted password format, then the &lt;<b>machineKey</b>&gt; settings are used when encrypting and decrypting the data. If you want to store encrypted passwords, use the following configuration in the Web.config file. Notice that <b>passwordFormat</b> is set to <b>"Encrypted"</b>.</p>
+  <div>
+    <pre>&lt;membership defaultProvider="AspNetSqlMembershipProvider"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; userIsOnlineTimeWindow="15" hashAlgorithmType=""&gt;<br />&nbsp; &lt;providers&gt;<br />&nbsp;&nbsp;&nbsp; &lt;clear /&gt;<br />&nbsp;&nbsp;&nbsp; &lt;add connectionStringName="LocalSqlServer" enablePasswordRetrieval="false" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enablePasswordReset="true" requiresUniqueEmail="false"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; passwordFormat="Encrypted" .../&gt;<br />&nbsp; &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  </div>
+  <blockquote>
+    <b>Note:</b> The default setting for the <b>passwordFormat</b> attribute is <b>"Hashed"</b>.</blockquote>
+  <h1>Anonymous Identification</h1>
+  <p>ASP.NET 2.0 supports anonymous identification, and you can encrypt the anonymous identification cookie. Encryption of the cookie uses the &lt;<b>machineKey</b>&gt; configuration. To enable anonymous identification, set <b>enabled="true"</b> on the &lt;<b>anonymousIdentification</b>&gt;<b></b>element in your Web.config file. To enable the cookies to be encrypted, set <b>cookieProtection="Encrypted",</b> as shown here.</p>
+  <div>
+    <pre>&lt;anonymousIdentification enabled="true" cookieName=".ASPXANONYMOUS"<br />cookieTimeout="100000" cookiePath="/" cookieRequireSSL="false"<br />cookieSlidingExpiration="true" cookieProtection="Encrypted"<br />cookieless="UseCookies" domain="" /&gt;</pre>
+  </div>
+  <p>The <b>cookieProtection</b> attribute can take any of the following values: </p>
+  <ul>
+    <li>
+      <b>"All"</b> (to perform both validation and encryption) <li>"<b>Encryption</b>" <li>"<b>Validation"</b> (the default) <li>"<b>None</b>" </li></li></li></li>
+  </ul>
+  <h1>Role Cookies</h1>
+  <p>ASP.NET version 2.0 also uses the &lt;<b>machineKey</b>&gt; settings to protect role cookies. The Role Manager can use role cookies to cache role names for a particular user. If you enable the Role Manager feature and elect to cache role names in the roles cookie, the default configuration in the Machine.config.comments file ensures that the roles cookie is tamper proof and encrypted. The <b>cookieProtection</b> attribute on the &lt;<b>roleManager</b>&gt; element is set to <b>All</b>.</p>
+  <p>If you enable the Role Manager and cache role names, you can ensure that the cookie is protected by setting <b>cookieProtection</b>="<b>All"</b> as shown in the following code example.</p>
+  <div>
+    <pre>&lt;roleManager enabled="true" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cacheRolesInCookie="true"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cookieProtection="All" ... /&gt;</pre>
+  </div>
+  <h1>Web Farm Deployment Considerations</h1>
+  <p>If you deploy your application in a Web farm, you must ensure that the configuration files on each server share the same value for <b>validationKey</b> and <b>decryptionKey</b>, which are used for hashing and decryption respectively. This is required because you cannot guarantee which server will handle successive requests.</p>
+  <p>With manually generated key values, the &lt;<b>machineKey</b>&gt; settings should be similar to the following example.</p>
+  <div>
+    <pre>&lt;machineKey&nbsp; <br />validationKey="21F090935F6E49C2C797F69BBAAD8402ABD2EE0B667A8B44EA7DD4374267A75D7<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AD972A119482D15A4127461DB1DC347C1A63AE5F1CCFAACFF1B72A7F0A281B"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />decryptionKey="ABAA84D7EC4BB56D75D217CECFFB9628809BDB8BF91CFCD64568A145BE59719F"<br />validation="SHA1"<br />decryption="AES"<br />/&gt;</pre>
+  </div>
+  <p>If you want to isolate your application from other applications on the same server, place the &lt;<b>machineKey</b>&gt; in the Web.config file for each application on each server in the farm. Ensure that you use separate key values for each application, but duplicate each application's keys across all servers in the farm.</p>
+  <h2>Generate Cryptographically Random Keys</h2>
+  <p>To generate cryptographically random keys: </p>
+  <ul>
+    <li>Use the <b>RNGCryptoServiceProvider</b> class to generate a cryptographically strong random number. <li>Choose an appropriate key size. The recommended key lengths are as follows: <ul><li>For SHA1, set the <b>validationKey</b> to 64 bytes (128 hexadecimal characters). <li>For AES, set the <b>decryptionKey</b> to 32 bytes (64 hexadecimal characters). <li>For 3DES, set the <b>decryptionKey</b> to 24 bytes (48 hexadecimal characters). </li></li></li></ul></li></li>
+  </ul>
+  <p>The following code shows how to generate random key values. Compile the code to create a console application, and then pass the required key size as a command line argument expressed as the desired number of hexadecimal characters. Each byte is represented by two hexadecimal characters; therefore, to request a 32-byte key, pass 64 as a command line argument. If you do not specify an argument, the code returns a 128 hexadecimal character (64-byte) key.</p>
+  <h3>C# Example</h3>
+  <div>
+    <pre>using System.Text;<br />using System.Security;<br />using System.Security.Cryptography;</pre>
+    <pre>class App &#123;<br />&nbsp; static void Main(string&#91;&#93; argv) &#123;<br />&nbsp;&nbsp;&nbsp; int len = 128;<br />&nbsp;&nbsp;&nbsp; if (argv.Length &gt; 0)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; len = int.Parse(argv&#91;0&#93;);<br />&nbsp;&nbsp;&nbsp; byte&#91;&#93; buff = new byte&#91;len/2&#93;;<br />&nbsp;&nbsp;&nbsp; RNGCryptoServiceProvider rng = new <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RNGCryptoServiceProvider();<br />&nbsp;&nbsp;&nbsp; rng.GetBytes(buff);<br />&nbsp;&nbsp;&nbsp; StringBuilder sb = new StringBuilder(len);<br />&nbsp;&nbsp;&nbsp; for (int i=0; i&lt;buff.Length; i&#43;&#43;)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sb.Append(string.Format("&#123;0:X2&#125;", buff&#91;i&#93;));<br />&nbsp;&nbsp;&nbsp; Console.WriteLine(sb);<br />&nbsp; &#125;<br />&#125;</pre>
+  </div>
+  <h3>Visual Basic Example</h3>
+  <div>
+    <pre>Imports System<br />Imports System.Text<br />Imports System.Security<br />Imports System.Security.Cryptography</pre>
+  </div>
+  <pre>Module App<br />&nbsp;&nbsp;&nbsp; Sub Main(ByVal argv() As String)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim len As Integer = 128<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If argv.Length &gt; 0 Then<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; len = Integer.Parse(argv(0))<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End If<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim buff(len / 2) As Byte<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim rng As New RNGCryptoServiceProvider()<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rng.GetBytes(buff)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim sb As New StringBuilder(len)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim i As Integer<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For i = 0 To buff.Length - 1<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sb.Append(String.Format("&#123;0:X2&#125;", buff(i)))<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Next i<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Console.WriteLine(sb)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Console.ReadLine()</pre>
+  <pre>&nbsp;&nbsp;&nbsp; End Sub 'Main<br />End Module</pre>
+  <p>Run the application two times, and then copy and paste the resulting keys into the &lt;<b>machineKey</b>&gt; element&#8212;one time for <b>validationKey</b> and the other time for <b>decryptionKey.</b></p>
+  <h1>Sharing Authentication Tickets Across Applications</h1>
+  <p>If you need a single logon to work across multiple applications located in separate virtual directories, you need to share a common authentication ticket. To configure a common authentication ticket, you must manually generate <b>validationKey</b> and <b>decryptionKey</b> values and ensure that each application shares these values.</p>
+  <p>If you want to share tickets across all applications on your server you can set these manual values on the &lt;<b>machineKey</b>&gt; element in the machine level Web.config file. To share tickets across specific applications, you can use a &lt;<b>machineKey</b>&gt; element with common <b>validationKey</b> and <b>decryptionKey</b> values in the relevant application's Web.config files.</p>
+  <p>For information about how to generate manual key values, see the section, "Web Farm Deployment Considerations," in this document.</p>
+  <h1>Upgrading ASP.NET Versions</h1>
+  <p>There is another important reason to explicitly set the &lt;<b>machineKey</b>&gt;. Each time you upgrade to a new version of ASP.NET, the key material used to automatically generate keys changes. Therefore, even if your application runs on a single Web server, if the keys need to remain stable over time, you should explicitly set the values for both <b>validation</b> and <b>decryption</b>.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about protecting forms authentication, see <a href="http://msdn2.microsoft.com/en-us/library/ms998310.aspx">How to: Protect Forms Authentication in ASP.NET 2.0</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

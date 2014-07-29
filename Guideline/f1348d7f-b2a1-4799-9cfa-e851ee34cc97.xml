@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-870901274" Content_Hash="-392786773">
+  <Metadata>
+    <Id>f1348d7f-b2a1-4799-9cfa-e851ee34cc97</Id>
+    <Id_History>fa275aac-75dc-4db1-8c20-9348f1b59187,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use Private Default Constructors to Prevent Unwanted Object Instantiation</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Private Default Constructors to Prevent Unwanted Object Instantiation</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Mark the class's constructor private if it is not designed to be instantiated.</p>
+  <h1>Why</h1>
+  <p>Unless the class is static, classes without constructors are given a public default constructor by the compiler in order to enable class instantiation. Hence you should add default private constructor if its not be instantiated.</p>
+  <h1>When</h1>
+  <p>An example of a class that is not designed for instantiation is a one that contains only static methods and properties.</p>
+  <h1>How</h1>
+  <p>The declaration of the empty constructor prevents the automatic generation of a default constructor. Note that if you don't use an access modifier with the constructor it will still be private by default. However, the private modifier is usually used explicitly to make it clear that the class cannot be instantiated.</p>
+  <p>The following is an example of a class using a private constructor.</p>
+  <pre>public class Counter<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private Counter() &amp;#123; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public static int currentCount;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public static int IncrementCount()<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return &amp;#43;&amp;#43;currentCount;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

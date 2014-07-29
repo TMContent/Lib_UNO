@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2076215441" Content_Hash="-806163302">
+  <Metadata>
+    <Id>ee2b241f-7591-42f6-bbd3-85247e6bf499</Id>
+    <Id_History>f0b329cf-1c23-4777-bab5-07c49848c074,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Deserialization of Untrusted Data Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Deserialization of Untrusted Data Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>Applications written in any object oriented language such as C++, Java, Python, Perl, or C#.</p>
+  <h1>Description</h1>
+  <p>Serialization is the process of saving the state of an object for later reconstruction. This enables applications to take objects from memory and send them to a disk, database, or across a network. Deserialization is the reverse process. Loading untrusted data into memory for direct use puts the application at risk of being placed in an insecure state or crashing. Many languages have built in serialization routines that do the heavy lifting for the programmer. They do not, however, protect the data integrity or prevent attackers from viewing sensitive information. Therefore, no serialized object should be considered safe for deserialization until rigorous validation and cryptographic countermeasures have been taken to prevent tampering.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Availability: Untrusted data may not be well formatted and could lead to erroneous or non-terminating deserialization or crash. </li>
+    <li>Information Disclosure: Serialization may expose sensitive information because it does not protect private fields by default. </li>
+    <li>Authorization: Trusting deserialized data without proper validation may lead to altered program logic or elevation of user privileges.</li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Failure to validate untrusted data during deserialization. </li>
+    <li>Failure to cryptographically sign or encode data before serialization.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <strong>Sign objects before serialization</strong>. Use a cryptographic library to sign data with a private key prior to serialization. This way the application can know when data has been changed and is therefore untrustworthy. This also provides authentication of the sender. </li>
+    <li>
+      <strong>Encrypt objects before serialization.</strong> Along with all the benefits of signing objects, correctly encrypting the entire object with an appropriate asymmetric cipher prevents untrusted users from examining the contents of the object as well. </li>
+    <li>
+      <strong>Populate new objects</strong>. Instead of using the generic object serialization routines, write your own custom routines for each class. When deserializing, populate a new object with the data the same way it was created by the application the first time. This ensures a known good state by using constructors and other initialization routines. It also makes it easier to validate each variable separately and is much safer than accepting an object as a whole. </li>
+    <li>
+      <strong>Explicitly prevent serialization where appropriate</strong>. When private data should be protected by not serializing at all, explicitly overload the default serialization functionality to prevent it in the class any any class that inherits from it. </li>
+    <li>
+      <strong>Make fields transient to prevent them for being serialized</strong>. Sometimes you may only have specific fields that should not be serialized. In this case prevent it by using the language specific keyword to make them transient.</li>
+  </ul>
+  <h1>Example</h1>
+  <p>The following Java code serializes a simple class to a file. It then deserializes from the file without performing any validation. This presents a serious risk because anything in the file, including the procedures, could have changed in the interim.</p>
+  <pre>import java.io.Serializable;<br />import java.util.Date;<br />public class Record implements Serializable{<br />   private String name;<br />   private String record;<br />   private Date date;<br />   public Record(String n, String r){<br />      name = n;<br />      record = r;<br />      date = Date();<br />   }<br />}<br /><br />// setup<br />String filename = "record.obj";<br />FileOutputStream fos = null;<br />ObjectOutputStream out = null;<br />ObjectInputStream oin = null;<br />FileInputStream fis = null;<br />Record record = new Record("Alice", "Is the data that lives here malicious?");<br /><br />// serialize<br />try{<br />   fos = new FileOutputStream(filename);<br />   oos = new ObjectOutputStream(fos);<br />   oos.writeObject(record);<br />   oos.close();<br />}<br />catch(IOException ex){<br />   ex.printStackTrace();<br />}<br /><br />// deserialize<br />record = null;<br />try{<br />   fis = new FileInputStream(filename);<br />   oin = new ObjectInputStream(fis);<br />   record = (Record)oin.readObject();<br />   oin.close();<br />}<br />catch(IOException ex) {<br />   ex.printStackTrace();<br />}<br />catch(ClassNotFoundException ex){<br />   ex.printStackTrace();<br />}</pre>
+  <p>The best solution is to write your own custom serialization method that writes the two string and date to a file as plain text and then encrypt the entire thing. However, an acceptable solution is presented below. Use a cryptographic library to sign the object before you serialize so you can verify the sender and that it has not been modified.</p>
+  <pre>// setup<br />SignedObject signedobject = null;<br />KeyPairGenerator kpg = KeyPairGenerator("SHA-1/DSA");<br />KeyPair kp = kpg.generateKeyPair();<br />PrivateKey privatekey = kp.getPrivate();<br />PublicKey publickey = kp.getPublic();<br />Signature signature = Signature.getInstance("SHA-1/DSA");<br /><br />// sign <br />objectsignedobject = new SignedObject(record, privatekey, signature);<br /><br />// serialize<br />try{<br />   fos = new FileOutputStream(filename);<br />   oos = new ObjectOutputStream(fos);<br />   oos.writeObject(signedobject);<br />   oos.close();<br />}<br />catch(IOException ex){<br />   ex.printStackTrace();<br />}<br /><br />// deserialize<br />record = null;<br />signedobject = null;<br />try{<br />   fis = new FileInputStream(filename);<br />   oin = new ObjectInputStream(fis);<br />   signedobject = (SignedObject)oin.readObject();<br />   oin.close();<br />   boolean ok = signedobject.verify(publickey, signature);<br />   if (ok){record = (Record)signedobject.getObject();}<br />   else{record = null;}<br />}<br />catch(IOException ex) {<br />   ex.printStackTrace();<br />}<br />catch(ClassNotFoundException ex){<br />   ex.printStackTrace();<br />}</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on serialization in general, see <a href="http://en.wikipedia.org/wiki/Serialization">Serialization on Wikipedia.</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/2ea301c7-883f-4666-87fa-45f796f71ba4">Attack: Command Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/adf5df06-2b67-4e2a-ace2-6d7060e0bd95">Attack: Server-Side Code Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/135ade44-2524-4b74-86e4-9ed1b122f1a3">Attack: Trust Relationship Attack</a>
+    </li>
+    <li>
+      <a href="/article/9f8d1872-4048-4df0-899c-38e0c7e81d79">Attack: Client-side Validation Attack</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

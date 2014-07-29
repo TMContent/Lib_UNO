@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2086063439" Content_Hash="-1440604740">
+  <Metadata>
+    <Id>176cc252-9267-435d-8772-9b84552bb066</Id>
+    <Id_History>c0098a4a-a5e9-4e99-a354-a9af9c0f2ba2,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Application Does Not Rely Only on Request Validation</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Application Does Not Rely Only on Request Validation</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p />Check to ensure that your application does not rely solely upon ASP.NET request validation to protect against malicious input.<span><p /></span><h1>Why</h1><p />Request validation will catch some attacks, however, it provides only basic input validation.&amp;nbsp; Do not rely on it. Use it as an extra precautionary measure in addition to your own input validation. Only you can define what represents good input for your application. <span><p /></span><h1>How to Check</h1><p>To check for this problem, you must determine if your application is relying solely upon request validation to provide input and data validation.&amp;nbsp; Use the following steps:&amp;nbsp;</p><h2>1. Find all sources of input in your application</h2><p>During design time identify all of the potential sources of input to your application. Scour the source code to discover sources of input that may have been missed in the design.&amp;nbsp; Compile a list that you can use in the following steps.</p><h2>2. Identify validation routines</h2><p>Each input source should have a data validation routine associated with it.&amp;nbsp; Ideally the validation will occur as soon after the input reaches your application as possible.&amp;nbsp; Shared validation routines are better than creating many spread throughout your code base, check for consolidation of routines to aid testing and reduce the chance of one-off bugs.&amp;nbsp; If an input source does not have a validation routine associated with it, flag it for fixing.</p><h2>3. Ensure quality of validation routines</h2><p>Validation routines&amp;nbsp;should check for length, range, format, and type. Validation should check first&amp;nbsp;for known valid and safe data and then for malicious, dangerous data.&amp;nbsp;Do not rely on filtering out all malicious data, it is too easy to miss something. Do not rely on client-side validation alone as it can be easily bypassed.</p><span></span><h1>How to Fix</h1><p>Check for known good data and constrain input by validating it for type, length, format, and range. <br /></p><p /><strong>Note</strong>: Validating input does not remove the need to format output, parametrize queries, or otherwisehandle user input carefully.<span><p /></span><h1>Problem Example</h1><p>An ASP.NET application uses forms authentication, however it relies upon request validation to validate the form of the username and password entered by the user.&amp;nbsp; The application does not contain any validation routines to check input for length, range, format and type.</p><p /><span><p /></span><h1>Solution Example</h1><p>An ASP.NET application uses forms authentication and has a variety of other input fields for user interaction.&amp;nbsp; Request validation has been left on as a precautionary measure, however, it is not the sole defense mechanism against malicious input.&amp;nbsp; The application authors have included validation routines through which all untrusted input and data is passed before it is used by the application.</p><span></span><h1>Additional Resources</h1><ul><li><div><a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGHT000003.asp">How To: Protect From Injection Attacks in ASP.NET</a></div></li><li><div><a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGHT000001.asp">How To: Use Regular Expressions to Constrain Input in ASP.NET</a></div></li><li><div><a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGHT000004.asp">How To: Prevent Cross-Site Scripting in ASP.NET</a></div></li><li><div><a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGHT000002.asp">How To: Protect From SQL Injection in ASP.NET</a></div></li></ul><hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

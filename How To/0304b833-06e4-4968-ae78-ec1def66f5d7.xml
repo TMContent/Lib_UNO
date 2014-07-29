@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1940491257" Content_Hash="747605693">
+  <Metadata>
+    <Id>0304b833-06e4-4968-ae78-ec1def66f5d7</Id>
+    <Id_History>7d9a6074-71cd-43d4-87e9-964c67921deb,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Test for Client-side Validation Bypass Bugs in ASP.NET</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Client-side Validation Bypass Bugs in ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<p>
+    <p>
+      <b>
+        <span>
+        </span>
+      </b>
+    </p>
+    <h1>
+      <p>
+        <b>
+          <span>
+          </span>
+        </b>
+      </p>
+      <span>Summary</span>
+    </h1>
+    <p>Web applications must validate client input to check for injection bugs such as SQL injection and cross-site scripting.<span>&amp;nbsp; </span>Many web applications rely on client-side scripts that are sent to the client along with web pages. The application uses these scripts to check for proper format of data entered into web forms at the client, before the page is submitted to the server, thus avoiding a round trip for simple format checks such as email addresses, phone numbers, and ZIP codes.<span>&amp;nbsp; </span><span>&amp;nbsp;</span>During a client-side script validation bypass attack, the attacker modifies or annuls a client-side script that checks against malicious input in order to successfully submit the input and execute an attack on the application.</p>
+    <p>It is recommended that you follow these steps to test for client-side validation bypass bugs in ASP.NET:</p>
+    <ul>
+      <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Start testing and exploring<li>Step 4: Execute additional testing</li></li></li></li>
+    </ul>
+    <p>&amp;nbsp;</p>
+    <h1>
+      <span>Step 1: Understand attack scenarios</span>
+    </h1>
+    <p>First, it is necessary to understand how attackers exploit client-side validation bypass bugs.<span>&amp;nbsp; </span>Two common ways of bypassing client-side scripts are:</p>
+    <ul>
+      <li>Disabling a client-side script prior to submitting a request<li>Modifying validated data after submitting a request by using an HTTP proxy</li></li>
+    </ul>
+    <p>
+      <b>
+        <i>
+          <span>
+          </span>
+        </i>
+      </b>
+    </p>
+    <h2>
+      <span>
+        <em>Disabling Client-side Script Prior to Submitting a Request</em>
+      </span>
+    </h2>
+    <p>In this scenario, the attacker disable the client-side script by setting his browser options to disable JavaScript before making the actual request to the application server. <span>&amp;nbsp;</span>By doing this, the attacker can submit any sequence of characters to the application.</p>
+    <p>In detail:</p>
+    <ol>
+      <li>The attacker requests a web page containing input fields, such as a web form. The application sends a web page with a client-side input validation script.<li>The attacker receives the web page and annuls the client-side validation by disabling JavaScript in the browser.<li>The attacker enters malicious data in the input fields and submits the web form.</li></li></li>
+    </ol>
+    <p>Note, however, that many applications, including AJAX-based applications, rely on JavaScript capabilities, so the attacker might be unable to submit the form with JavaScript disabled. If this is the case, the attacker needs to execute the following attack.</p>
+    <h2>
+      <em>Modifying Validated Data after Submitting a Request by Using an HTTP Proxy</em>
+    </h2>
+    <p>In this scenario, the attacker doesn&amp;#8217;t modify or disable the client-side script but proxies the browser through an HTTP packet-intercepting proxy such as Burp proxy or WebScarab. Then, the attacker enters well-formed input data into the target input fields and submits the request. The attacker then uses the proxy to intercept the request and change the well-formed input into a malicious string.</p>
+    <p>In detail:</p>
+    <ol>
+      <li>The attacker requests a web page containing input fields, such as a web form. The application sends the web page with a client-side input validation script.<li>The attacker proxies his browser through HTTP proxy and enables HTTP packet interception.<li>The attacker enters well-formed (allowed) data in the input fields and then submits the web form. Since the input is valid, the web page makes a request to the application, which is intercepted by the HTTP proxy.<li>In the HTTP proxy, the attacker replaces the well-formed data with malicious data and then forwards the packet to the application.</li></li></li></li>
+    </ol>
+    <p>&amp;nbsp;</p>
+    <h1>
+      <span>Step 2: Analyze Causes and Countermeasures</span>
+    </h1>
+    <p>The second step in testing for client-side validation bypass bugs is to analyze what causes them and how to avoid them.</p>
+    <p>This vulnerability exists because applications rely on client-side checks only for security-specific checks. <span>&amp;nbsp;</span>ASP.NET applications might use client-side JavaScript code to reduce the number of round-trips between the client and the server.<span>&amp;nbsp; </span>For instance, the following page checks if an email address is valid before submitting a web form. When a client clicks on the submit button <i>Button1</i>, the following ASP page invokes <i>validateForm()</i>,<i></i>which checks for a valid email-address before submitting the form:</p>
+    <p>
+      <i>Necessary Code for C# page</i>
+    </p>
+    <pre>
+      <span>protected void Page_Load(object sender, EventArgs e)<br />&amp;#123;<br />&amp;nbsp; Button1.Attributes.Add("onClick",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; "return validateForm(document.forms&amp;#91;0&amp;#93;&amp;#91;'txbUserName'&amp;#93;.value);");<br />. . . etc . . .<br />&amp;nbsp;</span>
+    </pre>
+    <p>
+      <i>Code for ASPX page</i>
+      <span>&amp;nbsp;</span>
+    </p>
+    <pre>
+      <span>&lt;&amp;#37;&amp;#64; Page Language="C#" AutoEventWireup="true" CodeFile="login.aspx.cs" Inherits="login" &amp;#37;&gt;<br />&amp;nbsp;<br />&lt;&amp;#33;DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />&amp;nbsp;<br />&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;<br />&lt;head runat="server"&gt;<br />&amp;nbsp; &lt;title&gt;Untitled Page&lt;/title&gt;<br />&amp;nbsp;<br />&lt;script&gt;<br />function validateForm(emailStr)<br />&amp;#123;<br />&amp;#9;// checks if the e-mail address is valid<br />&amp;nbsp; &amp;#9;var emailPat = "&amp;#94;&amp;#91;A-Za-z0-9._&amp;#37;&amp;#43;-&amp;#93;&amp;#43;&amp;#64;&amp;#91;A-Za-z0-9.-&amp;#93;&amp;#43;\\.&amp;#91;A-Za-z&amp;#93;&amp;#123;2,4&amp;#125;&amp;#36;";<br />&amp;#9;var matchArray = emailStr.match(emailPat);<br />&amp;nbsp; &amp;#9;if (matchArray == null) &amp;#123;<br />&amp;#9;&amp;#9;alert("Incorrect email address format");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#9;&amp;#9;return false;<br />&amp;nbsp; &amp;#9;&amp;#125;<br />&amp;nbsp; &amp;#9;document.forms&amp;#91;0&amp;#93;.submit();<br />&amp;#125;<br />&lt;/script&gt;<br />&lt;/head&gt;<br />&amp;nbsp;<br />&lt;body style="font-weight: 700"&gt;<br />&amp;nbsp; &lt;form id="form1" runat="server"&gt;<br />&amp;nbsp; &lt;div&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Username:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:TextBox ID="txbUserName" runat="server"&gt;&lt;/asp:TextBox&gt;&lt;br/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Password:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:TextBox ID="txbPassword" TextMode="Password" runat="server"&gt;&lt;/asp:TextBox&gt;&lt;br/&gt;<br />&amp;nbsp; &lt;/div&gt;<br />&lt;asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Login" Width="195px" /&gt;<br />&amp;nbsp; &lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</span>
+    </pre>
+    <p>
+      <span>
+      </span>
+    </p>
+    <p>Note how the C# code in <i>Page_Load </i>sets up the client-side validation. When the client submits the form, the JavaScript function <i>validateForm()</i> executes, alerting the client if the email address is in incorrect format. By doing this, the developer avoids a round-trip to the server to check for valid email address formats.</p>
+    <p>A problem arises when developers rely on this kind of check for protecting against application security attacks such as SQL injection, cross-site scripting, command injection, and similar attacks that involve attackers submitting ill-intended input to the application.<span>&amp;nbsp; </span>Attackers can trivially bypass client-side checks such as the one shown above in order to attack the application.</p>
+    <p>To protect against client-side bypass bugs, ASP.NET applications must perform proper validation at the server-side:</p>
+    <pre>
+      <span>private bool isValidEmail(string emailStr)<br />&amp;#123;<br />&amp;#9;Regex validEmail = new Regex("&amp;#94;&amp;#91;A-Za-z0-9._&amp;#37;&amp;#43;-&amp;#93;&amp;#43;&amp;#64;&amp;#91;A-Za-z0-9.-&amp;#93;&amp;#43;\\.&amp;#91;A-Za-z&amp;#93;&amp;#123;2,4&amp;#125;&amp;#36;");<br />&amp;nbsp; &amp;#9;if (&amp;#33;validEmail.IsMatch(emailStr))<br />&amp;nbsp; &amp;#9;&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#9;&amp;#9;return false;<br />&amp;nbsp; &amp;#9;&amp;#125;<br />&amp;#9;&amp;nbsp; return true;<br />&amp;#125;<br />&amp;nbsp;<br />protected void Button1_Click(object sender, EventArgs e)<br />&amp;#123;<br />&amp;nbsp;<br />&amp;#9;if (&amp;#33;isValidEmail(txbUserName.Text))<br />&amp;nbsp; &amp;#9;&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#9;&amp;#9;Response.Write("Incorrect email address format");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#9;&amp;#9;return;<br />&amp;nbsp; &amp;#9;&amp;#125;<br />&amp;nbsp; <br />&amp;#9;// continue with authentication process...<br />&amp;#125;</span>
+      <span>
+        <span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>
+      </span>
+    </pre>
+    <p>Note that the code above invokes the validating email function inside <i>Button1_Click</i>,<i></i>which runs at the server when the client clicks the form button. The request starts by checking if the email is in the correct format and stops the authentication process if it is not.</p>
+    <p>To fully protect against client-side bypass bugs, ASP.NET developers must leverage validation routines built into ASP.NET controls, since these routines run both at the client-side and server-side to protect against bypass attacks. According to MSDN:</p>
+    <p>&amp;#8220;Validation is performed on the server even if it was already performed on the client. This enables you to determine validation status in server code and provides security against users bypassing client-side validation.&amp;#8221;</p>
+    <p>&amp;nbsp;</p>
+    <h1>
+      <span>Step 3: Start Testing and Exploring</span>
+    </h1>
+    <p>The next step in discovering client-side validation bypass bugs is to execute basic test cases from an attacker&amp;#8217;s perspective in order to discover them in your application.</p>
+    <h2>
+      <em>Test by Disabling JavaScript in Internet Browser</em>
+    </h2>
+    <p>Follow these steps to test for client-side validation bypass by disabling JavaScript:</p>
+    <ol>
+      <li>Open a browser and navigate to a web page containing a client-side validation script.<li>Open browser Options and navigate to security options.<li>Disable JavaScript and then click OK.<li>Submit ill-intended data in the web form. </li></li></li></li>
+    </ol>
+    <p>Expected result: The application performs proper server-side validation and rejects the ill-intended data.</p>
+    <h2>
+      <em>Test by Intercepting HTTP Request using a proxy</em>
+    </h2>
+    <p>Follow these steps to bypass client-side validation by modifying web page:</p>
+    <ol>
+      <li>Open a browser and navigate to a web page containing a client-side validation script.<li>Download and execute Burp suite (<a href="http://portswigger.net/suite/">http://portswigger.net/suite/</a>).<li>In the Proxy-&gt;Intercept tab, set proxy to &amp;#8220;intercept is on&amp;#8221;.<li>In the browser, set connection options to use Burp proxy.<li>Fill in the web page with allowed values, such as a valid email address.<li>Submit the web page.<li>In Burp proxy, modify the intercepted request by changing the allowed values to malformed ones (see figures 1 and 2).Forward the request.</li></li></li></li></li></li></li>
+    </ol>
+    <p>Expected result: The application performs proper server-side validation and rejects the ill-intended data.</p>
+    <p>&lt;&lt;insert Figure 1 here&gt;&gt;</p>
+    <p>
+      <span>
+        <strong>Figure 1 -Burp proxy showing original request (with valid email value)</strong>
+      </span>
+    </p>
+    <p>&lt;&lt;insert Figure&amp;nbsp;2 here&gt;&gt;</p>
+    <p>
+      <span>
+        <strong>Figure 2 -Burp proxy after modifying request (with malformed email value)</strong>
+      </span>
+    </p>
+    <p>
+      <span>
+        <strong>
+        </strong>
+      </span>&amp;nbsp;</p>
+    <span>
+      <h1>
+        <span>Step 4: Execute Additional Testing</span>
+      </h1>
+      <p>The final step in testing for client-side validation bugs is to understand additional scenarios where testing is necessary.</p>
+      <h2>
+        <em>AJAX Applications are at High Risk</em>
+      </h2>
+      <p>AJAX (Asynchronous JavaScript and XML) applications rely heavily on client-side scripts. <span>&amp;nbsp;</span>Understand that it is impossible to disable JavaScript when testing for this bug in AJAX applications, as this will stop the browser from making requests; therefore, the use of a proxy is a must here. </p>
+      <h2>
+        <em>Consider Additional Frameworks</em>
+      </h2>
+      <p>Web developers might integrate ASP.NET applications with other Internet frameworks such as Flash/Flex. <span>&amp;nbsp;</span>This kind of framework might provide its own client-side forms with data validation options. Make sure to test Flash parameters for this vulnerability, as developers might rely on web form validators such as Flex to validate their input at the client-side only and fail to do so at the server-side.</p>
+      <p>&amp;nbsp;</p>
+      <h1>
+        <span>Conclusions</span>
+      </h1>
+      <p>Client-side validation bypass bugs allow attackers to submit malformed data that is not expected by the application in order to execute input-related attacks such as XSS and SQL injection. <span>&amp;nbsp;</span>Applications are vulnerable when they rely on client-side scripts only to perform security checks instead of implementing these checks on the server. Testing can be done by disabling JavaScript or using an HTTP proxy, depending on the nature of the application under test (traditional, AJAX, Flash, etc).<span>&amp;nbsp; </span></p>
+      <p />
+    </span>&amp;nbsp;</p>
+  <p>
+    <span>
+      <strong>
+      </strong>
+    </span>&amp;nbsp;</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

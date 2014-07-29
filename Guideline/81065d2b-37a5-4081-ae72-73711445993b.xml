@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="738690796" Content_Hash="285362272">
+  <Metadata>
+    <Id>81065d2b-37a5-4081-ae72-73711445993b</Id>
+    <Id_History>74be8616-ad22-4d1d-a7fc-8ff3d145fc61,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Do Not Disclose Exception Details to the Client</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Disclose Exception Details to the Client</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Do not allow internal application details to be sent to the client.</p>
+  <h1>Why</h1>
+  <p>Exceptions contain sensitive information about the application (e.g. call stack, fragments of code, etc.). Disclosing such information to an attacker could aid them when attacking the system.</p>
+  <h1>When</h1>
+  <p>Though it may be useful during development, avoid disclosing data contained inside exceptions to the client after your application has been deployed.</p>
+  <h1>How</h1>
+  <p>Exception handling is a mechanism used by the application to recover after unpredicted errors occur. To fully aid developers, exceptions contain important information such as call stacks and lines of code. However, disclosing such information to the client should be avoided.</p>
+  <p>Data within the exceptions should be passed to you using your application's logging mechanism (see the <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Log Important Security Operations</a> guideline for more details). The user on the client side should only be notified that an error has occurred and should not be given internal application details. The exception can be hidden from the user by dynamically generating an error message.</p>
+  <p>
+    <strong>Dynamically Generated Error Messages</strong>
+  </p>
+  <p>Certain error messages are dynamically generated when an exception is caught. Their use is triggered by unexpected errors such as failure to connect to a database server. Since dynamically generated error messages may contain user-supplied data, it is recommended to encode the user's input prior to displaying it to the client. See the <a href="/article/d6ae90bf-1b44-4a89-b22e-55ea97e52ba5">Encode All Output Data</a> guideline for more details.</p>
+  <pre>&lt;%@ Application Language="C#" %&gt;<br /> &lt;%@ Import Namespace="System.Diagnostics" %&gt;<br />  &lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> {<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />    // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " + ex.Message +<br />       "\nSOURCE: " + ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here... }<br /> &lt;/script&gt;</pre>
+  <p>
+    <strong>Error Pages</strong>
+  </p>
+  <p>Error pages provide an effective way of telling the user that something went wrong. Since error messages are pre-designed and reveal little detailed information, error pages are used when your application needs a global exception handler or it is expected that failures may happen. Use the <strong>customErrors</strong> element in your application's <strong>web.config</strong> to configure custom HTTP error pages. Set the <strong>mode</strong> attribute to On or RemoteOnly. Example:</p>
+  <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;<br />    &lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;<br />    &lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;<br />    &lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt; </pre>
+  <p>Additionally, it is a good practice to use a global exception handler to prevent unhandled exceptions from surfacing to the client. Consult the <a href="/article/33a894ce-2061-4741-be92-1d063c9cf057">Use a Global Exception Handler for Unhandled Exceptions</a> guideline for more details.</p>
+  <h1>Problem Example</h1>
+  <p>The developers of an ASP.NET application change the <strong>mode</strong> attribute of the &lt;<strong>CustomErrors</strong>&gt; element to <strong>Off </strong>in order to display detailed error messages on both the local machine and remote clients for debugging purposes. When the application goes into production this setting remains and detailed error messages are displayed to all users. An attacker investigating the site sees the error messages and finds sufficient information to exploit the application.</p>
+  <p>
+    <strong>Access to the path 'c:\myapp\docs\resource.txt' is denied.</strong>
+  </p>
+  <p>
+    <strong>Description:</strong> An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.</p>
+  <p>
+    <strong>Exception Details:</strong> System.UnauthorizedAccessException: Access to the path 'c:\myapp\docs\resource.txt' is denied.</p>
+  <p>ASP.NET is not authorized to access the requested resource. Consider granting access rights to the resource to the ASP.NET request identity. ASP.NET has a base process identity (typically {MACHINE}\ASPNET on IIS 5 or Network Service on IIS 6) that is used if the application is not impersonating. If the application is impersonating via &lt;identity impersonate="true"/&gt;, the identity will be the anonymous user (typically IUSR_MACHINENAME) or the authenticated request user.</p>
+  <p>To grant ASP.NET access to a file, right-click the file in Explorer, choose "Properties" and select the Security tab. Click "Add" to add the appropriate user or group. Highlight the ASP.NET account, and check the boxes for the desired access.</p>
+  <p>
+    <strong>Source Error:</strong>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>&lt;CODE&gt;An unhandled exception was generated during the execution of the current web request. Information regarding the origin and location of the exception can be identified using the exception stack trace below.&lt;/CODE&gt; </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>Stack Trace:</strong>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <pre>[UnauthorizedAccessException: Access to the path 'c:\myapp\docs\resource.txt' is denied.]<br />   System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath) +2014403<br />   System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share,<br />                              Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy) +998<br />   System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share) +114<br />   System.IO.File.Open(String path, FileMode mode) +42<br />   Crypto.TestDPAPI(FileInfo reportFile, Literal&amp; textField) +310<br />   _Default.Page_Load(Object sender, EventArgs e) +201<br />   System.Web.Util.CalliHelper.EventArgFunctionCaller(IntPtr fp, Object o, Object t, EventArgs e) +15<br />   System.Web.Util.CalliEventHandlerDelegateProxy.Callback(Object sender, EventArgs e) +34<br />   System.Web.UI.Control.OnLoad(EventArgs e) +99   System.Web.UI.Control.LoadRecursive() +47<br />   System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint) +1061</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h1>Solution Example</h1>
+  <p>During development an ASP.NET application sets the <strong>mode</strong> attribute of the &lt;<strong>CustomErrors</strong>&gt; &lt;CUSTOMERRORS&gt;element to <strong>RemoteOnly </strong>to aid debugging by displaying error messages on the local machine. Once the application is deployed the <strong>mode</strong> attribute is set to <strong>On </strong>to ensure that detailed error messages are not sent to any client. The <strong>defaultRedirect</strong> element is used to specify a generic error page while &lt;<strong>error</strong>&gt; elements are used to specify more specific error pages.</p>
+  <pre>&lt;customErrors mode="On" defaultRedirect="error.html"&gt;<br />    &lt;error statusCode="500" redirect="error.html"/&gt;<br />&lt;/customErrors&gt;<br />&lt;!-- error.html --&gt;<br />&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"<br /> "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />&lt;html xmlns="http://www.w3.org/1999/xhtml" &gt;<br />&lt;head&gt;<br />    &lt;title&gt;Unexpected Error&lt;/title&gt;&lt;/head&gt;<br />&lt;body&gt;<br />    &lt;span style="font-size: 10pt; font-family: Verdana"&gt;We are sorry, but we cannot complete<br />        your request. Please try again later!&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about creating custom errors in ASP.NET, visit <a href="http://support.microsoft.com/kb/306355">How to create custom error reporting pages in ASP.NET</a>.</li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Guideline: Log Important Security Operations </a>
+    </li>
+    <li>
+      <a href="/article/d6ae90bf-1b44-4a89-b22e-55ea97e52ba5">Guideline: Encode All Output Data</a>
+    </li>
+    <li>
+      <a href="/article/33a894ce-2061-4741-be92-1d063c9cf057">Guideline: Use a Global Exception Handler for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/e706145e-6465-4261-96af-a66d6a19a637">Guideline: Do Not Include Debug Data in Output</a>
+    </li>
+    <li>
+      <a href="/article/08f2f28f-d09a-4b82-843e-8d971fc50553">Guideline: Do Not Disclose Valuable Information in Error Messages</a>
+    </li>
+    <li>
+      <a href="/article/7d83d845-cd2b-4067-bb4c-5fbb890b9c9e">Attack: Information Disclosure Attack</a>
+    </li>
+    <li>
+      <a href="/article/dc172f55-185d-4c34-996a-1e368662f3f7">Attack: Exception Information Disclosure Attack</a>
+    </li>
+    <li>
+      <a href="/article/edb7f620-21a6-4599-aebd-2966c47ec2e3">Checklist Item: Exception Details are Not Disclosed to the Client </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

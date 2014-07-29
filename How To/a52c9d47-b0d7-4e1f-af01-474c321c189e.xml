@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="546309350" Content_Hash="1515298578">
+  <Metadata>
+    <Id>a52c9d47-b0d7-4e1f-af01-474c321c189e</Id>
+    <Id_History>128b0b60-d46a-4ebd-9b82-c1d37b342f2c,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Server-Side Code Injection in ASP .NET</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>ASP .NET applications<b></b></li>
+  </ul>
+  <p>
+    <b>
+      <span>&nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>ASP .NET applications are hosted by a web server capable of interpreting and executing server-side code such as Active Server Pages (ASP files).<span>&nbsp;&nbsp; </span>A server-side code injection bug occurs when an attacker is able to inject additional server-side code that is then interpreted and executed as part of the application’s code; for instance, when the application dynamically evaluates data sent by its clients.<span>&nbsp; </span>An attacker might be able to submit malicious code and have the ASP .NET application dynamically evaluate the injected code.<span>&nbsp; </span>Attackers can exploit server-side code injection bugs to execute logical attacks on ASP .NET applications.</p>
+  <p>Follow these steps to test for server-side code injection in ASP .NET applications:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios
+<li>Step 2: Analyze causes and countermeasures
+<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 1: Understand attack scenarios</span>
+  </h1>
+  <p>The first step in learning how to test for server-side code injection bugs is to understand well the anatomy of a server-side code injection vulnerability in ASP .NET.</p>
+  <p>It is important to understand the difference between client-side code injection and server-side code injection.<span>&nbsp; </span>Client-side code injection occurs when an attacker uses a vulnerable web application to execute remote code in the client’s browser context.<span>&nbsp; </span>This is why client-side code injection exploits such as cross-site scripting (XSS) as well as AJAX injection attacks are written in JavaScript; the victim client’s browser must be able to interpret the exploit code.<span>&nbsp;&nbsp;&nbsp; </span>Server-side code injection aims at having the application’s web engine (such as ASP, JSP, etc.) interpret and execute the malicious code as part of the application.<span>&nbsp;&nbsp;&nbsp; </span>This means that an attacker that successfully exploits a server-side code injection bug will add an extra application functionality that executes with the same privileges of the application’s code.<span>&nbsp;&nbsp; </span></p>
+  <p>ASP .NET web applications that dynamically evaluate scripts might be vulnerable to this attack.<span>&nbsp;&nbsp;&nbsp; </span>Consider an application that uses the following code:</p>
+  <pre>&lt;%<br />&nbsp;&nbsp;&nbsp; If Not Request("Code") = Nothing Then<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim fso, f<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'User input Code is written to a file named input.aspx<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fso = CreateObject("Scripting.FileSystemObject")<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f = fso.OpenTextFile(Server.MapPath("input.aspx"), 8, True)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f.Write(Request("Code") & vbCrLf)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f.close()<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f = Nothing<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fso = Nothing<br />&nbsp;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'input.aspx is executed<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Server.Execute("input.aspx")</strong><br />&nbsp;&nbsp;&nbsp; Else<br />%&gt;<br />&lt;form&gt;<br />&lt;input name="Code" size="100px" /&gt;&lt;input type="submit" name="Enter code" /&gt;<br />&lt;/form&gt;<br />&lt;%<br />End If<br />%&gt;<br /><br /></pre>
+  <p>The application dynamically evaluates the input data entered in the <i>Code</i> web form parameter.<span>&nbsp; </span>As a result, an attacker can pass malicious code that will be executed by the application at the server-side.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker discovers an application functionality where client supplied input is dynamically evaluated and executed.
+<li>The attacker passes malicious code as input so that the application executes it at the server-side.</li></li>
+  </ol>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The following step in learning how to test for server-side code injection bugs is to understand what causes this attack and how to protect against it.<span>&nbsp; </span></p>
+  <p>Server-side code injection in ASP .NET applications is possible due to dynamic code evaluation vulnerabilities.<span>&nbsp; </span>A dynamic code evaluation vulnerability occurs when the application uses client-supplied input for code evaluation and execution without doing proper input validation and sanitization.<span>&nbsp;&nbsp; </span>For example, in the previous scenario the application blindly constructs an input text file and, without checking for malicious code, invokes the <i>Server.Execute</i> function to evaluate and execute the newly created text file.</p>
+  <p>To protect against this bug, ASP .NET must properly validate any data before using it for dynamic evaluation such as when executing functions of the <i>Server.Execute</i> family.<span>&nbsp; </span><span>&nbsp;&nbsp;</span>Developers are encouraged to create a <i>white list </i>containing a list of the valid data and code constructs.<span>&nbsp; </span>The application must then check that all parameters used in the dynamic evaluation appear in the white list and reject any input data that is not white-listed.</p>
+  <p>
+    <br />&nbsp;</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you’ve reviewed the theoretical aspects of server-side code injection bugs in ASP .NET it is necessary to execute the necessary test cases to check if your application is vulnerable.</p>
+  <h2>
+    <em>Test for Server-side code injection in ASP .NET</em>
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Discover a functionality in the application that performs dynamic code evaluation based on client supplied input.
+<li>Pass a small proof-of-concept ASP .NET code as input such as:
+<ul><li><pre><span>&lt;% Response.Write("Application is vulnerable") %&gt;</span></pre></li></ul><li>Observe how the application reacts to the injected code.</li></li></li>
+  </ol>
+  <p>Expected results:<span>&nbsp; </span>The application is vulnerable if it evaluates and executes the code passed in step 2 and displays the message <i>Application is vulnerable.</i></p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Server-side code injection bugs allow attackers to inject code that will be executed by the ASP .NET engine that hosts the vulnerable application.<span>&nbsp;&nbsp; </span>Attackers can use server-side code injection to execute logical attacks on the target application.<span>&nbsp; </span>To learn how to test for this vulnerability it is necessary to understand its attack scenario and how it is possible in ASP .NET applications, as well as how to protect against it.<span>&nbsp; </span>Testing for this bug requires passing a small proof-of-concept code as input to the application under test while observing how the application reacts.</p>
+  <p>
+    <span>&nbsp;</span>
+  </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

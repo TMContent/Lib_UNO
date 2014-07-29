@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>2eb7f164-05a4-4e13-a12d-0fdca2bd88b2</Id>
+    <Id_History>a6d71c09-1b9c-4722-a9ce-f90b16cf4a76,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Perform a Dataflow Analysis</Title>
+    <Category>Security Engineering</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Perform a Dataflow Analysis</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Do==
+
+Use a technique called dataflow analysis to find bugs associated with poor input handling. Since there can be many data flows in your application, use prioritization to focus your work. The process works as follows:
+
+# For each input location determine how much you trust the source of input.  When in doubt you should give it no trust.
+# Trace the flow of data to each possible output noting along the way any attempts at data validation.
+# Move to the next input and continue.
+
+==Why==
+
+Use dataflow analysis to find vulnerabilities that are related to input validation.
+
+==When==
+
+Perform dataflow analysis during the development stage of the application development life cycle.
+
+==How==
+
+Dataflow analysis is the mechanism used to trace data from the points of input to the points of output.  Use a technique called dataflow analysis to find bugs associated with poor input handling.  Since there can be many data flows in your application, use prioritization to focus your work.  The process works as follows:
+
+# For each input location determine how much you trust the source of input.  When in doubt you should give it no trust.
+# Trace the flow of data to each possible output noting along the way any attempts at data validation.
+# Move to the next input and continue.
+
+When you are done you should have a list of all the functions that each piece of input data touches as well as the eventual outputs where it ends up. Don’t forget to pay attention to areas where the data is parsed and may end up in multiple output locations. Also pay attention to intermediary output locations. For instance the input may end up in a database and then later placed in web page content.
+
+Thinking about how much you trust each input source is tricky.  Ideally you will trust no input that comes from outside your component and validate all data fully.  For performance and maintainability reasons, however, this may not always be practical.  In general you can trust code that is closest to you and give less trust to code that is less well known.  Here is an example of how to think about trust boundaries:
+
+* High trust
+** Input that comes from code you are reviewing inside the component
+** Input that comes from known-good strongly named managed assemblies or signed/hashed native libraries
+** Input that comes from a database that is only used by your component and for which you can prove that all data to the database has been properly validated
+** Network data that has been signed by a known good source (IPSec or SSL)
+* Medium trust
+** Input that comes from known-good assemblies or native libraries that have not been strongly named or signed but are local to your server
+** Input from that comes from a public interface that should only be accessible to trusted users
+** Input from that comes from a UI that should only be accessible to trusted users
+** Network data that should not be accessible to an untrusted user (such as a segmented LAN internal to your datacenter)
+* Low trust
+** Input that comes from assemblies or native libraries that have not been strongly named or signed and are located on the client
+** Input that comes from client code
+** Input that comes over the network
+** Input that comes from a file
+** Input that comes from a public interface that is accessible to any user
+** Input that comes from UI that is accessible to any user
+** Input that comes from a database that is shared with other components or processes
+
+Remember to trace all the way to the source and assign trust based on the weakest link. As you conduct your traces look at the code carefully to ensure that input validation is performed rigorously on low trust input and performed adequately on medium trust input.  Ideally you will have a set of common validation routines that can be called into as soon as un-trusted data is received by the application.  This gives a central point of failure that can be updated as new information is discovered.  However, in addition to knowing how much you trust the data you must also be aware of how the data is going to be used in order to know how it should be validated.  This is where the dataflow analysis becomes important.  For instance if the eventual output for the untrusted data is a database then you should check for SQL injection problems.  If the data will be used to make a calculation then you should check for numeric overflows and underflows.  If the data will be displayed in a web page then you should check for cross site scripting problems.  Keep in mind while reviewing validation routines that validation should always opt-in, not opt-out; it’s easier to accurately define what’s good rather than what’s bad.
+
+The most common input validation bugs are as follows:
+
+# **Numeric underflows and overflows.** This problem is caused when a calculation causes a data value to be larger or smaller than its data type allows. This will cause the value to wrap-around and generally become much larger or smaller than expected. As you are tracing data through the code ensure that any location where a user can give input that results in a calculation will not cause an underflow or overflow condition.
+# **SQL injection.** A SQL injection attack occurs when un-trusted input can modify the logic of a SQL query in unexpected ways.  As you are tracing through the code ensure that any input that is used in a SQL query is validated or make sure that the SQL queries are parameterized.
+# **Cross Site Scripting.** Cross-site scripting is caused when an attacker manages to input script code into an application so that it is echoed back and executed in the security context of the application. This allows an attacker to steal user information including forms data and cookies. This vulnerability may be present whenever a web application echoes unfiltered user input back out to web content. As you are tracing through the code ensure that un-trusted data whose ultimate output is web page content does not contain HTML tags. Be aware that the data could move from un-trusted input to web page output via a roundabout path - for instance through a database and then later queried out of the database and displayed on a web page. To protect against this bug, make sure that data is encoded for the correct context before it is echoed back to web content.
+# **Canonicalization.** Canonicalization errors occur whenever there are multiple ways to represent a resource and the different representations result in varying security logic being run. The result of this bug is that an attacker gains access to a resource they would not otherwise have access to.  As you are tracing through the code look carefully at areas where resources are being accessed based upon user input. There are a several resource types for which this problem can occur:
+## **File resources.** Use of partial paths may result in a file other than what you expect being loaded. Use of the PATH environment variable may give control of the paths used by your application to an attacker.
+## **URLs.** Alternate representation of an IP address such as dotless IP may result in an URL other than what you expected being loaded. Encoded characters such as %20 for space may result in an URL other than what you expected being loaded.
+# **Native code issues.** If the code you are reviewing makes calls into native code there are some additional checks that must be done to ensure security.  Assumptions made in managed code about data validity and memory soundness may not hold true when running native code. The following bugs that are impossible or unusual in managed code are quite possible in native code.
+## **Buffer overflows.** Buffer overruns are a classic vulnerability that may lead to execution of arbitrary code. Successful exploitation of this vulnerability relies on low level details of the system architecture that is outside the scope of this guide, however, given the magnitude and frequent occurrence of the problem it is important to recognize when these vulnerabilities are present. While tracing through the code ensure that for unsafe code the following rules are followed: make sure any functions that copy variable length data into a buffer take and use a maximum length parameter properly, never rely on another layer or tier for data truncation, if you see a problem always choose to truncate data instead of expanding the buffer to fit. 
+## **Format string.** Format String bugs emanate from the printf family of functions handling of variables, and the %n format directive. The printf family of functions will pop the stack as many times as they see “%” in the format string.  Sufficient %’s can traverse the stack, and reach any location in it, or above.  Additionally the use of %n can allow arbitrary writing of data anywhere within the stack. While tracing through the code make sure that format string data never contains user input. As this can only occur in unmanaged code it is only worth worrying about if untrusted input is used in a call to a native library.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1493384786" Content_Hash="894991577">
+  <Metadata>
+    <Id>65df299d-3830-4e70-9f15-cf7ce30dc950</Id>
+    <Id_History>55ed5833-2ceb-4947-96b7-97a528fbce9e,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Reveal Exception Details to the Client</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Reveal Exception Details to the Client</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET&amp;nbsp;2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>When exceptions occur, return concise error messages to the client and log specific details on the server. Do not reveal internal system or application details, such as stack traces, SQL statement fragments, and table or database names to the client. Ensure that this type of information is not allowed to propagate to the end user or beyond your current trust boundary. </p>
+  <h1>Why</h1>
+  <p>A malicious user could use system-level diagnostic information to learn about your application and probe for weaknesses to exploit in future attacks. </p>
+  <h1>When</h1>
+  <p>This guideline is applicable to any application pages capable of generating errors.</p>
+  <h1>How</h1>
+  <p>Prevent detailed error messages from displaying by setting the <strong>mode</strong> attribute of the &lt;<strong>CustomErrors</strong>&gt; element to <strong>On</strong>, so that all callers receive filtered exception information. Do not use <strong>mode="Off"</strong> because this allows detailed error pages intended for application developers that contain system-level information to be returned to the client.&amp;nbsp; </p>
+  <p>You should also use the &lt;<strong>customErrors</strong>&gt; section of the Web.config file as shown in the following code example to specify a default error page to display, along with other required error pages for specific HTTP response codes that indicate errors.</p>
+  <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt;</pre>
+  <p>The <strong>defaultRedirect</strong> attribute allows you to use a custom error page for your application, which. for example, might include support contact details. Use these application-wide error pages to provide user-friendly responses for errors that are not caught in a structured event handling.&amp;nbsp;</p>
+  <h1>Problem Example</h1>
+  <p>The developers of an ASP.NET application change the <strong>mode</strong> attribute of the &lt;<strong>CustomErrors</strong>&gt;&amp;nbsp;&lt;CUSTOMERRORS&gt;element to <strong>Off </strong>in order to display detailed error messages on both the local machine and remote clients for debugging purposes.&amp;nbsp; When the application goes into production this setting remains and detailed error messages are displayed to all users.</p>
+  <h1>Solution Example</h1>
+  <p>During development an ASP.NET application sets the <strong>mode</strong> attribute of the &lt;<strong>CustomErrors</strong>&gt;&amp;nbsp;&lt;CUSTOMERRORS&gt;element to <strong>RemoteOnly </strong>to aid debugging by displaying error messages on the local machine. Once the application is deployed the <strong>mode</strong> attribute is set to <strong>On </strong>to ensure that detailed error messages are not sent to any client.&amp;nbsp; The <strong>defaultRedirect</strong> element is used to specify a generic error page while &lt;<strong>error</strong>&gt; elements are used to specify more specific error pages.</p>
+  <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt;</pre>
+  <h1>Related Items</h1>
+  <ul>
+    <li>Checklist Item: <a href="/article/a821a81f-0ba2-4b16-9943-238e2d451076">Structured exception handling is used</a></li>
+    <li>Checklist Item: <a href="/article/7f8f146c-9a3d-4a8c-9680-bc333ee6ef3b">Generic error pages with harmless messages are returned to the client</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

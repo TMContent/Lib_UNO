@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1579666327" Content_Hash="-1657981438">
+  <Metadata>
+    <Id>089d4b3f-6a31-4748-a622-ee9c5bc227ae</Id>
+    <Id_History>c6fdecbd-8856-4da7-974f-be79b29b9e11,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>How to Test for Buffer Overflow Bugs</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology>C++</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Buffer Overflow Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>
+    <b>
+    </b>
+  </p>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <p />
+  <h1>Summary</h1>
+  <p />
+  <p>Buffer overflows are among the most dangerous security vulnerabilities. They allow attackers to run code within the application they attack, with the application&amp;#8217;s privileges, and without user interaction. A buffer overflow occurs when more data is written into a memory buffer than there is room for in the buffer, either because more data was provided than expected, or because the program incorrectly allocated too little memory. In this way the malicious data <i>overflows</i> the buffer. Alternately, data can be written to a different location than the program expected.</p>
+  <p>Below is a summary of steps needed for testing for buffer overflow bugs:</p>
+  <ul>
+    <li>
+      <b>Step 1</b>: Understand buffer overflow attack scenarios <li><b>Step 2</b>: List high risk components and entry points <li><b>Step 3</b>: Start testing and exploring <li><b>Step 4</b>: Tune of test data</li></li></li></li>
+  </ul>
+  <h2>Step 1: Understand Attack Scenarios</h2>
+  <p />
+  <p>Although all types of buffer overflows happen due to miscalculated memory copies; getting the payload code to execute may require more effort if the variable overflowed is not in the stack. This fact divides buffer overflows into two categories: </p>
+  <ul>
+    <li>
+      <i>Stack overflows</i> - Happens when the overflowing buffer writes on top of the process stack. The attacker gets execution control of the victim program by writing on top of the return address of a function.</li>
+  </ul>
+  <p />
+  <ul>
+    <li>
+      <i>Heap overflows </i>- Happens when the overflowing buffer writes on top of unintended places of the process heap. The attacker gets execution control of the victim program by writing on top of locations of error routines, exception-handling filters, and environment blocks.</li>
+  </ul>
+  <p />
+  <p>Below are the two representative buffer overflow attack scenarios: </p>
+  <ul>
+    <li>Remote exploitation due to a bad string copy (stack overflow) <li>Local elevation of privileges due to incorrect copy in a loop (heap overflow) </li></li>
+  </ul>
+  <p />
+  <h2>
+    <em>Remote exploitation due to bad string copy (stack overflow)</em>
+  </h2>
+  <p />
+  <p>This scenario is common and shows the danger of buffer overflows. A server runs an FTP application that allows users to connect to it through the network and type a file name to get from the server. The server uses a function to store the file name into a local fixed-sized buffer. This function copies the file name to the buffer without checking the length of the file name. </p>
+  <pre>char&amp;#42; getFileName(char &amp;#42; inputFileName)<br />&amp;#123;<br />      char m_fileName&amp;#91;16&amp;#93;;<br />      strcpy(m_fileName, inputFileName);<br /><br />      /&amp;#42; do additional formatting for m_fileName and return &amp;#42;/<br />      return m_fileName;<br />&amp;#125; </pre>
+  <p>The attacker connects to the FTP program and enters a file name that looks like this: </p>
+  <pre>"AAAAAAAAAAAAAAAA&lt;payload code&gt;"</pre>
+  <p />
+  <p>During the call to strcpy(), the server program reads the first 16 &amp;#8216;A&amp;#8217; letter characters into the private buffer and then overflows it. The server then executes the code that that follows the &amp;#8216;A&amp;#8217;s appearing inside of the payload code tag above. The attacker can then open a remote shell in the FTP server, install a Trojan horse, propagate a worm or execute other harmful payloads by modifying the characters next to the A&amp;#8217;s. </p>
+  <h2>
+    <em>Local Elevation of Privileges due to incorrect copy in a loop (heap overflow)</em>
+    <em>
+    </em>
+  </h2>
+  <p>Heap overflows appear slightly different in code. The overflow occurs in variables allocated in the heap using functions like C malloc() or Win32 HeapAlloc(). However, like in the case of stack overflows, the code that generates a heap one is also a blind or miscalculated memory copy. </p>
+  <p />
+  <p>A logging service application runs in a server box with high privileges. It grabs messages from all users through a pipe and stores them in a system log. The messages are usually small like a few bytes so the service reads and copies to the destination byte by byte until it reaches a NULL. </p>
+  <pre>BYTE &amp;#42; formatBlock(BYTE &amp;#42; inputMessage)<br />&amp;#123;<br />      BYTE &amp;#42; logBlock = (BYTE &amp;#42;)malloc(100);;<br />      int i = 0;<br /><br />      while (&amp;#42;inputMessage &amp;#33;= NULL)<br />      &amp;#123;<br />            logBlock &amp;#91;i&amp;#43;&amp;#43;&amp;#93; = &amp;#42; inputMessage&amp;#43;&amp;#43;;<br />      &amp;#125;<br />      logBlock &amp;#91;i&amp;#93; = '\0';<br />      return logBlock;<br />&amp;#125;</pre>
+  <p>The attacker with low privileges (such as guest) connects to the pipe and sends a message like this: </p>
+  <pre>"AAAAAAAAAAAAAAAA&amp;#8230;(100 A&amp;#8217;s)&lt;payload code&gt;"</pre>
+  <p />
+  <p>The 100 A&amp;#8217;s will overflow the logBlock variable and overwrite the heap. The attacker can then use a heap overflow exploit method to execute the payload code with the privileges of the service application. <b></b></p>
+  <h1>Step 2: List High Risk Components and Entry Points </h1>
+  <h2>
+    <em>Identify high risk components </em>
+  </h2>
+  <p />
+  <p>Buffer overflows exist because of poor data handling. Once you understand the attack scenarios, continue by listing the system&amp;#8217;s components, modules, and libraries written in C/C&amp;#43;&amp;#43; (and their resulting executables) that do the most amount of data handling. Usually there exists some code heavy on manipulating data that copies many buffers or constructs various strings. It is important to also focus in old and complicated code. </p>
+  <p>Talk with the application&amp;#8217;s developers and ask them about legacy code that still lives in the application. Some components are developed with security in mind and use string libraries such as StrSafe.h to protect against overflows. List components that don&amp;#8217;t appear to have security checks, and always do quick code review before jumping into testing. </p>
+  <h2>
+    <em>Make sure to cover all dangerous API&amp;#8217;s and loop copies</em>
+  </h2>
+  <p />
+  <p>Go through all interfaces and look at the input gathering API&amp;#8217;s. A list like the following helps: </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <pre>String input</pre>
+        </td>
+        <td>
+          <pre>strcpy, strcat, scanf, strncpy, strncat, gets</pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>File input</pre>
+        </td>
+        <td>
+          <pre>gets, readf, freadf ReadFile, fscanf</pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>Network input</pre>
+        </td>
+        <td>
+          <pre>recv(), recvfrom()</pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>Memory input</pre>
+        </td>
+        <td>
+          <pre>memcpy, memmove, memset</pre>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>Registry input</pre>
+        </td>
+        <td>
+          <pre>RegQueryValue, RegQueryKey</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p />
+  <p>Look for any additional APIs that take data from foreign locations (such as a block of RAM or data from a pipe), or write data out to a memory address. Although the table above gives you an idea of what to look for, you need to go through all interfaces and double check for any data sources that an attacker might manipulate to overflow your application. </p>
+  <p />
+  <p>Also review your code for blind copies inside of a loop like the second scenario above. These occurrences are slightly harder to find so special attention is needed. </p>
+  <h2>
+    <em>Look for common buffer overflow coding errors</em>
+  </h2>
+  <p>If you have access to the application source code then look for common buffer overflow coding errors such as blind copies using dangerous API&amp;#8217;s: </p>
+  <pre>      strcpy(destinationBuffer, sourceBuffer);</pre>
+  <p />
+  <p>Check for loop copies that can lead to overflows:</p>
+  <pre>      while (&amp;#42;inputMessage &amp;#33;= NULL)<br />      &amp;#123;<br />            logBlock &amp;#91;i&amp;#43;&amp;#43;&amp;#93; = &amp;#42; inputMessage&amp;#43;&amp;#43;;<br />      &amp;#125;<br /></pre>
+  <p>
+    <b>
+    </b>
+  </p>
+  <p>Also look for code that dynamically calculates sizes. Sometimes sizes are miscalculated (truncated) and used to allocate a buffer. If a smaller size is used then the source buffer will overflow the destination: <br /></p>
+  <pre>int sizeOfBuffer = (USHORT)strlen(sourceBuffer);<br />char &amp;#42; destinationBuffer = (char &amp;#42;)malloc(sizeOfBuffer); <br />strcpy(destinationBuffer, sourceBuffer);<br /></pre>
+  <p>If the length of the sourceBuffer exceeds MAX_USHORT (65,535) in length then the casting to USHORT wraps up the integer returned by strlen. For example, if the attacker passes a source buffer of 65,540 characters, the sizeOfBuffer ends up being 65,540 - 65,535 = 5. Then destinationBuffer is allocated with size 5 and strcpy leads to a buffer overflow. </p>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <em>Look at managed and unmanaged code interactions</em>
+  </h2>
+  <p>Look closely for any interaction between managed and unmanaged code (like C or C&amp;#43;&amp;#43;). Specifically, they must investigate how the C or C&amp;#43;&amp;#43; code receives data from any managed components. </p>
+  <p>
+    <b>
+      <i>
+        <u>
+        </u>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <em>Match high risk components with entry points </em>
+  </h2>
+  <p />
+  <p>Input doesn&amp;#8217;t come only from the UI or the network. It can come from different interfaces. Determine how each high risk module or component receives its input. A module might receive its input from different entry points such as:</p>
+  <ul>
+    <li>User Interface <li>API parameters <li>Network packets <li>File contents <li>Memory sections <li>Registry keys and values <li>URL contents <li>IPC Pipes</li></li></li></li></li></li></li></li>
+  </ul>
+  <p>Make a list of entry points and identify which components handle each one. Record the results as a table.</p>
+  <p />
+  <h1>Step 3: Start Testing and Exploring </h1>
+  <p>During this step you need to prepare your testing environment and start passing simple test cases focused mainly at different lengths through the easiest entry point. </p>
+  <h2>
+    <em>Attach a debugger for verification </em>
+  </h2>
+  <p />
+  <p>Attach a debugger to the application under test and start feeding input. Feeding a string of A&amp;#8217;s works pretty well. A crash in the application is a hint of a possible overflow, what you&amp;#8217;re really looking is too see one of your registers filled with A&amp;#8217;s which in hex is &amp;#8220;41 41 41 &amp;#8230;&amp;#8221;. </p>
+  <p>
+    <img src="|image|clip_image003.png" />
+  </p>
+  <p>A stack overflow will corrupt most of the stack so that the instruction pointer EIP will end up holding the attack data. In the heap overflow scenario the data corrupted will be the one in the heap so it will probably appear in a register that stores heap memory values such as EAX, EBX or EXC.</p>
+  <p />
+  <p>
+    <b>
+    </b>
+  </p>
+  <h2>
+    <em>Determine how to submit test case data</em>
+  </h2>
+  <p />
+  <p>Test case strings can be passed to the application under test manually or using automation (explained later). Before testing starts, it is necessary to determine how to submit test cases so that they can be matched to a possible break into the debugger due to an access violation. During this step go through each of your high risk components and choose the easier entry point to test through. If possible start with the UI. In the next step you will cover the rest of entry points so pick the easier one in this step. <b><i></i></b></p>
+  <h2>
+    <em>Start by submitting strings of different lengths</em>
+  </h2>
+  <p />
+  <p>Before jumping into different attack strings, stop and think what the sizes programmers use more commonly to allocate strings. Many times the size is a power of 2. It is recommended to test the strings of sizes around such plus an additional 5 characters to generate the overflow:</p>
+  <pre>A x 9 <br />A x 13 <br />A x 37<br />A x 69<br />A x 133<br />A x 261<br />A x 517<br />A x 1029<br />&amp;#8230;<br />&amp;#8230;<br />A x 16389<br />A x 32773<br />A x 65541<br />&amp;#8230;<br />etc </pre>
+  <p>Scan the code for macros and look for any macro that may indicate maximum sizes:</p>
+  <pre>A x MAX_PATH &amp;#43; 5<br />A x MAX_LENGH &amp;#43; 5<br />A x MAX_BUFFER &amp;#43; 5<br />A x BUFFER_SIZE &amp;#43; 5<br />&amp;#8230;<br />etc </pre>
+  <h1>Step 4: Tune Test Case Data<b></b></h1>
+  <p>During this step you need to cover the remaining entry points for each of your high risk variables. </p>
+  <p />
+  <h2>
+    <em>Cover all entry points with appropriate toolsets</em>
+  </h2>
+  <p />
+  <p>When testing for buffer overflows many sources of the test input will reside in data stores such as files, network packets, memory sections, etc. Download a hex editor to closely examine these stores and modify them with precision. Each entry point requires a different tool. For example, testing a network entry point requires a network client to send raw data to the entry point or a proxy to intercept packets and modify them with your test cases.</p>
+  <p />
+  <h2>
+    <em>Choose attack data lengths based on context</em>
+  </h2>
+  <p />
+  <p>What strings are under test? Is the test string a last name or a description of an item? Strings vary in length depending on their purpose and context. </p>
+  <p>Look for variables that indicate length of strings. An application might allocate a buffer size using user supplied input. For example, consider a system that receives network packets and copies the contents of each packet to a buffer of a size dynamically set to the value of the first byte of the packet. This means that if you set the first byte to ten and send a 21 byte long packet then you will be overflowing a buffer by 10 bytes.</p>
+  <p />
+  <h2>
+    <em>Automate your testing</em>
+  </h2>
+  <p>
+    <b>
+    </b>
+  </p>
+  <p>Manually testing for buffer overflows gets very tedious and it is fundamental to use an automated test generator and test driver. There are different buffer overflow testing tools (also known as fuzzers) such as SPIKE for testing network interfaces, Visual Test for submitting graphical user interface input, and other fuzzers and tools. Make sure to download or develop the appropriate test tools to test for buffer overflows. </p>
+  <p>Then you need to find an automated way to discover if the application buffered overflowed and what test case are responsible. This poses a bit of a challenge but luckily there are debug libraries that can be used for this purpose. </p>
+  <p />
+  <p>These are crucial parts for successful automation testing for buffer overflows: </p>
+  <ol>
+    <li>Develop or learn how to use a test case driver or submitter. <li>Use a consistent set of test cases <li>Develop or learn how to use a test case generator to plug in to test case driver <li>Develop or learn how to use an automated test case validator than can catch buffer overflows and match them to a specific test case</li></li></li></li>
+  </ol>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <em>Use random fuzz data</em>
+  </h2>
+  <p>Trying a constant string of A's makes buffer overflows more noticeable. However, in order to walk different paths of the string parsing code one needs to modify input data with random characters. The benefit of passing variable random characters like symbols is that they can mess up string manipulation logic and results in a buffer overflow. </p>
+  <p />
+  <h2>
+    <em>Replace escape characters</em>
+  </h2>
+  <p>Sometimes a data source such as a file has markers for end of strings or sections that are suppose to take certain amount of memory. For instance, an application might be coded to allocate 10 bytes for a tag inside of a file (such as a string that starts at offset x). If you replace escape characters such as end of string characters they can trick the file into looking different. In the case of the file, they can overwrite the end of string character from the tag and make it look like a string that is longer than 10 bytes. When the application reads the string at offset x to get the tag&amp;#8217;s contents it will copy more than 10 bytes into the allocated space and generate a buffer overflow. </p>
+  <p />
+  <p>For this case, you didn&amp;#8217;t have to know so much about the application logic, but just to replace end of string characters in a file. The same concept can be applied with other sources of input such as network and memory input. </p>
+  <h2>
+    <em>Perform bitwise operations </em>
+  </h2>
+  <p>Sometimes an application will crash and might buffer overflow by simply shifting a bit in the string that it is manipulating. Security testers must make sure to include random or targeted (at specific offsets) bitwise operations to their test case generation.</p>
+  <p />
+  <h2>
+    <em>Tune data to pass validation or encryption checks</em>
+  </h2>
+  <p>Always think on different ways of enhancing automation and look into different ways of submitting test case data. For instance, try to plug in a test proxy and corrupt network packets after some sort of validation has been done. </p>
+  <p />
+  <p>You can also hook certain APIs to modify data before it is encrypted so that the attack data passes hash or digest checks. By doing this, it is more likely that the application will not reject the test data automatically and that your cases make it deeper into the application&amp;#8217;s processing logic. Be alert on different and creative methods for feeding data to the application under test that bypass checks and have a greater chance of generating buffer overflows.</p>
+  <p />
+  <h2>
+    <em>Look for more sophisticated attacks</em>
+  </h2>
+  <p />
+  <p>Attackers can use overflow bugs for other purposes rather than gaining execution control of the application. For example, by replacing memory contents both in the stack or heap they can change the logic of the victim application. The mechanisms for this kind of attack are similar, and you should look for examples of it at the same time. </p>
+  <p>In this scenario an application authenticates users based on a key value. The client supplies the key to the application and the application checks if the key is valid. If valid it sets the variable m_status to &amp;#8220;success&amp;#8221;. </p>
+  <pre>int DoAuthentication(char &amp;#42; key)<br />&amp;#123;<br />      char &amp;#42; m_key = (char &amp;#42;)malloc(10);<br />      char &amp;#42; m_status = (char &amp;#42;)malloc(10);<br />      strcpy(m_status, "failed");   <br />      strcpy(m_key, key);<br /><br />      /&amp;#42; ... check key for valid key and <br />               set m_status to "success" if valid... &amp;#42;/<br /><br />      if (strcmp(m_status, "success")==0) <br />      &amp;#123;<br />            printf("authentication succeeded\n");<br />            return 1;<br />      &amp;#125;<br />      else<br />      &amp;#123;<br />            printf("authentication failed\n");<br />      &amp;#125;<br />      return 0;<br />&amp;#125;<br /></pre>
+  <p>The application will check if &amp;#8220;test&amp;#8221; is a valid key and returns &amp;#8220;authentication failed&amp;#8221; since this is not a valid key. However, an attacker can pass a long string of A&amp;#8217;s to overflow the m_key variable in the heap and try writing on top of m_success.</p>
+  <p />
+  <pre>"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsuccess"; </pre>
+  <p>And the application returns:</p>
+  <p />
+  <pre>authentication succeeded</pre>
+  <p />
+  <p>This code was built in Visual C&amp;#43;&amp;#43; 2005 and Windows Vista and it required 57 A&amp;#8217;s of padding to reach the contents of m_sucess in the heap. The same concept can be easily applied to other operating system and programming environments with slightly different padding. </p>
+  <p>This is an interesting case of a heap overflow because it overwrites the heap to change the logic of the application. Changing the logic can lead to different kind of attacks besides authentication bypass. </p>
+  <p>
+    <b>
+    </b>
+  </p>
+  <h1>Conclusions</h1>
+  <p />
+  <p>Testing for buffer overflows requires a good understanding of the problem by looking at common attack scenarios. It is extremely important to do a quick source review when access to the code can be granted. Start testing through the easy entry points with different sizes of strings. Then cover all entry points using a solid test environment with tools such as fuzzers and automated debuggers. Always think about the different string lengths and different types of corruptions to use. Finally, keep your test suite always fresh with useful methods to feed test case data and up to date test case strings. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

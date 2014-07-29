@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="616345181" Content_Hash="-2119881414">
+  <Metadata>
+    <Id>fc227195-836d-4427-9045-cff053a5317a</Id>
+    <Id_History>56367747-607f-457e-99f2-b769db50e1fe,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Important Security Operations Are Logged</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Important Security Operations Are Logged</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure all important security operations are logged.</p>
+  <h1>Why</h1>
+  <p>A log trail of security operations can help you recognize application misuse and/or malicious activity. It can also help you track what happened in order to assess damage and improve future protections.</p>
+  <h1>How to Check</h1>
+  <p>To ensure your application logs all important security operations:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Determine what is important to log. </strong>Review your application's architecture and security objectives to determine which operations are important to log. In general, you should log anything that can help you recognize or track a malicious attack on your system. This could include:</p>
+      <ul>
+        <li>
+          <strong>Authentication attempts:</strong>&amp;nbsp;Verify that&amp;nbsp;your application logs authentication attempts. Logged information should include the username and any additional information such as remote host IP/name. Verify that no sensitive data, such as passwords, certificates, public/private encryption keys, that is used in the authentication process is logged. </li>
+        <li>
+          <strong>Account changes:</strong>&amp;nbsp;Verify that&amp;nbsp;your application logs modifications made to a user's account. Such modifications include, but are not limited to, change of password/PIN, account details, and contact information. </li>
+        <li>
+          <strong>Transactions performed by logged users:</strong>&amp;nbsp;Verify that&amp;nbsp;your application logs transactions that have value and are performed by logged users. For instance, if your application provides e-commerce services, verify that all transactions containing monetary value are logged. </li>
+        <li>
+          <strong>Creation, activation and lockout of accounts:</strong>&amp;nbsp;Verify that&amp;nbsp;your application logs operations related to the creation, activation and lockout of users. </li>
+        <li>
+          <strong>System and security related administration events:</strong>&amp;nbsp;Verify that&amp;nbsp;your application logs events pertaining to its overall wellness. Examples of such would be configuring, starting and terminating your application.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Audit the logs. </strong>Audit your application's logs. If there are no available logs to audit, use your application to generate enough logged sample data from all of your application's components. During the log audit, mark and categorize the information that has been logged.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check if logging mechanism logs all important security operations. </strong>Compare the results of the audit against the list of security events that have been identified as important operations that need to be logged. Mark and mitigate any missing gaps that have been observed.</p>
+    </li>
+    <li>
+      <strong>Verify that your application does not log sensitive data.&amp;nbsp;</strong>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following steps to log important security operations:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Determine what is important. </strong>Review your application's architecture and security objectives to determine which operations are important to log. In general, you should log anything that can help you recognize or track a malicious attack on your system. This could include:</p>
+      <ul>
+        <li>
+          <strong>Authentication attempts: </strong>Log all authentication attempts whether they are successful or not. You may choose to include additional information such as the&amp;nbsp;remote host IP/name. Logging authentication attempts provides a record of when accounts have been compromised or when your application has been used for malicious activities. </li>
+        <li>
+          <strong>Account changes: </strong>Log any changes made to a user's account. Such changes include, but are not limited to, change of password/PIN, account details and contact information. Such logs are useful when tracking the damage caused by a breach or when enforcing a lockout policy. </li>
+        <li>
+          <strong>Transactions performed by logged users: </strong>Log transactions performed by a logged user that have value. For instance, you should log e-commerce purchases since they have monetary value. It is also recommended to log the occurrence of user transactions when sensitive data is involved; however, do not log the actual sensitive data, such as credit card numbers. </li>
+        <li>
+          <strong>Creation, activation and locking/unlocking of accounts: </strong>Log any operations regarding the creation, activation and lockout of users. Logged information should include the remote IP address&amp;nbsp;and a valid email address. These logs can be useful when investigating compromised accounts and non-legitimate users. </li>
+        <li>
+          <strong>System and security related administration events:</strong> Log any event pertaining to the overall wellness of your application. Examples&amp;nbsp;include configuring, starting and terminating your application, auditing events, etc.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Identify areas of code. </strong>Once you understand the important operations that should be tracked, conduct a thorough review of your application's design and code. The goal of this review should be to pinpoint each component, class and function in your system&amp;nbsp;from where&amp;nbsp;logging should take place.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Add logging code. </strong>Log the beginning and end of all key security operations according to the logging mechanism adopted within your application. The logging schema should include universal date/time stamps, application name, subject/user ID, event type and resource, and state whether the event was a success or failure. Be careful not to log sensitive data that should otherwise be available only to privileged users.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following segment displays a log entry for a multi-user application. Because the application does not log all of the necessary information, it is hard to identify the context of the current log entry. Therefore, the log entry will not be useful when performing an audit or investigating a security breach.</p>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyBasic&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;message&gt;Account modified&lt;/message&gt;<br />&lt;/record&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>The following segment displays a log entry for a multi-user application. Because the application logs the application name, current user and return code, the log entry can be meaningful on its own during an audit or investigation of a security breach.</p>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;!-- Application name and current user have been stored --&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyBasic&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;message&gt;Account modified&lt;/message&gt;<br />  &lt;!-- Return code has been stored --&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
+  <h1>Java Logging Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">
+      </a>
+      <a href="/article/fa45dc02-507a-4d3f-a396-ed4aaf044f98">Centralize Logging</a>
+    </li>
+    <li>
+      <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">Protect Log Files</a>
+    </li>
+    <li>
+      <a href="/article/0109ec06-1830-472d-95ed-7ec64404c961">Log Important Event Details</a>
+    </li>
+    <li>
+      <a href="/article/82abb5d8-684b-47b7-adec-34c77ecfb25a">Do Not Log Sensitive Information</a>
+    </li>
+    <li>
+      <a href="/article/b88851a8-65e9-43b0-9e0a-104889680386">Log Important Security Operations</a>
+    </li>
+    <li>
+      <a href="/article/d63904d4-7028-441c-b99e-373e3c12e9da">Log Important Business Operations</a>
+    </li>
+    <li>
+      <a href="/article/4829a4fa-8767-4e10-9d78-0982da29ac23">Monitor the Use of Privileged Accounts</a>
+    </li>
+    <li>
+      <a href="/article/96c623c9-1fb0-4596-9730-afb58e45bc85">Log Unusual Activity</a>
+    </li>
+    <li>
+      <a href="/article/0196cc1e-01c4-48ac-87d5-aab9c6fbb78c">Consider Log Throttling</a>
+    </li>
+  </ul>
+  <h1>Java Logging Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/4729ce9a-d18f-4466-a068-f6146ca4af37">Logging Is Centralized</a>
+    </li>
+    <li>
+      <a href="/article/2e3eb764-6dc5-4715-a4af-d89a5aff0125">Log Files Are Protected</a>
+    </li>
+    <li>
+      <a href="/article/1be8f39e-609a-4d66-b4c9-ad839783a164">Important Event Details Are Logged</a>
+    </li>
+    <li>
+      <a href="/article/1006f5d2-6570-4ad7-9166-0e4dcf783651">Sensitive Data Is Not Logged</a>
+    </li>
+    <li>
+      <a href="/article/56367747-607f-457e-99f2-b769db50e1fe">Important Security Operations Are Logged</a>
+    </li>
+    <li>
+      <a href="/article/45fe4509-955a-471e-96cb-625fb0ad75b4">Important Business Operations Are Logged</a>
+    </li>
+    <li>
+      <a href="/article/b0355a7e-b64e-4683-9d46-b05c8c01cf4e">Use of Privileged Accounts Is Monitored</a>
+    </li>
+    <li>
+      <a href="/article/b01f48ac-6a08-445a-8419-83e285531bfa">Unusual Activity Is Logged</a>
+    </li>
+    <li>
+      <a href="/article/e78a7f02-82d4-4e8b-9395-56d52c503010">Logging Is Throttled</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2028282921" Content_Hash="358126056">
+  <Metadata>
+    <Id>bfa05a8d-2754-485c-b8a0-77f1008db614</Id>
+    <Id_History>b49526d2-d9e4-43b6-aea6-298a8c84050a,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Set Up Permissions To Write To The Event Log</Title>
+    <Category>Event Log</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Set Up Permissions To Write To The Event Log</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>If your code needs to use application specific event sources, you should create them at installation time when administrator privileges are available. You do so by creating an installer class that derives from <b>System.Configuration.Install.Installer</b> and using the InstallUtil.exe utility. If you are unable to create event sources at installation time, and you are in deployment, the administrator can manually create new event source entry beneath the following registry key <b>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\&lt;LogName&gt;</b></p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You should not grant write permission to the ASP.NET process account (or any impersonated account if your application uses impersonation) on the <b>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\ </b>registry key. If you allow write access to this key and the account is compromised, the attacker can modify any log-related setting, including access control to the log, for any log on the system. </blockquote>
+  <p>To access the event log, your assembly must be granted <b>EventLogPermission</b> by code-access security policy. In partial trust environments, if you want to constrain the actions of event-log wrapper code—perhaps because the code was written by another developer or development organization—you can use declarative attributes with the <b>SecurityAction.PermitOnly</b> enumeration as shown in the following example. </p>
+  <p>The following attribute ensures that the <b>WriteToLog</b> method and any methods it calls can only access the local computer's event log and cannot delete event logs or event sources. These operations are not permitted by the <b>EventLogPermissionAccess.Instrument</b> enumeration. </p>
+  <pre>using System.Diagnostics;  ... <br />[EventLogPermission(SecurityAction.PermitOnly,MachineName=".",<br />		PermissionAccess=EventLogPermissionAccess.Instrument)]<br />public static void WriteToLog( string message )  </pre>
+  <p>To enforce read-only access to existing logs, use the <b>EventLogPermissionAccess.Browse</b> enumeration. </p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

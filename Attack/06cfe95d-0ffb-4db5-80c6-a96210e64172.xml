@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1962692787" Content_Hash="484013154">
+  <Metadata>
+    <Id>06cfe95d-0ffb-4db5-80c6-a96210e64172</Id>
+    <Id_History>2d0d3540-bc16-4c39-99f2-1c50659f67f1,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Local Machine Credential Sniffing Attack</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>All software applications.</p>
+  <h1>Description</h1>
+  <p>Many applications assume that malicious software will never be executed on the local machine. However, in today's world of ubiquitous spyware, viruses, and trojans, relying on this assumption can lead to the loss of sensitive information like credentials. If an attacker can somehow trick a user into installing malicious software, it may be possible to recover sensitive information from the file system or other local machine resources. An attacker may look through temporary files, registry keys, swap files, config files, etc. to discover sensitive data such as username/password pairs, database connection strings, or other data that should be protected.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Information Disclosure</li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Failure to use proper encryption techniques. <li>Using default or insecure permission sets. <li>Writing sensitive data to locations discoverable by attackers.</li></li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Do not write any sensitive information out to the file system or registry in plaintext. <li>Encrypt any sensitive data that must be stored. <li>Explicitly set permissions on temporary files. <li>Keep sensitive information in memory for as little time as possible. <li>Overwrite sensitive data files on disk using a secure delete function.</li></li></li></li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>
+    <strong>Sensitive Data in Temporary Files</strong>: An application writes an encryption key to the disk as a temporary file while it's not using it to free up space in memory. When the encryption key is no longer used the developer calls the File.Delete operation which deletes the file from disk. </p>
+  <p>In this case it is trivial for an attacker to open an application that allows her to read the contents of the file from disk, even after the delete function had been called.</p>
+  <p>To ensure the contents of this file is unrecoverable it must be securely deleted by overwriting the bits on disk. The file should always be protected with encryption or with explicitly set permissions to make sure that the file is not discoverable before it is deleted.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://www.microsoft.com/technet/sysinternals/Security/SDelete.mspx">http://www.microsoft.com/technet/sysinternals/Security/SDelete.mspx</a>
+      <li>
+        <a href="http://wipe.sourceforge.net/">http://wipe.sourceforge.net/</a>
+        <li>
+          <a href="http://www.owasp.org/index.php/Insecure_Temporary_File">http://www.owasp.org/index.php/Insecure_Temporary_File</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/829b7182-7cf9-48b9-a25e-3a02f0685f49">Attack: Information Disclosure Attack</a>
+      <li>
+        <a href="/article/0054c741-8668-49df-a3f2-815e3fb82f79">Attack: Network Credential Sniffing Attack</a>
+        <li>
+          <a href="/article/e522e1bd-203d-47c4-b0bf-71623717ca45">Attack: Sniff Memory for Secrets Attack</a>
+          <li>
+            <a href="/article/bfa13598-4b53-43c0-a28a-06df67579269">Attack: API Hijacking Attack</a>
+            <li>
+              <a href="/article/2120b3fe-34c6-47bf-be83-d9756e512d02">Guideline: Do Not Leave Passwords in Memory </a>
+              <li>
+                <a href="/article/23c21386-b64a-4872-8727-714977ba84a4">Guideline: Clear Sensitive Data from Memory when No Longer Used </a>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

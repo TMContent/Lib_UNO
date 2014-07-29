@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>483b2a46-b6ca-4efa-8722-9574b6e5389b</Id>
+    <Id_History>7f064998-a562-4e03-abef-676230e80d7c,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Disable Platform Banners</Title>
+    <Category>Server Hardening</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Disable Platform Banners</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Configure PHP to make it less obvious that it is being used.
+
+==Why==
+
+Hiding PHP will make it just a little bit harder for attackers to figure out how to look for holes in the application. It makes just a small difference, but some recommend it anyway. With PHP in particular, for any reasonably sized application, it is quite difficult to fully hide that PHP is being used. Still, it is relatively easy to take some simple steps towards doing so.
+
+==What to Do==
+
+To help hide the fact that your application uses PHP: 
+
+Add the following directives to the php.ini file:
+
+{{{
+expose_php = off
+display_errors = off
+ServerTokens Prod
+ServerSignature = off 
+}}}
+
+The .php file extension of the application files will still be a dead give-away. To prevent this, change extensions of application files to something else, for example ".app" and, if you are using Apache, add the following directive to the Apache configuration file (for other web server types the procedure would be different):
+
+{{{
+AddType application/x-httpd-php .app
+}}}
+
+You can also use ModRewrite for Apache to rewrite request URLs to hide the .php file extensions, but this is limited to applications running on Apache web servers.
+
+If your application uses PHP sessions, change the name of the session cookie by using the session.name php.ini directive:
+
+{{{
+session.name = "SESSIONID"
+}}}
+
+==Additional Resources==
+
+* For a discussion about this subject, see http://www.php.net/manual/en/security.hiding.php. DO NOT set PHP as the default file type, as is recommended by marpetr - doing so greatly simplifies malicious file upload attacks.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

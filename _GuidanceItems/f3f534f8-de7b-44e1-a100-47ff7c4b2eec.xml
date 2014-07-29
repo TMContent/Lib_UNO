@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f3f534f8-de7b-44e1-a100-47ff7c4b2eec</Id>
+    <Id_History>00000000-0000-0000-0000-00000080bc3b,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Sensitive Data Is Not Stored in User Accessible Parameters</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Not Stored in User Accessible Parameters</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Check For==
+
+Make sure that sensitive data is not stored in user accessible parameters.
+
+==Why==
+
+Placing sensitive information in user accessible parameters allows an attacker to recover and/or tamper with that information. For example, if the application stores the users' group membership information in the URL, the attacker can easily assign himself to whatever group he chooses, usually making himself an admin and taking over the application. This used to be a surprisingly common vulnerability during the early days of web applications. Other possible vulnerabilities include allowing an attacker to retrieve sensitive information from parameters using man-in-the-middle attacks. The exact nature of possible vulnerabilities depends on the type of sensitive information that is stored in user accessible parameters. All of these vulnerabilities can be prevented by using PHP session handling.
+
+==How to Check==
+
+Review the application to find all parameters that may contain sensitive information. Unless this information is documented, there are two approaches to doing this: using the application with a web browser or reviewing the application code. Different people are better at different things. Choose the approach that is less time-consuming for your team.
+
+==How to Fix==
+
+To prevent storing sensitive data in user accessible parameters:
+
+# **Identify all parameters that contain data with security implications.** Review the application code to find all parameters that may contain sensitive information. 
+# **Find code that handles security sensitive parameters.** Find the code that is responsible for each user accessible parameter that contains sensitive information.
+# **Replace sensitive user-accessible parameters with PHP session handling.** Rewrite the code that stores sensitive information in user accessible parameters to store it using PHP sessions instead. 
+
+==Additional Resources==
+
+* For more information about PHP session handling, see http://php.net/manual/en/book.session.php]]></Data>
+  </Content>
+</TeamMentor_Article>

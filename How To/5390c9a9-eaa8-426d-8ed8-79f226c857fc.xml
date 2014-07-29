@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1810374285" Content_Hash="368690506">
+  <Metadata>
+    <Id>5390c9a9-eaa8-426d-8ed8-79f226c857fc</Id>
+    <Id_History>275b15cc-ef5c-4637-ae77-62d8d4d1d4e2,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Throw an Exception with Complex Types Or Data Contracts with a Fault Exception</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>The following steps show an example of how to throw an exception with a data contract that has a complex type.</p>
+  <ol>
+    <li>Define the DataContract type to pass the details of SOAP faults as exceptions from a service back to a client
+<ol><pre>[DataContract]<br />public class DatabaseFault<br />{<br />[DataMember]<br />public string DbOperation;<br />[DataMember]<br />public string DbReason<br />[DataMember]<br />public string DbMessage;<br />}</pre></ol><li>Use the FaultContract attribute in the ListCustomers method to generate SOAP faults.
+<ol><pre>[ServiceContract]<br />public interface ICustomerService<br />{<br />// Get the list of customers<br />[FaultContract(typeof(DatabaseFault))]<br />[OperationContract]<br />List&lt;string&gt; ListCustomers();<br />…<br />}</pre></ol><li>Create and populate the DatabaseFault object with the details of the exception in the Service implementation class and then throw a FaultException object with the DatabaseFault object details.
+<ol><pre>catch(Exception e)<br />{    DatabaseFault df = new DatabaseFault();<br />df.DbOperation = "ExecuteReader";<br />df.DbReason = "Exception in querying the Northwind database.";<br />df.DbMessage = e.Message;<br />throw new FaultException&lt;DatabaseFault&gt;(df);<br />}<br /></pre></ol></li></li></li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Fault Contracts, see “Specifying and Handling Faults in Contracts and Services” at <a href="http://msdn.microsoft.com/en-us/library/ms733721.aspx">http://msdn.microsoft.com/en-us/library/ms733721.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

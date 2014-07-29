@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1055517622" Content_Hash="-102570142">
+  <Metadata>
+    <Id>d2e7a239-0648-47c7-afdd-b8796f7ed779</Id>
+    <Id_History>49fce89d-eaae-440e-9ad9-4a6294e6d05f,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Avoid Letting Untrusted Code Or Data Control Reflection.Emit</Title>
+    <Category>Reflection</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Letting Untrusted Code Or Data Control Reflection.Emit</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If your application dynamically generates code through the use of <b>Reflection.Emit</b>, do not allow untrusted code or data to influence the code generation.</p>
+  <h1>Why</h1>
+  <p>If an attacker can influence the code generation, the attacker could coerce your application into generating malicious code. This is particularly significant if your code uses user-supplied input to generate code dynamically.</p>
+  <h1>When</h1>
+  <p>When your application dynamically generates code through the use of <b>Reflection.Emit</b></p>
+  <h1>How</h1>
+  <p>There are some scenarios, such as script engine implementation, in which it is necessary to allow untrusted input to drive <b>Reflection.Emit</b>. If your assembly dynamically generates code to perform operations for a caller and the caller operates at a lower trust level, be especially vigilant for security vulnerabilities. Validate any input string used as a string literal in your generated code and escape quotation mark characters to make sure that the caller cannot break out of the literal and inject code. If there is a way that the caller can influence the code generation so that it fails to compile, treat the problem as a potential security vulnerability.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

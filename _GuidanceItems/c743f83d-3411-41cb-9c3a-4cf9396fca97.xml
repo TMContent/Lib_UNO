@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1184456425" Content_Hash="-376537610">
+  <Metadata>
+    <Id>c743f83d-3411-41cb-9c3a-4cf9396fca97</Id>
+    <Id_History>28ab3f5d-263e-4e1f-8c26-cef952f488f8,</Id_History>
+    <Library_Id>47a10a30-15ad-4cfd-bf82-00e9bb2037f6</Library_Id>
+    <Title>Erase Files Securely</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Erase Files Securely</DirectLink>
+    <Tag />
+    <Security_Demand />
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 3.1</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use a program that securely deletes files by overwriting the files being deleted.</p>
+  <h1>Why</h1>
+  <p>The native Windows API does not securely delete files, so when it is used to delete files, examining the disk with forensic software can often retrieve the contents of the deleted files. When hardware is sold or stolen, data that is not securely erased can
+ be leaked.</p>
+  <h1>When</h1>
+  <p>Use sanitizing software when deleting sensitive data.</p>
+  <h1>How</h1>
+  <p>Use trusted secure deletion software or physically destroy the storage hardware. The methods for securely erasing data from solid-state storage devices (flash memory, "USB sticks," SD-cards, etc.) are more intricate, so the use of these devices to store
+ sensitive information is not recommended in the cardholder data environment. Use the following steps to erase files securely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use secure erasing software.</strong> To satisfy the PCI DSS requirement 3.2 to keep storage of cardholder data to a minimum, install Eraser on all Windows-based machines that handle cardholder data and have a copy of DBAN on hand. Make sure that
+ the Information Security policy requires the staff to use Eraser to delete sensitive information securely and DBAN to sanitize hard drives before disposal.
+</p>
+      <ul>
+        <li>
+          <strong>Eraser</strong> is a free, open-source tool for Windows Operating Systems. Eraser implements pseudo-random data overwrite and DoD 5220.22-M. Eraser allows easily changing the method and the number of passes ,and has a built-in scheduler. To delete
+ files with Eraser: Launch Eraser and drag the files to be deleted into its main window. In Eraser's application menu, select "Edit." Go to "Preferences." Choose "Erasing..." to choose the sanitizing method. In Eraser's application menu, select "Task." Select
+ "Run All." </li>
+        <li>
+          <strong>DBAN</strong>, Darik's Boot and Nuke, is a free bootable CD image that automatically detects most hard drive controllers and implements common secure deletion algorithms. DBAN only allows deleting entire disk partitions at once and uses a custom
+ Linux Operating System, so it works for most hardware. DBAN does not allow doing anything else on the computer it uses while it is running. To delete a disk partition with DBAN: Burn the DBAN CD image on a CD. Insert the DBAN CD into the CD drive of the target
+ computer. Make sure that the target computer boots from the DBAN CD. Most computers have a BIOS option called "Boot Priority" or a "Boot Menu" available during boot-up time. DBAN should boot and detect attached drives automatically. When presented with the
+ "boot:" prompt, press the Enter key. When presented with the DBAN UI, use the on-screen hints to select the method and initiate the procedure. Eraser is recommended for most secure deletion tasks. DBAN is recommended when hard drives are being replaced.&amp;nbsp;Solid-state
+ storage devices allocate space differently than hard drives; therefore, to make sure that information on SSD is deleted securely, the contents of the entire disk must be erased. This means that Eraser is not suitable for erasing data on SSD. DBAN should be
+ used to delete data securely from SSD.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Implement software algorithms for deleting data securely. </strong>Implement algorithms for deleting data securely in your custom software. There are several methods for securely deleting data that are considered acceptable. Several common methods
+ are:</p>
+      <ul>
+        <li>fill the drive space with zeros or pseudo-random data </li>
+        <li>the Gutmann method </li>
+        <li>RCMP TSSIT OPS-II </li>
+        <li>DoD 5220.22-M </li>
+      </ul>
+      <p>The recommended methods for securely deleting sensitive information are single pass overwrite with pseudo-random data and DoD 5220.22-M. Overwriting with pseudo-random data is the method that works well in practice and DoD 5220.22-M is the method that is
+ commonly accepted as secure. Either method gets the job done. It is a long held belief in the Information Security community that multiple passes are required to erase data securely, possibly because the Department of Defense requires multiple passes in their
+ security procedures. However, recent research has shown that a single pass is sufficient for hard drives manufactured after 2001, according to the 2006 NIST Special Publication 800-88 (p. 7). In the event that an assessor demands that the standard operating
+ procedures use multiple passes, it may be helpful to direct him or her to the above-mentioned NIST publication. Most software implementations of secure deletion algorithms make it easy to change the number of passes. Multiple passes may take multiple hours,
+ so unless this practice is deemed necessary, it is not recommended. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Physically destroy the storage media. </strong>Many companies choose to physically destroy old hard drives to make sure that sensitive data is securely deleted. There are several acceptable approaches to physically destroying hard drives, such as
+ drilling through the disk plates. The key to physically destroying hard drives is damaging or misaligning the plates inside. Physically destroying solid-state storage devices requires more extensive damage.
+</p>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To download Eraser, see its homepage at <a href="http://eraser.heidi.ie/">http://eraser.heidi.ie/</a>.
+</li>
+    <li>To download DBAN, see its project page at <a href="http://sourceforge.net/projects/dban/">
+http://sourceforge.net/projects/dban/</a>. </li>
+    <li>For more information about erasing data securely, see "Data Remanence" at <a href="http://en.wikipedia.org/wiki/Data_remanence">
+http://en.wikipedia.org/wiki/Data_remanence</a>.</li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

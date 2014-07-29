@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="405887721" Content_Hash="2125367048">
+  <Metadata>
+    <Id>5174f493-4eaf-482d-a628-bc84831d7851</Id>
+    <Id_History>d9936be5-17a7-44ba-ade7-04268863bd1e,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Protect Service Against Denial Of Service Attacks</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Protect Service Against Denial Of Service Attacks</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Protect against denial of service attacks by limiting message sizes, and using quotas to restrict memory consumption by WCF. </p>
+  <p>Restrict the message size that is processed by WCF using the maxReceivedMessageSize configuration present in the bindings</p>
+  <pre>&lt;binding name="wsHttpEndpointBindingconfig" <br />     maxReceivedMessageSize="65535"&gt;<br />     &lt;security&gt;<br />      &lt;message negotiateServiceCredential="false" /&gt;<br />     &lt;/security&gt;<br />&lt;/binding&gt;</pre>
+  <p>Restrict the buffer size used by WCF using the maxBufferPoolSize configuration present in the bindings</p>
+  <pre>&lt;binding name="wsHttpEndpointBindingconfig" maxBufferPoolSize="524287"<br />     maxReceivedMessageSize="65535"&gt;<br />     &lt;security&gt;<br />      &lt;message negotiateServiceCredential="false" /&gt;<br />     &lt;/security&gt;<br />&lt;/binding&gt;</pre>
+  <p>In streaming scenarios use the reader quotas to limit the size of arrays with maxArrayLength, the length of the string in XML elements with maxStringContentLength, the maximum depth of the XML node with maxDepth, the maximum bytes to be read with maxBytesPerRead and the maximum number of characters in a table with maxNameTableCharCount. </p>
+  <pre>&lt;basicHttpBinding&gt;<br />        &lt;binding name="BasicBindingConfiguration"&gt;<br />          &lt;readerQuotas maxDepth="2" maxStringContentLength="200" maxArrayLength="2000"<br />            maxBytesPerRead="1000" maxNameTableCharCount="1000" /&gt;<br />          &lt;security mode="Transport"&gt;<br />            &lt;transport clientCredentialType="None" /&gt;<br />          &lt;/security&gt;<br />        &lt;/binding&gt;<br />  &lt;/basicHttpBinding&gt;</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

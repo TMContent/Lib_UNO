@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="364297985" Content_Hash="1959147839">
+  <Metadata>
+    <Id>625692b0-742e-4a49-8e40-b2f8243bc4a2</Id>
+    <Id_History>250b4fcb-e181-4d5f-91e8-6545e184454a,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Review the Router Configuration</Title>
+    <Category>Documentation and Policy</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Review the Router Configuration</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 1.1.6 <li>PCI DSS Requirement 1.1.6.a <li>PCI DSS Requirement 1.1.6.b</li></li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Review the router configuration periodically to make sure that it is secure and matches business needs.</p>
+  <h1>Why</h1>
+  <p>The purpose of the review is to make sure that the router configurations are secure and to make corrections if they are necessary. The business needs of a company may change over time, resulting in a different network configuration, which&amp;nbsp;may require a change in the router configuration. A periodic review process helps ensure that changes to the router configuration have been made successfully.&amp;nbsp; </p>
+  <h1>When</h1>
+  <p>The PCI DSS requires the router configuration to be reviewed at least every six months.</p>
+  <h1>How</h1>
+  <p>Perform the following actions to review the router configurations in compliance with PCI DSS:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Designate a&amp;nbsp;DMZ. </strong>The purpose of the DMZ is to mediate the network access between the secure internal environment and the dangerous Internet. The cardholder data servers have to be separated from the DMZ.&amp;nbsp;Make sure that all computers that handle incoming connections from the Internet are located in the DMZ. Computers that need Internet access may have to be placed in the DMZ as well. Record any changes that need to be made, or state that the DMZ has been reviewed and does not require any changes. </p>
+      <li>
+        <p>
+          <strong>Inbound IP Traffic Limited to the DMZ. </strong>The inbound Internet traffic should be limited to the DMZ. Verify that the router does not use NAT to translate the ports on external IP(s) to the internal IP(s) that are not in the DMZ. Verify that the router does not route inbound IP addresses to internal hosts that are not in the DMZ. Record any changes that need to be made, or state that the port forwarding settings have been reviewed and do not require any changes.</p>
+        <li>
+          <p>
+            <strong>Limit outbound traffic from the cardholder data environment&amp;nbsp;to only access IPs in the DMZ. </strong>The network devices in the cardholder data environment should not have Internet access. Verify that the network devices in the cardholder data environment are not able to make any outgoing Internet connections to any network device that is not in the DMZ. Record any changes that need to be made, or state that the routing tables have been reviewed and do not require any changes.</p>
+          <li>
+            <p>
+              <strong>Place the database server on an internal network separate from the DMZ. </strong>The database server that stores cardholder information is an integral part of the cardholder data environment and therefore must be separate from the DMZ. Verify that any database server that stores cardholder data does not have Internet access. Record any changes that need to be made, or state that the database servers are on an internal network separate from the DMZ.</p>
+            <li>
+              <p>
+                <strong>Use NAT to hide internal IPs from the Internet. </strong>The network devices in the PCI DSS scope should only use RFC 1918 IP addresses. Verify that all network devices on the company networks that are in the PCI DSS scope are assigned RFC 1918 addresses only. Verify that NAT is enabled on the Internet router or firewall. Record any changes that need to be made, or state that the NAT settings have been reviewed and do not require any changes. RFC 1918 IP addresses are addresses in the following IP ranges: </p>
+            </li>
+            <ol>
+              <li>10.0.0.0 - 10.255.255.255 <li>172.16.0.0 - 172.31.255.255 <li>192.168.0.0 - 192.168.255.255</li></li></li>
+            </ol>
+            <li>
+              <p>
+                <strong>Review changes to the network. </strong>Review any changes that have been made to the network since the last review, such as addition of any new network devices. Make sure that the router configurations accommodate the changes that have been made to the network. The changes that have been made should have been documented when they were made and included in the network documentation.</p>
+              <li>
+                <p>
+                  <strong>Update documentation. </strong>The staff member(s) responsible for the review should sign off on the results of the review. The results of the review should be included in the network documentation.</p>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

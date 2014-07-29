@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1900879946" Content_Hash="1630322710">
+  <Metadata>
+    <Id>a24fb86a-5d6a-45c0-a688-3ae3e0b38593</Id>
+    <Id_History>ca9b1552-f3c9-424f-9f26-bef95ea5138e,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Test for Deserialization of Untrusted Data Vulnerabilities</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Deserialization of Untrusted Data Vulnerabilities</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>ASP.NET applications that use serialization/deserialization of data might be vulnerable to deserialization of untrusted data bugs.&amp;nbsp;To exploit this bug, an attacker tampers with the data that will be deserialized by the application so that the application deserializes a malicious data stream. An attacker can use malicious serialization data in order to inject client-side scripts, perform denial-of-service (DoS) attacks, or execute logical attacks on the target application.</p>
+  <p>Follow these steps to test for deserialization of untrusted data bugs in ASP.NET:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Execute test cases&amp;nbsp;</li>
+  </ul>
+  <h1>Step 1: Understand Attack Scenarios</h1>
+  <p>The first step in learning how to test for deserialization bugs in ASP.NET is to understand the anatomy of their attack scenarios.&amp;nbsp;Attack scenarios include but are not limited to:</p>
+  <ul>
+    <li>Client-side script injection </li>
+    <li>Denial-of-service attacks </li>
+    <li>Logical attacks<br /></li>
+  </ul>
+  <p>During a deserialization of untrusted data attack, an attacker tampers with serialized data or submits malicious serialized data so that the application behaves unexpectedly when it starts deserializing it. </p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker finds an application’s functionality where it inputs serialized data dynamically or from a permanent store. </li>
+    <li>If the application dynamically inputs serialized data, the attacker inputs malicious serialized data. If the application inputs serialized data from a permanent store such as a file or database, the attacker tampers with this store and writes the malicious serialized data. </li>
+    <li>The attacker waits for the application to react upon deserializing the malicious data.<b><i>&amp;nbsp;</i></b></li>
+  </ol>
+  <h2>Scenario 1: Client-side script injection</h2>
+  <p>Data deserialization, the opposite of data serialization, is used by ASP.NET applications that extract a sequence of bytes into a C# or VB object (depending on the language in use).&amp;nbsp;For instance, the following application uses serialized JSON data stored in a server-side file to build an ASP.NET response:</p>
+  <p>
+    <font face="'Courier New'">public partial class deserialize : System.Web.UI.Page<br />{<br />&amp;nbsp; &amp;nbsp; [Serializable]<br />&amp;nbsp; &amp;nbsp; public class Address<br />&amp;nbsp; &amp;nbsp; {<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public string Street;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public string City;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public string State;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public string Zip;<br />&amp;nbsp; &amp;nbsp; }<br /><br />&amp;nbsp; &amp;nbsp; [Serializable]<br />&amp;nbsp; &amp;nbsp; public class Customer<br />&amp;nbsp; &amp;nbsp; {<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public string Name;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public DateTime Entered = DateTime.Now;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; public List&lt;Address&gt; Addresses = new List&lt;Address&gt;();<br />&amp;nbsp; &amp;nbsp; }<br /><br />&amp;nbsp; &amp;nbsp; protected void Page_Load(object sender, EventArgs e)<br />&amp;nbsp; &amp;nbsp; {<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; StreamReader sr = new StreamReader(Server.MapPath("data.txt"));<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; MemoryStream ms = new&amp;nbsp;MemoryStream(Encoding.Unicode.GetBytes(sr.ReadToEnd()));<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Customer));<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Customer person = ser.ReadObject(ms) as Customer;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ms.Close();<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Response.Write(person.Name);<br />&amp;nbsp; &amp;nbsp; }<br />}&amp;nbsp;</font>
+  </p>
+  <p>The <i>data.txt </i>containing the following data:</p>
+  <p>
+    <font face="'Courier New'">{"Addresses":<br />[{"City":"Seatle","State":"WA","Street":"123 Wall St.","Zip":"98101"},<br />{"City":"Boston","State":"MA","Street":"33 St. Paul St","Zip":"02109"}],<br />"Entered":"\/Date(1191992400000-0500)\/",<br />"Name":"John Smith"}&amp;nbsp;</font>
+  </p>
+  <p>Generates the following output:</p>
+  <p>
+    <font face="'Courier New'">John Smith</font>
+  </p>
+  <p>To execute this attack scenario, an attacker can modify the serialized data to add a client-side script:</p>
+  <p>
+    <font face="'Courier New'">{"Addresses":&amp;nbsp;<br />[{"City":"Seatle","State":"WA","Street":"123 Wall St.","Zip":"98101"},&amp;nbsp;<br />{"City":"Boston","State":"MA","Street":"33 St. Paul St","Zip":"02109"}],&amp;nbsp;<br />"Entered":"\/Date(1191992400000-0500)\/",&amp;nbsp;<br />"Name":"&lt;script&gt;alert('exploiting deserialization')&lt;/script&gt;"}</font>
+  </p>
+  <p>This results in the browser displaying an alert box that confirms that the client-side script has been injected.&amp;nbsp;An attacker who is able to modify the untrusted data source used to service the request above might be able to inject a client-side script that is displayed to all clients.&amp;nbsp;This attack scenario is similar to stored Cross-Site Scripting (XSS) where the attacker injects a client-side script in a data source.&amp;nbsp;</p>
+  <h2>Scenario 2: Denial-of-service attack</h2>
+  <p>An attacker might also attempt a denial-of-service attack on the application by trying to crash the ASP.NET application or put it into a state that prevents the application from properly servicing its users:</p>
+  <p>
+    <font face="'Courier New'">{"Addresses":&amp;nbsp;<br />[{"City":"Seatle","State":"WA","Street":"123 Wall St.","Zip":"98101"},&amp;nbsp;<br />{"City":"Boston","State":"MA","Street":"33 St. Paul St","Zip":"02109"}],&amp;nbsp;<br />"Entered":"\/Date(1191992400000-0500)\/",<br />"Name":"}]}})}&amp;nbsp;</font>
+  </p>
+  <p>Here the attacker is trying to cause a parsing error in the application in an attempt of raising an unhandled exception that might eventually cause the application thread to terminate.&amp;nbsp;Additionally, an attacker can attempt exploiting recursive elements by adding an excessive number of recursion levels or exploiting array elements by adding an excessive number of array elements.&amp;nbsp;For example, using the current example an attacker might add numerous array elements to the <i>Addresses</i> array:</p>
+  <p>
+    <font face="'Courier New'">{"Addresses":&amp;nbsp;<br />[{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"a","State":"b","Street":"c","Zip":"d"}<br />{"City":"Seatle","State":"WA","Street":"123 Wall St.","Zip":"98101"},&amp;nbsp;<br />{"City":"Boston","State":"MA","Street":"33 St. Paul St","Zip":"02109"}],<br />"Entered":"\/Date(1191992400000-0500)\/","Name":"John Smith"}&amp;nbsp;</font>
+  </p>
+  <h2>
+    Scenario 3: Logical attacks
+  </h2>
+  <p>The last scenario refers to logical attacks on the application where the data modified by the attacker causes the application to behave differently, following an unexpected execution path or executing additional attacker-provided code. &amp;nbsp;&amp;nbsp;</p>
+  <p>For example, an application dynamically evaluates the following code and assumes that the access level is always 2:</p>
+  <p>
+    <font face="'Courier New'">{"username": jsmith<br />"password": I3483y0824nmnNJKBQSDVhvhv38u902hf08h0esubfe9f7w7gvb9<br />"Access-Level": 2}</font>
+  </p>
+  <p />
+  <p>However, the attacker can tamper with the data source used during serialization to change the access level to 1:</p>
+  <p>
+    <font face="'Courier New'">{"username": jsmith<br />"password": I3483y0824nmnNJKBQSDVhvhv38u902hf08h0esubfe9f7w7gvb9<br />"Access-Level": 1}&amp;nbsp;</font>
+  </p>
+  <p>As a result, the application might make an incorrect assumption about the attacker’s privilege and grant access to critical parts of the application to the attacker.&amp;nbsp;</p>
+  <h1>Step 2: Analyze Causes and Countermeasures</h1>
+  <p>Next it is necessary to analyze what causes and how to protect against deserialization of untrusted data attacks.</p>
+  <h2>
+    Accepting untrusted serialized data
+  </h2>
+  <p>This attack is possible when an application accepts untrusted data as input to a deserialization routine without validating the integrity of the untrusted data to prevent it from being tampered by an attacker.&amp;nbsp;As a result, the attacker is able to submit malicious data for the application to deserialize. A possible mitigation consists adding a cryptographic checksum to serialized messages to detect tampering of serialized data.</p>
+  <h2>
+    Using a secure channel
+  </h2>
+  <p>A similar option to implementing a cryptographic framework for serialized data is to send all serialized data using a secure channel.&amp;nbsp;Developers can choose different secure channel implementations such as SSL/TLS and IPSec.&amp;nbsp;</p>
+  <h1>Step 3: Execute Test Cases</h1>
+  <p>Now that you’ve reviewed the theoretical aspects of deserialization of untrusted data bugs it is necessary to execute the following test cases to check it your application is vulnerable.</p>
+  <h2>Test for deserialization of unstrusted data dynamically</h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Discover an application’s functionality that dynamically takes untrusted serialized data (from the URL, web form, or other client-accessible input point) and deserializes the data. </li>
+    <li>Modify the input data to add malicious data (such as an injected script) and feed the data to the application. </li>
+    <li>Wait till the application deserializes the data.</li>
+  </ol>
+  <p>Expected results:&amp;nbsp;The application is vulnerable if it allows for malicious modification of the serialized data.&amp;nbsp;That is, if modification results in an insecure condition such as script injection, denial-of-service, or a logical attack on the application.<b><i>&amp;nbsp;</i></b></p>
+  <h2>
+    Test for deserialization of unstrusted data through a data store
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Discover an application’s functionality that takes untrusted serialized data from a physical store (from a file, database, or other client-accessible data store) and deserializes the data. </li>
+    <li>Modify the data store to add a malicious data (such as an injected script) and feed the data to the application. </li>
+    <li>Wait till the application deserializes the data.</li>
+  </ol>
+  <p>Expected results: The application is vulnerable if it allows for malicious modification of the serialized data.&amp;nbsp;That is, if modification results in an insecure condition such as script injection, denial-of-service, or a logical attack on the application.&amp;nbsp;</p>
+  <h1>Conclusions</h1>
+  <p>Deserialization of untrusted data is a security concern as it allows attackers to execute different attacks on the application such as injecting a client-side script, denying the service of the application, and logically exploiting the application’s behavior for the attacker’s benefit. To test for this vulnerability in ASP .NET applications it is suggested to start by understanding the different attack scenarios. Continue by reviewing what causes this vulnerability and how to protect against it.&amp;nbsp;Finally, execute different test cases based on the input point that the application uses to gather the serialized data.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

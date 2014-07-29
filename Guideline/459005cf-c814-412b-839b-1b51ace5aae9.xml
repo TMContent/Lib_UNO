@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-202594194" Content_Hash="188111592">
+  <Metadata>
+    <Id>459005cf-c814-412b-839b-1b51ace5aae9</Id>
+    <Id_History>c56f630a-b2f8-4610-8e14-77b377a2587c,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Choose a Trust Level That Does Not Exceed the Application&amp;#39;s Requirements</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Choose a Trust Level That Does Not Exceed the Application&amp;#39;s Requirements</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0&amp;nbsp; </li>
+    <li>ASP.NET 1.1</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Determine what operating permissions&amp;nbsp;your application&amp;nbsp;needs, then choose a trust level that does not&amp;nbsp;exceed those&amp;nbsp;requirements.</p>
+  <h1>Why</h1>
+  <p>An attacker can only cause damage within the bounds defined by the trust level set on the application. The less privilege your application has, the less damage potential an attacker will have.&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>ASP.NET web services and applications run in the full trust mode by default. Rarely will an application need the entire set of permissions. This guideline is applicable whenever an application does not require the entire set of permissions that are grantable in ASP.NET.</p>
+  <h1>How</h1>
+  <p>To select the most appropriate trust level take the following steps: </p>
+  <ol>
+    <li>Identify the precise set of code access security permissions that your application requires. You can do this by manually reviewing your code or by using the Permissions Calculator tool (Permcalc.exe). </li>
+    <li>Evaluate whether the permissions required for your application match those provided by any of the standard trust levels. To see the permissions each trust level provides, examine each trust level policy file in the %windir%\Microsoft.NET\Framework\{version}\CONFIG directory, beginning with the High trust policy file web_hightrust.config. </li>
+    <li>If your application requires fewer code access security permissions than those provided by the High trust level, move on to consider Medium trust. Repeat the process, moving from Medium to Low to Minimal, and keep evaluating the partial trust levels until you reach an exact match to your application's requirements or until your application's required permissions slightly exceed a partial trust level. </li>
+    <li>If your application needs more permissions than are granted by one level but requires fewer that are provided by the next level, consider creating a custom trust policy. </li>
+    <li>Set the trust level by adding an xml directive to the web config file: <blockquote><pre>&lt;system.web&gt;<br />&amp;nbsp; ...<br />&amp;nbsp; &lt;trust level="Medium" originUrl="" /&gt;<br />&amp;nbsp; ...<br />&lt;/system.web&gt;</pre></blockquote></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>A developer creates&amp;nbsp;an ASP.NET&amp;nbsp;application that requires file system access&amp;nbsp;outside of the&amp;nbsp;directory that is allocated for&amp;nbsp;the application. The default Full Trust level does allow for file system access in the way that the application needs, however it also&amp;nbsp;gives several unnecessary privileges such as socket access, and the ability to call unmanaged code.&amp;nbsp;These additional privileges increase the amount of damage an attacker can do if the application is compromised.</p>
+  <h1>Solution Example</h1>
+  <p>A developer creates&amp;nbsp;an ASP.NET&amp;nbsp;application that requires file system access&amp;nbsp;outside of the&amp;nbsp;directory that is allocated for&amp;nbsp;the application. The developer does not want to give full permissions to the application. The developer runs permcalc.exe on the assembly, which generates an xml report that identifies&amp;nbsp;the precise permissions that the application requires, which are:</p>
+  <ul>
+    <li>
+      <strong>SMTP access.</strong> Emails are sent on behalf of the application to notify users when important events occur, such as&amp;nbsp;password reset acknowledgment responses&amp;nbsp;and welcome emails for new users. </li>
+    <li>
+      <strong>Managed code only</strong>. The application is very modern, and relies on no unmanaged libraries to perform tasks. The application does not need to call unmanaged (native) code. </li>
+    <li>
+      <strong>Socket Access.</strong> The application relies on an older auditing package that employs a custom, socket based communication protocol. The application needs the ability to create a socket connection and read/write data from/to it.</li>
+  </ul>
+  <p>The developer looks at the Predefined trust levels, and determines that the lowest level of trust that the application can use and still satisfy it's requirements is the high trust level.&amp;nbsp; She sets the trust level by adding an xml directive to the web config file:</p>
+  <blockquote>
+    <pre>&lt;system.web&gt;<br />&amp;nbsp; ...<br />&amp;nbsp; &lt;trust level="High" originUrl="" /&gt;<br />&amp;nbsp; ...<br />&lt;/system.web&gt;</pre>
+  </blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/paght000017.asp ">How to use code access security in ASP.Net 2.0</a>
+    </li>
+    <li>
+      <a href="http://msdn2.microsoft.com/en-us/library/ms165077.aspx">Permission Calculator Tool (PermCalc.exe)</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

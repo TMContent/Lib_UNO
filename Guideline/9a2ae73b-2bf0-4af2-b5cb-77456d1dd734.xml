@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-240517163" Content_Hash="1636906492">
+  <Metadata>
+    <Id>9a2ae73b-2bf0-4af2-b5cb-77456d1dd734</Id>
+    <Id_History>ad399c76-5073-4ed9-8b13-e3b8d9c07000,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Avoid Storing Sensitive Data in ViewState</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Storing Sensitive Data in ViewState</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Avoid storing sensitive data in ViewState.&amp;nbsp; If you need to manage sensitive data, maintain it on the server; for example, maintain it in session state.&amp;nbsp; If your ViewState does contain sensitive data, you should&amp;nbsp;encrypt ViewState. </p>
+  <h1>Why</h1>
+  <p>Although it does protect against tampering, by default, the ViewState does not provide any protection against information disclosure, and thus should not be used for sensitive data.&amp;nbsp; Encryption can be added to the ViewState, but there is a&amp;nbsp;large performance overhead to doing so, both in terms of CPU usage for encryption and the size of the resulting ViewState; the best option is to ensure that no sensitive data is in the ViewState. </p>
+  <h1>When</h1>
+  <p>Sensitive data should not be stored in the ViewState.&amp;nbsp; If sensitive data&amp;nbsp;must be stored in ViewState for some reason, it should be encrypted.</p>
+  <h1>How</h1>
+  <p>The ViewState is a blob of base-64 encoded data stored and submitted as a hidden form element by ASP.NET controls.&amp;nbsp; You can view it by looking at the page source or by using ASP.NET tracing.&amp;nbsp; To ensure that sensitive data is not stored in the view state, follow these steps:</p>
+  <ol>
+    <li>
+      <p>Examine all data which is being placed in the ViewState and ensure that it is not sensitive, either alone or in combination with other data.</p>
+    </li>
+    <li>
+      <p>Move any sensitive data into server-side session variables.</p>
+    </li>
+    <li>
+      <p>If data cannot be moved into server-side session variables, encrypt the ViewState.</p>
+    </li>
+  </ol>
+  <h2>To Turn off the ViewState</h2>
+  <p>If you're not using the ViewState (or don't want sensitive data to be persisted accidentally), you can turn it off at either the tag, page, or application levels with the following code:</p>
+  <table>
+    <tbody>
+      <tr>
+        <th>Per control (on tag)</th>
+        <td>
+          <pre>&lt;asp:datagrid EnableViewState="false" ... /&gt;</pre>
+        </td>
+      </tr>
+      <tr>
+        <th>Per page (in directive)</th>
+        <td>
+          <pre>&lt;%@ Page EnableViewState="False" ... %&gt;</pre>
+        </td>
+      </tr>
+      <tr>
+        <th>Per application (in web.config)</th>
+        <td>
+          <pre>&lt;Pages EnableViewState="false" ... /&gt;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>To Store Session State on the Server Side</h2>
+  <p>To store session state on the server side, you can use the <strong>SessionStateModule</strong> class, whose <strong>Contents</strong> collection allows for session objects to be added and retrieve easily.&amp;nbsp; Server-side session state can be stored either in-process, in a seperate state server, or in a SQL server, allowing for flexibility across a variety of configurations</p>
+  <h2>To Encrypt the ViewState:</h2>
+  <ol>
+    <li>Check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Always</b>, as shown in the following example. <pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Always"<br /> ...<br /> /&gt;</pre><p>If you do not want every page to used encrypted ViewState, check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Auto</b>, as shown in the following example. </p><pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Auto"<br /> ...<br /> /&gt;   </pre><p>Then, from within your code, call the <b>RegisterRequiresViewStateEncryption</b> method as shown in the following example. </p><pre>Page.RegisterRequiresViewStateEncryption();</pre></li>
+    <li>Specify the encryption algorithm to use on the <b>validation</b> attribute, as shown in the following example. <pre>&lt;machineKey ... validation="AES" ... /&gt;</pre><p>The <b>validation</b> attribute is overloaded and can be used to specify either the hashing algorithm or the encryption algorithm.&amp;nbsp; You can specify either <b>3DES</b> or <b>AES</b>.&amp;nbsp; (ASP.NET 2.0 introduces support for <b>AES</b>.)&amp;nbsp; Because <b>AES</b> offers larger key sizes (128 bits, 192 bits, or 256 bits) than <b>3DES</b> (56 bits), it is considered more secure and should be used.</p></li>
+    <li>Review the <b>decryptionKey</b> and <strong>validationKey</strong> attribute of the <b>&lt;machineKey&gt;</b> element: <pre>&lt;machineKey validationKey="AutoGenerate,IsolateApps"<br />   decryptionKey="AutoGenerate,IsolateApps"<br />   ... /&gt;</pre><p>Unless your application is installed in a Web farm, you should leave the <b>decryptionKey</b> and <strong>validationKey</strong> attribute with the default values shown in the example. To encrypt ViewState in a web farm, you need to manually set the <b>validationKey</b> and <strong>decryptionKey</strong> value—these values should be same across all machines in the web farm</p></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An e-commerce site sends billing details, including order amounts and (non-public) discount percentages round-trip through the user's browser.&amp;nbsp; All of this information is stored in a ViewState.&amp;nbsp; An attacker can extract all of the information in the ViewState, although they cannot modify it.&amp;nbsp; Thus, their competitors can learn the site's discount structure without having to compromise any server side machines. </p>
+  <p />
+  <h1>Solution Example</h1>
+  <p>An e-commerce site keeps all billing details in server-side session state after they have been initially submitted by the user, and protects that session state appropriately.&amp;nbsp; Attackers are unable to either view or modify billing details.</p>
+  <p />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>85951e85-3cf0-49cf-87c9-ebf0f04dc88b</Id>
+    <Id_History>7c45a123-1664-4657-8400-482b7f1a08c7,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Security Decisions Are Not Made Based on Client-Accessible Parameters</Title>
+    <Category>Checklist Item</Category>
+    <Phase>Session Management</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Design</Type>
+    <DirectLink>Security Decisions Are Not Made Based on Client-Accessible Parameters</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+<br /></p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">What to Check For</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Ensure your application does not make security decisions based on parameters that are accessible by the client.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Why</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Using client-accessible data to make security decisions allows the users to access and modify the data and work around security measures.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">How to Check</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Use the following steps to ensure that your application does not delegate parts of its security decision mechanism to the client-side:</p>
+  <ol style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Verify that there are no security decision points on the client.&amp;nbsp;</strong>Review your application's design and requirements. Ensure that no security decisions are made on the client-side. Common areas that might affect your application's security model include:</p>
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px;">
+        <li style="margin: 0px; padding: 0px;">URL-based parameters</li>
+        <li style="margin: 0px; padding: 0px;">Form-based parameters</li>
+        <li style="margin: 0px; padding: 0px;">Cookies</li>
+        <li style="margin: 0px; padding: 0px;">HTTP headers</li>
+      </ul>
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">Make sure that appropriate server-side security has been enforced.</p>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Verify that user input does not affect security decisions.&amp;nbsp;</strong>Trace all user input from source to sink. Verify that user input does not have a direct impact on your application's security decisions. Common mistakes to look out for include:</p>
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px;">
+        <li style="margin: 0px; padding: 0px;">Undocumented parameters that enable privileged functionality</li>
+        <li style="margin: 0px; padding: 0px;">Storing user privileges inside cookies</li>
+      </ul>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Check if security decisions can be tampered with by the client.&amp;nbsp;</strong>Through the use of parameter tampering attacks, ensure that users cannot tamper with your application's security decisions.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">How to Fix</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Security decisions should not be based on any data over which the client has control. Common mistakes include relying on data inside unprotected cookies, hidden fields or query strings.</p>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">To ensure that no security decisions are based on client-accessible data:</p>
+  <ol style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Identify security decision points.&amp;nbsp;</strong>Carefully examine the points in the code that are related to your application's security model. It is critical that no decision points are placed in the client. Because this is a design issue, it is recommended to use threat modeling to determine and evaluate the security decision points.</p>
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;" />
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Trace data that influences security decisions.&amp;nbsp;</strong>Tracing the data that influences security decisions helps&amp;nbsp;determine if the data is vulnerable to any client-based attacks. Make sure that the client cannot modify or influence this data.</p>
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;" />
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Prove that security-related data cannot be tampered with by the client.&amp;nbsp;</strong>Use cryptography or your application's design to ensure that security related data cannot be tampered with by the client.</p>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Mark all exceptions to this guideline.&amp;nbsp;</strong>Note all exceptions made to this guideline. Thoroughly examine the code associated with such instances. Verify that all instances are provided in the business logic and are intended.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Additional Resources</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <li style="margin: 0px; padding: 0px;">To learn more about parameter manipulation and ways to prevent it, see:&amp;nbsp;<a href="http://www.cgisecurity.com/owasp/html/ch11s04.html" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-weight: bold;">Parameter Manipulation</a>.</li>
+  </ul>
+  <div style="margin: 0px; padding: 0px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; background-color: rgb(255, 255, 255);">Session Management Guidelines</h1>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="13ad7fa3-199e-4957-9e4f-39bd931c9f1d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Protect Session IDs</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="5d296e90-a27c-424a-bfe1-5576490b50c2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Protect Session Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="f4218f89-d394-4162-8108-faef064f0f65" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Set the Domain and Path Values of Session Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="0c4222a4-6028-4191-8dcb-761bbb4d2661" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Set the Secure and HTTPOnly Flags on All Sensitive Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="b8e65bce-05bb-40b0-bc5b-ea6fe1e3ce96" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Change Session IDs During Authentication</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="05a2cfa6-d015-446b-8c25-3cb13f10d396" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Invalidate Sessions when Users Log Out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="6ac43864-2644-4f33-bfb2-1366c5c3cb58" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Make Inactive Sessions Time-out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="19f2779c-14ec-43fb-8e8d-4505cb0801c9" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Include Unique Tokens in HTTP Requests</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="7889a5ad-4e61-41da-97da-d40337050e17" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Do Not Make Security Decisions Based on Client-Accessible Parameters</a>
+        </b>
+      </li>
+    </ul>
+    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; background-color: rgb(255, 255, 255);">Session Management Checklists</h1>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="9dfbcbed-d897-4df4-b212-9d80fb26cbdf" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Session IDs Are Protected</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="fe0a7400-2140-4e9e-bcc7-f185acce6974" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Session Cookies are Protected</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="932cd357-dfd4-4f95-949b-e407b5299748" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Domain and Path Values of Session Cookies Are Strict</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="0679ade9-860f-42e0-b811-2a3434410a76" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Secure and HTTPOnly Flags Are Set on All Sensitive Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="3328e0df-abe9-4339-9eeb-fae6eb54042e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Session IDs Are Changed During Authentication</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="636b0c98-34d0-4aed-bf06-35f80a6e5551" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Sessions Are Invalidated When Users Log Out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="22c6bd72-94a7-4b86-9c9b-60d921fbd266" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Inactive Sessions Time-out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="178b26f6-689b-4a0e-a117-eadf1af3404c" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Unique Tokens Are Included in HTTP Requests</a>
+        </b>
+      </li>
+    </ul>
+  </div>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <div style="margin: 0px; padding: 0px; font-size: small; font-weight: normal;">
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; background-color: rgb(255, 255, 255);">
+      </ul>
+    </div>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

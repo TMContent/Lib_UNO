@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1855730057" Content_Hash="2104111466">
+  <Metadata>
+    <Id>c0c20ec8-f5f5-4d7e-a8e4-7e7513ca3eab</Id>
+    <Id_History>3142a97b-edd8-4564-aa92-559cf382e546,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Protect Data Privacy And Integrity over the Network</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Protect Data Privacy And Integrity over the Network</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Sensitive data passed across the network to and from the database server could include application-specific data or database login credentials. To ensure the privacy and integrity of data over the network, either use a platform-level solution, such as that provided by a secure datacenter where Internet Protocol Security (IPSec) encrypted communication channels are used between servers, or configure your application to establish SSL connections to the database.</p>
+  <h1>Why</h1>
+  <p>The internet is full of abstractions and layers. When data is sent over a wire, it typically passes through several intermediate relays on it's way towards&amp;nbsp;some final destination. Using a safe protocol to transmit information is important because it adds protection against inadvertent eavesdropping and modification in mid transport.</p>
+  <h1>When</h1>
+  <p>This is appropriate whenever sensitive data needs to be sent between two hosts, whether it is using the public internet or a private LAN as a transmission medium.</p>
+  <h1>How</h1>
+  <p>
+    <strong>Use SSL</strong> when you need granular channel protection for a particular application, instead of for all applications and services running on a computer.</p>
+  <ul>
+    <li>
+      <p>To use SSL:</p>
+      <p>&amp;nbsp;&amp;nbsp; 1. Install a server certificate on the Web server.<br />&amp;nbsp;&amp;nbsp; 2. Install the root certificate authority (CA) certificate from the same authority into the local computer's Trusted Root Certification Authorities certificate store.<br />&amp;nbsp;&amp;nbsp; 3. Use IIS to configure the server to force the use of encryption while accessing Web pages.<br />&amp;nbsp;&amp;nbsp; 4. Design pages with SSL in mind to minimize performance overhead. Optimize pages that use SSL by including less text and simple graphics and partition&amp;nbsp;the site and ensure that only those pages than contain sensitive data use SSL.</p>
+    </li>
+  </ul>
+  <p>
+    <strong>Use Internet Protocol Security (IPSec)</strong> to secure the communication channel between two servers and to restrict which computers can communicate with one another. For example, you can help secure a database server by establishing a policy that permits requests only from a trusted client computer, such as an application or Web server. You can also restrict communication to specific IP protocols and TCP/UDP ports.</p>
+  <ul>
+    <li>
+      <p>Using IPSec is not a a possibility when the two servers are not using static ip addresses.</p>
+      <p>To secure traffic between two servers, follow these steps:</p>
+      <p>
+        <strong>1.&amp;nbsp;Create an IP Filter.</strong> This&amp;nbsp;restricts&amp;nbsp;what computers can communicate with each other, and require that&amp;nbsp;specific&amp;nbsp;communication protocols are used.&amp;nbsp;A filter consists of:</p>
+      <ul>
+        <li>A source IP address or range of addresses. </li>
+        <li>A destination IP address or range of addresses. </li>
+        <li>An IP protocol, such as TCP, UDP, or "any." </li>
+        <li>Source and destination ports (for TCP or UDP only).<br /><strong></strong></li>
+      </ul>
+      <p>
+        <strong>2. Create Filter Actions.</strong> This procedure creates two filter actions. The first will be used to block all communications from specified computers and the second will be used to enforce the use of encryption between application server and database server computers.<br /><strong>3. Create Rules.</strong> This procedure creates two new rules that will be used to associate the filter that you created in Procedure 1, with the two filter actions you created in Procedure 2.<br /><strong>4. Export the IPSec Policy to the Remote Computer.</strong> The IPSec policy that you have created on the database server must now be exported and copied to the application server computer.<br /><strong>5. Assign Policies.</strong> An IPSec policy must be assigned before it becomes active. Note that only one policy may be active at any one time on a particular computer.<br /><strong>6. Verify that it Works.</strong> Use Network Monitor (netmon.exe) to verify that data sent between the two servers&amp;nbsp;is encrypted. </p>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

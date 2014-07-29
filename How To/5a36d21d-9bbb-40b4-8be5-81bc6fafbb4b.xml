@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1557483343" Content_Hash="463052389">
+  <Metadata>
+    <Id>5a36d21d-9bbb-40b4-8be5-81bc6fafbb4b</Id>
+    <Id_History>5eb4c8b2-e9f4-4262-88d5-81931e052b61,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Test for Reverse Engineering Vulnerabilities</Title>
+    <Category>Other</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Reverse Engineering Vulnerabilities</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies To</span>
+  </h1>
+  <ul>
+    <li>All software applications<b>&amp;nbsp;</b></li>
+  </ul>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Reverse engineering of software is the process of inferring details about the architecture, design, or implementation of a software application after the application has been built and released.<span>&amp;nbsp;</span>This attack commonly focuses on recovering the source code of the target application, but it may also focus in discovering its design and architecture.<span>&amp;nbsp; </span></p>
+  <p>Follow these steps to test for reverse engineering bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Execute test cases<b>&amp;nbsp;</b></li>
+  </ul>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, it is necessary to understand under what scenarios and for what purposes attackers utilize reverse engineering:</p>
+  <ul>
+    <li>Recovering source code </li>
+    <li>Recovering software design and architecture&amp;nbsp;</li>
+  </ul>
+  <h2>
+    <span>
+      Scenario 1: Recovering source code
+    </span>
+  </h2>
+  <p>Reverse engineering is often used to recover the source code of an application from a binary file or an intermediate file such as a Java class. For this purpose, the attacker uses a reverse engineering tool, such as a dissasembler or a decompiler, to parse the compiled or built source code in an attempt to reverse the compiling or building process and reconstruct the actual source code that created the file, line by line. Once the attacker gets the output of the code recovery tool, he usually uses the output source in an attempt to reconstruct the application. Attackers use this technique to recover source code for a program, to modify the code to achieve a desired task (such as getting rid of a registration/activation process, or to bypass a security check), and then to rebuild the application into a modified version that suits the attacker’s needs.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>Attacker gets a copy of application binary/object/class files. </li>
+    <li>Attacker uses a tool to translate binary/object/class files into source code. </li>
+    <li>Attacker modifies source code and rebuilds application (optional).</li>
+  </ol>
+  <p>Note that the last step is not a requirement for a reverse engineering attack.&amp;nbsp;</p>
+  <h2>
+    <span>
+      Scenario 2: Recovering software design and architecture
+    </span>
+  </h2>
+  <p>Software applications work by making internal logical decisions and interacting with their environments. For instance, an application might have different <i>if/then/else</i> or <i>case</i> conditions to choose different logical paths. In addition, to properly operate, most applications need to access files from the hard drive, send information over the network, consume memory, use the registry (in Windows), or interact with a database. By analyzing how and when an application takes logical decisions and how it interacts with its environment, an attacker can determine the design of a program, even when this design is not intuitive.</p>
+  <p>In this scenario, an attacker uses a set of tools including dissasemblers, decompilers, debuggers, dependency checkers, and monitoring tools to discover the details of how the application is designed and its architecture. In short, how the application decides different internal paths and interacts with its environment.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker gets a copy of an application’s binary/object/class files. </li>
+    <li>The attacker analyzes the application statically, using dependency checker tools to see how the application is decomposed. </li>
+    <li>The attacker analyzes the application using dissasembler to see how it chooses different logical paths based on different output choices. </li>
+    <li>The attacker exercises the application while monitoring its activity with file system, network, databases, registry, memory, and third-party APIs to see how it interacts with its environment. </li>
+    <li>The attacker collects output from steps 2, 3, and 4 to determine the application’s design and architecture.<b>&amp;nbsp;</b></li>
+  </ol>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The following step, before executing practical test cases, is to understand why reverse engineering bugs are possible and how to protect against them.</p>
+  <p>Reverse engineering bugs exist by default in any software application because they follow the premise that any engineering process can be reversed.<span>&amp;nbsp;</span>Shippable applications must produce executable files such as binaries or class files, which can become the target of reverse engineering attacks. In addition, all software applications must follow different execution paths and interact with their environment if they want to operate properly, thus opening the door for reverse engineering attacks on the behavior of the application. To protect against reverse engineering attacks, applications must take extra steps during both development and during the compilation/building process.</p>
+  <h2>
+    Anti-disassembling
+  </h2>
+  <p>Disassembling is the process of recovering the application’s source code by parsing the binary or class files that the application uses to execute. There are different tools that perform static disassembling, such as<i> IDA Pro </i>(for numerous types of binary files) and Cavaj (specifically for Java classes), by parsing the binary or class and reconstructing the source code. In addition, these tools might draw a logical flow of the application, such as a flowchart showing the different conditions and branches that the application might take. To protect against dissasemblers, developers are encouraged to use anti-disassembling techniques. Two examples of methods that work for anti-disassembly are obfuscation and code encryption.</p>
+  <p>Developers can mitigate the impact of reverse engineering attacks on applications by adding an extra step to the build/compilation process that obfuscates the application’s source code.&amp;nbsp;Obfuscation works by replacing specific instructions, such as targets of branch statements, with jumps to intermediate functions, using computed branches in which the target of a branch statement is dynamically computed, or by making all non-conditional branches conditional by inserting false predicates.<span>&amp;nbsp;</span>Each of these methods has as its primary goal to defeat any dissasembler from correctly interpreting and recovering the application’s source code.</p>
+  <p>Recent anti-disassembly research proposes the use of code encryption to protect against reverse engineering attacks by encrypting machine code and decrypting it with an encryption key as it executes. Reverse-engineering hackers obviously would not have the cryptographic key.&amp;nbsp;</p>
+  <h2>
+    Anti-debugging
+  </h2>
+  <p>Debugging is the process of analyzing the sequence of instructions that a program follows while it executes. As mentioned before, debugging can be of great benefit when executing reverse engineering attacks because it shows the attacker what the application does while running. Usually, reverse engineers will use a low-level debugger that can hook at kernel-level (or ring-0).&amp;nbsp;Attackers might also utilize user-mode debuggers such as <i>ntsd</i> or <i>OllyDbg.</i></p>
+  <p>To protect against reverse engineering attacks that are accomplished through debugging, developers can use different anti-debugging techniques such as checking for the presence of a debugger, inserting timers or break-points, or sending commands to void any debuggers that might be attached to the application. This requires the developer to add the necessary source code to the application to do the actual checks and to take the appropriate measures in case a debugger is found.</p>
+  <h2>
+    Additional countermeasures
+  </h2>
+  <p>Developers can take additional security measures to make it difficult for reverse engineers to succeed in inferring the application’s behavior, including renaming API and function names, executable modules, and libraries with names that don’t tell anything about the application’s design.</p>
+  <p>It is also important to never ship debug symbols for applications in applications where the impact of reverse engineering is high, because symbols reveal important details about how the application is developed.</p>
+  <p>Finally, if reverse engineering is a very high risk, developers and architects can look into inserting random components and behavior into the application to fool attackers into following paths that are not really part of the application’s design. The goal is to make reverse engineering the application so tedious that attackers become discouraged and stop trying.<b><i>&amp;nbsp;</i></b></p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you’ve reviewed the theoretical aspects of reverse engineering bugs, it is necessary to execute practical test cases to test your application against them.</p>
+  <h2>
+    <span>
+      Test for reverse engineering by using a dissasembler
+    </span>
+  </h2>
+  <p>Follow these steps to test for reverse engineering by using a dissasembler:</p>
+  <ol>
+    <li>Download and install <i>IDA Pro</i>.</li>
+    <li>Run <i>IDA Pro</i> and select a binary file. </li>
+    <li>Start disassembling.</li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp;</span>The application is vulnerable if any implementation or design details that must be kept secret can be inferred from <i>IDA Pro</i>.<b><i>&amp;nbsp;</i></b></p>
+  <h2>
+    <span>
+      Test for reverse engineering by using a Java decompiler
+    </span>
+  </h2>
+  <p>Follow these steps to test for reverse engineering using a Java decompiler:</p>
+  <ol>
+    <li>Download and install <i>Cavaj Decompiler</i>.</li>
+    <li>Run <i>Cajav Decompiler</i>. </li>
+    <li>In the main menu, navigate to <i>File-&gt;Open</i> and select a target Java class file.</li>
+  </ol>
+  <p>Expected results: The application is vulnerable if <i>Cavaj </i>shows source code that is not supposed to be read by an attacker.&amp;nbsp;</p>
+  <h2>
+    <span>
+      Test for reverse engineering by using a debugger
+    </span>
+  </h2>
+  <p>Follow these steps to test for reverse engineering by using a debugger:</p>
+  <ol>
+    <li>Download and install a debugger. </li>
+    <li>Execute the debugger and attach it to the target application. </li>
+    <li>Start debugging application.</li>
+  </ol>
+  <p>Expected results: The application is vulnerable if any implementation or design details that must be kept secret can be inferred from using the debugger.<b><i>&amp;nbsp;</i></b></p>
+  <h2>
+    <span>
+      Test for reverse engineering by using monitoring tools
+    </span>
+  </h2>
+  <p>Follow these steps to test for reverse engineering by using monitoring tools:</p>
+  <ol>
+    <li>Identify binary executable(s) for an application. </li>
+    <li>Open a command prompt. </li>
+    <li>In Microsoft<span>&amp;nbsp; </span>Visual Studio’s command prompt (installed with Visual Studio), execute <i>dumpbin</i> command in Windows:<span>&amp;nbsp; </span><font face="'Courier New'">dumpbin -all executable_name &gt; bin_output.txt</font>. The output file will give you a list of all the dependencies, DLLs and API names for the executable. </li>
+    <li>Execute the application. </li>
+    <li>Open <i>Task Manager</i>, find an application process, and note the process id number for the application process and any sub-process (you must select the <i>view process tree</i> option to see sub-processes). </li>
+    <li>In a command prompt, execute the <i>netstat</i> command: <font face="'Courier New'">netstat -ano &gt; net_output.txt</font>.</li>
+    <li>Filter the <i>net_output.txt</i> file to show only connections opened by process id number(s) from step 5 in order to find out what TCP/UDP connections are opened by the application. </li>
+    <li>Download, install, and execute <i>Process Explorer</i> from&amp;nbsp;<a href="http://www.sysinternals.com/">www.sysinternals.com</a>. </li>
+    <li>Download, install, and execute <i>Wireshark</i>.</li>
+    <li>Set up filters in both <i>Process Explorer</i> and <i>Wireshark </i>using information from the previous steps (process name, port numbers, etc). This will reduce the amount of noise in these tools. </li>
+    <li>Use the application under test while looking at output from <i>Process Explorer</i> and <i>Wireshark</i>. These tools will give you details on how the application interacts with its environment (file system, registry, kernel objects, and network).</li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp;</span>The application is vulnerable if any implementation or design details that must be kept secret can be inferred from the output of the discovery/monitoring tools.</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Reverse engineering attacks focus on recovering implementation and design details that should be hidden from ill-intended users. To test for reverse engineering bugs, it is necessary to understand the different attack scenarios, such as reversing a binary or class file, to determine the behavior, design, or architecture of a software application. These attacks are possible by default, because any engineering process can be reversed. However, to counter the impact of reverse engineering bugs, developers can use anti-disassembly and anti-debugging techniques. Finally, to test for this bug in your application, it is recommended that you use a set of disassembling, debugging, discovery, and monitoring tools to discover as many details as possible about the inner workings of your application. This, after all, is how the attacker works.</p>
+  <div>
+    <div>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

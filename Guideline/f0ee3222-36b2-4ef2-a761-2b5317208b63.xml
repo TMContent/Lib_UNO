@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1444602287" Content_Hash="-311494641">
+  <Metadata>
+    <Id>f0ee3222-36b2-4ef2-a761-2b5317208b63</Id>
+    <Id_History>383d42f7-5d56-47b3-837a-f3f2345f8061,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use SSL to Protect Session Authentication Cookies</Title>
+    <Category>Session Management</Category>
+    <Phase>Design</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use SSL to Protect Session Authentication Cookies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Web Application&amp;nbsp;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>You must protect the authentication cookie&amp;nbsp;with SSL. </p>
+  <h1>Why</h1>
+  <p>To prevent session hijacking and cookie replay attacks, secure the cookie by making sure that it is only passed over SSL connections using the HTTPS protocol. For additional risk mitigation, encrypt the cookie before sending it to the client and limit the period for which the cookie is valid. </p>
+  <h1>When</h1>
+  <p>When&amp;nbsp;you use Forms authentication, make sure your application encrypts the authentication cookies using the <b>protection="All"</b> attribute on the <b>&lt;forms&gt; </b>element. This practice is recommended in addition to SSL to mitigate the risk of an XSS attack that manages to steal the authentication cookie of a user.&amp;nbsp; </p>
+  <h1>How</h1>
+  <p>Do not pass authentication cookies over HTTP connections. Set the secure cookie property within authentication cookies, which instructs browsers to send cookies back to the server only over HTTPS connections. For more information, see Chapter&amp;nbsp;10, "Building Secure ASP.NET Web Pages and Controls."</p>
+  <p>If you are using .NET Framework version 1.1, set the secure property by using <b>requireSSL="true"</b> on the <b>&lt;forms&gt;</b> element as follows:</p>
+  <div>
+    <div>
+    </div>
+    <div>
+      <pre>&lt;forms loginUrl="Secure\Login.aspx"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="true" . . . /&gt;</pre>
+    </div>
+    <div>
+      <p>If you are using .NET Framework version 1.0, set the secure property manually in the <b>Application_EndRequest</b> event handler in Global.asax using the following code:</p>
+      <div>
+        <div>
+        </div>
+        <div>
+          <pre>protected void Application_EndRequest(Object sender, EventArgs e) <br />&amp;#123;<br />&amp;nbsp; string authCookie = FormsAuthentication.FormsCookieName;<br /><br />&amp;nbsp; foreach (string sCookie in Response.Cookies) <br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (sCookie.Equals(authCookie))<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Set the cookie to be secure. Browsers will send the cookie<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // only to pages requested with https<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies&amp;#91;sCookie&amp;#93;.Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>Design Guidelines for Secure Web Applications <a href="http://msdn2.microsoft.com/en-us/library/aa302420.aspx">http://msdn2.microsoft.com/en-us/library/aa302420.aspx</a><li>Architecture and Design Review for Security <a href="http://msdn2.microsoft.com/en-us/library/aa302420.aspx">http://msdn2.microsoft.com/en-us/library/aa302420.aspx</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

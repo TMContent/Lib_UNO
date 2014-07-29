@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="280690383" Content_Hash="-1859340311">
+  <Metadata>
+    <Id>b6079f22-5046-463b-9239-abdcea7c5dcd</Id>
+    <Id_History>ff0f750a-308b-4c78-8602-3c6d603e406d,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Mapping Values Are Used for Redirects And Forwards</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Design</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Mapping Values Are Used for Redirects And Forwards</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PHP</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that mapping values are used to determine destinations of redirects and forwards</p>
+  <h1>Why</h1>
+  <p>Using mapping values when performing redirects or forwards prevents malicious users from creating hyperlinks that use the redirects or forwards to point to pages other than those intended by the application design.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to make sure that mapping values are used for redirects and forwards:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify redirects and forwards.</strong> Review code to find all redirects and forwards.</p>
+      <li>
+        <p>
+          <strong>Examine redirects and forwards.</strong> Look for code that handles parameters. Verify that this code does not accept fully qualified URLs as input for calculating destinations of redirects or forwards. If code uses parameters to calculate destinations of redirects or forwards, verify that only short-hand keywords defined by the application are accepted as input to map to valid and authorized destinations.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to calculate destinations of redirects and forwards based on mapping values:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify redirects and forwards.</strong> Review code to find all redirects and forwards.</p>
+      <li>
+        <p>
+          <strong>Enumerate destinations.</strong> Make a list of all destinations pointed to by redirects and forwards.</p>
+        <li>
+          <p>
+            <strong>Define mapping values.</strong> Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
+          <li>
+            <p>
+              <strong>Rewrite redirects and forwards.</strong> Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>Consider an on-line banking application that has an insecure redirect:</p>
+  <p>
+    <a href="http://www.onlinebank.com/redirect.asp?url=&amp;#91;destination">http://www.onlinebank.com/redirect.asp?url=&amp;#91;destination</a>&amp;#93;</p>
+  <p>A phisher may create the following hyperlink to point to his site and send it in spam messages to millions of people:</p>
+  <p>
+    <a href="http://www.onlinebank.com/redirect.asp?url=www.phisher.com">http://www.onlinebank.com/redirect.asp?url=www.phisher.com</a>
+  </p>
+  <p>When a user sees a link that appears to point to his bank at onlinebank.com in an e-mail message, he clicks that link and sees a web site that looks exactly like the bank's, but is actually a phishing web site used to steal authentication credentials. The user enters his account number and PIN into the web page, receives an error message telling him to try again, and is redirected to the bank's real site. After entering his credentials again, the user successfully views his account. However, the phisher now has the user's online banking information.</p>
+  <h1>Solution Example</h1>
+  <p>The simplest solution is to get rid of the redirect altogether, but if it is necessary for application design, then mapping values may be used to mitigate this vulnerability. For example, if redirect.asp is used by the application to redirect to balance.asp, a mapping value called "balance" may be created to signify balance.asp. The page redirect.asp should then be rewritten to accept mapping values as input, instead of URLs. The following URL should then redirect to balance.asp:</p>
+  <p>
+    <a href="http://www.onlinebank.com/redirect.asp?map=balance">http://www.onlinebank.com/redirect.asp?map=balance</a>
+  </p>
+  <p>However, the following malicious hyperlink will no longer work, because supplied input will not match any mapping value defined in the application:</p>
+  <p>
+    <a href="http://www.onlinebank.com/redirect.asp?url=www.phisher.com">http://www.onlinebank.com/redirect.asp?url=www.phisher.com</a>
+    <br />
+  </p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about unvalidated redirects and forwards, please see <a href="http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards">http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards</a></li>
+  </ul>
+  <h1>Redirect and Forward&amp;nbsp;Validation&amp;nbsp;Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/9dd99e67-7f4b-4c3b-b355-253edd7b29a3">Don't Use Redirects or Forwards if Possible</a>
+      <li>
+        <a href="/article/6daf44c7-fe2c-45f6-8854-7aa1e3a1030f">Calculate Destinations of Redirects and Forwards Without User Input</a>
+        <li>
+          <a href="/article/f86bc5a9-e545-461b-9ba5-c6659841250e">Validate Destinations of Redirects and Forwards</a>
+          <li>
+            <a href="/article/d718d5f2-247e-4299-a6ca-bfeaaac67eea">Use Mapping Values When Redirecting on User Input</a>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Redirect and Forward Validation&amp;nbsp;Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/af8c3ff3-490d-40fe-bed3-eca342fdba4e">Redirects and Forwards Are Not Used Unless Necessary</a>
+    </li>
+    <li>
+      <a href="/article/a1061c45-7a6e-4257-ab36-f3a693d45ad3">Destinations of Redirects and Forwards Are Calculated Without User Input</a>
+    </li>
+    <li>
+      <a href="/article/f87f29d2-388b-4d5f-bab5-bdf7b17eff85">Destinations of Redirects and Forwards Are Validated</a>
+    </li>
+    <li>
+      <a href="/article/ff0f750a-308b-4c78-8602-3c6d603e406d">Mapping Values Are Used for Redirects and Forwards</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

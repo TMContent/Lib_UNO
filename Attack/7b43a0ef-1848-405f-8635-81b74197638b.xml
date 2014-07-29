@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1255460536" Content_Hash="-122696765">
+  <Metadata>
+    <Id>7b43a0ef-1848-405f-8635-81b74197638b</Id>
+    <Id_History>2ea301c7-883f-4666-87fa-45f796f71ba4,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Command Injection Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Command Injection Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>All applications.</p>
+  <h1>Description</h1>
+  <p>Command injection problems are a subset of injection problems in which the process is tricked into either executing code or calling external processes of the attacker's choice through the injection of control information into the data stream.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>
+      <strong>Elevation of Privilege:</strong> Command injection can allow for the execution of arbitrary commands and code by the attacker. </li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>
+      <strong>Failure to Validate User Input:</strong> Situations where control information and data are mixed create opportunities for command injection.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <strong>Validate user input</strong>. Prevent commands from being included in data by validating input for type, length, range, and format. Whitelist acceptable input and reject everything else. Escape meta characters and be aware of canonicalization issues. Remember that data may be changed as it flows through the program, so validating at multiple stages is often appropriate. </li>
+    <li>
+      <strong>Do not use input data in commands directly</strong>. Clever formatting may be used so that the user's input is treated as its own separate command instead of as data. Therefore, validate the input and explicitly type it as data so that it cannot be interpreted as a command even if it contains one. </li>
+    <li>
+      <strong>Avoid using command interpreters</strong>. Although not always practical, using a well maintained API will have better results than invoking commands through an interpreter or external process.</li>
+  </ul>
+  <h1>Example</h1>
+  <p>The following code is wrapper around the UNIX command cat which prints the contents of a file to standard out. It is also injectable: </p>
+  <pre>#include &lt;stdio.h&gt;<br />#include &lt;unistd.h&gt;<br />int main(int argc, char **argv) {<br />  char cat[] = "cat ";<br />  char *command;<br />  size_t commandLength;<br />  commandLength = strlen(cat) + strlen(argv[1]) + 1;<br />  command = (char *) malloc(commandLength);<br />  strncpy(command, cat, commandLength);<br />  strncat(command, argv[1], (commandLength - strlen(cat)) );<br />  system(command);<br />  return (0);<br />}</pre>
+  <p>Used normally, the output is simply the contents of the file requested: </p>
+  <pre>$ ./catWrapper Story.txt<br />When last we left our heroes...</pre>
+  <p>However, if we add a semicolon and another command to the end of this line, the command is executed by catWrapper with no complaint: </p>
+  <pre>$ ./catWrapper Story.txt; ls<br />When last we left our heroes...<br />Story.txt catWrapper</pre>
+  <p>If catWrapper had been set to have a higher privilege level than the standard user or could be executed anonymously, arbitrary commands could be executed with that higher privilege. </p>
+  <p>Another example of this type of behavior can be seen with XSL, the style sheet language for XML. The primary purpose of XSL is to provide an easy and modular way to transform XML documents into other XML documents such as HTML. In particular, different XSL styles can be attached to the same XML and are sometimes supplied by the user. Microsoft extended the functionality of XSL to allow scripting code to be embedded in the style sheets with the &lt;msxsl:script&gt; tag. If an attacker has the ability to modify or replace the XSL style sheet in use, they can therefore inject any command to the system running the application simply by including it in the style sheet.</p>
+  <p>In many programming languages there is an eval() function that, as the name suggests, evaluates a string as an expression. Among the members of this list are the commonly used JavaScript, ASP, Python, Perl, Ruby, and PHP. Blurring the distinction between data and code presents a huge security risk; this case is no different. User input is sometimes used in eval() expressions allowing arbitrary code to be executed. Consider an example where eval() is used in a php application to join strings:</p>
+  <pre>$name; // ask the user for their name and store it here<br />$str = '$user stole my coffee!';<br />$str_after_eval = eval("$str;");<br />echo $str. "\n";<br />echo $str_after_eval. "\n";</pre>
+  <p>If the user enters the name "Alice", this code will output the following:</p>
+  <pre>$user stole my coffee!<br />Alice stole my coffee!</pre>
+  <p>However, if the user enters the name "echo exec('whoami'); echo" then the application will return the name of the system user running the php/html application. Any system command or external program in the path could be run in this fashion.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Command Injection, see the <a href="http://www.e-articles.info/e/a/title/Command-Injection/">Command Injection </a>article at e-articles.info. </li>
+    <li>For more information on the Javascript Eval function, see the Wikipedia Eval article at <a href="http://en.wikipedia.org/wiki/Eval">http://en.wikipedia.org/wiki/Eval</a>. </li>
+    <li>For more information on script blocks in XSL, see <a href=" http://msdn2.microsoft.com/en-us/library/wxaw5z5e.aspx">Script Blocks Using msxsl:script </a>on MSDN. </li>
+    <li>For more information on XSL transformations, see <a href="http://en.wikipedia.org/wiki/XSL_Transformations">XSL Transformations</a> on wikipedia. </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/2422aa60-704b-4335-8a6e-3c6061784920">Attack: Canonicalization Attack</a>
+    </li>
+    <li>
+      <a href="/article/adf5df06-2b67-4e2a-ace2-6d7060e0bd95">Attack: Server-Side Code Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/d4b48303-d535-4549-90fc-474b99eff901">Attack: SQL Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/7df0582c-84a2-4f79-bb7b-6755e93b1591">Attack: XML Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/fd2576b2-a7b1-4ddd-bb1b-c51cd4addce3">Attack: Xpath-XQuery Attack</a>
+    </li>
+    <li>
+      <a href="/article/9f8d1872-4048-4df0-899c-38e0c7e81d79">Attack: Client-side Validation Attack</a>
+    </li>
+    <li>
+      <a href="/article/8049f087-514e-4f31-b587-c83f466547d3">Attack: Cross Site Scripting Attack</a>
+    </li>
+    <li>
+      <a href="/article/cad18808-0ab4-478c-958a-f2a82ce0fc06">Attack: AJAX Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/9d33852f-b48d-4680-bc9a-88782667b65d">Attack: LDAP Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/7dfbe9c9-481e-46d2-b1a5-9a776578d6c2">Attack: Man in the Middle Attack</a>
+    </li>
+    <li>
+      <a href="/article/8b79f29d-0962-440b-9099-f5bd0688ce1b">Guideline: Do Not Rely on Request Validation </a>
+    </li>
+    <li>
+      <a href="/article/ce899ba6-8ae2-4494-8706-ce863fae58e7">Guideline: Filter All User-Supplied Filename and Path Input </a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="939755033" Content_Hash="191239545">
+  <Metadata>
+    <Id>ebd60acf-7480-4900-8e07-755f1741925e</Id>
+    <Id_History>b7dde97a-d5e3-49a8-b98b-121213bdccf4,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Strong Passwords Are Enforced</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Strong Passwords Are Enforced</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Verify that a strong password policy is used to ensure that your passwords are complex enough to prevent users guessing other user passwords and to prevent a successful <a href="/article/e8b05112-2416-436a-9679-07d9e5626bca">Credentials Dictionary Attack</a> against your user credential store. </p>
+  <h1>Why</h1>
+  <p>Insufficiently complex passwords may be guessed by attackers, allowing them to compromise user accounts. Strong passwords make it much more difficult for automated attacks against your password store to succeed. Most users will not choose sufficiently strong passwords without guidance from the application.</p>
+  <h1>How to Check</h1>
+  <p>The way to check that a strong password policy is in place differs whether your application uses Active Directory or Windows Authentication. Checking that strong passwords are enforced is an easy way to improve security.</p>
+  <p>
+    <strong>Checking the password policy when using Windows Authentication</strong>:</p>
+  <ol>
+    <li>
+      <p>Run the group policy editor by opening <strong>%SystemRoot%\system32\gpedit.msc</strong> or from the start menu by running gpedit.msc. </p>
+    </li>
+    <li>
+      <p>Browse to the user password policy that can be found under <strong>Computer Configuration-&gt;Windows Settings-&gt;Security Settings-&gt;Account Policies-&gt;Password Policies</strong>.</p>
+    </li>
+    <li>
+      <p>Verify that the following values are set according to the application's password policy and that the values are sufficiently strong. For example: </p>
+      <ul>
+        <ul>
+          <li>
+            <strong>Enforce password history</strong> remembers <strong>6 passwords or more </strong></li>
+          <li>
+            <strong>Maximum password age</strong> is at most <strong>42 days</strong></li>
+          <li>
+            <strong>Minimum password length </strong>is<strong> 8</strong> characters or more </li>
+          <li>
+            <strong>Password must meet complexity requirements </strong>is <strong>Enabled</strong></li>
+          <li>
+            <strong>Store passwords using reversible encryption </strong>is <strong>Disabled</strong></li>
+        </ul>
+      </ul>
+    </li>
+  </ol>
+  <p>
+    <strong>Checking the password policy when using Active Directory</strong>:</p>
+  <ol>
+    <li>
+      <p>Setup a management console for group policy management:</p>
+      <ol>
+        <li>Log on to the domain controller as administrator. </li>
+        <li>Click the Start-&gt;Run, type mmc, and click OK. </li>
+        <li>In the Console1 window, click File -&gt; Add/Remove Snap-in. </li>
+        <li>In the Add/Remove Snap-in dialog box, click Add. </li>
+        <li>In the Add Standalone Snap-in dialog box: <ol><li>Click Active directory users and computers, and then click Add. </li><li>Click Group Policy Object Editor, and then click Add. </li><li>In the Select Group Policy Object dialog box: <ol><li>Ensure Local computer is selected under Group Policy Object. </li><li>Click Finish.</li></ol></li><li>Click Close. </li></ol></li>
+      </ol>
+    </li>
+    <li>
+      <p>Check the password policy:</p>
+      <ol>
+        <li>In the MMC console, click File, and then click-&gt;Save. </li>
+        <li>Expand Active Directory Users and Computers. </li>
+        <li>Right-click the domain of choice and click Properties. </li>
+        <li>Click the Group Policy tab. </li>
+        <li>The Domain Password Policy should exist and be set as No Override. </li>
+        <li>Double click on Domain Password Policy. </li>
+        <li>In the Group Policy Object Editor: <ol><li>Expand Computer Configuration -&gt; Windows Settings -&gt; expand Security Settings -&gt; expand Account Policies. </li><li>Click Password Policies. </li><li>Verify that the following values are set according to the application's password policy and that the values are sufficiently strong. For example: <ul><li><strong>Enforce password history</strong> remembers <strong>6</strong> passwords or more </li><li><strong>Maximum password age</strong> is at most <strong>42 days</strong></li><li><strong>Minimum password length</strong> is<strong> 8</strong> characters or more </li><li><strong>Password must meet complexity requirements</strong> is <strong>Enabled</strong></li><li><strong>Store passwords using reversible encryption</strong> is <strong>Disabled</strong></li></ul></li></ol></li>
+      </ol>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An online banking web site is using the <strong>Windows Authentication </strong>for their authentication. They unfortunately left the default Windows password policy in place. As a result, an attacker is able to brute force user's passwords very quickly, gaining access to both online accounts and many ATM card numbers.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on enforcing strong password policies in Active Directory, see: <a href="http://technet.microsoft.com/en-us/library/cc875814.aspx">Step-by-Step Guide to Enforcing Strong Password Policies</a></li>
+  </ul>
+  <ul>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

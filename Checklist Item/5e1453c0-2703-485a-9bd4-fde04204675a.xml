@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1199024023" Content_Hash="-1222633895">
+  <Metadata>
+    <Id>5e1453c0-2703-485a-9bd4-fde04204675a</Id>
+    <Id_History>d17c6d07-e12a-4e6a-aaea-17b093f1d989,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Session Cookies Have Strict Domains And Paths Set</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Session Cookies Have Strict Domains And Paths Set</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that session cookies have strict domains and paths set.</p>
+  <h1>Why</h1>
+  <p>Setting strict domains and paths in session cookies makes it harder for an attacker to hijack a user session.</p>
+  <h1>How To Check</h1>
+  <p>To verify that session cookies have strict domains and paths set:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define a strict cookie path.</strong> Use the application path as the cookie path.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define a strict cookie domain.</strong> If the application uses a subdomain, use it as the cookie domain.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all code that creates or handles session cookies.</strong> Review code to find all functions that create session cookies. By default, the session cookie is called "<em>ASP.NET_SessionId</em>". Searching for that string may reveal code that creates or handles session cookies. Session cookies are also created automatically when session state functionality is used. To search for code that uses session state, search for the string "<em>HttpContext.Current.Session</em>".</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that the cookie path is set.</strong> Review code that handles session cookies to make sure that the cookie path is set. Code similar to that below can be used to set the cookie path:</p>
+      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == “ASP.NET_SessionId”){<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Path = "StrictPath";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
+      <p>In the code above, "<em>StrictPath</em>" is the strict path value defined for the session cookie. The code example above is bulky to make sure that the session cookie exists, because otherwise the application will throw an exception. If it is known that the session cookie it exists, it is sufficient to use code such as this:</p>
+      <pre>Response.Cookies[“ASP.NET_SessionId”].Path = "StrictPath";</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that the cookie domain is set.</strong> Review code that handles session cookies to make sure that the cookie domain is set. Code similar to that below can be used to set the cookie domain:</p>
+      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == “ASP.NET_SessionId”){<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Domain = "StrictDomain";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
+      <p>In the code above, "<em>StrictDomain</em>" is the strict domain value defined for the session cookie. The code example above is bulky to make sure that the session cookie exists, because otherwise the application will throw an exception. If it is known that the session cookie it exists, it is sufficient to use code such as this:</p>
+      <pre>Response.Cookies[“ASP.NET_SessionId”].Domain = "StrictDomain";</pre>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>To set strict domains and paths in session cookies:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define a strict cookie path.</strong> Use the application path as the cookie path.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define a strict cookie domain.</strong> If the application uses a subdomain, use it as the cookie domain value.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all code that creates or handles session cookies.</strong> Review code to find all functions that create session cookies. By default, the session cookie is called "<em>ASP.NET_SessionId</em>". Searching for that string may reveal code that creates or handles session cookies. Session cookies are also created automatically when session state functionality is used. To search for code that uses session state, search for the string "<em>HttpContext.Current.Session</em>".</p>
+    </li>
+    <li>
+      <p>
+        <strong>Set the cookie path.</strong> Add code to each function that creates or handles session cookies similar to that displayed below:</p>
+      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == “ASP.NET_SessionId”){<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Path = "StrictPath";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
+      <p>In the code above, <em>"StrictPath"</em> is the strict path value defined for the session cookie. The code example above is bulky to make sure that the session cookie exists, because otherwise the application will throw an exception. If it is known that the session cookie it exists, it is sufficient to use code such as this:</p>
+      <pre>Response.Cookies[“ASP.NET_SessionId”].Path = "StrictPath";</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Set the cookie domain.</strong> Add code to each function that creates or handles session cookies similar to that displayed below:</p>
+      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == “ASP.NET_SessionId”){<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Domain = "StrictDomain";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
+      <p>In the code above, <em>"StrictDomain"</em> is the strict domain value defined for the session cookie. The code example above is bulky to make sure that the session cookie exists, because otherwise the application will throw an exception. If it is known that the session cookie it exists, it is sufficient to use code such as this:</p>
+      <pre>Response.Cookies[“ASP.NET_SessionId”].Domain = "StrictDomain";</pre>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/46cf80ac-3093-4f90-a133-2cf5e1a2881c">Set Strict Domains and Paths in Session Cookies<br /></a>
+    </li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <p>For more information about handling cookies, please see "ASP.NET Cookies Overview" at&amp;nbsp;<a href="http://msdn.microsoft.com/en-us/library/ms178194.aspx#Y2311">http://msdn.microsoft.com/en-us/library/ms178194.aspx#Y2311</a></p>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

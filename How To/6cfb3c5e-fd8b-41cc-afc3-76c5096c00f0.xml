@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1914235970" Content_Hash="1404552226">
+  <Metadata>
+    <Id>6cfb3c5e-fd8b-41cc-afc3-76c5096c00f0</Id>
+    <Id_History>a1fdf065-6bfb-4828-a3ba-9440eb63a00f,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Use Structured Exception Handling</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Structured Exception Handling</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Description</h1>
+  <p>Use structured exception-handling to avoid unhandled exceptions. Use <b>finally</b> blocks to ensure that resources are released, files are closed, and objects are disposed of&amp;#8212;regardless of whether an exception occurs. The following code example shows to use a <b>finally</b> block to ensure that a database connection is closed promptly. </p>
+  <pre>using System.Data.SqlClient;<br />using System.Security;<br />SqlConnection conn = new SqlConnection("...");<br />try&amp;#123;<br />    conn.Open();<br />    // Do some operation that might cause an exception.<br />    // Calling Close as early as possible.<br />    conn.Close();<br />    // ... other potentially long operations.<br />&amp;#125;<br />finally&amp;#123;<br />    if (conn.State==ConnectionState.Open)<br />        conn.Close();  <br />&amp;#9;// ensure that the connection is closed.<br />&amp;#9;&amp;#125;  </pre>
+  <p>To help diagnose security issues, consider adding a <b>catch</b> block for the <b>SecurityException</b> class. <b>SecurityException</b> has been enhanced to provide more information in case of a failed permission demand. Additionally, to diagnose role-based access or identity problems, consider logging the identity at the time of the exception, as shown in the following code example. </p>
+  <pre>catch(Exception ex)&amp;#123;...<br />    // Log current identity together with other exception information.<br />    WindowsIdentity wid = WindowsIdentity.GetCurrent();...<br />&amp;#125;&amp;nbsp;</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

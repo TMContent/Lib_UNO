@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-353177658" Content_Hash="-1387839100">
+  <Metadata>
+    <Id>70cbcc9d-85a4-4d1d-a39b-5124ba2c4877</Id>
+    <Id_History>cb4b8f23-3d29-4b42-9091-c1b8e5f594bc,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Sensitive Data Is Not Stored in View State</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Not Stored in View State</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that sensitive data,&amp;nbsp;is not being stored in ViewState.</p>
+  <h1>Why</h1>
+  <p>By default, the ViewState does not provide any protection against information disclosure, and thus should not be used for sensitive data.&amp;nbsp; Encryption can be added to the ViewState, but there is a&amp;nbsp;large performance overhead to doing so, both in terms of CPU usage for encryption and the size of the resulting ViewState; the easiest option is to simply ensure that no sensitive data is in the ViewState. </p>
+  <h1>How to Check</h1>
+  <p>Examine all data which is being placed in ViewState and ensure that it is not sensitive, either alone or in combination with other data.&amp;nbsp; By default, the ViewState will contain the accumulation of all the properties of all the server controls on your page. </p>
+  <p>To see what's in your ViewState at runtime you can use ASP.NET tracing:</p>
+  <ol>
+    <li>Turn on the ASP.NET Trace </li>
+    <li>Submit the form on your page or in some other way force a post back </li>
+    <li>Scan the trace for the hidden form field __VIEWSTATE </li>
+    <li>The values within this hidden form field makeup the contents of the ViewState</li>
+  </ol>
+  <p>Alternatively, you can review the HTML source returned by your application on the client-side and scan for the VIEWSTATE hidden field:</p>
+  <pre>&lt;form name="testForm" method="post" action="viewstate.aspx" id="testForm"&gt;	<br />&lt;input type="hidden" name="__VIEWSTATE" </pre>
+  <h1>How to Fix</h1>
+  <p>If your ViewState does contain sensitive data, you should consider protecting it against eavesdropping by enabling ViewState encryption</p>
+  <p>Using SSL protects ViewState while it is passed over the network between server and browser, but it does not stop it being viewed and modified on the user's computer. </p>
+  <p>To prevent ViewState from being viewed on the user's computer (and over the network), use ASP.NET ViewState encryption. Do not use it if your ViewState does not contain sensitive data because encryption significantly adds to the size of the ViewState and this impacts performance. </p>
+  <p>To enable ViewState encryption use the following steps:</p>
+  <ol>
+    <li>Check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Always</b>, as shown in the following example. <pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Always"<br /> ...<br /> /&gt;</pre><p>If you do not want every page to used encrypted ViewState, check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Auto</b>, as shown in the following example. </p><pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Auto"<br /> ...<br /> /&gt;   </pre><p>Then, from within your code, call the <b>RegisterRequiresViewStateEncryption</b> method as shown in the following example. </p><pre>Page.RegisterRequiresViewStateEncryption();</pre></li>
+    <li>Specify the encryption algorithm to use on the <b>validation</b> attribute, as shown in the following example. <pre>&lt;machineKey<br /> ...<br /> validation="AES"<br /> ... <br />/&gt;</pre><p>The <b>validation</b> attribute is overloaded and can be used to specify either the hashing algorithm or the encryption algorithm.&amp;nbsp; You can specify either <b>3DES</b> or <b>AES</b>.&amp;nbsp; (ASP.NET 2.0 introduces support for <b>AES</b>.)&amp;nbsp; Because <b>AES</b> offers larger key sizes (128 bits, 192 bits, or 256 bits) than <b>3DES</b> (56 bits), it is considered more secure and should be used.</p></li>
+    <li>Review the <b>decryptionKey</b> attribute of the <b>&lt;machineKey&gt;</b> element: <pre>&lt;machineKey decryptionKey="AutoGenerate,IsolateApps" ... /&gt;</pre><p>Unless your application is installed in a Web farm, you should leave the <b>decryptionKey</b> attribute with the default values shown in the example.</p></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application contains a server-side control that a user will fill in with social security number.&amp;nbsp; The ViewState is protected from tampering by default due to the fact it is integrity checked with HMACS.&amp;nbsp; The application's developer knows that social security information is sensitive so he requires SSL for the form post.&amp;nbsp; This protects the information on the network, however, since ViewState is not encrypted the social security information is visible on the user's computer to anyone who has access to the machine.</p>
+  <h1>Solution Example</h1>An ASP.NET application contains a server-side control that a user will fill in with social security number.&amp;nbsp; The ViewState is protected from tampering by default due to the fact it is integrity checked with HMACS.&amp;nbsp; The application's developer knows that social security information is sensitive so he requires SSL for the form post to protect the information on the network. In order to protect the information on the user's machine ViewState is encrypted using ASP.NET ViewState encryption.<hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

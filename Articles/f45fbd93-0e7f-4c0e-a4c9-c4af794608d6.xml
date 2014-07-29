@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f45fbd93-0e7f-4c0e-a4c9-c4af794608d6</Id>
+    <Id_History>ebca8158-df17-48da-9f2d-4f14201a56cf,</Id_History>
+    <Library_Id>f215ceee-9a08-41d9-b2c1-bbcc058a8f32</Library_Id>
+    <Title>Use Binder for IPC within the Application</Title>
+    <Category>Inter-Process Communication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Android</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Binder for IPC within the Application</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Android
+
+==What to Do==
+
+The //Binder// interface is used to conduct remote procedure call operations with a local background service. Use //Binder// when the background service is accessed from within your application.
+
+==Why==
+
+The Binder interface limits interaction between applications and services to one process space. This relieves the programmer of having to think through security mechanisms for these activities and services since all interaction is through trusted components. The Binder interface helps to create a simple application design, and the simplest systems tend to be the most secure.
+
+==When==
+
+Use //Binder// when different components of your application need to interact with a service within the same application process space.
+
+==How==
+
+To use binder for IPC:
+
+# **Create an inner class that extends //Binder//.** In the service that users will access from your application, create an inner class that extends //Binder//. Create a method within the //Binder// class that returns a reference to the parent class.  Override the required //onBind()// method. (The method should return the instance of the //Binder//).
+# **Create public methods that can be accessed from outside the service but within the application.** These methods are the interaction vehicle for other activities and services within your application’s process space. These methods act like any other method and can return values or void.
+# **Create a global field with the type of the local service class.** In the activity accessing the service, create a global field with the type of the local service class.  Create an instance of //ServiceConnection//, then override the //onServiceConnected// method and have it return a reference to the local service class by casting the //IBinder// and returning the service instance.
+# **Connect to the service through the ServiceConnection reference.** In the //onCreate// method, set an intent for the service, and then call the //bindService()// method with the intent and //ServiceConnection// as inputs. The activity should now be ready to connect to the service through the //ServiceConnection// reference.
+
+==Problem Example==
+
+As the MyApp developer, you need one of your activities to talk with your service. You immediately believe that you need a messenger. You create the handler, which implements the //handleMessage// method for all inbound connections.
+
+Because you are worried about non-approved applications accessing the service, you create a complex scheme within the handler to authenticate applications. You implement a database within the application and store keys for your activity; only if another activity has the key will the handler proceed with processing the message:
+
+{{{
+Bundle bun = incoming.getData();
+String key = bun.getString(PROFILE_APP_KEY);
+if (key==null) 
+{
+Log.i(getClass().getSimpleName(), "Unauthorized connection");
+return;
+}
+appId = helper.authenticateApp(key);
+}}}
+
+What you have done, though, is create a complex and unnecessarily open service connection.
+
+==Solution Example==
+
+Because only the MyApp application needs to access the service, the simplest approach is to extend the //Binder// class. You can create a local service with a class extending //Binder//, such as:
+
+{{{
+public class MyBinder extends Binder {
+MyService findService() 
+{
+   return MyService.this;
+}
+}
+}}}
+
+Next, you declare an instance of that class with type //IBinder//:
+
+{{{
+private final IBinder mBinder = new MyBinder();
+}}}
+
+The last step is to return the reference to it in the //onBind()// method so the calling activity can execute whatever public methods you declare in this service. The activity can now directly access the service’s methods, which simplifies the implementation considerably compared to using a messenger.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

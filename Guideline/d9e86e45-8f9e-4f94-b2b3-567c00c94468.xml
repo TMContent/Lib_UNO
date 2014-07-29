@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1843266725" Content_Hash="1761611510">
+  <Metadata>
+    <Id>d9e86e45-8f9e-4f94-b2b3-567c00c94468</Id>
+    <Id_History>d6ae90bf-1b44-4a89-b22e-55ea97e52ba5,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Encode All Output Data</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encode All Output Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <h1>What to Do</h1>
+  <p>Do not echo input back to the user without first validating and/or encoding the data. \Data which can be modified by a user must be treated as untrusted data.</p>
+  <h1>Why</h1>
+  <p>Echoing input directly back to the user makes your application susceptible to some code injection attacks, such as the <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Cross Site Scripting Attack</a>. What constitutes malicious input varies widely depending on the system in question. On the web, it normally means some kind of JavaScript.</p>
+  <h1>When</h1>
+  <p>When echoing user supplied data back to a webpage. There are various sources from which this type of input might come, including:</p>
+  <ul>
+    <li>Form fields </li>
+    <li>Query strings </li>
+    <li>Databases </li>
+    <li>Cookies </li>
+    <li>Session and application variables</li>
+  </ul>
+  <h1>How</h1>
+  <p>If you write output that includes user input or data from a shared database or a local file that you do not trust, encode it. Echoing input directly back to the user makes your application vulnerable to cross-site scripting attacks, among other problems. Encoding the data ensures that it is treated as literal text and not as script. In ASP.NET the <strong>Server.HtmlEncode</strong> function is often used to protect against cross-site scripting attacks. However, this function only encodes &lt;&gt;"&amp; characters, which is not sufficient to protect against all possible attacks. For instance, the following ASP.NET code would be vulnerable.</p>
+  <pre>&lt;img id='img&lt;%=Server.HtmlEncode(Request.QueryString["userId"]) %&gt;' src='/image.gif' /&gt;</pre>
+  <p>An attacker could inject client-side script here by setting userId to:</p>
+  <pre>' onload=alert('xss') alt='</pre>
+  <p>The safest solution is to encode all non-alphanumeric characters. Only this type of whitelist solution will catch all possible XSS attacks, regardless of context. This requires more overhead in terms of processing time and size of the resulting HTML, but it is the safest encoding mechanism for all HTML contexts:</p>
+  <pre>public static string HtmlEncode(string x)<br />{<br />  if (x == null)<br />  {<br />    return x;<br />  }<br />  return Regex.Replace(x, "[^a-zA-Z0-9]+", new MatchEvaluator(WebUtility.EncodeMatch));<br />}</pre>
+  <p>Similar encoding needs to be performed for each context that the data will be embedded in, including at a minimum HTML encoding, URL encoding, and JavaScript encoding. If you ensure that all the characters that you permit through cannot cause any problems first, you can expand your whitelist slightly in some of these contexts, but this requires a great deal of care. In no case should you ever attempt to use a blacklist instead of a whitelist.</p>
+  <p>The whitelist encoding approach is the method used by the Microsoft Anti-Cross Site Scripting Library. If you are using the Anti-Cross Site Scripting Library, you can use the <strong>Microsoft.Security.ApplicationAntiXSSLibrary.HtmlEncode</strong> method. Similarly, if you write URLs that might contain unsafe characters because they have been constructed from input data or data from a shared database, use the <strong>Microsoft.Security.ApplicationAntiXSSLibrary.UrlEncode</strong> method to make them safe. </p>
+  <p>
+    <strong>Note:</strong> Make sure that you encode data at the last possible opportunity before the data is returned to the client. If you encode any earlier than this, you may not know the exact context that the data will be used in, and hence the format you need to encode into. Also, early encoding of some data can result in double encoding problems.</p>
+  <p>
+    <strong>Limitations of ASP.NET HTML Encoding</strong>:</p>
+  <p>Beyond the issue with Server.HTMLEncode mentioned above, a number of other problems exist with ASP.NET default encodings. Specifically, many ASP.NET controls provide (sometimes optionally) a certain amount of encoding, but it's not sufficient to fully prevent real world attacks. When applying your own encoding, you will need to take this encoding into account to avoid double encoding issues. The following provides an overview of how ASP.NET controls encode data:</p>
+  <table>
+    <tbody>
+      <tr>
+        <th>Control</th>
+        <th>Encoding</th>
+      </tr>
+      <tr>
+        <td>Literal</td>
+        <td>Default: None Mode = LiteralMode.Encode: HTML</td>
+      </tr>
+      <tr>
+        <td>Label</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td>Button</td>
+        <td>Text: Attribute</td>
+      </tr>
+      <tr>
+        <td>LinkButton</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td>ImageButton</td>
+        <td>Image URL: URL, Attribute</td>
+      </tr>
+      <tr>
+        <td>HyperLink</td>
+        <td>Text: None NavigateUrl: URL (unless BLOCKED SCRIPT protocol is used), Attribute</td>
+      </tr>
+      <tr>
+        <td>TextBox</td>
+        <td>Single-line text box (input type="text"): None Multi-line text box: HTML </td>
+      </tr>
+      <tr>
+        <td>DropDownList and ListBox</td>
+        <td>Value: Attribute Display text: HTML </td>
+      </tr>
+      <tr>
+        <td>CheckBox and CheckBoxList</td>
+        <td>Value: Not used Display text: None</td>
+      </tr>
+      <tr>
+        <td>RadioButton and RadioButtonList</td>
+        <td>Value: Attribute Display text: None</td>
+      </tr>
+      <tr>
+        <td>Table</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td>DataGrid</td>
+        <td>Text column: None Hyperlink column: as HyperLink control</td>
+      </tr>
+      <tr>
+        <td>Validators (BaseValidator subclasses) and ValidationSummary</td>
+        <td>Display text: None Client script validator error and header: JavaScript Server-side validator error and header: None</td>
+      </tr>
+      <tr>
+        <td>HiddenField</td>
+        <td>Value: Attribute</td>
+      </tr>
+      <tr>
+        <td>GridView and DetailsView</td>
+        <td>Text field HtmlEncode = True (default): HTML Text field HtmlEncode = False: None Hyperlink field: as HyperLink control</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>Note:</strong> All the encoding methods mentioned above are insecure, blacklist based systems; none of them are sufficient to stop XSS attacks.</p>
+  <h1>Problem Example</h1>
+  <p>In the following example the webpage accepts testimonials from users and when submitted, displays the added testimonial on the same page, as well as stores a copy in the application database so that the testimonial is available to other users.</p>
+  <pre>&lt;%@ Page clienttarget="downlevel" %&gt;<br />&lt;html&gt;<br />&lt;body&gt;<br />&lt;script language="C#" runat="server"&gt;void btnSubmit_Click(Object Sender, EventArgs E)<br />{<br />    //show new te3stimonial to current user<br /><strong>lblTestimonials.Text += "&lt;br/&gt;" + txtTestimonial.Text;<br /></strong>    //also store lblTestimonials.Text in server database for other users<br />}<br />&lt;/script&gt;<br />&lt;form id="Form1" runat="server"&gt;<br />    &lt;asp:TextBox ID="txtTestimonial" runat="server" Rows="5" Height="102px" Width="298px"&gt;&lt;/asp:TextBox&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CausesValidation="False"/&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Label ID="lblTestimonials" runat="server" Height="102px" Width="297px"&gt;<br />&lt;/asp:Label&gt;<br />&lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</pre>
+  <p>Since this page does not encode the output which depends upon the user supplied value <strong>txtTestimonial.Text</strong>, malicious user input may lead to cross site scripting attacks.</p>
+  <p>
+    <strong>Note:</strong> While simple XSS attacks will not work for this webpage since ASP.NET enables request validation by default, some more complex attack will be successful. Read more about this problem here: <a href="/article/88f49e05-f101-4764-b8e3-b31cd7507071">Do Not Rely on Request Validation</a>.</p>
+  <h1>Solution Example</h1>
+  <p>We need to encode the user supplied data before it is used to construct output data. As mentioned above, using the <strong>Server.HtmlEncode</strong> method is not sufficient. Therefore in the example below, we use our own HtmlEncode method.</p>
+  <pre>&lt;%@ Page clienttarget="downlevel" %&gt;<br />&lt;html&gt;<br />&lt;body&gt;<br />&lt;script language="C#" runat="server"&gt;<br />  public static string <strong>HtmlEncode</strong>(string x)<br />  {<br />    if (x == null)<br />    {<br />        return x;<br />    }<br />    return Regex.Replace(x, "[^a-zA-Z0-9]+", new MatchEvaluator(WebUtility.EncodeMatch));<br />  }<br />  void btnSubmit_Click(Object Sender, EventArgs E)<br />  {<br />      //show new te3stimonial to current user<br /><strong>lblTestimonials.Text += "&lt;br/&gt;" + HtmlEncode (txtTestimonial.Text);<br /></strong>      //also store lblTestimonials.Text in server database for other users<br />  }<br />&lt;/script&gt;&lt;form id="Form1" runat="server"&gt;<br />    &lt;asp:TextBox ID="txtTestimonial" runat="server" Rows="5" Height="102px" Width="298px"&gt;&lt;/asp:TextBox&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CausesValidation="False"/&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Label ID="lblTestimonials" runat="server" Height="102px" Width="297px"&gt;&lt;/asp:Label&gt;<br />&lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</pre>
+  <p>Now, when an attacker submits malicious input, it will be encoded when the result is reflected back to the client and XSS attacks will be prevented.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the limitations of ASP.NET encoding, see: <a href="http://msmvps.com/blogs/calinoiu/archive/2006/06/13/102957.aspx">http://msmvps.com/blogs/calinoiu/archive/2006/06/13/102957.aspx</a>.</li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Attack: Cross Site Scripting Attack</a>
+    </li>
+    <li>
+      <a href="/article/733be22b-8cda-4c76-9009-1bafbb223ddc">Attack: Response Splitting Attack</a>
+    </li>
+    <li>
+      <a href="/article/14def5f6-6ddf-450f-9a7e-36a8550b22f5">Attack: AJAX Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/d898d2a2-f20a-45bb-b232-6713cb618de8">Checklist Item: All Output Data is Encoded </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

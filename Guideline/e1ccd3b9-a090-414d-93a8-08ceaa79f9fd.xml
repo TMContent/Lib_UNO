@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="414576591" Content_Hash="1850039944">
+  <Metadata>
+    <Id>e1ccd3b9-a090-414d-93a8-08ceaa79f9fd</Id>
+    <Id_History>3ea6e365-a6a0-4a88-8bd3-4275a6c5416a,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Use URL Authorization for Page And Directory Access Control</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use URL Authorization for Page And Directory Access Control</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use URL authorization to control which users and groups of users have access to the application or to parts of the application. </p>
+  <h1>Why</h1>
+  <p>Rather than having to password protect pages, URL Authorization allows you to tie page access to user accounts or roles.&amp;nbsp;&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>If your application restricts access to some pages use URL Authorization to enforce these restrictions.</p>
+  <h1>How</h1>
+  <p />To configure URL authorization, use an &lt;<b>authorization</b>&gt; element in Web.config and specify which user and/or role names are allowed access to the current directory or the nominated directory or file. ASP.NET version 2.0 on Windows Server 2003 protects all files in a given directory, even those not mapped to ASP.NET, such as .html, .gif, and .jpg files. <p />Authorization settings in Web.config refer to all of the files in the current directory and all subdirectories unless a subdirectory contains its own Web.config with an &lt;<b>authorization</b>&gt; element. In this case, the settings in the subdirectory override the parent directory settings. <p />URL authorization can be used for both forms authentication and Windows authentication. In the case of Windows authentication, user names take the form "DomainName\WindowsUserName" and role names take the form "DomainName\WindowsGroupName". The local administrators group is referred to as "BUILTIN\Administrators". The local users group is referred to as "BUILTIN\Users". The following example shows Windows users and Windows roles. <pre>&lt;authorization&gt;<br />  &lt;allow users="DomainName\Bob, DomainName\Mary" /&gt;<br /> &amp;nbsp;&lt;allow roles="BUILTIN\Administrators, DomainName\Manager" /&gt;<br />  &lt;deny users="*" /&gt;<br />&lt;/authorization&gt;  </pre><p />The following example uses a custom role. <pre>&lt;authorization&gt;<br />  &lt;allow roles="Manager"/&gt;<br />  &lt;deny users="*"/&gt;<br />&lt;/authorization&gt;  </pre><p />To apply authorization rules to a specific file or folder, enclose the &lt;<b>authorization</b>&gt; element inside a &lt;<b>location</b>&gt; element as shown here. <pre>&lt;location path="Secure" &gt;<br />  &lt;system.web&gt;<br />    &lt;authorization&gt;<br />      &lt;deny users="?" /&gt;<br />    &lt;/authorization&gt;<br />  &lt;/system.web&gt;<br />&lt;/location&gt;  </pre><p />This example denies access to unauthenticated users and forces a redirect to the login page that is specified on the &lt;<b>forms</b>&gt; element. <p />The following example shows how you can apply authorization to a specific file (Page.aspx). <pre>&lt;location path="page.aspx"&gt;<br />    &lt;authorization&gt;<br />        ...<br />    &lt;/authorization&gt;<br />&lt;/location&gt;  </pre><p>If necessary, you can apply different authorization rules for separate pages based on the identity, or more commonly, the role membership of the caller, by using multiple &lt;<b>authorization</b>&gt; elements within separate &lt;<b>location</b>&gt; elements. </p><p /><p /><hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

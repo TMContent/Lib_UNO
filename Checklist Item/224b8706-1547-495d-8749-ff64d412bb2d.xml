@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="332577165" Content_Hash="-472435058">
+  <Metadata>
+    <Id>224b8706-1547-495d-8749-ff64d412bb2d</Id>
+    <Id_History>4ca15745-847b-426a-a4c1-6d97db50bb68,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>The Authorization Cookie Is Protected for Tampering And Reading Information</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Authorization Cookie Is Protected for Tampering And Reading Information</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that your application protects roles data in the&amp;nbsp;authorization cookie to stop users from modifying the list of roles to which they belong, and to stop intruders from gaining information about the roles used by your application. </p>
+  <h1>How to Fix</h1>
+  <p>Protect the authorization cookie by appropriately configuring the &lt;<b>roleManager</b>&gt; element as follows: </p>
+  <ul>
+    <li>Set the <b>cookieProtection</b> attribute to <b>All</b>. This ensures that the role names in the cookie are digitally signed and encrypted to prevent unauthorized viewing and modification of the role data. <li>Set the <b>cookieSlidingExpiration</b> attribute to <b>true</b> and the <b>cookieTimeout</b> attribute to an integer number of minutes (for example, 10 to 20 or fewer). The cookie expires when the timeout expires and must be renewed. <li>Set the <b>cookieRequireSSL</b> attribute to <b>true</b> to specify that the authorization cookie with the role information should only be returned to the server over HTTPS connections. <li>Set the <b>createPersistentCookie</b> attribute to <b>false</b> to ensure that the roles cookie is session-based and not a persistent cookie. <li>If you cannot use SSL, consider reducing the <b>cookieTimeout</b> to 10 minutes. If you are concerned with cookie hijacking, consider setting the <b>cookieSlidingExpiration</b> attribute to false. This causes the cookie to expire after the fixed timeout period and must be renewed. </li></li></li></li></li>
+  </ul>
+  <p>The following example shows a &lt;<b>roleManager</b>&gt; element configured to protect the authorization cookie:</p>
+  <p>
+    <pre>&lt;roleManager enabled="true"<br />             cacheRolesInCookie="true"<br />             cookieName=".ASPROLES"<br />             cookieTimeout="30"<br />             cookiePath="/"<br />             cookieRequireSSL="true"<br />             cookieSlidingExpiration="true"<br />             cookieProtection="All"<br />             createPersistentCookie="false"&gt;<br />&lt;/roleManager&gt;</pre>
+  </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>dbec4b47-fa7d-41e7-939a-766be8b2c8e4</Id>
+    <Id_History>5b653aa9-7669-4dcb-88d2-8b0f601da772,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Disable the External Entities Feature</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Disable the External Entities Feature</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET 4.0
+
+==What to Do==
+
+Disable the external entities feature of the XML parser.
+
+==Why==
+
+Disable the external entities feature of the XML parser to prevent XML External Entity (XXE) processing vulnerabilities. The external entities feature is rarely used in practice but can result in vulnerabilities if left enabled.
+
+==How==
+
+To disable the external entities feature:
+
+# **Find code that uses the XML parser.** Search for code that references the XmlDocument class. Make a spreadsheet to track this code.
+# **Disable external entity processing.** For each piece of code that uses the XmlDocument class, add code that sets the XmlResolver property of each XmlDocument object to null before that object is used to process data.
+
+==Additional Resources==
+
+* For more information about disabling external entities processing in ASP.NET applications, see http://stackoverflow.com/questions/14230988/how-to-prevent-xxe-attack-xmldocument-in-net
+]]></Data>
+  </Content>
+</TeamMentor_Article>

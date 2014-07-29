@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1757226278" Content_Hash="-1656453444">
+  <Metadata>
+    <Id>c72d9465-b767-48b2-a5e7-b8cc5967f440</Id>
+    <Id_History>6ea39177-709c-474f-9786-da847c0bbdc6,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Format String Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Format String Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Applications written in any languages which provides string methods that accept a format specifier.</p>
+  <h1>Description</h1>
+  <p>Format string attacks are a class of vulnerabilities that can be used to crash a program or to execute harmful code. If unfiltered user input is used as the format string parameter in C functions that perform formatting, such as printf(), an attacker can use the &amp;#37;s, &amp;#37;x, and other format tokens to print data either from the stack or sometimes from other memory locations. Arbitrary data can be written anywhere in memory using the &amp;#37;n format token, used to specify that the number of bytes formatted should be written to the supplied pointer argument. More stack manipulation is required, but this argument can be inserted as part of a format string attack. &amp;#91;<a href="http://en.wikipedia.org/wiki/Format_string_attacks">http://en.wikipedia.org/wiki/Format_string_attacks</a>&amp;#93; </p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Elevation of Privilege <li>Read or Write sensitive information in memory <li>Arbitrary code execution</li></li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Inserting untrusted user input into a format string parameter.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Hard code the format string. <li>Format strings should not contain any user controlled data.</li></li>
+  </ul>
+  <h1>Example</h1>
+  <pre>printf (varUserSuppliedData);</pre>
+  <p>This will allow the user or attacker to provide the format specifier. Here, the attacker will be able to use format string tokens like &amp;#37;x and &amp;#37;n to compromise the security of the application.</p>
+  <p>The correct way of writing this line of code is to provide the format specifier ourselves:</p>
+  <pre>printf ("&amp;#37;s", varUserSuppliedData);</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on finding format string vulnerabilities, see <a href="http://www.owasp.org/index.php/Format_String_Testing_AoC">Format String Testing.</a><li>For more information on the exploitation of format string vulnerabilities, see <a href="http://doc.bughunter.net/format-string/exploit-fs.html">Exploiting Format String Vulnerabilities</a><li>For examples of Format String Vulnerabilities in non-C languages, see <a href="http://www.ddj.com/dept/security/197002914">Programming Language Format String Vulnerabilities</a></li></li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/84177ac7-5973-4502-abe2-812ff300a368">Attack: Double Encoding Attack</a>
+      <li>
+        <a href="/article/fb8f74de-9fbf-4c04-afa4-08f79fbf491f">Attack: Client-side Validation Attack</a>
+        <li>
+          <a href="/article/5aae21ac-2eb3-4f3d-ab10-ce31e490a261">Attack: Information Disclosure Attack</a>
+          <li>
+            <a href="/article/9f21442f-2aee-4573-8be6-a5b51d9c89b8">Guideline: Do Not Rely on Client-Side Validation </a>
+            <li>
+              <a href="/article/b431b7df-36d8-461b-a437-675a20e9548b">Guideline: Validate All Input Passed to Database </a>
+              <li>
+                <a href="/article/40eea61e-c8bd-494a-b75d-c18c2074c752">Guideline: Validate Input from All Sources </a>
+                <li>
+                  <a href="/article/946a5edb-e8f8-4365-8675-b8a5032c201b">Guideline: Validate All Data Passed Between Native and Java Code </a>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

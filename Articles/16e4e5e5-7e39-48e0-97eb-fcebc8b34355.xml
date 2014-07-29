@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>16e4e5e5-7e39-48e0-97eb-fcebc8b34355</Id>
+    <Id_History>fc982309-5729-48a8-bbc3-804a331573e5,</Id_History>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Origin: Header in WebSocket Handshakes is Checked to Prevent Steath Attacks</Title>
+    <Category>WebSockets</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Origin: Header in WebSocket Handshakes is Checked to Prevent Steath Attacks</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+HTML5
+
+==What to Check For==
+Describe what to check for in 1 to 3 sentences. Make clear to the reader what action they need to take in order to be in compliance.\\
+
+==Why==
+By checking the origin, you can restrict access to the WebSocket server, allowing requests only from the same origin or specified domains to prevent potentially malicious connections.
+
+==How To Check==
+Insert discrete, numbered instructions for each step required to check this item.  Each step should be actionable.  Include all necessary information to successfully go through each step.\\
+
+==How To Fix==
+To check for origin:
+
+# **Configure the WebSocket server to check the Sec-WebSocket-Origin header value (for older WebSocket clients) or Origin header value (for newer clients)**. Add code to the configuration file in accordance with your server language. For example, for PHP-WebSocket, which is an open source PHP implementation of a WebSocket server library, use the following method call to set origin checking: $server->setCheckOrigin(true);. This reads the value of Sec-WebSocket-Origin or origin.
+# **Specify the allowed origins from which the server will accept connections**. For example, to accept connections only from an HTML5 application residing on the same server, configure it to accept connections from the “same origin” only. If the WebSocket server and the application both reside on web.example.com, configure the WebSocket server to accept only from Origin= web.example.com.
+# **Iterate through the request headers to find the Origin or Sec-WebSocket-Origin header**. If the value is null or does not match the set of allowed origins, close the connection stream with a 401 response.
+
+{{{
+$example_origins = array('example.com',’web.example.com’);
+
+foreach ($example_origins as $origin) {
+    $server->setAllowedOrigin($origin);
+    $origin_ips[] = gethostbyname($origin);
+}
+if (!in_array($_SERVER["REMOTE_ADDR"], $origin_ips)) {
+
+// send 401 response
+}
+else {
+// begin tunnel
+}
+}}}
+
+
+==Related Items in TeamMentor==
+If applicable, provide links in the form of a bullet list:
+*Provide a link to the Guideline that this Checklist Item applies to.
+*Provide links to related Checklist Item articles.
+*Provide links to other related TM Content.\\
+\\
+
+==Additional Resources==
+If applicable, provide **trusted** links in the form of a bullet list:
+*Provide trusted trusted links to outside additional resources.
+*Specify relevant references.\\
+\\]]></Data>
+  </Content>
+</TeamMentor_Article>

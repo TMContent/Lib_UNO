@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7b3fd371-0a7c-43a0-8cf7-425fd9963a62</Id>
+    <Id_History>ea3ab295-f67d-4d05-ae47-1e59c0b87b12,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Send Password Reset Tokens over a Side Channel</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Send Password Reset Tokens over a Side Channel</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Send password reset tokens over a side channel.
+
+==Why==
+
+Send password reset tokens over a side channel to prevent an attacker from retrieving these tokens from the application and using them to take over user accounts.
+
+==How==
+
+To send password reset tokens over a side channel:
+
+# **Choose a side channel to use for password reset tokens.** Some common methods to send password recovery tokens are email and SMS.
+# **Associate contact information with user accounts.** Depending on the chosen side-channel, associate each user’s contact information with their user account. For example, if email is chosen as the side-channel, then associate email addresses with user accounts. One way to associate email addresses with user accounts is to store email addresses of the users in the same database as the usernames and password hashes.
+# **Verify user identity before sending password reset tokens.** To verify user identity, use a mechanism such as user-chosen questions with user-defined answers, or contact the user.
+# **Send password reset tokens over the side channel.** Add code that sends password recovery tokens using the chosen side-channel after verifying user identity.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

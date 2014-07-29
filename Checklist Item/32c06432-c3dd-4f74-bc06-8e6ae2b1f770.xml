@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1119812587" Content_Hash="-1625141375">
+  <Metadata>
+    <Id>32c06432-c3dd-4f74-bc06-8e6ae2b1f770</Id>
+    <Id_History>3ee9b07c-557a-4008-a0ac-cfb605505f88,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Important Business Operations Are Logged</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Important Business Operations Are Logged</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that important business operations are logged.</p>
+  <h1>Why</h1>
+  <p>Important business operations should be logged to help identify attacks in progress and to investigate attacks that have already occurred.</p>
+  <h1>How To Check</h1>
+  <p>Perform the following actions to check if important business operations are logged.</p>
+  <ol>
+    <li>
+      <p>
+        <strong>List important business operations.</strong> Make a list of business operations carried out by the application, such as placing orders, manipulating inventory, etc. Identify which of these operations are the most important.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify code that performs important business operations.</strong> Use the list of important business operations to find code that matches each one. Make a list of functions in this code.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify logging functionality.</strong> Examine the application architecture to identify logging facilities, such as the logging API and where audit trails are actually stored. Make a list of APIs used to log events, document how to use them, and where they store logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that code logs important business operations.</strong> Use the list of functions that carry out important business operations and verify that each one uses the logging API to make records when important business operations take place.</p>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Logging access to business logic is&amp;nbsp;easy. The following steps walk you through the process:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify significant business logic in your application.</strong>&amp;nbsp;In order to properly log business activity, you first must understand what the important activities that your application performs are, and what their logging needs are.&amp;nbsp;This information should come directly from the business requirements of an application (and should be added to the requirements documentation for the application if it's not present).&amp;nbsp;If you don't have a good breakdown of business activities for the application, the requirements modeling phase of a threat model is a good way to generate one.&amp;nbsp;</p>
+    </li>
+    <li>
+      <p>
+        <strong>Determine what level of logging each activity requires.</strong> How much information you need to log about each activity depends on what you need to be able to say about an occurence of the activity after the fact.&amp;nbsp;There are three rough levels of logging, namely tracking, verification, and non-repudiation, each of which has an increasing requirement for what needs to be logged.</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Logging for tracking.</strong> Logging for tracking purposes is appropriate when you only need to provide statistical data about transactions -- frequency, timing, etc. As the statistics need to be accurate, per-event logging is still appropriate, particularly if flexibility is desired in the actual statistics to be gathered.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Logging for verification. </strong>Verification is slightly more in depth; all relevent basic information about the transaction should be recorded. The goal of logging at this level is to provide a full record of transactions, sufficient to manually re-create the transaction.&amp;nbsp;This is the default level to log at for most business logic.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Logging for nonrepudiation.</strong> Nonrepudiation is a significantly higher standard.&amp;nbsp;The goal here is to ensure that, if one of the parties to a transaction disputes the transaction, proof of the validity of the transaction can be produce.&amp;nbsp;Being able to provide this proof is an architecture-level issue, which will have implications for many security-relevant design issues, especially authentication, but the issue is fundamentally a logging one. The hard part for nonrepudiation is ensuring that sufficient data exists within the system.&amp;nbsp;Log files designed to support nonrepudiation should include all data related to the transaction.&amp;nbsp;This data should ideally include cryptographic signatures, and should itself be signed to prevent tampering, and stored securely.</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that all ways of accessing that&amp;nbsp;logic are logged with sufficient data.&amp;nbsp;</strong>Once you know all of the pieces of logic which need to have their access logged, and what levels they need to be logged at, you need to enumerate all of the ways of accessing those pieces of logic.&amp;nbsp;For most applications, there will be a single entry point for any given piece of logic, but more complicated applications may have more than one entry point. Also, logging on multiple levels provides a form of defense in depth, in case higher levels of functionality are circumvented.&amp;nbsp;N-tier systems are a good example of this -- while the normal entry point may be through a web front-end, logging at the middleware and database layers is very important in detecting circumvention of the normal entry point.&amp;nbsp;When you do have multiple levels of logging, or even multiple non-hierarchical systems working together, it's vital that business-level logging provide a way of unifieing those disparate data sources into a single view.</p>
+      <p>By default, health monitoring is enabled for ASP.NET applications and all Web infrastructure error events (inheriting from <em>System.Web.Management.WebErrorEvent</em>) and all audit failure events (inheriting from <em>System.Web.Management.WebFailureAuditEvent</em>) are written to the event log.&amp;nbsp;The default configuration is defined in the <em>&lt;healthMonitoring&gt;</em> element in the machine-level Web.config file. To audit additional events, you create custom event types by deriving from one of the built-in types. </p>
+      <p />
+      <p>The health monitoring feature has built-in providers that allow you to log events in an e-mail message (<em>SimpleMailWebEventProvider, TemplatedMailWebEventProvider</em>), to SQL Server (<em>SqlWebEventProvider</em>), to the event log (<em>EventLogWebEventProvider</em>), as ASP.NET trace output (<em>TraceWebEventProvider</em>), or to the Windows Management Instrumentation (WMI) Web event provider (<em>WMIWebEventProvider</em>).&amp;nbsp;You can configure health monitoring in the machine or application <em>Web.config</em> file to modify the events that are logged and the way in which they are logged.</p>
+      <p>In-database logging can be implemented either inside the stored procedures which you use to interact with the data, or via triggers.&amp;nbsp;Logging via triggers may be preferable in some cases, because alterations to the data which occur outside of stored procedures (say, via a SQL injection vulnerability) will still be logged.&amp;nbsp;Care should be taken when implementing in-database logging to ensure that the process which is normally generating the log entries cannot overwrite them.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that logs are monitored.</strong>&amp;nbsp;The next step is ensuring that logs are monitored and the information in them acted upon.&amp;nbsp;Logging won't do any good if the results never see the light of day.&amp;nbsp;Work with the operations team who will be managing the application to define a plan for monitoring and responding to log events. Depending on the environment, you may need to define this from scratch, or you may be fitting into a pre-exisiting framework. </p>
+      <p>If you're defining a monitoring framework from scratch, here are some things you need to consider: </p>
+      <ul>
+        <li>When do the logs need to be monitored—some applications will need 24x7 coverage, but many will be fine with 8x5. </li>
+        <li>How much time will log monitoring take—if&amp;nbsp;your application is a&amp;nbsp;large ecommerce site, you may have a dedicated team for log monitoring, but a small web app may be safe enough with a sysadmin taking a look a couple times a day. </li>
+        <li>What are your response time needs—if there's a serious problem with the site, it'll show up in the logs first; is your tolerance for problems defined in minutes, hours, or days? </li>
+        <li>What will your procedure for acting on potential issues be? </li>
+        <li>How will you control access to your logs and information derived from them; how sensitive is the information likely to be? </li>
+        <li>What response capabilities will the log monitoring team have?&amp;nbsp; Log monitoring on it's own does no good if the information can't be acted on—suspcious events need to be investigated, accounts frozen, etc.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid pitfalls for logging. </strong>Logging information at the business level is harder than providing implementation level logs, like logs of specific function calls, web server traffic, or database queries.&amp;nbsp; Ensuring all of these disparate sources of information work together to provide a coherent view of business level events while still allowing the component implementation-level log entries that make up those events to be easily found is not an easy task.&amp;nbsp; Depending on the complexity of your application, this level of logging integration may not be necessary -- if it's possible to easily determine which business event a given database query is part of, for instance, you probably don't need to automate this sort of thing.&amp;nbsp; Larger and more complex applications, however, do require this sort of logging coordination.</p>
+      <p>Logging too much information can end up being a problem of its own.&amp;nbsp; Once you have an idea of the volume of log events that you're seeing from your application, it may be worthwhile to implement some form of log throttling to reduce the flow of information to a rate at which you can act upon.&amp;nbsp; Good log throttling should only eliminate redundant information and should provide a way to surface the most important information first. </p>
+      <p>Automatically taking action based on detection of anomolous conditions is a very dangerous thing to do, and is&amp;nbsp;best avoided.&amp;nbsp; While it may be reasonable to throttle the speed at which an event (say, a login attempt) may occur, preventing an action from occurring&amp;nbsp;may result in an easy-to-launch denial of service attack against your application. </p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/7d0273ff-f79d-469f-9843-06e1f0f1167f">Log Important Business Operations</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

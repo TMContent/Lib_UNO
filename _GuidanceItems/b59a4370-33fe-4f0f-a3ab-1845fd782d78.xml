@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b59a4370-33fe-4f0f-a3ab-1845fd782d78</Id>
+    <Id_History>00000000-0000-0000-0000-000000152037,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Sensitive Data Is Not Stored in Persistent Cookies</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Not Stored in Persistent Cookies</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP 
+
+==What to Check For==
+
+Make sure that sensitive data is not stored in persistent cookies.
+
+==Why==
+
+Data stored in persistent cookies may be recovered by an attacker, if the attacker gets access to where the cookies are stored. Usually, this attack scenario means an attacker gaining physical access to the victim's computer and recovering all the cookies from it. At that point, any sensitive data in those cookies comes into the possession of the attacker. It is therefore not recommended to store sensitive data in persistent cookies. The most common type of sensitive data that is stored in persistent cookies is an authentication token or a session ID, which is used to keep a user logged on for an extended period of time. If this functionality is absolutely required, then storing such sensitive information in persistent cookies cannot be avoided. Overall, it is recommended not to implement that functionality and not to store any sensitive information in persistent cookies.
+
+==How to Check==
+
+To make sure that sensitive data is not stored in persistent cookies:
+
+# **Identify all cookies used by the application.** Search application code for references to //setcookie//. This should help find all the cookies created by the application.
+# **Find code that handles sensitive cookies.** Examine code that handles each cookie and see if it stores sensitive information in the cookie.
+# **Make sure that sensitive cookies aren't persistent.** Review all code that handles sensitive cookies. Make sure that the //expire// property of sensitive cookies is never set, because that makes them persistent.
+
+==How to Fix==
+
+To prevent storing sensitive data in persistent cookies:
+
+# **Identify all cookies used by the application.** Search application code for references to //setcookie//. This should help find all the cookies created by the application.
+# **Find code that handles sensitive cookies.** Examine code that handles each cookie and see if it stores sensitive information in the cookie.
+# **Don't make sensitive cookies persistent.** Review all code that handles sensitive cookies. Make sure that the //expire// property of sensitive cookies is never set, because that makes them persistent. Remove code that sets the //expire// property of sensitive cookies, if such code exists.
+
+==Additional Resources==
+
+* For more information about the //setcookie// function, see http://php.net/manual/en/function.setcookie.php]]></Data>
+  </Content>
+</TeamMentor_Article>

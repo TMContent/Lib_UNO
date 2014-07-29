@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="855679067" Content_Hash="5937098">
+  <Metadata>
+    <Id>e6e7f7bc-25df-46e6-8e32-b7da87edaa8a</Id>
+    <Id_History>cf6176b8-68f1-4701-9395-2c166a985e80,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Test for Information Disclosure Vulnerabilities</Title>
+    <Category>Other</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Information Disclosure Vulnerabilities</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>Andres De Vivanco</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies To</span>
+  </h1>
+  <ul>
+    <li>
+      <span>Desktop applications, web applications, operating systems, API libraries, and any software program that deals with personally identifiable information</span>
+    </li>
+  </ul>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>
+    <span>Many software applications store and process sensitive data such as users’ personally identifiable information, bank accounts, email messages, private documents and so on.<span>&amp;nbsp;</span>Systems display this sensitive data to their users or clients based on an authorization and role separation model.&amp;nbsp;An information disclosure bug allows someone with not enough privileges to read the sensitive data.&amp;nbsp;</span>For example, a web application only displays to a user the emails belonging to this user’s account.&amp;nbsp;In addition, the application shows the administrator all the user emails since he has the privileges to read them by design.&amp;nbsp;An information disclosure bug allows an attacker to read from a user mailbox while lacking authorization to do so.</p>
+  <p>
+    <span>Follow these steps to test for information disclosure bugs:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Step 1:<span>&amp;nbsp;</span>Understand Attack Scenarios</span>
+    </li>
+    <li>
+      <span>Step 2:<span>&amp;nbsp;</span>Analyze Causes and Countermeasures</span>
+    </li>
+    <li>
+      <span>Step 3:<span>&amp;nbsp;</span>Start Testing and Exploring</span>
+    </li>
+    <li>
+      <span>Step 4:<span>&amp;nbsp;</span>Perform Additional Testing</span>&amp;nbsp;</li>
+  </ul>
+  <h1>
+    <span>Step 1:&amp;nbsp;Understand Attack Scenarios</span>
+  </h1>
+  <p>
+    <span>Information disclosure bugs happen because the application fails to protect sensitive data.<span>&amp;nbsp;</span>There are different types of attacks related to this bug:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Information disclosure by exploiting insecure connectivity.</span>
+    </li>
+    <li>
+      <span>Information disclosure by exploiting weak permissions.</span>
+    </li>
+    <li>
+      <span>Information disclosure by breaking cryptography.</span>
+    </li>
+    <li>
+      <span>Information disclosure due to overly explanatory error messages.</span>
+    </li>
+    <li>
+      <span>Indirect information disclosure and data theft.</span>&amp;nbsp;</li>
+  </ul>
+  <h2>
+    <span>
+      Information Disclosure by Exploiting Insecure Connectivity
+    </span>
+  </h2>
+  <p>
+    <span>Network applications such as web applications or client-server systems need to exchange sensitive information over the wire.<span>&amp;nbsp;</span>Some systems implement secure connectivity to exchange sensitive data through a secure channel such as the Secure Sockets Layer (SSL), Transport Layer Security (TLS), or IPSec.<span>&amp;nbsp;</span>However, not all systems deploy these security precautions.&amp;nbsp;As a result, an attacker with access to the physical network can eavesdrop the network traffic between the client and the server and easily obtain sensitive information from the wire.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Information Disclosure by Exploiting Weak Permissions
+    </span>
+  </h2>
+  <p>
+    <span>Software applications use user accounts with specific privileges and object permissions to manage sensitive information.<span>&amp;nbsp;</span>For instance, operating systems check the privileges of the user account accessing every file or database applications use roles and permissions to restrict access to sensitive tables.<span>&amp;nbsp;</span>This kind of applications implements permissions on every object to restrict unwanted access to the object.<span>&amp;nbsp;</span>However, sometimes the permissions applied on sensitive data are not strong enough and allow an attacker to access it.</span>
+  </p>
+  <h2>
+    <span>
+      Information Disclosure by Breaking Cryptography
+    </span>
+  </h2>
+  <p>
+    <span>Applications often include cryptographic countermeasures in order to protect sensitive information. Cryptographic code ensures that an attacker can only obtain sensitive information in ciphertext and not plaintext.<span>&amp;nbsp;</span>However, cryptography can be hard to implement properly and there are many attacks on it such as known plaintext attacks, chosen plaintext attacks, chosen ciphertext attacks, brute force attacks, and reading secrets from memory.<span>&amp;nbsp;</span>An attacker who successfully performs any of these attacks will be able to recover the original plaintext.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Information Disclosure due to Overly Explanatory Error Messages
+    </span>
+  </h2>
+  <p>
+    <span>Another way for attackers to gather sensitive information about the application’s design is to force the application into giving error codes.<span>&amp;nbsp;</span>In many cases, error messages contain useful information for attackers such as database structure or hints about the server side technology in use. This type of information disclosure is commonly executed as part of another attack such as SQL injection.&amp;nbsp;Commonly during this scenario, the application developers use error messages for debugging purposes internally but forgets to eliminate the messages them before shipping the application.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Indirect Information Disclosure and Data Theft
+    </span>
+  </h2>
+  <p>
+    <span>Data theft is the primary objective of many attacks. For example, a cross-site scripting attack targets stealing the session cookie or a blind SQL injection attack aims at inferring the database administrator’s password.&amp;nbsp;These attacks use another vulnerability (XSS and SQL injection in this case) to execute the information disclosure payload.&amp;nbsp;Indirect information disclosure is a common kind of attack scenario and a major threat to modern software.</span>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2:<span>&amp;nbsp;</span>Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>
+    <span>The next step in testing for information disclosure bugs is to understand what causes them and how to protect against them.</span>
+  </p>
+  <h2>
+    <span>
+      Information Disclosure Causes
+    </span>
+  </h2>
+  <p>
+    <span>Each type of information disclosure has a different cause.<span>&amp;nbsp;</span>In case of insecure connectivity, the cause is that the application doesn’t employ a secure channel such as SSL/TSL or IPSec to transmit sensitive data.<span>&amp;nbsp;</span>TCP/IP transmits data in plaintext by default and any sensitive can be trivially read by an eavesdropper.<span>&amp;nbsp;</span>SSL/TLS or IPSec were introduced to address this problem so that sensitive information travels always as ciphertext.<span>&amp;nbsp;</span>Information disclosure due to weak permissions is caused because an application or operating system fails to properly set the permissions of sensitive objects.&amp;nbsp;For instance, a web application may have an area for clients and an area for administrators in two different folders.<span>&amp;nbsp;</span>If the web application doesn’t set the permissions of the administrator area by restricting it to administrators only, any non administrator user will be able to browse to it and possibly execute administrative commands.</span>
+  </p>
+  <p>
+    <span>Information disclosure due to improper deployment of cryptography might be caused by poor design decisions, such as using a small key size, or implementation errors such as improper handling of private keys or incorrect exception handling.<span>&amp;nbsp;</span>In both design and implementation, the cause makes the cryptography useless and allows the attacker to decrypt the sensitive data.</span>
+  </p>
+  <p>
+    <span>In the case of disclosing information in error messages, the cause attributes to debug options left on (in configuration) or not checking what exception data is outputted (in code).<span>&amp;nbsp;</span>As a result, the sensitive error information makes it outside in a live environment as opposed to a debug/development environment.<span>&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <span>Indirect information disclosure is caused by a variety of reasons depending on the attack performed.<span>&amp;nbsp;</span>For instance, in case of information disclosure through SQL injection the cause can be attributed to not validating against malicious input (specifically against additional SQL commands) in the parameters when building a SQL statement with outside data.<span>&amp;nbsp;</span>In case of information disclosure through XSS, the cause is failing to sanitize HTML responses.<span>&amp;nbsp;</span>Developers must make sure to understand all the different ways in which sensitive data might leak to an attacker.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Information Disclosure Countermeasures
+    </span>
+  </h2>
+  <p>
+    <span>Applications must implement secure connectivity to avoid disclosing information through unsecure connections.<span>&amp;nbsp;</span>There are different industry protocols and solutions to create a secure channel between a client and server such that an eavesdropper will not see any sensitive information exchanged.<span>&amp;nbsp;</span>Two recommended protocols for secure connectivity are Secure Sockets Layer/Transport Layer Security or SSL/TLS and IPSec.<span>&amp;nbsp;</span>Both work by encrypting the data before sending it over the wire and decrypting it once received and offer a good defense.</span>
+  </p>
+  <p>
+    <span>Information disclosure due to lose permissions is solved by reviewing the access model and the permissions of sensitive objects.<span>&amp;nbsp;</span>The goal is to harden the system or database as much as possible so that sensitive resources have strong permissions.<span>&amp;nbsp;</span>An attacker without the proper permissions will now fail to access the target resource.<span>&amp;nbsp;</span>It is necessary to review the access model and make sure it works well.<span>&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <span>Information disclosure due to improper use of cryptography must be solved by avoiding cryptographic errors at design, implementation, and deployment.<span>&amp;nbsp;</span>Application developers must make sure to use keys of sufficient length and publicly reviewed cryptographic algorithms such as AES.<span>&amp;nbsp;</span>In addition, developers need to follow the specification of the encryption algorithms and not make design, coding, or deployment mistakes that end up compromising the encrypted data.</span>
+  </p>
+  <p>
+    <span>When it comes to protecting against information disclosure through error messages, there are two different types of countermeasures.<span>&amp;nbsp;</span>The first countermeasure is making sure that configuration settings don’t allow debug or error information to leak.<span>&amp;nbsp;</span>There are different settings depending on the platform in use.<span>&amp;nbsp;</span>For instance, ASP .NET web.config<span>&amp;nbsp; </span>has a tag to indicate whether debug info should be displayed by the browser.<span>&amp;nbsp;</span>The second countermeasure must be done at the coding level.<span>&amp;nbsp;</span>Here, developers must make sure to remove all the exceptions that leak sensitive information before shipping the product.<span>&amp;nbsp;</span>Industry best practices suggest that different compiler options should be used so that when a release version is built all the messages from the exception handling are removed.<span>&amp;nbsp;</span>For instance, Visual Studio uses two versions by default (“debug” and "release”) for C++ applications to help in keeping debug information away from the release version.</span>
+  </p>
+  <p>
+    <span>Defending against indirect information disclosure must take into consideration all the different attack vectors such as XSS, SQL injection, API hooking, etc.<span>&amp;nbsp;</span>Each different kind of attack requires a different kind of defense.<span>&amp;nbsp;</span>For instance, to defend against XSS, developers must validate and sanitize any input send in HTTP(s) responses.<span>&amp;nbsp;</span>In order to defend against SQL injection developers must sanitize any parameters that come from the outside against quotes and parenthesis or, even better, use parametized and type-safe queries or stored procedures, if available.<span>&amp;nbsp;</span>Defending against API hooking requires adjusting the privileges to avoid driver installation or shared memory modifications.</span>&amp;nbsp;
+    
+      &amp;nbsp;</p>
+  <h1>
+    <span>Step 3:<span>&amp;nbsp;</span>Start Testing and Exploring</span>
+  </h1>
+  <p>
+    <span>Now that you know the attack scenarios for information disclosure, why the attacks happen, and how to prevent against them, you need to execute basic test cases to ensure that your application is not vulnerable.</span>
+  </p>
+  <h2>
+    <span>
+      Test for Information Disclosure by Exploiting Insecure Connectivity
+    </span>
+  </h2>
+  <p>
+    <span>Follow these steps to test for info disclosure due to insecure connectivity:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Identify the sensitive data you will be testing against.</span>
+    </li>
+    <li>
+      Download <i>Wireshark </i>or a similar network sniffer.
+    </li>
+    <li>
+      <span>Start monitoring the network traffic (note down the application server’s IP).</span>
+    </li>
+    <li>
+      <span>Force transmission of sensitive data.</span>
+    </li>
+    <li>
+      <span>Stop monitoring network traffic.</span>
+    </li>
+    <li>
+      <span>Analyze capture by filtering the traffic (use a filter to only see the communication to server IP and to select the protocol used for transmitting the sensitive data).</span>
+    </li>
+  </ol>
+  <p>
+    <span>Expected results:<span>&amp;nbsp;</span>the application should not send the sensitive data in plaintext; it should be using SSL/TLS or IPSec and send sensitive data in ciphertext.<span>&amp;nbsp;</span></span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Test for Information Disclosure by Exploiting Weak Permissions
+    </span>
+  </h2>
+  <p>
+    <span>Follow these steps to test for information disclosure due to weak permissions:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Identify resource may contain sensitive information Such as a file in an operating system or a table in a database.</span>
+    </li>
+    <li>
+      <span>Note down the path to the target resource.</span>
+    </li>
+    <li>
+      <span>Try to access resource using an account that is not allowed to view the information (such as an account with non-administrative privileges).</span>
+    </li>
+  </ol>
+  <p>
+    <span>Expected results:<span>&amp;nbsp; </span>the application should not allow access to the target resource using the low privileged account.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Test for Information Disclosure by Breaking Cryptography
+    </span>
+  </h2>
+  <p>
+    <span>Follow these steps to test for information disclosure by breaking cryptography:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Identify the sensitive data that needs to be protected.</span>
+    </li>
+    <li>
+      <span>Identify when the data is encrypted.</span>
+    </li>
+    <li>
+      <span>Identify the part of the application responsible for encrypting the data.</span>
+    </li>
+    <li>
+      <span>Use a cryptanalysis attack in an attempt to recover key or reveal the plaintext for the sensitive information.</span>
+    </li>
+  </ol>
+  <p>
+    <span>Expected results: the application resists against known cryptographic attacks.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Test for Information Disclosure in Error Messages
+    </span>
+  </h2>
+  <p>
+    <span>Follow these steps to test for information disclosure in error messages:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Identify sensitive information that may be disclosed through error messages.<span>&amp;nbsp;</span>This information may include as database names or modules of code.</span>
+    </li>
+    <li>
+      <span>Submit unexpected values such as wrong types, fuzz strings, and overflow values to the application that are likely to trigger an erroneous condition in the application. </span>
+    </li>
+    <li>
+      <span>Wait for the error to trigger and attempt to discover descriptive information from any possible error messages.</span>
+    </li>
+  </ol>
+  <p>
+    <span>Expected results: the application should not disclose descriptive information in error messages.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Test for Indirect Information Disclosure
+    </span>
+  </h2>
+  <p>
+    <span>Testing for indirect information disclosure is done by testing against the vulnerabilities used to achieve it.&amp;nbsp;These vulnerabilities include but are not limited to: XSS, SQL injection, XPath Injection, XML injection, forceful browsing, API hijacking, ARP poisoning, and Man-in-the-Middle.</span>
+  </p>
+  <h1>
+    <span>Step 4:&amp;nbsp;Perform Additional Testing</span>
+  </h1>
+  <p>
+    The final step in testing for information disclosure bugs is to extend the test cases to make sure that strong permissions are used in the deployment environment.<span>&amp;nbsp;</span>There are freeware system utilities that let you check for the permissions needed to access each system objects (known as the object’s Access Control List or ACL).<span>&amp;nbsp;</span>For instance you can use Sysinternal’s<i> Process Explorer </i>tool to check the ACLs of system objects such as files, pipes, and memory sections.<span>&amp;nbsp;</span>In Unix-like environments, there are systems commands that produce equivalent results.
+  </p>
+  <p>
+    <span>A good idea is to extend automated testing to check against information disclosure vulnerabilities.<span>&amp;nbsp;</span>Model the permissions needed to access different objects and the users and roles of the system.<span>&amp;nbsp;</span>Then access each object with different user accounts and different roles and verify the access against the model.<span>&amp;nbsp;</span>This type of automated model based testing is quite effective to testing access and permissions systems and detecting information disclosure vulnerabilities.</span>
+  </p>
+  <p>
+    <span>Finally, perform stress testing of the application to generate error messages that might divulge information.<span>&amp;nbsp;</span>You can use fault injection tools such as Holodeck to simulate abnormal conditions such as low memory conditions or a network failure without having to actually go through the pain of consuming all memory or bringing down the network.</span>&amp;nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>
+    <span>Information disclosure bugs are easily detected but difficult to prevent.<span>&amp;nbsp;</span>However, in most cases an application can be protected by using secure communication channels, strong permissions, and by properly using cryptography.<span>&amp;nbsp;</span>To detect any information disclosure bugs you must monitor both how your system transmits data and how your system handles internal object permissions.<span>&amp;nbsp;</span>It is also necessary you test the application’s implementation of any cryptographic system to make sure that data is properly encrypted and to test that the application doesn’t disclose descriptive information in error messages that can be useful to attackers.<span>&amp;nbsp;</span>Testing for indirect information disclosure should be done by testing its different attack vectors such as XSS or SQL injection.</span>
+  </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

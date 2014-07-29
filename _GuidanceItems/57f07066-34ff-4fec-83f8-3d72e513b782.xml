@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>57f07066-34ff-4fec-83f8-3d72e513b782</Id>
+    <Id_History>00000000-0000-0000-0000-0000004e1296,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Authentication Information Is Not Stored in Local Storage</Title>
+    <Category>Local Storage</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Authentication Information Is Not Stored in Local Storage</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Check For==
+
+Verify that authentication information is not stored in local storage.
+
+==Why==
+
+HTML5 local storage is not designed to store sensitive information and is not suitable for that purpose. Data in local storage may be accessed by JavaScript, which means that it can be compromised via cross-site scripting (XSS) attacks. Cookies with the HTTPOnly flag set cannot be accessed with JavaScript, so they are much harder to compromise via XSS. 
+
+Overall, protected cookies are a better way to store session tokens, but should not store authentication information itself. Authentication information, other than session tokens, should not be stored on the client at all.
+
+==How to Check==
+
+To verify that authentication information is not stored in local storage:
+
+# **Find all code that stores authentication information in local storage.** Search the application code for references to the localStorage object. Examine each reference to the localStorage object to identify whether it is used to store or access authentication information. If the number of these references is prohibitively large, examine just the authentication code in this manner and ask the application's architect whether local storage is used to store authentication information. Create a spreadsheet to list all the code that stores or accesses authentication information in local storage.
+# **Verify that session tokens are stored in protected cookies.** Identify how session tokens used by the application are stored. A cursory review can be performed by using a web browser and viewing the cookies. The presence of a session cookie set by the application should incidate that cookies are being used to store session tokens. However, it is more reliable to review application code to identify how session tokens are stored and to make sure that they are not stored in local storage.
+# **Verify that authentication information is not stored in local storage.** Review every piece of application code that uses local storage and check what kind of data it stores in local storage. Make sure that authentication information, such as usernames or passwords, is not stored in local storage.
+
+==How to Fix==
+
+To remove all code that stores authentication information in local storage:
+
+# **Find all code that stores authentication information in local storage.** Search the application code for references to the localStorage object. Examine each reference to the localStorage object to identify whether it is used to store or access authentication information. If the number of these references is prohibitively large, examine just the authentication code in this manner and ask the application's architect whether local storage is used to store authentication information. Create a spreadsheet to list all the code that stores or accesses authentication information in local storage.
+# **Store session tokens in protected cookies.** The recommended way to handle sessions in web applications is to store session tokens in cookies that have HTTPOnly and Secure flags set. If the application uses a mechanism for session management other than storing session identifiers in protected cookies, it should be rewritten. Most web application platforms are designed in a manner to facilitate using cookies to store session identifiers, so there should be plenty of documentation and the overall process should be pretty simple.
+# **Remove all code that stores authentication information in local storage.** Once the application stores session identifiers in protected cookies, code that stores and accesses authentication information in local storage can be safely removed. Use the spreadsheet you created to find this code and remove it. Test these changes thoroughly, especially if you are making them to a live application.
+
+==Local Storage Guidelines==
+
+* [[00000000-0000-0000-0000-0000005c244a|Host Different Applications on Different Subdomains]]
+* [[00000000-0000-0000-0000-00000061bbb6|Do Not Store Sensitive Information in Local Storage]]
+* [[00000000-0000-0000-0000-000000233bdb|Use Session Storage Instead of Local Storage If Possible]]
+* [[00000000-0000-0000-0000-00000052241e|Do Not Store Session Identifiers in Local Storage]]
+* [[00000000-0000-0000-0000-00000052e67b|Do Not Store Authentication Information in Local Storage]]
+
+==Local Storage Checklist Items==
+
+* [[00000000-0000-0000-0000-000000358a18|Different Applications Are Hosted on Different Subdomains]]
+* [[00000000-0000-0000-0000-000000972b0b|Sensitive Information Is Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000007e3ee6|SessionStorage Is Used Instead of LocalStorage If Possible]]
+* [[00000000-0000-0000-0000-00000062c37e|Session Identifiers Are Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000004e1296|Authentication Information Is Not Stored in Local Storage]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

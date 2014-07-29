@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>97f2d654-0446-403b-88b2-ed25479059f7</Id>
+    <Id_History>476c6c0a-5463-4384-b63f-d54bf4a40fbd,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Simple Error Messages Are Displayed</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Simple Error Messages Are Displayed</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Check For==
+
+Verify that error messages are simple and don't give away too much information. Check that detailed information is written to protected log files.
+
+==Why==
+
+Error messages should be simple to prevent attackers from gathering sensitive information from them. Simple error messages also may be more user-friendly. Detailed error information should be written to protected log files, where it cannot be accessed by attackers.
+
+==How to Check==
+
+To verify that error messages don't give away too much information:
+
+# **Make sure that a global exception handler is used.** If a global exception handler is not used, the platform might display detailed error messages if the application crashes. 
+# **Identify all exception handlers and other error handling code.** Review application code to find all code that handles errors. One way is to search for keywords such as "try", "catch", and "throw".
+# **Verify that error messages don't give away too much information.** Examine the error messages that are likely to be displayed. Be careful not to disclose sensitive information in error messages. One thing to watch out for is disclosing information implicitly by displaying different messages for different scenarios. For example, displaying a message "The password is incorrect" when the password does not match an existing user and displaying "The username is incorrect" when the username is not valid - this is an example of volunteering too much information; using this information an attacker may infer what usernames exist on the system and focus on attacking existing accounts, thus making his attacks more efficient. Display as little information as possible to let the user know that an error has taken place and that the situation is under control. If some user action is required to recover from the error or to prevent the error from taking place again, that information may be included in the error message.
+# **Verify that detailed information is logged.** Examine exception handling code to make sure it collects information about the application state and write this information to a log file that is not accessible by unprivileged users.
+
+==How to Fix==
+
+To display simple error messages:
+
+# **Disable PHP error messages.** If you are using PHP, use the display_errors directive in php.ini to disable PHP error messages, like so: {{{ display_errors = off }}}
+# **Identify all exception handlers and other error handling code.** Review application code to find all code that handles errors. One way is to search for keywords such as "try", "catch", and "throw". 
+# **Log detailed error information.** Add code to exception handlers that collects information about the application state and records it in log files. Make sure log files are not exposed to unprivileged users. Be careful not to log sensitive information, such as passwords and other secrets in log entries.
+# **Show simple error messages.** Be careful not to disclose sensitive information in error messages. One thing to watch out for is disclosing information implicitly by displaying different messages for different scenarios. For example, displaying a message "The password is incorrect" when the password does not match an existing user and displaying "The username is incorrect" when the username is not valid - this is an example of volunteering too much information; using this information an attacker may infer what usernames exist on the system and focus on attacking existing accounts, thus making his attacks more efficient. Display as little information as possible to let the user know that an error has taken place and that the situation is under control. If some user action is required to recover from the error or to prevent the error from taking place again, that information may be included in the error message. Write error messages with these considerations in mind. Add code to exception handlers that displays the simple error messages.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

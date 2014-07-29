@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d49d2584-f78e-4c76-aec0-b3c0a2e32c76</Id>
+    <Id_History>00000000-0000-0000-0000-00000061e3bc,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Strong Session Identifiers Are Used</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Strong Session Identifiers Are Used</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+* Java
+
+==What to Check For==
+Verify that the default //HttpSession// object is used to identify sessions.
+
+==How to Check==
+
+To make sure that the default //HttpSession// object is used to identify sessions:
+ 
+# **Load the application.** Open the application in a web browser. Log in to the application. Any other way to start a session is okay, but logging in is a pretty sure way to start a session for any reasonably designed application.
+# **Examine the session identifier.** Use the browser plug-in or settings page that allows viewing the cookies. Make sure the //JSESSIONID// cookie is present. This cookie indicates that //HttpSession// object is used. Absence of this cookie should be alarming.
+# **(Optional) Review application code.** The presence of the //JSESSIONID// session cookie is a strong indicator that the default session ID generation algorithm is being used. To be absolutely sure, review the application code that handles session state. Make sure that when session gets established //HttpServletRequest.getSession// method is used to start a new session. 
+
+==How to Fix==
+Java //HttpSession// interface uses strong session IDs by default. Please, make sure that your application uses the default //HttpSession// object. Rewrite the application session state handling code, if necessary, to use the default //HttpServletRequest.getSession// to generate the new session ID. 
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1426657272" Content_Hash="-541160083">
+  <Metadata>
+    <Id>a032c13e-ed12-465a-8ca7-1596840ac6d0</Id>
+    <Id_History>5b641c0a-a63a-4524-8ce8-432150e6df6d,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use Windows Authentication for Web Users If Possible</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Windows Authentication for Web Users If Possible</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Consider windows authentication as an alternative to ASP.Net Forms Authentication. </p>
+  <h1>Why</h1>
+  <p>Unlike Forms Authentication, Windows Authentication never transmits either a password or a direct hash of the password over the network. This makes it much more difficult for an attacker to steal passwords by monitoring network traffic or to steal a session through a replay attack. In addition, it also benefits from a unified identity store, centralized account administration, and enforceable account and password policies. </p>
+  <h1>When</h1>
+  <p />Windows Authentication should be used whenever allowed by your application requirements. The three main disadvantages to Windows Authentication are: <ul><li>All user accounts for your application must also be a local machine account on the server or an Active Directory account. <li>Users must use Internet Explorer or FireFox 1.5 (or higher) on Microsoft Windows to connect to your application. <li>Windows Authentication can cause problems with some web proxies. It is generally not an ideal solution for web applications that are Internet accessible.</li></li></li></ul><h1>How</h1><p>Follow these steps to design and configure your application for Windows Authentication.</p><ol><li><p><strong>Protect against Cross-Site Request Forgery attacks</strong>. When you configure your web application to use Windows Authentication, Internet Explorer will automatically authenticate using the currently logged-on user's credentials without prompting the user. This is known as "silent authentication" and makes your application more susceptible to <a href="/article/6ae71499-095c-49bd-bed0-4e08303a4324">Cross Site Request Forgery</a>. Be sure to follow the counter measures outlined in the attack article to protect your application.</p><li><p><strong>Configure your application for Windows Authentication. </strong>To use Windows authentication in ASP.NET, you must use Microsoft Internet Information Services (IIS) to disable anonymous access and configure a Windows-based authentication method for your Web application's virtual directory. You must also ensure that the <strong>mode</strong> attribute on the &lt;<strong>authentication</strong>&gt; element is set to "Windows" (the default setting) in your Web.config file.</p></li></li></ol><h1>Problem Example</h1><p>John created a payroll ASP.Net Web Application for his company and decided to use ASP.Net Forms Authentication with the Active Directory Membership Provider because it seemed to be the simplest option at the time. He had no idea that Forms Authentication sends passwords and authentication cookies in plain text over the network. One week after the application was released, an employee used this vulnerability to impersonate a manager and increase their salary.</p><h1>Solution Example</h1><p>Upon review of the situation, John realized that the use of Forms Authentication was completely inappropriate for such a sensitive application. He switched the application over to use Windows Authentication instead and has had no subsequent problems.</p><h1>Related Items</h1><ul><li><a href="/article/12b0959c-774b-4dde-86b9-a4ff3d264317">Checklist Item: Windows Authentication is Used for Web Users if Possible</a><li><a href="/article/43c19a37-285d-4cdd-a43b-bdea78eb1686">Attack: HTTP Replay Attack</a><li><a href="/article/74e70134-b639-4cdc-b3e7-fe2952256d98">Attack: Network Credential Sniffing Attack</a><li><a href="/article/6ae71499-095c-49bd-bed0-4e08303a4324">Attack: Cross Site Request Forgery</a><li><a href="/article/862e51f1-a026-40f9-826b-7a65fa5dc563">Attack: HTTP Session Hijacking Attack</a><li><a href="/article/d72d0706-99df-4a65-a19d-6a83ec868a7b">Attack: Credentials Brute Force Attack</a><li><a href="/article/e8b05112-2416-436a-9679-07d9e5626bca">Attack: Credentials Dictionary Attack</a></li></li></li></li></li></li></li></ul><hr /><p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1139326968" Content_Hash="1604537638">
+  <Metadata>
+    <Id>638b9d8c-d3b3-44d7-9e9a-a4c48677f81f</Id>
+    <Id_History>24f3e287-809c-4172-9cfc-45b09bb54fb0,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Null Sessions (anonymous Logons) Are Restricted.</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>SQL Server 2000</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Null Sessions (anonymous Logons) Are Restricted.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>SQL Server 2000 </div>
+    </li>
+    <li>
+      <div>Windows 2000 Server</div>
+      <div>
+      </div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that null sessions are restricted to prevent anonymous access.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>To prevent anonymous access, disable null sessions. These are unauthenticated or anonymous sessions established between two computers. Unless null sessions are disabled, an attacker can connect to your server anonymously, that is, without requiring authentication.</p>
+  <p>As soon as an attacker establishes a null session, a variety of attacks can be performed, including enumeration used to obtain system-related information from the target computer. The type of information that can be returned over a null session includes domain and trust details, shares, user information including groups and user rights, registry keys, and more. Disable them because they represent a significant security threat.</p>
+  <p>Restrict null sessions by setting RestrictAnonymous=1 in the registry at the following location.</p>
+  <div>
+    <pre>HKLM\System\CurrentControlSet\Control\LSA\RestrictAnonymous=1</pre>
+  </div>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

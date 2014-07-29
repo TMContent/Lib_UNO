@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1716373173" Content_Hash="-1960908495">
+  <Metadata>
+    <Id>85fea796-f72d-4de1-99bd-ecbd811c335e</Id>
+    <Id_History>d6822de0-1913-46b8-ae14-a21f5bc0c3f9,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Encrypt Sensitive Data in Configuration Files</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Encrypt Sensitive Data in Configuration Files</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>To encrypt sensitive data in configuration files, use the<strong> aspnet_regiis.exe</strong> tool with the -<strong>pe</strong> (provider encryption) option:</p>
+  <p>Use the following command to encrypt the connectionStrings section using the DPAPI provider with the machine key store (the default configuration), run the following command from a command prompt: </p>
+  <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
+  <ul>
+    <li>-<strong>pe</strong> specifies the configuration section to encrypt.<li>-<strong>app</strong> specifies your Web application's virtual path. If your application is nested, you need to specify the nested path from the root directory, for example "/test/aspnet/MachineDPAPI" <li>-<strong>prov</strong> specifies the provider name.</li></li></li>
+  </ul>
+  <p>The .NET Framework supports <strong>RSAProtectedConfigurationProvider</strong> and <strong>DPAPIProtectedConfigurationProvider</strong> protected configuration providers:</p>
+  <ul>
+    <li>
+      <strong>RSAProtectedConfigurationProvider</strong>. This is the default provider and uses the RSA public key encryption to encrypt and decrypt data. Use this provider to encrypt configuration files for use on multiple WCF Services in a Web farm.<li><strong>DPAPIProtectedConfigurationProvider</strong>. This provider uses the Windows Data Protection API (DPAPI) to encrypt and decrypt data. Use this provider to encrypt configuration files for use on a single Windows Server.</li></li>
+  </ul>
+  <p>You do not need to take any special steps for decryption, the .NET runtime takes care of this for you. <br /></p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on encrypting configuration section, see &amp;#8220;How to: Encrypt Configuration Sections Using DPAPI&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998280.aspx">http://msdn2.microsoft.com/en-us/library/ms998280.aspx</a> and &amp;#8220;How to: Encrypt Configuration Sections Using RSA&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998283.aspx">http://msdn2.microsoft.com/en-us/library/ms998283.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

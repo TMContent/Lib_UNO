@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-643555541" Content_Hash="-985500837">
+  <Metadata>
+    <Id>557ed42b-69ed-4e8f-906b-39bac56f2ae8</Id>
+    <Id_History>ce899ba6-8ae2-4494-8706-ce863fae58e7,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Filter All User-supplied Filename And Path Input</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Filter All User-supplied Filename And Path Input</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Carefully validate use supplied filename and path to ensure correct format and validity of location within the context of the application</p>
+  <h1>Why</h1>
+  <p>Filtering paths and filenames helps to avoid a <a href="/article/f9f0a869-98fe-4ac5-9de3-3eaf33306c4b">Canonicalization Attack</a> where your application may be caused to read or write to arbitrary files on the server.</p>
+  <h1>When</h1>
+  <p>Whenever the user input used as a filename or path component for a file or similar resource on the server is received.</p>
+  <h1>How</h1>
+  <p>Whenever possible, user supplied input should not be used as a component of any filename or path. When storing files supplied by a user, keep the user-provided filename in a database and store the file on disk under a GUID. Likewise, do not allow users to specify details about which files to access unless absolutely necessary. When you must allow a user to specify part of a filename or path, the following three methods should be used to ensure safe handling of user supplied paths and filenames:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Validate file paths and names</strong>: to avoid canonicalization bugs, canonicalize the file name by using the <a href="http://msdn2.microsoft.com/en-us/library/system.io.path.getfullpath(vs.80).aspx">System.IO.Path.GetFullPath</a> method.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use MapPath to prevent cross application mapping</strong>: When using <strong>MapPath</strong> to map a supplied virtual path to a physical path on the server, use the overload of <a href="http://msdn2.microsoft.com/en-us/library/3z2189ck(VS.80).aspx">Request.MapPath</a> that accepts a bool parameter so that you can prevent cross-application mapping. In the sample below the final <strong>false</strong> parameter prevents cross-application mapping. This means that a user cannot successfully supply a path that contains ".." to traverse outside of your application's virtual directory hierarchy. Any attempt to do this results in an exception:</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use Code Access Security to restrict File IO</strong>: You can configure all the file operations by the web-application to be restricted to its own virtual directory. This is done by configuring the application to run with Medium trust, you can do this by setting the <strong>&lt;trust&gt;</strong> element in Web.config or Machine.config as follows:</p>
+      <pre> &lt;trust level="Medium" /&gt;</pre>
+      <p>Running applications successfully in <strong>Medium trust</strong> requires appropriate design and development techniques. </p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>In the following code example, the server receives a file name from the user. The server appends the user supplied filename to the a hardcoded path and verifies to see if this file exists on the server. If the file exists, the server opens the file and performs operations on it.</p>
+  <blockquote>
+    <pre>&lt;%@ Page Language="C#" ValidateRequest="false" %&gt;<br /> &lt;script runat="server"&gt;<br />   void submitBtn_Click(object sender, EventArgs e)<br />   {<br />       String fileName = "c:\\configfiles\\" + inputPath.Text;<br />       if (System.IO.File.Exists (fileName))<br />       {<br />            System.IO.FileStream fs = System.IO.File.Open(fileName, System.IO.FileMode.Open);<br />       }<br />   }<br /> &lt;/script&gt;<br /> &lt;html xmlns="<a href="http://www.w3.org/1999/xhtml/Overview.html">http://www.w3.org/1999/xhtml/Overview.html</a>"&gt;<br />   &lt;body&gt;<br />     &lt;form id="form1" runat="server"&gt;<br />       &lt;div&gt;<br />         &lt;asp:TextBox ID="inputPath" Runat="server"<br />               TextMode="MultiLine" Width="382px" Height="152px"&gt;<br />         &lt;/asp:TextBox&gt;<br />         &lt;asp:Button ID="submitBtn" Runat="server" Text="Submit"<br />                      OnClick="submitBtn_Click" /&gt;<br />       &lt;/div&gt;<br />     &lt;/form&gt;<br />   &lt;/body&gt;<br /> &lt;/html&gt;</pre>
+  </blockquote>
+  <p>Here one can clearly notice that the intention of the developer is to limit access to the <strong>C:\ConfigFiles</strong> folder. However, if a user supplied the input "..\windows\system32\critical.ini" then the application will readily join the user supplied input with the hardcoded path and give the attacker access to critical system files.</p>
+  <h1>Solution Example</h1>
+  <p>The server side code of this application is now updated to use the GetFullPath method:</p>
+  <blockquote>
+    <pre> &lt;script runat="server"&gt;<br />   void submitBtn_Click(object sender, EventArgs e)<br />   {<br />       String fileName = "c:\\configfiles\\" + inputPath.Text;<br />       fileName = System.IO.Path.GetFullPath(fileName).ToLower();<br />       if (fileName.StartsWith("c:\\configfiles") &amp;&amp;<br />            System.IO.File.Exists (fileName))<br />       {<br />            System.IO.FileStream fs = System.IO.File.Open(fileName, System.IO.FileMode.Open);<br />       }<br />   }<br /> &lt;/script&gt;</pre>
+  </blockquote>
+  <p>Now, the website calls GetFullPath and then verifies that the file name is indeed pointing to somewhere within the C:\ConfigFiles\ folder.</p>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/0c6693ed-e3c2-4640-a795-c7c9c2a63cbc">Guideline: Define a Security Policy </a>
+    </li>
+    <li>
+      <a href="/article/6e981095-84bd-4158-a212-8f9937bcb336">Guideline: Do Not Rely on Client-Side Validation </a>
+    </li>
+    <li>
+      <a href="/article/88f49e05-f101-4764-b8e3-b31cd7507071">Guideline: Do Not Rely on Request Validation </a>
+    </li>
+    <li>
+      <a href="/article/f9f0a869-98fe-4ac5-9de3-3eaf33306c4b">Attack: Canonicalization Attack</a>
+    </li>
+    <li>
+      <a href="/article/c392a633-2f74-4557-94ba-9fd6eeeefb95">Attack: Client-side Validation Attack</a>
+    </li>
+    <li>
+      <a href="/article/f5b0a5fe-c9b3-4a3b-a204-9bc7c7394162">Attack: Alternate Data Streams Attack</a>
+    </li>
+    <li>
+      <a href="/article/4b11c55a-9205-4ed6-9add-14e6addfc5b3">Attack: Command Injection Attack</a>
+    </li>
+    <li>
+      <a href="/article/df8e9450-e2ed-4ed8-b8de-a518a90d1789">Attack: File Name and Path Manipulation Attack</a>
+    </li>
+    <li>
+      <a href="/article/bf203bfc-b726-4e42-8fb3-fe0cfe02616a">Checklist Item: User-Supplied Filenames and Paths are Validated</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

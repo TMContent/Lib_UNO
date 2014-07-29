@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>09f30d4c-1b7d-4357-9621-570a61799755</Id>
+    <Id_History>00000000-0000-0000-0000-0000005304d5,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Insufficiently Protected Credentials</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>Insufficiently Protected Credentials</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Description==
+
+An insufficiently protected credential weakness occurs when the application doesn't store or transmit the authentication credentials securely. An attacker may be able to recover stored passwords after compromising the application, if the passwords are not hashed and salted. An attacker may be able to intercept passwords or hashes as a result of a man-in-the-middle attack, if the passwords or hashes are not encrypted during transmission. All applications that use authentication are affected by this vulnerability type. To prevent this vulnerability type, hash and salt stored passwords and send authentication credentials over encrypted tunnels. To make sure that adequate protection against this vulnerability type is in place, verify that passwords are hashed and salted for storage and that authentication credentials are never sent in plain-text.
+
+==Impact==
+
+An insufficiently protected credential vulnerability makes it easier for an attacker to gain access to the authentication credentials. Usually, some other vulnerability has to be present for the attacker to recover the credentials. Once the attacker has the credentials, he can impersonate the user whose credentials have been compromised. Malicious hackers usually target privileged accounts to take over the application. After taking over the application, an attacker may leverage other vulnerabilities to take over the application platform and use it to pivot for other attacks. The attacker may also be interested in user data or impersonating the user and compromising the authentication credentials allows him to do that.
+
+==Countermeasures==
+
+Implement all of the following countermeasures to protect the credentials stored by your application. 
+
+* [[6e0918c1-90db-46d5-9f0e-8a98ddbcd7d5|Store Passwords Securely]]
+* [[bcf8adb4-8186-4b97-b490-4fa33f506bfd|Limit Access to the Credential Store]]
+
+==Checklists==
+
+Use each of the following checklist items to make sure that the credentials stored by your application are sufficiently protected. 
+
+* [[d74fe6bf-387f-4ff1-9edb-d0275eedffc0|Passwords Are Stored Securely]]
+* [[9031f577-80b0-4a2e-9652-7b470439a0df|Access to the Credential Store Is Limited]]
+
+==Additional Resources==
+
+* For the CWE page about this vulnerability type, see http://cwe.mitre.org/data/definitions/522.html]]></Data>
+  </Content>
+</TeamMentor_Article>

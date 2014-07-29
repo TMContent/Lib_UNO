@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7806c2f0-4c3e-405e-aa5c-78bf6035706c</Id>
+    <Id_History>67586da5-b7e8-4888-9bb2-1fe7920facd7,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Validate SOAP Array Sizes</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate SOAP Array Sizes</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Services
+
+
+==What to Do==
+
+Validate SOAP array size using schemas before passing SOAP messages to the parser.
+
+
+==Why==
+
+Validate SOAP array size to prevent SOAP array abuse attacks. SOAP array abuse occurs when an attacker sends SOAP messages that say they have very large arrays in them. The parser allocates a lot of memory upon seeing such messages, so the attacker is able to exhaust the server's memory by sending a large amount of these SOAP messages rapidly. The result of SOAP array abuse is a denial of service condition.
+
+
+==When==
+
+Use this guideline for applications that use SOAP.
+
+
+==How==
+
+To validate SOAP array size:
+
+# **Find all code that uses SOAP messages.** Create a spreadsheet of all code that handles SOAP messages. Schema validation should be performed whether or not SOAP arrays are present in messages, so include all code that handles SOAP messages in the spreadsheet.
+# **Define schemas that limit the maximum size of SOAP arrays.** Write a schema for each type of SOAP message that is handled by your application. Set the maximum sizes of SOAP arrays in each schema. While doing this, set the known maximums and minimums for other values in the schemas to take full advantage of schema validation.
+# **Add code that validates SOAP array size using the schemas.** Validate SOAP messages using the schema that limits the maximum size of SOAP arrays and is appropriate for the message. Validate SOAP messages before passing them to the parser.
+
+
+==Additional Resources==
+
+* For more information about SOAP array validation, see http://clawslab.nds.rub.de/wiki/index.php/Soap_Array_Attack
+]]></Data>
+  </Content>
+</TeamMentor_Article>

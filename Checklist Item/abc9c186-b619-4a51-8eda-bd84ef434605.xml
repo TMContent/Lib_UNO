@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1174143503" Content_Hash="171096863">
+  <Metadata>
+    <Id>abc9c186-b619-4a51-8eda-bd84ef434605</Id>
+    <Id_History>65d76aae-7c7f-4914-aca0-e84684e919ee,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>ADO.NET Exception Details Are Logged on the Server</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>ADO.NET Exception Details Are Logged on the Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>ADO.NET 2.0</div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that your application logs detailed ADO.NET exception information on the server which is essential for problem diagnosis. </p>
+  <h1>How to Fix</h1>
+  <p>Log detailed ADO.NET exception information on the server. This information is essential for problem diagnosis. The following code shows a helper routine that you can use to log <b>SqlException</b> details to the application event log.</p>
+  <div>
+    <pre>using System.Data;<br />using System.Data.SqlClient;<br />using System.Data.Diagnostics;<br />...<br />// Data Access method<br />public string RetrieveProductName( int productID ){<br />  SqlConnection conn = null;<br />  // Enclose all data access code within a try block<br />  try<br />  {<br />    conn = new SqlConnection(_connString);<br />    conn.Open();<br />    SqlCommand cmd = new SqlCommand("LookupProductName", conn );<br />    cmd.CommandType = CommandType.StoredProcedure;<br />    cmd.Parameters.Add("@ProductID", productID );<br />    SqlParameter paramPN =<br />          cmd.Parameters.Add("@ProductName", SqlDbType.VarChar, 40 );<br />    paramPN.Direction = ParameterDirection.Output;<br />    cmd.ExecuteNonQuery();<br />    // The finally code is executed before the method returns<br />    return paramPN.Value.ToString();<br />    }<br />  catch (SqlException sqlex)<br />  {<br />    // Handle data access exception condition<br />    // Log specific exception details<br />    LogException(sqlex);<br />    // Wrap the current exception in a more relevant<br />    // outer exception and re-throw the new exception<br />    throw new DataAccessException(<br />                  "Unknown ProductID: " + productID.ToString(), sqlex );<br />  }<br />  catch (Exception ex)<br />  {<br />    // Handle generic exception condition . . .<br />    throw ex;<br />  }<br />  finally<br />  {<br />    if(conn != null) conn.Close();<br /> // Ensures connection is closed<br />  }<br />}<br />// Helper routine that logs SqlException details to the <br />// Application event log<br />private void LogException( SqlException sqlex ){<br />  EventLog el = new EventLog();<br />  el.Source = "CustomAppLog";<br />  string strMessage;<br />  strMessage = "Exception Number : " + sqlex.Number +<br />                "(" + sqlex.Message + ") has occurred";<br />  el.WriteEntry( strMessage );<br />  foreach (SqlError sqle in sqlex.Errors)<br />  {<br />    strMessage = "Message: " + sqle.Message +<br />                 " Number: " + sqle.Number +<br />                 " Procedure: " + sqle.Procedure +<br />                 " Server: " + sqle.Server + <br />                 " Source: " + sqle.Source +<br />                 " State: " + sqle.State + <br />                 " Severity: " + sqle.Class +<br />                 " LineNumber: " + sqle.LineNumber;<br />    el.WriteEntry( strMessage );<br />  }<br />}</pre>
+  </div>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

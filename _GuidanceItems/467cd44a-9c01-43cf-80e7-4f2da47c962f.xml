@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>467cd44a-9c01-43cf-80e7-4f2da47c962f</Id>
+    <Id_History>00000000-0000-0000-0000-00000077e119,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Use Parameterized APIs to Launch External Processes</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Parameterized APIs to Launch External Processes</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Do==
+
+Use parameterized APIs to launch external processes.
+
+==Why==
+
+Using parameterized APIs helps prevent injection attacks.
+
+==How==
+
+To use parameterized APIs to launch external processes:
+
+# **Identify all calls to external commands.** Search for the following APIs to find code that executes external commands: //AppCommandHandler.ExecuteCommand//, //System.Diagnostics.Process//.
+# **Use parameterized APIs.** The //System.Diagnostics.Process// object provides a parameterized API for executing external commands. Command parameters can be set using a //System.Diagnostics.ProcessStartInfo// object, which is passed as an argument to the constructor of the //System.Diagnostics.Process// object. Use these APIs whenever executing external commands from your applications. This is the most common way to do it, so your application is probably already doing it this way.
+# **Validate data passed to command execution APIs.** Input passed to external commands should be very carefully validated. Be particularly cautious if passing user data to a command interpreter, such as cmd.exe or PowerShell. Be careful when passing user data to any program that may spawn another application, for example explorer.exe. Even if parameterized APIs are used, passing untrusted user data to such processes may result in command injection vulnerabilities. It is best to avoid calling programs that may spawn other programs based on parameters passed to them. If such programs cannot be avoided, user data has to be positively validated before being passed in parameters.]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-804861154" Content_Hash="1390425320">
+  <Metadata>
+    <Id>8e490106-0f0c-42f3-9884-3c973232b4d2</Id>
+    <Id_History>d5ea5036-2532-4299-b2ee-8ba6fb768951,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Session Prediction Attack</Title>
+    <Category>Application State</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Session Prediction Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Any network application that must keep state through the use of session identifiers.</p>
+  <h1>Description</h1>
+  <p>In the session prediction attack the malicious user will attempt to discern the method used to create new session IDs for past, current or future sessions. If a session ID can be guessed the attacker can piggyback on the credentials of an authenticated user and masquerade as that user.</p>
+  <h1>Impact</h1>
+  <p>Elevation of privilege: Session hijacking allows the attacker to act as the user whose session was hijacked.</p>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Poor or predictable session identifiers - using a small ID space increases the likelihood that IDs will have to be reused and increases the probability of successful session ID guessing <li>Long session timeouts - if sessions do not expire or take a very long time to expire an attacker has more time to guess or use sniffed session IDs <li>Insecure communications channel - using insecure communication channels will allow an attacker to sniff valid session IDs in real time</li></li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Use strong random numbers for session identifiers - using a cryptographically secure random number (e.g., GUIDs) generator for session IDs will ensure that the session ID cannot be predicted <li>Use a large ID space - this will ensure session IDs are not repeated as often <li>Use small session timeout windows - if the timeout window is very small the session may have expired by the time the attacker can guess or sniff a valid session ID. <li>Use a secure communication channel - if the communication channel is secure, the attacker will have less data to guess the session ID with, and the possibility of them simply sniffing the session identifier is eliminated. <li>Do not reuse session identifiers - Do not reuse session IDs for the same user, assign a new cryptographically random session ID upon every successful login. </li></li></li></li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>An attacker may attempt to log in multiple times to the server to collect a number of session IDs. Once a large enough set of session IDs have been collected statistical analysis can be done on them to try to predict future session IDs. The attacker may also make sure that the server is not binding the session ID to any other information such as IP or MAC address. This can be done by logging into the service from two different computers using different IPs and swapping the session IDs. </p>
+  <p>First the attacker will log in a number of times and pull the session IDs out of response, this could be done manually or using a tool. The session IDs in this example the following session IDs were collected:</p>
+  <p>
+    <table>
+      <tbody>
+        <tr>
+          <td>MTUzNTp1c2VyTmFtZQ==</td>
+        </tr>
+        <tr>
+          <td>MTUzNzp1c2VyTmFtZQ==</td>
+        </tr>
+        <tr>
+          <td>MTUzODp1c2VyTmFtZQ==</td>
+        </tr>
+        <tr>
+          <td>MTU0MDp1c2VyTmFtZQ==</td>
+        </tr>
+      </tbody>
+    </table>
+  </p>
+  <p>The trailing equals of the session IDs is a tell tale sign of Base64 encoding, so the attacker decodes the session IDs and notices this web application is using incrementing session IDs appended to the username:</p>
+  <table>
+    <tbody>
+      <tr>
+        <td>MTUzNTp1c2VyTmFtZQ== </td>
+        <td>1535:userName</td>
+      </tr>
+      <tr>
+        <td>MTUzNzp1c2VyTmFtZQ== </td>
+        <td>1537:userName</td>
+      </tr>
+      <tr>
+        <td>MTUzODp1c2VyTmFtZQ== </td>
+        <td>1538:userName</td>
+      </tr>
+      <tr>
+        <td>MTU0MDp1c2VyTmFtZQ== </td>
+        <td>1540:userName</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Once the mechanism is known for predicting session IDs the attacker can then begin attacking the server. The attacker would simply guess a number slightly larger or smaller than the current session ID and append it to a list of known usernames. Successfully generating a valid session identifier in this way would allow the attacker to log in to the server as another user.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Session Prediction attacks, see <a href="http://www.webappsec.org/projects/threat/classes/credential_session_prediction.shtml">Credential / Session Prediction</a>.</li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/df4ccb8e-5670-4a5f-b521-a068070fec31">Attack: Statistical Analysis Attack</a>
+      <li>
+        <a href="/article/7d4ee303-b9fa-45bb-ad64-578312d80722">Attack: Key Bruteforce Attack</a>
+        <li>
+          <a href="/article/d0cf18ae-17da-489d-8f77-9ba99bbd669f">Attack: Network Credential Sniffing Attack</a>
+          <li>
+            <a href="/article/73c29051-2538-44b4-89ac-16932ca4adf7">Attack: HTTP Session Hijacking Attack</a>
+            <li>
+              <a href="/article/bd47b75e-1264-4ab1-995e-fe412dd75a1c">Attack: HTTP Replay Attack</a>
+              <li>
+                <a href="/article/2c48bbd6-2677-4ab0-80df-57985b90bee4">Guideline: Protect ASP.NET Session State </a>
+                <li>
+                  <a href="/article/9df0b518-f832-4a7c-9857-0517638c47db">Guideline: Do Not Make Security Decisions Based on Client-Accessible Parameters </a>
+                  <li>
+                    <a href="/article/254ddab5-ecd2-4e05-a2b0-861e970bc0d9">Guideline: Protect Session Cookies </a>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

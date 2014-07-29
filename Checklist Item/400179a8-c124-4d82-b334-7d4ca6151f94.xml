@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="26037445" Content_Hash="338443372">
+  <Metadata>
+    <Id>400179a8-c124-4d82-b334-7d4ca6151f94</Id>
+    <Id_History>bb200ff1-9bfb-4d7a-a048-575051c8c798,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Passwords Are Not Left in Memory</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Passwords Are Not Left in Memory</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that passwords are cleared from memory after their use.</p>
+  <h1>Why</h1>
+  <p>Passwords are sensitive data that are used to establish a trust relationship. Leaving them in memory after their use can expose them to an attacker.</p>
+  <h1>How to Check</h1>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all password use. </strong>Examine your application and identify all places inside its code base that handle user passwords. Common places include:</p>
+      <ul>
+        <li>Creating new users </li>
+        <li>Modifying existing users </li>
+        <li>Changing credentials for existing users </li>
+        <li>Authenticating users</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that passwords are stored in mutable objects.</strong> Each identified password should be stored in a mutable object, such as a character array. This allows the password to be overwritten in memory and not rely on the garbage collector. Verify that passwords are not stored in immutable objects, such as .NET strings, that do not allow their memory space to be modified after being allocated.</p>
+      <p>Ensure that the memory containing the password is overwritten as quickly after use as possible. Ensure that passwords are not passed between function, class, or object boundaries except when absolutely necessary. Note in the examples below the difference between <strong>Byte</strong> and <strong>byte</strong>. .NET cannot guarantee that it will overwrite the same memory location in the heap that is already occupied by a <strong>Byte</strong>. However, if you overwrite a <strong>byte</strong> variable or an element inside a <strong>byte[]</strong>, then you have overwritten the same memory location that contains the actual data.</p>
+      <p>Examples of Mutable objects:</p>
+      <ul>
+        <li>char </li>
+        <li>char[] </li>
+        <li>byte </li>
+        <li>byte[]</li>
+      </ul>
+      <p>Examples of Immutable objects:</p>
+      <ul>
+        <li>string </li>
+        <li>Byte </li>
+        <li>Byte[] </li>
+        <li>Char</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that all password instances are cleared.</strong> Ensure that all the memory locations where passwords have been stored are cleared or overwritten after their use. Setting a pointer to NULL does not clear or overwrite the memory- a new value must be assigned to it. For a character array, setting each char to a new value, such as a space or a zero, will overwrite the value stored in memory. </p>
+      <p />Example of improper password removal: <p /><pre>char[] pass = GetPassword();<br />...<br />//insufficient for removing a password from memory<br />pass = null;</pre><p>Example of proper password removal:</p><pre>char[] pass = GetPassword();<br />...<br />//proper clearing of character array to remove data from memory<br />for(int i=0; i&lt;pass.Length; i++){<br />      pass[i] = ' ';<br />}<br />pass = null;</pre></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code makes a use of a password. Although the pointer to the string is removed and garbage collection is called, .NET does not guarantee the data will be erased.</p>
+  <p />
+  <pre>string pass = GetPassword();<br />...<br />pass = null;<br />GC.Collect();</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about .NET data types, visit: <a href="http://msdn.microsoft.com/en-us/magazine/cc301569.aspx">.NET Type Fundamentals</a>.</li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/2120b3fe-34c6-47bf-be83-d9756e512d02">Guideline: Do Not Leave Passwords in Memory&amp;nbsp;</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

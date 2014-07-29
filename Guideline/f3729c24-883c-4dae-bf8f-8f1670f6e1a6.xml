@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1420476689" Content_Hash="-210399766">
+  <Metadata>
+    <Id>f3729c24-883c-4dae-bf8f-8f1670f6e1a6</Id>
+    <Id_History>9c4e46f4-ef36-42c3-ad76-4da1c7ab5027,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>If You Use ASP.NET, Use ASP.NET Validator Controls</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>If You Use ASP.NET, Use ASP.NET Validator Controls</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you are using ASP.NET, use the ASP.NET validator controls to constrain and validate input in the presentation layer of your application. ASP.NET validator controls validate the associated control on the server and they provide a client-side implementation to perform validation on the client. </p>
+  <h1>Why</h1>
+  <p>Client side validation can be easily bypassed. For example, a malicious user could disable&amp;nbsp;the client-side script routines by disabling JavaScript.&amp;nbsp;Users&amp;nbsp;may also construct their own&amp;nbsp;form posts using custom html, or&amp;nbsp;using an&amp;nbsp;HTTP proxy to modify form posts.&amp;nbsp;&amp;nbsp;</p>
+  <p>As ASP.NET validator controls validate the data associated on the server as well, it helps protecting from&amp;nbsp;injection vulnerabilities that would allow an attacker to bypass data input restrictions and gain access to unintended application functionality.</p>
+  <h1>When</h1>
+  <p>Whenever working with input ensure that all input from&amp;nbsp;the client is&amp;nbsp;validated, even if the input is not stored.</p>
+  <h1>How</h1>
+  <p>In ASP.NET use validation controls like <strong>RequiredFieldValidator</strong>, <strong>RegularExpressionValidator</strong>, <strong>CompareValidator</strong>, <strong>RangeValidator</strong> and <strong>CustomValidator</strong>. Using validator controls enables you to optionally leverage client side validation without writing any custom script code. The validation carried out on the client side is the same as validation done on server side.</p>
+  <p>The following example shows a RegularExpressionValidator control that has been used to validate a name field. Both server-side and client-side validation are performed unless the browser does not support client-side validation.</p>
+  <pre>&lt;form id="WebForm" method="post" runat="server"&gt;<br />&amp;nbsp; &lt;asp:TextBox id="txtName" runat="server"&gt;&lt;/asp:TextBox&gt;<br />&amp;nbsp; &lt;asp:RegularExpressionValidator id="nameRegex" runat="server" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToValidate="txtName" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ValidationExpression="[a-zA-Z'`-´\s]{1,40}" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ErrorMessage="Invalid name"&gt;<br />&amp;nbsp; &lt;/asp:regularexpressionvalidator&gt;<br />&lt;/form&gt;</pre>
+  <p>The preceding validation expression constrains the input name field to alphabetic characters (lowercase and uppercase), the single apostrophe for names such as O'Dell, and the dot character. In addition, the field length is constrained to 40 characters.</p>
+  <p>
+    <strong>Note</strong>&amp;nbsp;&amp;nbsp; If the input control is empty, no validation functions are called and validation succeeds. Use a <strong>RequiredFieldValidator</strong> control to prevent the user from skipping an input control.&amp;nbsp;</p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

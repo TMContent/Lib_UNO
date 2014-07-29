@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="731988880" Content_Hash="-934593177">
+  <Metadata>
+    <Id>a139d091-608e-4978-ac39-517c276eaeeb</Id>
+    <Id_History>aa29547a-e01d-46f4-8e74-dbd9b01fc344,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Restrict Unauthorized Code</Title>
+    <Category>Authorization</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Restrict Unauthorized Code</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Ensure that only trusted code can access your data access classes and methods.</p>
+  <h1>Why</h1>
+  <p>This decreases the risk of any malicious code exploiting your application.</p>
+  <h1>When</h1>
+  <p>When application requirement is to determine which code can retrieve and manipulate specific data, this guideline should be applied.</p>
+  <h1>How</h1>
+  <p>To restrict access to your code, do the following: </p>
+  <ul>
+    <li>
+      <b>Design for restricted access</b>.<b></b></li>
+    <li>
+      <b>Place ASP.NET data access code in your application's Bin directory</b>. </li>
+    <li>
+      <strong>Use strong names for data access library code</strong>.</li>
+  </ul>
+  <h3>Design for Restricted Access</h3>
+  <p>Carefully design the public interfaces, classes, and methods exposed by your data access code. Make sure that code which is for internal use by the data access library is marked <b>private</b>. When designing for restricted access, consider the following guidelines: </p>
+  <ul>
+    <li>Consider creational patterns, such as Abstract Factory or Singleton, to help make sure that the data access library retains control over how its objects are instantiated. Having the factory return an interface also ensures that the actual class remains hidden from the outside. </li>
+    <li>If you expose extension points through a provider model to provide the use with the ability to implement an interface or extend a class, make sure that the extension class has restricted access to the underlying data access code. </li>
+    <li>Mark classes and methods that need not be accessed outside the data access block as <b>internal</b>. </li>
+    <li>Seal classes that need to be exposed but should not be inherited from. </li>
+    <li>Mark methods that do not need to be exposed as <b>private</b> or <b>internal</b>. </li>
+  </ul>
+  <h3>Place ASP.NET Data Access Code in Your Application's Bin Directory</h3>
+  <p>If you are developing data access code for exclusive use by a single ASP.NET application, place the data access assembly in your application's Bin directory. To restrict access to the assembly, configure an ACL for the Bin directory that provides only read access to your application's unique process identity.</p>
+  <h3>Use Strong Names for Data Access Library Code</h3>
+  <p>Data access library code that is to be used by more than one application should be strong name signed and added to the global assembly cache. The added benefit of strong naming your library code is that the common language runtime prevents partially trusted code from calling a strong named assembly by adding a link demand for the FullTrust permission set.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

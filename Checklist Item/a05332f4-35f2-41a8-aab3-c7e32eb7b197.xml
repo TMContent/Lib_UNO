@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="74550313" Content_Hash="1423249287">
+  <Metadata>
+    <Id>a05332f4-35f2-41a8-aab3-c7e32eb7b197</Id>
+    <Id_History>9c92c6af-a002-4624-aa2e-c31b6fb1f802,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Configuration Settings Are Locked to Enforce Policy Settings</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Configuration Settings Are Locked to Enforce Policy Settings</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure web applications cannot change their own configuration settings by overriding them in child configuration files.</p>
+  <h1>Why</h1>
+  <p>Locking configuration settings prevents applications from modifying configuration settings through their own web.config files. This ensures that all important security settings will be properly propagated to all applications that are hosted within the given environment.</p>
+  <h1>How to Check</h1>
+  <p>ASP.NET configuration files inherit from each other in the order that they are loaded. Hence, a web.config file in an application directory can override settings specified in the machine.config. ASP.NET loads configuration files according to configuration levels in the following order: </p>
+  <p>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Configuration Level</strong>
+        </td>
+        <td>
+          <strong>File name</strong>
+        </td>
+        <td>
+          <strong>Location</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>Server</td>
+        <td>machine.config</td>
+        <td>%Windir%\Microsoft.NET\Framework\{version}\CONFIG</td>
+      </tr>
+      <tr>
+        <td>Root Web</td>
+        <td>web.config</td>
+        <td>%Windir%\Microsoft.NET\Framework\{version}\CONFIG</td>
+      </tr>
+      <tr>
+        <td>Web Site</td>
+        <td>web.config</td>
+        <td>The web site's root directory as identified by IIS</td>
+      </tr>
+      <tr>
+        <td>ASP.NET application root</td>
+        <td>web.config</td>
+        <td>The application's root directory</td>
+      </tr>
+      <tr>
+        <td>ASP.NET application subdirectory</td>
+        <td>web.config</td>
+        <td>The application's subdirectory</td>
+      </tr>
+    </tbody>
+  </table>
+  <p />
+  <p>In order to prevent certain configuration settings from being changed by web site or application specific configuration files, they should be properly locked, using the following steps:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the configuration settings that must be locked.</strong> Review your application's configuration settings and identify the settings that must be locked down. Common settings that should be locked include:</p>
+      <ul>
+        <li>
+          <strong>Connection strings</strong>: Check this setting if your application uses pre-defined connection strings that must not be altered. To locate these in a configuration file look for the <strong>connectionStrings</strong> element. </li>
+        <li>
+          <strong>Membership providers</strong>: Check this setting if your organization has adopted a centralized authentication schema and your application must comply with it. To locate these in a configuration file look for the <strong>providers</strong> element. </li>
+        <li>
+          <strong>Web resources</strong>: Check this setting if your application exposes web resources that are of a sensitive nature and require special access controls. To locate these in a configuration file look for the <strong>location</strong> element.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify the appropriate locking mechanism is applied.</strong> After identifying all elements that need to be locked, ensure that each element is protected through the appropriate locking actions.</p>
+      <p>To check for this in a configuration file, verify that an appropriate property from the list below has been set in the element tag. ASP.NET provides several levels of protection for its configuration settings:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>allowOverride</strong>: Used within a <strong>location</strong> tag, this attribute locks all configuration settings for the web resource identified by the <strong>path</strong> attribute. Use this attribute when you need to lock the security settings for a specific shared resource, such as a shared authentication module. </p>
+        </li>
+        <li>
+          <p>
+            <strong>lockAllAttributesExcept</strong>: Locks all attributes of an element except for the ones specified. Use this attribute to ensure that only specific attributes can be modified while preserving the integrity of the other attributes. This is helpful when your application has certain assumptions about its environment and the components that it will use. </p>
+        </li>
+        <li>
+          <p>
+            <strong>lockAllElementsExcept</strong>: Locks all children of an element except for the ones specified. Use this attribute to ensure that only specific children of the element can be modified while preserving the integrity of the other children elements. This is helpful when your application has certain assumptions about its environment and the components that it will use. </p>
+        </li>
+        <li>
+          <p>
+            <strong>lockAttributes</strong>: Lock all attributes of an element. Use this attribute to prevent all modifications to an element's attributes without protecting its children. </p>
+        </li>
+        <li>
+          <p>
+            <strong>lockElements</strong>: Lock all children of an element. Use this attribute to protect the element's children without protecting the element's attributes. </p>
+        </li>
+        <li>
+          <p>
+            <strong>lockItem</strong>: Locks an element and its children. Use this attribute if you need to protect a block of elements that are encapsulated by a parent element. This is helpful when you need to propagate a specific security feature into all of your application's components.</p>
+          <p>For example, a web resource may be locked as follows:</p>
+          <blockquote>
+            <pre> &lt;location allowOverride="false" path="myApplication1"&gt;<br />   &lt;system.web&gt;<br />     &lt;!- final settings go here --&gt;<br />   &lt;/system.web&gt;<br /> &lt;/location&gt;</pre>
+          </blockquote>
+        </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is the internal HR application for MyCorp. As part of MyCorp's security policy, the application is required to enforce Windows authentication throughout all of its components. The developers have set the appropriate authentication settings in the application's root web.config. Unfortunately, they have not locked the authentication element; therefore, other developers can override the authentication element through their components' web.config files and allow other authentication mechanisms that do not comply with the application's requirements.</p>
+  <p />
+  <pre>&lt;authentication mode="Windows"/&gt;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about the ASP.NET configuration file hierarchy and inheritance, visit: <a href="http://msdn2.microsoft.com/en-us/library/ms178685.aspx">ASP.NET Configuration File Hierarchy and Inheritance</a>. </li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/01aa845d-9256-42e8-8504-df338a47a01e">Guideline: Lock Configuration Settings to Enforce Policy Settings (ASP.NET)</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

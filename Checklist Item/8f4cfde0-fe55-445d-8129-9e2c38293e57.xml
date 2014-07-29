@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1367009225" Content_Hash="-600785871">
+  <Metadata>
+    <Id>8f4cfde0-fe55-445d-8129-9e2c38293e57</Id>
+    <Id_History>22cb473f-dab8-465a-864d-287fc81db3fc,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Security Decisions Are Not Made Based on Client Parameters</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Security Decisions Are Not Made Based on Client Parameters</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure security decisions are not made based upon any data that is under the control of the client. This includes making security decisions based on things like <b>Request.ServerName</b>, which is under client control, the contents of non-tamper-proofed cookies, hidden fields, query strings, etc.</p>
+  <p>The only exception to this rule is the use of passwords.&amp;nbsp; While a password submitted by a client is technically client input, it is used only to make an authentication check, not to make further security decisions.</p>
+  <h1>Why</h1>
+  <p>Client input comes in many forms, from direct input like form variables and query string parameters to less direct input like cookies and connection information.&amp;nbsp; None of it can be trusted and&amp;nbsp;any information coming from the client can be completely controlled by an attacker, even&amp;nbsp;with thick clients.</p>
+  <p>If security decisions are based directly on this information, an attacker can alter the outcome of those decisions.&amp;nbsp; For example, if your thick client sends a list of roles held by the user, the user can alter that list.&amp;nbsp; Role caching cookies are another example of this; unless the cookie is tamper-proofed via signing and encryption, the user can alter their role in the system at will. </p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check for this problem:</p>
+  <ol>
+    <li>Identify all of your security decision points—everywhere you place someone into a role or decide if an action should proceed.&amp;nbsp; Be thorough here, because understanding this element is critical to the security of your application.&amp;nbsp; A design review specifically aimed at this aspect, possibly including a threat model to ensure completeness, is a good way to start, but you'll need to review the actual implementation as well to make sure the design was executed properly. 
+</li>
+    <li>Trace the data used to make those decisions back until you can prove that none of it is based on client input. 
+</li>
+    <li>If data is round-tripped through the client, prove that it cannot be modified by the client (i.e. the data&amp;nbsp;is cryptographically signed). 
+</li>
+    <li>If there are any places where you do make security decisions based on client input, like a role editing component, document those exceptions and spend extra care auditing those code paths.&amp;nbsp; Ensure that any exceptions function according to the business rules they are intended implement.&amp;nbsp; Make sure that all input with security implications is handled carefully—only ask for it immediately before its use, don't cache it, and validate it before use. Also, use ViewStateUserKeys to protect forms, don't put the data in the query string, and generally treat the data like you would any other sensitive information.</li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Do not trust input parameters, especially when they are used to make security decisions at the server. Also, do not use clear text parameters for any form of sensitive data. Instead, store sensitive data on the server in a session store and use a session token to reference the items in the store. </p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

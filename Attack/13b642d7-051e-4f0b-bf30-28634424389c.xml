@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="88351897" Content_Hash="-84140709">
+  <Metadata>
+    <Id>13b642d7-051e-4f0b-bf30-28634424389c</Id>
+    <Id_History>fb3e3a32-9b11-4967-95d4-61bdf4b7c530,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Creation of False Transaction Attack</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Any application with logging enabled.</p>
+  <h1>Description</h1>
+  <p>An attacker may attempt to hide malicious requests behind a cloud of false transactions. If the attacker can fill log files up with legitimate looking requests the attack may go unnoticed. Additionally an attacker may attempt to fill up log space so the logging application can no longer write any new logs to disk. Once the logs have been filled to capacity the attacker is free to conduct attacks, knowing that the malicious requests will not be traceable.</p>
+  <p>In another type of False Transaction Attack, the attacker may generate a log entry for a transaction that did not actually happen, then the attacker will return to the victim claiming to have fully executed the transaction. For example the attacker may generate a log or receipt in a company&amp;#8217;s database that implies he purchased an item. The attacker then returns to the company claiming to have purchased the item but never received it. The company checks the logs and notices that indeed the attacker does have an entry in the completed orders database. Since the company has no way of knowing the logs have been tampered with, the company may reimburse the attacker or provide them with the product or service for free.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>
+      <strong>Repudiation</strong>: If the logs are filled there will be no way to discover what the attacker was able to do. <li><strong>Denial of Service</strong>: If the disk on a production server is filled to capacity other required services may be denied critical resources. <li><strong>Falsified transaction data</strong>: Transaction logs may contain the only record of a transaction, if an attacker can change this information he may be able to falsely claim a transaction took place when in fact it did not.</li></li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Improperly logging requests <li>Logging on production servers <li>Improper permissions on transaction logs <li>Other vulnerabilities that would lead to an attacker being able to edit or change log data</li></li></li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Log requests on a separate server: Make a decision whether it is more important to keep the production server up without logging or to turn off the production server in the case the log server is unresponsive. <li>Review logs: Create or use a reporting service that will allow you to view possible attacks. <li>Ensure proper permissions are placed on all log files. <li>Ensure you are using the principle of least privilege with SQL or other data stores to make sure there is no other way to change log data. <li>Ensure that the only way to cause the system to create a log entry is by properly creating the transaction being logged, following all the business rules regarding that transaction.</li></li></li></li></li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about preventing repudiation, see: <a href="http://en.wikipedia.org/wiki/Non-repudiation">http://en.wikipedia.org/wiki/Non-repudiation</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/e45a6627-b90c-4ebb-8c1e-097b65422ee8">Attack: Repudiation Attack</a>
+      <li>
+        <a href="/article/d4b48303-d535-4549-90fc-474b99eff901">Attack: SQL Injection Attack</a>
+        <li>
+          <a href="/article/d516fb03-93b2-4ec9-bf6f-bc490f807700">Attack: Business Rule Attack</a>
+          <li>
+            <a href="/article/2d684518-be94-4454-8d3b-e57f025b0083">Attack: Denial of Service Attack</a>
+            <li>
+              <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Guideline: Log Important Security Operations </a>
+              <li>
+                <a href="/article/56a1ea9e-8981-4315-a048-127a2bea2285">Guideline: Monitor the Use of Privileged Accounts </a>
+                <li>
+                  <a href="/article/fc33dfc5-5210-4656-bc27-e43b16c3c89e">Guideline: Consider Log Throttling </a>
+                  <li>
+                    <a href="/article/0256b587-e8b1-46e0-8b87-f62b9f816c45">Guideline: Protect Log Files </a>
+                    <li>
+                      <a href="/article/fab1733c-61d7-46a8-88c6-2617a643c0d9">Guideline: Use Least Privileged Accounts for Database Access </a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

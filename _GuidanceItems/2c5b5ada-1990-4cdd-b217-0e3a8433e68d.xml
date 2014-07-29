@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>2c5b5ada-1990-4cdd-b217-0e3a8433e68d</Id>
+    <Id_History>00000000-0000-0000-0000-00000051c329,</Id_History>
+    <Library_Id>b6f408c5-6e6e-4bc0-90a5-0bb10becc2ce</Library_Id>
+    <Title>Validate All Input</Title>
+    <Category>Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>iOS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate All Input</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* iOS applications that accept any user input.
+
+==What to Do==
+
+Validate all user input using whitelist/positive input validation. Whitelist input validation allows only input that is explicitly defined as valid, as opposed to blacklist input validation, which filters out known bad input.
+
+==Why==
+
+Properly implemented input validation mitigates many types of injection vulnerabilities, such as Cross-Site Scripting and SQL injection.
+
+==How==
+
+To validate all user input using whitelist input validation:
+
+# **Identify all entry points for user input.** Make a list of all possible sources of user input in your application.
+# **Identify all types of input accepted by the application.** For each source of user input on the list, define valid characters, length, format, and range (for numerical values).
+# **Define an input validation subsystem.** Define a set of validator functions to validate each type of input handled by the application. Input should be validated on the server.
+# **Validate characters.** Restrict the acceptable range of characters in text input using regular expressions.
+# **Validate length.** Check that the length of the user input is valid.
+# **Validate format.** If the input type has a specific pattern, such as a date or a phone number, use regular expressions to make sure user input matches the input type specified by the application. Use regular expressions to enforce strong password requirements.
+# **Validate range.** Restrict the acceptable range of numerical input by comparing the input to the maximum and minimum acceptable values.
+# **(Optional) Reject and respond to known bad input.** This step does not add much actual security, but it may provide defense in depth. The input validation subsystem may check for known attack strings and respond to these likely attacks by alerting the user. The options for responding to invalid input are: reject invalid input, log invalid input, take evasive action.
+# **(Optional) Encode input.** If the input is going to be displayed back through the web application, consider encoding it to prevent Cross-Site Scripting attacks.
+
+==Data Validation Guidelines==
+* [[00000000-0000-0000-0000-000000866d55|Canonicalize File Names and Paths]]
+* [[00000000-0000-0000-0000-000000590dce|Check File Paths and Names for Null Bytes]]
+* [[00000000-0000-0000-0000-00000051c329|Validate All Input]]
+* [[00000000-0000-0000-0000-0000005804d8|Validate and Encode Data Inserted into XML Documents]]
+* [[00000000-0000-0000-0000-000000410a08|Validate and Encode Data Passed to UIWebView Controls]]
+* [[00000000-0000-0000-0000-00000049bb5e|Validate File Formats]]
+
+==Data Validation Checklists==
+* [[00000000-0000-0000-0000-0000004d996e|File Names and Paths Are Canonicalized]]
+* [[00000000-0000-0000-0000-0000004446d0|File Paths and Names Are Checked for Null Bytes]]
+* [[00000000-0000-0000-0000-000000396c19|All Input Is Validated]]
+* [[00000000-0000-0000-0000-0000008c53b6|Data Inserted into XML Documents Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000647d44|Data Passed to UIWebView Controls Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000066105|File Formats Are Validated]]
+
+==Additional Resources==
+* For more a guide to input validation, please see https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet]]></Data>
+  </Content>
+</TeamMentor_Article>

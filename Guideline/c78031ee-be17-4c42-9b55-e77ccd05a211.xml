@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-771593139" Content_Hash="58221425">
+  <Metadata>
+    <Id>c78031ee-be17-4c42-9b55-e77ccd05a211</Id>
+    <Id_History>1c1ae921-31ab-40f2-9d93-0a7a45d3c7cc,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Persist Authentication Cookies</Title>
+    <Category>Forms Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Persist Authentication Cookies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not persist authentication cookies.&amp;nbsp; Ensure that they expire with the user's session, normally after no more than 30 minutes of activity.</p>
+  <h1>Why</h1>
+  <p>Persistent authentication cookies will be stored in a user's profile and can be stolen if an attacker gets physical access to the machine.&amp;nbsp; This will also help prevent problems for users who access your application from public or shared machines and forget to log out. </p>
+  <h1>When</h1>
+  <p>Whenever authentication cookies are used, they should not be persistent. </p>
+  <h1>How</h1>
+  <p>To ensure a non-persistent cookie, follow these steps:</p>
+  <ol>
+    <li>
+      <p>Set the <b>DisplayRememberMe</b> property of the <b>Login</b> control to <b>false</b>.</p>
+    </li>
+    <li>
+      <p>If you are not using the login controls, you can specify a non-persistent cookie when you call either the <b>RedirectFromLoginPage</b> or <b>SetAuthCookie</b> methods of the <b>FormsAuthentication</b> class having validated the user's credentials, as shown here: </p>
+      <pre>public void Login_Click(object sender, EventArgs e){<br />   // Is the user valid?<br />   if (Membership.ValidateUser(userName.Text, password.Text))<br />   {<br />        // Parameter two set to false indicates non-persistent cookie<br />        FormsAuthentication.RedirectFromLoginPage(username.Text, false);<br />   }<br />   else<br />   {<br />        Status.Text = "Invalid credentials. Please try again.";<br />   }<br />}</pre>
+    </li>
+  </ol>
+  <p>Proper handling of authentication cookies is one of many good reasons to use the ASP.NET Membership providers and authentication framework.&amp;nbsp; If you don't do so, you'll need to manually manage the expiration times of your authentication cookies to ensure that they don't last longer than you intend a user session to last.</p>
+  <p>
+    <b>Note:</b>&amp;nbsp; &amp;nbsp; It's acceptable to have a persistent user identification cookie, so that you can welcome a returning user to the site by name.&amp;nbsp; However, be very careful that the identification cookie does not become a login cookie or allow access to any protected resources.&amp;nbsp; Be aware of what customizations you perform on the site when only the user identification cookie is present, so as to not accidentally reveal sensitive information.</p>
+  <h1>Problem Example</h1>
+  <p>A web site allows users to persist their login cookies.&amp;nbsp; When an attacker gains access to a public terminal previously used by a user, they are able to use the persisted login cookie to impersonate the user and gain access to protected site resources.</p>
+  <p />
+  <h1>Solution Example</h1>
+  <p>A web site does not allow persistent login cookies.&amp;nbsp; When an attacker gains access to a public terminal previously used by a user, they are not able to gain access to protected site resources.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

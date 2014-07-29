@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>fca9c810-78c6-4f9b-9d81-ad7ae40628ae</Id>
+    <Id_History>00b07659-803d-47c3-a325-777f72688ac7,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Use Structured Exception Handling</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Structured Exception Handling</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Do==
+
+Use structured exception handling to catch exception conditions. 
+
+==Why==
+
+Using structured exception handling simplifies and de-clutters the application code, which improves robustness and avoids leaving the application in an inconsistent state. It provides the application more information regarding the encountered error and minimizes the risk of information disclosure. 
+
+==When==
+
+Use structured exceptions whenever erroneous or exceptional conditions can be raised in a given program. 
+
+==How==
+
+Exception handlers should be as specific and relevant as possible. When multiple exceptions are anticipated, the try/catch block should have multiple catch clauses to satisfy each type of exception. Consider the following aspects when constructing your application's exception handlers:
+
+# **Location of handlers.** The location of your exception handlers is very important if your code is to recover properly without damaging other parts of your application. Placing your handler closer to the exception source allows your application to have better information of the current operation and properly recover the appropriate resources.
+# **Purpose of handlers.** Carefully choose the purpose of your exception handlers. Although developers commonly use exception handlers to wrap up after their code has failed, exception handlers provide a mechanism for recovering allocated resources and safely disposing them. Keep track of the associated resources and handle them accordingly when an exception is thrown. If your code handles sensitive data, ensure that all instances of sensitive data inside your block of code have been safely disposed of.
+# **Exception data.** Because it is a common practice to log exceptions to help troubleshoot a problem, make sure that your exceptions do not contain sensitive data that could compromise your application's users or assets when logged.
+# **Type of handlers.** Always catch the type of exceptions that best fit your application's efforts to recover into its normal state of operation upon encountering an error. If a block in your application is expected to throw multiple types of exceptions, make sure that each exception type is handled accordingly.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

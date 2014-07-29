@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="705963325" Content_Hash="-820850892">
+  <Metadata>
+    <Id>7407a6a1-eacb-43b1-a390-e70c2b0e232f</Id>
+    <Id_History>f7806f64-b1c7-4990-a9e5-f6d814bae7f1,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Use ESAPI Encoder</Title>
+    <Category>Data Sanitization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Use ESAPI Encoder</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Java web-based applications.</li>
+  </ul>
+  <h1>Summary</h1>
+  <span>
+    <p>Use the ESAPI library to encode or decode data for usage in a given context. </p>
+  </span>
+  <h1>Objectives</h1>
+  <span>
+    <p>The ESAPI library provides an Encoder control that prepares data to be used in a given output context. Depending on the output context, this can prevent XSS or other types of injection (xml, xpath, OS, etc.).</p>
+  </span>
+  <h1>Scenarios</h1>
+  <span>
+    <p>Applications constantly send data to an output location, such as a database, flat file, web page, etc. Whenever this occurs, care must be taken to ensure special characters that are specific to the output context are either filtered or escaped to ensure proper functioning. The ESAPI library provides the Encoder control to manipulate data to be output into a given context. Various examples are given below of using the Encoder to safely escape data for various output contexts.</p>
+  </span>
+  <h1>Solution Example</h1>
+  <span>
+    <p>Sending data to a webpage in the HTML context:</p>
+    <pre>&lt;div&gt;&lt;&amp;#37;= ESAPI.encoder().encodeForHTML(myString) &amp;#37;&gt;&lt;/div&gt;</pre>
+    <p>Sending data to a webpage in the HTML attribute context:</p>
+    <pre>&lt;input type="text" value="&lt;&amp;#37;= ESAPI.encoder().encodeForHTMLAttribute(myString) &amp;#37;&gt;" /&gt;</pre>
+    <p>Sending data to a webpage in the JavaScript context:</p>
+    <pre>var myVar = '&lt;&amp;#37;= ESAPI.encoder().encodeForJavaScript(myString) &amp;#37;&gt;';</pre>
+    <p>Sending data to a webpage in the URL context (Note: This is only for url parameter values, NOT the entire url):</p>
+    <pre>&lt;a href="/myapp/mypage.jsp?a=123&amp;b=&lt;&amp;#37;= ESAPI.encoder().encodeForURL(myString) &amp;#37;&gt;" /&gt;"&gt;Click me&lt;/a&gt;</pre>
+    <p>Encode data in the Base64 format:</p>
+    <pre>String base64Data = ESAPI.encoder().encodeForBase64(myStr);</pre>
+  </span>
+  <h1>See Also</h1>
+  <span>
+    <ul>
+      <li>For more information about Cross-Site Scripting prevention, please see <a href="https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet</a><li>For more information about the OWASP ESAPI project, please see <a href="https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API">https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API</a></li></li>
+    </ul>
+  </span>
+  <h1>Java Data Sanitization Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/f83b953a-9b0c-406a-b274-9b2962d9c4e7">Encode All Output Data</a>
+      <li>
+        <a href="/article/c929277f-5bb0-44d5-9bf5-112c55927783">Escape All Untrusted Data in HTML Contexts in JSF</a>
+        <li>
+          <a href="/article/bc8de6c5-ba3a-4db5-a5ff-675c7336a2e8">Escape All Untrusted Data in HTML Contexts in JSP</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Data Sanitization Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/13112146-7c14-4b6d-9e94-24daa22eefc4">All Output Data Is Encoded</a>
+      <li>
+        <a href="/article/90893370-cbce-4116-b9ff-2e69dab56cfa">All Untrusted Data in HTML Contexts Is Escaped in JSF</a>
+        <li>
+          <a href="/article/02c900ca-0740-412a-b685-56b13408793d">All Untrusted Data in HTML Contexts is Escaped in JSP</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Data Sanitization Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/8cc6c40a-5a4c-4d77-8900-4b896e2d3912">Use h:outputText to Encode Echoed Input in JSF</a>
+    </li>
+    <li>
+      <a href="/article/a4c5ae58-6b1b-49b7-b16e-4199598f3446">Output Encoding Using JSF</a>
+    </li>
+    <li>
+      <a href="/article/2dc1ab76-320b-47ec-a562-9e203d1b630f">Output Encoding Using SpringMVC</a>
+    </li>
+    <li>
+      <a href="/article/f8d330df-9387-45b2-a88b-40c08d0af3c4">Output Encoding Using Struts 1</a>
+    </li>
+    <li>
+      <a href="/article/9135b59f-8c73-4a4f-83c5-9894d6587cca">Output Encoding Using Struts 2</a>
+    </li>
+    <li>
+      <a href="/article/f7806f64-b1c7-4990-a9e5-f6d814bae7f1">Use ESAPI Encoder</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

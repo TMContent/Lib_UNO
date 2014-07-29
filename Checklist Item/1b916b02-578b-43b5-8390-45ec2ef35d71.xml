@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2056015373" Content_Hash="-642525802">
+  <Metadata>
+    <Id>1b916b02-578b-43b5-8390-45ec2ef35d71</Id>
+    <Id_History>07732230-8869-45d1-b65c-278142d32f31,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Buffer Size Is Checked During Copying</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Buffer Size Is Checked During Copying</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that all functions that copy data between strings or arrays check boundaries of the destination buffers to prevent buffer overflows.</p>
+  <h1>Why</h1>
+  <p>Copying more data than a buffer can fit results in a buffer overflow.</p>
+  <h1>How to Check</h1>
+  <p>Perform the following actions to assure that buffer size is checked during copying:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all functions that copy data to strings or arrays.</strong> List the components, modules, and libraries that do the most amount of data handling. Usually there exists some code heavy on manipulating data that copies many buffers or constructs various strings.</p>
+      <li>
+        <p>
+          <strong>Verify that memory size is calculated correctly.</strong> Watch out for using sizeof() on pointers. When an array is passed as a parameter, it is passed as a pointer, and sizeof() returns the size of a pointer, not the array. Make sure that code accounts for the trailing null if data is stored in a null-terminated string.</p>
+        <li>
+          <p>
+            <strong>Verify that errors during memory allocation are handled.</strong> Memory allocation might fail, so the copying function should account for that possibility.</p>
+          <li>
+            <p>
+              <strong>Verify that bounds are checked during copying.</strong> Only copy the amount of data that fits into the buffer. There should be sufficient memory allocated if the size of data has been calculated correctly, but for extra security it is a good idea to write code that checks buffer bounds while copying to prevent buffer overflows. Data that doesn't fit into the buffer should be truncated -&amp;nbsp;code that copies data should terminate once the buffer is full.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following steps to assure that your code allocates enough buffer space when copying data to prevent buffer overflows:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all functions that copy data to strings or arrays.</strong> List the components, modules, and libraries that do the most amount of data handling. Usually there exists some code heavy on manipulating data that copies many buffers or constructs various strings.</p>
+      <li>
+        <p>
+          <strong>Calculate the amount of memory that is used by data being copied or set a maximum size limit for valid data.</strong> Make sure to include a trailing null if a null-terminated string is being copied. When calculating the size of data, count the amount of memory it uses, not the amount of elements in the array. Be careful when using the sizeof() function, because it returns the size of a pointer when an array containing data is passed as a parameter to the function. The memory size of data should be calculated beforehand, ideally in the same scope in which the data structure containing data is declared, and passed as an argument to the function that does the copying.</p>
+        <li>
+          <p>
+            <strong>Allocate memory for the buffer.</strong> Once the amount of memory needed to fit all the data is determined, allocate an array or a string of a sufficient size. Write code to handle possible memory allocation errors.</p>
+          <li>
+            <p>
+              <strong>Check bounds when copying.</strong> Use the size of the allocated array or string when copying to assure that only the amount of data that fits into the array is copied. This should always be the case if the amount of memory to allocate is calculated correctly, but for extra security it is a good idea to write code in a way that truncates data if it doesn't fit into the buffer.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about verifying that data is copied to sufficiently large storage, please see "ARR33-C. Guarantee that copies are made into storage of sufficient size" at <a href="https://www.securecoding.cert.org/confluence/display/seccode/ARR33-C.&amp;#43;Guarantee&amp;#43;that&amp;#43;copies&amp;#43;are&amp;#43;made&amp;#43;into&amp;#43;storage&amp;#43;of&amp;#43;sufficient&amp;#43;size">https://www.securecoding.cert.org/confluence/display/seccode/ARR33-C.&amp;#43;Guarantee&amp;#43;that&amp;#43;copies&amp;#43;are&amp;#43;made&amp;#43;into&amp;#43;storage&amp;#43;of&amp;#43;sufficient&amp;#43;size</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/54ee5a30-738f-4ca6-a1eb-ab6e58152f7b">Get the Size of an Array Correctly</a>
+      <li>
+        <a href="/article/bf5f6cb5-4a28-496f-9023-9e521e7dac6d">How to Test for Buffer Overflow Vulnerabilities</a>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

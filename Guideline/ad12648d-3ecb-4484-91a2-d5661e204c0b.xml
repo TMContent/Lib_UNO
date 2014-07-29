@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1956096336" Content_Hash="1063483651">
+  <Metadata>
+    <Id>ad12648d-3ecb-4484-91a2-d5661e204c0b</Id>
+    <Id_History>685ae5d0-5441-4a0b-bdcf-80a073ed4c84,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>If You Need to Support WCF Clients on the Same Machine, Consider Using NetNamedPipeBinding</Title>
+    <Category>Bindings</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>If You Need to Support WCF Clients on the Same Machine, Consider Using NetNamedPipeBinding</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you need to support WCF clients on the same machine as your service, consider using the netNamedPipeBinding. </p>
+  <h1>Why</h1>
+  <p>The netNamedPipeBinding has the following characteristics:</p>
+  <ul>
+    <li>It can only be consumed by WCF enabled clients. <li>Supports the WS&amp;#42; stack including reliable messaging, and secure transactions. <li>It only supports transport security; you cannot turn on message security. <li>The service can be hosted in IIS 5.0 or IIS 6.0, but it is not message activated, hence you can consider hosting in a Windows service or IIS 7.0 instead. <li>Your only authentication option is Windows.</li></li></li></li></li>
+  </ul>
+  <h1>When</h1>
+  <p>Use this binding when you want to make use of the NamedPipe protocol and provide full support for SOAP security, transactions, and reliability. </p>
+  <h1>How</h1>
+  <p>The following example shows how to configure netNamedPipeBinding:</p>
+  <pre>&lt;system.serviceModel&gt;<br />....<br />    &lt;services&gt;<br />        &lt;service behaviorConfiguration="" name="WCFServicecHost.MyService"&gt;<br />            ...<br />            &lt;endpoint address="" binding="netNamedPipeBinding" bindingConfiguration=""<br />                name="namedPipeBinding" contract="WCFServicecHost.IMyService" /&gt;<br />            ...<br />        &lt;/service&gt;<br />    &lt;/services&gt;<br />&lt;/system.serviceModel&gt; <br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on bindings, see &amp;#8220;Windows Communication Foundation Bindings&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733027.aspx">http://msdn2.microsoft.com/en-us/library/ms733027.aspx</a><li>For binding Q&amp;A, see the Binding section of &amp;#8220;WCF 3.5 Questions and Answers &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a><br /></li></li>
+  </ul>
+  <p>
+    <a href="http://www.codeplex.com/WCFSecurity/Wiki/View.aspx?title=Questions&amp;#37;20and&amp;#37;20Answers&amp;referringTitle=Home">
+    </a>
+  </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

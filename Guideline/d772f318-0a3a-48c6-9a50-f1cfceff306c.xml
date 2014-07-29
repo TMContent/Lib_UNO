@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="248600691" Content_Hash="-1046297356">
+  <Metadata>
+    <Id>d772f318-0a3a-48c6-9a50-f1cfceff306c</Id>
+    <Id_History>c63569b1-5373-4bb8-ac34-08db76346c18,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Encrypt ViewStates That Contain Sensitive Data</Title>
+    <Category>Parameter Manipulation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encrypt ViewStates That Contain Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>If your ViewState contains sensitive data (and this data must reside in the ViewState instead of in server-side session variables), you should encrypt the ViewState to protect the information against tampering and disclosure. </p>
+  <h1>Why</h1>
+  <p>Using SSL protects ViewState while it is passed over the network between server and browser, but it does not stop it being viewed and modified on the user's computer.&amp;nbsp; If the data in your ViewState should not be viewable or modifiable by end users, only signing and encryption will protect it. </p>
+  <h1>When</h1>
+  <p>Ideally, the ViewState does not contain sesitive data, which should instead be stored in a server-side session state variable.&amp;nbsp; If this is not possible, you should use ViewState encryption.&amp;nbsp; Do not use it if your ViewState does not contain sensitive data because encryption significantly adds to the size of the ViewState and this impacts performance. </p>
+  <h1>How</h1>
+  <p />
+  <p>The default ASP.NET settings ensure that ViewState is tamper proof.&amp;nbsp; This ensures that any modification of the ViewState&amp;nbsp;either on the client's computer or over the network is detected when the server processes the data.&amp;nbsp; If you need to use round trips for potentially sensitive data, you can force encryption of ViewState for a specific page.</p>
+  <ol>
+    <li>Check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Always</b>, as shown in the following example. <pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Always"<br /> ...<br /> /&gt;</pre><p>If you do not want every page to used encrypted ViewState, check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Auto</b>, as shown in the following example. </p><pre>&lt;pages<br /> ...<br /> viewStateEncryptionMode="Auto"<br /> ...<br /> /&gt;   </pre><p>Then, from within your code, call the <b>RegisterRequiresViewStateEncryption</b> method as shown in the following example. </p><pre>Page.RegisterRequiresViewStateEncryption();</pre></li>
+    <li>Specify the encryption algorithm to use on the <b>validation</b> attribute, as shown in the following example. <pre>&lt;machineKey<br /> ...<br /> validation="AES"<br /> ...<br /> /&gt;</pre><p>The <b>validation</b> attribute is overloaded and can be used to specify either the hashing algorithm or the encryption algorithm.&amp;nbsp; You can specify either <b>3DES</b> or <b>AES</b>.&amp;nbsp; Because <b>AES</b> offers larger key sizes (128 bits, 192 bits, or 256 bits) than <b>3DES</b> (56 bits), it is considered more secure and should be used.</p></li>
+    <li>Review the <b>decryptionKey</b> and <strong>validationKey</strong> attribute of the <b>&lt;machineKey&gt;</b> element: <pre>&lt;machineKey validationKey="AutoGenerate,IsolateApps" decryptionKey="AutoGenerate,IsolateApps"<br /> ...<br /> /&gt;</pre><p>Unless your application is installed in a Web farm, you should leave the <b>decryptionKey</b> and <strong>validationKey</strong> attribute with the default values shown in the example.&amp;nbsp; To encrypt ViewState in a web farm, you need to manually set the <b>validationKey</b> and <strong>decryptionKey</strong> value—these values should be same across all machines in the web farm.</p></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>Due to their interaction with their internal billing system, an e-commerce site is forced to send billing details, including a order amounts and (non-public) discount percentages round-trip through the user's browser.&amp;nbsp; All of this information is stored in a ViewState.&amp;nbsp; An attacker can extract all of the information in the ViewState, although they cannot modify it.&amp;nbsp; Thus, their competitors can learn the site's discount structure without having to compromise any server side machines.</p>
+  <h1>Solution Example</h1>
+  <p>Due to their interaction with their internal billing system, an e-commerce site is forced to send billing details, including a order amounts and (non-public) discount percentages round-trip through the user's browser.&amp;nbsp; All of this information is stored in an encrypted&amp;nbsp;ViewState.&amp;nbsp; An attacker is unable to read the information stored in this viewstate, even when it passes through their machine.&amp;nbsp; Thus, sensitive information stays private. </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

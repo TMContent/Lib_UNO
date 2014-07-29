@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-69635138" Content_Hash="299433223">
+  <Metadata>
+    <Id>47e2d426-e1f4-49d1-b6c5-ff920571ba50</Id>
+    <Id_History>1e82273c-884c-4b78-882d-bf1e56956604,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Disable Unused Services And Protocols</Title>
+    <Category>Configuration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Disable Unused Services And Protocols</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 2.2.2</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Disable unused services and protocols on each server. This includes disabling unused:</p>
+  <ul>
+    <li>Windows Server Roles <li>Windows Components <li>Windows services<li>Windows network protocols <li>Windows applications <li>UNIX TCP wrappers <li>LINUX daemons</li></li></li></li></li></li></li>
+  </ul>
+  <h1>Why</h1>
+  <p>The fewer network services that run on a server, the fewer potential vulnerabilities there are for an attacker to exploit.</p>
+  <h1>When</h1>
+  <p>The unused services and protocols should be disabled when a new server is deployed.</p>
+  <h1>How</h1>
+  <p>Perform the following tasks to disable unused services and protocols on each server:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Remove unnecessary Windows Server Roles on Windows 2008. </strong>Click on Start Menu, right click on "Computer&amp;#8221;, select "Manage", select "Roles", click "Remove roles". Remove all unnecessary roles to remove the associated network services. </p>
+      <li>
+        <p>
+          <strong>Remove unnecessary Windows Components on Windows 2003.</strong> Go to "Control Panel", "Add or Remove Programs", "Add/Remove Windows Components". Uncheck all unnecessary Windows Components. Click "Next" to remove the associated network services.</p>
+      </li>
+      <li>
+        <p>
+          <strong>Disable unused services on Windows 2003 and 2008. </strong>Click "Start", "Run", type "services.msc", hit "OK". Go through the list of services and disable the ones that are not needed. Different services are required on different versions of Windows Operating Systems. Use caution - disabling required services may render the server unusable. </p>
+      </li>
+      <li>
+        <p>
+          <strong>Remove unused network protocols on Windows 2003 and 2008. </strong>Go to "Network Connections." Right click on each active network connection and select "Properties." Uncheck each unnecessary protocol and click OK. </p>
+      </li>
+      <li>
+        <p>
+          <strong>Remove unnecessary Windows applications. </strong>Go to the "Control Panel." Select "Add or Remove Programs" or "Programs and Features" in the "Classic View." Identify which programs in the list are needed for server operations. Uninstall all unneeded programs by clicking the "Uninstall" button for each unneeded application. It is ok to leave programs necessary for server maintenance. </p>
+      </li>
+      <li>
+        <p>
+          <strong>Remove UNIX TCP wrappers if they are not used or disable unused services. </strong>Either disable TCP wrappers altogether by making sure that inetd does not start from the start-up scripts, which are typically located in&amp;nbsp;/etc/init.d and /etc/rc.d, or configure the inetd super-daemon by editing the /etc/inetd.conf configuration file. To disable unnecessary services, comment out unneeded services by placing a # in the beginning of the corresponding line for each unneeded service. </p>
+      </li>
+      <li>
+        <p>
+          <strong>Disable unused Linux daemons. </strong>Some UNIX-like systems include custom server management applications. They are often very simple and present a list of checkboxes that select which daemons are enabled. Daemon is a UNIX term for a system service and applies also to a network service. Please refer to the vendor's documentation or technical support for detailed instructions on configuring network services on your Operating System.</p>
+      </li>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

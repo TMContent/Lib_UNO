@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>9ab85cf5-2203-4792-815d-97c919a695d3</Id>
+    <Id_History>26caffea-d597-40fd-9ed0-36fb025d188b,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>X-Frame Options Are Added to Responses</Title>
+    <Category>HTTP Headers</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>X-Frame Options Are Added to Responses</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+* PHP
+
+==What to Check For==
+
+Verify that the X-Frame-Options header is added to responses programmatically.
+
+==Why==
+
+The X-Frame-Options response header instructs the browser to disallow the use of iframes across domains or limit their use to the same origin. This protects against clickjacking, a malicious technique that uses iframes to overlay (hide) a clickable link or button on a web page. In a clickjacking attack, a user thinks he or she is clicking the intended link but actually clicks the overlaid iframe link, thus sending data to an unintended website. 
+
+==When==
+
+Use this guideline when implementing HTML5 web applications where the web page is not intended for rendering in a frame or iframe.
+
+==How to Check==
+
+To verify that the X-Frame-Options header is added to responses programmatically:
+
+#Search the application code for references to the //header// function. Create a spreadsheet to list all code that uses the //header// function. #Examine each piece of code that uses the //header// function to make sure that it uses //x-frame-options// as the parameter and that the appropriate restrictions for iframes are set in this parameter.
+
+==How to Fix==
+
+To add the X-Frame-Options header to responses programmatically:
+
+#Add the following to the response at the top of the PHP page to deny any framing in the page: {{{ header("x-frame-options: DENY"); }}} 
+#Alternatively, add the following to the response at the top of the PHP page to allow framing in the page only from the same domain as the application: {{{ header("x-frame-options: SAMEORIGIN"); }}}
+
+
+==HTTP Header Guidelines==
+
+* [[00000000-0000-0000-0000-00000028bb7d|Use X-Content-Security-Policy to Mitigate XSS]]
+* [[00000000-0000-0000-0000-0000009026c0|Use X-XSS-Protection to Prevent Reflected XSS]]
+* [[00000000-0000-0000-0000-000000204a22|Use X-Frame-Options to Prevent ClickJacking]]
+* [[9e0f93ba-0b80-4aab-b93c-c17b9af2a19c|Use a Filter to Inject X-Frame-Options]]
+* [[ae2dc4f8-af3d-4002-9417-f3f1d5c9128b|Add X-Frame Options to Responses]]
+* [[00000000-0000-0000-0000-00000063561d|Use the Strict-Transport-Security Header to Enforce HTTPS]]
+* [[00000000-0000-0000-0000-000000225f24|Use includeSubDomains with Strict-Transport-Security]]
+
+==HTTP Header Checklist Items==
+
+* [[00000000-0000-0000-0000-0000006b6766|X-Content-Security-Policy Is Used to Mitigate XSS]]
+* [[00000000-0000-0000-0000-0000007122c6|X-XSS-Protection Is Used to Prevent Reflected XSS]]
+* [[00000000-0000-0000-0000-000000498810|X-Frame-Options Are Used to Prevent Clickjacking]]
+* [[0d1871fe-76d3-4ea3-87be-ef63662dd772|A Filter Is Used to Inject X-Frame Options]]
+* [[26caffea-d597-40fd-9ed0-36fb025d188b|X-Frame Options Are Added to Responses]]
+* [[00000000-0000-0000-0000-0000001b501f|The Strict-Transport-Security Header is Used to Enforce HTTPS]]
+* [[0078cd3f-9e84-4eb4-9a2f-7f51e3100801|IncludeSubDomains is Used with Strict-Transport-Security]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

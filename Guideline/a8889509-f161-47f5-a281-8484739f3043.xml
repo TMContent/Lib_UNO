@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1826367733" Content_Hash="1958489227">
+  <Metadata>
+    <Id>a8889509-f161-47f5-a281-8484739f3043</Id>
+    <Id_History>6380ebd4-6140-4772-b87b-d8d6d532eab2,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Consider Restricting Database Access on Hosted Servers</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Restricting Database Access on Hosted Servers</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Consider restricting database access on hosted servers.</p>
+  <h1>Why</h1>
+  <p>Adding the unrestricted <b>OleDbPermission</b> to your policy file means that your application can use any OLE DB provider on the server. This might prove to a be a security issue in a hosted enviornment. Where Application data needs to be isolated.</p>
+  <h1>When</h1>
+  <p>This guideline is to be followed when configuiring <strong>OleDbPermission</strong>&amp;nbsp;permission in a medium trust hosted enviornment.</p>
+  <h1>How</h1>
+  <p>The following example shows how to restrict access to a specific OLE DB data source.</p>
+  <pre>&lt;IPermission class="OleDbPermission"<br />             version="1"&gt;  &lt;add ConnectionString=<br />          "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\data\w4w.mdb"<br />       KeyRestrictions=""<br />       KeyRestrictionBehavior="AllowOnly"/&gt;<br />&lt;/IPermission&gt;  </pre>
+  <p>The &lt;<b>add</b>&gt; element supports the following attributes: </p>
+  <ul>
+    <li>
+      <b>ConnectionString.</b> This element specifies a permitted connection string. </li>
+    <li>
+      <b>KeyRestrictions. </b>This element specifies additional connection string parameters that may or may not be added to the connection string depending on the value of <b>KeyRestrictionBehavior</b>. Specify connection string parameters using the syntax <i>parameterName</i>=. You can specify multiple parameters by delimiting each one with a semi-colon (;). </li>
+    <li>
+      <b>KeyRestrictionBehavior.</b> You can set this to <b>AllowOnly</b> or <b>PreventUsage</b>. <ul><li>If you use <b>AllowOnly</b>, only the additional connection string parameters specified in the <b>KeyRestrictions</b> attribute may be added to the connection string specified in <b>ConnectionString</b>. </li><li>If you use <b>PreventUsage</b>, the connection string parameters specified in the <b>KeyRestrictions</b> attribute may not be added to the connection string specified in <b>ConnectionString</b>, although other connection string parameters may be added.</li></ul></li>
+  </ul>
+  <p>If no key restrictions are specified, and the <b>KeyRestrictionBehavior</b> attribute is set to <b>AllowOnly</b>, no additional connection string parameters are allowed.</p>
+  <p>If no key restrictions are specified, and the <b>KeyRestrictionBehavior</b> property is set to <b>PreventUsage</b>, additional connection string parameters are allowed. </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

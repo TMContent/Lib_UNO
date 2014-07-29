@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="125004554" Content_Hash="1935294931">
+  <Metadata>
+    <Id>64ddfb97-2ba2-431e-8419-ecd1d8055110</Id>
+    <Id_History>af091894-b7e2-4d6f-a047-4f36336850c7,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Request Smuggling Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Request Smuggling Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Vulnerable web servers and proxies.</p>
+  <h1>Description</h1>
+  <p>HTTP Request Smuggling is a technique to take advantage of discrepancies in parsing when one or more HTTP devices are between the user and the web server. An attacker may be able to 'smuggle' malicious requests through a packet inspector, firewall or web proxy server. This technique may leave the web server vulnerable to various attacks such as web cache poisoning or allow the attacker to request protected files on the web server.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>
+      <strong>Cache Poisoning</strong>: An attacker may be able to &amp;#8216;rewire&amp;#8217; a web server cache so that one page is served when another is requested. <li><strong>Malicious Requests</strong>: An attacker may be able to smuggle a malicious request through a packet inspector, web proxy server or firewall because of discrepancies in security rules between it and the web server <li><strong>Credential Hijacking</strong>: An attacker may be able to insert a request into the HTTP flow thereby manipulating the web server&amp;#8217;s request/response sequencing which can allow the attacker to hijack a third party&amp;#8217;s credentials.</li></li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Web Server, packet inspector, firewall, or web proxy server misconfiguration.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Deploy a non-vulnerable web server - Web servers with a very strict HTTP parsing procedure may not be vulnerable to this attack. <li>Change all pages to non-cacheable - This will force the proxy to retrieve the pages from the web server every time. Although from a security perspective this is better, the reality is that caching significantly improves the servers performance and reduces latency. This makes other countermeasures a better long term fix. <li>Rewrite all HTTP requests - Install a module on a firewall or proxy server to rewrite each HTTP request on the fly to a known valid request type. <li>Update your web server - Contact the web server vendor and check if there has been a patch released for a this type of vulnerability.</li></li></li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>This example describes the classic Request Smuggling attack in which an attacker can poison one page with the contents of another. In this example, the attacker combines one POST request and two GET requests into a single malformed HTTP request. The HTTP request has two Content-Length headers with conflicting values. Some servers, such as IIS and Apache simply reject such a request, but others attempt to &amp;#8216;fix&amp;#8217; the error. Fortunately for the attacker, certain web servers and web proxies choose to pay attention to different sections of the malformed request. In this case let "somewhere.com" be the DNS name of the web server behind the proxy, and suppose that &amp;#8220;/poison.html&amp;#8221; is a static and cacheable HTML page on the web server. </p>
+  <pre>1 POST http://somewhere.com/example.html HTTP/1.1\r\n2 Host: somewhere.com\r\n3 Connection: Keep-Alive\r\n4 Content-Type: application/x-www-form-urlencoded\r\n5 Content-Length: 0\r\n6 Content-Length: 53\r\n7 \r\n8 GET /poison.html HTTP/1.1\r\n9 Host: somewhere.com\r\n10 Bla: 11 GET http://somewhere.com/index.html HTTP/1.1\r\n12 Host: somewhere.com\r\n13 Connection: Keep-Alive\r\n14 \r\n</pre>
+  <p>Note that line 10 is the only line that does not end in CRLF ("\r\n") and instead there is a space ("Bla: "). This request is sent to a web server via a proxy server. </p>
+  <p>First this message is parsed by the proxy. When the proxy server parses the message it finds the POST request (lines 1-7) followed by the two conflicting Content-Length's (lines 5 and 6). The proxy ignores the first header and believes the body is 53 bytes long (which is exactly the number of bytes used by lines 8-10 including CRLFs). The proxy then sees lines 11-14 and interprets them as a second request. </p>
+  <p>Secondly the message is parsed by the web server. Although the web server receives the same message, when it sees the first Content-Length in line 5 it thinks that the body of the POST request is 0 bytes in length. Therefore it finds the second request in line 8 and interprets line 11 as the value of "Bla: " in line 10 because of the missing CRLF. </p>
+  <p>In summary we have the following:</p>
+  <p>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+          </td>
+          <td>First request</td>
+          <td>Second request</td>
+        </tr>
+        <tr>
+          <td>Proxy</td>
+          <td>POST, lines 1-10</td>
+          <td>GET, lines 11-14</td>
+        </tr>
+        <tr>
+          <td>Web Server</td>
+          <td>POST, lines 1-7</td>
+          <td>GET, lines 8-14</td>
+        </tr>
+      </tbody>
+    </table>
+  </p>
+  <p>At this point the web server responds to the GET in line 8 by sending the content of /poison.html to the proxy. The proxy, expecting a response to the GET request in line 11, mistakenly matches the reply from the webserver with contents from /poison.html to the page /index.html. Therefore, the contents of /poison.html are cached under the name /index.html on the proxy. Now any user who requests http://somewhere.com/index.html through the proxy will receive the contents of http://somewhere.com/poison.html instead.</p>
+  <p>There are several options available to mitigate this attack but all of them have their downside. If possible, use a well tested web server such as Apache or IIS. Otherwise, you can turn off server-side page caching but this can lead to significant performance problems such as increased server load and latency. A final option is to use SSL communication for everything (HTTPS instead of HTTP), but this too has an associated performance overhead. </p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on HTTP Request Smuggling, see the <a href="http://www.cgisecurity.com/lib/HTTP-Request-Smuggling.pdf">HTTP Request Smuggling Whitepaper</a>. </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/733be22b-8cda-4c76-9009-1bafbb223ddc">Attack: Response Splitting Attack</a>
+      <li>
+        <a href="/article/f9f0a869-98fe-4ac5-9de3-3eaf33306c4b">Attack: Canonicalization Attack</a>
+        <li>
+          <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Attack: Cross Site Scripting Attack</a>
+          <li>
+            <a href="/article/c8ae222b-ed2e-4621-a46b-3671f82f5a03">Attack: Phishing Attack</a>
+            <li>
+              <a href="/article/32c35abe-a470-4a9c-8bb6-54c1461d3295">Attack: URL Redirection Attack</a>
+              <li>
+                <a href="/article/7d83d845-cd2b-4067-bb4c-5fbb890b9c9e">Attack: Information Disclosure Attack</a>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

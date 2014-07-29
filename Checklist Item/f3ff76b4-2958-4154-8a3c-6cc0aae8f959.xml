@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1459876340" Content_Hash="1822172922">
+  <Metadata>
+    <Id>f3ff76b4-2958-4154-8a3c-6cc0aae8f959</Id>
+    <Id_History>cbd6a315-7d09-4dad-b05e-3768d3c52d10,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>The Exposure of Secrets in Memory Is Minimized</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Design</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Exposure of Secrets in Memory Is Minimized</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that the exposure of secrets in memory is minimized.</p>
+  <h1>Why</h1>
+  <p>Clear text secrets held in your process address space are vulnerable if an attacker is able to probe your application's address space. Also, if the page of memory containing the secret is swapped out to the page file, the secret data is vulnerable if someone gains access to the page file. Similarly, clear text secrets held in memory appear in the crash dump file if a process crashes.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that the exposure of secrets in memory is minimized:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify secrets.</strong> Identify sensitive information handled by your application.</p>
+      <li>
+        <p>
+          <strong>Review code.</strong> Identify application code that handles sensitive data in your application.</p>
+        <li>
+          <p>
+            <strong>Check if secrets are encrypted.</strong> Verify that code encrypts secrets stored in memory, only decrypts them when necessary, and deletes the unencrypted versions from memory immediately after use.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To minimize the exposure of secrets in memory, consider the following measures: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Avoid creating multiple copies of the secret.</strong> Having multiple copies of the secret data increases your attack surface. Pass references to secret data instead of making copies of the data. </p>
+      <li>
+        <p>
+          <strong>Keep the secret encrypted for as long as possible.</strong> Decrypt the data at the last possible moment before you need to use the secret. </p>
+        <li>
+          <p>
+            <strong>Clean the clear text version of the secret as soon as you can.</strong> Replace the clear text copy of the secret data with zeros as soon as you have finished with it.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/53c570b1-0628-404e-ae77-7045b05d6f33">Minimize the Exposure of Secrets in Memory</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

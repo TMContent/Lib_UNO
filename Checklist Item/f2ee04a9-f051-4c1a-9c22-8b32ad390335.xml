@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-350874335" Content_Hash="105688125">
+  <Metadata>
+    <Id>f2ee04a9-f051-4c1a-9c22-8b32ad390335</Id>
+    <Id_History>a11f1e34-66af-49d0-84e1-fafa9a8852e6,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Sensitive Data Is Cleared from Memory When No Longer Used</Title>
+    <Category>Other</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Cleared from Memory When No Longer Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that sensitive data, such as encryption keys or private information, is maintained in memory for the bare minimum amount of time required. Check that as soon as the data is no longer used, it is purged from memory and all traces of it are eradicated, so it does not end up leaking to the swap file.</p>
+  <h1>Why</h1>
+  <p>Sensitive data residing in memory for&amp;nbsp;longer than is strictly necessary is at high risk to be swapped out to disk. This could leave fragments of data available well after the application has terminated. Such data may be gathered by inspecting the contents of the disk, temporary files or the swap file.</p>
+  <h1>How to Check</h1>
+  <p>If the application handles sensitive data of any kind, use the following steps to ensure that your application properly handles sensitive data in memory: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify sensitive information. </strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users.</li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Identify all code that handles sensitive data. </strong>Examine your application's code base. Identify all functionality that handles sensitive data. Common places include:</p>
+        <ul>
+          <li>Authentication mechanisms <li>User management <li>All user transactions of a&amp;nbsp;sensitive nature</li></li></li>
+        </ul>
+        <li>
+          <p>
+            <strong>Verify that sensitive data is stored in mutable objects. </strong>Each piece of data identified as sensitive&amp;nbsp;should be stored in a mutable object, such as a character array. This allows the sensitive data to be overwritten in memory and not rely on the garbage collector. </p>
+          <ul>
+            <li>Verify that sensitive data is not stored in immutable objects, such as Java strings, that do not allow their memory space to be modified after being allocated. <li>Ensure that the memory containing the sensitive data is overwritten as quickly after use as possible. <li>Ensure that sensitive data is not passed between function, class or object boundaries except when absolutely necessary.<br /><br />Note in the examples below the difference between <strong>B</strong>yte and <strong>b</strong>yte. Java cannot guarantee that it will overwrite the same memory location in the heap that is already occupied by a <strong>Byte</strong>. However, if you overwrite a <strong>byte</strong> variable or an element inside a <strong>byte&amp;#91;&amp;#93;</strong>, then you have overwritten the same memory location that contains the actual data.<br /><br />Examples of mutable objects: <ul><li>char <li>char&amp;#91;&amp;#93; <li>byte <li>byte&amp;#91;&amp;#93;</li></li></li></li></ul><p>Examples of immutable objects:</p><ul><li>String <li>Byte <li>Byte&amp;#91;&amp;#93; <li>Character</li></li></li></li></ul></li></li></li>
+          </ul>
+          <strong>
+          </strong>
+          <li>
+            <p>
+              <strong>Verify that all instances of sensitive data are cleared. </strong>Ensure that all the memory locations where sensitive data has been stored are cleared or overwritten after their use. Setting a pointer to NULL does not clear or overwrite the memory - a new value must be assigned to it. For a character array, setting each char to a new value, such as a space or a zero, will overwrite the value stored in memory. Example of improper removal of sensitive data:</p>
+            <pre>char&amp;#91;&amp;#93; ssn = getSocialSecurity();<br />...<br />//insufficient for removing sensitive data from memory<br />ssn = null;</pre>
+            <p>Example of proper removal of sensitive data:</p>
+            <pre>char&amp;#91;&amp;#93; ssn = getSocialSecurity();<br />...<br />//proper clearing of character array to remove sensitive data from memory<br />for(int i=0; i<_ssn.length3b_></_ssn.length3b_><br />&amp;#123;<br />      ssn&amp;#91;i&amp;#93; = ' ';<br />&amp;#125;<br />ssn = null;</pre>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Sensitive data can be cleared by overwriting the memory where the sensitive data was stored. Deallocating the memory is not sufficient since the Java garbage collector gives no guarantee as to when the deallocated memory will be collected or reused. Be aware that any time you assign a sensitive data to a new buffer, or pass it as a parameter, the sensitive data is being copied and is now in memory in a new location. When clearing memory, ensure you clear every instance.</p>
+  <p>Keep in mind the following considerations when handling passwords: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify sensitive information. </strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users.</li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Identify all sensitive data use. </strong>Locate all code segments, both functions and data members, that handle sensitive data. These functions and data structures can be scattered throughout your application. If&amp;nbsp;the sensitive data in your code base is difficult to locate, centralize all code that handles sensitive data to make it easy to manage.</p>
+        <li>
+          <p>
+            <strong>Store sensitive data in mutable objects. </strong>Mutable objects allow the data in them to be overwritten. This is especially useful in Java as objects are required to be deallocated through the garbage collector. Therefore, there is no certainty when the sensitive data will be deallocated from the current process space. Examples of mutable objects include character arrays (i.e. <strong>char&amp;#91;&amp;#93;</strong>). Java strings, however, are not mutable objects; therefore, once allocated, their current memory space cannot be modified. When storing sensitive data into an array, make sure that you use arrays of primitive data types such as:</p>
+          <ul>
+            <li>
+              <em>byte&amp;#91;&amp;#93; </em>
+              <li>
+                <em>char &amp;#91;&amp;#93;</em>
+                <li>
+                  <em>int&amp;#91;&amp;#93;<br /></em>
+                  <br />Do not use arrays of the wrapper classes that Java provides for primitive types such as: <p /><li><em>Byte </em><li><em>Character </em><li><em>Integer</em></li></li></li></li>
+              </li>
+            </li>
+          </ul>
+          <li>
+            <p>
+              <strong>Clear all sensitive data instances. </strong>Make sure that all memory locations where sensitive data has been stored are overwritten after their use. Losing a pointer to a sensitive data instance can result in not cleaning that particular memory and allowing the sensitive data to leak.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code makes a use of a password. Although the pointer to the string is removed and garbage collection is called, Java does not guarantee the data will be erased.</p>
+  <pre>String pass = getPassword();<br />...<br />pass = null;<br />System.gc();</pre>
+  <h1>Solution Example</h1>
+  <p>The following code makes use of a password. After the password is used, the memory is explicitly cleared. Since strings are immutable object, the code uses character arrays to store passwords. This makes it possible to overwrite the data after its use. </p>
+  <pre>char&amp;#91;&amp;#93; pass = getPassword();<br />...<br />clearPassword(pass);<br />pass = null;<br />...<br />void clearPassword(char&amp;#91;&amp;#93; pass)&amp;#123;<br />      for(int i=0; i<_pass.length3b_></_pass.length3b_><br />      &amp;#123;<br />            pass&amp;#91;i&amp;#93; = ' ';<br />      &amp;#125;<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about cleaning-up data in Java, see: <a href="http://java.sun.com/developer/TechTips/2000/tt0124.html">Using Finalize vs Explicit clean-up</a>. <li>To learn more about primitive data types in Java, visit: <a href="http://java.sun.com/docs/books/tutorial/java/nutsandbolts/datatypes.html">Primitive Data Types</a>. </li></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

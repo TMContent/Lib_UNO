@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-176532927" Content_Hash="360376908">
+  <Metadata>
+    <Id>ec05d24f-cfb5-490b-811a-ab5d71170719</Id>
+    <Id_History>c56d5710-c2c7-4304-8684-02f9c4e55fb0,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Validate Unmanaged String Parameters</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate Unmanaged String Parameters</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>.NET 2.0</div>
+    </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Constrain and validate string parameters passed to native code.</p>
+  <h1>Why</h1>
+  <p>Certain types of input and data validation vulnerabilities are much more likely to occur in native code than in managed code. Validation reduces the risk of buffer overrun, format string, and integer overflow bugs.</p>
+  <h1>When</h1>
+  <p>If passing string parameters to native code, use this guideline</p>
+  <h1>How</h1>
+  <p>Check the length of any input string inside your wrapper code to make sure that it does not exceed the limit defined by the unmanaged API. If the unmanaged API accepts a character pointer, you may not know the maximum permitted string length unless you have access to the unmanaged source.</p>
+  <p>If you cannot examine the unmanaged code because you do not own it, make sure that you rigorously test the API by passing in deliberately long input strings.</p>
+  <p>If your code uses a <b>StringBuilder</b> to receive a string passed from an unmanaged API, make sure that it can hold the longest string that the unmanaged API can hand back</p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

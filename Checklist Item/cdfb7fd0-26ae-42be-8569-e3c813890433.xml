@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1817887706" Content_Hash="-1951167152">
+  <Metadata>
+    <Id>cdfb7fd0-26ae-42be-8569-e3c813890433</Id>
+    <Id_History>8a3a09a5-92b6-44d9-ad3d-0d4f04cab8a7,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Extensions Not Used by the Application Are Mapped to 404.dll (.idq, .htw, .ida, .shtml, .shtm, .stm, Idc, .htr, .printer).</Title>
+    <Category>Server Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Extensions Not Used by the Application Are Mapped to 404.dll (.idq, .htw, .ida, .shtml, .shtm, .stm, Idc, .htr, .printer).</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Author>
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>Web Application</div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that the extensions that are&amp;nbsp;not used by the application are mapped to 404.dll.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>On Windows&amp;nbsp;2000 and Windows Server 2003, the IIS file extensions of interest include: .asp, .asa, .cer, .cdx, .htr, .idc, .shtm, .shtml, .stm, and .printer.</p>
+  <p>If you do not use any one of these extensions, map the extension to the 404.dll, which is provided by IISLockdown. For example, if you do not want to serve ASP pages to clients, map .asp to the 404.dll.</p>
+  <p>The mappings altered by IISLockdown depend on the server template that you choose: </p>
+  <ul>
+    <li>
+      <b>Static Web Server</b>. If you run IISLockdown and choose the Static Web server option, then all of the above extensions are mapped to the 404.dll. 
+<li><b>Dynamic Web Server</b>. If you choose the Dynamic Web server option, which is the preferred option when serving ASP.NET pages, then .htr, .idc, .shtm, .shtml, .stm, and .printer are mapped to the 404.dll, while .asp, .cer, .cdx, and .asa are not. In this case, you should manually map .cer, .cdx, and .asa to the 404.dll. If you are not serving .asp, then you can map that as well. </li></li>
+  </ul>
+  <h3>Why Map to the 404.dll?</h3>
+  <p>By mapping file extensions to the 404.dll, you prevent files from being returned and downloaded over HTTP. If you request a file with an extension mapped to the 404.dll, a Web page with the message "HTTP 404 - File not found" is displayed. You are recommended to map unused extensions to the 404.dll rather than deleting the mapping. If you delete a mapping, and a file is mistakenly left on the server (or put there by mistake) it can be displayed in clear text when it is requested because IIS does not know how to process it.</p>
+  <p>
+    <b>To map a file extension to the 404.dll</b>
+  </p>
+  <ol>
+    <li>Start IIS. 
+<li>Right-click your server name in the left window, and then click <b>Properties</b>. 
+<li>Ensure that the <b>WWWService</b> is selected in the <b>Master</b><b>Properties</b> drop-down list, and then click the adjacent <b>Edit</b> button. 
+<li>Click the <b>Home</b><b>Directory</b> tab. 
+<li>Click <b>Configuration</b>. The tabbed page is shown below. 
+<p><img alt="" src="http://msdn2.microsoft.com/en-us/library/Aa302432.f16thcm04(en-us,MSDN.10).gif" border="0" />&amp;nbsp;</p></li></li></li></li></li>
+  </ol>
+  <p>
+    <b>
+      <i>Mapping application extensions</i>
+    </b>
+  </p>
+  <ol>
+    <li>Select one of the extensions from the list, and then click <b>Edit</b>. 
+<li>Click <b>Browse</b> and navigate to \WINNT\system32\inetsrv\404.dll. 
+<blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;This step assumes that you have previously run IISlockd.exe, as the 404.dll is installed by the IISLockdown tool.</blockquote><li>Click <b>Open</b>, and then click <b>OK</b>. 
+<li>Repeat steps 6, 7 and 8 for all of the remaining file extensions. </li></li></li></li>
+  </ol>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

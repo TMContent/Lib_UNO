@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="894364246" Content_Hash="616043258">
+  <Metadata>
+    <Id>8acc7a7d-0e6e-4020-8048-a2503f9f4890</Id>
+    <Id_History>3ad0f969-2260-4ce0-a090-308e68d1ba6a,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Except Where Necessary, APTCA Usage Is Avoided.</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Except Where Necessary, APTCA Usage Is Avoided.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that APTCA usage is avoided, except where necessary as it increases the attack surface and exposes your code to partial trust callers.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>You can override the link demand for full trust by adding the <b>AllowPartiallyTrustedCallersAttribute</b> (APTCA) to your assembly, as shown below, but you should do so only when it is absolutely necessary.</p>
+  <p>Use of APTCA increases the attack surface and exposes your code to partial trust callers.</p>
+  <p>Use APTCA only if both of the following conditions apply: </p>
+  <ul>
+    <li>You specifically want partially trusted callers to use your strong named assembly. For example, you might need an application running on a file share to access your assembly located in the global assembly cache. However, do not open up an attack surface with APTCA if you only want fully trusted callers to use your code. <li>You have performed a thorough security code review, and your code has been rigorously audited for security vulnerabilities. Examine the resource access and other privileged operations performed by your assembly, and consider authorizing access to these operations by using other code access security demands. </li></li>
+  </ul>
+  <p>The APTCA attribute is shown below.</p>
+  <div>
+    <pre> &amp;#91;assembly: AllowPartiallyTrustedCallersAttribute()&amp;#93;</pre>
+  </div>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

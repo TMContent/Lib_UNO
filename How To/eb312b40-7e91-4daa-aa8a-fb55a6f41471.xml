@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="853126126" Content_Hash="711360146">
+  <Metadata>
+    <Id>eb312b40-7e91-4daa-aa8a-fb55a6f41471</Id>
+    <Id_History>43729669-a154-4189-b196-aeee6ca69136,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Use Separate Application Domains To Isolate Untrusted Code</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>In the .NET Framework&nbsp;1.1, creating a new application domain with restricted permissions requires you to define code groups and the permission sets that would be granted to each of those groups. In the .NET Framework&nbsp;2.0, you can use an API to eliminate the need for boilerplate code and simplify setting up a constrained execution environment (or sandbox) for an application domain. An application domain created with this API loads assemblies with two grant sets. Either the assembly is fully trusted, or it is granted the permission set passed through the <b>grantSet</b> parameter. </p>
+  <p>The following code example shows how you can create a sandboxed application domain by using an API in the .NET Framework 2.0. </p>
+  <pre>
+    <pre>using System.Security;<br /><br />using System.Security.Permissions;<br />using System.Threading;using System.Security.Policy;<br />// Get the public key blob of the assembly to which you want to grant full trust.<br />byte&#91;&#93; publicKey = assemblyName.GetPublicKey();<br />if (publicKey == null &#124;&#124; publicKey.Length == 0)<br />    throw new InvalidOperationException("Assembly is not strongly named");<br />StrongNamePublicKeyBlob keyBlob = new StrongNamePublicKeyBlob(publicKey);<br />// Create the StrongName.<br />StrongName trustedAssemblyStrongName = new StrongName(keyBlob, assemblyName.Name,<br /> assemblyName.Version);<br />// Set up evidence for the untrusted code.<br />Evidence untrustedEvidence = new Evidence(<br />          new object&#91;&#93; &#123; new Zone(SecurityZone.Untrusted )<br /> &#125;,<br />          new object&#91;&#93; &#123; &#125;);<br />// Create the permission set. Deny all permissions by default<br />// and explicitly add the permissions that meet your requirements.<br />PermissionSet permissions = new PermissionSet(PermissionState.None);<br />// Grant access to the arbitrary target assembly to be executed.<br />permissions.AddPermission(new FileIOPermission(FileIOPermissionAccess.AllAccess,<br />&#9;&#9;&#64;"c:\sandbox\TargetExecutableAssembly.exe"));<br />// Grant read access to myfile1.txt.<br />permissions.AddPermission(new FileIOPermission(FileIOPermissionAccess.Read, <br />&#9;&#9;&#64;"c:\sandbox\myfile1.txt"));<br />// Grant the sandboxed AppDomain permission to run managed code.<br />permissions.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));<br />// This example uses a console application, so it requires UIPermission.<br />permissions.AddPermission(new UIPermission(PermissionState.Unrestricted ));<br />AppDomainSetup setup = new AppDomainSetup();<br />// The base assembly directory for the sandboxed AppDomain is the<br />// ApplicationBase of Current AppDomain.setup.<br />ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;<br />// New overload of AppDomain.CreateDomain in .NET 2.0<br />// allows easy setup of sandboxed appdomains.<br />AppDomain sandboxedDomain = AppDomain.CreateDomain(<br />                "Sandboxed AppDomain", untrustedEvidence, setup,<br />                 permissions, new StrongName&#91;&#93; &#123; trustedAssemblyStrongName &#125;);<br />                sandboxedDomain.ExecuteAssembly(&#64;"C:\sandbox\TargetExecutableAssembly.exe");</pre>
+  </pre>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

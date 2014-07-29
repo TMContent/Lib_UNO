@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1752561514" Content_Hash="-2076149180">
+  <Metadata>
+    <Id>39aad56d-fc02-4553-9b1f-e2a6a71d6e88</Id>
+    <Id_History>572ac2ef-647b-4cba-a976-7c285a6d475f,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Role Manager, Instead of Custom Code, Is Used for Roles Authorization</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Role Manager, Instead of Custom Code, Is Used for Roles Authorization</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure the ASP.NET Role Manager is used for role-based authorization instead of custom code.</p>
+  <h1>Why</h1>
+  <p>In ASP.NET version 1.1, you had to create, manage, and look up roles for the authenticated user by writing your own code.&amp;nbsp; ASP.NET version 2.0 provides a new role manager feature that automatically performs this work.&amp;nbsp; Role managers reduce possibilities for serious security issues from programmer errors and reduce the amount of custom code needed for an application. </p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check if your application is using the Role Manager:</p>
+  <ol>
+    <li>Check for the existence of the &lt;<strong>roleManager</strong>&gt; element beneath the &lt;<b>system.web</b>&gt; section of your application's Web.config file and make sure the <b>enabled</b> attribute is set to <b>true.</b></li>
+    <li>Ensure there is a connection string in the &lt;<strong>connectionStrings</strong>&gt; section that points to your roles store. </li>
+    <li>Ensure there is a specific provider configured in the &lt;<b>roleManager</b>&gt;<b></b>element. </li>
+    <li>Check that the <b>defaultProvider</b> attribute on the &lt;<b>roleManager</b>&gt; element points to your chosen role provider. </li>
+    <li>Check your application's code and ensure it is using the Role Manager API (for example <b>Roles.IsUserInRole </b>and <strong>Roles.CreateRole</strong>) whenever a roles check takes place.</li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Roles are accessed from the configured role store by the <b>RoleManager</b> HTTP module by using the configured role provider.&amp;nbsp; This occurs after the user is authenticated but before URL authorization and file authorization access checks occur and before programmatic role checks can occur. </p>
+  <p />To use the role manager feature in an ASP.NET application, you need to do the following: <ol><li>Add a &lt;<b>roleManager</b>&gt; element beneath the &lt;<b>system.web</b>&gt; section of your application's Web.config file and enable role manager by setting its <b>enabled</b> attribute to <b>true</b>. </li><li>Add a connection string to the &lt;<b>connectionStrings</b>&gt; section to point to your roles store. If you are using the <b>AuthorizationStoreRoleProvider</b>, this is an LDAP query string pointing to your Authorization Manager Policy store in Active Directory or ADAM. If you are using the <b>SqlRoleProvider</b>, this is a database connection string that points to your role store database. </li><li>Configure the specific provider in the &lt;<b>roleManager</b>&gt;<b></b>element in your application's Web.config file. The role manager system supports the following providers: </li><li>If your application roles are in an Authorization Manager Policy store in Active Directory or ADAM, use the <b>AuthorizationStoreRoleProvider</b>. </li><li>If your application roles are in a SQL Server database, use the <b>SqlRoleProvider.</b></li><li>If your application uses Windows groups as roles, use the <b>WindowsTokenRoleProvider</b>. Note that this is recommended to be used with Windows Authentication only. </li><li>If your application roles are in a store other than those previously listed, create a custom roles provider inheriting <b>RoleProvider</b> base class. </li><li>Set the <b>defaultProvider</b> attribute on the &lt;<b>roleManager</b>&gt; element to the chosen role provider. </li></ol><p>To check roles and manage roles, use the Role Manager API (for example <b>Roles.IsUserInRole </b>and <b>Roles.CreateRole</b>). </p><hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

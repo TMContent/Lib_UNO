@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="399508364" Content_Hash="592100011">
+  <Metadata>
+    <Id>60a6e711-ee38-4f0a-8d31-b9b4a1c336d4</Id>
+    <Id_History>06d93236-acce-4f57-a96e-842deb196fdf,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Validate File Format Before Use</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate File Format Before Use</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>C++</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Verify that the format of the file is correct when opening saved files or documents.</p>
+  <h1>Why</h1>
+  <p>Many vulnerabilities are exploited via malformed documents supplied to the application. One particular vector of attack that is frequently used is embedding malformed documents in web pages - some applications are integrated into the web browser and will open malicious documents automatically in that scenario. Making sure that file format is valid before loading files into the application makes it harder to embed exploit code into documents.</p>
+  <h1>When</h1>
+  <p>Use this guideline when developing applications that open saved files or documents.</p>
+  <h1>How</h1>
+  <p>Perform the following actions to validate file format before loading files into the application:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define file format.</strong> Specify valid values for all possible fields in all document types used by your applications. This information should be a part of project documentation and the developers may already have it. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Review code.</strong> Search for code that loads saved files into the application. Examine the extents of the validation already being performed by the application. If some validation is already being performed, some code may be recycled for a more thorough validation routine.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Implement validation.</strong> Write validation functions for all fields in all document types supported by the application.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Centralize validation.</strong> Move the validation functions for all document fields to the centralized input and data validation class or library. Write a master file format validation function that calls all individual data field validation functions.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use validation.</strong> Go back to code that loads data files into the application. Remove any old validation code. Add code that calls the master file format validation function on all files being loaded before loading them into the application.</p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/cc81757b-6da5-4463-92f9-d27f680ad6c7">Centralize Input Validation</a>
+    </li>
+  </ul>
+  <h1>&amp;nbsp;</h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

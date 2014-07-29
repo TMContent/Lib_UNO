@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-12546797" Content_Hash="-1996176486">
+  <Metadata>
+    <Id>6bb17293-8cd5-44f3-9f9c-743231be020f</Id>
+    <Id_History>82daee05-8d1a-444c-b2ba-3d91b5b31999,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Access Control Systems Have a Deny-all Default</Title>
+    <Category>Configuration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Access Control Systems Have a Deny-all Default</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 7.2.3</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Access control systems should have a "deny-all" default setting.</p>
+  <h1>Why</h1>
+  <p>Access control systems should have a "deny-all" default to ensure that all access is explicitly authorized.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps&amp;nbsp;to verify that all the access control system implementations have a "deny-all" default:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify the ACL defaults&amp;nbsp;on UNIX-type systems.</strong> Issue the "umask" command for each authorized user or check the login scripts for each user. The last two digits of the number returned by the "umask" command or supplied as an argument to the umask command in the login scripts should be 77. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify the&amp;nbsp;ACL defaults on Windows systems.</strong> On Windows, access is denied by default unless explicitly granted. Windows does grant access privileges generously because objects inherit permissions from their containing folder or drive. It is prudent to make sure that the inherited permissions do not exceed the defined privileges. To verify the access control settings on Windows: right click on each drive, select "Properties", go to the "Security" tab, and verify that only the needed access privileges are granted.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify the ACL defaults on other system-types. </strong>Most operating systems implement either the UNIX or the Windows type ACL system. Some network devices may have to be configured using a web interface. Use intuition or follow vendor's instructions to check the ACL defaults on such devices.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following tasks to enable the "deny-all" default&amp;nbsp;setting on access control systems:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Enable the "deny-all" ACL default setting on UNIX-type systems.</strong> add the "umask 077" command to the login scripts for all users.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enable the "deny-all" ACL default setting&amp;nbsp;on&amp;nbsp;Windows systems.</strong> Delete any excessive permissions by using the controls in the &amp;#8220;Security&amp;#8221; tab: right click on each drive, select "Properties", go to the "Security" tab, and delete all access permissions that are not explitictly authorized.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enable the "deny-all" ACL default settings on other system-types. </strong>Most operating systems implement either the UNIX or the Windows type ACL system. Some network devices may have to be configured using a web interface. Use intuition or follow vendor's instructions to configure ACL defaults on such devices.</p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/23d81019-d4ce-4147-8987-efbccba2b92c">Configure the Windows Access Control System</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-995955891" Content_Hash="-788500466">
+  <Metadata>
+    <Id>f24b0a7c-d80d-4b65-a353-01b4a8040419</Id>
+    <Id_History>f4b6e9d6-2be8-445f-ba50-895ab68a501e,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>If You Use the TCP Channel with .NET Remoting, Consider System.Net.Security.NegotiateStream</Title>
+    <Category>Communication Security</Category>
+    <Phase>Deployment</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Encrypt and sign the data transported over the channel and to authenticate callers. for this, you can configure the &lt;<b>channel</b>&gt; element and set <strong>authenticationMode</strong> as "<strong>IndentifyCallers</strong>" and <strong>secure</strong> as "<strong>true</strong>",&nbsp;in the Machine.config file, the Web.config file, or the App.config file, depending on whether you want to apply the setting across all applications on your computer or to a specific application.</p>
+  <h1>Why</h1>
+  <p>When data is sent over a wire, it typically passes through several intermediate relays on it's way towards&nbsp;some final destination. Using a&nbsp;encryption and authentication&nbsp;to transmit information is important because it adds protection against inadvertent eavesdropping and modification in mid transport.</p>
+  <h1>When</h1>
+  <p>This guideline should be followed when implementing an application to use TCP channel with remoting.</p>
+  <h1>How</h1>
+  <p>The following example shows how a server specifies that authentication is required and that the channel should be protected with encryption.</p>
+  <pre>&lt;channel ref="tcp" port="1234"<br />          authenticationMode="IdentifyCallers" secure="true" /&gt;  </pre>
+  <p>To authenticate clients by using their domain credentials, you need to set the <b>useDefaultCredentials</b> attribute of the &lt;<b>channel</b>&gt; in the client configuration to true. The following example shows a sample client configuration.</p>
+  <pre>&lt;channel ref="tcp" useDefaultCredentials="true" secure="true"<br />          impersonationLevel="Identify" /&gt;  </pre>
+  <p>To use Kerberos authentication, the client must specify a service principal name (SPN). This can be done programmatically or in the client's configuration file, as shown in the following example.</p>
+  <pre>&lt;channel ref="tcp"<br />          useDefaultCredentials="true"<br />          impersonationLevel="Identify"<br />          spn="someService/somehost.com" /&gt;  </pre>
+  <blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;Use of .NET remoting is not encouraged for interprocess or server-to-server communication. .NET remoting is for cross-application domain communication within a process.</blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see "Security Guidelines: .NET Framework 2.0" at <a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0003.asp">http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0003.asp</a>&nbsp;</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e36a4408-5a39-4063-8b99-68f1371d3150</Id>
+    <Id_History>bb3388d3-b96e-4937-a527-c23f8b96f926,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Uploaded Files Are Stored Outside of Root</Title>
+    <Category>Other</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Uploaded Files Are Stored Outside of Root</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Verify that uploaded files are stored in a location that is not web accessible.
+
+==Why==
+
+Storing uploaded files in a location that is not web accessible prevents shell upload vulnerabilities. Even if an attacker manages to upload a malicious script, they won't be able to execute it if the malicious script is stored in a location that is not accessible from the web.
+
+==How to Check==
+
+To verify that uploaded files are stored in a location that is not web accessible:
+
+# **Determine where the application stores uploaded files.** Examine the application design and file structure to determine where the application stores uploaded files. Uploaded files might be stored in a database, in which case they won't show up on the filesystem, and storing files in a database passes this checklist item.
+# **Verify that the location where uploaded files are stored is not web accessible.** If uploaded files are stored on the filesystem, determine their relative path in the application. Attempt to access some uploaded files and the uploads directory using HTTP requests on a deployed application to make sure that the location where uploaded files are stored is not web accessible. 
+
+==How to Fix==
+
+To store uploaded files in a location that is not web accessible:
+
+# **Find all code used to upload files.** Search your application for code that is used to upload files. Make a spreadsheet that enumerates this code.
+# **Determine where to store uploaded files.** It's possible to store uploaded files in a folder outside of the web root or in a database.
+## Storing uploaded files outside the web root is a strong and easy to implement measure.  However, it makes installing the application on a large amount of servers slightly more difficult, because the servers then need to be configured to allow storing files outside of the web root by creating a folder to store the uploaded files and granting the web server permissions to write to that folder. This additional configuration work is why many commercial applications store uploaded files in web accessible locations, and subsequently suffer from shell upload vulnerabilities. In the application installation instructions, document any special server configuration settings required to protect the uploads directory, and explain the risks of not protecting it. The main risk is that a web accessible uploads directory makes it easier for attackers to upload malicious code.
+## Another mitigation method is to store uploaded files in a database. Files stored in a database cannot be accessed directly via HTTP requests, so even if an attacker is able to upload a shell, they won't be able to access it. If the application is already using a database, there is no additional end-user configuration required. However, this method is harder to code, and there is some maintenance overhead because the database and backups might become quite large. 
+# **Change code to store uploaded files outside web root.** Change each piece of code that is used to handle uploaded files so that the uploaded files are stored in the chosen location that is not accessible from the web. 
+]]></Data>
+  </Content>
+</TeamMentor_Article>

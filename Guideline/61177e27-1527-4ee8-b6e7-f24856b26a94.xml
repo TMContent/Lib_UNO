@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2117318399" Content_Hash="-1224072024">
+  <Metadata>
+    <Id>61177e27-1527-4ee8-b6e7-f24856b26a94</Id>
+    <Id_History>d9dd7674-3aea-4f3b-b96b-48d5086bfa77,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use GenerateKey to Generate Random Keys</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use GenerateKey to Generate Random Keys</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>When you use a default constructor to create a new instance of a managed symmetric cryptographic class, a new key and initialization vector are automatically created. You should call the <b>GenerateKey</b> method on the symmetric algorithm instance. <b>GenerateKey</b> creates a random strong key and sets it to the algorithm.</p>
+  <h1>Why</h1>
+  <p>When you use symmetric algorithms, creating and managing keys is an important part of cryptographic process. If you use weak keys, you increase the likelihood that an attacker can compromise the key and access your encrypted data.</p>
+  <h1>When</h1>
+  <p>When using platform-provided cyrptography services. </p>
+  <h1>How</h1>
+  <p>The following example shows how to use the <b>GenerateKey</b> method.</p>
+  <pre>using System.Security.Cryptography;<br />&amp;nbsp; <br />// create instance of AES encryption algorithm and set the key value<br />RijndaelManaged aesEncryptionAlgorithm = new RijndaelManaged();</pre>
+  <pre>//Generate IV and Key for the instance<br />aesEncryptionAlgorithm.GenerateIV();<br />aesEncryptionAlgorithm.GenerateKey();</pre>
+  <pre>// Retrieve the IV and Key and encrypt and safeguard it.</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2108234711" Content_Hash="-109597">
+  <Metadata>
+    <Id>269965f1-1cc4-4c7d-beb0-a79980974c18</Id>
+    <Id_History>2fb82d88-02a8-4a04-b22d-90eda1e8b6ab,</Id_History>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Any</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>Without sufficient removal or quoting of SQL syntax in user-controllable inputs, the generated SQL query can cause those inputs to be interpreted as SQL instead of ordinary user data. This can be used to alter query logic to bypass security checks, or to
+ insert additional statements that modify the back-end database, possibly including execution of system commands.</p>
+  <p>SQL injection has become a common issue with database-driven web sites. The flaw is easily detected, and easily exploited, and as such, any site or software package with even a minimal user base is likely to be subject to an attempted attack of this kind.
+ This flaw depends on the fact that SQL makes no real distinction between the control and data planes.</p>
+  <h2>Discussion</h2>
+  <p>These days, it seems as if software is all about the data: getting it into the database, pulling it from the database, massaging it into information, and sending it elsewhere for fun and profit. If attackers can influence the SQL that you use to communicate
+ with your database, then suddenly all your fun and profit belongs to them. If you use SQL queries in security controls such as authentication, attackers could alter the logic of those queries to bypass security. They could modify the queries to steal, corrupt,
+ or otherwise change your underlying data. They'll even steal data one byte at a time if they have to, and they have the patience and know-how to do so. In 2011, SQL injection was responsible for the compromises of many high-profile organizations, including
+ Sony Pictures, PBS, MySQL.com, security company HBGary Federal, and many others.</p>
+  <h2>Detection</h2>
+  <p>There are multiple methods for detecting SQL injection vulnerabilities:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Automated Static Analysis.</strong> This weakness can often be detected using automated static analysis tools. Many modern tools use data flow analysis or constraint-based techniques to minimize the number of false positives. Automated static analysis
+ might not be able to recognize when proper input validation is being performed, leading to false positives - i.e., warnings that do not have any security consequences or do not require any code changes. Automated static analysis might not be able to detect
+ the usage of custom API functions or third-party libraries that indirectly invoke SQL commands, leading to false negatives - especially if the API/library code is not available for analysis. This is not a perfect solution, since 100% accuracy and coverage
+ are not feasible.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Automated Dynamic Analysis.</strong> This weakness can be detected using dynamic tools and techniques that interact with the software using large test suites with many diverse inputs, such as fuzz testing (fuzzing), robustness testing, and fault
+ injection. The software's operation may slow down, but it should not become unstable, crash, or generate incorrect results.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Manual Analysis.</strong> Manual analysis can be useful for finding this weakness, but it might not achieve desired code coverage within limited time constraints.</p>
+    </li>
+  </ol>
+  <h2>Mitigation</h2>
+  <p>There are many options available for preventing or fixing SQL injection. A combination of the following options should be used to prevent or fix SQL injection vulnerabilities:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use a secure framework.</strong> Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. For example, consider using persistence layers such as
+<em>Hibernate</em> or <em>Enterprise Java Beans</em>, which can provide significant protection against SQL injection if used properly.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use parameterized APIs.</strong> Process SQL queries using prepared statements, parameterized queries, or stored procedures. These features should accept parameters or variables and support strong typing. Do not dynamically construct and execute
+ query strings within these features using "<em>exec</em>" or similar functionality, since you may re-introduce the possibility of SQL injection.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the principle of least privilege.</strong> Run your code using the lowest privileges that are required to accomplish the necessary tasks. If possible, create isolated accounts with limited privileges that are only used for a single task. That
+ way, a successful attack will not immediately give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations. Specifically, follow
+ the principle of least privilege when creating user accounts to a SQL database. The database users should only have the minimum privileges necessary to use their account. If the requirements of the system indicate that a user can read and modify their own
+ data, then limit their privileges so they cannot read/write others' data. Use the strictest permissions possible on all database objects, such as execute-only for stored procedures.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Sanitize input used for dynamic SQL queries. </strong>If you need to use dynamically-generated query strings or commands in spite of the risk, properly quote arguments and escape any special characters within those arguments. The most conservative
+ approach is to escape or filter all characters that do not pass an extremely strict whitelist (such as everything that is not alphanumeric or white space). If some special characters are still needed, such as white space, wrap each argument in quotes after
+ the escaping/filtering step. Be careful of argument injection (CWE-88). Instead of building your own implementation, such features may be available in the database or programming language. For example, the Oracle
+<em>DBMS_ASSERT</em> package can check or enforce that parameters have certain properties that make them less vulnerable to SQL injection. For MySQL, the
+<em>mysql_real_escape_string()</em> API function is available in both C and PHP.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use white-list input validation.</strong> Assume all user input is malicious. Use an "accept known good" input validation strategy, i.e., use a whitelist of acceptable inputs that strictly conform to specifications. When constructing SQL query strings,
+ use stringent whitelists that limit the character set based on the expected value of the parameter in the request. Reject any input that does not strictly conform to specifications, or transform it into something that does. Do not rely exclusively on looking
+ for malicious or malformed inputs (i.e., do not rely on a blacklist). However, blacklists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright. When feasible, it may be safest to disallow
+ meta-characters entirely, instead of escaping them. This will provide some defense in depth. After the data is entered into the database, later processes may neglect to escape meta-characters before use, and you may not have control over those processes.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use reference maps.</strong> When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Do not disclose sensitive information in error messages.</strong> Ensure that error messages only contain minimal details that are useful to the intended audience, and nobody else. The messages need to strike the balance between being too cryptic
+ and not being cryptic enough. They should not necessarily reveal the methods that were used to determine the error. Such detailed information can be used to refine the original attack to increase the chances of success. If errors must be tracked in some detail,
+ capture them in log messages - but consider what could occur if the log messages can be viewed by attackers. Avoid recording highly sensitive information such as passwords in any form. Avoid inconsistent messaging that might accidentally tip off an attacker
+ about internal state, such as whether a username is valid or not. In the context of SQL Injection, error messages revealing the structure of a SQL query can help attackers tailor successful attack strings.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Optional) Use a web application firewall.</strong> Use an application firewall that can detect attacks against this weakness. It can be beneficial in cases in which the code cannot be fixed (because it is controlled by a third party), as an emergency
+ prevention measure while more comprehensive software assurance measures are applied, or to provide defense in depth. An application firewall might not cover all possible input vectors. In addition, attack techniques might be available to bypass the protection
+ mechanism, such as using malformed inputs that can still be processed by the component that receives those inputs. Depending on functionality, an application firewall might inadvertently reject or modify legitimate requests. Finally, some manual effort may
+ be required for customization.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(PHP Only) Disable register_globals.</strong> If you are using PHP, configure your application so that it does not use
+<em>register_globals</em>. During implementation, develop your application so that it does not rely on this feature, but be wary of implementing a
+<em>register_globals</em> emulation that is subject to weaknesses such as CWE-95, CWE-621, and similar issues.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about SQL injection, please see <a href="http://cwe.mitre.org/top25/index.html#CWE-89">
+http://cwe.mitre.org/top25/index.html#CWE-89</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

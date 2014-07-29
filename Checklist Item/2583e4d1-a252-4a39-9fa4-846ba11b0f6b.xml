@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-625987217" Content_Hash="1706192774">
+  <Metadata>
+    <Id>2583e4d1-a252-4a39-9fa4-846ba11b0f6b</Id>
+    <Id_History>59edd059-d117-45c0-b232-78ca548d11de,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Audit And Log Files Have Restricted Access</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Audit And Log Files Have Restricted Access</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure access rights to log files are appropriately set. Application accounts should have write-only access and operators and support personnel should have read-only access as needed.&amp;nbsp; Administrators accounts are the only accounts which should have full access.</p>
+  <h1>Why</h1>
+  <p>Restricting access to log files makes it harder for attackers to tamper with log files to cover their tracks.&amp;nbsp; Furthermore, it reduces opportunities for the repudiation or forging of actions.</p>
+  <h1>How to Check</h1>
+  <p>Check Windows ACLE on log files to ensure they are properly restricted:</p>
+  <ul>
+    <li>Application accounts should have write-only access </li>
+    <li>Operators and support personnel should have read-only access as needed </li>
+    <li>Administrators are the only accounts that should have full access</li>
+  </ul>
+  <h1>How to Fix</h1>
+  <p>Logging normally comes in two flavors, either logging to a file or logging to SQL server.&amp;nbsp; Here's a look at how you can secure access to each of these:</p>
+  <p>
+    <strong>Logging to Files</strong>
+  </p>
+  <p>Protect audit and log files using Windows ACLs and restrict access to the log files. </p>
+  <ul>
+    <li>Assign appropriate permissions to the log files. <ul><li>Logs should be written by a process with write permission only. </li><li>Logs should be read only by users with administrative access.</li></ul></li>
+    <li>Minimize the number of individuals who can manipulate the log files.&amp;nbsp; Authorize access only to highly trusted accounts such as administrators. </li>
+  </ul>
+  <p>
+    <strong>Logging to SQL Server</strong>
+  </p>
+  <p>If you log events to SQL Server or to some custom event sink, use appropriate access controls to limit access to the event data.</p>
+  <ul>
+    <li>Grant write access to the account or accounts used by your application </li>
+    <li>Grant full control to administrators </li>
+    <li>Grant read-only access to operators. </li>
+    <li>Minimize the number of individuals who can manipulate the log files.&amp;nbsp; Authorize access only to highly trusted accounts such as administrators.</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

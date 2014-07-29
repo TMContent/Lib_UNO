@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="672302440" Content_Hash="-1543582333">
+  <Metadata>
+    <Id>cec35eb5-40e7-45c4-bebb-690a36f16084</Id>
+    <Id_History>eae9b65b-9032-44b2-bf87-b7bad67a38d8,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Reflection Attack</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Reflection Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Client/Server applications using cryptographic mutual authentication schemes (described below) where the server uses the same protocol as the clients. </p>
+  <h1>Description</h1>
+  <p>Reflection attacks use the fact that both sides of a protocol work the same way to authenticate to the server using its own credentials, without ever seeing those credentials. The server and a normal client share a secret, which allows them to authenticate each other. To perform this authentication without simply sending the secret, they each pick a value and request that the other party hash that value with the secret. A malicious user can attempt to take advantage of the symmetry in the protocol to circumvent the system, causing the server to authenticate against itself. The attack works like this:</p>
+  <ol>
+    <li>The attacker connects to the server. <li>The server sends a challenge to the attacker. <li>The attacker connects to the server again, but this time sends the challenge they received from the server previously. <li>The server completes the challenge correctly and sends the result back to the attacker. <li>The attacker uses that correct response and replies to the initial, still open challenge. <li>The server checks the response and allows the attacker access to the resource being protected.</li></li></li></li></li></li>
+  </ol>
+  <p>This sequence allows the attacker to authenticate to the server without ever knowing the secret.</p>
+  <h1>Impact</h1>
+  <p>An attacker, without proper credentials, will be able to authenticate and communicate with the server.</p>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Poor implementation of the challenge-response authentication system that uses the same protocol and same key in both directions.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>Require the key or protocol to be different in each direction </li>
+  </ul>
+  <h1>Example</h1>
+  <p />From an attacker&amp;#8217;s perspective this attack may look something like the following: <p />First the attacker opens a connection to the server. <p /><table><tbody><tr><td>Client Sends in connection 1:</td></tr><tr><td><pre>REQ: initialize connection</pre></td></tr></tbody></table><p>So the server sends a challenge value which must be used to generate the response to be authenticated. The server sends a packet that may look like the following:</p><table><tbody><tr><td>Server Sends in connection 1:</td></tr><tr><td><pre>AUTH: domain=test&amp;#64;testdomain.comFunction: initiate/authenticatechallenge=6F1ED002AB5595859014EBF0951522D9</pre></td></tr></tbody></table><p>Now that the attacker has a challenge that she can send back to the server to force the server to create a valid response. So the attacker opens a second connection and sends the same packet to the server and waits for a response:</p><table><tbody><tr><td>Client Sends in connection 2:</td></tr><tr><td><pre>AUTH: domain=test&amp;#64;testdomain.comFunction: initiate/authenticatechallenge=6F1ED002AB5595859014EBF0951522D9</pre></td></tr></tbody></table><p>The server sends the following response back in the second connection:</p><table><tbody><tr><td>Server Sends in connection 2:</td></tr><tr><td><pre>AUTH: username=&amp;#8221;demo&amp;#8221;Function: authenticateResponse= 23D5C7C0BAB95DE5AFB0E6CDDA275D3A</pre></td></tr></tbody></table><p>Note: in this example the response hash is an MD5 hash of a valid username, password, domain and the challenge. The attacker doesn&amp;#8217;t need to know any more information than the challenge since the server is providing its credentials in hashed form.</p><p>From this point, the attacker responds to the first connection that was opened with the response that the server provided in the second connection and the authorization for the first connection is complete.</p><table><tbody><tr><td>Client Sends in connection 1:</td></tr><tr><td><pre>AUTH: username=&amp;#8221;demo&amp;#8221;Function: authenticateResponse= 23D5C7C0BAB95DE5AFB0E6CDDA275D3A</pre></td></tr></tbody></table><h1>Additional Resources</h1><ul><li>For more information on Reflection attacks, see&amp;nbsp;the <a href="http://en.wikipedia.org/wiki/Reflection_attack">Wikipedia Reflection Attack Article</a>&amp;nbsp;and <a href="http://www.owasp.org/index.php/Reflection_attack_in_an_auth_protocol">OWASP's Reflection Attack article</a>.</li></ul><h1>Related Items</h1><ul><li><a href="/article/43c19a37-285d-4cdd-a43b-bdea78eb1686">Attack: HTTP Replay Attack</a></li></ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

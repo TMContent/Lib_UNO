@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1040081907" Content_Hash="-449974177">
+  <Metadata>
+    <Id>8eb62ff5-b2c1-4882-a26d-eb7a80546b37</Id>
+    <Id_History>8e94fa5f-0326-44a1-89e0-2406a7118bef,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Block Protected Files From Being Retrieved</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority> J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0&nbsp;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Block Protected files from being retrieved.</p>
+  <h1>Why</h1>
+  <p>Some files that a system uses are private and should never be made available for retrieval. For example, most configuration files should not be retrievable. </p>
+  <h1>When</h1>
+  <p>This guideline is applicable whenever an application uses files that should not be made available for direct retrieval. </p>
+  <h1>How</h1>
+  <p>To prevent protected files being downloaded over HTTP, map them to the ASP.NET HttpForbiddenHandler. HTTP handlers are located in the machine-level </p>
+  <p>Web.config file beneath the &lt;httpHandlers&gt; element. HTTP handlers are responsible for processing Web requests for specific file extensions. <br />Many well-known file extensions are already mapped to System.Web.HttpForbiddenHandler. For .NET Framework resources, if you do not use a particular file extension, map the extension to System.Web.HttpForbiddenHandler in the machine-level Web.config file, as shown here.</p>
+  <pre>&lt;add verb="&#42;" path="&#42;.asmx" type="System.Web.HttpForbiddenHandler" /&gt;</pre>
+  <p>This example assumes that your Web server does not host Web services, so the .asmx file extension is mapped to System.Web.HttpForbiddenHandler. If a client requests a path that ends with .asmx, ASP.NET returns a message that says, "This type of page is not served." If your application uses other files with extensions not already mapped, also map these to System.Web.HttpForbiddenHandler. </p>
+  <p>&nbsp;</p>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

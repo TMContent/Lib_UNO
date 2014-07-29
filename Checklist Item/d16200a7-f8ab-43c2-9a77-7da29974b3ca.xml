@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2017093455" Content_Hash="613330835">
+  <Metadata>
+    <Id>d16200a7-f8ab-43c2-9a77-7da29974b3ca</Id>
+    <Id_History>e75f4a58-8ee4-4fda-8ed0-2be0a8a337cf,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Locks Are Used with Mutexes to Avoid Deadlocks</Title>
+    <Category>Concurrency</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Locks Are Used with Mutexes to Avoid Deadlocks</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that locks are used with mutexes, instead of manual locking and unlocking.</p>
+  <h1>Why</h1>
+  <p>Using std::lock_guard makes it simpler to prevent deadlocks, because it unlocks mutexes automaticaly when a function exits.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check if locks are used with mutexes:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Locate mutexes.</strong> Search code for declarations of std::mutex objects and their subsequent use to make sure mutexes are being used.</p>
+      <li>
+        <p>
+          <strong>Verify that locks are used.</strong> Locate functions that use mutexes and make sure they use std::lock_guard instead of calling lock() and unlock().</p>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to use locks with mutexes:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify unsafe code. </strong>Search for code that manually locks and unlocks mutexes by calling lock() and unlock() functions.</p>
+      <li>
+        <p>
+          <strong>Add locks.</strong> Add locks to functions that manuall lock() and unlock() mutexes by declaring them in a manner such as const std::lock_guard&lt;std::mutex&gt;(mutex);</p>
+        <li>
+          <p>
+            <strong>Remove old code.</strong> Remove calls to lock() and unlock() from the functions where a lock is now being used.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Solution Example</h1>
+  <p>In the following example, a lock is being used with the mutex. Notice that nothing else is necessary to assure concurrency when using a lock. Yes, it really is that simple.</p>
+  <pre>static std::mutex mutex;</pre>
+  <pre>void function()&amp;#123;</pre>
+  <pre>  const std::lock_guard&lt;std::mutex&gt;(mutex);</pre>
+  <pre>  //do stuff<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about using locks with mutexes, please see <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/CON02-CPP.&amp;#43;Use&amp;#43;lock&amp;#43;classes&amp;#43;for&amp;#43;mutex&amp;#43;management">https://www.securecoding.cert.org/confluence/display/cplusplus/CON02-CPP.&amp;#43;Use&amp;#43;lock&amp;#43;classes&amp;#43;for&amp;#43;mutex&amp;#43;management</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/41b5df05-32be-44df-93b6-f3cb4117f676">Use Locks with Mutexes to Avoid Deadlocks</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

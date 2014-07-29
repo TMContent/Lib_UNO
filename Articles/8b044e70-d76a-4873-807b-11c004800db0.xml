@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8b044e70-d76a-4873-807b-11c004800db0</Id>
+    <Id_History>83031f88-25ac-4b97-bfd4-f308a1fb373b,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Do Not Log Sensitive Information</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Log Sensitive Information</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+* Server-side
+
+==What to Do==
+
+Avoid logging sensitive information.
+
+==Why==
+
+Log files are usually less protected and available to more users than sensitive data filaes. Including sensitive information in logs may lead to unauthorized information disclosure.
+
+==When==
+
+Use this guideline if your application handles sensitive data.
+
+==How==
+
+Perform the following actions to prevent logging of sensitive information:
+
+# **Identify sensitive data.** Make a list of types of sensitive information handled by your application. Some examples are:
+## System information
+## Filenames and paths
+## Passwords
+## Encryption keys
+## Cardholder data
+## Personal information
+# **Identify logging functionality.** Examine the application architecture to identify logging facilities, such as the logging API and where audit trails are actually stored. Make a list of APIs used to log events, document how to use them, and where they store logs.
+# **Review logging code.** Identify code that generates log entries. Review this code to verify that it does not include sensitive information in log entries. If necessary, rewrite this code in a way that does not log sensitive data.
+# **Prevent logging of sensitive data.** The most effective measure for avoiding logging of sensitive information is prevention, which means making sure that sensitive information does not get logged whenever writing code that generates log entries.
+# **Review logging of errors.** Error logs often store sensitive data when they shouldn't. Pay particular attention to code that generates error logs, both when writing this code and when reviewing it, to make sure that sensitive information is not included in error messages or log entries.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

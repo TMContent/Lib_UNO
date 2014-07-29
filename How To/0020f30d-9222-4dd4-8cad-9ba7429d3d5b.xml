@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-241393155" Content_Hash="1787007381">
+  <Metadata>
+    <Id>0020f30d-9222-4dd4-8cad-9ba7429d3d5b</Id>
+    <Id_History>4e05e69a-992f-4585-9c6c-a772c8ce864e,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for VLAN Hopping Bugs</Title>
+    <Category>Networking</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Virtual Local Area Networks (VLANs)</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>Virtual Local Area Networks (VLANs) are Local Area Network (LAN) segments interconnected by network switches. The switches isolate a segment of the LAN and make it inaccessible from the other VLAN segments. An attacker executes a VLAN hopping attack on a target VLAN to monitor (sniff) network traffic from specific network nodes and, in the worst case, to execute Man in the Middle (MitM) attacks on nodes belonging to the target VLAN.</p>
+  <p>Follow these steps to test for VLAN hopping vulnerabilities:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Start testing and exploring<li>Step 4: Execute additional testing</li></li></li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>Step 1: Understand Attack Scenarios</h1>
+  <p>First, it is necessary to understand the different attack scenarios related to VLAN hopping:</p>
+  <ul>
+    <li>Network switch spoofing attack<li>Double tagging attack</li></li>
+  </ul>
+  <h2>
+    <em>Network switch spoofing attack</em>
+  </h2>
+  <p>VLANs isolate logical LANs from each other using a network switch. However, sometimes VLANs extend over numerous switches. In order to maintain VLAN information across switches, VLANs implement a trunking protocol that works over a designated <i>trunking</i><i>port</i> on every switch on a VLAN.</p>
+  <p>A network switch spoofing attack, also known as basic VLAN hopping, targets the Dynamic Trunk Protocol (DTP) used by switches to negotiate a trunking link between two network nodes. The attacker first intercepts traffic on his own box inside the VLAN in order to discover the format of the trunk tag used by the switch. The attacker is specifically looking for the format of the tag that indicates the VLAN ID. Once the attacker knows the tag format, the attacker sends a packet to the target on another VLAN, but modifies the trunking tags so that the VLAN ID is that of the target VLAN instead of the attacker&#8217;s VLAN. Upon receiving the attacker&#8217; packet, the target switch thinks that the frame comes from a trusted switch that needs trunking, and adds the attacker&#8217;s port as the trunking port of the switch. As a trunking port, the attacker can access any of the VLANs in the victim&#8217;s switch.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker captures traffic from within a VLAN to sample a frame. <li>The attacker finds the VLAN ID of the target node.<li>The attacker starts intercepting traffic at his end.<li>The attacker sends a sample frame with an additional 802.1Q tag with the VLAN ID corresponding to the target VLAN.<li>The switch determines that the attacker is a switch that needs trunking, and adds the attacker&#8217;s port as a trunking port on the switch.</li></li></li></li></li>
+  </ol>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <em>Double tagging attack</em>
+  </h2>
+  <p>Double tagging or double encapsulating VLAN hopping attacks consist of prepending two VLAN tags to outgoing packets so that they reach the target VLAN. This attack is different from switch spoofing, as the packet can only be sent from the attacker to the target, and not the other way around. The first prepended tag corresponds to the attacker&#8217;s VLAN and it will be stripped by the switch on the attacker&#8217;s VLAN. The attacker&#8217;s switch can only strip or decapsulate one tag, so the switch resolves the additional tag by sending the packet to all of its switch ports and trunk ports (including the switch port corresponding to the target VLAN&#8217;s switch). Upon receiving this packet, the target switch uses the VLAN ID in the tag set by the attacker and forwards the packet to the target node.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker starts intercepting traffic at his end.<li>The attacker sends a packet to the target node and prepends two 802.1Q tags (the first with the attacker&#8217;s VLAN ID and the second corresponding to the target VLAN ID).<li>The attacker forwards the packet to his own switch.<li>The attacker&#8217;s switch decapsulates the first tag and then forwards the packet to all switch ports and truck ports.<li>The target switch receives the packet and uses the VLAN ID set by the attacker to resolve the destination VLAN.<li>The target switch sends the packet to the target node.</li></li></li></li></li></li>
+  </ol>
+  <p>&nbsp;</p>
+  <h1>Step 2: Analyze Causes and Countermeasures</h1>
+  <p>The second step in testing for VLAN hopping is to understand what causes it and how to protect against it.</p>
+  <h2>
+    <em>Network Switch Spoofing</em>
+  </h2>
+  <p>This attack variation exploits trunk ports on network switches that have been insecurely configured. When a network switch is configured for VLAN use, it can be set to <i>autotrunking</i>. Autotrunking reduces configuration overhead by forwarding packets from different VLANs through a particular switch. An alternative is setting autotrunking to off and manually configuring each VLAN. Because this can be complex and time consuming, autotrunking is often left on by default. When a VLAN is configured for autotrunking, it becomes vulnerable to switch spoofing, which &nbsp;is essentially intended by design.</p>
+  <p>To protect against network switch spoofing, it is necessary to set autotrunking to off. By doing this, the switch will not confuse the attacker node with a switch, and VLAN hopping will be much less likely. In addition, it is important to note that the latest versions of Cisco switches (as of 2002) mitigate the network switch spoofing attacks described here in their default configuration. </p>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <em>Double-tagging Attack</em>
+  </h2>
+  <p>The double-tagging attack is possible in networks with DTP enabled because it directly exploits the logic of this protocol. DTP parses an additional 802.1Q header by forwarding the frame with the inner 802.1Q header to all of its switch ports and trunk ports.</p>
+  <p>To mitigate the double-tagging attack, Cisco recommends setting all user nodes to non-trucking by disabling DTP on any multi-switched network. Instead, it is necessary to explicitly configure any switch-to-switch details using the different vendor tools and configuration options &#91;i&#93;. </p>
+  <p>Additional mitigations for both normal and double-tagging attacks include always using a dedicated VLAN ID for each trunk port, disabling all unused trunk ports and placing them in an unused VLAN, not using VLAN native trunk port, and using security by obscurity techniques such as a random VLAN ID for switch management instead of the default VLAN 1. &nbsp;Additionally, not relying on VLANs for security purposes is also an option. Instead, use physically separate networks when a firm security barrier is required.</p>
+  <p>
+    <b>
+    </b>
+  </p>
+  <p>
+    <b>&nbsp;</b>
+  </p>
+  <h1>Step 3: Start Testing and Exploring</h1>
+  <p>Now that the attack scenarios, causes, and countermeasures of VLAN hopping bugs have been examined, it is necessary to start auditing a VLAN-enabled network by executing basic VLAN hopping test cases.</p>
+  <h2>
+    <em>Testing for basic VLAN hopping </em>
+  </h2>
+  <p>During the basic VLAN hopping test, we use a set of common tools to check if a VLAN-enabled network is vulnerable. Follow these steps:</p>
+  <ol>
+    <li>Capture a sample frame:<ol><li>Connect two computers (PC 1 and PC 2) in the same VLAN.<li>Download Network Associate&#8217;s Sniffer Pro (Note: This tool is required; &nbsp;it can replay network frames without modifying them.). <li>Using Sniffer Pro, start monitoring traffic on PC 1. <li>Send and ICMP echo from PC 1 to PC 2.<li>Stop monitoring traffic and save the captured packet.<li>Start packet generation in Sniffer Pro, enter the captured packet, and send the packet to PC 2 to verify that the frame is correct.</li></li></li></li></li></li></ol><li>Find out the VLAN ID of target node (Note: This step is executed as a proof-of-concept when accessing the target VLAN. In the wild, it would be necessary to infer the target VLAN ID or send malicious packets to a range of VLAN IDs.):<ol><li>Move PC 2 to the trunk port on the switch (port 24).<li>Start monitoring traffic on PC 2.<li>From PC 1, send a ping request to a non-existent IP.<li>Stop monitoring traffic on PC 2.<li>Identify the 802.1 Q header tag in the VLAN header of the ARP sent to PC 2.<li>Move PC 1 to VLAN 2 (target VLAN).<li>Repeat steps 2b through 2e.<li>The VLAN headers from the second set of captures should reveal the format of the VLAN ID in use. For instance: <b>81 00 00 01</b> and <b>81 00 00 02</b>. The second VLAN ID is the one used by the target node.</li></li></li></li></li></li></li></li></ol><li>Resend the captured frame from step 1 with the target VLAN ID from step 2:<ol><li>Connect PC 1 to a user port on VLAN 1, and PC 2 to a user port on VLAN 2.<li>Start packet generation in Sniffer Pro; enter the captured packet from step 1, but add an 802.1 Q tag with the target VLAN ID, and send packet to PC 2.</li></li></ol><li>Verify if the packet sent from PC 1 successfully reached PC2. This can be done by sniffing traffic on PC 2.</li></li></li></li>
+  </ol>
+  <p>Expected results: If the packet sent from PC 1 reaches PC 2, the VLAN-enabled network is vulnerable to VLAN hopping.</p>
+  <h2>
+    <em>Testing for double-tagging VLAN hopping </em>
+  </h2>
+  <p>The double-tagging attack scenario can be launched using Yersinia. Follow these steps: </p>
+  <ol>
+    <li>Download the Yersinia network testing tool (<a href="http://www.yersinia.net/">http://www.yersinia.net/</a>).<li>Start Yersinia with GUI option: yersinia -I.<li>Select interface connected to VLAN using i option.<li>Wait &nbsp;three minutes.<li>Check if any DTP packets were intercepted by Yersinia.</li></li></li></li></li>
+  </ol>
+  <p>Expected results: If Yersinia starts showing DTP traffic, the VLAN-enabled network is vulnerable to VLAN hopping.</p>
+  <p>&nbsp;</p>
+  <h1>Step 4: Execute Additional Testing </h1>
+  <p>It is possible to modify the double-tagging attack in order to solve the problem of hopping in only one direction. This can be done by adding a third host that will act as the receiver for any packets sent from the remote victim. The attack works by sending a malicious packet with two 802.1 tags and with a spoofed IP address corresponding to a host under the attacker&#8217;s control (any host with a route from the target node). Similar to the common double-tag attack, the first tag is stripped and the second is used to hop the VLAN and forward the packet to the victim. However, now the victim&#8217;s reply is not lost, since it arrives at a host controlled by the attacker. This attack can also be executed by using Yersinia. For more information on this and additional VLAN hopping details, see &#8220;Bypassing and Hacking VLAN Switches&#8221; &#91;ii&#93;.</p>
+  <p>&nbsp;</p>
+  <h1>Conclusions</h1>
+  <p>Attackers use VLAN hopping to bypass Virtual LAN restrictions and deliver or receive packets from a different VLAN. In order to test for VLAN hopping, it is first necessary to understand the attack scenarios, such as basic VLAN hopping (or switch spoofing) and double-tagging VLAN hopping. Then you must understand what causes this vulnerability and how to protect against it. Network tools such as Yersinia are used to execute VLAN hopping attacks and to test for the presence of this bug in VLAN implementations.<b></b></p>
+  <p />&nbsp;<br /><hr /><p /><div><div><p>&#91;i&#93; <b>Mitigating Layer 2 Attacks. </b>Cisco Press.<b></b><a href="http://www.ciscopress.com/content/images/1587201534/samplechapter/1587201534content.pdf">www.ciscopress.com/content/images/1587<b>2</b>01534/samplechapter/1587<b>2</b>01534content.pdf</a>&nbsp;</p></div><div><p>&#91;ii&#93; <b>Bypassing and Hacking VLAN Switches</b>. <a href="http://www.askapache.com/security/hacking-vlan-switched-networks.html">http://www.askapache.com/security/hacking-vlan-switched-networks.html</a></p><p>&nbsp;</p></div></div>]]></Data>
+  </Content>
+</TeamMentor_Article>

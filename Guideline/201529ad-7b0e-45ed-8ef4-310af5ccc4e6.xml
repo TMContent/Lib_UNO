@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-421642814" Content_Hash="1925612607">
+  <Metadata>
+    <Id>201529ad-7b0e-45ed-8ef4-310af5ccc4e6</Id>
+    <Id_History>f1d46ddd-8464-4ce0-9fae-22493ddbbe9e,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Avoid Creating Temporary Files in Unsafe Locations</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Creating Temporary Files in Unsafe Locations</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Avoid using temporary files if possible. If temporary files are necessary, place them in folders secured with ACLs, use random file names, and remove them before the program exits.</p>
+  <h1>Why</h1>
+  <p>Placing temporary files in locations where other programs and users may access them may result in multiple vulnerabilities, depending on exactly what the temporary files are used for. In some cases, placing sensitive data in publicly available temporary files may result in information disclosure vulnerabilities. In other cases, an attacker may tamper with the contents of the temporary files and alter program behavior.</p>
+  <h1>When</h1>
+  <p>Use this guideline if your program creates temporary files.</p>
+  <h1>How</h1>
+  <p>Follow these steps to assure that your temporary files are created and used securely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Avoid using temporary files.</strong> If temporary files are used to share data with other processes, consider using other inter-process communication mechanisms, such as sockets, shared memory, or remote procedure calls.</p>
+      <li>
+        <p>
+          <strong>Secure the temporary directory.</strong> Create a separate directory and secure it with ACLs. Use this directory for temporary files.</p>
+        <li>
+          <p>
+            <strong>Use unique names.</strong> Generate (pseudo-)random strings and use them for temporary file names to assure that it is difficult for an attacker to predict the names of the temporary files.</p>
+          <li>
+            <p>
+              <strong>Clean up.</strong> Remove temporary files before the program exits.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about creating temporary files in secure locations, please see "FIO43-CPP. Do not create temporary files in shared directories"&amp;nbsp;at <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/FIO43-CPP.&amp;#43;Do&amp;#43;not&amp;#43;create&amp;#43;temporary&amp;#43;files&amp;#43;in&amp;#43;shared&amp;#43;directories">https://www.securecoding.cert.org/confluence/display/cplusplus/FIO43-CPP.&amp;#43;Do&amp;#43;not&amp;#43;create&amp;#43;temporary&amp;#43;files&amp;#43;in&amp;#43;shared&amp;#43;directories</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>5e7d4f2a-6742-46c2-b2cf-960890e30b7b</Id>
+    <Id_History>00000000-0000-0000-0000-000000233bdb,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Use Session Storage Instead of Local Storage If Possible</Title>
+    <Category>Local Storage</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Session Storage Instead of Local Storage If Possible</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Use session storage instead of local storage as much as possible.
+
+==Why==
+
+Session storage should be used instead of local storage as much as possible, because session storage only stores data for one session, and, in the event of a compromise, only the data from the latest session would be available to the attacker. This reduces the likelihood that large amounts of information could be leaked. Data stored in local storage, on the other hand, does not expire unless it is explicitly cleared, which might lead to a large amount of information accumulating in local storage. If a compromise occurs, all data in local storage might become available to the attacker. 
+
+==How==
+
+To use session storage instead of local storage:
+
+# **Find all code that uses local storage.** Search the application code for references to the localStorage object, to locate all code that stores or accesses data in local storage. Create a spreadsheet to list all code that stores or accesses data in local storage.
+# **Identify all data types stored in local storage.** Examine each piece of code that stores or accesses data in local storage. Create a spreadsheet of each distinct data type that is stored in local storage, such as first name, last name, date of birth. 
+# **Identify whether session storage can be used instead.** For each data type that is stored in local storage, consider whether that data needs to persist between sessions. If a data type does not need to persist between sessions, it should be stored in session storage instead of local storage. In the spreadsheet of distinct data types stored in local storage, note which data types should be stored in session storage instead.
+# **Rewrite code that uses local storage to use session storage.** Using your spreadsheets and notes, identify code that stores data in local storage which should be stored in session storage. Rewrite each piece of code to use session storage instead of local storage. 
+
+==Local Storage Guidelines==
+
+* [[00000000-0000-0000-0000-0000005c244a|Host Different Applications on Different Subdomains]]
+* [[00000000-0000-0000-0000-00000061bbb6|Do Not Store Sensitive Information in Local Storage]]
+* [[00000000-0000-0000-0000-000000233bdb|Use Session Storage Instead of Local Storage If Possible]]
+* [[00000000-0000-0000-0000-00000052241e|Do Not Store Session Identifiers in Local Storage]]
+* [[00000000-0000-0000-0000-00000052e67b|Do Not Store Authentication Information in Local Storage]]
+
+==Local Storage Checklist Items==
+
+* [[00000000-0000-0000-0000-000000358a18|Different Applications Are Hosted on Different Subdomains]]
+* [[00000000-0000-0000-0000-000000972b0b|Sensitive Information Is Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000007e3ee6|SessionStorage Is Used Instead of LocalStorage If Possible]]
+* [[00000000-0000-0000-0000-00000062c37e|Session Identifiers Are Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000004e1296|Authentication Information Is Not Stored in Local Storage]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

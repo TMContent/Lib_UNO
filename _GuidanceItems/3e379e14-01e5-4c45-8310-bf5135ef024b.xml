@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>3e379e14-01e5-4c45-8310-bf5135ef024b</Id>
+    <Id_History>00000000-0000-0000-0000-000000345bc8,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Use Strong Session Identifiers</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Strong Session Identifiers</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Do==
+
+Use strong session identifiers if your application keeps session state.
+
+==Why==
+
+Using cryptographically strong session identifiers prevents attackers from easily guessing session ids and taking over users' sessions. If an attacker hijacks the session he/she can perform the same functions as the logged in user. This will lead to a compromise of user account and in case the user is an administrator, the whole application.
+
+==How==
+
+ASP.NET uses strong session IDs by default. Please, make sure that your application uses the default ASP.NET session IDs. Rewrite the application session state handling code, if necessary, to use the default ASP.NET session ID generation algorithm. Session cookies will automatically be created if ASP.NET session state is used.
+
+Even though it is strongly advised against, if your application must use a custom session ID, make sure that the ID generation algorithm is sufficiently random to make it difficult to predict the IDs. The default ASP.NET session ID has 2^120 possible values. Using a custom ID generation algorithm, try to get at least as much entropy as the default ASP.NET algorithm. ]]></Data>
+  </Content>
+</TeamMentor_Article>

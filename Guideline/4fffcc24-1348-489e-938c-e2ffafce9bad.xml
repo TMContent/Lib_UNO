@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1116594330" Content_Hash="-294115646">
+  <Metadata>
+    <Id>4fffcc24-1348-489e-938c-e2ffafce9bad</Id>
+    <Id_History>e33acce7-fb19-411c-ab79-cceb0716aba1,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Use Private Default Constructors to Prevent Unwanted Object Instantiation</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Private Default Constructors to Prevent Unwanted Object Instantiation</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Mark the class's constructor private if it is not designed to be instantiated.</p>
+  <h1>Why</h1>
+  <p>Unless the class is static, classes without constructors are given a public default constructor by the compiler in order to enable class instantiation. Hence you should add default private constructor if its not be instantiated.</p>
+  <h1>When</h1>
+  <p>An example of a class that is not designed for instantiation is a one that contains only static methods and properties.</p>
+  <h1>How</h1>
+  <p>The declaration of the empty constructor prevents the automatic generation of a default constructor. Note that if you don't use an access modifier with the constructor it will still be private by default. However, the private modifier is usually used explicitly to make it clear that the class cannot be instantiated.</p>
+  <p>The following is an example of a class using a private constructor.</p>
+  <pre>public class Counter<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private Counter() { }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public static int currentCount;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public static int IncrementCount()<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return ++currentCount;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1196023731" Content_Hash="79288344">
+  <Metadata>
+    <Id>55812296-c785-47cd-b480-d3b2b8e96415</Id>
+    <Id_History>8e8ced23-b0c5-47f9-9491-b2a736a5856a,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Previously Used Passwords Are Forbidden</Title>
+    <Category>Configuration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Previously Used Passwords Are Forbidden</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 8.5.12</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>A user should not be able to use a password that is the same as any of the four previous ones when choosing a new password. This functionality is commonly known as "password history."</p>
+  <h1>Why</h1>
+  <p>Not allowing old passwords to be recycled ensures that the old passwords cannot be used if they have been compromised.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check that previously used passwords are forbidden:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Launch the "Group Policy Management" console. </strong>The "Group Policy Management" console is included in Windows 2008, but has to be downloaded and installed on Windows 2003 and 2000. The link to the download is available at the bottom of this page. To launch the "Group Policy Management" console, execute the "gpmc.msc" command.</p>
+      <li>
+        <p>
+          <strong>Launch the Group Policy Object Editor.</strong>&amp;nbsp;Navigate to the "Group Policy Objects" folder under the current domain, right click on the GPO and select "Edit".</p>
+        <li>
+          <p>
+            <strong>Verify that the "Password history" policy is used.</strong> For each relevant domain, check that there is a linked group policy object that enables the "Password History" policy. Password history is enabled on Windows 2003 and 2008 by default and is configured to remember the last 24 passwords. The default GPO that includes this setting is called "Default Domain Policy." The "Password History" option is located under "Windows Settings", "Security Settings", "Account Policies", "Password Policy", &amp;#8220;Enforce password history". Make sure that it is configured to remember at least the last four passwords. </p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to assure that previously used passwords are forbidden in an Active Directory environment:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Launch the "Group Policy Management" console. </strong>The "Group Policy Management" console is included in Windows 2008, but has to be downloaded and installed on Windows 2003 and 2000. The link to the download is available at the bottom of this page. To launch the "Group Policy Management" console, execute the "gpmc.msc" command.</p>
+      <li>
+        <p>
+          <strong>Edit or create a Group Policy Object (GPO).</strong> To create and activate a new Group Policy Object (GPO), launch "The Group Policy Management" console, right click on the domain and select "Create and Link a GPO Here." To edit an existing GPO, navigate to the "Group Policy Objects" folder under the current domain, right click on the GPO and select "Edit" - this will open the "Group Policy Object Editor." To change the settings of a GPO using the "Group Policy Object Editor, navigate the folders to find the setting of interest, double click on it, set the desired option(s).</p>
+        <li>
+          <p>
+            <strong>Enable&amp;nbsp;the "Password history" policy.</strong>&amp;nbsp;The "Password History" option is located under "Windows Settings", "Security Settings", "Account Policies", "Password Policy", &amp;#8220;Enforce password history". Set the "Enforce password history" policy to remember at least the last four passwords.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about enforcing password policy in a Microsoft AD environment, please see "Enforcing Strong Password Usage Througout Your Organization" at <a href="http://technet.microsoft.com/en-us/library/cc875814.aspx">http://technet.microsoft.com/en-us/library/cc875814.aspx</a> . <li>To download the "Group Policy Management Console," please see "Group Policy Management Console with Service Pack 1" at <a href="http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=0a6d4c24-8cbd-4b35-9272-dd3cbfc81887">http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=0a6d4c24-8cbd-4b35-9272-dd3cbfc81887</a>.</li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/1b1e78bf-bbf4-4f41-96d6-3b1c2fcfbd6b">Formulate the User Authentication and Password Policies</a>
+      <li>
+        <a href="/article/bb6b2abe-a754-4105-966e-cfb0bd138dc8">Implement the Password Policy Using Group Policy Objects</a>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

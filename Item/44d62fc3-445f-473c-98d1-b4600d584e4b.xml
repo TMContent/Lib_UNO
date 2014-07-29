@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="29058630" Content_Hash="-895283589">
+  <Metadata>
+    <Id>44d62fc3-445f-473c-98d1-b4600d584e4b</Id>
+    <Id_History>d98eef4f-c50a-447a-ac28-1353cc2a70b4,</Id_History>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Allocate Sufficient Memory for Buffers</Title>
+    <Category>Memory Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Allocate Sufficient Memory for Buffers</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>If you allocate a buffer for the purpose of transforming, converting, or encoding an input, make sure that you allocate enough memory to handle the largest possible encoding. For example, in a routine that converts "<em>&amp;</em>" characters to "<em>&amp;</em>"
+ for HTML entity encoding, you will need an output buffer that is at least 5 times as large as the input buffer.
+</p>
+  <p>When processing structured incoming data containing a size field followed by raw data, ensure that you identify and resolve any inconsistencies between the size field and the actual size of the data (CWE-130).
+</p>
+  <p>When allocating memory that uses sentinels to mark the end of a data structure - such as
+<em>NUL</em> bytes in strings - make sure you also include the sentinel in your calculation of the total amount of memory that must be allocated.
+</p>
+  <p>Use <em>sizeof()</em> on the appropriate data type to avoid CWE-467.</p>
+  <h1>Why</h1>
+  <p>Copying more data than an array or string can fit results in a buffer overflow.</p>
+  <h1>When</h1>
+  <p>Allocate enough buffer space for copying data, when data is being copied to an array or a string.</p>
+  <h1>How</h1>
+  <p>Perform the following steps to assure that your code allocates enough buffer space when copying data to prevent buffer overflows:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all functions that copy data to strings or arrays.</strong> List the components, modules, and libraries that do the most amount of data handling. Usually there exists some code heavy on manipulating data that copies many buffers or constructs
+ various strings.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Calculate the amount of memory that is used by data being copied or set a maximum size limit for valid data.</strong> Make sure to include a trailing null if a null-terminated string is being copied. When calculating the size of data, count the amount
+ of memory it uses, not the amount of elements in the array. Be careful when using the sizeof() function, because it returns the size of a pointer when an array containing data is passed as a parameter to the function. The memory size of data should be calculated
+ beforehand, ideally in the same scope in which the data structure containing data is declared, and passed as an argument to the function that does the copying.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Allocate memory for the buffer.</strong> Once the amount of memory needed to fit all the data is determined, allocate an array or a string of a sufficient size. Write code to handle possible memory allocation errors.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check bounds when copying.</strong> Use the size of the allocated array or string when copying to assure that only the amount of data that fits into the array is copied. This should always be the case if the amount of memory to allocate is calculated
+ correctly, but for extra security it is a good idea to write code in a way that truncates data if it doesn't fit into the buffer.</p>
+    </li>
+  </ol>
+  <h2>Additional Resources</h2>
+  <ul>
+    <li>For more information about "CWE-130: Improper Handling of Length Parameter Inconsistency", please see
+<a href="http://cwe.mitre.org/data/definitions/130.html">http://cwe.mitre.org/data/definitions/130.html</a></li>
+    <li>For more information about "CWE-467: Use of sizeof() on a Pointer Type", please see
+<a href="http://cwe.mitre.org/data/definitions/467.html">http://cwe.mitre.org/data/definitions/467.html</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

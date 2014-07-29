@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>538af3e3-803f-475a-a41d-f7c2f760ba39</Id>
+    <Id_History>f22fa081-a9c7-4575-bacf-9a4e8176cede,</Id_History>
+    <Library_Id>f215ceee-9a08-41d9-b2c1-bbcc058a8f32</Library_Id>
+    <Title>Minimize Use of Javascript and URL Redirects within WebViews</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Design</Phase>
+    <Technology>Android</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Minimize Use of Javascript and URL Redirects within WebViews</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Android
+
+==What to Do==
+
+When using the //WebView// class to access and load URLs, only enable JavaScript if absolutely necessary. If JavaScript is necessary, only enable interfaces into your Android methods for trusted websites. In order to prevent the user from navigating to other sites through external page links, pass any non-trusted URLs to the //Browser// class for loading with //Intent.ACTION_VIEW// in the //shouldOverrideUrlLoading// method.
+
+==Why==
+
+//WebView// allows an application to load HTML content into a user layout. In addition, a loaded web page can  interact with the Android application’s classes and methods through Javascript calls. If not properly secured, this could allow a malicious website to access sensitive data within the application by invoking these methods or by sending the user to dangerous sites through HTML links and re-directs.
+
+==When==
+
+Use //WebView// when you want to provide a simple web interface for a given URL. Do not attempt to create complex, browser-style applications with //WebView//. Two possible scenarios for a //WebView// might be when you want the user to have a link for an FAQ page or a patch update notification for the application or service. Enable JavaScript within the //WebView// only when there is a business requirement to allow JavaScript method invocations or calls to Android methods. Never allow the user to click through to other sites through the //WebView// but rather pass new URL requests to the //Browser// class.
+
+==How==
+
+To avoid using JavaScript in WebView objects: 
+
+# **Identify whether JavaScript is enabled in WebView objects.** Search the application for calls to the //setJavaScriptEnabled()// method to determine whether JavaScript is enabled in //WebView// objects. By default, JavaScript is disabled in //WebView// objects, so if there are no calls to this method, JavaScript is not enabled in //WebView// objects.
+# **Disable JavaScript in WebView Object.** Find all calls to the //setJavaScriptEnabled// method and remove them.
+# **Enable JavaScript only if necessary.** By default, JavaScript is not enabled. If you do not require JavaScript, do not enable it. However, if JavaScript is necessary, you can enable it with an additional line of code: //web.getSettings().setJavaScriptEnabled(true);//
+# **(Optional) Create an interface for each method you want to access.** If you have methods within your Android application that you want the website to access, create an interface for each method. Instantiate a new class that extends //WebViewClient// and returns //False// in the //shouldOverrideUrlLoading// method only for nonpublic sites that should have access to the JavaScript interfaces.
+# **Ensure that non-trusted websites get loaded through the Browser class and not the WebView.** Do this by having the //shouldOverrideUrlLoading// return true when the application calls the //setWebViewClient// method. Load the URL through //Intent.ACTION_VIEW// which will pass it to the //Browser// class.
+
+==Problem Example==
+
+As the MyApp developer, you need to provide access to your help page. Doing so will allow you to make frequent updates, and you will not need to parse the data for display on a layout for MyApp.
+
+You download sample code and see that you could provide custom JavaScript calls for your application. Although this is not absolutely necessary, you think users will enjoy the ability to send comments about the MyApp help page through an Android JavaScript interface. You code the interface below and call it Comment:
+
+{{{
+@JavascriptInterface 
+    public void comment(String _message, String _cc) {
+        //Sends the message in the_message argument
+    }
+}}}
+
+This interface sends user input to the master inbox and Cs-s the message to the email address the user provides.
+
+Unfortunately, this practice has opened a hole in the application. First, you are allowing unformatted strings to enter the MyApp application and ultimately the mail system. Second, by allowing the user to manipulate the Cc field, the user could send damaging messages to other recipients, and it will look as if the Android application sent them. Finally, there is no control over which sites can access this method.
+
+==Solution Example==
+
+First, rethink whether this functionality is needed. If this feature is not required, consider removing it to reduce your attack surface. Remove JavaScript from the //WebView// by deleting this line in the activity that instantiates it:
+
+{{{
+webView.getSettings().setJavaScriptEnabled(true);
+}}}
+
+If you decide that JavaScript is a must and this method is truly necessary, than you should at a minimum ensure that the application controls any redirects or links clicked to sites your organization does not manage. By default, this will happen anyway, but you should ensure that the application is not calling the //setWebViewClient//, as the following code shows:
+
+{{{
+setWebViewClient (new WebViewClient()); 
+}}}
+
+This call allows the user to click any links within the //WebView// and exposes the application to malicious JavaScript attacks. Also, look for any calls to the following:
+
+{{{
+public boolean shouldOverrideUrlLoading(WebView view, String url)
+}}}
+
+This method should only return //False// for sites your organization controls. All others should return //True// and use an intent with //Intent.ACTION_VIEW// to load through a browser.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1538918383" Content_Hash="7935280">
+  <Metadata>
+    <Id>d9247682-7f53-4e33-ae70-874adb5aaef9</Id>
+    <Id_History>c70e4224-33d8-4f17-a5b4-26adee72ba6e,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Protected File Types Are Blocked Using HttpForbiddenHandler</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Protected File Types Are Blocked Using HttpForbiddenHandler</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>What to Check For</h1>
+  <p>Check to ensure that your application blocks protected file types by using HttpForbiddenHandler.</p>
+  <h1>How to Fix</h1>
+  <p>To prevent protected files being downloaded over HTTP, map them to the ASP.NET <b>HttpForbiddenHandler</b>. HTTP handlers are located in the machine-level Web.config file beneath the &lt;<b>httpHandlers</b>&gt; element. HTTP handlers are responsible for processing Web requests for specific file extensions. </p>
+  <p>Many well-known file extensions are already mapped to <b>System.Web.HttpForbiddenHandler</b>. For .NET Framework resources, if you do not use a particular file extension, map the extension to <b>System.Web.HttpForbiddenHandler</b> in the machine-level Web.config file, as shown here.</p>
+  <div>
+    <pre>&lt;add verb="&amp;#42;" path="&amp;#42;.asmx" type="System.Web.HttpForbiddenHandler" /&gt;  </pre>
+  </div>
+  <p>This example assumes that your Web server does not host Web services, so the .asmx file extension is mapped to <b>System.Web.HttpForbiddenHandler</b>. If a client requests a path that ends with .asmx, ASP.NET returns a message that says, "This type of page is not served." If your application uses other files with extensions not already mapped, also map these to <b>System.Web.HttpForbiddenHandler</b>.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

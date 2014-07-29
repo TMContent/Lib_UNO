@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="763601796" Content_Hash="72546101">
+  <Metadata>
+    <Id>d99dfd61-f3dd-47fc-8bcd-e3e1b361ee21</Id>
+    <Id_History>45c2264b-1687-4363-bf10-b7e87d990a66,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Inactive User Accounts Are Automatically Locked</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Inactive User Accounts Are Automatically Locked</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure your application automatically locks inactive user accounts. Verify that all instances of locking inactive accounts are logged. </p>
+  <h1>Why</h1>
+  <p>Inactive user accounts increase the attack surface of the application and can be used by an attacker as a means of entry.</p>
+  <h1>How to Check</h1>
+  <p>Take the following steps during the design phase to make sure your application has the capability to lock inactive user accounts.</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify your application stores the user's last login date or inactivity information. </strong>Check if your application has the necessary procedures to store and retrieve last-login and lock-out information about its users. Common locations for storing such information include: </p>
+      <ul>
+        <li>Database that stores user account information. Verify that the last login date for each user is stored and updated every time a user authentication succeeds. Also check that a column exists to store the lock/unlock status information for each user. </li>
+        <li>Data structures that represent user accounts. Verify that fields exist to store the last login date and lock/unlock status. </li>
+        <li>Routines that handle user login. Verify that the last-login timestamp is reset to the current timestamp upon a successful authentication attempt. </li>
+        <li>Routines that retrieve and update user account information. Verify that a routine exists to update the last login date and inactivity information for the user.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify your application has a lockout policy. </strong>An account lockout policy is typically application specific. Review your application's requirements and design specifications. Check for the following functionality:</p>
+      <ul>
+        <li>A mechanism for determining user inactivity </li>
+        <li>A mechanism for locking inactive accounts </li>
+        <li>A mechanism for unlocking disabled accounts</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify the lockout policy is enforced by default. </strong>Make sure that the functionality that enforces the lockout policy is enabled by default during deployment. Ensure that only users with administrative privileges can amend your application's lockout policy. Verify that all instances of modifying the lockout policy are logged. Note the following when verifying the lockout policy:</p>
+    </li>
+    <ul>
+      <li>
+        <strong>Database.</strong> If your application uses a backend database as its user store, a scheduled database transaction may be used to lock inactive user accounts. </li>
+      <li>
+        <strong>Active Directory.</strong> If your application uses Active Directory as its user store, inactive accounts may be required to be locked by your organization's network administrators.</li>
+    </ul>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. In its current state, the application logs the last time the user has logged in but does not enforce a lockout policy for its inactive users; therefore, an attacker can gain unauthorized access to the application by compromising an inactive account. Since inactive accounts are usually not monitored for suspicious activity, they are prime targets of hackers as their activities may remain undetected for a long period of time. Attackers attempting to guess valid usernames will have a&amp;nbsp;better chance of logging in successfully when inactive accounts are not locked. </p>
+  <p />
+  <pre>sql&gt; select username, locked, last_login_date from users;<br />+----------+--------+-----------------+<br />| username | locked | last_login_date |<br />+----------+--------+-----------------+<br />| adam     |      0 |      2013-10-11 |<br />| sue      |      0 |      2013-10-11 |<br />| jim      |      0 |      2013-10-01 |<br />| richard  |      0 |      2013-10-01 |<br />| julie    |      0 |      2013-09-23 |<br />| sam      |      0 |      2013-06-23 |<br />+----------+--------+-----------------+</pre>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/ba207c2f-46a0-473d-9631-7292426b2dad">Guideline: Automatically Lock Inactive User Accounts </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

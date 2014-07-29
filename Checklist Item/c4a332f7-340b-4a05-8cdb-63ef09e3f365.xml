@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1464319302" Content_Hash="-1754579420">
+  <Metadata>
+    <Id>c4a332f7-340b-4a05-8cdb-63ef09e3f365</Id>
+    <Id_History>a821a81f-0ba2-4b16-9943-238e2d451076,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Structured Exception Handling Is Used</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Structured Exception Handling Is Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure structured exception handling is used to catch error conditions.</p>
+  <h1>Why</h1>
+  <p>Using exception handling helps to protect your application from denial of service attacks and&amp;nbsp;can be used to fail securely.&amp;nbsp;For instance, when using impersonation you can use exception handling to return to a lower privilege level in the event of an error.&amp;nbsp;Exception handling&amp;nbsp;also simplifies and de-clutters the application code, which improves robustness.</p>
+  <h1>How to Check</h1>
+  <p>All code in your application that may fail should either&amp;nbsp;be enclosed in a Try/Catch/Finally block or caught by a global exception handler.&amp;nbsp; While you should not catch exceptions that can not handle, catching exceptions close to the source can improve error messages both for user experience and debugging purposes.&amp;nbsp;&amp;nbsp;</p>
+  <p>The code that may fail should be enclosed in a Try statement such as:</p>
+  <p />
+  <pre>Try<br />{<br />    //error prone code<br />}</pre>
+  <p />
+  <p>A Catch block may follow the Try block if you want to execute error handling code including resource cleanup necessary in an error condition and any work needed to fail to a secure state.&amp;nbsp; Catch blocks are the right place to do exception logging and&amp;nbsp;add more information to the existing exception.&amp;nbsp; In most cases you should rethrown the exception so that exception handlers above your code can react appropriately.&amp;nbsp;You should only consume an exception if you can handle the error completely:</p>
+  <p />
+  <pre>Catch(SomeExceptionClass e)<br />{<br />    //error handling code<br />}</pre>
+  <p />
+  <p>It is ok to use Try/Finally without a Catch block, especially when you cannot handle the exception and just need to make sure cleanup code is run.&amp;nbsp; You should next create a Finally block that performs cleanup or any other operations that should occur regardless of whether the code succeeds or fails</p>
+  <p />
+  <pre>Finally<br />{<br />    //resource cleanup code<br />}</pre>
+  <h1>How to Fix</h1>
+  <p>Use Try/Catch/Finally blocks to catch exceptions thrown by code that may fail.&amp;nbsp; Use Try/Finally to ensure resources are disposed properly regardless of an error condition. Use a global error handler to catch exceptions not caught directly in the code.</p>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application has code to connect to a SQL database.&amp;nbsp; However, the code is not wrapped with an exception handler and when the connection times out the application fails, then displays exception details to the user including sensitive SQL database information.</p>
+  <pre>  protected void Page_Load(object sender, EventArgs e)<br />  {<br />      using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["MyDbConn"].ToString()))<br />      {<br />          SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM authors", cn);<br />          cn.Open();<br />          SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);<br />          rdr.Read();<br />          Response.Write(rdr[0].ToString());<br />	 //read a value<br />      }<br />  }</pre>
+  <p>&amp;nbsp;</p>
+  <h1>Solution Example</h1>
+  <p>An ASP.NET application has code to connect to a SQL database.&amp;nbsp; The code is wrapped with an exception handler and when the connection times out the application handles the error gracefully.</p>
+  <blockquote>
+    <pre>using System.Data.SqlClient;<br />using System.Security;<br />SqlConnection conn = new SqlConnection("...");<br />try{<br />    conn.Open();<br />    // Do some operation that might cause an exception.<br />    // Calling Close as early as possible.<br />    conn.Close();<br />    // ... other potentially long operations.<br />}<br />finally{<br />    if (conn.State==ConnectionState.Open)<br />        conn.Close();<br />  // ensure that the connection is closed.<br />}</pre>
+  </blockquote>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

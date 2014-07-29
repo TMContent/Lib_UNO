@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1964299408" Content_Hash="662196885">
+  <Metadata>
+    <Id>96cd2e03-add3-4e7e-a1ee-89af57287fb4</Id>
+    <Id_History>222b627e-b614-40aa-80ee-bf57eb6d5a80,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>How to Test for Race Condition Bugs in Java</Title>
+    <Category>Other</Category>
+    <Phase>Test</Phase>
+    <Technology>Java</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Race Condition Bugs in Java</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>J2EE applications <b><span></span></b></li>
+  </ul>
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>A race condition occurs when more than one application thread or process tries to access the same resource at the same time or when a thread accesses a resource in a time window that&amp;nbsp;the application is not expecting. If an application doesn&amp;#8217;t handle another thread or process, modifying or locking the dependant resource at the specific target window of time, it might end up executing undesired behavior.</p>
+  <p>Depending on specific timing, an attacker can access a resource and modify it to change the application's behavior and execute logical attacks on the application or execute denial-of-service (DoS) attacks on the target application.</p>
+  <p>Follow these steps to test for race condition bugs in J2EE:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, in order to properly understand how race condition flaws affect J2EE applications, it is recommended to review the common attack scenarios involved:</p>
+  <ul>
+    <li>Logical attacks <li>Denial-of-service attacks</li></li>
+  </ul>
+  <h2>
+    <span>
+      <em>Scenario 1:<span>&amp;nbsp; </span>Logical attacks</em>
+    </span>
+  </h2>
+  <p>J2EE applications using multithreading might fall victim to logical attacks through race conditions.<span>&amp;nbsp;</span>If developers don&amp;#8217;t properly protect static member variables from being modified from a different thread, an attacker can use a different thread to tamper with the value of a static member variable.<span>&amp;nbsp;</span>In some cases, the attacker can actually tamper with a static member at the correct time in order to launch a logical attack on the application.<span></span>This scenario is similar to time-of-check, time-of-use (TOCTOU) attacks where a resource is changed by an attacker in between the time it is checked and the time it is used.</p>
+  <p>Consider this code:</p>
+  <pre>1&amp;nbsp; class PriceCalculator()<br />2&amp;nbsp; &amp;#123;<br />3&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>static int number_of_coupons = 0;</strong>&amp;nbsp; <br />4<br />5&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; public int CalculatePrice()<br />6&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />7&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int balance = 5000;<br />8&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int maximum_coupons_allowed = 10;<br />9<br />10&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (number_of_coupons &lt; maximum_coupons_allowed) <br />11&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />12&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int total = balance - 10&amp;#42;number_of_coupons; <br />13&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return total;<br />14&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />15&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return 0;<br />16&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />17<br />18&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; public void GrabCoupon()<br />19&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />20&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; number_of_coupons&amp;#43;&amp;#43;;<br />21&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />22<br />23&amp;nbsp; &amp;#125; <br /></pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>The code in the function above looks harmless.<span>&amp;nbsp;</span>However, the <em>number_of_coupons</em> was defined as a static member of a class in line 3.<span>&amp;nbsp;</span>This means that in a multithreading application, a different thread might change the value of the <em>number_of_coupons</em> variable after the instruction in line 10 executes but before executing the instruction in line 12.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>Now notice the following method in the class <em>GrabCoupon </em>that can be used to increase the number of coupons.<span></span>If an attacker can invoke the <em>GrabCoupon</em> method from a different thread, he or she might be able to modify the total price calculated in the <em>CalculatePrice</em> method.<span>&amp;nbsp;</span>For instance, an attacker might discover that a request to the following URL invokes the <em>GrabCoupon</em> method, increasing the <em>number_of_coupons </em>static member variable:</p>
+  <pre>
+    <span>http://some_site/sumbitCoupon?method=GrabCoupon</span>
+  </pre>
+  <p>To launch the attack, the attacker calls the <em>CalculatePrice()</em> function while making repeated requests to the URL above.<span></span>This may cause the <em>number_of_coupons</em> to be less than the maximum allowed at the time of check (line 10) but be larger than the maximum allowed at the time of use (line 12), resulting in the application calculating a lower price than the one expected.</p>
+  <h2>
+    <span>
+      <em>Scenario 2:<span>&amp;nbsp; </span>Denial-of-services (DoS) attacks</em>
+    </span>
+  </h2>
+  <p>During this second scenario the application doesn&amp;#8217;t need to be multithreaded.<span>&amp;nbsp;</span>The attack scenario consists of an attacker accessing and locking a resource that is dependant&amp;nbsp;on the J2EE application to properly function, such as a critical file or network port.<span></span>If the attacker locks the resource before the J2EE application can access it, he or she causes the application to malfunction, thus creating a denial-of-service scenario.</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The&amp;nbsp;second step in learning how to test for race condition bugs in J2EE is to understand what causes them and how to protect against them.<span>&amp;nbsp;</span>This will help you to identify this bug in code as well as to prepare you for executing the necessary test cases.</p>
+  <h2>
+    <span>
+      <em>References to static members of classes</em>
+    </span>
+  </h2>
+  <p>A common cause for race condition bugs is to allow static members of a class to be changed in between time of check and time of use (TOCTOU).<span></span>This cause is what allows the first scenario in which the attacker logically attacks the application by changing the static member <em>number_of_coupons</em> in between TOCTOU.<span>&amp;nbsp;</span>To prevent race condition attacks using this scenario, developers can refrain from defining static members of classes and use local variables inside functions and methods:</p>
+  <pre>1&amp;nbsp; class PriceCalculator()<br />2&amp;nbsp; &amp;#123;<br />3<br />4&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; public int CalculatePrice()<br />5&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;  &amp;#123;<br />6&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>int number_of_coupons = GetCouponCount();&amp;nbsp; </strong><br />7&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int balance = 5000;<br />8&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int maximum_coupons_allowed = 10;<br />9<br />10&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (number_of_coupons &lt; maximum_coupons_allowed) <br />11&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;  &amp;#123;<br />12&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int total = balance - 10&amp;#42;number_of_coupons; <br />13&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return total;<br />14&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;  &amp;#125;<br />15&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return 0;<br />16&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />17<br />18&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; public void GrabCoupon()<br />19&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />20&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; number_of_coupons&amp;#43;&amp;#43;;<br />21&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />22<br />23&amp;nbsp; &amp;#125; </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>Now the J2EE application defines <em>number_of_coupons</em> inside a method so the local variables exist in the stack of each thread and will not be shared across threads, preventing attackers from modifying a shared version of the variable to execute the attack.&amp;nbsp;</p>
+  <p>If developers must use static member variables, they can add a lock in between time of check and time of use to avoid race condition attacks:</p>
+  <pre>1&amp;nbsp; class PriceCalculator()<br />2&amp;nbsp; &amp;#123;<br />3<br />4&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; static int number_of_coupons = 0;&amp;nbsp; <br />5&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Object lock = new Object(); <br />6&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />7&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; public float CalculatePrice()<br />8&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />9&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />10&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int balance = 5000;<br />11&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int maximum_coupons_allowed = 10;<br />12&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />13&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>synchronized(lock)</strong><br />14&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />15&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (number_of_coupons &lt; maximum_coupons_allowed) <br />16&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />17&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int total = balance - 10&amp;#42;number_of_coupons; <br />18&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return total;<br />19&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />20&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />21&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return 0;<br />22&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />23<br />24&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; public void GrabCoupon()<br />25&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />26&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>synchronized(lock)</strong><br />27&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />28&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; number_of_coupons&amp;#43;&amp;#43;;<br />29&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />30&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />31<br />32 &amp;#125;&amp;nbsp;&amp;nbsp;&amp;nbsp; </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>The <em>synchronized</em> instruction makes sure that only one thread executes the code within the <em>lock </em>variable.<span></span>This means that two threads can&amp;#8217;t be checking and using the <em>number_of_coupons</em> static member variable at the same time and that the attack is no longer possible.</p>
+  <h2>
+    <span>
+      <em>Accessing locked resources</em>
+    </span>
+  </h2>
+  <p>The second cause of race condition bugs in J2EE applications is relying on resources that can be accessed by low-privileged users to properly operate.<span>&amp;nbsp;</span>For instance, depending on a file that can be deleted or locked by a guest user can enable&amp;nbsp;a DoS attack on a target application using the guest account.<span></span>To protect against this variation, developers must properly secure the attack surface of the application so that no critically-dependant resources can be changed by low-privileged users.</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of race condition bugs in J2EE, it is necessary to understand the necessary test cases to check if your application is vulnerable. </p>
+  <h2>
+    <span>
+      <em>Test for logical attacks through race conditions</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for logical attacks on the application using race conditions:</p>
+  <ol>
+    <li>Find a request to an application action that uses a static variable to calculate the outcome of the action and where the static variable is accessible through a different thread.<span>&amp;nbsp;</span>See Scenario 1 above for additional detail. <li>Find a request, different than the action in Step 1, which modifies the target static member variable. <li>Execute the following sub steps simultaneously: <ul><li><span><span>a.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</span></span></span>Make one request to the application found in Step 1 while <li><span><span>b.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span></span>Making continuous requests to request found in Step 2. </li></li></ul></li></li></li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp;</span>The application is vulnerable if making the continued requests that use a separate thread to alter the static variable (found in Step 2) alters with the behavior of the application request found in Step 1 and generates a different outcome for the desired action. </p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Test for denial-of-service (DoS) attacks through race conditions</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for DoS attacks on the application using race conditions:</p>
+  <ol>
+    <li>Log in to the computer that is hosting the J2EE application using a low-privileged account. <li>Monitor the application&amp;#8217;s interaction with the file system.<span></span>To execute this step you can use file system, registry, and network port monitoring tools such as Process Explorer from Systeinternals.com. <li>Find an application resource that is accessible to the low-privileged account. <li>Open with write access or lock the application resource and observe how the application reacts.</li></li></li></li>
+  </ol>
+  <p>Expected results:<span></span>The application is vulnerable if it stops servicing its users.<span>&amp;nbsp;</span>This can occur because the application:</p>
+  <ul>
+    <li>Depends on a resource that is accessible to low-privileged users. <li>Doesn&amp;#8217;t fail gracefully if a dependant resource is locked or inaccessible.</li></li>
+  </ul>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Even though race condition attacks are subtle in code, they represent a significant threat to J2EE applications using multithreading or relying on resources that are accessible to low-privileged users.<span></span>Attackers can exploit this vulnerability to execute logical or denial-of-service attacks on applications.<span>&amp;nbsp;</span>To test for this vulnerability, it is recommended&amp;nbsp;become familiar&amp;nbsp;with the common attack scenarios involved as well as with what causes this bug and how to protect against it.<span></span>Then, you must try executing simultaneous actions to trigger different threads into accessing a shared variable or method.<span></span>To exploit race conditions for denial-of-service attacks, use a low-privileged user to access any critically dependant resource to the application and see how the application&amp;nbsp;responds when&amp;nbsp;the resource&amp;nbsp;is not&amp;nbsp;available.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

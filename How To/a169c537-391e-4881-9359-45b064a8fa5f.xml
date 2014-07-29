@@ -1,0 +1,281 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-195385162" Content_Hash="104798141">
+  <Metadata>
+    <Id>a169c537-391e-4881-9359-45b064a8fa5f</Id>
+    <Id_History>40771780-be59-4d4c-b283-5ec3cc286357,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>How to Test for Session Prediction Bugs in Java</Title>
+    <Category>Session Management</Category>
+    <Phase>Test</Phase>
+    <Technology>Java</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Session Prediction Bugs in Java</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<p>
+    <b>
+      <span>
+      </span>
+    </b>
+  </p>
+  <h1>
+    <span>Applies to:</span>
+  </h1>
+  <ul>
+    <li>J2EE applications </li>
+  </ul>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Java web applications use sessions to relate authentication and authorization decisions with the&amp;nbsp;subsequent activities of a user.<span></span>Sessions are tracked with session identifiers (or session IDs), ensuring they have been authenticated before allowing access certain areas of an application or performing particular transactions.</p>
+  <p>For example, an online banking application requires a valid session ID before its clients can access their account details or make transfers.<span></span>An application commonly creates and assigns a session ID to its clients at login time, after their credentials have been checked.<span>&amp;nbsp;</span>Later, before allowing the clients to browse through different pages or execute specific functionality, the application checks the session ID sent in the client&amp;#8217;s request against a server copy of the client&amp;#8217;s session ID and allows the request if they match. </p>
+  <p>During a session prediction attack, an attacker observes the algorithm the application uses to create new session identifiers in an attempt to discover a pattern.<span>&amp;nbsp;</span>The attacker&amp;#8217;s goal is to predict a valid session ID corresponding to another user in order to impersonate or spoof the user.<span>&amp;nbsp; </span></p>
+  <p>It is recommended to follow these steps to test for session prediction bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Start testing and exploring <li>Step 4: Execute additional testing</li></li></li></li>
+  </ul>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>The first step in testing for session prediction bugs is to identify its attack scenario.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>Before reviewing a session prediction it is important to understand how and why Internet applications use session identifiers.<span></span>Internet applications such as e-commerce sites require their clients to enter valid usernames and passwords to log in to the application.<span></span>To avoid prompting clients to re-enter their credentials as they navigate through the application and execute transactions, the application creates a session ID for the logged-in client and checks it to verify the client&amp;#8217;s authenticity with every request.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>After successful logins, new session IDs are usually sent to clients as a cookie (using the Set-Cookie header) or in the URL.<span></span>Once the client receives the session ID, it sends it in future HTTP requests.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>A client enters valid username and password in response to an application request. <li>The application creates a session ID and sends it to client. <li>The client receives session ID. <li>The client makes an HTTP(S) request to application that requires authentication, and it includes the session ID received in Step 4. <li>The application checks&amp;nbsp;that the session ID sent by the&amp;nbsp;client is valid and replies to the request based on the value of the valid session ID.</li></li></li></li></li>
+  </ol>
+  <p>A session prediction attack begins with an attacker selecting a target Internet application.<span></span>The attacker&amp;nbsp;will then&amp;nbsp;monitor that application&amp;#8217;s session ID generation scheme.<span></span>The attacker looks for a pattern in the collected&amp;nbsp;session IDs such as incrementing characters, time stamps, or parts of the client&amp;#8217;s name used in the session ID.<span></span>If the attacker discovers a weak session ID generation algorithm, they may be able to predict a valid session&amp;nbsp;and replace their own current-session ID with the value of the predicted one.<span></span>If the application is vulnerable and this is successful, the attacker will be able to impersonate another logged in user.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>In detail:</p>
+  <ol>
+    <li>An attacker starts monitoring network traffic. <li>The attacker logs in to the target application by entering valid username and password. <li>The application creates a session ID and sends it to client. <li>Repeat Steps 2 and 3,&amp;nbsp;reviewing valid session IDs until determining if predicting future session IDs is possible. <li>If Step 4 shows that session prediction is possible, the attacker will continue with a <i>session hijacking</i> attack. </li></li></li></li></li>
+  </ol>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The next step in testing for session prediction bugs is to understand what causes them and how to protect against them.</p>
+  <h2>
+    <span>
+      <em>Session Prediction Causes</em>
+    </span>
+  </h2>
+  <p>J2EE applications and servlets provide a framework for authentication and session ID management using the <i>Session</i> object.<span>&amp;nbsp;</span>However, developers might also implement their own using cookies. First, a session ID is set:</p>
+  <pre>
+    <span>Cookie cookie = new Cookie("Session ID", "user01");<br />response.addCookie(cookie);</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>Then, before allowing the client to perform a request, the code checks the value of the cookie against the expected value:</p>
+  <pre>
+    <span>Cookie&amp;#91;&amp;#93; cookies = request.getCookies();<br />String sessionID&amp;nbsp; = cookies&amp;#91;0&amp;#93;.getValue();</span>
+  </pre>
+  <pre>
+    <span>if (sessionID.equals("user01"))<br />&amp;#123;<br />&amp;#9;out.print("authenticated");<br />&amp;#125;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>
+  </pre>
+  <p>Developers should not&amp;nbsp;implement their own session ID generation scheme as they can suffer from low entropy and similarly poor security issues&amp;nbsp;that make them easy to predict.</p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <h2>
+    <em>J2EE Misconfiguration</em>
+  </h2>
+  <p>J2EE applications must be careful to run with a secure configuration.<span>&amp;nbsp; </span>By default a J2EE session ID is of 128 bits in size with 64 bits of entropy.<span></span>However, web servers such as Tomcat or WebLogic can change the length of the session ID and lower the bits of entropy, allowing session prediction attacks.<span>&amp;nbsp;&amp;nbsp;</span>Research performed by OWASP shows that setting the session identifier length to 128 protects J2EE applications against session prediction attacks &amp;#91;i&amp;#93;.<span>&amp;nbsp;&amp;nbsp;</span><span>&amp;nbsp;</span><span>&amp;nbsp;</span></p>
+  <h2>
+    <em>Low entropy session IDs</em>
+  </h2>
+  <p>The principal cause of session prediction bugs is that sessions are not random enough - they have low entropy.<span></span>For instance, a session ID generation algorithm might create user sessions like this:</p>
+  <pre>
+    <span>AWEG00013BCD<br />AWFG00014BCD<br />AWGG00015BCD<br />AWHG00016BCD<br />AWIG00017BCD</span>
+  </pre>
+  <p>By analyzing the above session IDs, an attacker can easily predict the&amp;nbsp;sequential&amp;nbsp;session IDs to be:</p>
+  <pre>
+    <span>AWJG00018BCD<br />AWKG00019BCD<br />AWLG00019BCD</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>Low entropy session IDs include sessions that are too short in length or use predictable time stamps.&amp;nbsp;</p>
+  <h2>
+    <em>Using client credentials as session IDs</em>
+  </h2>
+  <p>Some applications construct their session IDs using client&amp;#8217;s credentials.<span></span>For instance, an application might build its session IDs by<span></span>using the client&amp;#8217;s email address:</p>
+  <pre>
+    <span>sid=user01&amp;#64;example.com</span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>An attacker might be able to execute a successful attack by replacing&amp;nbsp;his own&amp;nbsp;session ID with the email of the target client.<span></span>Applications should use client credentials as part of the session ID only if they are combined with an additional high entropy string.</p>
+  <pre>
+    <span>JSESSIONID:<span>&amp;nbsp; </span>user01<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span><strong>Wrong</strong></span>
+  </pre>
+  <pre>
+    <span>JSESSIONID: AA932n90f20dfwuih1QAxxy-user01<span>&amp;nbsp; </span><span>&amp;nbsp;&amp;nbsp;&amp;nbsp;<strong></strong></span><strong>OK</strong></span>
+  </pre>
+  <h2>
+    <span>
+      <em>Session Prediction Countermeasures</em>
+    </span>
+  </h2>
+  <p>To protect against session prediction attacks in J2EE, developers should take advantage of J2EE built-in session functionality.<span></span>J2EE applications and servlets can automatically create a session ID with enough entropy to protect it against session prediction attacks.<span>&amp;nbsp;</span>In addition, make sure to set the length of J2EE session IDs to at least 128 bits if the underlying web server has changed it.</p>
+  <p>Note that protecting against session prediction is different from protecting against session hijacking.<span></span>Session prediction protection focuses on creating high entropy session IDs while session hijacking protection includes using additional defenses like forms authentication and SSL.<span>&amp;nbsp;</span>.</p>
+  <h1>
+    <span>Step 3: Start Testing and Exploring</span>
+  </h1>
+  <p>Now that you have understood session prediction attack scenarios as well as&amp;nbsp;the causes and how to protect against them, it is necessary to execute basic test cases and explore their results.</p>
+  <h2>
+    <em>Test for session IDs of short length and low entropy </em>
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Download and run the Burp suite, a tookkit for internet security testing,&amp;nbsp;at <a href="http://portswigger.net/sequencer/help.html">http://portswigger.net/sequencer/help.html</a>, turning intercept off. <li>Open a web browser and set connection options to use the Burp proxy. <li>Log in to the target application with a valid username and password. <li>Wait for application to reply with a session ID (can be in cookie, URL, or body). <li>In the Burp suite, click on the <em>Proxy</em> tab and the <em>History</em> sub-tab. <li>Identify the HTTP authentication request, right-click on it, and select <em>Send to Sequencer</em>. <li>In the Burp suite, click on the <em>Sequencer</em> tab and the<em><strong></strong>Live capture</em> sub-tab. <li>Select the request and identify the session ID. <li>Click <em>start capture</em> and wait for the Burp sequencer to give a report.</li></li></li></li></li></li></li></li></li>
+  </ol>
+  <p>Expected results: The session ID length should be at least 128 bits and have a minimum of&amp;nbsp;64 bits of effective entropy.<span></span>If the Burp sequencer reports a rating of medium or poor, the application is vulnerable to session prediction.</p>
+  <p>For detailed information about using the Burp sequencer to test session ID entropy, refer to the Burp Sequencer Help page, which has simple instructions and screenshots:<span>&amp;nbsp; </span><a href="http://portswigger.net/sequencer/help.html">http://portswigger.net/sequencer/help.html</a></p>
+  <h2>
+    <em>Test for client credentials in session IDs</em>
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Download Wireshark, a network protocol analyzer,&amp;nbsp;at <a href="http://www.wireshark.org/">http://www.wireshark.org/</a>&amp;nbsp;then launch it. <li>Open a web browser. <li>Log in to the target application with a valid username and password. <li>In Wireshark, identify the session ID. <li>Look for client credentials in the session ID.</li></li></li></li></li>
+  </ol>
+  <p>Expected results:<span></span>The session ID should not consist of client credentials, usernames, or any other fixed strings unless a sufficient amount of random data is also present, as fixed strings are easy to predict.<span>&amp;nbsp; </span></p>
+  <h1>
+    <span>Step 4: Execute Additional Testing</span>
+  </h1>
+  <p>Make sure you cover all entry points for session prediction attacks.<span>&amp;nbsp; </span>Although many applications commonly send session IDs in cookies, some applications use other methods such as hidden variables or parameters in the URL.<span></span>In either case, it is necessary for attackers to identify the location used by the application.<span></span>Below are two examples of URLs containing a session ID:</p>
+  <pre>
+    <span>http://example.com/<strong>34i77i2af12xxz</strong>/example.jsp</span>
+  </pre>
+  <pre>
+    <span>http://example.com/example.jsp?sid=<strong>34i77i2af12xxz</strong></span>
+  </pre>
+  <p>The first example uses the session ID as a URL directory mapping while the second employs a URL parameter.</p>
+  <p>The code below shows a session ID passed as a <em>POST</em> request variable using a hidden input tag:</p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <pre>
+    <span>
+      <form method="post" action="example " />
+    </span>
+  </pre>
+  <pre>
+    <span>....<br />&amp;nbsp;<br /><input value="user01" type="hidden" name="sid" /><br /><input value="324802581" type="hidden" name="user-account" /><br />&amp;nbsp;<br /><input name="Continue" type="submit" /><br />&lt;/form&gt;<br /></span>&amp;nbsp;</pre>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Session prediction bugs affect J2EE applications that implement their own session ID generation scheme instead of using J2EE built-in sessions.<span></span>To test for session prediction vulnerabilities in J2EE applications it is necessary to understand how a session prediction attack is executed as well as&amp;nbsp;the causes and how to protect against&amp;nbsp;one in J2EE environments.<span>&amp;nbsp;</span>Then you must measure the entropy of the session ID generation and test for the session IDs consisting of only fixed strings like client credentials.<span></span>Finally, make sure to cover all the different entry points for session prediction bugs including URLs and hidden input tags.&amp;nbsp;</p>
+  <div>
+    <br />
+    <hr />
+  </div>
+  <p>&amp;#91;i&amp;#93; <span>Insufficient Session-ID Length. </span><span>OWASP.</span><span></span><span><a href="http://www.owasp.org/index.php/J2EE_Misconfiguration:_Insufficient_Session-ID_Length"><span>http://www.owasp.org/index.php/J2EE_Misconfiguration:_Insufficient_Session-ID_Length</span></a></span><span></span></p>
+  <div>
+  </div>
+  <h1>Java Session Management Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/42276b64-f51d-4b89-8c33-0ffd9b098890">Use Session Management Offered by the Framework</a>
+      <li>
+        <a href="/article/2aa12bed-347a-43c6-a419-48ffd5bc3f5a">Protect Session IDs</a>
+        <li>
+          <a href="/article/6012e717-6ba6-4380-8ca8-2f0b7c69d717">Protect Session Cookies</a>
+          <li>
+            <a href="/article/7a517ad5-8640-4bc7-9e84-ccc313a71901">Set the Domain and Path Values of Session Cookies</a>
+            <li>
+              <a href="/article/9b7e6e63-c37c-403b-a2f5-60b1e1abbb0b">Set the Secure and HTTPOnly Flags on All Sensitive Cookies</a>
+              <li>
+                <a href="/article/6c470029-5c62-4394-99a9-8990bc48b0a8">Change Session IDs During Authentication</a>
+                <li>
+                  <a href="/article/a223c2d8-ab42-47fb-81a2-86ad677a5632">Invalidate Sessions when Users Log Out</a>
+                  <li>
+                    <a href="/article/acfe1a16-3f00-4383-ada4-bebafc98a836">Make Inactive Sessions Time-out</a>
+                    <li>
+                      <a href="/article/61b8ebc8-3ba5-4e75-aea8-94d6d3b3177e">Include Unique Tokens in HTTP Requests</a>
+                      <li>
+                        <a href="/article/9df0b518-f832-4a7c-9857-0517638c47db">Do Not Make Security Decisions Based on Client-Accessible Parameters</a>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Session Management Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/3f2660b3-a935-4b4e-85ff-27ae28683f5b">Session Management Offered by the Framework Is Used</a>
+      <li>
+        <a href="/article/1de62774-3392-4da7-9bae-065fb15b4a2b">Session IDs Are Protected</a>
+        <li>
+          <a href="/article/59132a30-2bae-45e9-9d85-8de26441be29">Session Cookies are Protected</a>
+          <li>
+            <a href="/article/500d61f2-c9fa-4b1e-91f5-0a589c0fe00b">The Domain and Path Values of Session Cookies Are Strict</a>
+            <li>
+              <a href="/article/d8922a46-a943-4ae0-b8af-b88eb01d6997">The Secure and HTTPOnly Flags Are Set on All Sensitive Cookies</a>
+              <li>
+                <a href="/article/58df5418-8c03-4121-83e0-bc68247c5d7b">Session IDs Are Changed During Authentication</a>
+                <li>
+                  <a href="/article/0e40c446-c740-42a9-a4d2-72c9d05e55ac">Sessions Are Invalidated When Users Log Out</a>
+                  <li>
+                    <a href="/article/c486eeb2-f64f-480b-9823-48bd7d21047d">Inactive Sessions Time-out</a>
+                    <li>
+                      <a href="/article/0463ae25-dc35-45e7-8b24-9b1f8ddb6af0">Unique Tokens Are Included in HTTP Requests</a>
+                      <li>
+                        <a href="/article/4436e342-64d9-4b1b-ae9b-3e00696053fb">Security Decisions are Not Made Based on Client-Accessible Parameters</a>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Session Management Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/7d647e95-e47f-42e3-bb84-fd0dd727245c">Add Unique Tokens to HTTP Requests Using ESAPI</a>
+    </li>
+    <li>
+      <a href="/article/25e3943b-a651-42c5-9e19-76077de05e90">Add Unique Tokens to HTTP Requests Using Java Server Faces (JSF)</a>
+    </li>
+    <li>
+      <a href="/article/986c7161-0a76-430a-8d0e-80d4615ab5db">Add Unique Tokens to HTTP Requests Using Plain Java Server Pages (JSP)</a>
+    </li>
+    <li>
+      <a href="/article/bf931bed-21c0-4b89-9cb2-9274d8c796a6">Cross-Site Request Forgery (CSRF) Prevention Using SpringMVC</a>
+    </li>
+    <li>
+      <a href="/article/63deed1a-6df4-4e04-9f61-898f190e1fe1">Cross-Site Request Forgery (CSRF) Prevention Using Struts 1</a>
+    </li>
+    <li>
+      <a href="/article/a9c2c121-614c-4a3f-9b7c-f2cf57d6aa0b">Cross-Site Request Forgery (CSRF) Prevention Using Struts 2</a>
+    </li>
+    <li>
+      <a href="/article/4d7ee521-8680-481e-a40b-3afb04c2616d">Use ESAPI HTTPUtilities</a>
+    </li>
+  </ul>
+  <h1>Java Session Management Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/40771780-be59-4d4c-b283-5ec3cc286357">How to Test for Session Prediction Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

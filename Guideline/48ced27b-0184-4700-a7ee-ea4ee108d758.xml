@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1082782556" Content_Hash="-617665017">
+  <Metadata>
+    <Id>48ced27b-0184-4700-a7ee-ea4ee108d758</Id>
+    <Id_History>b903ff44-64fa-46ed-9aec-2afb8211d780,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Lock Configuration Settings to Enforce Policy Settings</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority> J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to </h1>
+  <ul>
+    <li>ASP.Net 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Prevent web applications from changing their own configuration settings. </p>
+  <h1>Why</h1>
+  <ul>
+    <li>To prevent specific application's from being able to override configuration settings with their own Web.config files <li>To lock the configuration settings for all Web applications on a Web server </li></li>
+  </ul>
+  <h1>How</h1>
+  <p>To prevent individual application's from being able to override configuration settings with their own Web.config files, apply configuration settings centrally in the machine-level Web.config file located in the following directory: &#37;Windir&#37;\Microsoft.NET\Framework\&#123;version&#125;\CONFIG. To lock the configuration settings for all Web applications on a Web server, place the configuration settings inside a &lt;SYSTEM.WEB&gt;element nested within a &lt;LOCATION&gt;element and set the allowOverride attribute to false. See the Solution examples for further details. </p>
+  <h1>Solution Example</h1>
+  <p>The following example enforces the use of Windows authentication for all Web applications on the server. </p>
+  <pre>&lt;location allowOverride="false"&gt;<br />&nbsp;&lt;system.web&gt;<br />&nbsp;&nbsp; &lt;authentication mode="Windows"/&gt;<br />&nbsp;&lt;/system.web&gt;<br />&lt;/location&gt;</pre>
+  <p>If you need to apply and lock settings for a specific Web application, use the path attribute on the &lt;location&gt; element to identify the Web application as shown here.</p>
+  <pre>&lt;location path="Default Web Site/VDirName"&gt;<br />&nbsp; &lt;system.web&gt;<br />&nbsp;&nbsp;&nbsp; &lt;authentication mode="Windows"/&gt;<br />&nbsp;&nbsp;&nbsp; &lt;identity impersonate="false"/&gt;<br />&nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;<br /></pre>
+  <p>If you specify the path, it must be fully qualified and include the Web site name and virtual directory name.<br /></p>
+  <h1>&nbsp;</h1>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

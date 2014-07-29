@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1629727195" Content_Hash="-96197904">
+  <Metadata>
+    <Id>fbefd928-95f2-4af1-a61c-3ff23978fdf5</Id>
+    <Id_History>4832e6c2-3669-4dde-8aa1-4cc33ba5224d,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Avoid Untrusted Input for File Names And File Paths</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Untrusted Input for File Names And File Paths</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Avoid writing code that accepts file or path input from the caller. Instead, use fixed file names and locations when your code reads and writes data.</p>
+  <h1>Why</h1>
+  <p>Accepting file names or paths from users can result in attackers coercing your application into accessing arbitrary files and resources. </p>
+  <h1>When</h1>
+  <p>You should never accept a file name or path from a user under any circumstances.</p>
+  <h1>How</h1>
+  <p>If you need to store a file from a user, store it in a database or other non-filesystem data store.&amp;nbsp; Keep the name the user provided as a reference to the file, but do not use it as any form of canonical name.</p>
+  <p>If your application has to accept input file names, file paths, or URL paths, you need to validate that the path is in the correct format and that it points to a valid location within the context of your application. Failure to do this can result in attackers persuading your application into accessing arbitrary files and resources. </p>
+  <h2>Validating File Paths</h2>
+  <p>To prevent a malicious user manipulating your code's file operations, avoid writing code that accepts user-supplied file or path input. For example: </p>
+  <ul>
+    <li>If you must accept file names as input, use the full name of the file by using <b>System.IO.Path.GetFileName</b>. <li>If you must accept file paths as input, use the full file path by using <b>System.IO.Path.GetFullPath</b>.</li></li>
+  </ul>
+  <h2>Using MapPath to Prevent Cross Application Mapping</h2>
+  <p>If you use <b>MapPath</b> to map a supplied virtual path to a physical path on the server, use the overload of <b>Request.MapPath</b> that accepts a <b>bool</b> parameter so that you can prevent cross-application mapping. The following code example shows this technique.</p>
+  <pre>try<br />&amp;#123;<br />&amp;nbsp; string mappedPath = Request.MapPath( inputPath.Text, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Request.ApplicationPath, false);<br />&amp;#125;<br />catch (HttpException)<br />&amp;#123;<br />&amp;nbsp; // Cross-application mapping attempted<br />&amp;#125;   </pre>
+  <p>The final <b>false</b> parameter prevents cross-application mapping. This means that a user cannot successfully supply a path that contains <b>".."</b> to traverse outside of your application's virtual directory hierarchy. Any attempt to do this results in an exception of type <b>HttpException</b>.</p>
+  <p>If you use server controls, you can use the <b>Control.MapPathSecure</b> method to retrieve the physical path to which the virtual path is mapped. <b>Control.MapPathSecure</b> uses code access security and throws an <b>HttpException</b> if the server control does not have permissions to read the resulting mapped file. For more information, see <b>Control.MapPathSecure</b> in the .NET Framework SDK documentation.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

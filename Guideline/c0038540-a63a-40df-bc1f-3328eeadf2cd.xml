@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1891133224" Content_Hash="-1512988547">
+  <Metadata>
+    <Id>c0038540-a63a-40df-bc1f-3328eeadf2cd</Id>
+    <Id_History>eb847f28-6df9-424b-928d-1c8b68cd2d00,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Use PasswordDeriveBytes for Password-Based Encryption</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use PasswordDeriveBytes for Password-Based Encryption</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>The <b>System.Security.Cryptography.DeriveBytes</b> namespace provides <b>PasswordDeriveBytes</b> for use when you encrypt data based on a password the user supplies. To decrypt the data, the user must supply the same password he or she used to encrypt it.</p>
+  <h1>Why</h1>
+  <p>As the keys are derived using the password to recreate the keys and decrypt the data, user password is required. This gives an additional layer of security as the user not only has to know the salt and vector values but also the user password making it difficult for him to break the encryption.</p>
+  <h1>When</h1>
+  <p>When encrypting sensitive information in memory or in persistent stores.</p>
+  <h1>How</h1>
+  <p>
+    <b>PasswordDeriveBytes</b> accepts a password, salt, an encryption algorithm, a hashing algorithm, key size (in bits), and initialization vector data to create a symmetric key to be used for encryption. After the key is used to encrypt the data, clear it from memory but persist the salt and initialization vector. These values should be protected and are needed to regenerate the key for decryption.</p>
+  <p>The following code shows how to call <b>PasswordDeriveBytes</b>.</p>
+  <pre>using System.Security.Cryptography;<br />...<br />// Get salt (random bytes) uisng RNGCryptoServiceProvider.<br />byte[] salt = new byte[8];<br />new RNGCryptoServiceProvider().GetBytes(salt);</pre>
+  <pre>// Get the&amp;nbsp; PasswordDeriveBytes using password and salt<br />PasswordDeriveBytes passwordBytes = new PasswordDeriveBytes("P@ssword!", salt);</pre>
+  <br />
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="342625832" Content_Hash="-1647277145">
+  <Metadata>
+    <Id>cf5b776f-5834-4f62-be5e-da62db75eef5</Id>
+    <Id_History>227537b4-d52e-4926-b2b6-2a993bd613c9,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Rely on ASP.NET Request Validation</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>The ASP.NET request validation feature performs basic input validation.&nbsp; Do not rely on it.&nbsp; Use it as an extra precautionary measure in addition to your own input validation.</p>
+  <h1>Why</h1>
+  <p>Only you can define what represents good input for your application.&nbsp; Furthermore, while request validation will catch some attacks, it is easy to circumvent.</p>
+  <h1>When</h1>
+  <p>Never rely on request validation under any circumstances. Always manually validate all input against the expected format, encode all output based on a white-list and according to context, and carefully use parameters in other situations where input and control flow are mixed, like SQL statements.</p>
+  <h1>How</h1>
+  <p>Request validation is enabled by default.&nbsp; You can see this by examining the <b>validateRequest</b> attribute, which is set to true on the <b>&lt;pages&gt;</b> element in the <b>Machine.config.comments</b> file.&nbsp; Ensure that it is enabled for all pages except those that need to accept a range of HTML elements.&nbsp; If you need to disable it for a page, set the <b>ValidateRequest</b> attribute to <b>false</b> by using the <b>&#64;Page</b> directive. </p>
+  <pre>&lt;&#37;&#64; Page Language="C#" ValidateRequest&nbsp;= "false"&nbsp;&#37;&gt;<br /></pre>
+  <p>In order to ensure that you are handling user data correctly, ensure that you're following all of these steps: </p>
+  <ol>
+    <li>Always validate input as strictly as possible against the expected input format via regular expressions. <li>Always encode output by whitelist; any character not on the whitelist for the context you're outputing to should be encoded appropriately for the context.&nbsp; Make sure that your whitelist contains only known safe characters for the context you're in. <li>Ensure that all queries are fully parameterized, especially if they use user input. <li>Do not make any security decisions based on user input. <li>Do not allow users to input filenames or paths. </li></li></li></li></li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see "How To: Protect From Injection Attacks in ASP.NET" at <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/paght000003.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/paght000003.asp</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="437980654" Content_Hash="252614780">
+  <Metadata>
+    <Id>3a8c8363-829e-41a4-a465-ac3e86a32f3a</Id>
+    <Id_History>f8947b63-2dcf-4432-b5ba-14b76874cfc2,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Base Classes That Are Not Intended to Be Derived from Are Sealed.</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Design</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Base Classes That Are Not Intended to Be Derived from Are Sealed.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that your application design makes the base classes that are not intended to be derived from are sealed.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>You can use the <b>sealed</b> keyword at the class and method level. In Visual Basic .NET, you can use the <b>NotInheritable</b> keyword at the class level or <b>NotOverridable</b> at the method level. If you do not want anyone to extend your base classes, you should mark them with the <b>sealed</b> keyword.</p>
+  <p>Before you use the <b>sealed</b> keyword at the class level, you should carefully evaluate your extensibility requirements. It is especially important to seal a class in the following situations: </p>
+  <ul>
+    <li>The class contains security secrets, such as passwords, that are accessible through protected APIs. <li>The class contains many virtual members that cannot be sealed, and the type is not designed for third-party extensibility. </li></li>
+  </ul>
+  <p>You can also seal individual methods and properties within a class. For example, if you derive from a base class that has virtual members and you do not want anyone to extend the functionality of the derived class, you can consider sealing the virtual members in the derived class. Sealing the virtual methods has performance benefits because it makes them candidates for inlining and other compiler optimizations.</p>
+  <p>Consider the following example.</p>
+  <div>
+    <pre>public class MyClass&amp;#123;<br />   protected virtual void SomeMethod()<br /> &amp;#123; ... &amp;#125;<br /> &amp;#125;  </pre>
+  </div>
+  <p>You can override and seal the method in a derived class, as follows.</p>
+  <div>
+    <pre>public class DerivedClass : MyClass<br /> &amp;#123;<br />   protected override sealed void SomeMethod ()&amp;#123; ... &amp;#125; <br />&amp;#125;  </pre>
+  </div>
+  <p>This code ends the chain of virtual overrides and makes <b>DerivedClass.SomeMethod</b> a candidate for inlining.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Class sealing is enforced at compile time only. When malicious code runs in a full trust environment, it could use reflection or unmanaged pointers to bypass this restriction.<b></b></blockquote>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

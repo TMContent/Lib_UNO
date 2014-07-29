@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>ca6613a5-f6c5-48f4-a89f-ca0bebeeb0a1</Id>
+    <Id_History>c5688313-0255-461c-a978-423596d182db,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>The Application Does Not Rely on Client-Side Validation</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Application Does Not Rely on Client-Side Validation</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>Applications written using Scala and Play Framework 2.1.0+</p>
+  <h1>What to Check For</h1>
+  <p>Ensure that all input validation is performed on the server. Client-side validation should only be used for performance and usability reasons.</p>
+  <h1>Why</h1>
+  <p>Client-side validation is executed by the client and can be easily bypassed. Client side validation is a major design problem when it appears in web applications. It places trust in the browser, an entity that should never be trusted.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to establish a validation strategy:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all sources of input.&amp;nbsp;</strong>An application can take input via various ways such as a web interface, database, file system or other software running on the server. During design, identify all potential sources of input to your application. Scour the source code to discover sources of input that may have been missed in the design. The most common sources are:</p>
+      <ul>
+        <li>URL based parameters</li>
+        <li>Form based parameters</li>
+        <li>Hidden fields</li>
+        <li>Cookies</li>
+        <li>HTTP headers (Host, accept types, www authentication, cache settings, encodings, etc)</li>
+        <li>Local filesystem</li>
+        <li>Database</li>
+        <li>Other services running on the system</li>
+        <li>JavaScript variables</li>
+        <li>File upload and attributes (filename, size, data, etc)</li>
+        <li>DNS results or host names</li>
+        <li>External component call return values (AJAX, etc)</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Identify validation routines.&amp;nbsp;</strong>Each input source should have a server-side validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base and may be located in a single component.</p>
+      <p>Validation may be identified by any of the following:</p>
+      <ul>
+        <li>Custom Scala Validator class</li>
+        <li>Regular expression use (<em>scala.util.matching.regex</em>)</li>
+        <li>Method names that contain&amp;nbsp;<em>validate</em>&amp;nbsp;or&amp;nbsp;<em>validator</em></li>
+        <li>Client-side validation is often linked to events:<ul><li>onSubmit</li><li>onChange</li><li>onFocus</li><li>onBlur</li><li>onKeyDown/Press/Up</li></ul></li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure validators run on the server.&amp;nbsp;</strong>Validation routines should run on the server. Server-side validation guarantees that malformed input will be caught and discarded regardless of the state that the client is in. As an optional feature, validation can also be implemented client side in order to improve application performance and user experience.<br /><br />Server-side validation is done within the application code. Ideally, validation occurs immediately after canonicalization, and canonicalization should be done&amp;nbsp;as soon as the input reaches your application. In web applications, look for application-supplied validators, such as a Custom Validator, to validate and constrain input after it is received from an input source, such as a Form&amp;nbsp;parameter. Check for the use of regular expressions and&amp;nbsp;<em>scala.util.matching.regex</em>, or the use of a validator that checks numeric ranges.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Client-side validation should only be used to improve user experience,&amp;nbsp;<b>never for security purposes</b>. Client-side validation can improve application performance by catching malformed input on the client<strike></strike>, thus saving a roundtrip to the server. However, client-side validation can be easily bypassed, and places trust in the browser, an entity that should never be trusted.<strike></strike>&amp;nbsp;Always use server-side validation to protect your application from malicious attacks.</p>
+  <p>Use the following steps when developing validation for client-side input:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Never trust the browser.</strong>&amp;nbsp;Because the browser is running on the user's machine, it can be fully controlled by the user. Therefore, any client-side validation code can be controlled and bypassed by an attacker.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use JavaScript only to enhance your pages, but never for security.</strong>&amp;nbsp;JavaScript is useful for enhancing your application's presentation. However, it has no mechanism to protect the integrity of its code. Do not rely on JavaScript to enforce security decisions.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Place a server-side validator for all input.&amp;nbsp;</strong>Execute validation on the server side. Use the following steps to properly set the validation routines:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Identify input.</strong>&amp;nbsp;Determine the data that is to be passed from the client to your application. Input can take the following forms on the client-side:&amp;nbsp;<br /></p>
+          <ul>
+            <li>URL-based parameters</li>
+            <li>Form-based parameters</li>
+            <li>Hidden fields</li>
+            <li>Cookies</li>
+          </ul>
+        </li>
+        <li>
+          <p>
+            <strong>Understand the input.</strong>&amp;nbsp;Understand the use and constraints associated with each input. Be clear how each input is used. Define the format and type of each input. Build a server-side validator for each format and type of expected input.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Create a set of validators.</strong>&amp;nbsp;Build a validator for each type of input. Place the set of validators on the server-side of your application. If there are validators on the client-side, make sure the same validators are implemented on the server-side as well. Consult the&amp;nbsp;<a href="af528b9a-af5f-49b8-a314-4578c0b31273">Validate Input from All Sources</a>&amp;nbsp;and&amp;nbsp;<a href="b6795407-d01e-44ec-8aed-a440d388902b">Validate Input for Length, Range, Format, and Type</a>&amp;nbsp;guidelines about creating the validators.</p>
+        </li>
+      </ul>
+      <p>Once developed, it is important to place the validation routines at your application's trust boundary. Because your application's trust boundary extends only to your application's process space, do not consider <font color="#ff0000"></font>the user's browser to be within your application's trust boundary.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); color: rgb(17, 17, 17);">Input and Data Validation Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255); color: rgb(17, 17, 17);">
+    <li style="margin: 0px; padding: 0px;">
+      <font style="margin: 0px; padding: 0px;" color="#333399">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="af528b9a-af5f-49b8-a314-4578c0b31273" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Input from All Sources</a>
+        </b>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <font style="margin: 0px; padding: 0px;" color="#333399">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="b6795407-d01e-44ec-8aed-a440d388902b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Input for Length, Range, Format, and Type</a>
+        </b>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <font style="margin: 0px; padding: 0px;" color="#333399">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="00000000-0000-0000-0000-00000016b3b2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate All Input Passed to the Database</a>
+        </b>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">
+        <a href="97d61072-14e2-48dd-a1bf-ec149efbcb54" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Do Not Rely on Client-Side Validation</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); color: rgb(17, 17, 17);">Input and Data Validation Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <font style="margin: 0px; padding: 0px;">
+        <a href="0bf6f129-8641-43f4-a29c-62f58493fb78" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-weight: bold;">
+          <b style="margin: 0px; padding: 0px;">Input from All Sources Is Validated</b>
+        </a>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="067e2f72-18f0-4f5a-ba9c-287691cd9ed3" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Input Is Validated for Length, Range, Format and Type</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="2faf9bc6-fb15-4341-bb10-7dbc39e30d6e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Database Input Is Validated</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="c5688313-0255-461c-a978-423596d182db" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Application Does Not Rely on Client-Side Validation</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

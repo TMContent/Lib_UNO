@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1585475508" Content_Hash="-276742078">
+  <Metadata>
+    <Id>9671f8b8-a460-4dc2-80e4-5c8ffeb50965</Id>
+    <Id_History>8d63c67a-fad0-4824-9708-fbc9bc4e06ff,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Impersonate And Delegate Using LogonUser Windows API</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Impersonate And Delegate Using LogonUser Windows API</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can use the Win32 <strong>LogonUser()</strong> API (via P/Invoke) to create impersonation tokens, only when your WCF Service is not trusted for delegation, because this option forces you to store user name and passwords on your WCF Service.</p>
+  <p>The following code example shows how the LogonUser API is used for impersonation:</p>
+  <pre>using System.Runtime.InteropServices;<br />&amp;#8230;<br />// Declare the logon types as constants<br />const long LOGON32_LOGON_NETWORK = 3;</pre>
+  <pre>// Declare the logon providers as constants<br />const long LOGON32_PROVIDER_DEFAULT = 0;<br /><br />&amp;#91;DllImport("advapi32.dll",EntryPoint = "LogonUser")&amp;#93;<br />private static extern bool LogonUser(<br />           string lpszUsername,<br />           string lpszDomain,<br />           string lpszPassword,<br />           int dwLogonType,<br />           int dwLogonProvider,<br />           ref IntPtr phToken);<br />&amp;#91;DllImport("kernel32.dll", CharSet=CharSet.Auto)&amp;#93;<br />public extern static bool CloseHandle(IntPtr handle);</pre>
+  <pre>private void ImpersonateAndUse(string Username,<br />                                        string Password,<br />                                        string Domain)<br />&amp;#123;<br />  IntPtr token = new IntPtr(0);<br />  token = IntPtr.Zero;<br />  // Call LogonUser to obtain a handle to an access token.<br />  bool returnValue = LogonUser(Username, Domain,Password,<br />                                 (int)LOGON32_LOGON_NETWORK,<br />                                 (int)LOGON32_PROVIDER_DEFAULT,<br />                                 ref token);<br />  if (false == returnValue)<br />  &amp;#123;<br />     int ret = Marshal.GetLastWin32Error();<br />     string strErr = String.Format("LogonUser failed with error code : &amp;#123;0&amp;#125;", ret);<br />     throw new ApplicationException(strErr, null);<br />  &amp;#125;<br />  WindowsIdentity newId = new WindowsIdentity(token);<br />  WindowsImpersonationContext impersonatedUser = newId.Impersonate();<br />  try<br />  &amp;#123;<br />     // do the operations using original user security context<br />  &amp;#125;<br />  finally<br />  &amp;#123;<br />     // stop impersonating<br />     impersonatedUser.Undo();<br />     CloseHandle(token);<br />  &amp;#125;<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on the LogonUser API, see &amp;#8220;How to validate user credentials on Microsoft operating systems&amp;#8221; at <a href="http://support.microsoft.com/kb/q180548/">http://support.microsoft.com/kb/q180548/</a><li>For more information, see &amp;#8220;Delegation and Impersonation with WCF&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms730088.aspx">http://msdn2.microsoft.com/en-us/library/ms730088.aspx</a><li>For impersonation and delegation Q&amp;A, see the Impersonation/Delegation section of &amp;#8220;WCF 3.5 Questions and Answers&amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuideGuideGuideGuide/Wiki/View.aspx?title=Questions&amp;#37;20and&amp;#37;20Answers&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuideGuideGuideGuide/Wiki/View.aspx?title=Questions&amp;#37;20and&amp;#37;20Answers&amp;referringTitle=Home</a></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1818565835" Content_Hash="-1913674689">
+  <Metadata>
+    <Id>6f75b603-e25e-4266-b6da-6b5471f2b938</Id>
+    <Id_History>2f5ea3ad-054a-42a5-8b3a-ac9545d9a231,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Validate Untrusted Input Passed to Data Access Methods</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate Untrusted Input Passed to Data Access Methods</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Validate all input, including form fields, query string parameters, and cookies. Assume all user&amp;nbsp;supplied data&amp;nbsp;is malicious, and use server-side validation all of the input. If&amp;nbsp;the data access methods receive input parameters from outside the trust boundary of&amp;nbsp;the data access code, make sure&amp;nbsp;to validate them for type, length, format, and range.&amp;nbsp;&amp;nbsp; </p>
+  <h1>Why</h1>
+  <p>There are no assumptions of trust that can be made&amp;nbsp;regarding the safety of&amp;nbsp;unchecked input. Most application-level attacks&amp;nbsp;involve malicious input. Failure to validate input&amp;nbsp;means that&amp;nbsp;data could contain database injection attacks.&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>This&amp;nbsp;guideline is applicable whenever there is untrusted input, in the form of direct or indirect user data.&amp;nbsp;For example, a user&amp;nbsp;is able&amp;nbsp;to&amp;nbsp;enter data&amp;nbsp;directly via HTTP POST and GET&amp;nbsp;forms, but&amp;nbsp;some applications allow for indirect user input, such as uploading a&amp;nbsp;picture or media file&amp;nbsp;that&amp;nbsp;contains&amp;nbsp;malicious data. This is not applicable to data that has already been validated, because double validation is wasteful and&amp;nbsp;unneccessary.&amp;nbsp;&amp;nbsp;&amp;nbsp;</p>
+  <h1>How</h1>
+  <p>To constrain input, follow these guidelines: </p>
+  <p>Validating input is&amp;nbsp;inherently difficult, because the range of&amp;nbsp;possible&amp;nbsp;values is hard to constrain. It's important to specify what input is acceptable, rather then trying to specify all&amp;nbsp;the&amp;nbsp;variations&amp;nbsp;of input that are&amp;nbsp;illegal (whitelisting as opposed to blacklisting).&amp;nbsp;Use ASP.NET validator controls to check user input on the server side and provide feedback to the user when input fails to pass validation requirements.&amp;nbsp; Follow these steps on each form page in an application:</p>
+  <p>
+    <strong>1.&amp;nbsp;&amp;nbsp;Determine the required fields.</strong> Use the required field validator control to ensure all required fields are present. Here is an example that declares a textfield in an ASP page that is a required field:</p>
+  <blockquote>
+    <pre>&lt;td&gt;<br />&amp;nbsp;&amp;nbsp; &lt;asp:RequiredFieldValidator runat=server <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToValidate=txtName<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ErrorMessage="User ID is required."&gt; *<br />&amp;nbsp;&amp;nbsp; &lt;/asp:RequiredFieldValidator&gt;<br />&lt;/td&gt;<br />&lt;td&gt;User ID:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtName&gt;&lt;/td&gt;</pre>
+  </blockquote>
+  <p>The * is displayed next to the label if the input is blank. The error message is reported in a summary. The "ControlToValidate" property specifies the ID of the control to validate. The final step is to add a validation summary to the top of the page like so:</p>
+  <blockquote>
+    <pre>&lt;asp:ValidationSummary runat=server <br />HeaderText="There were errors on the page:" /&gt;<br /></pre>
+  </blockquote>
+  <p>
+    <strong>2.&amp;nbsp;Enforce numeric range&amp;nbsp;constraints.</strong> Use the RangeValidator control to ensure any numeric values are constrained to a specific, acceptable&amp;nbsp;range. Here is an example that declares an integer field&amp;nbsp;in an ASP page that has&amp;nbsp;a valid range from 1 to 50:</p>
+  <blockquote>
+    <pre>&lt;td&gt;</pre>
+    <pre>  &lt;asp:RangeValidator id="Range1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToValidate="txtState"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; MinimumValue="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; MaximumValue="50"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Type="Integer"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; EnableClientScript="false"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Text="The value must be from 1 to 10!"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; runat="server"&gt; * </pre>
+    <pre>&amp;nbsp; &lt;/asp:RangeValidator&gt;<br />&lt;/td&gt;<br />&lt;td&gt;State:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtState&gt;&lt;/td&gt;</pre>
+  </blockquote>
+  <p>
+    <strong>3. Validate&amp;nbsp;verification fields.</strong> Fields such as password entry are often verified by having the user re-type them to ensure they are correct. Use the CompareValidator control to make the comparisons and ensure validity/integrity. Here is an example that declares&amp;nbsp;two password&amp;nbsp;fields&amp;nbsp;in an ASP page that&amp;nbsp;must match in order to validate properly:</p>
+  <blockquote>
+    <pre>&lt;asp:CompareValidator runat=server <br />	ControlToValidate=txtRePWord           <br />	ControlToCompare=txtPWord             <br />	ErrorMessage="Passwords do not match." /&gt;</pre>
+  </blockquote>
+  <p>In this case, the two fields being compared are "txtPWord" and "txtRePWord". If they do not&amp;nbsp;match, validation fails with the error message, "Passwords do not match.".&amp;nbsp;</p>
+  <p>
+    <strong>4. Enforce type constraints on string fields.</strong> String fields are the most difficult type of input to effectively validate because the range of acceptable&amp;nbsp;characters is much larger then numeric&amp;nbsp;and enumerated types. Regular expression provide a flexible mechanism for dictating valid patterns and characters. Use the RegularExpressionValidator to perform a variety of checks on string-based fields such as zip codes and phone numbers.&amp;nbsp; Here is an example that declares an&amp;nbsp;text field&amp;nbsp;in an ASP page that should represent a five digit zip code, consisting entirely of numberic digits, and a validator to enforce those constraints:</p>
+  <blockquote>
+    <pre>&lt;input type=text runat=server id=txtZip&gt;      <br />&lt;asp:RegularExpressionValidator runat=server             <br />	ControlToValidate="txtZip"             <br />	ErrorMessage="Zip code must be 5 digits, all numbers."             <br />	ValidationExpression="[0-9]{5}"&gt; * </pre>
+    <pre>&lt;/asp:RegularExpressionValidator&gt;</pre>
+    <pre>&lt;td&gt;Zip code:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtZip&gt;&lt;/td&gt;</pre>
+  </blockquote>
+  <p>
+    <strong>5. Use custom validation to handle remaining&amp;nbsp;input constraints.</strong> The built-in ASP.NET&amp;nbsp;validation controls handle&amp;nbsp;most of the cases that commonly arise in&amp;nbsp;web applications, but there&amp;nbsp;may be&amp;nbsp;times when they are not appropriate.&amp;nbsp;The CustomValidator enables custom validation code that can plugs into the existing validation system.&amp;nbsp;Here is an example that declares a&amp;nbsp;text field&amp;nbsp;in an ASP page. For this particular text field, there is business logic that needs to be satisfied which is not easily constrainable by the&amp;nbsp;other&amp;nbsp;validation constructs, so a&amp;nbsp;custom validator is implementated that ensures the&amp;nbsp;string&amp;nbsp;in the text field&amp;nbsp;does not start&amp;nbsp;with the letter "a":</p>
+  <blockquote>
+    <pre>&lt;%@ Page Language="vb" %&gt;<br />&lt;script runat=server&gt;</pre>
+    <pre>public sub CheckID(source as Object, args as ServerValidateEventArgs)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; args.IsValid = args.Value.substring(0, 1).tolower() &lt;&gt; "a"<br />end sub </pre>
+    <pre>&lt;/script&gt;</pre>
+  </blockquote>
+  <p>To call this function, add a CustomValidator, which is designed to call developer code to perform its check. Here is the declaration:</p>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:CustomValidator runat=server<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; controltovalidate="txtName" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; errormessage="ID is already in use." <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; OnServerValidate="CheckID" /&gt;</pre>
+  <p>It is worth noting that this could have been done with the RegularExpression validation control, but in this case it makes more sense to use custom validation since&amp;nbsp;a type of high-level validation that could conceivably be more complex then a simple pattern match is being defined (e.g., the validation rules might change based on application state).&amp;nbsp;</p>
+  <p>You can use regular expressions for text input and perform type and range checks on numeric data. If you do not do this, your data access code is potentially susceptible to SQL injection. Only omit input parameter validation in your data access methods if you know for certain that data can only be supplied by trusted code, such as your application's business logic, which you know has thoroughly validated the data passed to it.&amp;nbsp;&amp;nbsp;&amp;nbsp;</p>
+  <h1>Problem Example</h1>
+  <p>The&amp;nbsp;developer's intent is to select&amp;nbsp;a user's name based on the social security number (SSN) associated with the user, which is accomplished&amp;nbsp;via the&amp;nbsp;following&amp;nbsp;data access method:</p>
+  <blockquote>
+    <pre>&amp;nbsp;public DataSet GetAuthorInfo(String SSN)<br />{</pre>
+    <pre>SqlConnection connection;<br />SqlDataAdapter dataadapter;<br />DataSet dataset;</pre>
+    <pre>connection = new SqlConnection("Persist Security Info=False;" +<br />&amp;nbsp; "Integrated Security=SSPI;database=appdb;" +<br />&amp;nbsp; "server=localhost;Connect Timeout=30");<br />connection.Open();</pre>
+    <pre>string SQLstr = "SELECT au_lname, au_fname FROM authors WHERE au_id = '" + SSN.Text + "'";</pre>
+    <pre>
+      <br />dataadapter = new SqlDataAdapter(SQLstr, connection);<br />dataset = new DataSet();<br />dataadapter.Fill(dataset, "table1");</pre>
+    <pre>connection.Close();</pre>
+    <pre>return dataset;</pre>
+    <pre>}</pre>
+  </blockquote>
+  <p>The SSN input is from a textfield in&amp;nbsp;a&amp;nbsp;web&amp;nbsp;form which is&amp;nbsp;passed to&amp;nbsp;the GetAuthorInfo method. For example, passing an SSN variable containing '172-32-9999' will result in the following query being executed:</p>
+  <pre>SELECT au_lname, au_fname FROM authors WHERE au_id = '172-32-9999'</pre>
+  <p>Consider what happens when a user types the following string in the SSN text box, which is expecting a Social Security number of the form nnn-nn-nnnn:</p>
+  <pre> ; DROP DATABASE pubs&amp;nbsp; --<br />&amp;nbsp; </pre>
+  <p>The code inserts the user's malicious input and generates the following query.</p>
+  <pre>SELECT au_lname, au_fname FROM authors WHERE au_id = ''; DROP DATABASE pubs --'<br />&amp;nbsp; </pre>
+  <p>In this case, the ' (single quotation mark) character that starts the rogue input terminates the current string literal in the SQL statement. The ; (semicolon) character tells SQL that this is the end of the current statement, which is then followed by the following malicious SQL code. Finally, the -- (double dash) sequence of characters is a SQL comment that tells SQL to ignore the rest of the text. In this case, SQL ignores the closing ' (single quotation mark) character, which would otherwise cause a SQL parser error.&amp;nbsp;</p>
+  <h1>Solution Example</h1>
+  <p>{{Prashant - Set the context of the solution example like - An ASP.NET application&amp;nbsp; has following code for accessing author info.... for consistency sake}}The&amp;nbsp;developer's intent is to select&amp;nbsp;a user's name based on the social security number (SSN) associated with the user, which is accomplished&amp;nbsp;via the&amp;nbsp;following&amp;nbsp;data access method:</p>
+  <blockquote>
+    <pre>using System.Text.RegularExpressions ;</pre>
+    <pre>public DataSet GetAuthorInfo(String SSN)<br />{</pre>
+    <pre>  SqlConnection connection;<br />  SqlDataAdapter dataadapter;<br />  DataSet dataset;</pre>
+    <pre>  // Validate the SSN  <br />  //If the SSN does match the regex pattern, perform the query  <br />  if (Regex.IsMatch(SSN.Text,@"^[0-9]{3}\-[0-9]{2}\-[0-9]{4}$"))  <br />  {</pre>
+    <pre>
+      <pre>    connection = new SqlConnection("Persist Security Info=False;" +<br />&amp;nbsp;     "Integrated Security=SSPI;database=appdb;" +<br />&amp;nbsp;     "server=localhost;Connect Timeout=30");<br />    connection.Open();</pre>
+      <pre>    string SQLstr = "SELECT au_lname, au_fname FROM authors WHERE au_id = '" + SSN.Text + "'";</pre>
+      <pre>
+        <br />    dataadapter = new SqlDataAdapter(SQLstr, connection);<br />    dataset = new DataSet();<br />    dataadapter.Fill(dataset, "table1");</pre>
+      <pre>    connection.Close();  }</pre>
+    </pre>
+    <pre>  return dataset;</pre>
+    <pre>}</pre>
+  </blockquote>
+  <p>The SSN input is from a textfield in&amp;nbsp;a&amp;nbsp;web&amp;nbsp;form which is&amp;nbsp;passed to&amp;nbsp;the GetAuthorInfo method. The SSN is considered untrusted input, and gets validated before being used in the SQL query.&amp;nbsp;</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

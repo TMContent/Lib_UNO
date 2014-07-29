@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-101090760" Content_Hash="-1554267589">
+  <Metadata>
+    <Id>08395c40-517e-4c00-9064-f64b8b8fdf49</Id>
+    <Id_History>a5498075-d530-437d-9cc1-11697b3be564,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Threading Issues Should Be Considered If Impersonation Is Used</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Threading Issues Should Be Considered If Impersonation Is Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check that your application considers the Threading issues when using impersonation. Make&amp;nbsp;sure that the ASPNET.config is configured correctly when&amp;nbsp;passing impersonation token to the newly created threads.</p>
+  <h1>How to Fix</h1>
+  <p>Losing an impersonated security context because of thread switches is a common vulnerability. The common language runtime (CLR) automatically propagates impersonation tokens to threads that you create using any of the managed threading techniques, such as <b>Thread.Start</b>, an asynchronous delegate, or <b>QueueUserWorkItem</b>. However, it is easy to drop the thread impersonation token if you use COM interop with components that have incompatible threading models, or if you use unmanaged techniques to create new threads such as the Win32 <b>CreateThread</b> API.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

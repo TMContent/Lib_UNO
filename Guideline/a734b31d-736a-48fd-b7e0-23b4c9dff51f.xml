@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1038602875" Content_Hash="-1254359627">
+  <Metadata>
+    <Id>a734b31d-736a-48fd-b7e0-23b4c9dff51f</Id>
+    <Id_History>a3b52196-4bc7-452b-947b-2b09be21dd39,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Use .pfx Files to Protect Your Private Key If You Do Not Use Delay Signing</Title>
+    <Category>Strong Naming and Signing </Category>
+    <Phase>Deployment</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use .pfx Files to Protect Your Private Key If You Do Not Use Delay Signing</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use password protected .pfx files to protect your private key.</p>
+  <h1>Why</h1>
+  <p>Using .pfx instead of plain .snk files for signing gives extra security from intruders.</p>
+  <h1>When</h1>
+  <p>If you do not use delay-signing, this approach is more appropriate for small to medium sized projects. If you previously passed around or had access to .snk files that included a private key, you should consider using .pfx files instead.</p>
+  <h1>How</h1>
+  <p>Visual Studio .NET 2005 adds support for .pfx files, which makes this very convenient. When using the .pfx files for sigining your aseembly, the strong naming utility (SN.EXE) will not accept .pfx files which contains multiple certificates. Also the .pfx files needs to have a password, the SN.exe will not work with a .pfx file with null password.&amp;nbsp;</p>
+  <p>If you want to create a self signed .pfx&amp;nbsp;key, the easiest way is to use Visual Studio 2005.&amp;nbsp; </p>
+  <ul>
+    <li>
+      <p>With the project node selected in <b>Solution Explorer</b>, from the <b>Project</b> menu, click <b>Properties</b> (or right-click the project node in <b>Solution Explorer</b>, and click <b>Properties</b>).</p>
+    </li>
+    <li>
+      <p>In the <b>Project Designer</b>, click the <b>Signing</b> tab.</p>
+    </li>
+    <li>
+      <p>Select the <b>Sign the assembly</b> check box.</p>
+    </li>
+    <li>
+      <p>Specify a new key file. In the <b>Choose a strong name key file</b> drop-down list, select <b>&lt;New...&gt;</b>. Note that new key files are always created in the .pfx format.</p>
+    </li>
+    <li>
+      <p>In the <b>Create Strong Name Key</b> dialog box, enter a name and password for the new key file, and then click <b>OK</b>.</p>
+    </li>
+  </ul>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

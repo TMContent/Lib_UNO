@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1483158092" Content_Hash="1295342164">
+  <Metadata>
+    <Id>67ba3b54-c3d3-4a0a-9203-bb3566c95ac1</Id>
+    <Id_History>c3e1d93d-5042-437c-9b92-4f3ace48cab7,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Encrypt And Sign a Cookie</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Encrypt And Sign a Cookie</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to illustrate how to securely distribute session data to an external trusted web application when there exists no common server-side session state. It includes topics such as generating an HMAC, inclusion of timestamp and the encryption of session data.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Provide confidentiality of application cookies while in transit even over insecure communication channels, ensuring that they are not exposed to unauthorized users. </li>
+    <li>Provide controls to mitigate possible session replay vulnerabilities. </li>
+    <li>Provide controls to protect against information disclosure.</li>
+    <li>Provide controls which validate message integrity.</li>
+    <li>Protect against users' ability to tamper with cookie parameters which may impact the business logic, authentication or authorization context or overall data integrity through HMAC message signing.</li>
+    <li>Ensure the secure storage of a shared secret encryption key and HMAC signing key through use of the Data Protection API (DPAPI).</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Web application needs to distribute some details within the session state to another application (e.g. Single sign-on, distributed web server architecture).</li>
+    <li>Web applications are deployed within an infrastructure where it isn't feasible to share session state through a common server-side data store. </li>
+    <li>A shared symmetric key and HMAC signing key are pre-established either out of band or via some other secure communication channel. </li>
+    <li>Developers wish to avoid users from tampering with cookie parameters which may impact the business logic, authentication or authorization context or overall data integrity.</li>
+    <li>Securely distributing session state to an external application.</li>
+    <li>Providing confidentiality through cookie encryption.</li>
+    <li>Providing message integrity through HMAC code embedded in crypto blob.</li>
+    <li>Mitigate session replay through use of a session timeout mechanism.</li>
+    <li>A user must retrieve data distributed across multiple web servers, each which serve a different purpose, e.g. customer portal, reporting server, etc.</li>
+  </ul>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates a poorly designed cookie sharing mechanism between two web applications where encryption and key signing are not used:</p>
+  <p>Set the cookie value:</p>
+  <pre>cookieval = user + "|" + uid + "|" + adminRole.ToString();<br />HttpCookie chocolateChip = new HttpCookie("CookieJar", cookieval);<br /><br />// Ensure that proper secure cookie modes are set:<br />//<br />// Make cookies unavailable to client side scripts<br />chocolateChip.HttpOnly = true;<br /><br />// Set the cookie transport mechanism to SSL only<br />chocolateChip.Secure = true;<br /><br />// Ideally choose a more restrictive domain under which cookies are set<br />chocolateChip.Domain = ".ourapp.microsoft.com";<br /><br />// Place some restrictions on which web paths can access our cookies<br />chocolateChip.Path = "/CookieExample/";<br /><br />// Finally set the cookie<br />Response.Cookies.Add(chocolateChip);</pre>
+  <p>Issues found in this example:</p>
+  <ul>
+    <li>Sensitive information is exposed within the cookie, potentially containing data which should never be exposed to a user.</li>
+    <li>Cookies are vulnerable to tampering by the user (and intermediaries in the event of a man-in-the-middle scenario).</li>
+    <li>Cookies are vulnerable to replay.</li>
+    <li>If cookies are altered in transit there is no way to detect such a situation.</li>
+    <li>Any web application in the .ourapp.microsoft.com domain can access the cookie.</li>
+  </ul>
+  <p>Careful consideration should be given to other common coding mistakes not shown in the code above:</p>
+  <ul>
+    <li>Encryption using weak encryption keys (typically &lt;128, but dependent on encryption algorithms).</li>
+    <li>Use of unproven or homegrown encryption algorithms.</li>
+    <li>Use of improper encryption types (e.g. stream cipher instead of block cipher).</li>
+    <li>Use of improper encryption modes (lack of chaining blocks).<ul><li>Leads to easier cookie tampering even with encryption (replace or reorder blocks).</li><li>Leads to information disclosure of common values transmitted.</li></ul></li>
+    <li>Failure to choose random initialization vector (IV).<ul><li>Leads to information disclosure of common values transmitted.</li></ul></li>
+    <li>Failure to include HMAC.<ul><li>Encrypted values may still be altered and go undetected.</li></ul></li>
+    <li>HMAC keys and encryption keys are equal.<ul><li>Compromise of one key leads to total system compromise.</li></ul></li>
+    <li>Failure to include timestamp or session id.<ul><li>Encrypted value may be replayed.</li></ul></li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System;<br />using System.Collections.Generic;<br />using System.Security.Cryptography;<br />using System.Security.AccessControl;<br />using System.Text;<br />using Microsoft.Win32;</pre>
+  <p>Browsing to the web application containing the solution code will establish an encrypted and signed cookie value.</p>
+  <p>The following cookie value is set by the server with secure cookie options:</p>
+  <pre>Set-Cookie: CookieJar=g2rzx1QZ94lAOyUxLGscUbQg1/yyG8Gy4NTCjaK5a<br />upWwSXoAdyuNBer0sFZQiK9dx4kZnY0h8hd9xqEe6d8hMvGoJiGhlOh88cx35Jt<br />9sQIQmjAgCmecj6VhHwKfbrZ; domain=.ourapp.microsoft.com; path=/CookieExample/; secure; HttpOnly</pre>
+  <p>The cookies change with each encryption operation (due to random IV, and appended timestamp value). Base64 decoding the "CookieJar" value yields and encrypted array of bytes.</p>
+  <h1>Expected Result</h1>
+  <p>HTTP Response header:</p>
+  <p>Set-Cookie: CookieJar=g2rzx1QZ94lAOyUxLGscUbQg1/yyG8Gy4NTCjaK5aupWwSXoAdyuNBer0sFZQiK9dx4kZnY0h8hd9xqEe6d8hMvGoJiGhlOh88cx35Jt9sQIQmjAgCmecj6VhHwKfbrZ; domain=.ourapp.microsoft.com; path=/CookieExample/; secure; HttpOnly</p>
+  <h1>More Information</h1>
+  <p>This implementation makes use of the DPAPI user key as opposed to the machine key. This means that the AES shared secret and HMAC signing key will only be accessible from programs that run within the same user context and will not be accessible by other applications running under different service accounts. This adds additional protection against a rogue application (such as a virus or trojan) compromising connection string data but could pose problems where sharing between mutliple applications running under different accounts is required. We recommend this approach whenever other programs will not need to access the same key material for encryption operations. Encryption of the message alone is not sufficient to protect against message tampering, as such we've included the use of an HMAC (or message integrity check, which relies on a shared secret key). The HMAC is generated by using a seperate shared secret and relies on a strong one-way hashing algorithm to generate a unique hash for the given message. Even with cookie encryption and signing, a user who intercepts these cookies may replay them to the server unless there is a value contained within the message designating the sequence number of the message. The symmetric shared key and HMAC signing key must be securely stored in order to maintain the confidentiality of data encrypted using these keys. In this example, we make use of the DPAPI in order to transparently store the shared key pair encrypted with in the registry. The details of AES and HMAC message signing are beyond the scope of this article.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>HMAC definition: <a href="http://en.wikipedia.org/wiki/HMAC">http://en.wikipedia.org/wiki/HMAC</a></li>
+    <li>HMAC class: <a href="http://msdn2.microsoft.com/en-US/library/system.security.cryptography.hmac.aspx">http://msdn2.microsoft.com/en-US/library/system.security.cryptography.hmac.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

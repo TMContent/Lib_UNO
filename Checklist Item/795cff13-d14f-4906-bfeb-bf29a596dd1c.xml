@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-757287317" Content_Hash="450999169">
+  <Metadata>
+    <Id>795cff13-d14f-4906-bfeb-bf29a596dd1c</Id>
+    <Id_History>18408811-a0be-4c45-bcb0-6f34482251cb,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Idle Terminal Sessions Are Locked After 15 Minutes</Title>
+    <Category>Configuration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Idle Terminal Sessions Are Locked After 15 Minutes</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 8.5.15</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Interactive terminal sessions should be locked automatically after being idle for at most 15 minutes.</p>
+  <h1>Why</h1>
+  <p>Locking inactive terminal sessions ensures that a passerby cannot use the credentials of the user who is currently logged in for unauthorized access.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check&amp;nbsp;if controls are in place to lock idle terminal sessions after 15 minutes of inactivity in an Active Directory environment:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Launch the "Group Policy Management" console. </strong>The "Group Policy Management" console is included in Windows 2008, but has to be downloaded and installed on Windows 2003 and 2000. The link to the download is available at the bottom of this page. To launch the "Group Policy Management" console, execute the "gpmc.msc" command.</p>
+      <li>
+        <p>
+          <strong>Launch the Group Policy Object Editor.</strong>&amp;nbsp;Navigate to the "Group Policy Objects" folder under the current domain, right click on the GPO and select "Edit".</p>
+        <li>
+          <p>
+            <strong>Verify that terminal locking policies are used.</strong>&amp;nbsp;For each relevant domain, check that there is a linked group policy object that enables the "Password protect the screen saver" and "Screen Saver timeout" policies. The "Password protect the screen saver" and "Screen Saver timeout" policies are not enabled by default in Windows 2003 and 2008. Verify that "Password protect the screen saver" is enabled. Verify that "Screen Saver timeout" is set to 15 minutes or less.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to assure that idle terminal sessions are locked after 15 minutes in an Active Directory environment:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Launch the "Group Policy Management" console. </strong>The "Group Policy Management" console is included in Windows 2008, but has to be downloaded and installed on Windows 2003 and 2000. The link to the download is available at the bottom of this page. To launch the "Group Policy Management" console, execute the "gpmc.msc" command.</p>
+      <li>
+        <p>
+          <strong>Edit or create a Group Policy Object (GPO).</strong> To create and activate a new Group Policy Object (GPO), launch "The Group Policy Management" console, right click on the domain and select "Create and Link a GPO Here." To edit an existing GPO, navigate to the "Group Policy Objects" folder under the current domain, right click on the GPO and select "Edit" - this will open the "Group Policy Object Editor." To change the settings of a GPO using the "Group Policy Object Editor, navigate the folders to find the setting of interest, double click on it, set the desired option(s).</p>
+        <li>
+          <p>
+            <strong>Enable and configure&amp;nbsp;the terminal locking policies.</strong>&amp;nbsp;The Password protect the screen saver" and "Screen Saver timeout" policies are located under "User Configuration", "Administrative Templates", "Control Panel", "Display". Set "Password protect the screen saver" policy to "Enabled". Set "Screen Saver timeout" to 15 minutes or less.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about enforcing password policy in a Microsoft AD environment, please see "Enforcing Strong Password Usage Througout Your Organization" at <a href="http://technet.microsoft.com/en-us/library/cc875814.aspx">http://technet.microsoft.com/en-us/library/cc875814.aspx</a>. <li>To download the "Group Policy Management Console," please see "Group Policy Management Console with Service Pack 1" at <a href="http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=0a6d4c24-8cbd-4b35-9272-dd3cbfc81887">http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=0a6d4c24-8cbd-4b35-9272-dd3cbfc81887</a>.</li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/79f9f0b9-958c-4794-8f2c-470e48bec3e5">Formulate the User Authentication and Password Policies</a>
+      <li>
+        <a href="/article/61bdfe5f-b0c0-4335-a92a-059cbabfe07c">Implement the Password Policy Using Group Policy Objects</a>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

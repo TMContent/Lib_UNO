@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1279155345" Content_Hash="-1777884029">
+  <Metadata>
+    <Id>1276ea36-a0b3-48a0-8b9a-326e8e59c1a2</Id>
+    <Id_History>d9fe5ffd-51e8-44a1-ac81-bee0d1dc773e,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Use Persist Security Info=&amp;#39;true&amp;#39; Or &amp;#39;yes&amp;#39;</Title>
+    <Category>Configuration</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Use Persist Security Info=&amp;#39;true&amp;#39; Or &amp;#39;yes&amp;#39;</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you pass user credentials for connecting to the database, do NOT set <strong>Persist Security Info</strong>=<strong>'true'</strong> or <strong>'yes' </strong>in the database connection string.</p>
+  <p>
+    <strong>Note</strong> - <strong>Persist Security Info</strong> is set to <b>"false"</b> by default.</p>
+  <h1>Why</h1>
+  <p>Setting the <b>Persist Security Info</b> keyword to "<b>true"</b> or "<b>yes"</b> in a connection string allows security-sensitive information, including the user ID and password; to be obtained from the connection after the connection has been opened.</p>
+  <p>Keeping <b>Persist Security Info</b> as "<b>false"</b> helps to make sure that the untrusted source does not have access to the security-sensitive information for your connection and also helps to make sure that no security-sensitive information is saved to disk with your connection string information.</p>
+  <h1>When</h1>
+  <p>This should be followed whenever you pass user credentials explicitly for connecting to the database.</p>
+  <h1>How</h1>
+  <p>Here is an example of setting the Persist Security Info as "false".</p>
+  <blockquote>
+    <pre>public DataSet GetAuthorInfo(String SSN)<br />{</pre>
+    <pre>SqlConnection connection;<br />SqlDataAdapter dataadapter;<br />DataSet dataset;</pre>
+    <pre>connection = new SqlConnection("Persist Security Info=False;" +<br />&amp;nbsp; "Integrated Security=SSPI;database=appdb;" +<br />&amp;nbsp; "server=localhost;Connect Timeout=30");<br />connection.Open();</pre>
+    <pre>string SQLstr = "SELECT au_lname, au_fname FROM authors WHERE au_id = '" + SSN.Text + "'";</pre>
+    <pre>
+      <br />dataadapter = new SqlDataAdapter(SQLstr, connection);<br />dataset = new DataSet();<br />dataadapter.Fill(dataset, "table1");</pre>
+    <pre>connection.Close();</pre>
+    <pre>return dataset;</pre>
+    <pre>}</pre>
+  </blockquote>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

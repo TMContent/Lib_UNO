@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1512039681" Content_Hash="-1621861391">
+  <Metadata>
+    <Id>ce69fc00-dd12-4f78-9db5-1cb7417863fe</Id>
+    <Id_History>e0158249-3434-41bd-b329-46c0f0372fc5,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Consider Which Identity to Use to Connect to the Database</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Which Identity to Use to Connect to the Database</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>When you connect to a database by using Windows authentication, you need to consider which account to use. Regardless of the account, make sure that it has limited permissions in the database.</p>
+  <h1>Why</h1>
+  <p>There are security implications depedning upon which identity is used to connect to the database, hence its important to evaluate and decide which identity to use.</p>
+  <h1>When</h1>
+  <p>This guideline should be followed when using windows authentication for connecting to database.</p>
+  <h1>How</h1>
+  <p>When using Windows authentication to connect to the database, do the following: </p>
+  <ul>
+    <li>
+      <b>Use a trusted service account where possible</b>. This is usually your application's process account. By using a single trusted service account, your application benefits from connection pooling, which provides greater scalability. Also, account administration and authorization within the database is simplified. </li>
+    <li>
+      <b>If you cannot use a domain account, consider mirrored accounts</b>. If you cannot use domain accounts because of domain trust or firewall restrictions, consider using mirrored service accounts instead. With this approach, you still use Windows authentication, but you create two local accounts with the same name and password on the Web server and database server. You configure your application to run using the local account created on the Web server and create a SQL login for the local account on the database server. With this approach, you must make sure that the passwords of the two accounts are synchronized. </li>
+    <li>
+      <b>Use impersonation and delegation when necessary</b>. If you need per-user authorization in the database or if you need to use operating system auditing to track the activity of individual users, use impersonation and delegation and access the database by using the caller's identity. This approach has limited scalability because it prevents the efficient use of connection pooling.</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

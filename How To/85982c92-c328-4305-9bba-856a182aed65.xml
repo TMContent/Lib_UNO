@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-323081641" Content_Hash="-1518930997">
+  <Metadata>
+    <Id>85982c92-c328-4305-9bba-856a182aed65</Id>
+    <Id_History>850d6416-8577-4b86-aa42-2d0db0e4a594,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Encrypt Configuration Data In Configuration Files</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Encrypt Configuration Data In Configuration Files</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>For ASP.NET applications, if you store sensitive data in the Web.config file, you can use the ASP.NET IIS Registration Tool (Aspnet_regiis.exe) to encrypt configuration file sections by using either DPAPI or RSA encryption. This tool uses the protected configuration provider in the .NET Framework 2.0. <br /></p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;In Web farms, you should use RSA encryption due to the ease with which encryption keys can be exported.<b></b></blockquote>
+  <p>There is no equivalent tool for encrypting data in Windows application configuration files. Instead, you must use the protected configuration API, as shown in the following code example. This example encrypts the<b> connectionStrings</b> section of an application's App.config file by using the DPAPI protected configuration provider. </p>
+  <pre>Using System.Configuration;<br />ExeConfigurationFileMap filemap = new ExeConfigurationFileMap();<br />filemap.ExeConfigFilename = @"c:\Samples\SampleApp\App.config";<br />Configuration testConfig = ConfigurationManager.OpenMappedExeConfiguration(<br />                                     filemap, ConfigurationUserLevel.None);<br />ConfigurationSection configSection = testConfig.GetSection(<br />                                                "connectionStrings");<br />if (configSection.SectionInformation.IsProtected)<br />    configSection.SectionInformation.UnprotectSection();<br />else<br />    // This example uses the DPAPI protected configuration provider<br />    configSection.SectionInformation.ProtectSection(<br />                                    "DataProtectionConfigurationProvider");<br />testConfig.Save();</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

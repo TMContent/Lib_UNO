@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-205757582" Content_Hash="-696213957">
+  <Metadata>
+    <Id>5b972a6c-75e9-43a2-8019-71419885239a</Id>
+    <Id_History>1d8976fa-5978-4a5a-847f-c25710bfe31c,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Do Not Disclose Session IDs</Title>
+    <Category>Session Management</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Disclose Session IDs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Protect the cookies that contain the session IDs.</p>
+  <h1>Why</h1>
+  <p>Do not disclose session IDs to make it harder for an attacker to compromise a user's session.</p>
+  <h1>When</h1>
+  <p>Protect session IDs in all web applications that use authentication.</p>
+  <h1>How</h1>
+  <p>To prevent disclosure of session IDs:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>The session IDs should be sent in non-persistent cookies.</strong> This is the setting used by ASP.NET by default. Review the application design to make sure that this default has not been changed.</p>
+      <li>
+        <p>
+          <strong>Find all pages that use session IDs.</strong> Make a list of all pages that use ASP.NET session management functions.</p>
+        <li>
+          <p>
+            <strong>Enable a HTTPS binding for the site.</strong> Start the "<em>Internet Information Services (IIS) Manager</em>". Right-click on the site and select "<em>Edit bindings...</em>". Add a binding of the&amp;nbsp;"<em>https</em>" type.</p>
+          <li>
+            <p>
+              <strong>Enable SSL on all pages that use session IDs.</strong> Start the "<em>Internet Information Services (IIS) Manager</em>". Navigate the folders with pages that use ASP.NET session management. Double-click on the SSL icon in the right pane and enable SSL for the folder. </p>
+            <li>
+              <p>
+                <strong>Mark session cookies as secure.</strong> Marking session cookies as secure assures that they are only sent over HTTPS connections.</p>
+              <pre>if (Response.Cookies.Count &gt; 0)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == FormsAuthentication.FormsCookieName)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies&amp;#91;cookie&amp;#93;.Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; else if (cookie == &amp;#8220;ASP.NET_SessionId&amp;#8221;)&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies&amp;#91;cookie&amp;#93;.Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <p>For more information about the SessionID property, please see "HttpSessionState.SessionID Property" at&amp;nbsp;<a href="http://msdn.microsoft.com/en-us/library/system.web.sessionstate.httpsessionstate.sessionid.aspx">http://msdn.microsoft.com/en-us/library/system.web.sessionstate.httpsessionstate.sessionid.aspx</a></p>
+      <li>
+        <p>For more information about session management, please see "Session Management - OWASP" at&amp;nbsp;<a href="http://www.owasp.org/index.php/Session_Management#Protect_Session_Identifiers">http://www.owasp.org/index.php/Session_Management#Protect_Session_Identifiers</a></p>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

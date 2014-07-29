@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e8c63206-69ac-44b0-af71-05da3ea6fa44</Id>
+    <Id_History>00000000-0000-0000-0000-0000003f54e3,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Cookieless Authentication</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>Cookieless Authentication</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Description==
+
+Most web applications use cookies to keep track of session state. Some applications use other mechanisms to keep track of authenticated sessions and these custom authentication schemes are usually vulnerable to session hijacking vulnerabilities. An attacker exploiting cookieless authentication schemes may gain elevated privileges by tampering with user-mutable parameters or hijack an authenticated session by intercepting it using some form of a man-in-the-middle attack. Use platform-provided session management, use SSL to protect authentication, set HTTP-Only and Secure flags on session cookies and send session cookies only over SSL to prevent this type of problem. To check your application for cookieless authentication flaws, examine the authentication mechanism and determine whether the application uses session cookies to keep track of authenticated users.
+
+==Impact==
+
+Using cookieless authentication often allows an attacker to hijack user sessions. Once the attacker has hijacked a user's session, he can do anything that the user is allowed to do by the application. This usually allows the attacker to access and modify the user's data. If the attacker hijacks an administrator's session, he may be able to take full control of the application.
+
+==Countermeasures==
+
+Implement all of the following countermeasures to use cookies to store session identifiers. 
+
+* [[96059535-1543-458e-afb7-e40360b9dcd2|Use ASP.NET Session Management]]
+* [[00000000-0000-0000-0000-000000960e37|Use SSL to Communicate Authentication Credentials]]
+* [[00000000-0000-0000-0000-000000894eab|Set HTTP-Only and Secure Flags on Session Cookies]]
+* [[00000000-0000-0000-0000-000000737bd8|Send Session Cookies Only Using SSL/TLS]]
+
+==Checklists==
+
+Use each of the following checklist items to make sure that cookies are used to store session identifiers. 
+
+* [[505042f3-ae71-4a3a-bf71-03fa1dbe34a7|ASP.NET Session Management Is Used]]
+* [[00000000-0000-0000-0000-0000008f91de|SSL Is Used to Communicate Authentication Credentials]]
+* [[00000000-0000-0000-0000-000000570fbb|HTTP-Only and Secure Flags Are Set on Session Cookies]]
+* [[00000000-0000-0000-0000-00000071f956|Session Cookies Are Sent Only over SSL]]
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

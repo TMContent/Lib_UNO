@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2110548115" Content_Hash="1340760901">
+  <Metadata>
+    <Id>cc21cb4b-2726-469c-bcbe-fea698414619</Id>
+    <Id_History>b3fb8571-77ae-4803-9345-51f8cf797e40,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Indirect Object References Are Used</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Indirect Object References Are Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that indirect object references are used.</p>
+  <h1>Why</h1>
+  <p>Using indirect object references makes it harder for an attacker to bypass security controls.</p>
+  <h1>How To Check</h1>
+  <p>To verify that indirect object references are used:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify pages that use system objects.</strong> Make a list of pages that use files and databases.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Examine object references.</strong> Review each page to make sure it uses a lookup table to address objects, instead of addressing them directly. A lookup table is a term for assigning identifiers to system objects and using these identifiers in pages that are exposed to the user. The purpose of lookup tables is to make sure that an attacker cannot perform unauthorized access by modifying object references - since all that is exposed are aliases, the attacker has no opportunity to tamper with other system objects.</p>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>To use indirect object references:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify pages that use system objects.</strong> Make a list of pages that use files and databases.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify application assets.</strong> Make a list of files and database keys that are used by each page.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define lookup tables.</strong> Assign an identifier to each resource being accessed by each page. Write a function or a set of functions that translates these identifiers into object references.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use lookup tables.</strong> Use the object identifiers assigned in step 3 as parameters when referencing system objects. Call the function that translates that identifier into a direct object reference to access data.</p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/d4ce4080-2feb-434c-bbfe-b00549e099a7">Use Indirect Object References</a>
+    </li>
+  </ul>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

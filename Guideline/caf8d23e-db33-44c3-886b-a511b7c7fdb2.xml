@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2068153321" Content_Hash="957182194">
+  <Metadata>
+    <Id>caf8d23e-db33-44c3-886b-a511b7c7fdb2</Id>
+    <Id_History>f0dec819-6ee9-4909-916f-8363bb448c39,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Avoid Programmatic Impersonation Where Possible.</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Programmatic Impersonation Where Possible.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>You should avoid programmatic impersonation, such as <strong>WindowsIdentity.Impersonate</strong>,&amp;nbsp;where possible. </p>
+  <h1>Why</h1>
+  <p>You should avoid programmatic impersonation where possible for the following reasons: </p>
+  <p />
+  <ul>
+    <li>It is easy to introduce errors because of thread switches where the thread impersonation token is not propagated across threads. </li>
+    <li>Some programmatic techniques require you to store credentials which should be avoided. </li>
+    <li>Some programmatic techniques require you to grant additional privileges to your process account, which you should avoid. For example, you must grant your process account "Act as part of the operating system" if you call <strong>LogonUser</strong> on Windows Server 2000 or to obtain an impersonate-level token on Windows Server 2003 when you use the new <strong>WindowsIdentity</strong> constructor that generates a token from a user principal name. </li>
+    <li>If exceptions occur while impersonating, it is possible for malicious code higher in the call stack to run using the impersonated identity. This can present security issues, particularly if you impersonate a highly privileged account. </li>
+  </ul>
+  <p />
+  <h1>When</h1>
+  <p>If you need to impersonate at the method level to perform specific operations or access particular resources, then you can use programmatic impersonation by using the <b>WindowsIdentity.Impersonate</b> method.&amp;nbsp; Otherwise programmatic impersonation should be avoided.</p>
+  <h1>How</h1>
+  <p>By default, ASP.NET does not use impersonation, and your code runs using the ASP.NET application's process identity. On the Microsoft® Windows Server™ 2003 operating system, ASP.NET applications run in an Internet Information Services (IIS) 6.0 application pool by default. The IIS application pool runs under the NT AUTHORITY\Network Service identity. On the Microsoft Windows® 2000 Server operating system with IIS 5.0 or on Windows Server 2003 with IIS 6.0 configured for IIS 5.0 isolation mode, ASP.NET applications run in a worker process that uses the local ASPNET account identity.</p>
+  <p>Because impersonation is disabled, the application gains access to all resources by using the process identity. Any Windows resources, such as files and registry keys, must have an access control list (ACL) that grants access to the process identity.</p>
+  <p>If you need to access resources by using the authenticated caller's identity or by using a specific Windows identity other than the process identity, you can configure your ASP.NET application to use impersonation. If you need to impersonate at the method level to perform specific operations or access particular resources, then you can use programmatic impersonation by using the <b>WindowsIdentity.Impersonate</b> method.</p>
+  <p>The most common situations where you might require impersonation and delegation are: </p>
+  <ul>
+    <li>
+      <b>Impersonating the original caller.</b> You want to access Windows resources that are protected with ACLs configured for your application's domain user accounts. </li>
+    <li>
+      <b>Impersonating the original caller programmatically. </b>You want to access resources predominantly by using the application's process identity, but specific methods need to use the original caller's identity. </li>
+    <li>
+      <b>Impersonating a specific Windows identity.</b> You need to use a specific identity or several Windows identities to access particular resources. </li>
+    <li>
+      <b>Using delegation to access network resources by using an impersonated identity.</b> You need to use an impersonated identity to access remote resources. </li>
+  </ul>
+  <p />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

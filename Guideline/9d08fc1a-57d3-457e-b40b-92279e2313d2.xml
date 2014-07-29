@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1004441428" Content_Hash="1374496306">
+  <Metadata>
+    <Id>9d08fc1a-57d3-457e-b40b-92279e2313d2</Id>
+    <Id_History>b8b0d075-5aa2-4095-a441-210f38fc3b3e,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Don't Access Unallocated Memory</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Don't Access Unallocated Memory</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>C&amp;#43;&amp;#43;</p>
+  <h1>What to Do</h1>
+  <p>Write code in a way that guarantees that pointers are not used after memory that they point to has been deallocated.</p>
+  <h1>Why</h1>
+  <p>Accessing memory that has been deallocated may result in an exploitable vulnerability. This type of vulnerability is called a "dangling pointer vulnerability". The unallocated memory is accessed via a pointer that has been used to free the memory earlier - this pointer is the "dangling pointer".</p>
+  <h1>How</h1>
+  <p>Write code in such a way that guarantees that pointers are not used after memory that they point to has been deallocated. One way to do this is to deallocate memory at the end of functions, so that there is no code that accesses memory after it has been deallocated. Perform the following actions to assure that unallocated memory is not accessed:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Search for deallocation code.</strong> Review code to find all places where memory is being deallocated.</p>
+      <li>
+        <p>
+          <strong>Move deallocation code.</strong> Place deallocation code right before exit points of the function. Set pointers to null. Make sure that deallocated pointers are not being used elsewhere in the application.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <pre>float&amp;#42; array = new array &amp;#91;5&amp;#93;;<br />delete&amp;#91;&amp;#93; array;<br />array&amp;#91;0&amp;#93; = 0.1;</pre>
+  <p>The problem with the example above is obvious - the pointer is deleted before the application is done with it.</p>
+  <h1>Solution Example</h1>
+  <pre>float&amp;#42; array = new array &amp;#91;5&amp;#93;;<br />array&amp;#91;0&amp;#93; = 0.1;<br />delete&amp;#91;&amp;#93; array;</pre>
+  <p>The solution is equally simple - move deallocation code to the end of the function.</p>
+  <h1>Additional Resources</h1>
+  <p>For more information about not accessing freed memory, please see <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/MEM30-CPP.&amp;#43;Do&amp;#43;not&amp;#43;access&amp;#43;freed&amp;#43;memory">https://www.securecoding.cert.org/confluence/display/cplusplus/MEM30-CPP.&amp;#43;Do&amp;#43;not&amp;#43;access&amp;#43;freed&amp;#43;memory</a></p>]]></Data>
+  </Content>
+</TeamMentor_Article>

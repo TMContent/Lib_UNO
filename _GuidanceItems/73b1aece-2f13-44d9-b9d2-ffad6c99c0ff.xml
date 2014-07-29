@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>73b1aece-2f13-44d9-b9d2-ffad6c99c0ff</Id>
+    <Id_History>00000000-0000-0000-0000-00000077e316,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>The Origin Header in WebSocket Handshake is Checked</Title>
+    <Category>WebSockets</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Origin Header in WebSocket Handshake is Checked</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Check For==
+
+Verify that the origin header in WebSocket handshakes is checked.
+
+==Why==
+
+By checking the origin, you can restrict access to the WebSocket server, allowing requests only from the same origin or specified domains. This prevents potentially malicious connections.
+
+
+==How To Check==
+
+To verify that the origin header in WebSocket handshakes is checked:
+
+# **Examine the server configuration file.** Examine the server configuration file to make sure that the Origin header is checked. The exact details of configuring WebSocket servers to check Origin headers are different for different implementations.
+# **Review code that validates headers.** It might be the case that the WebSocket implementation that is used by the application does not have an option to check Origin headers automatically. In that case, custom code will be necessary to perform that functionality. Implementation details are platform-specific, so there are no clear keywords to search for to find this functionality. The Origin header should be validated before the WebSocket tunnel is established, so this code should be located or called at the beginning of the code that establishes the WebSocket connection, and this information should help find this code. If such code does not exist, it should be added. 
+
+
+==How To Fix==
+
+
+To check for origin:
+
+# **Configure the WebSocket server to check the Sec-WebSocket-Origin header value (for older WebSocket clients) or Origin header value (for newer clients).** Add code to the configuration file in accordance with your server language. For example, for PHP-WebSocket, which is an open source PHP implementation of a WebSocket server library, use the following method call to set origin checking: {{{$server->setCheckOrigin(true);}}}. This reads the value of  Sec-WebSocket-Origin  or  origin.
+# **Specify the allowed origins from which the server will accept connections.**  For example, to accept connections only from an HTML5 application residing on the same server, configure it to accept connections from the “same origin” only. If the WebSocket server and the application both reside on web.example.com, configure the WebSocket server to accept only from {{{Origin= web.example.com}}}.
+# **Iterate through the request headers to find the Origin or Sec-WebSocket-Origin header.** If the value is null or does not match the set of allowed origins, close the connection stream with a 401 response.
+
+{{{
+
+$example_origins = array('example.com',’web.example.com’);
+
+foreach ($example_origins as $origin) {
+    $server->setAllowedOrigin($origin);
+    $origin_ips[] = gethostbyname($origin);
+}
+if (!in_array($_SERVER["REMOTE_ADDR"], $origin_ips)) {
+
+// send 401 response
+}
+else {
+// begin tunnel
+}
+
+
+}}}
+
+
+==WebSocket Guidelines==
+
+* [[00000000-0000-0000-0000-000000869806|Validate Data Coming from WebSockets]]
+* [[00000000-0000-0000-0000-00000093dea4|Check the Origin Header in the WebSocket Handshake]]
+* [[00000000-0000-0000-0000-0000005f2e4a|Use TLS/SSL to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-000000736a21|Check the Origin Attribute of WebSocket Messages]]
+* [[00000000-0000-0000-0000-0000005326a8|Use the Latest WebSocket RFC 6455 Standard]]
+* [[00000000-0000-0000-0000-00000085bc2f|Do Not Tunnel TCP via WebSockets]]
+
+==WebSocket Checklist Items==
+
+* [[00000000-0000-0000-0000-00000086537e|Data Coming from WebSockets Is Validated]]
+* [[00000000-0000-0000-0000-00000077e316|The Origin Header in WebSocket Handshake is Checked]]
+* [[bd870268-f104-4f6f-ba0d-6628dc34eb2a|TLS/SSL is Used to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-0000002f39d7|The Origin Attribute of WebSocket Messages Is Checked]]
+* [[18d5564d-00a4-4afe-a853-707269df2566|Latest RFC 6455 Standard is Used]]
+* [[00000000-0000-0000-0000-00000091ce5a|TCP Is Not Tunneled via WebSockets]]
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

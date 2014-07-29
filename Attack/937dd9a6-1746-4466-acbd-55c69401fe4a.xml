@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="250816504" Content_Hash="324309240">
+  <Metadata>
+    <Id>937dd9a6-1746-4466-acbd-55c69401fe4a</Id>
+    <Id_History>7df0582c-84a2-4f79-bb7b-6755e93b1591,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>XML Injection Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Any application that writes user input to an XML file on a server.</p>
+  <h1>Description</h1>
+  <p>An XML injection vulnerability will allow an attacker to insert malicious data into XML which resides on the server. Depending on the type of XML parser used (SAX or DOM), this malicious data could be used to either overwrite the values in previous nodes or cause the XML parser to consume an excessive amount of memory on the server.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Modification of previous node values in the XML <li>Denial of Service on the server <li>Exposure of entire XML document to unauthorized users. <li>Addition of new nodes or even entire documents. <li>Ability to modify or remove data that should not be accessed.</li></li></li></li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Dynamic XML generation using untrusted input <li>Incorrectly defined schema <li>Lack of schema validation <li>Failure to validate input and properly encode any dangerous meta characters according to the context</li></li></li></li>
+  </ul>
+  <a name="Countermeasures">
+  </a>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <p>
+        <strong>When loading an XML file on the server validate it against a defined XSD</strong>.</p>
+      <li>
+        <p>
+          <strong>Perform context-sensitive encoding of untrusted input</strong>. As with encoding data to be output in HTML, a whitelist approach should be taken. For each context which data is going to be inserted in (element, attribute value, etc.) a set of known-safe characters should be constructed. The data to be added should be checked against the whitelist, and any characters not specifically listed should be encoded. CDATA sections should be used to further ensure that the parser ignores special characters. Ideally, only non-XML values should be accepted from untrusted sources. If an XML blob must be accepted from an untrusted source, it should be manually reassembled from values parsed out and encoded after checking the received blob against an XSD.</p>
+        <li>
+          <p>
+            <strong>Untrusted input should be validated against an inclusion list before use</strong>. For example, use a RegEx pattern, primitive type casting, a domain constraint, or another validator. See the Additional Resources for more information on data validation.</p>
+          <li>
+            <p>
+              <strong>Trim XML documents to include only the data that is necessary to the application</strong>.</p>
+            <li>
+              <p>
+                <strong>Use XML processing pipelines to make the flow of data clear and threats easier to identify</strong>.</p>
+              <li>
+                <p>
+                  <strong>Remove DOCTYPE element from user input before creating XML objects</strong>.</p>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Example</h1>
+  <p>Let us assume that a valid node in our server side XML looks like this:</p>
+  <pre>&lt;UserRecord&gt;   &lt;UniqueID&gt;5&lt;/UniqueID&gt;   &lt;Name&gt;Gandalf&lt;/Name&gt;   &lt;Email&gt;Gandalf&amp;#64;MiddleEarth.com&lt;/Email&gt;   &lt;Address&gt;One Middle Earth Way, ME&lt;/Address&gt;   &lt;ZipCode&gt;10000&lt;/ZipCode&gt;   &lt;PhoneNumber&gt;123-456-7890&lt;/PhoneNumber&gt;&lt;/UserRecord&gt;</pre>
+  <p>The UniqueID field here is assigned by the server. Now, if web server accepts input from the user and stores it in the XML file, what is the outcome of the parser when a user enters the following data for the Email field:</p>
+  <pre>Gandalf&amp;#64;MiddleEarth.com&lt;/Email&gt;&lt;UniqueID&gt;0&lt;/UniqueID&gt;&lt;Name&gt;Gandalf&lt;/Name&gt;&lt;Email&gt;Gandalf&amp;#64;MiddleEarth.com</pre>
+  <p>The resulting XML on the server will look like this:</p>
+  <pre>&lt;UserRecord&gt;   &lt;UniqueID&gt;5&lt;/UniqueID&gt;   &lt;Name&gt;Gandalf&lt;/Name&gt;   &lt;Email&gt;Gandalf&amp;#64;MiddleEarth.com&lt;/Email&gt;&lt;UniqueID&gt;0&lt;/UniqueID&gt;               &lt;Name&gt;Gandalf&lt;/Name&gt;&lt;Email&gt;Gandalf&amp;#64;MiddleEarth.com&lt;/Email&gt;   &lt;Address&gt;One Middle Earth Way, ME&lt;/Address&gt;   &lt;ZipCode&gt;10000&lt;/ZipCode&gt;   &lt;PhoneNumber&gt;123-456-7890&lt;/PhoneNumber&gt;&lt;/UserRecord&gt;</pre>
+  <p>We now have two fields and values for UniqueID, Name and Email. The outcome of parsing such data will depend upon the type of XML parser used:</p>
+  <ul>
+    <li>If a SAX parser is used, it will report the UniqueID for this node to be 0, so an attacker would have essentially overwritten the field value. <li>If a DOM parser is used, it will report an error. However, the DOM parser can be abused by inserting additional nodes in the XML while still matching the schema, which will lead to excessive memory consumption by the parser and could potentially result in a Denial of Service.</li></li>
+  </ul>
+  <p>Also note that this is a simple example. It is possible to insert an entire new record among other issues. To fix the example above we can escape the markup delimiters to prevent the users input from being interpreted, replacing &amp; with &amp;, &lt; with &lt;, and so on as described in the Countermeasures section. This will prevent the users data from being interpreted in this case. In general, though, we don't know exactly what the input might look like, so the best plan is to have a white-list acceptable characters and do type checking as much as possible. Where type checking is not possible consider using CDATA to enforce that the string be treated strictly as data. For example:</p>
+  <pre>&amp;#36;evil_input = "Gandalf&amp;#64;MiddleEarth.com&lt;/Email&gt;   &lt;UniqueID&gt;0&lt;/UniqueID&gt;&lt;Name&gt;Gandalf&lt;/Name&gt;&lt;Email&gt;Gandalf&amp;#64;MiddleEarth.com";&amp;#36;data = "&lt;&amp;#33;&amp;#91;CDATA&amp;#91;" &amp;#43; &amp;#36;evil_input &amp;#43; "&amp;#93;&amp;#93;&gt;";</pre>
+  <p>After we insert &amp;#36;data into the email field above the result will be the following acceptable XML:</p>
+  <pre>&lt;UserRecord&gt;   &lt;UniqueID&gt;5&lt;/UniqueID&gt;   &lt;Name&gt;Gandalf&lt;/Name&gt;   &lt;Email&gt;&lt;&amp;#33;&amp;#91;CDATA&amp;#91;Gandalf&amp;#64;MiddleEarth.com&lt;/Email&gt;&lt;UniqueID&gt;0&lt;/UniqueID&gt;             &lt;Name&gt;Gandalf&lt;/Name&gt;&lt;Email&gt;Gandalf&amp;#64;MiddleEarth.com&amp;#93;&amp;#93;&gt;   &lt;/Email&gt;   &lt;Address&gt;One Middle Earth Way, ME&lt;/Address&gt;   &lt;ZipCode&gt;10000&lt;/ZipCode&gt;   &lt;PhoneNumber&gt;123-456-7890&lt;/PhoneNumber&gt;&lt;/UserRecord&gt;</pre>
+  <p>CDATA is very useful when used correctly but it has the same generic problem as we had before. An attacker can create a malicious string that uses "&amp;#93;&amp;#93;&gt;" to end the CDATA and insert malicious XML. Therefore, wherever we use CDATA we must also remove or escape &amp;#93;&amp;#93;&gt; from the input string&amp;#8212;at a certain point, it's easier to simply give up and encode everything by whitelist.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://www.w3.org/XML/Processing/">http://www.w3.org/XML/Processing/</a>
+      <li>
+        <a href="http://www-128.ibm.com/developerworks/xml/library/x-think37/index.html">http://www-128.ibm.com/developerworks/xml/library/x-think37/index.html</a>
+        <li>
+          <a href="http://www.owasp.org/index.php/Data_Validation">http://www.owasp.org/index.php/Data_Validation</a>
+          <li>
+            <a href="http://www-128.ibm.com/developerworks/xml/library/x-tipcfsx.html">http://www-128.ibm.com/developerworks/xml/library/x-tipcfsx.html</a>
+            <li>
+              <a href="http://www.w3schools.com/xml/xml_cdata.asp">http://www.w3schools.com/xml/xml_cdata.asp</a>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/fd2576b2-a7b1-4ddd-bb1b-c51cd4addce3">Attack: Xpath-XQuery Attack</a>
+      <li>
+        <a href="/article/d4b48303-d535-4549-90fc-474b99eff901">Attack: SQL Injection Attack</a>
+        <li>
+          <a href="/article/829b7182-7cf9-48b9-a25e-3a02f0685f49">Attack: Information Disclosure Attack</a>
+          <li>
+            <a href="/article/adf5df06-2b67-4e2a-ace2-6d7060e0bd95">Attack: Server-Side Code Injection Attack</a>
+            <li>
+              <a href="/article/cad18808-0ab4-478c-958a-f2a82ce0fc06">Attack: AJAX Injection Attack</a>
+              <li>
+                <a href="/article/9d33852f-b48d-4680-bc9a-88782667b65d">Attack: LDAP Injection Attack</a>
+                <li>
+                  <a href="/article/9f8d1872-4048-4df0-899c-38e0c7e81d79">Attack: Client-side Validation Attack</a>
+                  <li>
+                    <a href="/article/8b79f29d-0962-440b-9099-f5bd0688ce1b">Guideline: Do Not Rely on Request Validation </a>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

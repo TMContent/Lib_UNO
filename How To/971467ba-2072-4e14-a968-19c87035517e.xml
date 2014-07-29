@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2127657471" Content_Hash="1958049900">
+  <Metadata>
+    <Id>971467ba-2072-4e14-a968-19c87035517e</Id>
+    <Id_History>c7705b46-862c-4fa1-a5fc-b35cd41ab4a0,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Restrict Who Can Serialize Your Objects</Title>
+    <Category>Serialization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Restrict Who Can Serialize Your Objects</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>If you create a class that implements the <b>ISerializable</b> interface, which allows your object to be serialized, you can add a permission demand to your <b>ISerializable.GetObjectData</b> implementation to authorize the code that is attempting to serialize your object. This is particularly important if your code supports partial trust callers. </p>
+  <p>For example, the following code fragment uses a <b>System.Security.Permissions.StrongNameIdentityPermission</b> attribute to help ensure that only code signed with a particular private key, which corresponds to the public key in the demand, can serialize the object's state. </p>
+  <pre>using System.Diagnostics;...<br />[StrongNameIdentityPermission(SecurityAction.Demand,<br />                              PublicKey="00240000048...97e85d098615")]<br />public override void GetObjectData(SerializationInfo info,<br />                                    StreamingContext context)  </pre>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;In the .NET Framework 2.0, any fully trusted assembly will satisfy any demand, including a link demand for an identity permission, such as <b>System.Security.Permissions.StrongNameIdentityPermission</b> which the assembly does not satisfy.</blockquote>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

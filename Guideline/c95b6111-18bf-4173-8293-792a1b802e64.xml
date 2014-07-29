@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1715125178" Content_Hash="-121247876">
+  <Metadata>
+    <Id>c95b6111-18bf-4173-8293-792a1b802e64</Id>
+    <Id_History>2120b3fe-34c6-47bf-be83-d9756e512d02,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Do Not Leave Passwords in Memory</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Leave Passwords in Memory</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Clear passwords from memory after their use.</p>
+  <h1>Why</h1>
+  <p>Passwords are sensitive data that are used to establish a trust relationship. Leaving them in memory after their use can expose them to an attacker.</p>
+  <h1>When</h1>
+  <p>If your application handles passwords.</p>
+  <h1>How</h1>
+  <p>Passwords can be cleared by overwriting the memory where the passwords were stored. Deallocating the memory is not sufficient since the .NET garbage collector gives no guarantee as to when the deallocated memory will be collected or reused. Be aware that any time you assign a password to a new buffer, or pass it as a parameter, the password is being copied and is now in memory in a new location. When clearing memory, ensure you clear every instance.</p>
+  <p>Keep in mind the following considerations when handling passwords: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all password use. </strong>Locate all code segments, both functions and data members, that handle passwords. These can be functions and data structures scattered throughout the application. If the application cannot be managed as easy, centralize all code that handles passwords. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Store passwords in mutable objects.</strong> Mutable objects allow the data in them to be overwritten. This is especially useful in .NET as objects are required to be deallocated through the garbage collector. Therefore there is no certainty when the password instance will be deallocated from the current process space. Examples of mutable objects include character arrays (i.e. char[]). .NET strings, however, are not mutable objects; therefore, once allocated, their current memory space cannot be modified. When storing a password into an array, make sure you use arrays of primitive data types such as byte, char, and int, but not arrays of the wrapper structures that .NET provides for primitive types such as Byte, Char, and Int32. If you are forced to use .NET strings, (for instance, when calling a function which takes a .NET string), try to construct the string just before use and assign a new value to it as soon as you are done to encourage speedy garbage collection; this is sub-optimal and may lead to security issues, but until the .NET APIs allow for the exclusive use of mutable objects or SecureStrings, it may be unavoidable. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Clear all password instances.</strong> Make sure that all memory locations, where passwords have been stored, are cleared/overwritten after their use. Losing a pointer to a password instance can result in not cleaning that particular memory and allowing the password to leak.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code makes a use of a password. Although the pointer to the string is removed and garbage collection is called, .NET does not guarantee the data will be erased.</p>
+  <pre>string pass = GetPassword();<br />...<br />pass = null;<br />GC.Collect();</pre>
+  <h1>Solution Example</h1>
+  <p>The following code makes use of a password. After the password is used, the memory is explicitly cleared. Since strings are immutable objects, the code uses character arrays to store passwords. This makes it possible to overwrite the data after its use. </p>
+  <pre>char[] pass = GetPassword();<br />...<br />ClearPassword(pass);<br />pass = null;<br />...<br />void ClearPassword(char[] pass)<br />{      <br />	for(int i=0; i&lt;pass.Length; i++)      <br />	{            <br />		pass[i] = ' ';      <br />	}<br />}</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about the .NET garbage collector, visit: Documentation for <a href="http://msdn2.microsoft.com/en-us/library/system.gc(vs.80).aspx">GC Class</a> in MSDN. </li>
+    <li>To learn more about .NET data types, visit: <a href="http://msdn.microsoft.com/en-us/magazine/cc301569.aspx">.NET Type Fundamentals</a>.</li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/88ae773e-d30d-4d76-89ef-41b40f0eb0aa">Attack: Sniff Memory for Secrets Attack</a>
+    </li>
+    <li>
+      <a href="/article/2a28f8b4-6907-4fa2-b8db-0c96ef4912ec">Attack: Local Machine Credential Sniffing Attack</a>
+    </li>
+    <li>
+      <a href="/article/bb200ff1-9bfb-4d7a-a048-575051c8c798">Checklist Item: Passwords are Not Left in Memory </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

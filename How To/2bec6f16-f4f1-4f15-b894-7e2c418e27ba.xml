@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1083888811" Content_Hash="302544313">
+  <Metadata>
+    <Id>2bec6f16-f4f1-4f15-b894-7e2c418e27ba</Id>
+    <Id_History>b744cbfd-8fe0-4183-8f69-6425bc8f5b64,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Race Condition Bugs in ASP .NET</Title>
+    <Category>Threading</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>ASP .NET applications</li>
+  </ul>
+  <p>
+    <b>
+      <span>&nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>A race condition occurs when more than one application thread or process tries to access the same resource at the same time or when a thread accesses a resource in a time window where the application is not expecting it.<span>&nbsp;&nbsp; </span>If an application doesn’t handle another thread or process modifying or locking the dependant resource at the specific target window of time, it might end up executing undesired behavior.<span>&nbsp; </span>Depending on specific timing, an attacker can access a resource and modify it to change the applications behavior and execute logical attacks on the application or execute denial-of-service (DoS) attacks on the target application.</p>
+  <p>Follow these steps to test for race condition bugs in ASP .NET:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios
+<li>Step 2: Analyze causes and countermeasures
+<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, in order to properly understand how race condition flaws affect ASP .NET applications, it is recommended to review the common attack scenarios involved:</p>
+  <ul>
+    <li>Logical attacks
+<li>Denial-of-service attacks</li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h2>
+    <span>
+      <em>Scenario 1:<span>&nbsp; </span>Logical attacks</em>
+    </span>
+  </h2>
+  <p>ASP .NET applications using multithreading might fall victim to logical attacks through race conditions.<span>&nbsp; </span>If developers don’t properly protect static member variables from being modified from a different thread, an attacker can use a different thread to tamper with the value of a static member variable.<span>&nbsp;&nbsp; </span>In some cases, the attacker can actually tamper with a static member at the correct time in order to launch a logical attack on the application.<span>&nbsp; </span>This scenario is similar to time-of-check, time-of-use (TOCTOU) attacks where a resource is changed by an attacker in between the time it is checked and the time it is used.<span>&nbsp; </span>Consider this code:</p>
+  <pre>
+    <span>1&nbsp; class PriceCalculator()<br />2&nbsp; {<br />3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>static int number_of_coupons = 0;&nbsp; </strong><br />4<br />5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public int CalculatePrice()<br />6&nbsp;&nbsp;&nbsp;&nbsp; {<br />7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int balance = 5000;<br />8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int maximum_coupons_allowed = 10;<br />9<br />10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (number_of_coupons &lt; maximum_coupons_allowed) <br />11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int total = balance - 10*number_of_coupons; <br />13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return total;<br />14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 0;<br />16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />17<br />18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void GrabCoupon()<br />19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_of_coupons++;<br />21&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />22<br />23&nbsp; } <br /></span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>The code in the function above looks harmless.<span>&nbsp; </span>However, the <i>number_of_coupons</i> was defined as a static member of a class in line 3.<span>&nbsp; </span>This means that in a multithreading application a different thread might change the value of the <i>number_of_coupons</i> variable after the instruction in line 10 executes but before executing the instruction in line 12.<span>&nbsp;&nbsp; </span></p>
+  <p>Now notice the following method in the class <i>GrapCoupon </i>that can be used to increase the number of coupons.<span>&nbsp; </span>If an attacker can invoke the <i>GrabCoupon</i> method from a<span>&nbsp; </span>different thread he or she might be able to modify the total price calculated in the <i>CalculatePrice</i> method.<span>&nbsp; </span>For instance, an attacker might discover that a request to the following URL invokes the GrabCoupon method, increasing the <i>number_of_coupons </i>static member variable:</p>
+  <pre>
+    <span>http://some_site/sumbitCoupon.aspx?method=GrabCoupon</span>
+  </pre>
+  <p>To launch the attack, the attacker calls the <i>CalculatePrice()</i> function while making repeated requests to the URL above.<span>&nbsp; </span>This may cause the <i>number_of_coupons</i> to be less than the maximum allowed at the time of check (line 10) but be larger than the maximum allowed at the time of use (line 12), resulting in the application calculating a lower price than the one expected.</p>
+  <p>&nbsp;</p>
+  <h2>
+    <span>
+      <em>Scenario 2:<span>&nbsp; </span>Denial-of-services (DoS) attacks</em>
+    </span>
+  </h2>
+  <p>During this second scenario the application doesn’t need to be multithreaded.<span>&nbsp;&nbsp; </span>The attack scenario consists of an attacker accessing and locking a resource that is dependant to the ASP .NET application to properly function, such as critical file or network port.<span>&nbsp;&nbsp; </span>If the attacker beats the ASP .NET application into accessing the resource, he or she causes the application not to properly operate and service its users, thus creating a denial-of-service scenario.</p>
+  <p>
+    <span>&nbsp; </span>
+  </p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The following step in learning how to test for race condition bugs in ASP .NET is to understand what causes and how to protect against them.<span>&nbsp; </span>This will help you to identify this bug in code as well as to prepare you for executing the necessary test cases.</p>
+  <h2>
+    <span>
+      <em>References to static members of classes</em>
+    </span>
+  </h2>
+  <p>A common cause for race condition bugs is to allow static members of a class to be changed in between time of check and time of use (TOCTOU).<span>&nbsp;&nbsp; </span>This cause is what allows the first scenario in which the attacker logically attacks the application by changing a static member <i>number_of_coupons</i> in between TOCTOU.<span>&nbsp; </span><span>&nbsp;</span>To prevent race condition attacks using this scenario, developers can refrain from defining static members of classes and use local variables inside functions and methods:</p>
+  <pre>1&nbsp; class PriceCalculator()<br />2&nbsp; {<br />3<br />4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public int CalculatePrice()<br />5&nbsp;&nbsp;&nbsp;&nbsp; {<br />6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>int number_of_coupons = GetCouponCount();</strong>&nbsp; <br />7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int balance = 5000;<br />8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int maximum_coupons_allowed = 10;<br />9<br />10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (number_of_coupons &lt; maximum_coupons_allowed) <br />11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int total = balance - 10*number_of_coupons; <br />13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return total;<br />14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 0;<br />16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />17<br />18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void GrabCoupon()<br />19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_of_coupons++;<br />21&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />22<br />23&nbsp; } <span>&nbsp;</span></pre>
+  <p>Now the ASP .NET application defines <i>number_of_coupons</i> inside a method so the local variables with exist in the stack of each thread and will not be shared across threads, preventing attackers from modifying a shared version of the variable to execute the attack.</p>
+  <p>If developers must use static member variables, they can add a lock in between time of check and time of use to avoid race condition attacks:</p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <pre>1&nbsp; class PriceCalculator()<br />2&nbsp; {<br />3<br />4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static int number_of_coupons;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />5&nbsp;&nbsp;&nbsp;&nbsp; static object synchLock = new Object();<br />6<br />7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public int CalculatePrice()<br />8&nbsp;&nbsp;&nbsp;&nbsp; {<br />9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int balance = 5000;<br />10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int maximum_coupons_allowed = 10;<br />11<br />12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>lock(synchLock)</strong><br />13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />14<br />15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (number_of_coupons &lt; maximum_coupons_allowed) <br />16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />17&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int total = balance - 10*number_of_coupons; <br />18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return total;<br />19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 0;<br />21&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />22&nbsp;&nbsp;&nbsp;&nbsp; }<br />23&nbsp;&nbsp;&nbsp;&nbsp; <br />24&nbsp;&nbsp;&nbsp;&nbsp; public void GrabCoupon()<br />25&nbsp;&nbsp;&nbsp;&nbsp; {<br />26&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>lock(synchLock)</strong><br />27&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />28&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_of_coupons++;<br />29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />30&nbsp;&nbsp;&nbsp;&nbsp; }<br />31<br />32 }<br /></pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>The <i>lock</i> instruction makes sure that only one thread executes the code within the <i>synchLock</i> variable.<span>&nbsp; </span>This means that two threads can’t be checking and using the <i>number_of_coupons</i> static member variable at the same time and that the attack is no longer possible.</p>
+  <p>&nbsp;</p>
+  <h2>
+    <span>
+      <em>Accessing locked resources</em>
+    </span>
+  </h2>
+  <p>The second cause of race condition bugs in ASP .NET applications is relying on resources that can be accessed by low privileged users to properly operate.<span>&nbsp; </span>For instance, depending on a file that can be deleted or locked by a guest user can enable attackers to DoS a target application using the guest account.<span>&nbsp; </span>To protect against this variation, developers must properly secure the attack surface of the application so that no critically-dependant resources can be changed by low privileged attackers.</p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you’ve reviewed the theoretical aspects of race condition bugs in ASP .NET, it is necessary to understand the necessary test cases to check if your application is vulnerable. </p>
+  <h2>
+    <span>
+      <em>Test for logical attacks through race conditions</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for logical attacks on the application using race conditions:</p>
+  <ol>
+    <li>Find a request to an application action that uses a static variable to calculate the outcome of the action, and where the static variable is accessible through a different thread.<span>&nbsp; </span>See scenario 1 above for additional detail.
+<li>Find a request, different than the action in step 1, which modifies the target static member variable.
+<li>Execute the following sub steps simultaneously:
+<ul><li><span><span>a.<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span>Make one request to the application found in step 1 while
+<li><span><span>b.<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span>Making continuous requests to request found in step 2. </li></li></ul></li></li></li>
+  </ol>
+  <p>Expected results:<span>&nbsp; </span>The application is vulnerable if making the continued requests that use a separate thread to alter the static variable (found in step 2) alters with the behavior of the application request found in step 1 and generates a different outcome for the desired action. </p>
+  <p>
+    <b>
+      <i>
+        <span>&nbsp;</span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Test for denial-of-service (DoS) attacks through race conditions</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for DoS attacks on the application using race conditions:</p>
+  <ul>
+    <li>Log in to the computer that is hosting the ASP .NET application using a low privileged account. 
+<li>Monitor the application’s interaction with the file system.<span>&nbsp; </span>To execute this step you can use file system, registry, and network port monitoring tools such as Process Explorer from Systeinternals.com.
+<li>Find an application resource that is accessible to the low privileged account.
+<li>Open with write access or lock the application resource and observe how the application reacts.</li></li></li></li>
+  </ul>
+  <p>Expected results:<span>&nbsp; </span>The application is vulnerable if it stops servicing its users.<span>&nbsp; </span>This can occur because the application:</p>
+  <ul>
+    <li>Depends on a resource that is accessible to low privileged users.
+<li>Doesn’t fail gracefully if a dependant resource is locked or inaccessible.</li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Even though race condition attacks are subtle in code, they represent a significant threat to ASP .NET applications using multithreading or relying on resources that are accessible to low privileged users.<span>&nbsp; </span>Attackers can exploit this vulnerability to execute logical or denial-of-service attacks on applications.<span>&nbsp; </span>To test for this vulnerability, it is recommended to familiarize with the common attack scenarios involved as well as with what causes this bug and how to protect against it.<span>&nbsp; </span>Then, you must try executing simultaneous actions to trigger different threads into accessing a shared variable or method.<span>&nbsp; </span>To execute race conditions for denial-of-service attacks, use a low privileged user to access any critically dependant resource to the application and see how the application handles the resource not being available.</p>
+  <p>&nbsp;</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

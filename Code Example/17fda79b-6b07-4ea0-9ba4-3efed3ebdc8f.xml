@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1058219795" Content_Hash="-1719349992">
+  <Metadata>
+    <Id>17fda79b-6b07-4ea0-9ba4-3efed3ebdc8f</Id>
+    <Id_History>d124abb1-e230-43ef-8762-1caa0dbb89ca,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Input Validation Using Struts 1</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Input Validation Using Struts 1</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>JAVA <li>Struts 1</li></li>
+  </ul>
+  <h1>Summary</h1>
+  <p>Perform input validation using Struts 1 within an application.</p>
+  <h1>Objectives</h1>
+  <p>Strong input validation is a powerful control that can prevent various security issues within an application. This article will describe how to use the built-in mechanisms provided by Struts 1 to perform appropriate input validation.</p>
+  <h1>Solution Example</h1>
+  <p>There are 2 basic ways to perform input validation within Struts1: overriding the <em>validate()</em> method in the form bean and using the validator mechanism.</p>
+  <h3>1. Overriding the validate() method.</h3>
+  <p>If you use the <em>ActionForm</em> class (or some subclass) to handle your user input, you can simply override the validate method within your class and have the framework call this method in order to perform validation. Below is an example of a simple form bean</p>
+  <pre>public class MyForm extends ActionForm &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private String title;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) &amp;#123; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //very important - call super first before any validations<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ActionErrors errors = super.validate(mapping,request);&amp;nbsp; </pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (errors == null) errors = new ActionErrors();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (title == null) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //"errors.required" message is defined in message bundle for app<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.required","Title"));<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (errors.empty()) return null;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return errors;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
+  <p>The next step is to define the form bean as is typical for the application in the <em>struts-config.xml</em> file.</p>
+  <pre>&lt;form-bean name="myForm" type="com.myapp.struts.form.MyForm" /&gt;</pre>
+  <p>Finally (also in the <em>struts-config.xml</em> file) you need to define your action, and tell struts that validation should be enabled. This will cause the framework to validate your form when the action is submitted.</p>
+  <pre>&lt;action path="..." name="myForm" validate="true" ... /&gt;</pre>
+  <h3>2. Using the validator framework.</h3>
+  <p>Using the Struts validator framework involves including 2 additional files, the <em>validator-rules.xml</em> (the actual validations, many defaults provided for you) and <em>validation.xml</em> (ties validations to application forms) files.</p>
+  <p>You'll also need to tweak the <em>struts-config.xml</em> file by adding the configuration shown below:</p>
+  <pre>&lt;&amp;#33;--&amp;nbsp; Validator plugin --&gt;<br />&lt;plug-in className="org.apache.struts.validator.ValidatorPlugIn"&gt;<br />&amp;nbsp; &lt;set-property<br />&amp;nbsp; property="pathnames"<br />&amp;nbsp;&amp;nbsp; value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/&gt;<br />&lt;/plug-in&gt;</pre>
+  <p>You'll likely want to use the <em>DynaValidatorForm</em> or some subclass since it is very convenient to use when working with the validation framework. An example login form configured this way is shown here: </p>
+  <pre>&lt;form-beans&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form-bean name="LoginForm" type="org.apache.struts.validator.DynaValidatorForm"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form-property name="userName" type="java.lang.String" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form-property name="password" type="java.lang.String" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/form-bean&gt;<br />&lt;/form-beans&gt;</pre>
+  <p>Since the <em>validator-rules.xml</em> file covers many standard validations, you'll essentially need to alter the <em>validation.xml</em> file to account for your new form validations. Below is an example covering the login form.</p>
+  <pre>&lt;form-validation&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;formset&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form name="LoginForm"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;field property="userName" depends="required"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;arg key="LoginForm.userName"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/field&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;field property="password" depends="required,minlength"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;arg0 key="LoginForm.password"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;arg1 key="&amp;#36;&amp;#123;var:minlength&amp;#125;" name="minlength" resource="false"/&gt;</pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;var&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;var-name&gt;minlength&lt;/var-name&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;var-value&gt;6&lt;/var-value&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/var&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/field&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/form&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/formset&gt;<br />&lt;/form-validation&gt;</pre>
+  <p>Now that these pieces are in place, you configure your standard action as shown below and ensure validation is enabled in order to perform validation. </p>
+  <pre>&lt;action path="..." name="LoginForm" validate="true" ... /&gt;</pre>
+  <p>Whether you choose to validate using the code-driven validate method or the configuration-driven validator framework, you can display errors to the user on the UI using the <em>ActionError</em> or <em>ActionErrors</em> tags provided by Struts. This will allow you to display the error messages directly to the user in a localized manner. </p>
+  <p>In conclusion, input validation can function as a strong security control if used properly and applied thoroughly throughout the application. The Struts framework provides 2 options for accomplishing this task. </p>
+  <h1>More Information</h1>
+  <ul>
+    <li>For Struts 1 documentation, please see <a href="http://struts.apache.org/1.x/">http://struts.apache.org/1.x/</a><li>For more information about Struts Validator, please see <a href="http://struts.apache.org/1.x/faqs/validator.html">http://struts.apache.org/1.x/faqs/validator.html</a><li>For more information about Struts Validator, please see <a href="http://struts.apache.org/1.2.4/userGuide/dev_validator.html">http://struts.apache.org/1.2.4/userGuide/dev_validator.html</a></li></li></li>
+  </ul>
+  <h1>Input and Data Validation Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/b531d29c-86f7-4812-90ce-5f3f0f780aba">Validate Input from All Sources</a>
+    </li>
+    <li>
+      <a href="/article/c98695c5-cf02-44a1-96bf-1f8046b8ad9d">Validate Input for Length, Range, Format, and Type</a>
+    </li>
+    <li>
+      <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">
+        <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">Validate All Input Passed to the Database</a>
+      </a>
+    </li>
+    <li>
+      <a href="/article/a5491c44-164b-4046-94d3-b575b9745e8b">Filter All User-Supplied Filename and Path Input</a>
+    </li>
+    <li>
+      <a href="/article/9f21442f-2aee-4573-8be6-a5b51d9c89b8">Do Not Rely on Client-Side Validation</a>
+    </li>
+  </ul>
+  <h1>Input and Data Validation Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/7f8deb21-cd52-41be-80b4-8897612021dc">Input from All Sources Is Validated</a>
+    </li>
+    <li>
+      <a href="/article/61869793-2c10-40c0-b82a-babcc0312697">Input Is Validated for Length, Range, Format and Type</a>
+    </li>
+    <li>
+      <a href="/article/42f4b565-14f7-42f4-8c5a-0f78f357e4c0">All Database Input Is Validated</a>
+    </li>
+    <li>
+      <a href="/article/17884af0-fc83-412a-b613-4def4a6f84ad">User-Supplied Filenames and Paths Are Validated</a>
+    </li>
+    <li>
+      <a href="/article/b1803c35-9579-4a38-9a63-30202160ef25">The Application Does Not Rely on Client-Side Validation</a>
+    </li>
+  </ul>
+  <h1>Input and Data Validation Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/0f49430b-2abe-408f-b046-89fa739f5d53">Input Validation Using JSF</a>
+    </li>
+    <li>
+      <a href="/article/18ac74df-602b-4a58-8998-52f638f3a045">Input Validation Using SpringMVC</a>
+    </li>
+    <li>
+      <a href="/article/d124abb1-e230-43ef-8762-1caa0dbb89ca">Input Validation Using Struts 1</a>
+    </li>
+    <li>
+      <a href="/article/2f917654-65a8-49c9-b000-c17f9765bf42">Input Validation Using Struts 2</a>
+    </li>
+    <li>
+      <a href="/article/38342130-4e4b-47df-afd9-c7e8c86f77ee">Use ESAPI Executor</a>
+    </li>
+  </ul>
+  <h1>Input and Data Validation Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/fd3ecaaa-cb7c-43a2-a91a-f19862f736d4">How to Test for Server-Side Code Injection in Java</a>
+    </li>
+    <li>
+      <a href="/article/c00b9149-1290-4c9e-bcd0-392a9c5a6fb0">How to Test for Path Manipulation Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/5c99da7b-b4eb-4315-b48c-ac2598c13144">How to Test for Double Encoding Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/fc95c5e5-667a-4e66-b1cf-f7d0529c4c2f">How to Test for Client-side Validation Bypass Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/6f4e927b-bd45-498b-95c4-78fd2c3287c1">How to Test for Integer Overflows in Java</a>
+    </li>
+    <li>
+      <a href="/article/ed20009a-59ef-415d-8e72-0ff3221a1346">How to Test for Integer Underflow Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/d7682043-0095-4700-97dd-01ce797c4ada">How to Test for Deserialization of Untrusted Data Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

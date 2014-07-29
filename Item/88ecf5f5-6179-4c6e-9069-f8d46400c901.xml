@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="111659276" Content_Hash="547154761">
+  <Metadata>
+    <Id>88ecf5f5-6179-4c6e-9069-f8d46400c901</Id>
+    <Id_History>038c7b88-b7a9-4e30-833a-614ab3184b46,</Id_History>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-494: Download of Code Without Integrity Check</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>Any</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-494: Download of Code Without Integrity Check</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>The product downloads source code or an executable from a remote location and executes the code without sufficiently verifying the origin and integrity of the code. An attacker can execute malicious code by compromising the host server, performing DNS spoofing,
+ or modifying the code in transit.</p>
+  <h2>Discussion</h2>
+  <p>You don't need to be a guru to realize that if you download code and execute it, you're trusting that the source of that code isn't malicious. Maybe you only access a download site that you trust, but attackers can perform all sorts of tricks to modify that
+ code before it reaches you. They can hack the download site, impersonate it with DNS spoofing or cache poisoning, convince the system to redirect to a different site, or even modify the code in transit as it crosses the network. This scenario even applies
+ to cases in which your own product downloads and installs its own updates. When this happens, your software will wind up running code that it doesn't expect, which is bad for you but great for attackers.</p>
+  <h2>Detection</h2>
+  <p>The following methods for detecting download of code without integrity checks vulnerabilities are available:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Manual Analysis.</strong> This weakness can be detected using tools and techniques that require manual (human) analysis, such as penetration testing, threat modeling, and interactive tools that allow the tester to record and modify an active session.
+ Specifically, manual static analysis is typically required to find the behavior that triggers the download of code, and to determine whether integrity-checking methods are in use. These may be more effective than strictly automated techniques. This is especially
+ the case with weaknesses that are related to design and business rules.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Black Box.</strong> Use monitoring tools that examine the software's process as it interacts with the operating system and the network. This technique is useful in cases when source code is unavailable, if the software was not developed by you, or
+ if you want to verify that the build phase did not introduce any new weaknesses. Examples include debuggers that directly attach to the running process; system-call tracing utilities such as
+<em>truss</em> (Solaris) and <em>strace</em> (Linux); system activity monitors such as
+<em>FileMon, RegMon, Process Monitor</em>, and other Sysinternals utilities (Windows); and sniffers and protocol analyzers that monitor network traffic. Attach the monitor to the process and also sniff the network connection. Trigger features related to product
+ updates or plugin installation, which is likely to force a code download. Monitor when files are downloaded and separately executed, or if they are otherwise read back into the process. Look for evidence of cryptographic library calls that use integrity checking.</p>
+    </li>
+  </ol>
+  <h2>Mitigation</h2>
+  <p>The following methods for mitigating download of code without integrity checks vulnerabilities are available:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Perform proper forward and reverse DNS lookups to detect DNS spoofing.</strong>&amp;nbsp;This is only a partial solution since it will not prevent your code from being modified on the hosting site or in transit.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Encrypt the code with a reliable encryption scheme before transmitting.</strong> This will only be a partial solution, since it will not detect DNS spoofing and it will not prevent your code from being modified on the hosting site.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a secure framework.</strong> Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. Speficially, it may be helpful to use tools or frameworks to perform integrity
+ checking on the transmitted code.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Sign code that you are distributing.</strong> If you are providing the code that is to be downloaded, such as for automatic updates of your software, then use cryptographic signatures for your code and modify your download clients to verify the signatures.
+ Ensure that your implementation does not contain CWE-295, CWE-320, CWE-347, and related weaknesses. Use code signing technologies such as
+<em>Authenticode</em>. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the principle of least privilege.</strong> Run your code using the lowest privileges that are required to accomplish the necessary tasks. If possible, create isolated accounts with limited privileges that are only used for a single task. That
+ way, a successful attack will not immediately give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a sandbox.</strong> Run your code in a "jail" or similar sandbox environment that enforces strict boundaries between the process and the operating system. This may effectively restrict which files can be accessed in a particular directory or
+ which commands can be executed by your software. OS-level examples include the Unix
+<em>chroot</em> jail, <em>AppArmor</em>, and <em>SELinux</em>. In general, managed code may provide some protection. For example,
+<em>java.io.FilePermission</em> in the <em>Java SecurityManager</em> allows you to specify restrictions on file operations. This may not be a feasible solution, and it only limits the impact to the operating system; the rest of your application may still be
+ subject to compromise. Be careful to avoid CWE-243 and other weaknesses related to jails.
+<br /><strong>Note:</strong> The effectiveness of this mitigation depends on the prevention capabilities of the specific sandbox or jail being used and might only help to reduce the scope of an attack, such as restricting the attacker to certain system calls or limiting
+ the portion of the file system that can be accessed.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about download of code without integrity checks vulnerabilities, please see
+<a href="http://cwe.mitre.org/top25/index.html#CWE-494">http://cwe.mitre.org/top25/index.html#CWE-494</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

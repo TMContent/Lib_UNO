@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2054471074" Content_Hash="645149297">
+  <Metadata>
+    <Id>35f6e868-670b-47e2-8b29-4ea4f0de37ed</Id>
+    <Id_History>86caf209-6655-4a12-b9e7-fcdf9ee08ead,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Applications Are Isolated Using Medium Trust in Hosted Environments.</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Applications Are Isolated Using Medium Trust in Hosted Environments.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that your application uses medium trust in shared hosting environments.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>In ASP.NET version 1.1, Web applications configured for Medium trust could not access SQL Server databases. In ASP.NET, SQL Server database access is available to Medium trust applications because the SQL Server managed data provider no longer demands Full trust. If you need to isolate multiple applications on a shared server from one another and from shared system resources, use Medium trust. To enforce Medium trust for all Web applications on a server, use the following configuration in the machine-level Web.config file. </p>
+  <div>
+    <pre>&lt;location allowOverride="false"&gt;<br />  &lt;system.web&gt;<br />   &lt;trust level="Medium" originUrl="" /&gt;<br />  &lt;/system.web&gt;<br /> &lt;/location&gt;  </pre>
+  </div>
+  <p>By setting <b>allowOverride="false"</b>, an individual developer is unable to override the Medium trust policy setting in his or her application's Web.config file.</p>
+  <p>Medium trust provides application isolation because it restricts file system access to the application's own virtual directory hierarchy, and it limits access to HTTP Web resources to a defined address or set of addresses specified by the originUrl attribute on the &lt;trust&gt; element. It also prevents access to shared system resources such as the Windows event log and registry. Additionally, Medium trust applications cannot use reflection and cannot access non-SQL Server OLE DB data sources.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

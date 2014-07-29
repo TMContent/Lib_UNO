@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>470a4a35-6b30-45e5-b32a-c5ba19cff6f8</Id>
+    <Id_History>00000000-0000-0000-0000-0000005c244a,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Host Different Applications on Different Subdomains</Title>
+    <Category>Local Storage</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Host Different Applications on Different Subdomains</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Host different applications on different subdomains.
+
+==Why==
+
+Different applications should be deployed on different subdomains to prevent multiple applications from sharing the same localStorage object. This will mitigate the risk of unauthorized disclosure. Applications deployed on the same domain share the same localStorage object. If one application is compromised, the data stored in localStorage by the other applications on the same domain will also be compromised. 
+
+==How==
+
+To host different applications on different subdomains:
+
+# **Identify all the applications on the same domain.** Create a spreadsheet of all the applications on the same domain.
+# **Create a separate subdomain for each application.** For each application in the spreadsheet, use whatever mechanism is used to manage domains to create subdomains. In practice, you might need to ask the person who manages the domains to do this. Ideally, each subdomain should be isolated from the others in a manner that prevents file-system access between each application. This can usually be done as follows: For each application, create an OS user and provide only this OS user with access to the application's web root folder.
+# **Move each application to its separate subdomain.** Copy each application's files to its new subdomain. Make sure each application works properly at its new location. It's probably best not to delete the files on the original domain, but to move them to a location outside of the web root. Moving the original files outside of the web root makes them inaccessible from the Internet, but makes it easy to restore them if necessary.
+# **(Optional) Create redirects from the old URLs to the new subdomains.** Use a redirection mechanism, such as JavaScript redirection, a server setting, or a script that sends an HTTP redirection header, to send users from each application's original location to its new location. Do this for each application that has been moved.
+# **(Optional) Notify the users of any changes that were made.** Depending on how critical the data handled by the application is, it might be prudent to notify the users that a change in the URL has taken place, so that they are not alarmed when they notice this change. A simple way to provide this notification is to put a note on the front page of the application. Another way is to send e-mail to the users of the application to explain the change.
+
+==Local Storage Guidelines==
+
+* [[00000000-0000-0000-0000-0000005c244a|Host Different Applications on Different Subdomains]]
+* [[00000000-0000-0000-0000-00000061bbb6|Do Not Store Sensitive Information in Local Storage]]
+* [[00000000-0000-0000-0000-000000233bdb|Use Session Storage Instead of Local Storage If Possible]]
+* [[00000000-0000-0000-0000-00000052241e|Do Not Store Session Identifiers in Local Storage]]
+* [[00000000-0000-0000-0000-00000052e67b|Do Not Store Authentication Information in Local Storage]]
+
+==Local Storage Checklist Items==
+
+* [[00000000-0000-0000-0000-000000358a18|Different Applications Are Hosted on Different Subdomains]]
+* [[00000000-0000-0000-0000-000000972b0b|Sensitive Information Is Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000007e3ee6|SessionStorage Is Used Instead of LocalStorage If Possible]]
+* [[00000000-0000-0000-0000-00000062c37e|Session Identifiers Are Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000004e1296|Authentication Information Is Not Stored in Local Storage]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1595724024" Content_Hash="-1238384315">
+  <Metadata>
+    <Id>44c364a0-b90f-49dc-8a63-5258e9df4be5</Id>
+    <Id_History>40b8b8eb-b678-4d2f-b9bb-17573a914293,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Consider Encrypting Sensitive Data in the Registry</Title>
+    <Category>Registry</Category>
+    <Phase>Deployment</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Encrypting Sensitive Data in the Registry</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you need to store sensitive data in the registry, then consider encrypting it with DPAPI. You can use DPAPI with the machine key to encrypt the data, store the encrypted data beneath a registry key, and then use an ACL that restricts access to your specific application identity to restrict access to the registry key. Alternatively, you can use DPAPI with the user store. In this latter case, you need to load the user account's profile to access the key.</p>
+  <h1>Why</h1>
+  <p>Encrypted data in&amp;nbsp;registry is a final line of defense.&amp;nbsp; Even if an attacker successfully gains access to a registry key, she must still decrypt the data.&amp;nbsp; Although key management and encryption overhead add to the cost and complexity of an application, at-rest data encryption can greatly increase application security.&amp;nbsp; </p>
+  <h1>When</h1>
+  <p>You should consider the level of protection required, and use encryption only when protecting a field is worth the cost incurred.&amp;nbsp; Good candidates for encryption include Keys, passwords and similar authentication tokens which cannot be stored as salted hashes, and other highly sensitive and/or personally identifiable information.</p>
+  <h1>How</h1>
+  <p>Consider using the machine store if your application is a server that runs on its own dedicated computer with no other applications, or if you have multiple applications on the same server and you need those applications to be able to share the sensitive registry data. If you only want specific service accounts to be able to access the DPAPI keys and their profiles are loaded, then use DPAPI with the user store.</p>
+  <p>The following code shows how to create a registry key protected with an ACL and how to use DPAPI with the machine store to store encrypted data in the restricted key.</p>
+  <pre>using System.Security.Cryptography;<br />using System.Security.AccessControl;<br />using System.Text;<br />using Microsoft.Win32;<br />...</pre>
+  <pre>// Get the original data in a byte array<br />byte[] toEncrypt = UnicodeEncoding.ASCII.GetBytes(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "The secret data to be encrypted");</pre>
+  <pre>// Encrypt the data by using the ProtectedData class.<br />byte[] encryptedData = ProtectedData.Protect(toEncrypt, null,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; DataProtectionScope.LocalMachine);</pre>
+  <pre>// Create a new key in the registry with a restricted ACL <br />// and write stream of bytes to the registry key<br />string user = Environment.UserDomainName + "\\" + Environment.UserName;<br />RegistrySecurity security = new RegistrySecurity();<br />RegistryAccessRule rule = new RegistryAccessRule(user,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistryRights.FullControl,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; InheritanceFlags.ContainerInherit,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; PropagationFlags.None,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; AccessControlType.Allow);<br />security.AddAccessRule(rule);</pre>
+  <pre>Registry.CurrentUser.CreateSubKey("TestEncryptedData",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistryKeyPermissionCheck.ReadWriteSubTree,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; security);<br />Registry.SetValue(@"HKEY_CURRENT_USER\TestEncryptedData", "Encrypted",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; encryptedData);</pre>
+  <p>Use the following code to decrypt the data stored in the registry.</p>
+  <pre>// Read the encrypted data from registry and decrypt the contents <br />byte[] dataFromRegistry = Registry.GetValue(<br />@"HKEY_CURRENT_USER\TestEncryptedData",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "Encrypted", null) as byte[];<br />byte[] decryptedData = ProtectedData.Unprotect(dataFromRegistry, null,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; DataProtectionScope.LocalMachine);</pre>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/4fa0d699-fb20-46bc-b0d5-04d9bb49a987">Consider Using ACLs to Restrict Access to Data Stored in HKLM</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

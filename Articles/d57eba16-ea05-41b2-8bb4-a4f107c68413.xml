@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d57eba16-ea05-41b2-8bb4-a4f107c68413</Id>
+    <Id_History>067e2f72-18f0-4f5a-ba9c-287691cd9ed3,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Input Is Validated for Length, Range, Format And Type</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Input Is Validated for Length, Range, Format And Type</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <h1>
+    <p style="font-size: medium; font-weight: normal;">Applications written using Scala and Play Framework 2.1.0+</p>
+  </h1>
+  <h1>What to Check For</h1>
+  <h1>
+    <p style="font-size: medium; font-weight: normal;">Check that all input is validated and treated as untrusted data. Ensure data is validated using whitelisting techniques to check against known good input.</p>
+  </h1>
+  <h1>Why</h1>
+  <h1>
+    <p style="font-size: medium; font-weight: normal;">Unchecked malicious input may lead to integer overflows, injection based attacks, denial of service or information disclosure.</p>
+  </h1>
+  <h1>How to Check</h1>
+  <h1>
+    <p style="font-size: medium; font-weight: normal;">To check for this problem, use the following steps:</p>
+    <ol style="font-size: medium; font-weight: normal;">
+      <li>
+        <p>
+          <strong>Find all input sources.&amp;nbsp;</strong>During design time, identify all of the potential input sources to your application. Scour the source code to discover sources of input that may have been missed in the design. The most common sources are:</p>
+        <ul>
+          <li>URL based parameters</li>
+          <li>Form based parameters</li>
+          <li>Hidden fields</li>
+          <li>Cookies</li>
+          <li>HTTP headers (Host, accept types, www authentication, cache settings, encodings, etc)</li>
+          <li>Local filesystem</li>
+          <li>Database</li>
+          <li>Other services running on the system</li>
+          <li>Javascript variables</li>
+          <li>File upload and attributes (filename, size, data, etc)</li>
+          <li>DNS results or host names</li>
+          <li>External component call return values (AJAX, etc)</li>
+        </ul>
+      </li>
+      <li>
+        <p>
+          <strong>Trace data from source to sink.&amp;nbsp;</strong>Trace each source of input through your application until you find its ultimate destination. The final sink may be in memory, on the hard drive, sent over the network or stored in a data store such as a database.</p>
+      </li>
+      <li>
+        <p>
+          <strong>Identify validation routines.&amp;nbsp;</strong>Each input source should have a data validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many spread throughout your code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing.</p>
+      </li>
+      <li>
+        <p>
+          <strong>Ensure quality of validation routines.&amp;nbsp;</strong>Validation routines should check for length, range, format and type.</p>
+        <ul>
+          <li>Validation routines should check for known good data and constrain input against each of the four categories: length, range, format and type.</li>
+          <li>In web applications, look for application-supplied validators, such as a Custom Scala Validator, to validate and constrain input after it is received from an input source.</li>
+          <li>Ensure that all numeric fields are validated for type and range. Check for the use of regular expressions and&amp;nbsp;<strong>scala.util.matching</strong>&amp;nbsp;or the use of a validator that checks numeric ranges by converting the input value to an integer or double and then performing a range check.</li>
+          <li>Check that validators validate input against the least permissive expression possible that will accept all the input expected for that field.</li>
+          <li>If you know that the field will have a certain internal structure, ensure that is checked for.</li>
+          <li>If the input has an internal checksum, like a credit card number, ensure that is checked.&amp;nbsp;<br /><br />Validation should check first for whitelisted data, ie, known valid, safe data, and then for blacklisted data, ie, malicious, dangerous data. Do not rely only on filtering out malicious data as it is too easy to miss something. Validate on the server--do not rely on client-side validation alone as it can be easily bypassed.</li>
+        </ul>
+      </li>
+    </ol>
+    <blockquote style="font-size: medium; font-weight: normal;">
+      <p>
+        <strong>Options for Constraining and Sanitizing Data</strong>
+      </p>
+      <table>
+        <tbody>
+          <tr>
+            <th>Requirement</th>
+            <th>Options</th>
+          </tr>
+          <tr>
+            <td>Type checks</td>
+            <td>Regular expressions (<strong>scala.util.matching</strong><strong>.regex</strong>)<p>Scala type system</p></td>
+          </tr>
+          <tr>
+            <td>Length checks</td>
+            <td>Regular expressions (<strong>scala.util.matching</strong><strong>.regex</strong>)<br /><p><i><b>play.api.data.validation</b></i>&amp;nbsp;object</p><p>Custom Scala&amp;nbsp;<strong>Validator</strong></p></td>
+          </tr>
+          <tr>
+            <td>Format checks</td>
+            <td>Regular expressions for pattern matching (<strong>Pattern</strong>,&amp;nbsp;<strong>Matcher</strong>)<p>Scala type system</p><p><i><b>play.api.data.validation</b></i>&amp;nbsp;object</p></td>
+          </tr>
+          <tr>
+            <td>Range checks</td>
+            <td>Custom Scala&amp;nbsp;<strong>Validator</strong><p>Typed data comparisons</p><p><i><b>play.api.data.validation</b></i>&amp;nbsp;object</p></td>
+          </tr>
+        </tbody>
+      </table>
+    </blockquote>
+  </h1>
+  <h1>How to Fix</h1>
+  <h1>
+    <p style="font-size: medium; font-weight: normal;">Input can vary in length, data type, and content. Validate that all input meets your application's expectations.</p>
+    <ol style="font-size: medium; font-weight: normal;">
+      <li>
+        <p />
+        <strong>Validating length</strong>: Your application should check a string's length or the number of bits in a numeric value. Checking the length can help prevent buffer overflows as well as integer overflows in numeric values. A simple way to validate the numeric value for forms is through the use of&amp;nbsp;<i>minLength(length: Int)</i>&amp;nbsp;and<i>&amp;nbsp;maxLength(length: Int)</i>&amp;nbsp;from the&amp;nbsp;<i>play.api.data.validation</i>&amp;nbsp;constraints object of Play Framework:<pre>object SignUp extends Controller {
+  
+  /**
+   * Sign Up Form definition.
+   */
+  val signupForm: Form[User] = Form(
+    
+    // Define a mapping that will handle User values
+    mapping(
+      "firstname" -&gt; text(maxLength = 20),
+      "lastname" -&gt; text(maxLength = 20),
+      "username" -&gt; text(minLength = 4),
+      "password" -&gt; text(minLength = 6),   
+      // Create a tuple mapping for the password/confirm
+      "password" -&gt; tuple(
+        "main" -&gt; text(minLength = 6),
+        "confirm" -&gt; text
+      ),
+
+    )
+  )
+  }</pre>Also, you can validate any numeric value through the use of<font color="#ff0000"></font>&amp;nbsp;BigInt/BigDecimal as follows:&amp;nbsp;<pre>def productcheck = Action { implicit request =&gt;
+    prodForm.bindFromRequest.fold(
+      errors =&gt; BadRequest(views.html.index(errors, "There is some error")),
+      prodForm =&gt; {
+
+        val proname = prodForm.pname
+        val prodprice = prodForm.price
+        if(prodprice.compare(BigInt(0)) &gt; -1
+          &amp;&amp; prodprice.compare(BigInt(Integer.MAX_VALUE)) 
+        {
+          println("true")
+          ............ //code for true
+        }
+        else
+        {
+          println("false")
+          ............ // code for exception
+        }</pre></li>
+      <li>
+        <p />
+        <strong>Validating type</strong>:&amp;nbsp;Validating the input's data type is important when your application expects a specific non-string parameter. Difference in data type can trigger unhandled exceptions that would throw your application into an unknown state. The following is an example of validating in forms:<pre>object ContactForm extends Controller {
+  
+  /**
+   * Contact Form definition.
+  */
+  val appointmentMapping = tuple(
+  "location" -&gt; text,
+  "start" -&gt; tuple(
+    "date" -&gt; date,
+    "time" -&gt; text),
+  "attendees" -&gt; list(mapping(
+    "name" -&gt; text,
+    "email" -&gt; email)
+)}</pre></li>
+      <li>
+        <strong>Validating contents</strong>: Use whitelist and blacklist techniques to validate the input's contents, based on the constraints that are imposed on the input: If the input follows a tight structure and format, you can use whitelisting alone to weed out malicious input. If there are unknowns about the input, you'll need a combination of whitelisting and blacklisting. In general, use blacklisting as a backup to whitelisting, through a spiral-out approach: Use whitelisting for the initial validation. If whitelisting cannot validate the input, then fall back to blacklisting. If blacklisting cannot validate, then discard the input. The following is an example of implementing this technique using forms:<pre>object ValidateProduct extends Controller {
+
+  val productForm = Form(mapping(
+    "ean" -&gt; longNumber.verifying("This product already exists!", Product.findByEan(_).isEmpty),
+    "name" -&gt; nonEmptyText,
+    "description" -&gt; text,
+    "pieces" -&gt; number,
+    "active" -&gt; boolean)(Product.apply)(Product.unapply).verifying(
+      "Product can not be active if the description is empty", product =&gt;
+        !product.active || product.description.nonEmpty))
+}</pre><p>Using regular expressions, the fix would be as below:</p><p /><pre>val pid = ProductForm.productid
+val pname = ProductForm.productname
+val products = Product.findProduct(pid, pname)
+val whitelistPattern = "(\\w|\\d)+".r
+val issafe =whitelistPattern.pattern.matcher(pname).matches</pre><pre>if (issafe){</pre><pre>...... //Code for Action</pre><pre>}else{</pre><pre>...... //Code for Exception</pre><pre>}</pre><pre><br /></pre><p>Examples of useful regular expressions:</p><p /><table><tbody><tr><td>Use</td><td>Regular Expression</td><td>Scala String</td></tr><tr><td>Valid E-Mail Address</td><td>^\w+(\.|_|-){0,1}\w+@(\w+\.)*\w{3,1024}\.([a-zA-Z]{2}\.){0,1}[a-zA-Z]{2,4}$</td><td>^\\w+(\\.|_|-){0,1}\\w+@(\\w+\\.)*\\w{3,}\\.([a-zA-Z]{2}\\.){0,1}[a-zA-Z]{2,4}$</td></tr><tr><td>Alpha-numeric free text</td><td>(\w|\d|\s|;|\?|!|,|\.|-|:)+</td><td>(\\w|\\d|\\s|;|\\?|!|,|\\.|-|:)+</td></tr><tr><td>Word characters</td><td>\w+</td><td>\\w+</td></tr><tr><td>Numbers</td><td>\d+</td><td>\\d+</td></tr></tbody></table></li>
+    </ol>
+  </h1>
+  <h1>Additional Resources</h1>
+  <h1>
+    <ul style="font-size: medium; font-weight: normal;">
+      <li>A tutorial on regular expressions is available at&amp;nbsp;<a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>.</li>
+      <li>For more information on using regular expression in Scala, see: Documentation for&amp;nbsp;<a href="http://www.scala-lang.org/api/current/index.html#scala.util.matching.Regex">Regex Pattern</a>&amp;nbsp;in Scala documentation.</li>
+    </ul>
+  </h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); color: rgb(17, 17, 17);">Input and Data Validation Guidelines</h1>
+  <h1>
+    <div style="font-size: medium; font-weight: normal;">
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255); color: rgb(17, 17, 17);">
+        <li style="margin: 0px; padding: 0px;">
+          <font color="#333399" style="margin: 0px; padding: 0px;">
+            <b style="margin: 0px; padding: 0px;">
+              <a href="af528b9a-af5f-49b8-a314-4578c0b31273" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Input from All Sources</a>
+            </b>
+          </font>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <font color="#333399" style="margin: 0px; padding: 0px;">
+            <b style="margin: 0px; padding: 0px;">
+              <a href="b6795407-d01e-44ec-8aed-a440d388902b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Input for Length, Range, Format, and Type</a>
+            </b>
+          </font>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <font color="#333399" style="margin: 0px; padding: 0px;">
+            <b style="margin: 0px; padding: 0px;">
+              <a href="00000000-0000-0000-0000-00000016b3b2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate All Input Passed to the Database</a>
+            </b>
+          </font>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">
+            <a href="97d61072-14e2-48dd-a1bf-ec149efbcb54" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Do Not Rely on Client-Side Validation</a>
+          </b>
+        </li>
+      </ul>
+    </div>
+  </h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); color: rgb(17, 17, 17);">Input and Data Validation Checklists</h1>
+  <h1>
+    <div style="font-size: medium; font-weight: normal;">
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+        <li style="margin: 0px; padding: 0px;">
+          <font style="margin: 0px; padding: 0px;">
+            <a href="0bf6f129-8641-43f4-a29c-62f58493fb78" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-weight: bold;">
+              <b style="margin: 0px; padding: 0px;">Input from All Sources Is Validated</b>
+            </a>
+          </font>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="067e2f72-18f0-4f5a-ba9c-287691cd9ed3" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Input Is Validated for Length, Range, Format and Type</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="2faf9bc6-fb15-4341-bb10-7dbc39e30d6e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Database Input Is Validated</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="c5688313-0255-461c-a978-423596d182db" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Application Does Not Rely on Client-Side Validation</a>
+          </b>
+        </li>
+      </ul>
+    </div>
+  </h1>
+  <div>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    </ul>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

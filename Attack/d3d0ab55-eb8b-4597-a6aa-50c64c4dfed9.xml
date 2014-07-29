@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-849642041" Content_Hash="-587486448">
+  <Metadata>
+    <Id>d3d0ab55-eb8b-4597-a6aa-50c64c4dfed9</Id>
+    <Id_History>5aae21ac-2eb3-4f3d-ab10-ce31e490a261,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Information Disclosure Attack</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Information Disclosure Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Any application that restricts access to certain types of information, including configuration and deployment details.</p>
+  <h1>Description</h1>
+  <p>An Information Disclosure attack results in an application revealing sensitive information to the attacker. Examples of sensitive information include system specific data such as overly descriptive error messages, source code, software distribution and version numbers, database information, passwords, machine names and file paths to other sensitive areas.</p>
+  <p>For web applications there are several methods that can be used by an attacker to get more information from the application, such as directory indexing, path traversal, reading source code or error messages and comments left behind by developers, etc. </p>
+  <p>If the attacker can gain access to the binaries of the application (in the case of an installed client application), or through forceful browsing or other attacks (for a server application), the information disclosure attack surface becomes much larger. In this case the attacker can employ debuggers, decompilers, hex editors and other tools to search for secrets left in the application. </p>
+  <p>SQL injection, whether in a web application or installed client application, can also be considered a type of information disclosure attack because it can be used to access sensitive information that is stored in a database, as can other similar query-based attacks.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>
+      <strong>Confidentiality</strong>: An attacker gains access to sensitive information which may be used to launch further exploits against the application, or which may be of direct value (sensitive user information such as passwords or social security numbers, for instance) <li><strong>Authentication</strong>: Through an error message that reveals too much information or a SQL injection exploit, an attacker may be able to figure out another user's ID and password, and log in as that user. </li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>
+      <strong>Improper permissions: </strong>Through forceful browsing an attacker may be able to discover sensitive information that should not be available such as source code, binaries, backup files, etc. <li><strong>Directory indexing left on: </strong>This can allow an attacker to freely browse an entire directory on a website which can tell an attacker all available files on the server. <li><strong>Storing sensitive data in plaintext:</strong> Storing sensitive data in plain or weakly encoded text can lead to an attacker discovering username/password pairs, cryptography keys, or other sensitive data <li><strong>Detailed error messages:</strong> Propagating SQL errors, exception handler errors or stack traces do not help users solve a problem but can drastically reduce the amount of time it takes an attacker to exploit a system. <li><strong>Comments left in code:</strong> The client downloads and has access to all client side code. Any comments left in HTML, AJAX, or other script can easily be discovered. <li><strong>Hard coded usernames and passwords:</strong> Opening an application in a hex editor will show any hard coded strings in the application, this can lead an attacker directly to hard coded credentials <li><strong>Running with more privilege than is needed:</strong> This can allow an attacker to gain access to information on the server that should not be available. Permissions should be limited for all users including: SQL, Web Service, Web Application, etc.</li></li></li></li></li></li></li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <strong>Use language specific comments:</strong> These comments will be automatically removed by the parsing or compiling engine and are not visible client side. Note: be careful with comments that are similar to HTML comments such as ColdFusion comments ( &lt;&amp;#33;--- comment ---&gt; ). <li><strong>Use proper permissions:</strong> Restrict access to files and directories on the server, so users cannot access any file they want using directory/path traversal. <li><strong>Use strong encryption algorithms:</strong> whenever sensitive data is stored ensure that it is properly protected using strong encryption <li><strong>Use least privilege:</strong> Ensure that your application uses the principle of least privilege if it uses a backend database server. <li><strong>Use terse error messages:</strong> Be sure to only use short, generic error messages that don't reveal any sensitive information and never directly display error messages returned by a back-end database or other system. <li><strong>Use the principle of open design:</strong> When designing an application, assume the attacker has access to all information; bake security into your application so even with this information no further attacks are possible</li></li></li></li></li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>
+    <strong>Directory indexing</strong>: The HTTP request 'GET /&lt;null byte&gt;.jsp HTTP/1.0' allows an attacker to view the directory and file listing due to improper handling of null bytes </p>
+  <p>
+    <strong>Directory traversal</strong>: The URL http://www.example.com/../restricted-file.cgi allows an attacker to access the file 'restricted-file.cgi' which lies outside the web document root directory </p>
+  <p>
+    <strong>Directory traversal with encoded characters</strong>: The URL http://www.example.com/..&amp;#37;255c..&amp;#37;255c/restricted-file.cgi is similar to the one above, but the '/' characters are double encoded to bypass security filters</p>
+  <p>
+    <strong>Examples of too much information in error messages:</strong>
+  </p>
+  <ul>
+    <li>Invalid password for user: test <li>User test does not exist in this system <li>Unclosed &amp;#8216; character near &amp;#8216;); <li>Any error message that reflects internal component exceptions such as SQL, internal libraries, SSL, encryption, etc.</li></li></li></li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about Information Disclosure attacks, see <a href="http://www.webappsec.org/projects/threat/classes_of_attack.shtml">http://www.webappsec.org/projects/threat/classes_of_attack.shtml</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/08f2f28f-d09a-4b82-843e-8d971fc50553">Guideline: Do Not Disclose Valuable Information in Error Messages </a>
+      <li>
+        <a href="/article/74be8616-ad22-4d1d-a7fc-8ff3d145fc61">Guideline: Do Not Disclose Exception Details to the Client </a>
+        <li>
+          <a href="/article/875fb915-a91b-4190-b383-23dc81474136">Attack: Xpath-XQuery Attack</a>
+          <li>
+            <a href="/article/eaa90597-a420-410b-a7e7-2527dba65649">Attack: Server-Side Code Injection Attack</a>
+            <li>
+              <a href="/article/8247071e-d8f4-4812-b422-222921e309f5">Attack: Account Lockout Attack</a>
+              <li>
+                <a href="/article/d2cd0955-4493-48de-81aa-c46f681fad0a">Attack: XML Injection Attack</a>
+                <li>
+                  <a href="/article/22722eaf-f317-4b81-aecb-22c5caebfc97">Attack: Local Machine Credential Sniffing Attack</a>
+                  <li>
+                    <a href="/article/50551553-36c6-438f-9da8-185069467dc6">Attack: Traffic Analysis Attack</a>
+                    <li>
+                      <a href="/article/5c86d31c-18bf-45e8-9fd1-9214a285022e">Attack: SQL Injection Attack</a>
+                      <li>
+                        <a href="/article/a12f8f94-f2da-44fc-92a3-0b749626adf0">Attack: Exception Information Disclosure Attack</a>
+                        <li>
+                          <a href="/article/e7cbb2b5-b25c-47d5-8dbb-a1bb02d7ab25">Attack: Network Credential Sniffing Attack</a>
+                          <li>
+                            <a href="/article/87091639-81c2-4bae-a996-cc35b136638c">Attack: Network Eavesdropping Attack</a>
+                            <li>
+                              <a href="/article/1b2b2ca9-d35e-4119-b9d0-707b7cf127c0">Attack: Sniff Memory for Secrets Attack</a>
+                              <li>
+                                <a href="/article/8525587e-8122-495e-902a-6a67b0a81e4b">Attack: Statistical Analysis Attack</a>
+                                <li>
+                                  <a href="/article/53e5d83a-a7d5-4617-a54f-1a55cf151cfc">Attack: Timing Analysis Attack</a>
+                                  <li>
+                                    <a href="/article/80751518-9e6f-467f-83bc-33bac6b94ef5">Attack: Cross Site Scripting Attack</a>
+                                    <li>
+                                      <a href="/article/5fc61d60-4afa-4f2e-80a5-05d7a656f3ac">Attack: Canonicalization Attack</a>
+                                      <li>
+                                        <a href="/article/e706145e-6465-4261-96af-a66d6a19a637">Guideline: Do Not Include Debug Data in Output </a>
+                                        <li>
+                                          <a href="/article/bdff2308-96e1-4787-9162-a115d1366f76">Guideline: Block Protected Files From Being Retrieved </a>
+                                          <li>
+                                            <a href="/article/a96eaddb-5fb2-458e-b5ca-fde05a9a3a06">Guideline: Do Not Place Sensitive Data in Parameters </a>
+                                            <li>
+                                              <a href="/article/e1992e93-39c6-4508-9b16-0e07b0939c37">Guideline: Secure Connection Strings </a>
+                                              <li>
+                                                <a href="/article/0256b587-e8b1-46e0-8b87-f62b9f816c45">Guideline: Protect Log Files </a>
+                                                <li>
+                                                  <a href="/article/2c48bbd6-2677-4ab0-80df-57985b90bee4">Guideline: Protect ASP.NET Session State </a>
+                                                  <li>
+                                                    <a href="/article/b070122f-f1d1-47da-a378-57f845d5db61">Guideline: Encrypt Communication Links </a>
+                                                    <li>
+                                                      <a href="/article/bd63d4b0-205d-4d95-9022-86a3f0af5232">Guideline: Use SSL When Transmitting Credentials </a>
+                                                      <li>
+                                                        <a href="/article/51b6776e-c771-4d63-b77d-b16ba295a62f">Guideline: Encrypt Sensitive Data in the Database </a>
+                                                        <li>
+                                                          <a href="/article/c6f3e32d-57b8-44cf-818a-c346d0014c06">Guideline: Do Not Store Plaintext Sensitive Data </a>
+                                                          <li>
+                                                            <a href="/article/67be9ff5-80d7-465e-ae47-2717b705e647">Guideline: Do Not Store Passwords </a>
+                                                            <li>
+                                                              <a href="/article/32fb66b7-7055-4fa0-a9e3-168cfc829aa2">Guideline: Protect Sensitive Data Over the Network </a>
+                                                              <li>
+                                                                <a href="/article/faada3f5-3f50-42fc-b863-5058e3d848cb">Guideline: Protect Sensitive Data Inside Configuration Files </a>
+                                                                <li>
+                                                                  <a href="/article/e46483a2-7f7e-4753-aaeb-e330ed9aef02">Guideline: Do Not Log Sensitive Information </a>
+                                                                  <li>
+                                                                    <a href="/article/fd675679-e8ad-40fc-bac4-d56fc440bc00">Guideline: Disable Directory Browsing </a>
+                                                                  </li>
+                                                                </li>
+                                                              </li>
+                                                            </li>
+                                                          </li>
+                                                        </li>
+                                                      </li>
+                                                    </li>
+                                                  </li>
+                                                </li>
+                                              </li>
+                                            </li>
+                                          </li>
+                                        </li>
+                                      </li>
+                                    </li>
+                                  </li>
+                                </li>
+                              </li>
+                            </li>
+                          </li>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

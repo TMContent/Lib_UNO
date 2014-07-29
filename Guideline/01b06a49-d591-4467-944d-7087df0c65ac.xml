@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1712751268" Content_Hash="-1913365704">
+  <Metadata>
+    <Id>01b06a49-d591-4467-944d-7087df0c65ac</Id>
+    <Id_History>0af3d5f4-53a6-40bc-82c3-770faf48d7db,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Avoid Dynamic Queries That Accept Untrusted Input</Title>
+    <Category>SQL Injection</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Dynamic Queries That Accept Untrusted Input</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Avoid constructing SQL queries in code that include user input; instead, prefer parameterized stored procedures that use type safe SQL parameters.&amp;nbsp;If stored procedures&amp;nbsp;cannot be used, use parameterized dynamic SQL statements.</p>
+  <h1>Why</h1>
+  <p>Database queries constructed dynamically&amp;nbsp;from user input&amp;nbsp;are susceptible to SQL injection. A successful SQL injection attack enables a malicious user to execute commands&amp;nbsp;on the&amp;nbsp;application's database instance by using the privileges granted to&amp;nbsp;the application's login. Using stored procedures with parameterized SQL is recommended because SQL parameters are type safe&amp;nbsp;and treated as&amp;nbsp;literal values by the database,&amp;nbsp;not as executable code. Parameters are also checked for type and length. </p>
+  <h1>When</h1>
+  <p>Always use parameterized SQL queries. Avoid constructing SQL queries directly from&amp;nbsp;any input, including form fields, query string parameters, and cookies.&amp;nbsp;</p>
+  <h1>How</h1>
+  <p>To protect&amp;nbsp;an application from SQL injection, perform the following steps:</p>
+  <p>
+    <strong>1. Use parameters with stored procedures.</strong> Stored procedures alone&amp;nbsp;will not prevent SQL injection.&amp;nbsp;Lack&amp;nbsp;of&amp;nbsp;parameter usage means that&amp;nbsp;stored procedures will be susceptible to SQL injection, especially if they use unfiltered input. The following code shows how to use SqlParameterCollection when calling a stored procedure:</p>
+  <blockquote>
+    <pre>using System.Data;<br />using System.Data.SqlClient;</pre>
+    <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&amp;nbsp; DataSet userDataset = new DataSet();<br />&amp;nbsp; SqlDataAdapter myCommand = new SqlDataAdapter( <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "LoginStoredProcedure", connection);<br />&amp;nbsp; myCommand.SelectCommand.CommandType = CommandType.StoredProcedure;<br />&amp;nbsp; myCommand.SelectCommand.Parameters.Add("@au_id", SqlDbType.VarChar, 11);<br />&amp;nbsp; myCommand.SelectCommand.Parameters["@au_id"].Value = AuthId.Text;</pre>
+    <pre>&amp;nbsp; myCommand.Fill(userDataset);<br />}<br />&amp;nbsp; </pre>
+    <p>In this case, the @au_id parameter is treated as a literal value and not as executable code. Also, the parameter is checked for type and length. In the preceding code example, the input value cannot be longer than 11 characters. If the data does not conform to the type or length defined by the parameter, the SqlParameter class throws an exception.</p>
+  </blockquote>
+  <p>
+    <strong>2. Use parameters with dynamic SQL.</strong> If stored procedures are unavailable, use parameters when constructing dynamic SQL statements. The following code shows how to use SqlParametersCollection with dynamic SQL:</p>
+  <blockquote>
+    <pre>using System.Data;<br />using System.Data.SqlClient;</pre>
+    <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&amp;nbsp; DataSet userDataset = new DataSet();<br />&amp;nbsp; SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "SELECT au_lname, au_fname FROM Authors WHERE au_id = @au_id", <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connection);&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp; myCommand.SelectCommand.Parameters.Add("@au_id", SqlDbType.VarChar, 11);<br />&amp;nbsp; myCommand.SelectCommand.Parameters["@au_id"].Value = AuthId.Text;<br />&amp;nbsp; myDataAdapter.Fill(userDataset);<br />}</pre>
+  </blockquote>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

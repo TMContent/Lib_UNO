@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-168663834" Content_Hash="847363818">
+  <Metadata>
+    <Id>acdcb9ac-a56b-4b62-a7b9-f0337cca8d59</Id>
+    <Id_History>5c5fc263-852a-40ff-bd6e-546b0b2f71b9,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Destinations of Redirects And Forwards Are Validated</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Destinations of Redirects And Forwards Are Validated</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>OWASP</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Web Applications</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check that destinations of redirects and forwards are validated.</p>
+  <h1>Why</h1>
+  <p>If destinations of redirects or forwards are not validated, an attacker may create hyperlinks that appear to point to legitimate sites, but actually point to malicious pages controlled by the attacker. This technique is often used by phishers to trick people into visiting fake sites that steal authentication credentials. In some cases, a user may gain unauthorized access by manipulating redirect or forward parameters, if destinations are not validated.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that destinations of redirects and forwards are validated:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify redirects and forwards.</strong> Review code to find all redirects and forwards.</p>
+      <li>
+        <p>
+          <strong>Enumerate destinations.</strong> Make a list of all destinations for each redirect and forward.</p>
+        <li>
+          <p>
+            <strong>Identify access permissions.</strong> Determine circumstances under which it is acceptable for each user role to access each destination.</p>
+          <li>
+            <p>
+              <strong>Examine each redirect and forward.</strong> Verify that each redirect and forward uses mapping values instead of fully-qualified urls to determine destinations. Review the code of each redirect and forward to make sure that all destinations are validated to assure that users can only access resources that are authorized for them. </p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to assure validation of redirects and forwards:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify redirects and forwards.</strong> Review code to find all redirects and forwards.</p>
+      <li>
+        <p>
+          <strong>Map destinations.</strong> Make a list of all destinations for each redirect and forward. Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
+        <li>
+          <p>
+            <strong>Define access permissions.</strong> Determine circumstances under which it is acceptable for each user role to access each destination.</p>
+          <li>
+            <p>
+              <strong>Validate redirects.</strong> Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards. Add validation routines to verify that the user has permissions to access the resource, which is the destination of the redirect or forward.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about unvalidated redirects and forwards, please see <a href="http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards">http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/e7a1c675-9cae-4c12-85f3-4eb4269c197d">Validate Destinations of Redirects and Forwards</a>
+      <li>
+        <a href="/article/8a8fe651-2168-4c88-b89a-0b6b442da2f8">Use Mapping Values When Redirecting on User Input</a>
+        <li>
+          <a href="/article/26fc07d7-32fe-4823-9898-cf17f2582d8b">URL Redirection Attack</a>
+          <li>
+            <a href="/article/12f80857-1b6e-4c41-bc1c-83ff514b0056">How to Test for URL Redirection Bugs</a>
+            <li>
+              <a href="/article/61967ec5-3139-410c-a622-a4d07dd3a438">Phishing Attack</a>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

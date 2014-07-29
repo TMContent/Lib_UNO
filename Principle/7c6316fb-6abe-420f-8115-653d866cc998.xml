@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="868148412" Content_Hash="312322288">
+  <Metadata>
+    <Id>7c6316fb-6abe-420f-8115-653d866cc998</Id>
+    <Id_History>2b3ba04b-2576-483c-aa86-854bdcf25b55,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Use the Correct Algorithm And Correct Key Size</Title>
+    <Category>Cryptography</Category>
+    <Phase>Design</Phase>
+    <Technology> Any</Technology>
+    <Type>Principle</Type>
+    <DirectLink>Use the Correct Algorithm And Correct Key Size</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Applications that use cryptography.
+
+==What to Do==
+
+Select a well-vetted algorithm that is currently considered to be strong by experts in the field, and select well-tested implementations. As with all cryptographic mechanisms, the source code should be available for analysis. For example, US government systems require FIPS 140-2 certification. When you use industry-approved techniques, you need to use them correctly. Don't cut corners by skipping resource-intensive steps (CWE-325). These steps are often essential for preventing common attacks.
+
+Do not develop your own cryptographic algorithms. They will likely be exposed to attacks that are well-understood by cryptographers. Reverse engineering techniques are mature. If your algorithm can be compromised if attackers find out how it works, then it is especially weak.
+
+==Why==
+
+As commercially available computing power rapidly increases and new threats emerge, it becomes more and more important to use strong cryptographic algorithms to secure sensitive data. Strong cryptographic algorithms assure that an attacker cannot break encryption in a timely manner. Using the correct key size will also result in a more secure encryption. Different encryption algorithms require different key sizes for a similar level of security. According to the NIST guidelines, 15360-bit RSA keys are equivalent to 256-bit AES keys.
+
+==When==
+
+Use this guideline whenever your application handles sensitive data.
+
+==How==
+
+Perform the following actions to encrypt sensitive data:
+
+# **Identify sensitive data.** Review your application design to determine what kinds of sensitive data your application handles.
+# **Choose cryptographic algorithms.** Strong symmetric algorithms are AES and, to a lesser extent, 3-DES. Strong asymmetric encryption algorithms are RSA, Elliptic Curve, and NTRU. When storing passwords use PBKDF2. The recommended key strengths are: 256-bit or more for AES, 3-DES key length is fixed at 168-bit, 2048-bit or more for RSA, 384-bit for Elliptic Curve cryptography, and 80-bit for NTRU.
+# **Choose libraries and APIs.** Find libraries that implement your chosen cryptographic algorithms. In some cases, they may be implemented by the platform. Find out the APIs for using these algorithms.
+# **Implement encryption.** Add functions to your applications that uses your chosen cryptographic APIs to encrypt and decrypt all the types of sensitive data that your application handles.
+# **Use encryption.** Find code that handles sensitive data. Add code that calls your new encryption functions to encrypt and decrypt sensitive data as appropriate.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

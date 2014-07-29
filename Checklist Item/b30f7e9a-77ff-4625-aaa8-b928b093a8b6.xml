@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2004498814" Content_Hash="-162025383">
+  <Metadata>
+    <Id>b30f7e9a-77ff-4625-aaa8-b928b093a8b6</Id>
+    <Id_History>fa1c9336-4e98-4970-8c77-535a20a2f2a9,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>All Input Used to Identify Resources Is Canonicalized</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>All Input Used to Identify Resources Is Canonicalized</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that all input used to identify resources is canonicalized. Canonicalization means reducing to the simplest form. Typical input used to identify resources includes names of files and directories. </p>
+  <h1>Why</h1>
+  <p>There are often many ways to address the same resource by name. An attacker may try to bypass validation routines to perform unauthorized access by supplying obfuscated input. Canonicalization defeats obfuscation and helps validate data access attempts.</p>
+  <h1>How to Check</h1>
+  <p>Identify all functions used to access resources, such as files or folders, by name. On UNIX-type systems, named pipes and devices are other resources that may be accessed by name. Out of these functions, identify ones that take user-supplied input. Verify that input is canonicalized and validated before using it to access resources.</p>
+  <h1>How to Fix</h1>
+  <p>Identify all functions used to access resources, such as files or folders, by name. On UNIX-type systems, named pipes and devices are other resources that may be accessed by name. Add code that canonicalizes and validates this input. It is recommended to create a separate class or library for data validation routines and include functions for canonicalizing input in it. </p>
+  <p>Canonicalization means reducing to the simplest form. There are often many ways to access the same resources by name. One example is addressing files - the same file on a Windows system may be addressed as file, C:\file, C:\\file, ..\file, ..\..\..\file, etc. Canonicalization is particularly important for systems that use unicode, because there are many different unicode strings that have the same meaning.</p>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/004526a6-5b2f-4094-94fa-a80d818c0a41">Canonicalize All Input Used to Identify Resources</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

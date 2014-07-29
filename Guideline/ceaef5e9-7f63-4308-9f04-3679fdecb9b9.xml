@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="959532958" Content_Hash="1117845268">
+  <Metadata>
+    <Id>ceaef5e9-7f63-4308-9f04-3679fdecb9b9</Id>
+    <Id_History>0664b048-d14d-4ef2-b9b8-dfff578b3ac4,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Leak Information to the Client</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Design</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Leak Information to the Client</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>Web Application</div>
+    </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not reveal internal system or application details, such as stack traces, SQL statement fragments, and table or database names to the client. Ensure that this type of information is not allowed to propagate to the end user or beyond your current trust boundary.</p>
+  <h1>Why</h1>
+  <p>To prevent&amp;nbsp;a malicious user who can exploit the overly detailed information that an error message contains. A malicious user could use system-level diagnostic information to learn about your application and probe for weaknesses to exploit in future attacks. </p>
+  <h1>When</h1>
+  <p>Whenever exceptions occur, return only the concise error messages to the client.</p>
+  <h1>How</h1>
+  <p>In the event of a failure, do not expose information that could lead to information disclosure.<b></b>For example, do not expose stack trace details that include function names and line numbers in the case of debug builds (which should not be used on production servers). Instead, return generic error messages to the client.</p>
+  <p>Review the type of information that could be revealed to an attacker if he or she obtained a session ID. In ASP.NET applications, the session ID is properly randomized so that it is hard to guess session IDs. However, there are other ways an attacker can get this information. Make sure that the session ID is sent over SSL, and make sure that the session timeout is short.</p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

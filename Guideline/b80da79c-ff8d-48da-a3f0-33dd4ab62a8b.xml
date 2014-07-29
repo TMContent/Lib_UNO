@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="726632284" Content_Hash="29722913">
+  <Metadata>
+    <Id>b80da79c-ff8d-48da-a3f0-33dd4ab62a8b</Id>
+    <Id_History>513cc4a0-4710-4f83-a6fa-bc0b998f622b,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Encrypt Configuration Sections That Store Sensitive Data</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encrypt Configuration Sections That Store Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority> J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.Net 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Encrypt configuration sections containing sensitive data such as passwords or usernames. </p>
+  <h1>Why</h1>
+  <p>Configuration sections typically contain privacy sensitive resource access credentials (e.g., a connection string for a SQL server resource includes a username and password.) As a precautionary measure, they should not be stored in plaintext, because an attacker that can compromise a server will be able to read those values if they are not adequately protected. </p>
+  <h1>When</h1>
+  <p>This guideline is applicable whenever configuration sections are utilized. </p>
+  <h1>How</h1>
+  <p>In ASP.NET version 1.1, you could use the Aspnet_setreg.exe tool to encrypt certain elements in the Web.config and Machine.config files that contain credentials. This tool replaces the credentials in the configuration file with a pointer to a registry key that holds the DPAPI encrypted data. In ASP.NET version 2.0, you can use either the DPAPI or RSA protected configuration providers to encrypt specific sections that contain sensitive data. The sections that usually contain sensitive information that you need to encrypt include &lt;appSettings&gt;, &lt;connectionStrings&gt;, &lt;identity&gt;, and &lt;sessionState&gt;. To encrypt the &lt;connectionStrings&gt; section by using the DPAPI provider with the machine-key store (the default configuration), run the following command from a command window:</p>
+  <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
+  <ul>
+    <li>
+      <strong>-pe</strong>: Specifies the configuration section to encrypt. </li>
+    <li>
+      <strong>-app</strong>: Specifies your Web application's virtual path. If your application is nested, you need to specify the nested path from the root directory; for example, "/test/aspnet/MachineDPAPI". </li>
+    <li>
+      <strong>-prov</strong>: Specifies the provider name.</li>
+  </ul>
+  <p>If you need to encrypt configuration file data on multiple servers in a Web farm, you should use RSA protected configuration provider because of the ease with which you can export RSA key containers.&amp;nbsp; </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

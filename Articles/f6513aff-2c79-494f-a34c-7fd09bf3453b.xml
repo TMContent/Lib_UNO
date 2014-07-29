@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f6513aff-2c79-494f-a34c-7fd09bf3453b</Id>
+    <Id_History>18d5564d-00a4-4afe-a853-707269df2566,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Latest RFC 6455 Standard is Used </Title>
+    <Category>WebSockets</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Latest RFC 6455 Standard is Used </DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+Applications written in HTML5 that use WebSockets
+
+==What to Check For==
+
+Using the the WebSockets Implementation Comparison sheet, which is linked below under Additional Resources, determine if the WebSockets server library version that you are using for your application is shown as using the RFC 6455 protocol.
+ 
+==Why==
+
+Versions hixie-76/hybi-00 and below are considered insecure. Using the latest RFC 6455 standard can reduce the risk of vulnerabilities such as cache poisoning. 
+
+==How To Check==
+
+# **Determine which Server Library you are using for WebSockets.**  Depending on which Web Server and/or Web Application Framework you are using (Jetty, Tornado, etc.), look up the appropriate row in the WebSockets Implementation Comparison sheet, which is linked below under Additional Resources.
+# **Look at the Protocol Column of the sheet and make sure that RFC 6455 is listed there.**  If you don't see RFC 4655 under Protocol, you are using out-of-date server libraries for WebSockets.
+# ** If you're using an out-of-date server library, select a library that uses RFC 6455 as the protocol.**  Review the comparison sheet to determine a version of server libraries that use RFC 6455 for its protocol.
+# ** If you need to update your server library for WebSockets, follow the instruction in the "How To Fix" section below.**  Download the appropriate server library that supports RFC 6455 as its protocol and install it using the instructions below.
+
+==How To Fix==
+
+To use the latest RFC 6455 standard to prevent WebSocket stealth attacks:
+
+# **Upgrade the WebSockets server’s libraries with the latest stable release that uses the RFC 6455 standard.** For example, Tornado, a popular web framework written in Python, has WebSockets libraries that many use as part of their WebSockets server implementation. If you are using Tornado, upgrade to at least Tornado version 2.2, as that version and later provide support for RFC 6455.
+# **Ensure that backward compatibility is not enabled.** A server implementation that supports RFC 6455 might be configured to be backward compatible with older WebSockets versions in order to support older browsers. In the case of Tornado, backward compatibility is enabled with a line of code: {{{WebSocketHandler.allow_draft76().}}} Search the server code or configuration to see if backward compatibility is enabled. If it is, disable it by removing (or commenting out) that line of code. This will ensure the server only allows the RFC 6455 protocol.
+
+==Additional Resources==
+* For more information on RFC 6455 - The WebSocket Protocol, see: http://tools.ietf.org/html/rfc6455
+* For a Comparison of WebSocket Implementations, see: http://en.wikipedia.org/wiki/Comparison_of_WebSocket_implementations
+
+
+==WebSocket Guidelines==
+
+* [[00000000-0000-0000-0000-000000869806|Validate Data Coming from WebSockets]]
+* [[00000000-0000-0000-0000-00000093dea4|Check the Origin Header in the WebSocket Handshake]]
+* [[00000000-0000-0000-0000-0000005f2e4a|Use TLS/SSL to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-000000736a21|Check the Origin Attribute of WebSocket Messages]]
+* [[00000000-0000-0000-0000-0000005326a8|Use the Latest WebSocket RFC 6455 Standard]]
+* [[00000000-0000-0000-0000-00000085bc2f|Do Not Tunnel TCP via WebSockets]]
+
+==WebSocket Checklist Items==
+
+* [[00000000-0000-0000-0000-00000086537e|Data Coming from WebSockets Is Validated]]
+* [[00000000-0000-0000-0000-00000077e316|The Origin Header in WebSocket Handshake is Checked]]
+* [[bd870268-f104-4f6f-ba0d-6628dc34eb2a|TLS/SSL is Used to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-0000002f39d7|The Origin Attribute of WebSocket Messages Is Checked]]
+* [[18d5564d-00a4-4afe-a853-707269df2566|Latest RFC 6455 Standard is Used]]
+* [[00000000-0000-0000-0000-00000091ce5a|TCP Is Not Tunneled via WebSockets]]
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

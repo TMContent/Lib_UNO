@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="686533907" Content_Hash="-446449829">
+  <Metadata>
+    <Id>5cf3e558-d0e1-4664-a882-ccc328ea0033</Id>
+    <Id_History>2bef4aaa-d019-43bf-ba3b-7486f75036c2,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>The Application's Authenticity Is Verified to the User</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Application's Authenticity Is Verified to the User</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure your application allows its users to verify the authenticity of your application.</p>
+  <h1>Why</h1>
+  <p>Some applications are targets for phishing attacks. Failure to provide authentication of the application&amp;nbsp;for the user allows attackers to spoof the application, therefore, fooling the users into submitting their credentials or other sensitive information into an attacker's malicious application.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to ensure the application is capable of proving its authenticity to its users:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Ensure that your application uses SSL to identify itself to the user. </strong>Check that your application's environment has enabled HTTPS. Verify that transactions of a sensitive nature are transmitted only over HTTPS connections. Check if the &lt;forms&gt; element in your application's <strong>web.config</strong> file has the <strong>requireSSL</strong> attribute set to "true" when performing form-based authentication:</p>
+      <pre>&lt;authentication mode="Forms"&gt;<br />&amp;nbsp; &lt;forms loginUrl="login.aspx"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; protection="All"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="20"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>requireSSL="true"</strong>&gt;&amp;nbsp; <br />&lt;/forms&gt;<br />&lt;/authentication &gt;</pre>
+      <li>
+        <p>
+          <strong>Check if your application displays a shared secret with its users. </strong>Check if your application has a personal shared secret for each of its users. Shared secrets include, but are not limited to, combinations of any of the following:</p>
+        <ul>
+          <li>
+            <strong>Layout</strong>: a user-defined layout/color scheme <li><strong>Picture</strong>: a user-defined image <li><strong>Word/Phrase</strong>: a user-defined word, phrase, or question</li></li></li>
+        </ul>
+        <p>Verify that the shared secret is displayed to the user after providing their ID and before providing their credentials.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is a financial application with a public web interface. Because the application does not use SSL to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of&amp;nbsp;differentiating the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface,&amp;nbsp;he may be fooled into providing&amp;nbsp;his credentials to the attacker.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about anti-phishing techniques, see <a href="http://en.wikipedia.org/wiki/Phishing#Anti-phishing">Phishing</a> in Wikipedia. </li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/40188a30-1dab-4905-93ba-377068d670ca">Guideline: Verify the Application's Authenticity to the User&amp;nbsp;</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-988595157" Content_Hash="-529064500">
+  <Metadata>
+    <Id>3f2b5579-65c6-4568-877c-3e8b5a0d757c</Id>
+    <Id_History>4e9cd265-8421-4b3c-9650-376162c6d610,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Set the CustomErrors Mode to On to Prevent Detailed Error Messages</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Set the <b>customErrors</b> mode attribute to <strong>On</strong> to prevent detailed error messages from reaching the caller. </p>
+  <h1>Why</h1>
+  <p>Detailed error messages provide an attacker with valuable system&nbsp;configuration information, making the system far easier to compromise.&nbsp; Furthermore, some detailed error messages may contain sensitive user information.&nbsp; Depending on how your application handles errors, leaving detailed error messages on could directly result in the disclosure of sensitive customer data. </p>
+  <h1>When</h1>
+  <p>All applications should set <b>customErrors</b> to <strong>On</strong> for normal operations.&nbsp; <b>RemoteOnly</b> is an acceptable choice for situations when local debugging is required in an emergency, but is not the preferred setting.</p>
+  <h1>How</h1>
+  <p>Use the following steps to prevent detailed error messages:</p>
+  <p>
+    <strong>1. Set CustomErrors. </strong>Prevent detailed error messages from being displayed by setting the <b>mode</b> attribute of the <b>&lt;customErrors&gt;</b> element to <strong>On. </strong>This will ensure that&nbsp;callers receive only filtered exception information.&nbsp; Do not use <b>mode="Off"</b> because this allows detailed error pages intended for application developers that contain system-level information to be returned to the client. </p>
+  <p>
+    <strong>2. Choose a default error page.</strong> Use the <b>&lt;customErrors&gt;</b> section of the Web.config file as shown in the following code example to specify a default error page to display, along with other required error pages for specific HTTP response codes that indicate errors. </p>
+  <p>The following example shows <b>&lt;customErrors&gt;</b> set correctly, with custom error pages specified:</p>
+  <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;    <br />	&lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;    <br />	&lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;   <br />	&lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt;</pre>
+  <p>The <b>defaultRedirect</b> attribute allows you to use a custom error page for your application, which, for example, might include support contact details.&nbsp; Use these application-wide error pages to provide user-friendly responses for errors that are not caught in a structured event handling. </p>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>faf89910-c736-4d23-91e0-4fce7326b859</Id>
+    <Id_History>00000000-0000-0000-0000-000000225f24,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Use includeSubDomains with Strict-Transport-Security</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use includeSubDomains with Strict-Transport-Security</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+When communication with the browser is intended to be HTTP over SSL (HTTPS) across the application and its subdomains, use the Strict-Transport-Security response header with includeSubDomains. This header is often referred to as HTTP Strict Transport Security, or simply HSTS.
+
+==Why==
+
+The Strict-Transport-Security header instructs the browser to communicate with the server only via HTTPS, a secure communication tunnel that prevents eavesdropping. Use of the includeSubDomains directive ensures that the browser will use HTTPS to communicate with subdomains within the host as well. Without the header, there is no way for browser to “know” that a web page should be accessed over HTTPS. This would leave open the possibility of using standard, unencrypted HTTP, whether through a malicious link or direct URL access. 
+
+==When==
+
+Use this guideline when you implement HTML5 web applications deployed to domains utilizing subdomains.
+
+==How==
+
+Note that, as of this writing, the latest releases of Mozilla Firefox, Google Chrome, and Opera all support the HSTS header. However, Internet Explorer does not.
+
+# **Enable the the //mod_header// module in the //httpd.conf// configuration file (if it is not already enabled).** For example, if you are using Apache Web Server, first enable
+//LoadModule headers_module modules/mod_headers.so //
+# **Add the HSTS header to the //httpd.conf// configuration file.** Include the required directive  //max-age//, which specifies the time, in seconds, that a compliant browser will abide by forced HTTPS, even in the event a standard HTTP connection is attempted. And, include the //includeSubDomains// directive, which takes no value. For example, in the Apache //httpd.conf// configuration file, add the following line: //Header always append Strict-Transport-Security: "max-age=7776000 ; includeSubDomains"//. This directive instructs the browser to connect only via HTTPS for the next 90 days, and includes all sub-domains. The server will inject this header information into each application page rendered.   
+# **Reload or restart the web server configuration.** The first time the user connects to your website using HTTPS, the browser reads the HSTS header, including the //max-age// and //includeSubDomains// directives. The browser will know it should connect only via HTTPS for the specified //max-age// time period.
+
+==Problem Example==
+
+Example.com is a popular stock trading site that handles confidential financial information for its users. In this scenario, it is the intention that all requests from users be sent using HTTPS. However, no Strict-Transport-Security response header is sent from the Example.com server.
+
+A hacker at a coffee shop uses his laptop to intercept all traffic on the local wireless network. A user visits the coffee shop, and clicks a link to log in to the secure Example.com website. Using only HTTPS, the connection to Example.com could be spoofed by sending the user to a look-alike web site. The user may never know the difference, thus putting personal and financial information at risk.
+
+==Solution Example==
+
+To correct the situation, the developers at Example.com include the Strict-Transport-Security response header In the configuration file of their Apache 2 server. They enable mod_header, and then add:
+
+{{{
+
+Header always append Strict-Transport-Security: "max-age=7776000 ; includeSubDomains" 
+
+}}}
+
+Assuming that the user has logged in previously to Example.com, the browser will now detect that the connection should be HTTPS and will immediately recognize any invalid connection attempt.
+
+Because the includeSubDomains directive is added, even if the user had a previous visit to https://web1.example.com and the next connection is to https://web2.example.com, the browser will still recognize that the connection should be secured with HTTPS.
+
+==Additional Resources==
+
+* For information about the Strict-Transport-Security header, see http://tools.ietf.org/html/draft-ietf-websec-strict-transport-sec-14#section-6.1
+* For information about useful HTTP headers, see https://www.owasp.org/index.php/List_of_useful_HTTP_headers
+
+
+==HTTP Header Guidelines==
+
+* [[00000000-0000-0000-0000-00000028bb7d|Use X-Content-Security-Policy to Mitigate XSS]]
+* [[00000000-0000-0000-0000-0000009026c0|Use X-XSS-Protection to Prevent Reflected XSS]]
+* [[00000000-0000-0000-0000-000000204a22|Use X-Frame-Options to Prevent ClickJacking]]
+* [[9e0f93ba-0b80-4aab-b93c-c17b9af2a19c|Use a Filter to Inject X-Frame-Options]]
+* [[ae2dc4f8-af3d-4002-9417-f3f1d5c9128b|Add X-Frame Options to Responses]]
+* [[00000000-0000-0000-0000-00000063561d|Use the Strict-Transport-Security Header to Enforce HTTPS]]
+* [[00000000-0000-0000-0000-000000225f24|Use includeSubDomains with Strict-Transport-Security]]
+
+==HTTP Header Checklist Items==
+
+* [[00000000-0000-0000-0000-0000006b6766|X-Content-Security-Policy Is Used to Mitigate XSS]]
+* [[00000000-0000-0000-0000-0000007122c6|X-XSS-Protection Is Used to Prevent Reflected XSS]]
+* [[00000000-0000-0000-0000-000000498810|X-Frame-Options Are Used to Prevent Clickjacking]]
+* [[0d1871fe-76d3-4ea3-87be-ef63662dd772|A Filter Is Used to Inject X-Frame Options]]
+* [[26caffea-d597-40fd-9ed0-36fb025d188b|X-Frame Options Are Added to Responses]]
+* [[00000000-0000-0000-0000-0000001b501f|The Strict-Transport-Security Header is Used to Enforce HTTPS]]
+* [[0078cd3f-9e84-4eb4-9a2f-7f51e3100801|IncludeSubDomains is Used with Strict-Transport-Security]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

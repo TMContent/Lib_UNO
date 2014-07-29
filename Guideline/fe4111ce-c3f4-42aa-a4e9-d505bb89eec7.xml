@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="30740230" Content_Hash="-224571233">
+  <Metadata>
+    <Id>fe4111ce-c3f4-42aa-a4e9-d505bb89eec7</Id>
+    <Id_History>0580935e-569b-4703-a358-69205e8d374b,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Set CookieSlidingExpiration to False And Limit Authentication Cookie Lifetimes If SSL Cannot Be Used</Title>
+    <Category>Forms Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If SSL cannot be used to protect authentication cookies for an application, set <b>cookieSlidingExpiration</b> to <b>false</b> and set cookie timeouts to limit the lifetime of authentication cookies. </p>
+  <h1>Why</h1>
+  <p>There are a few cases where SSL is not possible; one such scenario might be mobile devices which lack SSL support.&nbsp; In these cases expiring authentication cookies reduces the window of opportunity for an attacker intent on stealing the cookie to falsly authenticate. This is not a replacement for SSL, however, and offers much less security.</p>
+  <h1>When</h1>
+  <p>An application which can not use SSL to protect authentication cookies should use these techniques to offer a minimal level of protection. </p>
+  <h1>How</h1>
+  <p>If you cannot use SSL, the following steps will help mitigate the risk to your application.</p>
+  <ol>
+    <li>
+      <p>Limit the cookie lifetime to reduce the time window in which an attacker can use a captured cookie to gain access to your application with a spoofed identity.&nbsp; The default timeout for an authentication cookie is 30 minutes.&nbsp; Consider reducing this to 10 minutes as shown here:</p>
+      <pre>&lt;forms     timeout="00:10:00"    ... /&gt;</pre>
+      <li>
+        <p>The default setting of <b>SlidingExpiration="true"</b> ensures that the cookie expiration period is reset after each Web request.&nbsp; If the user interaction model will allow you or if you are in a scenario where you are concerned about cookie hijacking, consider setting <b>SlidingExpiration="false"</b>.&nbsp; If you do so, the authentication cookie expires after the timeout period whether or not the user is active and&nbsp;the user must re-authenticate.&nbsp; The following code will turn off <strong>SlidingExpiration</strong>: </p>
+        <pre>&lt;forms     slidingExpiration="true"... /&gt;</pre>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>A web site normally used by mobile customers without SSL uses the default settings for authentication cookie management.&nbsp; A user temporarily uses a public terminal to connect to the site, checks their account status briefly, and then browses other (unsecured) parts of the site.&nbsp; Because they're still refreshing the site, when an attacker sits down at their machine ten minutes after they get up, the attacker is&nbsp;able to go directly to the site and alter the user's settings without needing to log in again.</p>
+  <p />
+  <h1>Solution Example</h1>
+  <p>A web site normally used by mobile customers without SSL locks down their settings for authentication cookie management.&nbsp; A user temporarily uses a public terminal to connect to the site, checks their account status briefly, and then browses other (unsecured) parts of the site.&nbsp; As soon as ten minutes have elapsed since their login, their authorization cookies expire, but this doesn't affect them browsing.&nbsp; When an attacker sits down at their machine ten minutes after the user&nbsp;gets up, the attacker is locked out of the site. </p>
+  <p />
+  <p />
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

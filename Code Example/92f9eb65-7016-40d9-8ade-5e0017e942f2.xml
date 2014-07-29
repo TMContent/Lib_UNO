@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2113563819" Content_Hash="1812435154">
+  <Metadata>
+    <Id>92f9eb65-7016-40d9-8ade-5e0017e942f2</Id>
+    <Id_History>a4c5ae58-6b1b-49b7-b16e-4199598f3446,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Output Encoding Using JSF</Title>
+    <Category>Data Sanitization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Output Encoding Using JSF</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>JAVA<li>JSF</li></li>
+  </ul>
+  <h1>Summary</h1>
+  <p>Perform output encoding using JSF within an application.</p>
+  <h1>Objectives</h1>
+  <p>Strong output encoding is a control that is typically used to prevent encoding (primarily XSS on the web) issues within an application. This article will describe how to use the built-in mechanisms provided by JSF to perform appropriate output encoding.</p>
+  <h1>Solution Example</h1>
+  <p>In general, JSF tags perform HTML entity encoding by default (see XSS prevention cheat sheet in references). A few examples are given below.</p>
+  <p>Using <em>h:outputText</em> to output simple text (performs HTML entity encoding).</p>
+  <pre>&lt;h:outputText value="#&amp;#123;someManagedBean.someValue&amp;#125;" /&gt;</pre>
+  <p>Using h:outputLabel to output simple text (performs HTML entity encoding).</p>
+  <pre>&lt;h:outputLabel value="#&amp;#123;someManagedBean.someValue&amp;#125;" /&gt;</pre>
+  <p>Using <em>h:outputLink</em> to output a url (performs URL encoding on url parameter values).</p>
+  <pre>&lt;h:outputLink value="#&amp;#123;form.welcomeURL&amp;#125;"&gt;<br />&lt;h:outputText value="#&amp;#123;form.welcomeLinkText&amp;#125;"/&gt;<br />&lt;/h:outputLink&gt;</pre>
+  <p>
+    <strong>Note</strong>: An important point to be aware of is that there are a few tags that allow you to disable the encoding performed by the tag. This is sometimes useful, the most common case being where you are allowing administrators for a site add HTML formatted messages to be displayed to users. There may also be cases where users can create formatted messages for other users. These approaches are often not handled properly to prevent XSS. However, through strong input validation, it is possible to allow users to enter limited HTML and still display that safely to users without allowing XSS. </p>
+  <p>You can determine if this is being done by simply looking for the escape attribute in JSF tags. If it is set to false, then the HTML entity encoding is disabled (the default is true). An example of disabling encoding is shown below.</p>
+  <pre>&lt;h:outputText value="#&amp;#123;someManagedBean.someValue&amp;#125;" escape="false" /&gt;</pre>
+  <p>Another important note is that while the <em>f:verbatim</em> tag can perform output encoding, it by default does not. If you see something like the following, it is unsafe.</p>
+  <pre>//DO NOT USE<br />&lt;f:verbatim&gt; Untrusted data &lt;/f:verbatim&gt;</pre>
+  <p>JSF provides various tags that can perform output encoding. However, you must be aware of the encoding properties of the tag(s) you are using and encode appropriately for your given output context. </p>
+  <h1>More Information</h1>
+  <ul>
+    <li>For more information about JSF tags, please see <a href="http://www.horstmann.com/corejsf/jsf-tags.html">http://www.horstmann.com/corejsf/jsf-tags.html</a><li>For more information about Cross-Site Scripting prevention, please see <a href="https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet</a><br /></li></li>
+  </ul>
+  <h1>Java Data Sanitization Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/f83b953a-9b0c-406a-b274-9b2962d9c4e7">Encode All Output Data</a>
+      <li>
+        <a href="/article/c929277f-5bb0-44d5-9bf5-112c55927783">Escape All Untrusted Data in HTML Contexts in JSF</a>
+        <li>
+          <a href="/article/bc8de6c5-ba3a-4db5-a5ff-675c7336a2e8">Escape All Untrusted Data in HTML Contexts in JSP</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Data Sanitization Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/13112146-7c14-4b6d-9e94-24daa22eefc4">All Output Data Is Encoded</a>
+      <li>
+        <a href="/article/90893370-cbce-4116-b9ff-2e69dab56cfa">All Untrusted Data in HTML Contexts Is Escaped in JSF</a>
+        <li>
+          <a href="/article/02c900ca-0740-412a-b685-56b13408793d">All Untrusted Data in HTML Contexts is Escaped in JSP</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Data Sanitization Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/8cc6c40a-5a4c-4d77-8900-4b896e2d3912">Use h:outputText to Encode Echoed Input in JSF</a>
+    </li>
+    <li>
+      <a href="/article/a4c5ae58-6b1b-49b7-b16e-4199598f3446">Output Encoding Using JSF</a>
+    </li>
+    <li>
+      <a href="/article/2dc1ab76-320b-47ec-a562-9e203d1b630f">Output Encoding Using SpringMVC</a>
+    </li>
+    <li>
+      <a href="/article/f8d330df-9387-45b2-a88b-40c08d0af3c4">Output Encoding Using Struts 1</a>
+    </li>
+    <li>
+      <a href="/article/9135b59f-8c73-4a4f-83c5-9894d6587cca">Output Encoding Using Struts 2</a>
+    </li>
+    <li>
+      <a href="/article/f7806f64-b1c7-4990-a9e5-f6d814bae7f1">Use ESAPI Encoder</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

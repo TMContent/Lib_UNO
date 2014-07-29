@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1971263257" Content_Hash="1171527894">
+  <Metadata>
+    <Id>675cee04-9c04-4315-8fe3-fe7180b391fd</Id>
+    <Id_History>bfc330d7-bb4d-48f4-bd8a-2a9aa1880fd7,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Put Logs on a Separate Server</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Put Logs on a Separate Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Log application events on a separate, protected server. </p>
+  <h1>Why</h1>
+  <p>If the primary server is compromised, logs which are located elsewhere cannot be compromised.&amp;nbsp; This prevents an attacker from covering their steps.&amp;nbsp; Also, the logging server can have a much smaller attack surface than the primary server, as it does not need to be accessible to end users.&amp;nbsp; This makes logs much harder to compromise than other parts of the site, which can be valuable when nonrepudiation is a primary business requirement. </p>
+  <h1>When</h1>
+  <p>Whenever you create log files in a client/server or web environment, putting them on a separate server is a good idea.&amp;nbsp; In practice, this may not be feasible for very small systems.&amp;nbsp; However, most systems with separate dedicated web/middle tier and database servers are large enough to warrant a dedicated log server. </p>
+  <h1>How&amp;nbsp;</h1>
+  <p>Use the following steps to log to a seperate server:</p>
+  <p>
+    <strong>1. Ensure your application uses Health Monitoring</strong>
+  </p>
+  <p>By default, health monitoring is enabled for ASP.NET applications. You can see the default configuration in the machine-level Web.config.comments file in the <b>%windir%\Microsoft .NET\Framework\{version}\CONFIG </b>configuration file directory. <br /></p>
+  <p>
+    <strong>2. Configure SqlWebEventProvider</strong>
+  </p>
+  <p>If you want to configure an event provider that writes to a SQL Server instance, you must create the database used by the <b>SqlWebEventProvider</b>, configure a connection string, and configure a provider definition. </p>
+  <ol>
+    <li>Install the Web event database by running the following command from the Visual Studio 2005 command prompt: <p /><b>aspnet_regsql.exe -E -S </b>&lt;<b>ServerName</b>&gt;<b> -A w</b><p />This command uses the following switches: <ul><li><b>-E.</b> This switch indicates to use Windows authentication to connect to the database. </li><li><b>-S</b> &lt;<b>ServerName</b>&gt;<b>.</b> This switch indicates the name of the server where the database will be installed, or is already installed. </li><li><b>-A w. </b>This switch indicates to add Web event support. This creates the relevant tables and stored procedures required by the <b>SqlWebEventProvider</b>. </li></ul></li>
+    <li>Create a SQL Server logon for your Web application's identity. For example, create a network service and then create a database user for this logon in the Aspnetdb database. </li>
+    <li>Grant the database user <b>execute</b> permission on the <b>aspnet_WebEvent_LogEvent</b> stored procedure. </li>
+    <li>Add the following connection string to your application's Web.config file. <br /><pre>&lt;connectionStrings&gt;<br /> &amp;nbsp;&amp;nbsp; &lt;add name="MySqlConnection" connectionString="Data Source=remotehost;Initial Catalog=aspnetdb;Integrated Security=SSPI;"<br />    /&gt; <br />&lt;/connectionStrings&gt;</pre></li>
+    <li>Add the following &lt;<b>providers</b>&gt; configuration within the &lt;<b>healthMonitoring</b>&gt; section in Web.config. <br /><pre>&lt;providers&gt;<br />   &lt;add connectionStringName="MySqlConnection"<br />      maxEventDetailsLength="1073741823"<br />      buffer="true"<br />      bufferMode="Extra Critical Notification"<br />      name="MySqlWebEventProvider"<br />      type="System.Web.Management.SqlWebEventProvider,System.Web,Version=2.0.0.0,<br />		Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br /> &lt;/providers&gt; </pre></li>
+  </ol>
+  <p />The following list describes the most important attributes you can set when configuring event providers: <ul><li><b>name. </b>This is a name for the buffer mode used to reference it from other elements. </li><li><b>type.</b> This is a fully-qualified assembly reference to the provider class. This class should implement the <b>System.Configuration.Provider.ProviderBase</b> class. </li><li><b>buffer.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to enable event buffering. If this attribute is <b>true</b>, you must configure the <b>bufferMode</b> attribute. The default value is <b>false</b>. </li><li><b>bufferMode.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to specify the friendly name of the buffer mode to be used for buffering the events. </li><li><b>connectionStringName.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to specify the friendly name of the connection string used for connecting to the SQL Server database. </li><li><b>maxEventDetailsLength.</b> This is the maximum length of the event details. </li></ul><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you want to use the <b>SqlWebEventProvider</b> to write to a local or remote SQL Server instance, use the Aspnet_regsql tool to configure the necessary database tables and roles as described in "Step 3. Configure Health Monitoring."<b></b></blockquote><h1>Problem Example</h1><p>An e-commerce site with a two-tier web server/database model is built using file-based logging, and each machine keeps its logs on local disk.&amp;nbsp; When several of the web servers are compromised, the attackers wipe the logs and the owners are unable to determine how they got in.&amp;nbsp; The attacks re-occur several times because of this, before the hole is finally found and patched.</p><h1>Solution Example</h1><p>An e-commerce site with a two-tier web server/database model is built using remote logging server, with communication occuring over an encrypted channel.&amp;nbsp; When several of the web servers are compromised, the attackers are unable to break into the remote logging machine and cannot wipe the logs.&amp;nbsp; The owners find the whole quickly, thanks to the information in the log files, and the machines are patched immediately.</p><pre>&lt;healthMonitoring heartbeatInterval="0" enabled="true"&gt;<br /> &lt;providers&gt;<br />    &lt;add connectionStringName="MySqlConnection"<br />       maxEventDetailsLength="1073741823"<br />       buffer="true"<br />       bufferMode="Extra Critical Notification"<br />       name="MySqlWebEventProvider" <br />       type="System.Web.Management.SqlWebEventProvider,System.Web,Version=2.0.0.0,<br />		Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br /> &lt;/providers&gt;<br />&lt;/healthMonitoring&gt; </pre><hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

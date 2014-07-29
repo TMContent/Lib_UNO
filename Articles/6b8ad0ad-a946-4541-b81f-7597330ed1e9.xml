@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6b8ad0ad-a946-4541-b81f-7597330ed1e9</Id>
+    <Id_History>df4c50d1-4fc6-43bb-b446-0b9cab0d747c,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Positive (Whitelist) Input Validation Is Used</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Positive (Whitelist) Input Validation Is Used</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>Applications written using Scala and Play Framework 2.1.0.</p>
+  <h1>What to Check For</h1>
+  <p>Verify that positive (or <i>whitelist</i>) input validation is used to filter all user input.</p>
+  <h1>Why</h1>
+  <p>When properly implemented, input validation is effective at preventing SQL injection and cross-site scripting vulnerabilities.</p>
+  <h1>How to Check</h1>
+  <p>To verify that all user input is filtered using whitelist input validation:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all sources of user input.&amp;nbsp;</strong>Make a list of all possible sources of user input in your application, such as form fields, POST/GET parameters, cookies, etc.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all types of input accepted by the application.&amp;nbsp;</strong>For each source of user input on the list, define valid characters, length, format, and range (for numerical values).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the input validation subsystem.</strong>&amp;nbsp;Verify that validators exist for each type of user input accepted by the application. Make sure that each validator verifies the characters, length, format, and range (for numerical values) of the respective type of input.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To validate all user input using whitelist input validation:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all sources of user input.</strong>
+        <font color="#ff0000">&amp;nbsp;</font>Make a list of all possible sources of user input in your application, such as form fields, POST/GET parameters, cookies, etc.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all types of input accepted by the application.</strong>&amp;nbsp;For each source of user input on the list, define valid characters, length, format, and range (for numerical values).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define an input validation subsystem.</strong>&amp;nbsp;Define a set of validator functions that should be used to validate each type of input handled by the application. Input should be validated on the server.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate characters.</strong> Use regular expressions to restrict the acceptable range of characters in text input.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate length.</strong>&amp;nbsp;Add code to check that the length of the input is valid.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate format.</strong>&amp;nbsp;If the input type has a specific pattern, such as a date or a phone number, use regular expressions to make sure user input matches the input type specified by the application. Use regular expressions to enforce strong password requirements.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate range.&amp;nbsp;</strong>Restrict the acceptable range of numerical input by comparing the input to the maximum and minimum acceptable values.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Optional) Reject and respond to known bad input.</strong>&amp;nbsp;This step does not add much actual security, but is included here as an additional option: The input validation subsystem may check for known attack strings. In response to an attack it may take actions such as:&amp;nbsp; log detailed user information, alert the administrator, block the user's IP address for some time, and display an error message to the attacker informing him that you are onto him and reminding him of the consequences.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Optional) Encode input.</strong>&amp;nbsp;If the input is going to be displayed back through the web application, consider encoding it to prevent Cross-Site Scripting attacks.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(17, 17, 17);">Input and Data Validation Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; color: rgb(17, 17, 17);">
+    <li style="margin: 0px; padding: 0px;">
+      <font color="#333399" style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="af528b9a-af5f-49b8-a314-4578c0b31273" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Input from All Sources</a>
+        </b>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <font color="#333399" style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="b6795407-d01e-44ec-8aed-a440d388902b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Input for Length, Range, Format, and Type</a>
+        </b>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <font color="#333399" style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="00000000-0000-0000-0000-00000016b3b2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate All Input Passed to the Database</a>
+        </b>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">
+        <a href="97d61072-14e2-48dd-a1bf-ec149efbcb54" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Do Not Rely on Client-Side Validation</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(17, 17, 17);">Input and Data Validation Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <li style="margin: 0px; padding: 0px;">
+      <font style="margin: 0px; padding: 0px;">
+        <a href="0bf6f129-8641-43f4-a29c-62f58493fb78" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-weight: bold;">
+          <b style="margin: 0px; padding: 0px;">Input from All Sources Is Validated</b>
+        </a>
+      </font>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="067e2f72-18f0-4f5a-ba9c-287691cd9ed3" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Input Is Validated for Length, Range, Format and Type</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="2faf9bc6-fb15-4341-bb10-7dbc39e30d6e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Database Input Is Validated</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="c5688313-0255-461c-a978-423596d182db" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Application Does Not Rely on Client-Side Validation</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

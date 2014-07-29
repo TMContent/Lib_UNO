@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="369375366" Content_Hash="-1400363722">
+  <Metadata>
+    <Id>3549de94-1184-4996-b56a-b9b1dff90cfd</Id>
+    <Id_History>7fbe76de-049d-4714-a7e2-7a21a399a7bd,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use File Authorization with Windows Authentication</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use File Authorization with Windows Authentication</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Use file authorization when using windows authentication. </p>
+  <h1>Why</h1>
+  <p>Using file authorization with Windows authentication allows you to leverage groups and roles defined in your company's Active Directory to control per-file authorization inside your application.&amp;nbsp; While not necessarily sufficient for all of your authorization needs, it can be a very powerful tool. </p>
+  <h1>When</h1>
+  <p>All applications which use Windows authentication should use file authorization as part of their authorization toolkit. </p>
+  <h1>How</h1>
+  <p>File authorization works automatically when using Windows authentication, and there is no need to impersonate the original user.&amp;nbsp; The <b>FileAuthorizationModule</b> only performs access checks against the requested file.&amp;nbsp; For example, if you request Default.aspx and it contains an embedded user control (Usercontrol.ascx), which in turn includes an image tag (pointing to Image.gif), the <b>FileAuthorizationModule</b> performs an access check for Default.aspx and Usercontrol.ascx, because these file types are mapped by IIS to the ASP.NET ISAPI extension.&amp;nbsp; The <b>FileAuthorizationModule</b> does not perform a check for Image.gif, because this is a static file handled internally by IIS.&amp;nbsp; However, because access checks for static files are performed by IIS, the authenticated user must still be granted read permission to the file with an appropriately configured ACL. </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

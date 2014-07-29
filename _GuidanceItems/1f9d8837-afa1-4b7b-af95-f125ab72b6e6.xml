@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>1f9d8837-afa1-4b7b-af95-f125ab72b6e6</Id>
+    <Id_History>00000000-0000-0000-0000-000000032b66,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Perform Access Control Checks for Any Filesystem Access</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Perform Access Control Checks for Any Filesystem Access</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Do==
+
+Configure ASP.NET to perform access control checks for all filesystem access.
+
+==Why==
+
+Perform access control checks for all filesystem access to prevent unauthorized access.
+
+==How==
+
+To perform access control checks for all filesystem access add the <securitypolicy> section to your web.config or machine.config as follows.
+
+{{{
+<securitypolicy>
+  <trustlevel name="Medium" policyfile="web_MediumTrust.config"></trustlevel>
+</securitypolicy>
+}}}
+
+If the 'Medium' policy doesn't match your needs and you want more customization, create a new file called customtrust.config and add the permissions for File I/O into this file. A sample set of permissions could look like this:
+
+{{{
+<permissionset class="NamedPermissionSet" version="1" name="ASP.Net">
+  ...
+     <ipermission class="RegistryPermission" version="1" unrestricted="true"></ipermission>
+     ...
+   </permissionset>  
+}}}
+
+Note that you can simply make a copy of the medium trust file and rename it to customtrust.config. Once this is done, you can modify the file according to your needs.
+
+==Additional Resources==
+
+* For more information about how a Code Access Security Policy is implemented in .NET 4.0 see http://msdn.microsoft.com/en-us/library/dd984947%28v=vs.100%29.aspx#Overview
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1538928176" Content_Hash="1488819275">
+  <Metadata>
+    <Id>17d98dea-18ac-48b3-afa7-d3d279840238</Id>
+    <Id_History>e1992e93-39c6-4508-9b16-0e07b0939c37,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Secure Connection Strings</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Secure Connection Strings</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Protect the application's credentials to the backend database server.</p>
+  <h1>Why</h1>
+  <p>If an attacker gains access to the application's credentials to the backend database the attacker could access the database with all the permissions allowed for the application.</p>
+  <h1>When</h1>
+  <p>If your application uses a backend database server.</p>
+  <h1>How</h1>
+  <p>To protect the application's database credentials:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>When possible, use Windows authentication to connect to the database server.</strong> Using windows authentication solves the problem of having to store credentials entirely. </p>
+      <li>
+        <p>
+          <strong>Store credentials in an encrypted configuration file.</strong> Do not hardcode database credentials into your code. Instead, use an application configuration file and encrypt the sections which contain sensitive data. In ASP.NET applications, there are two libraries that provide encryption facilities for connection strings &amp;#8212; DPAPI and RSA. If your application is deployed in a Web farm, you should use the RSA protected configuration provider due to the ease with which RSA keys can be exported. Otherwise you should use the DPAPI protected configuration provider.</p>
+        <li>
+          <p>
+            <strong>Protect configuration files</strong>:</p>
+          <ul>
+            <li>
+              <strong>Choose a configuration directory</strong>: Dedicate a directory for storing your application's configuration files. Make sure the directory is not web-accessible. This limits the scope of users that can potentially compromise the contents inside the directory. <li><strong>Set appropriate permissions</strong>: Apply the appropriate filesystem permissions such that the configuration files can be only accessed by your application and its administrators.</li></li>
+          </ul>
+          <li>
+            <p>
+              <strong>Encrypt connection to database server.</strong> Encrypting the connection between your application and the database server protects the database credentials when your application initially authenticates to the backend database. Because the implementation varies between the different brands of database servers, it is recommended to consult the server manual on how to utilize such functionality.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application contains the following Identity element in its web.config file:</p>
+  <pre>
+    <identity impersonate="true">
+    </identity>
+    <br />          userName="MyDomain\MyUserName"<br />          password="MySecretPassword"/&gt;</pre>
+  <p>Since the username and password are in plaintext they would be easily readable by any attacker who gains access to the server.</p>
+  <h1>Solution Example</h1>
+  <p>An ASP.NET application contains the something similar to the following in place of the Identity element in its web.config file:</p>
+  <pre>
+    <encrypteddata>
+      <br />
+      <cipherdata>
+        <br />
+        <ciphervalue>
+          <br />          AQAAANCMnd8BFdERjHoAwE/Cl&amp;#43;sBAAAAexuI<br />          J/8oFE&amp;#43;sGTs7jBKZdgQAAAACAAAAAAADZgAA<br />          qAAAABAAAAAKms84dyaCPAeaSC1dIMIBAAAA<br />          AASAAACgAAAAEAAAAKaVI6aAOFdqhdc6w1Er<br />          3HMwAAAAcZ00MZOz1dI7kYRvkMIn/BmfrvoH<br />          NUwz6H9rcxJ6Ow41E3hwHLbh79IUWiiNp0Vq<br />          FAAAAF2sXCdb3fcKkgnagkHkILqteTXh<br /></ciphervalue>
+        <br />
+      </cipherdata>
+      <br />
+    </encrypteddata>
+  </pre>
+  <p>The username and password have been encrypted and are not easily readable by an attacker who gains access to the server.</p>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/c6f3e32d-57b8-44cf-818a-c346d0014c06">Guideline: Do Not Store Plaintext Sensitive Data</a>
+      <li>
+        <a href="/article/7d83d845-cd2b-4067-bb4c-5fbb890b9c9e">Attack: Information Disclosure Attack</a>
+        <li>
+          <a href="/article/1fe40372-6648-4496-8552-794f91ff6bbf">Checklist Item: Connection Strings are Secured</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

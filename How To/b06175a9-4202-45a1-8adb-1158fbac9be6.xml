@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1253006580" Content_Hash="-407708493">
+  <Metadata>
+    <Id>b06175a9-4202-45a1-8adb-1158fbac9be6</Id>
+    <Id_History>6d504027-0376-4d15-93aa-7dd92d2db45c,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Test for Weak Passwords</Title>
+    <Category>Authentication</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Weak Passwords</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies To</span>
+  </h1>
+  <ul>
+    <li>All applications that use passwords</li>
+  </ul>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Weak passwords are passwords that are easy to predict by an attacker who wants to bypass authentication and log in to a target application as a legitimate user. Systems that rely on user accounts, including e-commerce sites, database servers, and operating systems, must enforce a strong password policy in order to avoid becoming victims to this attack.</p>
+  <p>Follow these steps to test for weak password bugs:</p>
+  <ul>
+    <li>Step 1: Understand background information </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Start testing and exploring&amp;nbsp;</li>
+  </ul>
+  <h1>
+    <span>Step 1: Understand Background Information</span>
+  </h1>
+  <p>An application either creates passwords automatically for its clients or uses a password policy to let clients create their own. This attack aims at measuring the strength of both passwords created automatically and password policies used by applications, database servers, operating systems, or other systems. </p>
+  <h2>
+    Strong Passwords
+  </h2>
+  <p>Before analyzing an attack scenario, it is necessary to understand what a strong password is. In general terms, a strong password is a password that it is not easy for humans or computers to predict. Strong passwords must contain:</p>
+  <ul>
+    <li>at least eight characters </li>
+    <li>a combination of upper-case and lower-case letters </li>
+    <li>at least one special character (such as ^, @, or #) </li>
+    <li>at least one numeric digit </li>
+  </ul>
+  <p>Strong password must not:</p>
+  <ul>
+    <li>use default values (for example, <i>admin </i>or <i>1234</i>) </li>
+    <li>contain words that could be found in a dictionary (for example, <i>house </i>or <i>pet</i>) </li>
+    <li>contain dictionary words that are obfuscated by symbols or digits (such as <i>h0us€ </i>or <i>p3t</i>) </li>
+    <li>include personal details about the user, such as user name, email addresses, phone numbers, birthdays, etc </li>
+    <li>include a previously used password</li>
+  </ul>
+  <h2>
+    Attack Scenarios
+  </h2>
+  <p>The goals of testing for weak passwords are to assess the strength of the application’s password policy and to determine if it’s strong enough to be attack-resistant. There are three common ways of checking for weak passwords:</p>
+  <ul>
+    <li>Create a new password </li>
+    <li>Review password policy </li>
+    <li>Execute a credential brute-force/dictionary attack </li>
+  </ul>
+  <h3>
+    <span>
+      Scenario 1: Create a new password
+    </span>
+  </h3>
+  <p>The easiest way for attackers to check for a weak password policy is by creating a new password. In this scenario, the attacker goes to the application’s registration area (such as a web application’s registration page) and creates an account that has a weak password. If the application allows a weak password, the attacker knows that additional attacks such as credential brute-forcing are possible, because other user accounts may have weak passwords.</p>
+  <h3>
+    <span>
+      Scenario 2: Review password policy
+    </span>
+  </h3>
+  <p>If the attacker has enough privileges in the target system, a configuration tool or text editor can be used in order to review the password policy and check if the system is vulnerable to this bug. For example, in Windows, an attacker can run the security policy editor to check if Windows is enforcing strong passwords. The system is vulnerable if the configuration indicates that no strong passwords are in use.</p>
+  <h3>
+    <span>
+      Scenario 3: Execute credential brute-force/dictionary attack 
+    </span>
+  </h3>
+  <p>Credential brute-force and dictionary attacks are a common way to reveal weak passwords because as they don’t require privileges in the target system. These attacks usually involve executing an automated tool known as a password cracker that tests for weak passwords by trying numerous words from dictionaries and exhaustive searches over different ranges of characters. Attackers can use brute-force or dictionary attack tools such as <i>Brutus</i>&amp;nbsp;to test for weak passwords.</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The next step is to understand what causes weak password bugs and how to protect against them.</p>
+  <h2>
+    <span>
+      Weak password policies
+    </span>
+  </h2>
+  <p>Weak passwords exist because applications implement password policies that allow for weak passwords. As seen in the previous section, weak password policies permit short passwords, passwords containing dictionary words, personal information, and so on. This bug usually happens when users create a new account and have to specify their passwords. If the application is vulnerable, it allows any value as the password without checking if this value is strong enough.</p>
+  <h2>
+    <span>
+      Protecting at the application level
+    </span>
+  </h2>
+  <p>To protect against this vulnerability, make sure to enforce a strong password policy. That is, before storing any password, check if it is strong enough. An effective way to implement this check is by using regular expressions. For instance, MSDN suggests the following regular expression to check against weak passwords:</p>
+  <p>
+    <font face="'Courier New'">(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$</font>
+  </p>
+  <p>According to MSDN, the regular expression “. . . validates a strong password. It must be between 8 and 10 characters, contain at least one digit and one alphabetic character, and must not contain special characters.”</p>
+  <p>You can alter this expression to match a stronger password policy, such as one requiring at least one special character. In addition, if the risk of weak passwords is high, you can implement additional checks such as dictionary checks or checks against personal information (email address, birthday, etc.) before storing a password.</p>
+  <h2>
+    <span>
+      Protecting at the configuration level
+    </span>
+  </h2>
+  <p>Operating systems, database servers, and web environments can be configured to use strong passwords. For instance, you can configure a Windows domain security policy so that all passwords meet certain complexity requirements specified by the domain administrator. This solution can be extended to SQL Server if you are configuring SQL Server to use Windows authentication. In addition, ASP.NET can be configured to check against weak passwords as part of its Forms Authentication functionality.</p>
+  <p>Even though these examples are specific to Microsoft, similar configuration options are available on other platforms. Be sure that you understand the configuration options of your specific technology so that you may properly protect your application and its users.</p>
+  <h2>
+    <span>
+      Protecting against credential brute-force/dictionary attacks
+    </span>
+  </h2>
+  <p>There are different ways to protect against automated password attacks, each presenting advantages and disadvantages. Applications can protect using an account lockout policy so that an account is locked after a certain number of failed login attempts; however, attackers can use this feature to lock out legitimate users. A more efficient technique involves inserting a time delay in the authentication process that is unnoticeable to clients but that slows down password crackers; still, sophisticated attacks can execute over time and try to beat any time delay mechanism. Another possible option involves using human interaction proofs such as CAPTCHAs; yet, this technology has also been defeated.&amp;nbsp;Choose your protection by carefully combining these techniques.&amp;nbsp;</p>
+  <h1>
+    <span>Step 3: Start Testing and Exploring</span>
+  </h1>
+  <p>Now that you understand the background information on weak password bugs, it is necessary to execute some practical test cases to see if your application is vulnerable.</p>
+  <h2>
+    <span>
+      Test for weak password by creating new password
+    </span>
+  </h2>
+  <p>This test focuses on testing password policy strength by creating a weak password. Follow these steps to test for weak passwords:</p>
+  <ol>
+    <li>Specify rules that constitute a strong password (see section 1). </li>
+    <li>Navigate to a place in the application where a user account can be created, such as a registration page. </li>
+    <li>Enter a password that doesn’t match the rules specified in step 1, and then submit a request to create an account.</li>
+  </ol>
+  <p>Expected result: The application is vulnerable if it allows creation of an account with the weak password. </p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      Test for Windows weak passwords by checking security policy
+    </span>
+  </h2>
+  <p>This test focuses in testing for weak passwords by reviewing the security policy. Follow these steps to check Windows Server 2003/2008 security policy:</p>
+  <ol>
+    <li>Open Windows <i>Run </i>dialog box, type <i>secpol.msc</i>, and then click <i>OK</i>. </li>
+    <li>In the <i>Local Security Policy</i> window, navigate to <i>Account Policies-&gt;Password Policies</i>.</li>
+  </ol>
+  <p>Expected result: The system is vulnerable if the option <i>Password must meet complexity requirements</i> is disabled.</p>
+  <p>Note that the same test can be executed at the domain controller to check the domain password policy.</p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      Test for web application weak passwords by running HTTP password cracker 
+    </span>
+  </h2>
+  <p>This test focuses on testing password policy strength by executing a credential brute-force/dictionary attack. Follow these steps to test for dictionary attacks:</p>
+  <ol>
+    <li>Download and install <i>Brutus </i>from <a href="http://www.hoobie.net/brutus/">http://www.hoobie.net/brutus/</a>. </li>
+    <li>Run <i>Brutus</i>. </li>
+    <li>Type a target URL and authentication type. </li>
+    <li>In the <i>Pass Mode</i> dropdown list, select <i>Word List</i>. </li>
+    <li>Modify the word list file with any file of your choice (word lists can be created from dictionaries or from sets of rules). </li>
+    <li>Click <i>Start</i>.</li>
+  </ol>
+  <p>Expected result: The application is vulnerable if <i>Brutus </i>displays any matches in the<b></b><i>Positive Authentication Results</i> list box.<b>&amp;nbsp;</b></p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Testing for weak passwords focuses on determining the strength of a software application’s password policy. This can be done either by creating a new password, analyzing the application, database, or system configuration, or executing a credential brute-force/dictionary attack. Be sure that you understand what makes a strong password so that you can test against passwords that don’t meet the criteria, and use the appropriate tools depending on the environment and platform your application resides in.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

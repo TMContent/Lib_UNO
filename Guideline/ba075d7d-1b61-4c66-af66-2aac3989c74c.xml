@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1841207242" Content_Hash="1077682669">
+  <Metadata>
+    <Id>ba075d7d-1b61-4c66-af66-2aac3989c74c</Id>
+    <Id_History>0c2b2c27-782c-4947-b03d-ae4f77bc4c79,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Restrict Access to Audit And Log Files</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Restrict access to audit and log files.&nbsp; Application accounts should have write-only access and operators and support personnel should have read-only access as needed.&nbsp; Administrators accounts are the only accounts which should have full access, and in some cases even this should be restricted or avoided. </p>
+  <h1>Why</h1>
+  <p>Restricting access to log files makes it harder for attackers to tamper with log files to cover their tracks.&nbsp; Furthermore, it reduces opportunities for the repudiation or forging of actions. </p>
+  <h1>When</h1>
+  <p>Access to log files should always be restricted, regardless of logging method or system architecture.&nbsp; The degree of protection possible and desirable depends on the details of system architecture and the security requirements of the application, but some level of protection is always appropriate. </p>
+  <h1>How</h1>
+  <p>Logging normally comes in two flavors, either logging to a file or logging to SQL server.&nbsp; Here's a look at how you can secure access to each of these:</p>
+  <p>Protect audit and log files using Windows ACLs and restrict access to the log files. </p>
+  <ul>
+    <li>Assign appropriate permissions to the log files. <ul><li>Logs should be written by a process with write permission only. <li>Logs should be read only for operators and support personnel who need access. <li>Only administrators should have full access.</li></li></li></ul><li>Minimize the number of individuals who can manipulate the log files.&nbsp; Authorize access only to highly trusted accounts such as administrators. </li></li>
+  </ul>
+  <h2>Logging to SQL Server</h2>
+  <p>If you log events to SQL Server or to some custom event sink, use appropriate access controls to limit access to the event data.</p>
+  <ul>
+    <li>Grant write access to the account or accounts used by your application <li>Grant full control to administrators <li>Grant read-only access to operators. <li>Minimize the number of individuals who can manipulate the log files.&nbsp; Authorize access only to highly trusted accounts such as administrators.</li></li></li></li>
+  </ul>
+  <h1>Problem Example</h1>
+  <p>An online bank keeps all of their transaction logs in a database, and all of their web logs in flat files.&nbsp; Permissions on the flat files allow write access to all users, and permissions in the database give full edit control to all support personnel.&nbsp; An attacker compromises the web server, but is constrained by the relatively low-privilege application account.&nbsp; However, they're still able to remove all traces of their attack from the web logs, remaining on the server undetected.&nbsp; When they manage to crack the password of a support account, they're able to remove the records of transactions they force through from the web front end, resulting in significant losses for the bank.</p>
+  <p />
+  <h1>Solution Example</h1>
+  <p>An online bank keeps all of their transaction logs in a database, and all of their web logs in flat files.&nbsp; Permissions on the flat files grant write-only access to the application account, read-only access to support staff, and full control only to administrators.&nbsp; Permissions in the database allow inserts only to the application account, and selects only to&nbsp;support staff.&nbsp; When an attacker compromises the web server, they are unable to hide their tracks by erasing the evidence of the attack in web logs.&nbsp; Despite this, they crack the password of a support account and attempt to push transactions through the system.&nbsp; As they can't alter the transaction logs, they're caught immediately, before the transaction succeeds.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

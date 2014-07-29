@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>da24a97c-2e28-4573-9164-d3de798e7e5c</Id>
+    <Id_History>ebb56508-bfbf-4e02-871c-b98dec27d836,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Search Engines Are Blocked from Sensitive Areas</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Search Engines Are Blocked from Sensitive Areas</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+
+==What to Check For==
+
+Make sure that search engines are blocked from indexing sensitive areas on your site.
+
+
+==Why==
+
+If a search engine indexes sensitive data on your web site, an attacker will be able to retrieve that data from the search engine.
+
+
+==How to Check==
+
+To make sure that search engines are blocked from indexing sensitive areas on your site:
+
+# **Identify sensitive URI locations.** Enumerate all the URIs that lead to sensitive data in your application. These URIs will usually correspond to the filesystem structure of the application, but sometimes they will be produced dynamically by the application itself. Whatever the case, consider how the URIs look from the perspective of the client when enumerating the locations of the sensitive data. It is strongly recommended to prevent indexing of any administrative pages.
+# **Examine the robots.txt file.** Make sure that the robots.txt file is present in the web root directory of the server and that is web accessible. Use a web browser to check if the robots.txt file is available at /robots.txt URI on your site. Review the robots.txt file to make sure that it includes rules that block search engines from indexing each of the sensitive URIs on your site.
+# **Examine search engine caches.** Use popular web search engines to execute search queries that include sensitive URI locations on your server.  See if these locations have already been cached. If sensitive data has already been cached, it should be purged automatically some time later when the search engine crawls your site again and parses the robots.txt file correctly. If that is not acceptable, consider contacting the search engine operator and asking them to remove the sensitive data from their caches.
+
+
+==How to Fix==
+
+To block search engines from indexing sensitive data on your site by using a robots.txt file:
+
+# **Identify sensitive URI locations.** Enumerate all the URIs that lead to sensitive data in your application. These URIs will usually correspond to the filesystem structure of the application, but sometimes they will be produced dynamically by the application itself. Whatever the case, consider how the URIs look from the perspective of the client when enumerating the locations of the sensitive data. It is strongly recommended to prevent indexing of any administrative pages.
+# **Write a robots.txt file.** The robots.txt file has a simple syntax. Study the reference at the link at the bottom of this page, and write a robots.txt file that prevents indexing of all the sensitive URI locations.
+# **Upload the robots.txt file to the web site.** Upload the robots.txt file to the web root directory on your application server. 
+# **(Optional) Examine search engine caches.** Use popular web search engines to execute search queries that include sensitive URI locations on your server. See if these locations have already been cached. If sensitive data has already been cached, it should be purged automatically some time later when the search engine crawls your site again and parses the robots.txt file correctly. If that is not acceptable, consider contacting the search engine operator and asking them to remove the sensitive data from their caches.
+
+
+==Additional Resources==
+
+* For information about the robots.txt file syntax, see http://www.w3.org/TR/html4/appendix/notes.html#h-B.4.1.1
+]]></Data>
+  </Content>
+</TeamMentor_Article>

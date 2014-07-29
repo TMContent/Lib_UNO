@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1925248767" Content_Hash="1611796800">
+  <Metadata>
+    <Id>8c4f4768-95bb-4362-90ed-3a84ba3a2215</Id>
+    <Id_History>e9eb9e15-e155-47fa-80a6-3ffa5a5f80e0,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Out-of-process State Service Is Protected</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Out-of-process State Service Is Protected</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that your application protects Out-of-process state service when managing session state information.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>If you use <b>mode=StateServer</b> on the &lt;<b>sessionState</b>&gt; element, use the following recommendations to help secure session state: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Use a least-privileged account to run the state service:</b> By default, the state service runs using the Network Service local, least-privileged account. You should not need to change this configuration </p>
+      <li>
+        <p>
+          <b>Protect the channel: </b>If the state service is located on a remote server and you are concerned about the network eavesdropping threat, protect the channel to the remote state store by using IPSec to ensure the user state remains private and unaltered. </p>
+        <li>
+          <p />
+          <b>Consider changing the default port:</b> The ASP.NET state service listens on port 42424. To avoid using this well-known default port, you can change the port by editing the following registry key: <p><b>HKLM\SYSTEM\CurrentControlSet\Services\aspnet_state\Parameters</b></p><p>The port number is defined by the <b>Port</b> named value. If you change the port number in the registry to 45678, for example,&amp;nbsp;you must also change the connection string on the &lt;<b>sessionState</b>&gt; element, as follows: </p><p><b>stateConnectionString="tcpip=127.0.0.1:45678"</b></p><li><p /><b>Encrypt the state connection string:</b> Because this element contains service connection details, you should encrypt it by using one of the protected configuration providers. <hr /></li></li>
+      </li>
+    </li>
+  </ul>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

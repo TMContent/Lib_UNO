@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6359def1-1746-47c3-b2f1-cdfd9308ea17</Id>
+    <Id_History>00000000-0000-0000-0000-0000003a5a7d,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Log Forging</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>Log Forging</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Description==
+
+Log forging occurs when an attacker is able to modify log entries recorded by the application. This usually occurs when the application writes some part of user input to the log files verbatim, which allows an attacker to insert special characters into the log files. Special characters may be processed by the application to change the contents of the files or render them unusable. The threat of log forging is that it may allow an attacker to hide traces of the attacks. In extreme cases, an attacker may forge logs to implicate someone else of the attacks. This vulnerability type affects all applications. To prevent this vulnerability, validate all input and validate user data which is logged. To check for adequate protection against this vulnerability type, make sure that all input is validated and especially that user data which is logged is validated.
+
+==Impact==
+
+Log forging allows an attacker to tamper with the logs. Usually, the attacker will try to insert special characters in an attempt to remove a part of the log or make it invisible from within the application. If the attacker can hide a part of the log, it allows him to hide some of the traces of his attack(s). This makes it harder to detect the attack when it is taking place and also makes it harder to investigate the attack afterwards. In a more extreme case that is rarely seen in practice, an attacker may insert data into the logs to implicate someone else of the attacks and send the investigators down the wrong path. These days, attackers usually rely on some form of proxy or tunnel technology to hide themselves, rather than modifying the logs, but this vulnerability type still exists.
+
+==Countermeasures==
+
+Implement all of the following countermeasures to protect your application against log forging. 
+
+* [[3de41277-0cc1-4ebc-8dd7-e96d161aa0ef|Validate All Input]]
+* [[e59923e7-c2fb-4a75-8db7-a9a91e869f74|Validate Input for Length, Range, Format, And Type]]
+* [[00000000-0000-0000-0000-0000004307e6|Validate Logged User Data]]
+
+==Checklists==
+
+Use each of the following checklist items to make sure that sufficient countermeasures against log forging have been implemented. 
+
+* [[a210fcb7-f142-4c2e-844a-c43e0859f90d|All Input Is Validated]]
+* [[0e71dd64-87d1-4cf5-9569-ea320f209977|Input Is Validated for Length, Range, Format, And Type]]
+* [[00000000-0000-0000-0000-000000413b08|Logged User Data Is Validated]]
+
+==Additional Resources==
+
+* For more information about log forging, see http://minsky.gsi.dit.upm.es/semanticwiki/index.php/Log_Forging
+* For more information about log forging, see https://www.owasp.org/index.php/Log_forging]]></Data>
+  </Content>
+</TeamMentor_Article>

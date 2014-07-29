@@ -1,0 +1,327 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-470290349" Content_Hash="1771550972">
+  <Metadata>
+    <Id>7eedbaa3-b500-41ea-a811-b54aee59f11e</Id>
+    <Id_History>d0b1e36c-0b8d-4e5f-9d61-4851faceddca,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Use Code Access Security in ASP.NET</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Code Access Security in ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Summary</h1>
+  <p>This How to shows you how to select an appropriate trust level for your application, and where necessary, how to create a custom ASP.NET code access security policy file to define a custom trust level. You can use different code access security trust levels to incrementally limit your exposure to security attacks and provide extra degrees of application isolation. Code access security allows you to constrain your Web application by restricting the types of resources it can access and the types of operations it can perform. Code access security is particularly important when your application does not trust other applications that run in a hosted or shared server environment. For example, you can use it to ensure that applications cannot read each other's private data and cannot access critical shared system resources.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>
+      <div>Objectives</div>
+      <li>
+        <div>Overview</div>
+        <li>Summary of Steps<li><div>Step 1. Identify the Permissions Your Application Needs</div><li><div>Step 2. Choose an Appropriate Trust Level</div><li><div>Step 3. Configure Your ASP.NET Application</div><li><div>Step 4. Optionally Create a Custom Trust Level</div><li><div>Locking the Trust Level</div><li><div>Wrapping Privileged Code</div><li><div>Resource Access Permissions Summary</div><li><div>Privileged Operation Permissions Summary</div><li>Additional Resources</li></li></li></li></li></li></li></li></li></li>
+      </li>
+    </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Learn how to use code access security in ASP.NET Web applications. <li>Choose the most appropriate trust level for your application. <li>Use different code access security trust levels to incrementally limit your exposure to security attacks and provide extra degrees of application isolation. </li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>By default, ASP.NET Web applications and Web services run with Full trust. When an application runs with Full trust, code access security places no restrictions on the resources and operations it can access, and resource access is based solely on operating system security and Windows access control lists (ACLs). </p>
+  <p>To protect your ASP.NET application, you can use code access security to restrict the resources the application can access and the privileged operations it can perform. You do this by configuring the &lt;<b>trust</b>&gt; element in either the machine-level Web.config file or the application's Web.config file and setting it to one of the predefined trust levels, as shown here.</p>
+  <div>
+    <pre>&lt;trust level="Full&amp;#124;High&amp;#124;Medium&amp;#124;Low&amp;#124;Minimal" /&gt;  </pre>
+  </div>
+  <p>The &lt;<b>trust</b>&gt; element supports a number of predefined trust levels. Each level in succession provides a more restrictive environment (with fewer code access security permissions) in which to run your application.</p>
+  <p>For situations where your application requires a set of code access security permissions that do not exactly match one of the predefined trust levels, you need to evaluate whether it makes sense to create a custom trust level or whether you should target the higher trust level. The best choice depends on how close the existing trust level is to meeting the permission requirements of your application. </p>
+  <h1>Summary of Steps</h1>
+  <p>To use code access security in your ASP.NET applications: </p>
+  <ul>
+    <li>Step 1. Identify the permissions your application needs. <li>Step 2. Choose an appropriate trust level. <li>Step 3. Configure your ASP.NET application. <li>Step 4. Optionally create a custom trust level. </li></li></li></li>
+  </ul>
+  <h1>Step 1. Identify the Permissions Your Application Needs</h1>
+  <p>Identify the precise set of code access security permissions that your application requires. You can do this by manually reviewing your code or by using the Permissions Calculator tool (Permcalc.exe).</p>
+  <h2>Manually Reviewing Code to Identity Permission Requirements</h2>
+  <p>To manually identify permission requirements, you need to analyze your code and determine the types of resources it accesses, the kind of resource access it requires (such as read/write), and the privileged operations it performs. </p>
+  <p>The main difficulty with trying to manually identify permission requirements occurs if your code calls other assemblies, such as third-party assemblies or system assemblies. Identifying their permission requirements can be very difficult. This is where the PermCalc tool can help.</p>
+  <p>For more information about the permissions you need to be able to access specific resources types, see the "Resource Access Permissions Summary" section later in this document.</p>
+  <p>For more information about privileged operations and the permissions you need to be able to perform them, see the "Privileged Operation Permissions Summary" section later in this document.</p>
+  <h2>Using the Permissions Calculator Tool</h2>
+  <p>If you use separate assemblies for your application's business and data access logic and place them either in your application's \bin directory or the global assembly cache, you can run PermCalc on those assemblies. You cannot run PermCalc directly on .aspx Web pages.</p>
+  <h3>To see the permission requirements of an assembly </h3>
+  <ol>
+    <li>Run the following command from a Microsoft Visual Studio .NET command window. <p><b>permcalc -Show </b>&lt;<b><i>assemblyName</i></b>&gt; </p><p>The following is sample output from this command. </p><div><pre>&lt;?xml version="1.0" ?&gt; <br />&lt;Assembly&gt;<br />&amp;nbsp; &lt;Namespace Name="ClassLibrary1"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;Type Name="Class1"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;Method Sig="instance void test()" /&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;Method Sig="instance void .ctor()"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;Demand&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;PermissionSet version="1" <br />class="System.Security.PermissionSet"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;IPermission version="1"<br />class="System.Security.Permissions.RegistryPermission, mscorlib,<br />Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />Read="true" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;IPermission version="1" class="System.Security.Permissions.FileIOPermission, mscorlib,<br />Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />Unrestricted="true" /&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/PermissionSet&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/Demand&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;Sandbox&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;PermissionSet version="1" class="System.Security.PermissionSet"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;IPermission version="1" class="System.Security.Permissions.RegistryPermission, mscorlib,<br />Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />Read="true" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;IPermission version="1" class="System.Security.Permissions.FileIOPermission, mscorlib,<br />Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />Unrestricted="true" /&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/PermissionSet&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/Sandbox&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/Method&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/Type&gt;<br />&amp;nbsp; &lt;/Namespace&gt;<br />&lt;/Assembly&gt;  </pre></div><li>Examine the permissions listed in the &lt;<b>Demand</b>&gt; element. These represent the permissions that the assembly needs. In this case, the assembly needs <b>RegistryPermission</b> and <b>FileIOPermission</b>. <div><pre>&lt;IPermission version="1" class="System.Security.Permissions.RegistryPermission, mscorlib,<br />&amp;#9; Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Read="true" /&gt;<br />&lt;IPermission version="1"<br />class="System.Security.Permissions.FileIOPermission, mscorlib,<br />Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />Unrestricted="true" /&gt;  </pre></div><p>You can pass a number of assemblies to the PermCalc tool at the same time, as shown in the following command example. </p><p><b>permcalc -Show </b>&lt;assembly1&gt;<b></b>&lt;assembly2&gt;<b></b>&lt;assembly3&gt; </p></li></li>
+  </ol>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If any resource is accessed directly from an .aspx page, you will need to manually calculate the permission requirements for that resource. PermCalc works only with assemblies.</blockquote>
+  <h1>Step 2. Choose an Appropriate Trust Level</h1>
+  <p>Try to evaluate whether the permissions required for your application match those provided by any of the standard trust levels. </p>
+  <h2>Trust Levels Summary</h2>
+  <p>The capabilities available to applications running at the various trust levels are summarized in Table 1.</p>
+  <p>
+    <b>Table 1. Trust Levels and Their Key Capabilities and Restrictions</b>
+  </p>
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <th>Trust Level</th>
+          <th>Key Capabilities and Restrictions</th>
+        </tr>
+        <tr>
+          <td>Full</td>
+          <td>No restrictions imposed by code access security.</td>
+        </tr>
+        <tr>
+          <td>High</td>
+          <td>No unmanaged code.<br />No enterprise services.<br />Can access Microsoft SQL Server and other OLE DB data sources.<br />Can send e-mail by using SMTP servers.<br />Very limited reflection permissions. No ability to invoke code by using reflection.<br />A broad set of other framework features are available. Applications have full access to the file system and to sockets.</td>
+        </tr>
+        <tr>
+          <td>Medium</td>
+          <td>Permissions are limited to what the application can access within the directory structure of the application.<br />No file access is permitted outside of the application's virtual directory hierarchy.<br />Can access SQL Server.<br />Can send e-mail by using SMTP servers.<br />Limited rights to certain common environment variables.<br />No reflection permissions whatsoever.<br />No sockets permission.<br />To access Web resources, you must explicitly add endpoint URLs&amp;#8212;either in the <b>originUrl</b> attribute of the &lt;<b>trust</b>&gt; element or inside the policy file.</td>
+        </tr>
+        <tr>
+          <td>Low</td>
+          <td>Intended to model the concept of a read-only application with no network connectivity.<br />Read only access for file I/O within the application's virtual directory structure.</td>
+        </tr>
+        <tr>
+          <td>Minimal</td>
+          <td>Execute only.<br />No ability to change the <b>IPrincipal</b> on a thread or on the <b>HttpContext</b>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p />
+  <p>If your application calls unmanaged code, it must run with Full trust. Even the least restrictive partial trust level, High, does not permit calls to unmanaged code.</p>
+  <h3>To choose an appropriate trust level </h3>
+  <ol>
+    <li>Examine each trust level, beginning with High trust. <li>Look inside the High trust policy file, web_HighTrust.config. <li>If your application requires fewer code access security permissions than those provided by the High trust level, move on to consider Medium trust. <li>Repeat the process, moving from Medium to Low to Minimal, and keep evaluating the partial trust levels until you reach an exact match to your application's requirements or until your application's required permissions slightly exceed a partial trust level. </li></li></li></li>
+  </ol>
+  <p>This process will help you to identify a trust level that matches your application's code access security permission requirements as closely as possible but does not grant permissions that your application does not need. </p>
+  <h1>Step 3. Configure Your ASP.NET Application</h1>
+  <p>You can configure your ASP.NET application to use a standard trust level either in your application's Web.config file or in the machine-level Web.config file. Machine-level configuration affects all the ASP.NET Web applications and Web services hosted on that server. Application-level configuration affects only a specific application.</p>
+  <p>For machine-level configuration, you make changes to the Web.config file located in the following directory: &amp;#37;windir&amp;#37;\Microsoft.NET\Framework\&amp;#123;version&amp;#125;\CONFIG\.</p>
+  <p>For application-level configuration, you make changes to the Web.config file located in your application's virtual directory root.</p>
+  <p>The following example shows how to configure your application for Medium trust.</p>
+  <div>
+    <pre>...<br />&lt;system.web&gt;<br />&amp;nbsp; ...<br />&amp;nbsp; &lt;trust level="Medium" originUrl="" /&gt;<br />&amp;nbsp; ...<br />&lt;/system.web&gt;<br />...  </pre>
+  </div>
+  <h1>Step 4. Optionally Create a Custom Trust Level</h1>
+  <p>You may require a custom trust level if none of the predefined trust levels provide the exact set of permissions that your application needs to run. For example, you may find that your application needs more permissions than Medium trust provides but fewer permissions than High trust provides.</p>
+  <h2>Customizing Trust Level Policy</h2>
+  <p>With this approach you do the following: </p>
+  <ol>
+    <li>Copy one of the existing trust level policy files to create a custom policy file. <li>Add the required permissions to the custom policy file. <li>Configure your application to run using the custom policy. </li></li></li>
+  </ol>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You are unlikely to be able to use this approach to customize the trust level in hosted environments, where policy restrictions are likely to be rigid.</blockquote>
+  <p>If you can customize policy, this is the preferred option because it does not require any development effort. </p>
+  <p>In the following example, the application requires all the permissions provided by Medium trust. In addition, it needs unrestricted access to the Windows registry. While High trust provides unrestricted registry access, it also provides permissions that you may not want to grant to your application, such as unrestricted file I/O access. This is the type of situation where you should consider creating a custom trust level.</p>
+  <h3>To create the custom trust level configuration file </h3>
+  <ol>
+    <li>Copy the Medium trust policy file, web_MediumTrust.config, which is located in the &amp;#37;windir&amp;#37;\Microsoft.NET\Framework\&amp;#123;version&amp;#125;\CONFIG\ directory to a file named Web_CustomTrust.config in the same directory. <li>Add the <b>RegistryPermission</b> security class definition to the &lt;<b>SecurityClass</b>&gt; section in the Web_CustomTrust.Config file, as shown in the following example. <div><pre>&lt;SecurityClass Name="RegistryPermission"<br />&amp;nbsp;Description="System.Security.Permissions.RegistryPermission, <br />mscorlib, Version=2.0.0.0, Culture=neutral, <br />PublicKeyToken=b77a5c561934e089"/&gt;  </pre></div><li>Add the unrestricted <b>RegistryPermission</b> to the "ASP.Net" named permission set. <div><pre>&lt;PermissionSet<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; class="NamedPermissionSet"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; version="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Name="ASP.Net"&gt;<br />&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;IPermission<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; class="RegistryPermission"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; version="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Unrestricted="true" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp; &lt;/PermissionSet&gt;  </pre></div><li>Modify the default Web.config file in the &amp;#37;windir&amp;#37;\Microsoft.NET\Framework\&amp;#123;version&amp;#125;\CONFIG\ directory to add the custom trust level that references the custom trust configuration file you have created. <li>Add a new &lt;<b>trustLevel</b>&gt; element to the &lt;<b>securityPolicy</b>&gt;<b></b>section of the Web.config file to define a new level called <b>"Custom"</b> and to associate it with the custom policy file. <div><pre><br />&lt;location allowOverride="true"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Full" policyFile="internal" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="High" policyFile="web_hightrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Medium" policyFile="web_mediumtrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Low" policyFile="web_lowtrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Minimal" policyFile="web_minimaltrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Custom" policyFile="web_CustomTrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trust level="Full" originUrl="" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />&amp;nbsp;&amp;nbsp; &lt;/location&gt;  </pre></div></li></li></li></li></li>
+  </ol>
+  <p>The preceding changes apply to the root Web.config file in the framework CONFIG folder. This applies defaults to all Web applications on the current server. </p>
+  <h3>To configure the trust level for your specific application </h3>
+  <ol>
+    <li>Copy the web_CustomTrust.config file to your application's virtual directory. <li>Instead of referring to the Web_CustomTrust.config from the machine-level Web.config file, refer to it directly from your application's Web.config, as shown in the following example. <div><pre>...<br />&lt;location allowOverride="true"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Custom" policyFile="web_CustomTrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trust level="Custom" originUrl="" /&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;<br />&amp;nbsp;...  </pre></div></li></li>
+  </ol>
+  <h1>Locking the Trust Level</h1>
+  <p>If a Web server administrator wants to use code access security to ensure application isolation and restrict access to system-level resources, the administrator must be able to define security policy at the machine level and prevent individual applications from overriding it.</p>
+  <p>Application service providers or anyone responsible for running multiple Web applications on the same server should lock the trust level for all Web applications.</p>
+  <p>To do this, enclose the &lt;<b>trust</b>&gt; element in the machine-level Web.config file in a &lt;<b>location</b>&gt; tag, and set the <b>allowOverride</b> attribute to <b>false</b>, as shown in the following example.</p>
+  <div>
+    <pre>...<br />&lt;location allowOverride="false"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trust level="Medium" originUrl=""/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />...<br />&lt;/location&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />...  </pre>
+  </div>
+  <h1>Wrapping Privileged Code</h1>
+  <p>To avoid running with unnecessary permissions, you can either create a custom trust level that provides your exact set of permission requirements or you can wrap your privileged resource access code and grant Full trust to the wrapper assembly. The first approach is easier and involves no development effort. However, if you do not want all the pages in your ASP.NET application to have a particular extended permission granted to them, you can use a wrapper assembly to control access to your resources. With this approach, you separate your privileged code into a separate wrapper assembly.</p>
+  <h2>To wrap privileged code </h2>
+  <ol>
+    <li>Identify the precise set of extra permissions beyond those provided by Medium trust that your application needs. <li>Place your application's resource access code in a wrapper assembly. <li>Grant the wrapper assembly (not the Web application) Full trust by strong naming it and installing it into the global assembly cache. <li>Add the <b>AllowPartiallyTrustedCallersAttribute</b> to the wrapper assembly to allow it to be called by your partial-trust Web application. <li>In the wrapper assembly, assert the permissions that the resource access code needs by calling the <b>Assert</b> method of the <b>CodeAccessPermission</b> class, perform the privileged operation (or access the privileged resource), and then call the <b>RevertAssert</b> method. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you want to prevent any other partially trusted code from accessing the resources and operations exposed by the wrapper assembly, before calling the <b>Assert</b> method, demand a custom permission that is only granted to your Web application.</blockquote></li></li></li></li></li>
+  </ol>
+  <h1>Resource Access Permissions Summary</h1>
+  <p>Table 2 shows the code access security permissions that are required to access various resource types.</p>
+  <p>
+    <b>Table 2: Resources and Associated Code Access Security Permission Requirements</b>
+  </p>
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <th>Resources Accessed</th>
+          <th>Required Permissions</th>
+        </tr>
+        <tr>
+          <td>DPAPI encryption</td>
+          <td>DataProtectionPermission</td>
+        </tr>
+        <tr>
+          <td>DNS directory</td>
+          <td>DnsPermission</td>
+        </tr>
+        <tr>
+          <td>Environment variables</td>
+          <td>EnvironmentPermission</td>
+        </tr>
+        <tr>
+          <td>Event log</td>
+          <td>EventLogPermission</td>
+        </tr>
+        <tr>
+          <td>File dialog</td>
+          <td>FileDialogPermission</td>
+        </tr>
+        <tr>
+          <td>File system</td>
+          <td>FileIOPermission</td>
+        </tr>
+        <tr>
+          <td>Isolated file storage</td>
+          <td>IsolatedStoragePermission</td>
+        </tr>
+        <tr>
+          <td>Key containers</td>
+          <td>KeyContainerPermission</td>
+        </tr>
+        <tr>
+          <td>Message queues</td>
+          <td>MessageQueuePermission</td>
+        </tr>
+        <tr>
+          <td>Network information and traffic statistics</td>
+          <td>NetworkInformationPermission</td>
+        </tr>
+        <tr>
+          <td>OLE DB data sources</td>
+          <td>OleDbPermission</td>
+        </tr>
+        <tr>
+          <td>Performance counters</td>
+          <td>PerformanceCounterPermission</td>
+        </tr>
+        <tr>
+          <td>Printers </td>
+          <td>PrintingPermission</td>
+        </tr>
+        <tr>
+          <td>Reflection </td>
+          <td>ReflectionPermission</td>
+        </tr>
+        <tr>
+          <td>Registry </td>
+          <td>RegistryPermission</td>
+        </tr>
+        <tr>
+          <td>Security </td>
+          <td>SecurityPermission</td>
+        </tr>
+        <tr>
+          <td>SMTP servers</td>
+          <td>SmtpPermission</td>
+        </tr>
+        <tr>
+          <td>Sockets </td>
+          <td>SocketsPermission</td>
+        </tr>
+        <tr>
+          <td>SQL Server notifications</td>
+          <td>SqlNotificationPermission</td>
+        </tr>
+        <tr>
+          <td>SQL Server </td>
+          <td>SqlClientPermission</td>
+        </tr>
+        <tr>
+          <td>Stores containing X.509 certificates</td>
+          <td>StorePermission</td>
+        </tr>
+        <tr>
+          <td>User interfaces and clipboard</td>
+          <td>UIPermission</td>
+        </tr>
+        <tr>
+          <td>Web services (and other HTTP Internet resources)</td>
+          <td>WebPermission</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p />
+  <h1>Privileged Operation Permissions Summary</h1>
+  <p>Table 3 shows the code access security permissions that are required to perform privileged operations. </p>
+  <p>
+    <b>Table 3: Privileged Operations and Associated Code Access Security Permission Requirements</b>
+  </p>
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <th>Privileged Operation</th>
+          <th>Required Permissions</th>
+        </tr>
+        <tr>
+          <td>Creating and controlling application domains</td>
+          <td>SecurityPermission with SecurityPermissionFlag.ControlAppDomain</td>
+        </tr>
+        <tr>
+          <td>Specifying policy application domains</td>
+          <td>SecurityPermission with SecurityPermissionFlag.ControlDomainPolicy</td>
+        </tr>
+        <tr>
+          <td>Asserting security permissions</td>
+          <td>SecurityPermission with SecurityPermissionFlag.Assertion</td>
+        </tr>
+        <tr>
+          <td>Creating and manipulating evidence</td>
+          <td>SecurityPermission with SecurityPermissionFlag.ControlEvidence</td>
+        </tr>
+        <tr>
+          <td>Creating and manipulating principal objects</td>
+          <td>SecurityPermission with SecurityPermissionFlag.ControlPrincipal</td>
+        </tr>
+        <tr>
+          <td>Configuring types and channels remoting</td>
+          <td>SecurityPermission with SecurityPermissionFlag.RemotingConfiguration</td>
+        </tr>
+        <tr>
+          <td>Manipulating security policy</td>
+          <td>SecurityPermission with SecurityPermissionFlag.ControlPolicy</td>
+        </tr>
+        <tr>
+          <td>Serialization </td>
+          <td>SecurityPermission with SecurityPermissionFlag.SerializationFormatter</td>
+        </tr>
+        <tr>
+          <td>Threading operations</td>
+          <td>SecurityPermission with SecurityPermissionFlag.ControlThread</td>
+        </tr>
+        <tr>
+          <td>Reflection</td>
+          <td>ReflectionPermission</td>
+        </tr>
+        <tr>
+          <td>Calling unmanaged code</td>
+          <td>UnmanagedCodePermission</td>
+        </tr>
+        <tr>
+          <td>Call DPAPI to encrypt and decrypt data</td>
+          <td>DataProtectionPermission</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p />
+  <h1>
+    <hr />
+  </h1>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

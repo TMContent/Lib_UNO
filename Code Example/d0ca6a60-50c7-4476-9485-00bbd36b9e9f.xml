@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1483164222" Content_Hash="-1400057461">
+  <Metadata>
+    <Id>d0ca6a60-50c7-4476-9485-00bbd36b9e9f</Id>
+    <Id_History>38342130-4e4b-47df-afd9-c7e8c86f77ee,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Use ESAPI Executor</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Use ESAPI Executor</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Java web-based applications.</li>
+  </ul>
+  <h1>Summary</h1>
+  <span>
+    <p>Use the ESAPI library to execute system commands safely.</p>
+  </span>
+  <h1>Objectives</h1>
+  <span>
+    <p>The ESAPI library provides an Executor control that ensures that only a whitelist of programs can execute. Additionally, parameters or switches sent to the executable are escaped appropriately for the given operating system that is executing the command. This allows an application to safely execute system level commands while preventing attackers from running any system level command injection attacks they may attempt.</p>
+  </span>
+  <h1>Scenarios</h1>
+  <span>
+    <p>Applications that wish to execute system level commands can use the ESAPI Executor control to execute a command from a configured whitelist.</p>
+  </span>
+  <h1>Solution Example</h1>
+  <span>
+    <p>The following (insecure) example shows an application using dynamic data to execute a system command.</p>
+    <pre>
+      <p>//DO NOT USE THIS</p>
+      <p>HttpServletRequest request = ...;</p>
+      <p>String command = request.getParameter("cmd") &amp;#43; " -a 123 -b 456";</p>
+      <p>System.getRuntime().exec(command);</p>
+    </pre>
+    <p>The following example shows an application using ESAPI executing a known system command while using dynamic data. Because the executor is used, only a command from the whitelist will be executed. Any other commands will be rejected.</p>
+    <pre>
+      <p>HttpServletRequest request = ...;</p>
+      <p>List&lt;String&gt; params = ...;</p>
+      <p>String cmdRef = request.getParameter("cmdRef"); </p>
+      <p>//Map indirect command reference to actual command</p>
+      <p>//ex. something like "Ax7PrTz3" might map to "C:\myapp\myother.exe"</p>
+      <p>//This prevents users specifying actual commands as request parameters.</p>
+      <p>//They just specify a random identifier and the server contains</p>
+      <p>//the mappings (indirect object reference)</p>
+      <p>String cmd = getActualCommand(cmdRef);</p>
+      <p>try &amp;#123;</p>
+      <p>&amp;#9;ESAPI.executor().executeSystemCommand(command, params) throws &amp;#123;</p>
+      <p>&amp;#125; catch (ExecutorException ee) &amp;#123;</p>
+      <p>&amp;#9;//an invalid command was attempted ... handle exception here</p>
+      <p>&amp;#125;</p>
+    </pre>
+    <p>In addition to using this function, you'll need to update the <em>ESAPI.properties</em> file for your application to inform ESAPI what the acceptable executables are for your application. An example of the snippet you need to update is below:</p>
+    <pre>Executor.ApprovedExecutables=C:\\myapp\\myprog.exe,C:\\myapp\\myother.exe</pre>
+  </span>
+  <h1>See Also</h1>
+  <span>
+    <p>Links to API references and other useful links.</p>
+    <p>
+      <a href="https://www.owasp.org/index.php/Command_Injection">https://www.owasp.org/index.php/Command_Injection</a> - Command Injection</p>
+    <p>
+      <a href="https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API">https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API</a> - ESAPI</p>
+  </span>
+  <h1>Input and Data Validation Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/b531d29c-86f7-4812-90ce-5f3f0f780aba">Validate Input from All Sources</a>
+    </li>
+    <li>
+      <a href="/article/c98695c5-cf02-44a1-96bf-1f8046b8ad9d">Validate Input for Length, Range, Format, and Type</a>
+    </li>
+    <li>
+      <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">
+        <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">Validate All Input Passed to the Database</a>
+      </a>
+    </li>
+    <li>
+      <a href="/article/a5491c44-164b-4046-94d3-b575b9745e8b">Filter All User-Supplied Filename and Path Input</a>
+    </li>
+    <li>
+      <a href="/article/9f21442f-2aee-4573-8be6-a5b51d9c89b8">Do Not Rely on Client-Side Validation</a>
+    </li>
+  </ul>
+  <h1>Input and Data Validation Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/7f8deb21-cd52-41be-80b4-8897612021dc">Input from All Sources Is Validated</a>
+    </li>
+    <li>
+      <a href="/article/61869793-2c10-40c0-b82a-babcc0312697">Input Is Validated for Length, Range, Format and Type</a>
+    </li>
+    <li>
+      <a href="/article/42f4b565-14f7-42f4-8c5a-0f78f357e4c0">All Database Input Is Validated</a>
+    </li>
+    <li>
+      <a href="/article/17884af0-fc83-412a-b613-4def4a6f84ad">User-Supplied Filenames and Paths Are Validated</a>
+    </li>
+    <li>
+      <a href="/article/b1803c35-9579-4a38-9a63-30202160ef25">The Application Does Not Rely on Client-Side Validation</a>
+    </li>
+  </ul>
+  <h1>Input and Data Validation Code Examples</h1>
+  <ul>
+    <li>
+      <a href="/article/0f49430b-2abe-408f-b046-89fa739f5d53">Input Validation Using JSF</a>
+    </li>
+    <li>
+      <a href="/article/18ac74df-602b-4a58-8998-52f638f3a045">Input Validation Using SpringMVC</a>
+    </li>
+    <li>
+      <a href="/article/d124abb1-e230-43ef-8762-1caa0dbb89ca">Input Validation Using Struts 1</a>
+    </li>
+    <li>
+      <a href="/article/2f917654-65a8-49c9-b000-c17f9765bf42">Input Validation Using Struts 2</a>
+    </li>
+    <li>
+      <a href="/article/38342130-4e4b-47df-afd9-c7e8c86f77ee">Use ESAPI Executor</a>
+    </li>
+  </ul>
+  <h1>Input and Data Validation Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/fd3ecaaa-cb7c-43a2-a91a-f19862f736d4">How to Test for Server-Side Code Injection in Java</a>
+    </li>
+    <li>
+      <a href="/article/c00b9149-1290-4c9e-bcd0-392a9c5a6fb0">How to Test for Path Manipulation Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/5c99da7b-b4eb-4315-b48c-ac2598c13144">How to Test for Double Encoding Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/fc95c5e5-667a-4e66-b1cf-f7d0529c4c2f">How to Test for Client-side Validation Bypass Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/6f4e927b-bd45-498b-95c4-78fd2c3287c1">How to Test for Integer Overflows in Java</a>
+    </li>
+    <li>
+      <a href="/article/ed20009a-59ef-415d-8e72-0ff3221a1346">How to Test for Integer Underflow Bugs in Java</a>
+    </li>
+    <li>
+      <a href="/article/d7682043-0095-4700-97dd-01ce797c4ada">How to Test for Deserialization of Untrusted Data Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1946463363" Content_Hash="76336545">
+  <Metadata>
+    <Id>8ac3d5f7-36db-4cd8-95e9-77b448122356</Id>
+    <Id_History>e0f7d99d-d83a-4b3e-8641-d17b14bced9d,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Canonicalization Attack</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Canonicalization Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>Any application that builds a file name, or path string, host name, url, or other resource identifier based on user input.</p>
+  <h1>Description</h1>
+  <p>Different forms of input that resolve to the same standard name (the canonical name), is referred to as canonicalization. Code is particularly susceptible to canonicalization issues if it makes security decisions based on the name of a resource that is passed to the program as input. Files, paths, host names, and URLs are resource types that are vulnerable to canonicalization because in each case there are many different ways to represent the same name. </p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Unauthorized access <li>Information disclosure <li>Elevation of privilege</li></li></li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>Making security decisions based on the non-canonical form of resources strings supplied by untrusted input. Common examples of such resource strings include URLs, file names, and file paths.</li>
+  </ul>
+  <a name="Countermeasures">
+  </a>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <p>Choose a standard 'canonical' representation for all strings that are used to make security decisions.</p>
+      <li>
+        <p>Convert all such strings to their canonical form before making security decisions. For example:</p>
+        <ul>
+          <li>Convert URL encoded strings into their unicode equivalent <li>Convert relative paths to absolute paths for files and URL strings.</li></li>
+        </ul>
+        <li>
+          <p>If available, use common libraries for canonicalization. Only write your own canonicalization routines if absolutely necessary.</p>
+          <li>
+            <p>Avoid input file names where possible and instead use absolute file paths that cannot be changed by the end user.</p>
+            <li>
+              <p>Reject incorrectly encoded characters and do not accept alternate representations of standard characters.</p>
+              <li>
+                <p>Check all resource via whitelist, not blacklist.</p>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Examples</h1>
+  <p>
+    <strong>Directory traversal</strong>:</p>
+  <p>Suppose a server has a rule to only execute files stored in the C:\inetpub\wwwroot\cgi-bin directory. When a path is supplied to the server, if it does not begin with C:\inetpub\wwwroot\cgi-bin, then it will not be run. Now consider the following path:</p>
+  <pre>C:\inetpub\wwwroot\cgi-bin\..\..\..\Windows\System32\cmd.exe</pre>
+  <p>This is sufficient to pass the validating rule, but when it is run by the shell, it resolves to the following canonical representation:</p>
+  <pre>C:\Windows\System32\cmd.exe</pre>
+  <p>This is clearly not what was intended and provides a clear example of why canonicalization is a security risk.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://en.wikipedia.org/wiki/Canonicalization">http://en.wikipedia.org/wiki/Canonicalization</a>
+      <li>
+        <a href="http://www.nextgenss.com/papers/unicodebo.pdf">http://www.nextgenss.com/papers/unicodebo.pdf</a>
+        <li>
+          <a href="http://www.owasp.org/index.php/Canoncalization,_locale_and_Unicode">http://www.owasp.org/index.php/Canoncalization,_locale_and_Unicode</a>
+          <li>
+            <a href="http://www.faqs.org/rfcs/rfc3492.html">http://www.faqs.org/rfcs/rfc3492.html</a>
+            <li>
+              <a href="http://projects.cerias.purdue.edu/secprog/class2/7.Canon_&amp;_DT.pdf">http://projects.cerias.purdue.edu/secprog/class2/7.Canon_&amp;_DT.pdf</a>
+              <li>
+                <a href="http://www.dwheeler.com/secure-programs/Secure-Programs-HOWTO/index.html">http://www.dwheeler.com/secure-programs/Secure-Programs-HOWTO/index.html</a>
+                <li>
+                  <a href="http://en.wikipedia.org/wiki/File_format">http://en.wikipedia.org/wiki/File_format</a>
+                  <li>
+                    <a href="http://channel9.msdn.com/wiki/default.aspx/SecurityWiki.CanonicalizationLab">http://channel9.msdn.com/wiki/default.aspx/SecurityWiki.CanonicalizationLab</a>
+                    <li>
+                      <a href="http://support.microsoft.com/kb/887459">http://support.microsoft.com/kb/887459</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/1ec74735-3a31-40c8-b14d-89f9dd31dcc5">Attack: Command Injection Attack</a>
+      <li>
+        <a href="/article/c42d3aa7-fac8-4f6b-9608-290538e2098d">Attack: Alternate Data Streams Attack</a>
+        <li>
+          <a href="/article/549d1780-f060-4d45-8292-11eadbe23293">Attack: File Name and Path Manipulation Attack</a>
+          <li>
+            <a href="/article/b541ba53-6354-47be-9d89-8209b9807d93">Attack: Forceful Browsing Attack</a>
+            <li>
+              <a href="/article/0a5555cd-028e-4d64-94a5-3f90e8bb03fd">Attack: Information Disclosure Attack</a>
+              <li>
+                <a href="/article/f3f17982-9773-4bb0-b77c-304d80a5a45e">Attack: Phishing Attack</a>
+                <li>
+                  <a href="/article/ce899ba6-8ae2-4494-8706-ce863fae58e7">Guideline: Filter All User-Supplied Filename and Path Input </a>
+                  <li>
+                    <a href="/article/946a5edb-e8f8-4365-8675-b8a5032c201b">Guideline: Validate All Data Passed Between Native and Java Code </a>
+                    <li>
+                      <a href="/article/40eea61e-c8bd-494a-b75d-c18c2074c752">Guideline: Validate Input from All Sources </a>
+                      <li>
+                        <a href="/article/f29fac90-c626-41d6-9184-acd6007696cf">Guideline: Validate Input for Length, Range, Format, and Type </a>
+                        <li>
+                          <a href="/article/6e981095-84bd-4158-a212-8f9937bcb336">Guideline: Do Not Rely on Client-Side Validation </a>
+                          <li>
+                            <a href="/article/88f49e05-f101-4764-b8e3-b31cd7507071">Guideline: Do Not Rely on Request Validation </a>
+                          </li>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

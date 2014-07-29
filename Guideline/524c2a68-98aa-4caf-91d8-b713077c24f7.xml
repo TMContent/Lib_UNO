@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1199113476" Content_Hash="-632845573">
+  <Metadata>
+    <Id>524c2a68-98aa-4caf-91d8-b713077c24f7</Id>
+    <Id_History>e35c6f53-82e8-4be7-8f5b-a04b0f251cd2,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Encrypt Remote Administrator Access</Title>
+    <Category>Communication Security</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encrypt Remote Administrator Access</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 2.3<li>PCI DSS Requirement 2.3.a<li>PCI DSS Requirement 2.3.c</li></li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use an encryption tunnel to secure remote administrator access.</p>
+  <h1>Why</h1>
+  <p>Encrypting remote administrative access makes sure that a potential attacker cannot get administrative authentication credentials or other information about the network by eavesdropping.</p>
+  <h1>When</h1>
+  <p>An encryption tunnel should be installed and configured when setting up remote administrator access.</p>
+  <h1>How</h1>
+  <p>Perform the following tasks to assure that remote administrator access is encrypted:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use&amp;nbsp;an encryption tunnel for interactive remote administration. </strong>There are basically two options for encrypting interactive remote administration: VPN and SSH. VPN is the more versatile and practical option. VPN is recommended for most applications. VPN and SSH may be used in parallel. </p>
+      <ul>
+        <li>
+          <p>
+            <strong>VPN</strong> is a general purpose, encrypted IP tunnel. There are many different VPN implementations, offering various degrees of security. Microsoft Windows Operating Systems have built-in PPTP VPN functionality. Many routers and firewalls also have built-in VPN functionality. The exact procedure for implementing VPN varies by configuration. VPN is recommended for remote administration using remote desktop (RDP) or other visual administration protocols (VNC). </p>
+          <li>
+            <p>
+              <strong>SSH</strong> works best for UNIX-style systems when only a command-line interface to a single system is necessary. SSH may be used for backup tasks on the web server in the DMZ, for example. While general purpose SSH tunnels are possible, they offer no advantage over VPN and should be avoided because of maintenance overhead. Because of its inherent limitations, SSH is not likely to be sufficient to accommodate the needs of anything but the smallest businesses. Using SSH is recommended for remote administration of UNIX-style systems in the DMZ, but for all other interactive remote administration, VPN is recommended. </p>
+          </li>
+        </li>
+      </ul>
+      <li>
+        <p>
+          <strong>Disable insecure remote&amp;nbsp;administration services on the internal network. </strong>Insecure remote command services are old UNIX-style services that used plain-text authentication, including telnet, rcp, rexec, etc. They really have no place in a modern, secure, computing environment. Most modern systems don't have them installed or running by default, although some Linux distributions might still have telnet enabled. These services should not be installed, and if they have been somehow installed, they should be disabled and/or removed. </p>
+        <li>
+          <p>
+            <strong>Use&amp;nbsp;SSL for&amp;nbsp;web-based remote administration. </strong>SSL is recommended for encrypting web-based remote administration. There are several SSL implementations. SSL v2 is the one to avoid because it has well-known vulnerabilities and is often disabled by default. SSL v3 and TLS1.2 are the current ones. SSL v3 was released in 1996 and TLS1.2 was last updated in 2008. To use SSL/TLS for encrypting a remote web administration session, the server hosting the web administration interface should be using SSL/TLS. Configuring SSL/TLS on a web server varies by server, so you will need to refer to the vendor's manual or technical support for detailed instructions for implementing SSL/TLS on your web server. SSL/TLS will be enabled by default for many web administration interfaces. If SSL/TLS is not implemented, the procedure to implement it may be complex. In that case, it may be possible to use VPN instead. The key to securely using VPN instead of SSL/TLS is to make the web administration interface available only through the VPN and not over the Internet.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <p>For information on setting up Virtual Private Networks in a Windows environment, please see "Virtual Private Networks" at <a href="http://technet.microsoft.com/en-us/network/bb545442.aspx">http://technet.microsoft.com/en-us/network/bb545442.aspx</a>.</p>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

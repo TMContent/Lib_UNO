@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1990397028" Content_Hash="-1152421162">
+  <Metadata>
+    <Id>d8c76643-3d59-4de6-8f05-68b29494a2ff</Id>
+    <Id_History>1030f13a-fa23-4a50-b24d-5c6ba5b97845,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>A New Or Blank Session ID Is Assigned on Logout</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>A New Or Blank Session ID Is Assigned on Logout</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that a new or blank session ID is assigned on logout.</p>
+  <h1>Why</h1>
+  <p>Reset the session ID of the user upon logout to prevent people using the same computer from being able to retrieve the session ID after the user has logged out.</p>
+  <h1>How To Check</h1>
+  <p>To verify that a new or blank session ID is assigned on logout:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify logout functionality.</strong> Find the function or functions that are called to log the user out.</p>
+      <li>
+        <p>
+          <strong>Verify that the session state is cleared on logout. </strong>Review the logout function to make sure it clears the session state on the server by using code such as the following:</p>
+        <pre>Session.Abandon();</pre>
+        <li>
+          <p>
+            <strong>Verify that the session ID cookie is reset.</strong> Review the logout function to make sure it resets the session ID cookie by using code such as the following:</p>
+          <pre>Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", ""));</pre>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>To assign a blank session ID on logout:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify logout functionality.</strong> Find the function or functions that are called to log the user out.</p>
+      <li>
+        <p>
+          <strong>Clear the session state on logout.</strong> Add the following code to the logout function to clear the session state on the server:</p>
+        <pre>Session.Abandon();</pre>
+        <li>
+          <p>
+            <strong>Reset the session ID cookie.</strong> Add the following code to the logout function to set the session ID to null:</p>
+          <pre>Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", ""));</pre>
+        </li>
+      </li>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

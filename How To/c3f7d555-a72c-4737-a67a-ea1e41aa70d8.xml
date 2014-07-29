@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1413963869" Content_Hash="-291360101">
+  <Metadata>
+    <Id>c3f7d555-a72c-4737-a67a-ea1e41aa70d8</Id>
+    <Id_History>284b8045-d1f7-4bb6-8d2f-1df54feb4025,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Use WMI For Instrumentation</Title>
+    <Category>Event Log</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>Description</h1>
+  <p>The <b>System.Management</b> assembly defines classes that you can use to instrument your application with Windows Management Instrumentation (WMI). To instrument specific aspects of your .NET Framework application, you need to define and register with the Common Information Model Object Manager (CIMOM) a WMI-managed class that captures required information when that specific event occurs in your application. You need to call the <b>Fire</b> method of the WMI-managed event class to notify the WMI infrastructure and monitoring applications that the event has occurred. </p>
+  <p>To use WMI, create a WMI-managed class that derives from the <b>BaseEvent</b> class and register the schema with CIMOM. Add the <b>Instrumented</b> assembly-level attribute to the assembly that contains the WMI-managed class definition as shown here. </p>
+  <pre>using System;<br />using System.ComponentModel; <br />using System.Management.Instrumentation; <br />... <br />System.Management.Instrumentation;<br />&#91;assembly:Instrumented(&#64;"root\MyAppWMI")&#93; <br />namespace MyApp.WMI&#123;<br />    &#91;ManagedName("MyApp_MyAppExceptionEvent")&#93;<br />    public class MyAppExceptionEvent : BaseEvent<br />    ...<br />&#125;  </pre>
+  <p>Add any event-specific properties (to the class) that you would like to be captured when monitoring the application. </p>
+  <p>To register the schema of your WMI-managed class with CIMOM, create a new class that derives from the <b>DefaultManagementProjectInstaller </b>class, as shown in the following code example. </p>
+  <pre>namespace MyApp.WMI&#123;<br />    &#91;RunInstaller(true)&#93;<br />    public class MyAppWmiSchemaInstaller :<br />                     DefaultManagementProjectInstaller<br /> &#125;  </pre>
+  <ul>
+    <li>To register the class, run the InstallUtil.exe tool, as follows:</li>
+  </ul>
+  <pre>installutil MyApp.Wmi.dll </pre>
+  <p>At runtime, to instrument an event, call the <b>Fire</b> method of the WMI-managed class when the specific event occurs in the application as shown here. </p>
+  <pre>try&#123;&#125;catch(MyAppException ex)&#123;<br />    new MyAppExceptionEvent().Fire();<br />&#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about WMI in the .NET Framework, see "Managing Applications Using WMI" at <a href="http://msdn.microsoft.com/library/en-us/cpguide/html/cpconManagingApplicationsUsingWMI.asp">http://msdn.microsoft.com/library/en-us/cpguide/html/cpconManagingApplicationsUsingWMI.asp</a><li>For more information see, "Security Practices: .NET Framework 2.0 Security Practices at a Glance" at <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/PAGPractices0002.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpag2/html/PAGPractices0002.asp</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

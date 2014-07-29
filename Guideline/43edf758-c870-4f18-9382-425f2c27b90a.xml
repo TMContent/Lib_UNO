@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-364851773" Content_Hash="607821481">
+  <Metadata>
+    <Id>43edf758-c870-4f18-9382-425f2c27b90a</Id>
+    <Id_History>66a3ee42-7c75-4867-902f-0449a79bd9f3,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use Read-only Properties Appropriately</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Read-only Properties Appropriately</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Mark properties read-only unless the caller needs to be able to make a modification. </p>
+  <h1>Why</h1>
+  <p>This prevents a caller from accidentally modifying a field.</p>
+  <h1>When</h1>
+  <p>This is important guideline and should be followed all the time. Do not expose your fields to caller modification unless absolutely necessary. </p>
+  <h1>How</h1>
+  <p>Mark properties read-only unless the caller needs to be able to make a modification. </p>
+  <p>
+    <strong>Note</strong>&amp;nbsp;&amp;nbsp;&amp;nbsp;Read-only properties are enforced at compile time only. When malicious code runs in a full trust environment, it could use reflection or unmanaged pointers to bypass these visibility restrictions.</p>
+  <p>Here is an example of using read-only property, the employeeName can be set in the constructor of the class or while initalizing it.</p>
+  <pre>public class Employee<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private readonly string employeeName;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public string Name<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; get<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return this.employeeName; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

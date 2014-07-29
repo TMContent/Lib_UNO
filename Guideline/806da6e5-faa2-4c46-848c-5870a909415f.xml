@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2027201889" Content_Hash="1427162819">
+  <Metadata>
+    <Id>806da6e5-faa2-4c46-848c-5870a909415f</Id>
+    <Id_History>4fecec03-0502-4b91-a345-9247d4ccb614,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Consider Employing the Using Statement to Make Sure That Database Connections Are Closed</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Employing the Using Statement to Make Sure That Database Connections Are Closed</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If developing in C# you can use the <strong>'using'</strong> keyword which will automatically dispose resources after their usage.</p>
+  <h1>Why</h1>
+  <p>At compile time, the <b>using</b> statement automatically generates a <b>try</b> and <b>finally</b> block that calls <b>Dispose</b> on the object allocated inside the <b>using</b> block. For connection objects, this ensures that the connection's <b>Close</b> method is called. </p>
+  <h1>When</h1>
+  <p>The <b>using</b> statement is available to developers who use the Microsoft Visual C#® 1.1 and 2.0 and to developers who use Microsoft Visual Basic® .NET 2.0. So when developing in this languages user can use <strong>using</strong> keyword</p>
+  <h1>How</h1>
+  <p>The following code illustrates this syntax.</p>
+  <pre>using ( SqlConnection conn = new SqlConnection( _connString) )<br />{<br />&amp;nbsp; // Open the connection and access the database<br />&amp;nbsp; ...<br />} // Dispose is called and the connection closed  </pre>
+  <p>During compilation, the preceding code is converted into the following equivalent code.</p>
+  <pre>SqlConnection conn = new SqlConnection( _connString);<br />try<br />{<br />&amp;nbsp; // Open the connection and access the database<br />&amp;nbsp; ...<br />}<br />finally<br />{<br />&amp;nbsp; conn.Dispose(); // Closes the connection<br />}</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

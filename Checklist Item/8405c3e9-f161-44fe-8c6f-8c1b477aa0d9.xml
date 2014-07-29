@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="45540731" Content_Hash="1908119068">
+  <Metadata>
+    <Id>8405c3e9-f161-44fe-8c6f-8c1b477aa0d9</Id>
+    <Id_History>467c390a-87b6-459c-878a-8f2da151750a,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Request Validation Is Not Relied On</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Request Validation Is Not Relied On</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that input is properly validated by your application,&amp;nbsp;keeping in mind that&amp;nbsp;the ASP.NET request validation feature should be used only as an additional precautionary measure. </p>
+  <h1>Why</h1>
+  <p>The ASP.NET request validation feature only performs basic input validation and should not be relied upon to detect all types of malicious data. It is not sufficient for preventing attacks like cross-site scripting and SQL injection, and each application has specific validation needs&amp;#8212;what is good input to one application may be bad input for another.</p>
+  <h1>How to Check</h1>
+  <p>Check that the request validation feature is enabled by default by examining the <strong>validateRequest</strong> attribute, which is set to true on the <strong>&lt;pages&gt;</strong> element in the <strong>Machine.config.comments </strong>file or is called explicitly by the server by using the <strong>Request.ValidateInput()</strong> call. </p>
+  <p>If you want this feature disabled for a certain page, check that the <strong>ValidateRequest</strong> attribute is set to <strong>false</strong> by using the <strong>&amp;#64;Page</strong> directive as follows:</p>
+  <pre>&lt;&amp;#37;&amp;#64; Page Language="C#" ValidateRequest = "false" &amp;#37;&gt;</pre>
+  <p>Even if the ASP.NET request validation feature is enabled, follow these steps to ensure that input is properly validated:</p>
+  <ol>
+    <li>Ensure that input is validated strictly for range, length, type and format using regular expressions. <li>Check that all SQL queries to the database are parametrized, especially if the input is used in dynamic SQL queries, and that stored procedures are used where possible. <li>Verify that no security decision is made based on user input, to prevent an attacker from altering/influencing the outcome of those decisions. <li>Check that filename or path input is not obtained from user. If this is not possible, then ensure that the filename and path input obtained from the user is properly validated.</li></li></li></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>In this example of&amp;nbsp;an online shopping cart, the cart component consists of two components:</p>
+  <ol>
+    <li>
+      <p>An HTML form that contains all of the fields that make up the order to be submitted for processing:</p>
+      <pre>&lt;html&gt;<br />  &lt;head&gt;<br />    &lt;title&gt;Widget shopping cart&lt;/title&gt;<br />  &lt;/head&gt;<br />  &lt;body&gt;<br />    &lt;H1&gt;welcome to the most boring shopping cart on the web&amp;#33;&lt;/H1&gt;<br />     A widget's current price is &amp;#36;19.95 USD. Please use the following form to submit an order.<br />    &lt;form action="process_order.aspx" method="POST"&gt;<br />       &lt;p&gt;Please enter the number of widgets you would like to purchase:&lt;/p&gt;<br />      quantity:&lt;br/&gt;<br />      &lt;select name="WidgetQuantity"&gt;<br />        &lt;option value="1"&gt;1&lt;/option&gt;<br />        &lt;option value="2"&gt;2&lt;/option&gt;<br />        &lt;option value="3"&gt;3&lt;/option&gt;<br />        &lt;option value="4"&gt;4&lt;/option&gt;<br />      &lt;/select&gt;<br />      ...<br />      &lt;input type="submit" value="order"/&gt;<br />    &lt;/form&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
+      <li>
+        <p>An ASP.NET page that relies on the request validation feature and processes the form submissions and performs the necessary steps to create the order:</p>
+        <pre>......<br />try<br />&amp;#123;<br />   Request.ValidateInput();<br />&amp;#125;<br />catch(HttpRequestValidationException e)<br />&amp;#123;<br />   //error out<br />&amp;#125;<br />int d<br />Quantity = Request("WidgetQuantity");<br />double dPrice = 19.95;<br />double dCost = d<br />Quantity &amp;#42; d<br />Price;<br />......</pre>
+      </li>
+    </li>
+  </ol>
+  <p>This server side page is problematic because it relies solely&amp;nbsp;on the ASP.NET request validation feature. The application works fine in the case where a user plays by the rules and submits the form as it is shown because the quantity field ensures that the range constraints for the order quantity are always valid. However, if a clever user decides to construct their own form and submits a negative WidgetQuantity field, it causes a negative balance. Depending on what e-commerce system is used, this could result in a credit to the user's account. It might also subtract the negative balance from the company's inventory, which would carry significant ramifications and costs later on.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on request validation, see: <a href="http://msdn2.microsoft.com/en-us/library/ms998258.aspx#pagguidelines0001_donotrelyonaspnetrequestvalidation">Security Guideline: Do not rely on ASP.NET request validation</a> in MSDN.</li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/88f49e05-f101-4764-b8e3-b31cd7507071">Guideline: Do Not Rely on Request Validation&amp;nbsp;</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

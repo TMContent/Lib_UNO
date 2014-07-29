@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1756220546" Content_Hash="-478366876">
+  <Metadata>
+    <Id>aa42a69e-3263-4e66-ab74-4feef9c8c1ac</Id>
+    <Id_History>d3753ecb-2731-4c80-94bc-6f0f47335380,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Apply Firewall Restrictions And Make Sure That Only the Required Ports Are Open</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>ADO.NET 2.0</p>
+  <h1>What to Do</h1>
+  <p>If you connect to SQL Server through a firewall, configure the firewall, client, and server. Configure the client by using the SQL Server Client Network Utility. Configure the database server by using the Server Network Utility. By default, SQL Server listens on TCP port 1433, although you can change this. You must open the chosen port at the firewall.</p>
+  <h1>Why</h1>
+  <p>Applying firewall restrictions and opening only the required ports reduces the attack surface for the attacker.</p>
+  <h1>When</h1>
+  <p>This is an important guideline and should be followed all the time.</p>
+  <h1>How</h1>
+  <p>Depending on the SQL Server authentication mode you choose and your application's use of distributed transactions, you may need to open several additional ports at the firewall: </p>
+  <ul>
+    <li>If your application uses Windows authentication to connect to SQL Server, the necessary ports to support Kerberos or NTLM authentication must be open. <li>For networks that do not use Active Directory, TCP port 139 is usually required for Windows authentication.</li></li>
+  </ul>
+  <p>If your application uses distributed transactions, for example automated COM&#43; transactions, you might need to configure your firewall to allow DTC traffic to flow between separate DTC instances and between the DTC and resource managers such as SQL Server.</p>
+  <h1>&nbsp;</h1>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see "Security Guidelines: ADO.NET 2.0" at <a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0002.asp">http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0002.asp</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

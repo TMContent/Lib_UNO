@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1866116787" Content_Hash="-317267131">
+  <Metadata>
+    <Id>63047ede-1991-4e95-af0d-6794a5e1f2bf</Id>
+    <Id_History>f4ccf159-109c-42c6-bb01-ddbfe453c695,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Protect Remoting</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Protect Remoting</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Description</h1>
+  <p>You can use the security-related functionality in the <b>System.Net.Security</b> namespace to help secure .NET remoting applications. You can apply security programmatically or more often through configuration-file options. Remoting security uses the <b>NegotiateStream</b> class. This provides a stream that uses the Negotiate security protocol to authenticate the client, and optionally the server, in client-server communication. The following code example shows how to configure a remoting server. </p>
+  <pre>&lt;configuration&gt;<br />  &lt;system.runtime.remoting&gt;<br />    &lt;application&gt;<br />      &lt;service&gt;<br />        &lt;wellknown mode="Singleton"<br />          type="RemotingSample.RemObject, RemotingSample"<br />          objectUri="RemObjectEndpoint.rem" /&gt;<br />      &lt;/service&gt;<br />      &lt;channels&gt;<br />        &lt;channel ref="tcp" secure="true" port="8080" /&gt;<br />      &lt;/channels&gt;<br />    &lt;/application&gt;<br />   &lt;/system.runtime.remoting&gt;<br />&lt;/configuration&gt;  </pre>
+  <p>The <b>channel</b> element in the preceding configuration specifies an encrypted TCP communication channel that uses port 8080. By setting the <b>secure</b> attribute of the <b>channel</b> element to <b>true</b>, you help protect the communication channel. The <b>protectionLevel</b> attribute has not been specified, so the default setting of <b>EncryptAndSign</b> is used. This causes transmitted data to be encrypted and signed. </p>
+  <p>The following code example shows a client configuration for protected remoting. </p>
+  <pre>&lt;configuration&gt;<br />&amp;nbsp; &lt;system.runtime.remoting&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;application&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;channels&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;channel ref="tcp" secure="true" useDefaultCredentials="true"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/channels&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/application&gt;<br />&amp;nbsp; &lt;/system.runtime.remoting&gt;<br />&lt;/configuration&gt;  </pre>
+  <p>The client configuration must also specify a protected channel by setting <b>secure="true"</b>. Because the <b>tokenImpersonationLevel</b> attribute has not been specified in the client configuration, it defaults to <b>Identification</b>. This allows the remoting server to obtain security information about the client (such as security identifiers and privileges) without giving the remoting server the ability to impersonate the client. </p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;A secure TCP-client channel can connect only to secure TCP-server channel and an unsecured TCP-client channel may connect only to a non-secure TCP-server channel. </blockquote>
+  <p>On both the server and the client, you need to register the configuration by calling the <b>Configure</b> method, as shown in the following code example. </p>
+  <pre>// Add the following to your remoting server application.<br />RemotingConfiguration.Configure("YourRemotingServerAppName.exe.config", true);<br />// Add the following to your remoting client application.<br />RemotingConfiguration.Configure("YourRemotingClientAppName.exe.config", true);</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

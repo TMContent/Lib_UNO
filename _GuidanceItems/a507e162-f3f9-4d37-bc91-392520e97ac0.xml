@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>a507e162-f3f9-4d37-bc91-392520e97ac0</Id>
+    <Id_History>00000000-0000-0000-0000-0000004d996e,</Id_History>
+    <Library_Id>b6f408c5-6e6e-4bc0-90a5-0bb10becc2ce</Library_Id>
+    <Title>File Names and Paths Are Canonicalized</Title>
+    <Category>Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>iOS</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>File Names and Paths Are Canonicalized</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* iOS applications that open saved files or documents.
+
+==What to Check For==
+
+Verify that file names and paths are canonicalized.
+
+==Why==
+
+Canonicalizing file paths before validating them helps prevent unauthorized access. If a file path is not canonicalized, an attacker may use special characters to access resources outside of what is allowed by the application.
+
+==How to Check==
+
+To verify that file names and paths are canonicalized:
+
+# **Identify all input used for file access.** Enumerate all file access performed by the application. Examine code responsible for accessing each file. Take note of any input used to form path or file names for file access.
+# **Verify that null bytes are removed from paths.** If a file name or path includes a null byte, an incorrect resource may be accessed. Verify that the application checks for null bytes in strings that are used for file names or paths. If null bytes are detected, it is safer to abort the operation than to strip the null bytes, because the presence of null bytes almost certainly indicates an attack.
+# **Verify that all input data used for file paths is canonicalized.** Examine code that handles file names and paths and make sure that it translates file paths and names into canonical forms before using the files. If file names or paths are hard-coded, they don't need to be canonicalized.
+# **Verify that all file paths are validated.** Examine code that opens files to make sure that file names and paths are validated before being used. If file names or paths are hard-coded, they don't need to be validated.
+
+
+==How to Fix==
+
+To canonicalize file names and paths:
+
+# **Identify all input used for file access.** Enumerate all file access performed by the application. Examine code responsible for accessing each file. Take note of any input used to form path or file names for file access.
+# **Remove null bytes from paths.** If a file name or path includes a null byte, an incorrect resource may be accessed. Verify that there are no null bytes in strings that are used for file names or paths. If null bytes are detected, it is safer to abort the operation than to strip the null bytes, because the presence of null bytes almost certainly indicates an attack.
+# **Canonicalize all input data used for file paths.** The exact approach to canonicalization depends on the application. One common solution is to append a user-specified file name to a predefined path. In that case, the //lastPathComponent// method of the //NSString// class should be used on the file name to get just the file name. After that, the file name should be added to the predefined path.
+# **Validate file paths.** Verify that the user or application is authorized to access the specified resource.
+
+==Data Validation Guidelines==
+* [[00000000-0000-0000-0000-000000866d55|Canonicalize File Names and Paths]]
+* [[00000000-0000-0000-0000-000000590dce|Check File Paths and Names for Null Bytes]]
+* [[00000000-0000-0000-0000-00000051c329|Validate All Input]]
+* [[00000000-0000-0000-0000-0000005804d8|Validate and Encode Data Inserted into XML Documents]]
+* [[00000000-0000-0000-0000-000000410a08|Validate and Encode Data Passed to UIWebView Controls]]
+* [[00000000-0000-0000-0000-00000049bb5e|Validate File Formats]]
+
+==Data Validation Checklists==
+* [[00000000-0000-0000-0000-0000004d996e|File Names and Paths Are Canonicalized]]
+* [[00000000-0000-0000-0000-0000004446d0|File Paths and Names Are Checked for Null Bytes]]
+* [[00000000-0000-0000-0000-000000396c19|All Input Is Validated]]
+* [[00000000-0000-0000-0000-0000008c53b6|Data Inserted into XML Documents Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000647d44|Data Passed to UIWebView Controls Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000066105|File Formats Are Validated]]]]></Data>
+  </Content>
+</TeamMentor_Article>

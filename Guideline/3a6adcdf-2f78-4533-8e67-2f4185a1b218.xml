@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="604739165" Content_Hash="-2004756755">
+  <Metadata>
+    <Id>3a6adcdf-2f78-4533-8e67-2f4185a1b218</Id>
+    <Id_History>e59923e7-c2fb-4a75-8db7-a9a91e869f74,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Validate Input for Length, Range, Format, And Type</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate Input for Length, Range, Format, And Type</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not trust input. Instead, validate on the server that input is in the expected format, validate based upon which contexts the input is used in, and encode it appropriately on output. </p>
+  <h1>Why</h1>
+  <p>An attacker passing malicious input can attempt SQL injection, cross-site scripting, and other injection attacks that aim to exploit your vulnerabilities in your application. Validating input helps to reduce these risks by ensuring that the input received matches the expected format. Input validation on its own is not sufficient; output encoding is also needed to fully prevent these attacks, but it is an important step for both security and reliability. Validation should always be as strict as possible, to ensure that problems do not arise from input thought to be out of range but harmless. A whitelist approach should always be taken, never a blacklist, to ensure that this property is maintained.</p>
+  <h1>When</h1>
+  <p>All input should always be validated, regardless of source. Unless data is actually static within the scope of the local code base, it could be modified by a malicious user—even data in a database which is supposed to be static. </p>
+  <h1>How</h1>
+  <p>The methods for validating different aspects of user input are shown below:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Enforce numeric range constraints</strong>: Use the RangeValidator control to ensure any numeric values are constrained to a specific, acceptable range. Here is an example that declares an integer field in an ASP page that has a valid range from 1 to 50:</p>
+      <pre>&lt;td&gt;<br />  &lt;asp:RangeValidator id="Range1"<br />           ControlToValidate="txtState"<br />           MinimumValue="1"<br />           MaximumValue="50"<br />           Type="Integer"<br />           EnableClientScript="false"<br />           Text="The value must be from 1 to 10!"<br />           runat="server"&gt;<br />  &lt;/asp:RangeValidator&gt;&lt;/td&gt;<br />&lt;td&gt;State:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtState&gt;&lt;/td&gt;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Validate verification fields</strong>: Fields such as password entry are often verified by having the user re-type them to ensure they are correct. Use the CompareValidator control to make the comparisons and ensure validity/integrity. Here is an example that declares two password fields in an ASP page that must match in order to validate properly:</p>
+      <pre>&lt;asp:CompareValidator runat=server<br />            ControlToValidate=txtRePWord<br />            ControlToCompare=txtPWord<br />            ErrorMessage="Passwords do not match." /&gt;</pre>
+      <p>In this case, the two fields being compared are "txtPWord" and "txtRePWord". If they do not match, validation fails with the error message, "Passwords do not match.". </p>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce type constraints on string fields</strong>: String fields are the most difficult type of input to effectively validate because the range of acceptable characters is much larger than numeric and enumerated types. Regular expressions provide a flexible mechanism for dictating valid patterns and characters. Use the RegularExpressionValidator to perform a variety of checks on string-based fields such as zip codes and phone numbers. Here is an example that declares a text field in an ASP page that should represent a five digit zip code, consisting entirely of numeric digits, and a validator to enforce those constraints:</p>
+      <pre>&lt;input type=text runat=server id=txtZip&gt;<br />      &lt;asp:RegularExpressionValidator runat=server<br />             ControlToValidate="txtZip"<br />             ErrorMessage="Zip code must be 5 digits, all numbers."<br />             ValidationExpression="[0-9]{5}"&gt; <br />      &lt;/asp:RegularExpressionValidator&gt;&lt;td&gt;Zip code:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtZip&gt;&lt;/td&gt;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Use custom validation to handle remaining input constraints</strong>: The built-in ASP.NET validation controls handle most of the cases that commonly arise in web applications, but there may be times when they are not appropriate. The CustomValidator enables custom validation code that can plug into the existing validation system. Here is an example that declares a text field in an ASP page. For this particular text field, there is business logic constraint that needs to be satisfied which is not easily constrainable by the other validation constructs, so a custom validator is implemented that ensures the string in the text field does not start with the letter "a":</p>
+      <pre>&lt;%@ Page Language="vb" %&gt;<br />&lt;script runat=server&gt;public sub CheckID(source as Object, args as ServerValidateEventArgs)<br />    args.IsValid = args.Value.substring(0, 1).tolower() &lt;&gt; "a"end sub &lt;/script&gt;</pre>
+      <p>To call this function, add a CustomValidator, a control designed to call developer code to perform its check. Here is the declaration:</p>
+      <pre>      &lt;asp:CustomValidator runat=server<br />             controltovalidate="txtName"<br />             errormessage="ID is already in use."<br />             OnServerValidate="CheckID" /&gt;</pre>
+      <p>It is worth noting that this could have been done with the RegularExpression validation control, but in this case it makes more sense to use custom validation since a type of high-level validation that could conceivably be more complex than a simple pattern match is being defined (e.g., the validation rules might change based on application state). </p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the Regex class to validate other sources</strong>: Most Web applications accept input from various sources, including HTML controls, server controls, query strings, and cookies. Validate input from all of these sources to help prevent injection attacks. Use regular expressions to help validate input. The following example shows how to use the <strong>Regex</strong> class. </p>
+      <pre>using System.Text.RegularExpressions;<br />// Instance method:Regex reg = new Regex(@"^[a-zA-Z'.\s]{1,40}$");<br />Response.Write(reg.IsMatch(Request.QueryString["Name"]));<br />// Static method:if (!Regex.IsMatch(Request.QueryString["Name"],@"^[a-zA-Z'.\s]{1,40}$"))<br />{<br />   // Name does not match expression<br />}</pre>
+      <p>If you cannot cache your regular expression for frequent use, you should use the static <strong>IsMatch</strong> method where possible for performance reasons, to avoid unnecessary object creation.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>Consider a very simple form for an online shopping cart. The cart component consists of two components:</p>
+  <ol>
+    <li>
+      <p>An HTML form that contains all of the fields that make up the order to be submitted for processing:</p>
+      <pre>&lt;html&gt;<br />  &lt;head&gt;<br />    &lt;title&gt;Widget shopping cart&lt;/title&gt;<br />  &lt;/head&gt;<br />  &lt;body&gt;<br />    &lt;H1&gt;welcome to the most boring shopping cart on the web!&lt;/H1&gt;<br />     A widget's current price is $19.95 USD. Please use the following form to submit an order.<br />    &lt;form action="process_order.aspx" method="POST"&gt;<br />       &lt;p&gt;Please enter the number of widgets you would like to purchase:&lt;/p&gt;<br />       quantity:&lt;br/&gt;<br />       &lt;select name="WidgetQuantity"&gt; <br />       &lt;option value="1"&gt;1&lt;/option&gt; <br />       &lt;option value="2"&gt;2&lt;/option&gt; <br />       &lt;option value="3"&gt;3&lt;/option&gt;<br />       &lt;option value="4"&gt;4&lt;/option&gt;<br />       &lt;/select&gt;<br />       ...<br />       &lt;input type="submit" value="order"/&gt;<br />    &lt;/form&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
+    </li>
+    <li>
+      <p>An ASP.NET page that processes the form submissions and performs the necessary steps to create the order.</p>
+      <pre>int dQuantity = Request("WidgetQuantity");<br />double dPrice = 19.95;<br />double dCost = dQuantity * dPrice;</pre>
+      <p>This server side page is problematic because it lacks validation to ensure the quantity field is correct. The application works fine in the case where a user plays by the rules and submits the form as it is shown, because the quantity field ensures that the range constraints for the order quantity are always valid. However, if a clever user decides to construct their own form and submits a negative WidgetQuantity field, it causes a negative balance. Depending on what e-commerce system is used, this could result in a credit to the user's account. It also might subtract the negative balance from the company's inventory, which would carry significant ramifications and costs later on.</p>
+    </li>
+  </ol>
+  <h1>Solution Example</h1>
+  <p>Consider the following ASP.NET page that processes the form submissions and performs the necessary steps to create an order:</p>
+  <pre>&lt;%@ Page Language="vb" %&gt;<br />&lt;script runat=server&gt;public sub OnSubmit(source as Object, e as EventArgs)<br />    if Page.IsValid then<br />        ' Now we can perform our transaction.<br />        int dQuantity = Request("WidgetQuantity");<br />        double dPrice = 19.95;<br />        double dCost = dQuantity * dPrice;<br />    end if<br />end sub<br />&lt;/script&gt;<br />&lt;html&gt;<br />&lt;head&gt;<br />&lt;title&gt;Validation Sample&lt;/title&gt;<br />&lt;/head&gt;<br />&lt;body&gt;<br />&lt;form runat=server&gt;<br />&lt;asp:ValidationSummary runat=server headertext="There were errors on the page:" /&gt;<br />&lt;table&gt;<br />  &lt;tr&gt;<br />    &lt;td&gt;<br />        &lt;asp:RequiredFieldValidator runat=server<br />             controltovalidate="WidgetQuantity"<br />             errormessage="WidgetQuantity is required."&gt;<br />        &lt;/asp:RequiredFieldValidator&gt;<br />    &lt;/td&gt;<br />    &lt;td&gt;A widget's current price is $19.95 USD. Please use the following form to submit an order.&lt;/td&gt;<br />    &lt;td&gt;<br />      &lt;select name="WidgetQuantity"&gt;<br />        &lt;option value="1"&gt;1&lt;/option&gt;<br />        &lt;option value="2"&gt;2&lt;/option&gt;<br />        &lt;option value="3"&gt;3&lt;/option&gt; <br />        &lt;option value="4"&gt;4&lt;/option&gt;<br />      &lt;/select&gt;<br />     &lt;asp:RegularExpressionValidator runat=server display=dynamic<br />            controltovalidate="WidgetQuantity"<br />            errormessage="WidgetQuantity must be a non-zero, positive integer."<br />            validationexpression="[1-9]{1}[0-9]{0,7}" /&gt;<br />    &lt;/td&gt;<br />  &lt;/tr&gt;<br />...<br />&lt;/table&gt;<br />&lt;br&gt;<br />&lt;input type=submit runat=server id=cmdSubmit value=Submit onserverclick=OnSubmit&gt;<br />&lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</pre>
+  <p>The ASP.NET Validator control provides client-side validation to reduce roundtrips to the server and improve user experience, but also provides server-side validation to ensure that the widget quantity field is a positive integer. It is also validated as a required field that must be provided before submitting the order.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

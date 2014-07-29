@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1374156302" Content_Hash="50800389">
+  <Metadata>
+    <Id>8dfc0721-8312-40fc-a39f-69bcbbc9d0b5</Id>
+    <Id_History>2739df30-b3da-417e-8856-2201a2b2a17a,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Structured Exception Handling Is Used</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Structured Exception Handling Is Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that structured exception handling is used for error handling.</p>
+  <h1>Why</h1>
+  <p>Structured exception handling improves robustness and avoids leaving the application in an inconsistent state. It provides the application with more information regarding the encountered error and minimizes the risk of information disclosure.</p>
+  <h1>How to Check</h1>
+  <p>Because your application can raise various types of exceptions, its exception handlers should be as specific and relevant as possible. To check if your application's exception handling is well structured: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all areas inside the code where exception handling is necessary. </strong>Locate the places within the code where exception handling needs to take place. If the function you will be executing throws a given exception, then you should catch that specific exception or its parental class. For instance, the following code raises <em>KeyStoreException</em>, <em>NoSuchAlgorithmException</em>, <em>CertificateException</em>, and <em>IOException</em>:</p>
+      <pre>keyStore = KeyStore.getInstance("JCEKS");<br />FileInputStream keyStoreFile = new FileInputStream(getConfigPath() + keyStoreName);<br />keyStore.load(keyStoreFile, keyStorePass);<br />keyStoreFile.close();</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the important types of exceptions. </strong>Enumerate all possible types of exceptions that your application can throw. List the types of exceptions that hold a significant value and must be handled accordingly. For example, SQL/network exceptions would be handled differently than local I/O exceptions.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that all exception handlers are positioned appropriately. </strong>Make sure that all known exceptions are handled appropriately by either catching them explicitly or through their parental classes.<br /><br />If an exception is caught explicitly, its handler should be placed before the handler for its parental class. Explicit exceptions should be caught as close as possible to the code that raised them as&amp;nbsp;this will allow more adequate handling and mitigation to take place. Example: </p>
+      <pre>try<br />{<br />      Class.forName("com.mysql.jdbc.Driver").newInstance();<br />      dbConnection = DriverManager.getConnection(connectionString, dbCredentials);<br />}<br />catch(SQLException se)<br />{<br />      dbConnection = null;<br />      // Add logging}catch (Exception e)<br />{<br />      // Add logging<br />      throw new ApplicationCriticalException("Cannot connect to database server.");<br />}</pre>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Exception handlers should be as specific and relevant as possible. When multiple exceptions are anticipated, the <em>try/catch</em> block should have multiple catch clauses to satisfy each type of exception. For example, if a <em>FileNotFoundException</em> and <em>UnsupportedCallbackException</em> are expected, then there should be an exception handler for each type of exception:</p>
+  <pre>try{<br />      ...<br />}<br />catch (FileNotFoundException fnf)<br />{<br />      logger.warning(fnf.toString());<br />}<br />catch (UnsupportedCallbackException uce)<br />{<br />      logger.warning(uce.toString());<br />}<br />finally<br />{<br />      //Execute clean-up routine<br />}</pre>
+  <p>
+    <strong>Note:</strong> The example above assumes that there is a global exception handling mechanism placed at the root of the code execution. <br /></p>
+  <h1>Problem Example</h1>
+  <p>The following code shows part of an implementation of a JAAS Login Module. Because the code uses a single exception handler, the application cannot log the exception information appropriately.</p>
+  <pre>public boolean login() throws LoginException{<br /><br />      if(callbackHandler == null)<br />      {<br />            throw new LoginException("Authentication failed.");<br />      }<br /><br />      // Prompt strings and echo flag not used in callbacks<br />      Callback[] callbacks = new Callback[2];<br />      callbacks[0] = new NameCallback("User: ");<br />      callbacks[1] = new PasswordCallback("Pass: ", false);<br /><br />      try<br />      {<br />            callbackHandler.handle(callbacks);<br />            NameCallback nameCall = (NameCallback)callbacks[0];<br />            PasswordCallback pwdCall = (PasswordCallback)callbacks[1];<br /><br />            user = nameCall.getName();<br />            char[] tempPass = pwdCall.getPassword();<br />            if(tempPass == null)<br />            {<br />                  pass = null;<br />            }<br />            else<br />            {<br />                  pass = new char[tempPass.length];<br />                  common.copyArray(tempPass, pass);<br />            }<br /><br />            pwdCall.clearPassword();<br /><br />            // Verify credentials<br />            if(validUser())<br />            {<br />                  succeeded = true;<br />                  return true;<br />            }<br />            else<br />            {<br />                  succeeded = false;<br />                  clearCredentials();<br />                  throw new FailedLoginException("Authentication failed.");<br />            }<br />      }<br /><br />      // The application has a single exception handler when<br />      // IOException and UnsupportedCallbackException are expected<br />      catch (Exception e)<br />      {<br />            // Add appropriate logging and exception handling mechanisms.<br /><br />            // Consult the Logging section<br /><br />            throw new LoginException("Authentication failed.");<br />      }<br />}</pre>
+  <h1>Solution Example</h1>
+  <p>The following code shows part of an implementation of a JAAS Login Module. Because the code uses structured exception handling, the application can log the exception information appropriately.</p>
+  <pre>public boolean login() throws LoginException{<br /><br /><br />      if(callbackHandler == null)<br />      {<br />            throw new LoginException("Authentication failed.");<br />      }<br /><br />      // Prompt strings and echo flag not used in callbacks<br />      Callback[] callbacks = new Callback[2];<br />      callbacks[0] = new NameCallback("User: ");<br />      callbacks[1] = new PasswordCallback("Pass: ", false);<br /><br />      try<br />      {<br />            callbackHandler.handle(callbacks);<br />            NameCallback nameCall = (NameCallback)callbacks[0];<br />            PasswordCallback pwdCall = (PasswordCallback)callbacks[1];<br /><br />            user = nameCall.getName();<br />            char[] tempPass = pwdCall.getPassword();<br />            if(tempPass == null)<br />            {<br />                  pass = null;<br />            }<br />            else<br />            {<br />                  pass = new char[tempPass.length];<br />                  common.copyArray(tempPass, pass);<br />            }<br /><br />            pwdCall.clearPassword();<br /><br />            // Verify credentials<br />            if(validUser())<br />            {<br />                  succeeded = true;<br />                  return true;<br />            }<br />            else<br />            {<br />                  succeeded = false;<br />                  clearCredentials();<br />                  throw new FailedLoginException("Authentication failed.");<br />            }<br />      }<br /><br /><br />      // The application uses structured exception handling for<br />      // the expected IOException and UnsupportedCallbackException<br />      catch (IOException ioe)<br />      {<br />            // Add appropriate logging and exception handling mechanisms.<br />            // Consult the Logging section<br /><br />            throw new LoginException("Authentication failed.");<br />      }<br />      catch (UnsupportedCallbackException uce)<br />      {<br />            // Add appropriate logging and exception handling mechanisms.<br /><br />            // Consult the Logging section<br /><br />            throw new LoginException("Authentication failed.");<br />      }<br />      catch (Exception e)<br />      {<br />            // Add appropriate logging and exception handling mechanisms.<br /><br />            // Consult the Logging section<br /><br />            throw new LoginException("Authentication failed.");<br />      }<br />  }</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about Java exceptions, visit: <a href="http://java.sun.com/docs/books/tutorial/essential/exceptions/index.html">Lesson: Exceptions</a> available from The Java Tutorials.</li>
+  </ul>
+  <h1>Java Error Handling Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/fceefe0c-900a-4c29-9c2e-ee662aa9e1f1">Use Structured Exception Handling</a>
+    </li>
+    <li>
+      <a href="/article/3e815c74-4d57-4c1b-8446-750b319ea046">Use a Global Exception Handler for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/30abc3c9-d288-4e8a-a614-fd1a1f331270">Do Not Disclose Valuable Information During Authentication Errors</a>
+    </li>
+    <li>
+      <a href="/article/56ad1852-7fc3-4d1f-b109-bbcce29170f7">Do Not Disclose Exception Details to the Client</a>
+    </li>
+    <li>
+      <a href="/article/fd4b2a8a-db2d-4594-ba30-3ce5f63ad459">Do Not Include Debug Data in Output</a>
+    </li>
+  </ul>
+  <h1>Java Error Handling Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/2739df30-b3da-417e-8856-2201a2b2a17a">Structured Exception Handling Is Used</a>
+    </li>
+    <li>
+      <a href="/article/c88e1b49-357d-4202-aafc-86ce0de485bd">A Global Exception Handler Is Used for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/e574d1d8-acae-4c64-90db-a0f6b98ca45f">Valuable Information Is Not Disclosed During Authentication Errors</a>
+    </li>
+    <li>
+      <a href="/article/d13e57d7-f6f5-4bd4-8629-26c45f9f029b">Exception Details Are Not Disclosed to the Client</a>
+    </li>
+    <li>
+      <a href="/article/d33cc3de-517c-4c84-95bd-24f14d9d99d6">Debug Data Is Not Included in Output</a>
+    </li>
+  </ul>
+  <h1>Java Error Handling Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/5556fc17-3f60-4fc0-8717-0a2ff1c12701">How to Test for Exception Information Disclosure Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

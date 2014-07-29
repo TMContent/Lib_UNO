@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1293214691" Content_Hash="1109301454">
+  <Metadata>
+    <Id>9f3edc92-befe-44ca-b583-a4ca4efb4969</Id>
+    <Id_History>ff908dba-dde9-49ba-9756-371e97d4bc80,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How to Test for Key Brute Force Bugs</Title>
+    <Category>Cryptography</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<p />
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>
+  </p>
+  <h1>
+    <span>Applies to</span>
+  </h1>
+  <p />
+  <ul>
+    <li>Applications that utilize cryptography </li>
+  </ul>
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>&nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Key brute force attacks focus at defeating a cryptographic algorithm by attempting to predict a valid key from a large number of possibilities.<span>&nbsp;&nbsp; </span>During this attack, an attacker produces a large number of keys by performing an exhaustive search over the key space (all possible keys) and uses each of the predicted keys in an attempt of decrypting a cipher text. <span>&nbsp;</span>Attackers will often take this attack route when they discover weak cryptographic systems, such as systems using a small key length, wherein predicting a valid key is feasible. Actually, in cryptographic terms, the choice of a secure key length depends on the possibility of executing a key brute force attack in a reasonable amount of time.</p>
+  <p>Follow these steps to test for key brute force bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>The first step in testing for key brute force attacks is to understand the details of the different attack scenarios involved:<span>&nbsp;&nbsp; </span></p>
+  <ul>
+    <li>Breaking encryption<li>Breaking authentication</li></li>
+  </ul>
+  <p>&nbsp;</p>
+  <h2>
+    <em>Scenario 1: Breaking encryption</em>
+  </h2>
+  <p>For simplicity, this article will refer to any data before encryption as <i>plaintext </i>and to the encrypted data as <i>ciphertext</i>.</p>
+  <p>During this scenario, the attacker&#8217;s goal is to recover a cryptographic key in order to decrypt an encrypted message.<span>&nbsp;&nbsp; </span>First the attacker must possess a ciphertext that was produced using the target key.<span>&nbsp;&nbsp;</span><span></span>The attacker might also possess the plaintext that was used to create this ciphertext (known-plaintext attack).<span>&nbsp;&nbsp; </span>Then the attacker starts trying all possible key values.<span>&nbsp; </span>For each produced key, the attacker attempts to decrypt the ciphertext and produce a readable plaintext (or the known plaintext in known-plaintext attacks).<span>&nbsp; </span>The attack succeeds when the attacker is able to recover the encryption key.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker discovers a cipher text and the encryption algorithm used to produce it.<li>The attacker produces a key value by iterating over all possible key values in the key space.<li>The attacker attempts to decrypt the ciphertext using the key value predicted in the previous step.<span>&nbsp; </span><li>The attacker repeats steps 2 and 3 until a readable plaintext is produced (in known plaintext attacks the attacker checks the decrypted value against the known plaintext).</li></li></li></li>
+  </ol>
+  <p>It is important to note that this scenario flows different depending on whether the plain text is known or not.<span>&nbsp; </span>If the plain text is known, the attacker knows what plain text to verify on step 4.<span>&nbsp; </span>In that case the attacker&#8217;s goal is to recover a valid key to use for decrypting other unknown plaintexts.<span>&nbsp; </span>If the attacker doesn&#8217;t possess the plaintext then step 4 must be done looking for any form of readable plaintext (ciphertext-only attack).<span>&nbsp; </span></p>
+  <p>
+    <b>
+      <i>&nbsp;</i>
+    </b>
+  </p>
+  <h2>
+    <em>Scenario 2: Breaking authentication</em>
+  </h2>
+  <p>Applications can also use keys for authentication purposes such as when signing messages or allowing clients to log into the application.<span>&nbsp;&nbsp; </span>During this scenario, the attacker executes the key brute force attack to find a valid authentication key.<span>&nbsp;&nbsp; </span><span>&nbsp;</span></p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker discovers an application functionality that performs authentication based on a key value.<li>The attacker produces a key value by iterating over all possible key values in the key space.<li>The attacker attempts to authenticate using the key value predicted in the previous step.<span>&nbsp; </span></li></li></li>
+  </ol>
+  <p>For more information on credential brute force attacks refer to Team Mentor&#8217;s article <i>How to Test for Credential Brute Force Bugs.</i></p>
+  <p>&nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>During this step you must analyze what causes key brute force attacks and how to protect against them.</p>
+  <h2>
+    <em>Key lengths</em>
+  </h2>
+  <p>Any application that implements cryptography must choose a key size to encrypt and decrypt messages.<span>&nbsp;&nbsp; </span>Key lengths are measure in bits.<span>&nbsp; </span>For instance, a 64-bit key has 2&lt;SUP&gt; 64 &lt;/SUP&gt;possible key combinations.<span>&nbsp; </span>However, in cryptography the expected number of tries to recover a valid key is of half the key space (2&lt;SUP&gt; 63&lt;/SUP&gt;).<span>&nbsp; </span>The larger the key the more time it takes to brute force. <span>&nbsp;</span>Symmetric block ciphers such as DES have fallen victims to this attack.<span>&nbsp; </span>DES uses a 56-bit key that was broken using brute force attack in 1998 &#91;i&#93;.<span>&nbsp; </span>To countermeasure key brute force attacks, it is recommended to use a key size of at least 128 bits.<span>&nbsp; </span></p>
+  <p>&nbsp;</p>
+  <h2>
+    <em>Authentication brute force attacks</em>
+  </h2>
+  <p>For key brute force attacks that focus at breaking authentication, , developers can take additional measures.<span>&nbsp; </span>For instance, they can implement an account lockout policy that locks out the account that is trying to be brute forced.<span>&nbsp; </span>However, attackers can use lockout policies to execute denial-of-service attacks on legitimate clients.<span>&nbsp; </span>For more information on counter measuring authentication brute force attacks refer to Team Mentor&#8217;s articles <i>How to Test for Credential Brute Force Bugs </i>and<i> How to Test for Account Lockout Bugs.<span>&nbsp; </span></i></p>
+  <p>
+    <span>&nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you&#8217;ve reviewed the theoretical aspects of key brute force attacks, it is necessary to execute the following test cases to check if your application is vulnerable.</p>
+  <h2>
+    <em>Test for key brute force using a known-plaintext attack</em>
+  </h2>
+  <p>Follow these steps to test for key brute force using a known-plain text attack:</p>
+  <ol>
+    <li>Discover a plaintext message <i>P</i> and its correspondent ciphertext <i>C</i> encrypted using key <i>K</i><i>(C = Encrypt(P, K)).</i><li>Iterate though all possible key values on the key space of <i>K</i>. <span>&nbsp;</span><ul><li>For each predicted value <i>K&#8217;</i>, execute the decryption algorithm using the ciphertext from step 1 to produce its equivalent plaintext <i>(P&#8217; = Decrypt (C, K&#8217;)).</i><li>Check if the produced plaintext <i>P&#8217; </i>equals the initial known plaintext (<i>P = P&#8217;?</i>). <span>&nbsp;&nbsp;</span></li></li></ul></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it is possible to recover a valid key in a reasonable amount of time.</p>
+  <p>
+    <b>
+      <i>&nbsp;</i>
+    </b>
+  </p>
+  <h2>
+    <em>Test for key brute force using a ciphertext-only attack</em>
+  </h2>
+  <p>Follow these steps to test for key brute force using a ciphertext-only attack:</p>
+  <ol>
+    <li>Discover a ciphertext message <i>C</i> that was encrypted using key <i>K</i><i>(C = Encrypt(P, K)).</i><span>&nbsp; </span>Note that plaintext <i>P</i> is unknown.<li>Iterate though all possible key values on the key space of<i> K</i>.<span>&nbsp; </span><ul><li>For each predicted value <i>K&#8217;</i>, execute the decryption algorithm using the ciphertext from step 1 to produce its equivalent plaintext <i>(P&#8217; = Decrypt(C, K&#8217;)).</i><li>Check if the produced plaintext <i>P&#8217;</i> is readable.<span>&nbsp;&nbsp; </span></li></li></ul></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it is possible to recover a valid key in a reasonable amount of time.</p>
+  <p>
+    <b>
+      <i>&nbsp;</i>
+    </b>
+  </p>
+  <h2>
+    <em>Test for key brute force attacks to bypass authentication</em>
+  </h2>
+  <p>Follow these steps to test for key brute to bypass authentication:</p>
+  <ol>
+    <li>Discover an application functionality that uses a cryptographic key <i>K </i>to authenticate its users.<li>Iterate though all possible key values on the key space of <i>K</i>.<span>&nbsp; </span><ul><li>For each predicted value <i>K&#8217;</i>, execute the application functionality in step 1 using <i>K&#8217;</i>.<li>Check if authentication is possible using <i>K&#8217;</i>.<span>&nbsp;&nbsp; </span></li></li></ul></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it is possible to recover a valid key for authentication in a reasonable amount of time.</p>
+  <p>
+    <b>
+      <i>&nbsp;</i>
+    </b>
+  </p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Key brute force attacks focus at discovering a valid key by trying a large amount of possible combinations.<span>&nbsp;&nbsp; </span>Once attackers discover a valid key they can use it to decipher encrypted data or to break an authentication scheme.<span>&nbsp; </span>This vulnerability is avoided by using an industry-standard algorithm with a large enough key of at least 128 bits, thus making the key space so large that is impossible to cover it in a reasonable amount of time.<span>&nbsp; </span></p>
+  <p>Testing for key brute force attacks is done by executing different test cases.<span>&nbsp; </span>To test for key brute force attacks on encryption keys it is necessary to execute two different test cases, depending on whether the plaintext that produced the ciphertext is known or not.<span>&nbsp; </span>To test for key brute force attacks on authentication keys it is necessary to find an application functionality that performs authentication and that is accessible to outside users such as a login packet and perform the brute force attack.<span>&nbsp; </span></p>
+  <p>
+    <br />&nbsp;</p>
+  <div>
+    <div>
+      <p>&#91;i&#93; <b>Brute force attack</b>.<span>&nbsp; </span>Wikipedia. <a href="http://en.wikipedia.org/wiki/Brute_force_attack">http://en.wikipedia.org/wiki/Brute_force_attack</a></p>
+      <p>&nbsp;</p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-335366574" Content_Hash="-999388374">
+  <Metadata>
+    <Id>26778d73-1c43-4460-b93e-e11eb2e79230</Id>
+    <Id_History>1cdd4407-fb3a-4626-8686-fbe6938d75fe,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Avoid Plaintext Passwords in Configuration Files</Title>
+    <Category>Sensitive Data</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Plaintext Passwords in Configuration Files</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0&amp;nbsp;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>The &lt;<b>sessionState</b>&gt; and &lt;<b>identity</b>&gt; elements in the Machine.config and Web.config files have <strong>userName</strong> and <strong>password</strong> attributes. If you store credentials in these sections, encrypt them by using one of the protected configuration providers. </p>
+  <h1>Why</h1>
+  <p>Machine.config and Web.config files typically contain sensitive resource access credentials (e.g., userName and password attributes) As a precautionary measure, they should not be stored in plaintext, because an attacker that can compromise a server will be able to read those connection strings unless they are adequately protected. </p>
+  <h1>When</h1>
+  <p>Use this guideline on any application that stores credentials in the Machine.config or Web.config files </p>
+  <h1>How</h1>
+  <p>In ASP.NET version 2.0 applications, there are two libraries that provide encryption facilities for connection strings, DPAPI and RSA. If your application is deployed in a Web farm, you should use the RSA protected configuration provider due to the ease with which RSA keys can be exported.&amp;nbsp; Otherwise you should use the DPAPI protected configuration provider.&amp;nbsp; </p>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application contains the following <strong>Identity</strong> element in its web.config file:</p>
+  <div>
+    <div>
+    </div>
+  </div>
+  <div>
+    <pre>&lt;identity impersonate="true"           <br />	userName="MyDomain\MyUserName"          <br />		password="MySecretPassword"/&gt;</pre>
+  </div>
+  <p>Since the username and password are in plaintext they would be easily readable by any attacker who gains access to the server.</p>
+  <h1>Solution Example</h1>
+  <p>An ASP.NET application contains the something similar to the following in&amp;nbsp;place of the&amp;nbsp;<strong>Identity</strong> element in its web.config file:</p>
+  <pre>&amp;nbsp; &lt;EncryptedData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;CipherValue&gt;AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAexuIJ/8oFE+sGTs7jBKZdgQAAAACAAAAAAADZgAAqAAAABAAAAA<br />Kms84dyaCPAeaSC1dIMIBAAAAAASAAACgAAAAEAAAAKaVI6aAOFdqhdc6w1Er3HMwAAAAcZ00MZOz1dI7kYRvkMIn/<br />BmfrvoHNUwz6H9rcxJ6Ow41E3hwHLbh79IUWiiNp0VqFAAAAF2sXCdb3fcKkgnagkHkILqteTXh&lt;/CipherValue&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/CipherData&gt;<br />&amp;nbsp; &lt;/EncryptedData&gt;</pre>
+  <p>The username and password have been encrypted and are not easily readable by an attacker who gains access to the server.</p>
+  <p />
+  <p>
+    <em>
+    </em>
+  </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

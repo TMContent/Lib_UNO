@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-506047951" Content_Hash="-339746128">
+  <Metadata>
+    <Id>df344b3c-9fab-4ef7-abaf-bb41ecff7344</Id>
+    <Id_History>6576e405-0b5d-458a-a5bf-52282b968abe,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Code Is Partitioned into Separate Assemblies</Title>
+    <Category>Other</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Code Is Partitioned into Separate Assemblies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure that web controls, user controls, and resource access code in your application are partitioned into their own assemblies for granular security. Verify appropriate security settings are assigned to each assembly.</p>
+  <h1>Why</h1>
+  <p>Because different components may require different privileges and levels of trust, your application may not be suited well by a single security policy. Partitioning your application into multiple assemblies provides extra flexibility when constructing and enforcing a security policy. Following this strategy will help you reduce the overall minimum set of privileges that your application requires while granting a given component extra trust when completing a task.</p>
+  <h1>How To Check</h1>
+  <p>Take the following steps to ensure that your application is partitioned into multiple assemblies with appropriate trust levels:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all the major components of your application. </strong>Review your application's design. Ensure that all major functionality has been properly identified.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all special security settings. </strong>Review your application's security requirements. Ensure that all special privileges required by particular components that&amp;nbsp;are not required by others have been identified.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that your application has been partitioned. </strong>Ensure that all major functionality is properly separated into different assemblies so that there is extra flexibility when assigning security settings. This lets you assign only the minimum necessary privileges to each assembly. All the elements of an assembly (assembly manifest, type metadata, MSIL code and resources) can be grouped into a single .dll file. ASP.NET provides the following types of assemblies:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Page assemblies:</strong> By default, each ASP.NET page is compiled into its own assembly that is then loaded into the ASP.NET engine. Security configuration for such assemblies is stored inside the <em>web.config</em> file. Enumerating all of the .aspx files in a web application will provide a comprehensive list of all the page assemblies in an application.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Executable assemblies:</strong> Typically known as external libraries or DLLs, these assemblies can be re-used outside of ASP.NET development. Security settings for such assemblies are managed by the <em>app.config</em> file and the <em>caspol.exe</em> utility. Finding each <em>app.config</em> file in the source tree for an application along with any binary-only DLLs used will provide a comprehensive list of the executable assemblies in an application.</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that appropriate security settings have been applied. </strong>Ensure that an appropriate security policy has been applied to each assembly based on its specific security requirements. Use the <em>caspol.exe</em> utility, your application's <em>web.config</em>, or the assembly's <em>app.config</em> to accomplish this task.</p>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Use the following steps when partitioning your application:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the major components</strong>: Review your application's design and locate all major functionality.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all special security settings</strong>: Review your application's security requirements. Identify all cases where a component would require a privilege that is otherwise not needed by the rest of your application. For example, all code that accesses the file system should be placed within a single assembly.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Partition your application</strong>: Store all major functionality into separate assemblies. Adding this level of granularity to your application provides extra flexibility when applying your application's security settings. ASP.NET provides the following types of assemblies:</p>
+      <ul>
+        <li>
+          <strong>Page assemblies</strong>: By default, each ASP.NET page is compiled into its own assembly that is then loaded into the ASP.NET engine. Security configuration for such assemblies is stored inside <em>web.config</em>. </li>
+        <li>
+          <strong>Executable assemblies</strong>: Typically known as external libraries or DLL, these assemblies can be re-used outside of ASP.NET development. Security settings for such assemblies is managed through <em>app.config</em>.</li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/0b0a2b85-9d4a-4802-9fb9-a27015e1ce47">Partition Code into Separate Assemblies</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

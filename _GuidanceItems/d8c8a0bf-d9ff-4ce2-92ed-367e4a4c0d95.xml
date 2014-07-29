@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d8c8a0bf-d9ff-4ce2-92ed-367e4a4c0d95</Id>
+    <Id_History>00000000-0000-0000-0000-0000000b3752,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>XML Data Is Validated Using a Schema</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>XML Data Is Validated Using a Schema</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Java
+
+
+==What to Check For==
+
+Check that the application validates all XML data input against a schema to ensure that it is well-formed and free of malicious input.
+
+
+==Why==
+
+An attacker might be able to inject malicious XML content into your application, expose local files and private data, modify data, starve server resources, or perform other attacks. Validating XML input reduces these risks by ensuring that the input received matches the expected format. 
+
+
+==How to Check==
+
+To verify that XML data is validated against a schema:
+
+# **Review code to identify any input processed by an XML parser or combined with XML in the application.** Find application code that parses XML data.
+# **Ensure that code first validates XML input before sending it to the XML parser.** Review each piece of code that parses XML data to make sure that it validates XML data against a schema before processing it.
+
+
+==How to Fix==
+
+To validate XML data against a schema:
+# **Create a //Schema// object.** Use the //SchemaFactory// class to create a //Schema// object.
+# **Create a //SAXParserFactory// object.** The //SAXParserFactory// will be used to create a parser for working with the XML data.
+# **Assign the //Schema// object to the //SAXParserFactory// object.** Use the //setSchema// method to assign the //Schema// object to the //SAXParserFactory// object. This will cause the parser produced by the factory object to use our schema to validate data.
+# **Create a //SAXParser// object.** Use the //SAXParserFactory// object to create a parser. Since a schema has been assigned to the factory, the parser will validate XML data that is parses against the schema. This parser can then be used to load XML data.
+
+
+==Problem Example==
+
+This code does not validate XML data using a schema:
+
+{{{
+private void getXMLStream(InputStream inStream, DefaultHandler defHandler) {
+  SAXParserFactory factory = SAXParserFactory.newInstance();
+  try {
+    SAXParser saxParser = factory.newSAXParser();
+    saxParser.parse(inStream, defHandler);
+  } catch (Throwable t) { 
+    ...
+  }
+}
+}}}
+
+
+==Solution Example==
+
+This article is focused entirely on making sure the data is actually validated using a schema, so it is assumed that a schema file //schema.xsd// already exists. The following code validates XML data using the schema:
+
+{{{
+private static void getXMLStream(InputStream inStream, DefaultHandler defHandler) 
+  throws ParserConfigurationException, SAXException, IOException {
+  try {
+    SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    sf.setErrorHandler(defHandler);
+    StreamSource ssrc = new StreamSource(new File("schema.xsd"));
+    Schema schema = sf.newSchema(ssrc);
+    SAXParserFactory spf = SAXParserFactory.newInstance();
+    spf.setSchema(schema);
+    SAXParser saxParser = spf.newSAXParser();
+    saxParser.parse(inStream, defHandler);   
+  } catch (Throwable t) { 
+    ...
+  }
+} 
+}}}]]></Data>
+  </Content>
+</TeamMentor_Article>

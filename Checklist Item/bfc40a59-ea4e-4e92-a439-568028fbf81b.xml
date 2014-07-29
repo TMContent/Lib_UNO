@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="179018202" Content_Hash="-2140625428">
+  <Metadata>
+    <Id>bfc40a59-ea4e-4e92-a439-568028fbf81b</Id>
+    <Id_History>fafebf4b-070c-4683-94c8-478fc6340928,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Mode Attribute in CustomErrors Is Set to On</Title>
+    <Category>Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Mode Attribute in CustomErrors Is Set to On</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that the <strong>Mode</strong> attribute in &lt;<strong>CustomErrors</strong>&gt; is set to <strong>On</strong> to prevent disclosure of sensitive application details such as:</p>
+  <ul>
+    <li>Code structure </li>
+    <li>Database structure </li>
+    <li>Connection strings </li>
+    <li>Credentials</li>
+  </ul>
+  <h1>Why</h1>
+  <p>Disclosing application details may give an attacker the information he needs to&amp;nbsp;successfully exploit&amp;nbsp;a vulnerability in your application.</p>
+  <h1>How to Check</h1>
+  <p>Check to ensure that the&amp;nbsp;<b>mode</b> attribute of the &lt;<b>customErrors</b>&gt; element to <b>On</b>, so that all callers receive filtered exception information.</p>
+  <p>Check to ensure that the &lt;<b>customErrors</b>&gt; section of the Web.config file has been set to specify a default error page to display.</p>
+  <h1>How to Fix</h1>
+  <p>When exceptions occur, return concise error messages to the client and log specific details on the server. Do not reveal internal system or application details, such as stack traces, SQL statement fragments, and table or database names to the client. Ensure that this type of information is not allowed to propagate to the end user or beyond your current trust boundary. A malicious user could use system-level diagnostic information to learn about your application and probe for weaknesses to exploit in future attacks. </p>
+  <p>Prevent detailed error messages from displaying by setting the <b>mode</b> attribute of the &lt;<b>customErrors</b>&gt; element to <b>On</b>, so that all callers receive filtered exception information. Do not use <b>mode="Off"</b> because this allows detailed error pages intended for application developers that contain system-level information to be returned to the client.</p>
+  <p>You should also use the &lt;<b>customErrors</b>&gt; section of the Web.config file as shown in the following code example to specify a default error page to display, along with other required error pages for specific HTTP response codes that indicate errors.</p>
+  <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;<br />    &lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;<br />    &lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;<br />    &lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt;</pre>
+  <p>The <b>defaultRedirect</b> attribute allows you to use a custom error page for your application, which. for example, might include support contact details. Use these application-wide error pages to provide user-friendly responses for errors that are not caught in a structured event handling.</p>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application has code to connect to a SQL database. However, the application does not have a generic error page specified. As a result, when the connection times out, application details are revealed to the client in the exception.</p>
+  <p>
+    <strong>Description: </strong>An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code. <br /><br /><b>Exception Details: </b>System.Data.SqlClient.SqlException: An error has occurred while establishing a connection to the server.&amp;nbsp;When connecting to SQL Server, this failure may be caused by the fact that under the default settings SQL Server does not allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)<br /><br /><b>Source Error:</b></p>
+  <p>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <pre>
+            <br />Line 216:<br />Line 217:            if (conn.State != ConnectionState.Open)<br />Line 218:                conn.Open();<br />Line 219:<br />Line 220:            cmd.Connection = conn;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p />
+  <h1>Solution Example</h1>
+  <p>An ASP.NET application has code to connect to a SQL database. Since it has set the <b>mode</b> attribute of the &lt;<b>customErrors</b>&gt; element to <strong>On</strong>,<strong></strong>only generic error information is displayed when the SQL connection times out.</p>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/56445506-9e81-4e20-8562-52d11bf7408b">Guideline: Return Generic Error Pages with Harmless Messages to the Client</a>
+    </li>
+    <li>
+      <a href="/article/82840838-deed-4697-ad57-c6d1aafc9adf">Guideline: Set the customErrors Mode to On to Prevent Detailed Error Messages</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

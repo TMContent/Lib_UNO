@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b7d224f1-cefd-4ee7-bd5a-81b05ddeafd2</Id>
+    <Id_History>00000000-0000-0000-0000-0000000960a4,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Encode Input Included in Output</Title>
+    <Category>Encoding</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encode Input Included in Output</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Encode untrusted user data that is going to be included in HTML output. It is recommended to encode user data right before displaying it in HTML contexts. Another option is to encode user data when it is stored.
+
+==Why==
+
+Encoding untrusted data before displaying it prevents Cross-Site Scripting vulnerabilities.
+
+==How==
+
+To encode PHP input included in output:
+
+# **Identify all pages that display user entered data.** Enumerate all the pages used by the application. Make a list of all the pages that display data that comes from untrusted sources.
+# **Identify all user input that is displayed in HTML contexts.** For each page that displays untrusted data, make a list of all untrusted data that is displayed and the context in which it is displayed. Most commonly, untrusted data is displayed as HTML. Other possibilities include displaying user input inside JavaScript or CSS.
+# **Implement encoding functions for corresponding contexts.** PHP has a function for encoding HTML special characters, called //htmlspecialchars//. PHP does not have encoding functions for data being displayed inside JavaScript and CSS contexts. If your application displays data in contexts other than plain HTML, you will need to write your own encoding functions or use third-party ones. It is recommended to use a third-party encoding library, such as OWASP ESAPI.
+# **Identify functions that display untrusted user data.** For each instance of untrusted data being displayed by your application, identify what function outputs that untrusted data. Make a list of these functions and note the code that is directly responsible for displaying untrusted data.
+# **Add calls to encoding functions to functions that display untrusted data.** Add calls to encoding functions in a way that all untrusted data is encoded before being displayed. Make sure that output data is encoded correctly for its respective context.
+
+
+==Additional Resources==
+
+* For more information about //htmlspecialchars//, see http://php.net/manual/en/function.htmlspecialchars.php
+]]></Data>
+  </Content>
+</TeamMentor_Article>

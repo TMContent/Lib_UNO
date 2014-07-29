@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-767341387" Content_Hash="-472161413">
+  <Metadata>
+    <Id>bf8e1ecc-8c70-4860-ad75-da2dffe5bffb</Id>
+    <Id_History>900b7948-2555-42f6-8e50-fc080d1bb8bf,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Log Sensitive Data</Title>
+    <Category>Event Log</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Log Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not log sensitive user information, such as credentials, credit card numbers, or user IDs.</p>
+  <h1>Why</h1>
+  <p>Permissions required to access logs are often different than permissions required to access sensitive or private user data.&amp;nbsp; Logging such data can results in unintended information disclosure. To prevent the disclosure of sensitive data, do not log it in the first place. The event log is a useful location to store application execution information and error information.</p>
+  <h1>When</h1>
+  <p>Follow this guideline when designing a logging architecture.</p>
+  <h1>How</h1>
+  <p>Use the following steps to avoid revealing sensitive information:</p>
+  <ol>
+    <li>In the design phase, create a list of all sensitive user data your system handles.&amp;nbsp; Include composite data elements which are sensitive in combination, like multi-part registration credentials or fields which together uniquely identify an individual.&amp;nbsp; Remember that sensitive data can come in a wide variety of formats.&amp;nbsp; Names of customers, government issued ID numbers, credit card or other financial information, passwords, and private keys are all examples of sensitive information.&amp;nbsp; Some industries, such as health care and banking, have regulatory standards that define sensitive information.&amp;nbsp; Use regulatory requirements, as they apply to your application, to identify sensitive data.&amp;nbsp; In general sensitive data can be defined as follows: <ol><li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with users. </li><li>Information that a user provides that they would not want shared with other users of the application. </li><li>Information that comes from an external trusted source that is not designed to be shared with users. </li></ol></li>
+    <li>Ensure sensitive data does not get logged. When designing a logging architecture for your application, pay special attention to components that will handle sensitive data.&amp;nbsp; Design logging systems for these components so that they do not collect sensitive data.&amp;nbsp; When recording transactions inside your system, log only the minimum amount of information needed.&amp;nbsp; If you're logging a new order from a customer, log only the time, customer ID, and order ID.&amp;nbsp; Information like customer names, items ordered, or payment information can be reconstructed from transaction records and can be left out of the logging system. </li>
+  </ol>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

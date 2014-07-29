@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>19fda093-f64a-4591-a8ea-09483db5904c</Id>
+    <Id_History>00000000-0000-0000-0000-000000866d55,</Id_History>
+    <Library_Id>b6f408c5-6e6e-4bc0-90a5-0bb10becc2ce</Library_Id>
+    <Title>Canonicalize File Names and Paths</Title>
+    <Category>Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>iOS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Canonicalize File Names and Paths</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* iOS applications that access saved files.
+
+==What to Do==
+
+Canonizalize and validate all file paths that include input data. Use the //stringByStandardizingPath// function to canonicalize file paths before validating them.
+
+==Why==
+
+Canonicalizing file paths before validating them helps prevent unauthorized access. If a file path is not canonicalized, an attacker may use special characters to access resources outside of what is allowed by the application.
+
+==How==
+
+To canonicalize file names and paths:
+
+# **Identify all input used for file access.** Enumerate all file access performed by the application. Examine code responsible for accessing each file. Take note of any input used to form path or file names for file access.
+# **Remove null bytes from paths.** If a file name or path includes a null byte, an incorrect resource may be accessed. Verify that there are no null bytes in strings that are used for file names or paths. If null bytes are detected, it is safer to abort the operation than to strip the null bytes, because the presence of null bytes almost certainly indicates an attack.
+# **Canonicalize all input data used for file access.** The exact approach to canonicalization depends on the application. Often the application needs to append a user-specified file name to a predefined path. In that case, the //lastPathComponent// method of the //NSString// class should be used on the file name to get just the file name. After that, the file name should be added to the predefined path.
+# **Validate file paths.** Verify that the user or application is authorized to access the specified resource.
+
+==Data Validation Guidelines==
+* [[00000000-0000-0000-0000-000000866d55|Canonicalize File Names and Paths]]
+* [[00000000-0000-0000-0000-000000590dce|Check File Paths and Names for Null Bytes]]
+* [[00000000-0000-0000-0000-00000051c329|Validate All Input]]
+* [[00000000-0000-0000-0000-0000005804d8|Validate and Encode Data Inserted into XML Documents]]
+* [[00000000-0000-0000-0000-000000410a08|Validate and Encode Data Passed to UIWebView Controls]]
+* [[00000000-0000-0000-0000-00000049bb5e|Validate File Formats]]
+
+==Data Validation Checklists==
+* [[00000000-0000-0000-0000-0000004d996e|File Names and Paths Are Canonicalized]]
+* [[00000000-0000-0000-0000-0000004446d0|File Paths and Names Are Checked for Null Bytes]]
+* [[00000000-0000-0000-0000-000000396c19|All Input Is Validated]]
+* [[00000000-0000-0000-0000-0000008c53b6|Data Inserted into XML Documents Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000647d44|Data Passed to UIWebView Controls Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000066105|File Formats Are Validated]]]]></Data>
+  </Content>
+</TeamMentor_Article>

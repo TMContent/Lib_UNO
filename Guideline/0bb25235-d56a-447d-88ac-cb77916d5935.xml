@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-539196830" Content_Hash="-1618209344">
+  <Metadata>
+    <Id>0bb25235-d56a-447d-88ac-cb77916d5935</Id>
+    <Id_History>692215af-bca6-46b8-b237-7a7480ee65dd,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Use Pointer Arithmetic Correctly</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Pointer Arithmetic Correctly</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>When using pointers as integers for addressing, make sure the arithmetic is correct.</p>
+  <h1>Why</h1>
+  <p>Miscalculations in pointer arithmetic may result in buffer overflows, which may allow an attack to execute arbitrary code.</p>
+  <h1>When</h1>
+  <p>Pay careful attention to the arithmetic when using pointers as integers.</p>
+  <h1>How</h1>
+  <p>Pointer arithmetic means using a pointer as an integer and adding some number to it to address another location in memory. This is most commonly used as a pointer to an array, where the pointer is incremented to address the sequential elements in the array. The only mathematical operator available for pointer arithmetic is addition. The challenge here is that incrementing a pointer by one actually increments its value by the size of the type of the variable it points to. For example, if a pointer points to an array of four-byte wide objects, incrementing the pointer by one programmatically actually increases its value by four. This is important, because a common mistake is to increment pointers by multiples of the size of the object programmatically, which results in miscalculations and buffer overflows.</p>
+  <h1>Problem Example</h1>
+  <pre>int buffer&amp;#91;10&amp;#93;;<br />int &amp;#42;pointer = buffer;</pre>
+  <pre>&amp;#42;pointer &amp;#43;= 9&amp;#42;sizeof(buffer);<br />&amp;#42;buffer = 0;</pre>
+  <p>Here, the pointer is incremented by 9 times the size of an integer programmatically. This is wrong, because the compiler will automatically multiple that value by the size of an integer, resulting in a miscalculation and a 0 being written to some unexpected memory address.</p>
+  <h1>Solution Example</h1>
+  <pre>int buffer&amp;#91;10&amp;#93;;<br />int &amp;#42;pointer = buffer;</pre>
+  <pre>&amp;#42;pointer &amp;#43;= 9;<br />&amp;#42;buffer = 0;</pre>
+  <p>Here, the pointer is incremented by 9 programmatically. This is correct, because the compiler will automatically multiply 9 by the size of the integer and the program will write 0 to an array element during run-time.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about pointer arithmetic, please see "EXP08-CPP. Ensure pointer arithmetic is used correctly" at <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/EXP08-CPP.&amp;#43;Ensure&amp;#43;pointer&amp;#43;arithmetic&amp;#43;is&amp;#43;used&amp;#43;correctly">https://www.securecoding.cert.org/confluence/display/cplusplus/EXP08-CPP.&amp;#43;Ensure&amp;#43;pointer&amp;#43;arithmetic&amp;#43;is&amp;#43;used&amp;#43;correctly</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

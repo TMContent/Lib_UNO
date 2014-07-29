@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="578089277" Content_Hash="-249027687">
+  <Metadata>
+    <Id>261552cd-3131-4573-aa0d-2947a0151dab</Id>
+    <Id_History>5f9cc8ca-c517-43e3-a176-720b6d4a92de,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Create And Store a Symmetric Encryption Key</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Create And Store a Symmetric Encryption Key</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code sample is to demonstrate the secure creation and storage of a symmetric cryptographic key and initialization vector to be used for encrypting and decrypting blocks of data.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Create a random encryption key to be used within a symmetric encryption cipher. </li>
+    <li>Securely store the symmetric encryption key without needing to implement additional encryption operations or relying on filesystem or database security. </li>
+    <li>Discuss the use and distribution of initialization vectors.</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>The application is required to store sensitive data in an encrypted form </li>
+    <li>Two entities in a client-server or client-client architecture need to transmit data in an encrypted form </li>
+    <li>Application developers should not have access to production encryption keys; a product support group may use a utility containing the solution code to set the production encryption keys.</li>
+  </ul>
+  <h1>Solution Example</h1>
+  <p>The .NET framework supports several symmetric or block ciphers including: Rijndael (AES), DES, 3DES, RC2, etc. Symmetric (secret key) encryption algorithms assume that both parties know the secret key and initialization vector or IV (when using a chained mode for the crypto operation). Protecting the secret key by both recipients is vital to the protection of data transmitted or stored by both parties. Symmetric ciphers are often well suited to protecting large blocks of data between two or more parties when the secret key has been negotiated in a secure manner. There exist many block ciphers today, however perhaps the most popular is AES, the current encryption standard approved by the National Institute of Standards and Technology (NIST). The AES algorithm was created by two Belgian cryptographers and commonly referred to as Rijndael as is the case in the .NET framework.</p>
+  <pre>public static void GenerateAndStoreSymmetricAESKey()<br /> {<br />    // The following call will create a Rijndael (AES) Crypto Provider with a cryptographically<br />    // random key and initialization vector. This crypto provider defaults to a key size<br />    // of 256 bits and considered extremely secure even by today's computing standards.<br />    Rijndael rij = Rijndael.Create();<br /><br />    // The following method demonstrates the ability to generate a new key from the<br />    // given crypto provider.  Typically this method need not be called unless<br />    // it is desired to "re-key".  Re-keying may be performed in some communication protocols<br />    // to mitigate the likelihood of an adversary having compromised a secret key used<br />    // to protect the session.<br />    // By default in the .NET framework a call to Rijndael.Create() constructor will<br />    // automatically generate a key and associated it with the object created (stored in the<br />    // Key member).<br />    rij.GenerateKey();<br /><br />    // Encryption keys should be protected in storage. The .NET framework provides a method<br />    // to securely protect secrets such as encryption keys and passwords known as the<br />    // data protection api (DPAPI). For further details please refer to:<br />    //  http://msdn.microsoft.com/library/en-us/dnpag2/html/paght000005.asp<br />    // The following method demonstrates the generation of a new initialization vector.<br />    // Initialization vectors (IV) are used to ensure that encrypted blocks of data are "chained".<br />    // When using a chaining encryption mode such as CBC, CFB, OFB, a random initialization<br />    // vector should be chosen with which the first block of plaintext data is XOR by the<br />    // cipher.  Subsequent blocks of the plaintext message are XORed with the output<br />    // (crypted text) of the previous block.<br />    //<br />    // When using a random initialization vector for each communication, an eavesdropper<br />    // who observes traffic between Alice and Bob may not be able to detect<br />    // repititious blocks of data even if the same message is sent multiple times.<br />    // We don't actually store this value but it's contained here to demonstrate how it<br />    // should be called during subsequent encryption operations<br /><br />    rij.GenerateIV();<br /><br />    // The IV need not be protected, as an intermediary who intercepts an encrypted<br />    // communication still needs the secret key to decrypt the message. However,<br />    // the recipient of the encrypted data needs the IV to successfully decrypt the<br />    // message. It is common for an encrypted text (ciphertext) to be preceeded by the<br />    // IV used in the chaining of the encryption routine.  Because the IV is a fixed<br />    // length (as determined by the encryption cipher), the recipient of the encrypted<br />    // text must remove the IV from the beginning of the message and use this value in<br />    // conjunction with the shared secret key to decrypt the message.<br />    // Upon subsequent encrypt routines the application should generate a new Initialization<br />    // vector each time.<br />    // Store the AES symmetric (shared secret) key to a byte array<br />    // encrypted and stored in the registry by using the DPAPI ProtectedData class.<br />    // We're using the CurrentUser scope instead of the MachineKey scope so that other<br />    // users or applications which may become compromised cannot access this key in the<br />    // registry and decrypt. This provides additional security but sacrifices interoperability<br />    // with other applications. Consider using the MachineKey scope if you have a need to<br />    // share keys between applications.<br />    byte[] encryptedKeyPair = ProtectedData.Protect(<br />                    rij.Key,<br />                    null,<br />                    DataProtectionScope.CurrentUser);<br /><br /><br /><br /><br />    // Create a security context for a new key that we will use to store<br />    // our shared key. The security context will restrict access to only<br />    // our user.<br />    string user = Environment.UserDomainName + "\\" + Environment.UserName;<br />    RegistrySecurity security = new RegistrySecurity();<br />    RegistryAccessRule rule = new RegistryAccessRule(user,<br />                    RegistryRights.FullControl,<br />                    InheritanceFlags.ContainerInherit,<br />                    PropagationFlags.None,<br />                    AccessControlType.Allow);<br />    security.AddAccessRule(rule);<br /><br />    // Actually create the new registry key and apply the security context<br />    // we just came up with.<br />    Registry.CurrentUser.CreateSubKey("AESSymmetricKey",<br />        RegistryKeyPermissionCheck.ReadWriteSubTree,<br />        security);<br /><br />    // Write the encrypted connection string into the registry<br />    Registry.SetValue(@"HKEY_CURRENT_USER\AESSymmetricKey",<br />        "KeyData",<br />        encryptedKeyPair);<br />}</pre>
+  <h1>Problem Example</h1>
+  <p>The following code sample demonstrates a hardcoded encryption key and initialization vector, which is a common pitfall&amp;nbsp;for many developers.</p>
+  <pre>Rijndael rijndaelAlg = Rijndael.Create();<br />//Set secret key for the AES algorithm.<br />rijndaelAlg.Key = ASCIIEncoding.ASCII.GetBytes("_A_SAMPLE_KEY_WE_USE_TO_ENCRYPT_");<br />// Hardcode our IV<br />rijndaelAlg.IV = ASCIIEncoding.ASCII.GetBytes("SAMPLEIV");</pre>
+  <p>If an unauthorized user gains access to the application source code or compiled code he/she will be able to extract the key and decrypt all future communications. A hardcoded initialization vector does not provide full confidentiality of messages in that all equivalent plaintext messages will result in the same encrypted value, providing knowledge to an attacker about common messages.</p>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Security;<br />using System.Security.AccessControl;<br />using System.Security.Cryptography;<br />using Microsoft.Win32;</pre>
+  <p>Execute the following code and then open "regedit" and look in the registry under the key "<em>HKEY_CURRENT_USER\AESSymmetricKey</em>" to see the AES shared secret key encrypted in the registry via the DPAPI.</p>
+  <pre>static void Main(string[] args){<br />  // Generate an AES encryption key and store in the registry<br />  // using DPAPI<br />  GenerateAndStoreSymmetricAESKey();<br />}</pre>
+  <h1>Expected Result</h1>
+  <p>The AES key is encrypted using DPAPI and stored in the registry key, "<em>HKEY_CURRENT_USER\AESSymmetricKey</em>"</p>
+  <h1>More Information</h1>
+  <p>Symmetric (secret key) encryption algorithms assume that both parties know the secret key and initialization vector or IV (when using a chained mode for the crypto operation an Initialization Vector is required). Protecting the secret key by both recipients is vital to the protection of data transmitted or stored by both parties. Symmetric ciphers are often well suited to protecting large blocks of data between two or more parties when the secret key has been negotiated in a secure manner. There exist many block ciphers today, however perhaps the most popular is AES, the current encryption standard approved by the National Institute of Standards and Technology (NIST). The AES algorithm was created by two Belgian cryptographers and commonly referred to as 'Rijndael', as is the case in the .NET framework.</p>
+  <p>While encryption keys should be protected in storage, the IV need not be protected, as an intermediary who intercepts an encrypted communications still needs the secret key to decrypt the message. However, the recipient of the encrypted data needs the IV to successfully decrypt the message.&amp;nbsp; It is common for an encrypted text (ciphertext) to be preceeded by the IV used in the chaining of the encryption routine. Because the IV is a fixed length (as determined by the encryption cipher), the recipient of the encrypted text must remove the IV from the beginning of the message and use this value in conjunction with the shared secret key to decrypt the message.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

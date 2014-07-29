@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1918260817" Content_Hash="-497330480">
+  <Metadata>
+    <Id>37df23eb-073e-4e4c-9123-253768c7a5c6</Id>
+    <Id_History>24e64319-c897-4c27-bfd5-d721b5cdad3c,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>The Number of Times Language Boundaries Are Crossed Is Minimized</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Number of Times Language Boundaries Are Crossed Is Minimized</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Verify that your code is optimized such that the native code is executed as little as possible.</p>
+  <h1>Why</h1>
+  <p>Executing native code forces the developer to implement extra security checks and may result in security bugs (such as buffer overflows), which would otherwise be mitigated by the Java Virtual Machine.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to ensure that your application minimizes the number of times it crosses language boundaries:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Review your application's design and requirements. </strong>Thoroughly examine your application's design and requirements and identify all functionality that is necessary for your application to perform its tasks. Research whether each component can be implemented using Java. If the Java SDK cannot provide a viable solution for a component,&amp;nbsp;ensure that the component is using JNI. Common tasks that may require the use of JNI include:</p>
+      <ul>
+        <li>Interaction with the underlying operating system <li>Low-level network operations <li>Interaction with legacy software <li>Interaction with external libraries that are written in native code <li>Interaction with hardware devices</li></li></li></li></li>
+      </ul>
+      <strong>
+      </strong>
+      <li>
+        <p>
+          <strong>Ensure that your application is optimized. </strong>Ensure that your application's native components are optimized such that transitions between native and Java code are minimized. Use the following list of items to verify that your application's native code is optimized:</p>
+        <ul>
+          <li>
+            <strong>Language Transitions</strong>: Ensure that the JNI component can accomplish its tasks with as few calls to your application's Java components as possible. <li><strong>Wrapper Method</strong>: Verify that your application invokes multiple native calls from a single C/C&amp;#43;&amp;#43; method and not through its Java code. <li><strong>DLL/Library Optimization</strong>: Ensure that your application's JNI code is not scattered throughout multiple libraries.</li></li></li>
+        </ul>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To minimize the number of times language boundaries are crossed:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Understand the functionality. </strong>Make sure there is a clear understanding of the required functionality. Label each component as low or high level:</p>
+      <ul>
+        <li>
+          <strong>Low level:</strong> Low-level components are closely tied to the hardware and operating system. Although low-level components are commonly written in native code, Java provides support for the most basic operations such as filesystem access, sockets, etc. <li><strong>High level:</strong> High-level components hold the business logic within an application. Their loose coupling with hardware and operating systems allows them to be implemented 100&amp;#37; using Java. </li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Reduce calls into native code. </strong>Determine which functionalities should be executed in native code. Ensure that native code is called from as few locations in your application as possible. Segregate functionality that requires native code so that its use is isolated into a small number of components.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following segment shows JNI code that utilizes a COM object. Because the code uses Java to verify the GUID's length, the application does unnecessary crossing of language boundaries by invoking Java functionality from native code, thereby disrupting the JVM's security optimization routines. </p>
+  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &amp;#42; env, jobject jobj, jstring jguid)&amp;#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries twice:<br />      // get the string and get the string's length<br />      char&amp;#42; temp_guid = (&amp;#42;env)-&gt;GetStringUTFChars(env, jguid, &amp;iscopy);<br />      int guid_size = (int)(&amp;#42;env)-&gt;GetStringLength(env, jguid);<br /><br />      ...<br /> &amp;#125;</pre>
+  <h1>Solution Example</h1>
+  <p>The following segment shows JNI code that utilizes a COM object. Because the code uses C to verify the GUID's length, there is no extra crossing of language boundaries; therefore, the JVM's security optimization routines are not disrupted. </p>
+  <p />
+  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &amp;#42; env, jobject jobj, jstring jguid)&amp;#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries once:<br />      // get the string<br />      char&amp;#42; temp_guid = (&amp;#42;env)-&gt;GetStringUTFChars(env, jguid, &amp;iscopy);<br />      int guid_size = (int)strlen(temp_guid);<br /><br />      ...<br /> &amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the security issues that JNI introduces, see: <a href="http://www.owasp.org/index.php/Unsafe_JNI">Unsafe JNI</a> from OWASP. </li>
+  </ul>
+  <h1>Unmanaged Code Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/351b69c8-b40b-4c13-899e-a8399b85a0ea">Do Not Utilize Functionality Through JNI if Java Already Supports It</a>
+      <li>
+        <a href="/article/70b53138-faf7-410a-a966-16f3088fca63">Minimize the Number of Times Language Boundaries are Crossed</a>
+        <li>
+          <a href="/article/946a5edb-e8f8-4365-8675-b8a5032c201b">Validate All Data Passed Between Native and Java Code</a>
+          <li>
+            <a href="/article/43e09871-01a1-4b24-af9f-31e275b91b2f">Protect Libraries Loaded Through JNI</a>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Unmanaged Code Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/5b207f0a-b17d-42e3-813f-8ac255b3e1bb">Java Supported Functionality Is Not Utilized Through JNI</a>
+      <li>
+        <a href="/article/24e64319-c897-4c27-bfd5-d721b5cdad3c">The Number of Times Language Boundaries Are Crossed Is Minimized</a>
+        <li>
+          <a href="/article/a61487db-d1e1-4304-89b1-44bb8c88b1e3">All Data Passed Between Native and Java Code Is Validated</a>
+          <li>
+            <a href="/article/d775ead4-8413-4736-a40f-92c7e0231e5b">Libraries Loaded Through JNI Are Protected</a>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

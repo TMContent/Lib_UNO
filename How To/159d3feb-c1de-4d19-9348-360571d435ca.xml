@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1182542742" Content_Hash="-1940906418">
+  <Metadata>
+    <Id>159d3feb-c1de-4d19-9348-360571d435ca</Id>
+    <Id_History>2ad6c81b-2b98-4039-9ada-ca31b6433fb8,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How To Use Protocol Transition And Constrained Delegation in ASP.NET</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How To Use Protocol Transition And Constrained Delegation in ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Internet Information Services 6.0 or later<li>Microsoft Windows Server 2003 or later&amp;nbsp;operating system </li></li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How To shows you how to configure and use protocol transition and constrained delegation to allow your ASP.NET application to access network resources while impersonating the original caller. The Microsoft Windows 2000 operating system supports delegation; however, access to downstream servers or services cannot be limited by delegation. The Microsoft Windows Server 2003 and later operating systems provides a more secure form of delegation called <i>constrained delegation</i>. With constrained delegation, you can configure the Microsoft Active Directory&amp;#174; directory service to restrict the services and servers that your ASP.NET application can access with the impersonated identity.</p>
+  <p>Constrained delegation in Windows Server requires Kerberos authentication. If your application cannot use Kerberos authentication to authenticate its callers, you can use protocol transition to switch from an alternate, non-Windows authentication mode (such as forms or certificate authentication) to Kerberos authentication. You can then use Kerberos with constrained delegation to access downstream network resources.</p>
+  <p>For demonstration purposes, this How To uses protocol transition with forms authentication. In practice, you would use the <b>LogonUser</b> API because you already obtained the username and password. An example of a production scenario for protocol transition is where you use certificates to authenticate users and want to map them to existing Windows accounts.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>
+      <div>Objectives</div>
+      <li>
+        <div>Overview</div>
+        <li>
+          <div>Scenarios</div>
+          <li>
+            <div>Summary of Steps</div>
+            <li>
+              <div>Step 1. Use an S4U Logon to Create a Windows Token for the Original Caller</div>
+              <li>
+                <div>Step 2. Configure Your Service or Machine account for Constrained Delegation</div>
+                <li>
+                  <div>Step 3. Implement and Test Protocol Transition</div>
+                  <li>
+                    <div>Using Constrained Delegation Through Multiple Tiers</div>
+                    <li>
+                      <div>Domain Functional Levels</div>
+                      <li>
+                        <div>Additional Resources</div>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Use protocol transition to switch from non-Windows authentication to Kerberos authentication. <li>Use constrained delegation to restrict access to specific services. <li>Pass the original caller identity from the Web server to the database server. <li>Pass the original caller identity from the Web server to the application server to the database server. </li></li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>When an ASP.NET application impersonates the original caller, it accesses resources by using the security context of the authenticated user. However, the application can only access local resources. To access network resources while impersonating a remote user, your application must use delegation. If your application uses Kerberos authentication to authenticate its users, you can use delegation to pass the caller's identity through the layers of your application, and use it to access network resources. If your application does not use Kerberos authentication, you can use protocol transition to switch from a non-Kerberos authentication mechanism to Kerberos, and then use delegation to pass the identity on.</p>
+  <h2>Protocol Transition</h2>
+  <p>In many situations&amp;#8212;for example, if your users access a Web site over the Internet&amp;#8212;you cannot use Kerberos authentication because firewalls prevent the client computer from directly communicating with the domain controller. Instead, your application must authenticate the client by using another approach, such as forms authentication, or in an extranet scenario, client certificate authentication.</p>
+  <p>Windows Server has a protocol transition feature that permits applications to use a non-Windows authentication mechanism to authenticate users, but still use Kerberos authentication and delegation to access downstream network resources. This allows your application to access downstream servers that require Windows authentication and it allows you to use Windows auditing to track user access to backend resources.</p>
+  <p>Note that impersonating a Windows identity to access downstream resources brings a number of advantages, but also some disadvantages. The advantages include the ability to use Windows auditing to track user access to back-end resources, and the ability to implement fine-grained access controls to resources (such as databases) on a per-user basis. The disadvantages include the additional administration required to administer fine-grained access controls and reduced scalability. For many applications, the trusted subsystem model is appropriate; for example, where the Web server authenticates the caller, but then uses a service identity to access downstream resources on behalf of the original caller. This results in reduced administration and improved scalability. For more information on selecting the appropriate authentication model for your application, see <a href="http://msdn2.microsoft.com/en-us/library/aa302383.aspx">Building Secure ASP.NET Applications: Authentication, Authorization, and Secure Communication</a>.</p>
+  <p>The use of protocol transition to access downstream resources relies on two extensions to the Kerberos protocol. Both extensions are implemented in Windows Server. These extensions are: </p>
+  <ul>
+    <li>
+      <b>Service-for-User-to-Self (S4U2Self)</b>, which allows you to obtain a Windows token for the client by supplying a user principal name (UPN) without a password. <li><b>Service-for-User-to-Proxy (S4U2Proxy)</b>, which allows an administrator to control exactly which downstream services can be accessed with the S4U2Self token. </li></li>
+  </ul>
+  <p>For more information about protocol transition and the related service for user (S4U) extensions to the Kerberos protocol, see Exploring S4U Kerberos Extensions in Windows Server.</p>
+  <h2>Constrained Delegation</h2>
+  <p>Kerberos delegation on Windows Server 2000 is unconstrained and servers that are configured as trusted for delegation in Active Directory can access any network resources or any machine on the network while using the impersonated user's security context. This represents a potential security threat, particularly if the Web server is compromised.</p>
+  <p>To address this issue, Windows Server 2003 and later&amp;nbsp;includes constrained delegation. This allows administrators to specify exactly which services on a downstream server or a domain account can access when using an impersonated user's security context.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The list of services that can be accessed by delegation is maintained in an Active Directory list referred to as the A2D2 list.<b></b></blockquote>
+  <p>This How To shows how to use protocol transition and constrained delegation in Windows Server to solve the following common problems: </p>
+  <ul>
+    <li>Using a non-Windows authentication mechanism for external clients and then transitioning to Kerberos authentication to access network resources. <li>Impersonating Kerberos-authenticated clients and then using their Windows security context to pass their identities through multiple tiers to access network resources. </li></li>
+  </ul>
+  <h2>Scenarios</h2>
+  <p>Protocol transition is appropriate when a non-Windows authentication mechanism is used by your Web application to authenticate clients. Consider the following scenarios: </p>
+  <ul>
+    <li>
+      <b>If your client uses</b>
+      <b>forms authentication, you can use LogonUser.</b> If the user name and password entered through the forms login page map directly to a Windows domain account, your application can call the <b>LogonUser</b> API and avoid protocol transition. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The example in this How To uses forms authentication for simplicity.</blockquote><li><b>If your</b> c<b>lient uses certificate authentication, you can consider protocol transition.</b> If your client uses certificates to authenticate with your Web server the application can look up the user in Active Directory based on the certificate, and use protocol transition to allow the user to log on. </li></li>
+  </ul>
+  <h1>Summary of Steps</h1>
+  <p>Follow these steps to use protocol transition and constrained delegation in ASP.NET on Windows Server: </p>
+  <ul>
+    <li>Step 1. Use an S4U Logon to create a Windows token for the original caller. <li>Step 2. Configure your service or machine account for constrained delegation. <li>Step 3. Implement and test protocol transition. </li></li></li>
+  </ul>
+  <h1>Step 1. Use an S4U Logon to Create a Windows Token for the Original Caller</h1>
+  <p>If your users have Windows domain accounts, but must connect to your Web server from outside the domain or a non-trusted domain (for example, over the Internet), then you cannot use integrated Windows authentication. Instead, you can use a non-Windows authentication mechanism, and then transition to Kerberos as shown in Figure 1.</p>
+  <p>
+    <img alt="" src="http://msdn2.microsoft.com/en-us/library/ms998355.f01paght00002401(en-us,MSDN.10).gif" border="0" />
+  </p>
+  <p>
+    <b>Figure 1. Using an S4U logon to call a database from an ASP.NET application using the caller's identity</b>
+  </p>
+  <h2>Configure ASP.NET for Forms Authentication</h2>
+  <p>Create an ASP.NET application and configure it to use forms authentication. Note that instead of forms authentication, you could use any non-Windows authentication mechanism to authenticate the users of your application.</p>
+  <h3>To configure a Web site for forms authentication </h3>
+  <ol>
+    <li>Create a Web application. <li>In Internet Information Services Administrator, edit the properties of the Web site. Edit the <b>Anonymous access and authentication control</b> on the <b>Directory</b><b>security</b> tab, and check the <b>Anonymous access</b> checkbox. <li>Create a Web application. Add a Web.config file, enable forms authentication, and deny access to unauthenticated users by adding the following configuration. <div><pre>&lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authentication mode="Forms"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="?" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp;&amp;nbsp; ...<br />&lt;/system.web&gt;  </pre></div></li></li></li>
+  </ol>
+  <h3>To create a login form for the Web site </h3>
+  <ol>
+    <li>Add a Web form called Login.aspx. <li>Add a <b>Login</b> control and a <b>CreateUserWizard</b> control, as shown in the following example. <div><pre>&lt;&amp;#37;&amp;#64; Page Language="C#" &amp;#37;&gt;<br />&lt;&amp;#33;DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "<a href="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd</a>"&gt;<br />&lt;html&amp;nbsp; &gt;<br />&lt;head runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;title&gt;Protocol Transition&lt;/title&gt;<br />&lt;/head&gt;<br />&lt;body&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form id="form1" runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;div&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:Login ID="Login1" runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/asp:Login&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/div&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:CreateUserWizard ID="CreateUserWizard1" runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;WizardSteps&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:CreateUserWizardStep runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/asp:CreateUserWizardStep&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:CompleteWizardStep runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/asp:CompleteWizardStep&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/WizardSteps&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/asp:CreateUserWizard&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;  </pre></div></li></li>
+  </ol>
+  <h2>Obtain a Windows Token for the Original Caller</h2>
+  <p>Add the following code to your application. This code takes the user name supplied in the login form, constructs a UPN in the format <i>userName</i>&amp;#64;<i>domainName</i>, and passes the UPN to the <b>WindowsIdentity</b> constructor. This constructor uses the Kerberos S4U extension to obtain a Windows token for the user. The code then uses the token to begin impersonation.</p>
+  <div>
+    <pre>using System.Security.Principal;<br />...<br />// Obtain the user name (obtained from forms authentication)<br />string identity = User.Identity.Name;</pre>
+    <pre>// Convert the user name from domainName\userName format to <br />// <a href="mailto:userName&amp;#64;domainName">userName&amp;#64;domainName</a> format if necessary<br />int slash = identity.IndexOf("\\");<br />if (slash &gt; 0)<br />&amp;#123;<br />&amp;nbsp; string domain = identity.Substring(0, slash);<br />&amp;nbsp; string user = identity.Substring(slash &amp;#43; 1);<br />&amp;nbsp; identity = user &amp;#43; "&amp;#64;" &amp;#43; domain;<br />&amp;#125;</pre>
+    <pre>// The WindowsIdentity(string) constructor uses the new<br />// Kerberos S4U extension to get a logon for the user<br />// without a password.<br />WindowsIdentity wi = new WindowsIdentity(identity);<br />WindowsImpersonationContext wic = null;<br />try<br />&amp;#123;<br />&amp;nbsp; wic = wi.Impersonate();<br />&amp;nbsp; // Code to access network resources goes here.<br />&amp;#125;<br />catch()<br />&amp;#123;<br />&amp;nbsp; // Ensure that an exception is not propagated higher in the call stack.<br />&amp;#125;<br />finally<br />&amp;#123;<br />&amp;nbsp; // Make sure to remove the impersonation token<br />&amp;nbsp; if( wic &amp;#33;= null)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; wic.Undo();<br />&amp;#125;  </pre>
+  </div>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;In many cases, the UPN is the user's e-mail address, but it does not have to be. For some accounts, it may not be configured at all. The default format for a UPN is <i>userName</i>&amp;#64;<i>DomainName</i>. If you are logged on to a domain, you can display your user name in UPN format by running the command <b>whoami /upn</b> from a command prompt. <b>Whoami</b> is a command-line tool available on Windows Server and in the in the Support/Tools directory on the Windows XP Professional operating system CD.</blockquote>
+  <h3>Token Types</h3>
+  <p>The type of token generated with the S4U2Self extension determines what you can do with the token while impersonating. You can obtain the following token types: </p>
+  <ul>
+    <li>
+      <b>Identify-level token.</b> This is returned by default. With this token type, you can check to see what groups are contained in the token, but you cannot use it to access local or remote resources while impersonating. <li><b>Impersonation-level token.</b> This type of token allows you to access local resources while impersonating. To obtain this type of token from the <b>WindowsIdentity</b> constructor, you must grant your process account the "Act as part of the operating system" user right. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;This places your process within the trusted computing base (TCB) of the Web server, which makes your Web server process very highly privileged. Where possible, you should avoid this approach because an attacker who manages to inject code and compromise your Web application will have unrestricted capabilities on the local computer.<b></b></blockquote><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If your process account is part of the TCB, you get an impersonate-level token. To access network resources, you must enable protocol transition in Active Directory. In this case, you can obtain S4U2Proxy tickets on behalf of your client by accessing remote services defined in the A2D2 list.<b></b></blockquote></li></li>
+  </ul>
+  <h1>Step 2. Configure Your Service or Machine Account for Constrained Delegation</h1>
+  <p>In this step, you configure Active Directory to allow your Web application to use constrained delegation to access a remote database server.</p>
+  <p>If your ASP.NET application runs using the Network Service machine account, then you must enable protocol transition and constrained delegation for your Web server computer. However, if your ASP.NET application runs under a custom domain account, you must enable protocol transition and constrained delegation for the custom domain account.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you use a custom domain account to run SQL Server, you must create a service principal name (SPN) for this account. You can do this by using the following command:</blockquote>
+  <blockquote>
+    <b>setspn -A MSSQLSvc/ databaseservername.fullyqualifieddomainname</b>
+  </blockquote>
+  <blockquote>
+    <b>domain\customAccountName </b>
+  </blockquote>
+  <blockquote>If you run SQL Server by using the System account (which is not recommended because of the associated high privileges that an attacker could exploit), an SPN is created automatically for you. </blockquote>
+  <h2>To configure protocol transition for the machine account</h2>
+  <p>This procedure assumes that you are running your Web application under the Network Service machine account. </p>
+  <ol>
+    <li>Start the Microsoft Management Console (MMC) Active Directory Users and Computers snap-in. <li>In the left pane of the MMC snap-in, click the <b>Computers</b> node. <li>In the right pane, double-click your Web server computer to display the <b>Properties</b> dialog box. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If the <b>Properties</b> dialog box does not have a <b>Delegation</b> tab and there is a single checkbox called <b>Trust Computer for Delegation</b> on the <b>General</b> tab, your domain is operating as a Windows 2000 mixed domain. You must raise the domain functional level to Windows Server 2003 as described in the section "Domain Functional Levels," in this document.<b></b></blockquote><li>On the <b>Delegation</b> tab of the <b>Properties</b> window for the Web server computer, <b>Do not trust the computer for delegation</b> is selected by default. To use constrained delegation, select <b>Trust this computer for delegation to specified services only</b>. You specify precisely which service or services can be accessed in the bottom pane. <li>Beneath <b>Trust this computer for delegation to specified services only</b>, select <b>Use any authentication protocol</b>. <p>If you select <b>Use Kerberos only</b>, constrained delegation works only with Kerberos authentication. If you are using protocol transition to switch from forms authentication (or an alternate non-Kerberos authentication mechanism) to Kerberos, then you must select <b>Use any authentication protocol</b>. </p><li>Click the <b>Add</b> button. This displays the <b>Add Services</b> dialog box. <li>Click the <b>Users or computers</b> button. <li>In the <b>Select Users or Computers</b> dialog, type the name of your database server computer if you are running SQL Server as System or Network Service. Alternatively, if you are running SQL Server by using a custom domain account, enter that account name instead. Then click <b>OK</b>. <li>You will see all the service principal names configured for the selected user or computer account. To restrict access to SQL Server, select the <b>MSSQLSvc</b> service, and then click <b>OK</b>. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you want to delegate to a file on a file share, you need to select the Common Internet File System (CIFS) service.<b></b></blockquote></li></li></li></li></li></li></li></li></li>
+  </ol>
+  <h2>To configure protocol transition for a custom domain account</h2>
+  <p>This procedure assumes that you are running your Web application under a custom domain account. </p>
+  <ol>
+    <li>Create an SPN for your custom domain account. Kerberos requires an SPN to support mutual authentication. To create an SPN for the domain account:<b></b><ol><li>Install the Windows Server Tools from the Windows Server CD. <li>From a command prompt, run the <b>Setspn</b> tool twice from the <b>C:\Program Files\Support Tools</b> directory as shown here. <p><b>setspn -A HTTP/<i>webservername</i><i>domain</i>\<i>customAccountName</i></b></p><p><b>setspn -A HTTP/<i>webservername.fullyqualifieddomainname</i></b></p><p><b><i>domain</i>\<i>customAccountName</i></b></p><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You can only have a single SPN associated with any HTTP service (DNS) name, which means you cannot create SPNs for different service accounts mapped to the same HTTP server unless they are on different ports. The SPN can include a port number. </blockquote></li></li></ol><li>Start the Microsoft Management Console (MMC) Active Directory Users and Computers snap-in. <li>In the left pane of the MMC snap in, click the <b>Users</b> node. <li>In the right pane, double-click the user account you are using to run the ASP.NET application. This displays the user account properties. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If the <b>Properties</b> dialog box for your account does not have a <b>Delegation</b> tab, this indicates that a service principal name (SPN) does not exist for the user. Create an SPN as explained in step 1, above.<b></b></blockquote><li>On the <b>Delegation</b> tab of the <b>Properties</b> window for your Web server computer, <b>Do not trust the computer for delegation</b> is selected by default. To use constrained delegation, select <b>Trust this user for delegation to specified services only</b>. You specify precisely which service or services can be accessed in the bottom pane. <li>Beneath <b>Trust this user for delegation to specified services only</b>, select <b>Use any authentication protocol</b>. <p>If you select <b>Use Kerberos only</b>, constrained delegation works only with Kerberos authentication. If you are using protocol transition to switch from forms authentication (or an alternate non-Kerberos authentication mechanism) to Kerberos, then you must select <b>Use any authentication protocol</b>. </p><li>Click the <b>Add</b> button. This displays the <b>Add Services</b> dialogue. <li>Click the <b>Users or computers</b> button. <li>In the <b>Select Users or Computers</b> dialog, type the name of your database server, and then click <b>OK</b>. <li>You will now see all the available services on your database server. To restrict access to SQL Server, select the <b>MSSQLSvc</b> service, and then click <b>OK</b>. </li></li></li></li></li></li></li></li></li></li>
+  </ol>
+  <h1>Step 3. Implement and Test Protocol Transition</h1>
+  <p>In this step, you implement the code necessary to call the database using the identity of the caller. This example assumes the target database is a SQL Server called DBServer, the database server requires Windows authentication and the required database is the Northwind database.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;To allow access to SQL Server, you must create a SQL Server login for each of your application's end users or for a set of groups that the users belong to, and grant them read access to the Northwind database.<b></b></blockquote>
+  <h2>To implement code that uses the caller's identity </h2>
+  <ol>
+    <li>Define a connection string to the database server in your Web.config file, specifying Windows authentication to the database, as shown in the following example. <div><pre>&lt;configuration xmlns="<a href="http://schemas.microsoft.com/.NetConfiguration/v2.0">http://schemas.microsoft.com/.NetConfiguration/v2.0</a>"&gt;<br />&amp;nbsp; &lt;connectionStrings&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="nwindConnectionString" connectionString=<br />"Data Source=DBServer;Initial Catalog=northwind;Integrated Security=True" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; providerName="System.Data.SqlClient" /&gt;<br />&amp;nbsp; &lt;/connectionStrings&gt;<br />&amp;nbsp; ...<br />&lt;/configuration&gt;  </pre></div><li>Use code similar to the following to impersonate the caller and access the database. <div><pre>Using System.Data.SqlClient;<br />Using System.Security.Principal;<br />...<br />private DataTable CallDatabase()<br />&amp;#123;<br />&amp;nbsp; DataTable dt = new DataTable();<br />&amp;nbsp; WindowsImpersonationContext wic = null;<br />&amp;nbsp; try<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // First, impersonate the original caller<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; wic = ImpersonateEndUser();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Fetch data from the database using the original caller's <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // security context<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; using (SqlConnection conn = new SqlConnection())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; conn.ConnectionString = ConfigurationManager.ConnectionStrings<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#91;"nwindConnectionString"&amp;#93;.ConnectionString;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; conn.Open();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlCommand cmd = new SqlCommand("Select ProductName from Products",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; conn); <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlDataAdapter da = new SqlDataAdapter(cmd);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; da.Fill(dt);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp; &amp;#125;<br />&amp;nbsp; catch<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Do not let the exception propagate higher up the call stack<br />&amp;nbsp; &amp;#125;<br />&amp;nbsp; finally<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Ensure that impersonation is stopped<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if( wic &amp;#33;= null)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; wic.Undo();<br />&amp;nbsp; &amp;#125;<br />&amp;nbsp; return dt;<br />&amp;#125;<br />private WindowsImpersonationContext ImpersonateEndUser()<br />&amp;#123;<br />&amp;nbsp; // Obtain the user name (from forms authentication)<br />&amp;nbsp; string identity = User.Identity.Name;<br />&amp;nbsp; // Convert from domainName\userName format to <a href="mailto:userName&amp;#64;domainName">userName&amp;#64;domainName</a> format<br />&amp;nbsp; // if necessary<br />&amp;nbsp; int slash = identity.IndexOf("\\");<br />&amp;nbsp; if (slash &gt; 0)<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string domain = identity.Substring(0, slash);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string user = identity.Substring(slash &amp;#43; 1);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; identity = user &amp;#43; "&amp;#64;" &amp;#43; domain;<br />&amp;nbsp; &amp;#125;<br />&amp;nbsp; // The WindowsIdentity(string) constructor uses the new<br />&amp;nbsp; // Kerberos S4U extension to get a logon for the user<br />&amp;nbsp; // without a password.<br />&amp;nbsp; WindowsIdentity wi = new WindowsIdentity(identity);<br />&amp;nbsp; return wi.Impersonate();<br />&amp;#125;  </pre></div><li><p>Note the following points about the preceding code: </p><ul><li>The <b>ImpersonateEndUser</b> method uses the user name of the user that has been authenticated using forms authentication. It converts the user name to UPN format (<i>userName</i>&amp;#64;<i>domainName</i>), and passes the UPN to the <b>WindowsIdentity</b> constructor. This constructor returns a Windows token for a domain account without requiring the account's password. <p>By default, an identify-level token is returned. You can only use this to check the user's group membership. You cannot access local or remote resources. However, if you configure protocol transition in Active Directory, you can use the token to access specified services on selected servers as defined by the A2D2 list. </p><li>Your application must authenticate the request by using the user name and password submitted on your forms login page. When your application determines that the user is authentic, you must select an existing Windows account to represent the user on the back end. This example assumes that the user submitted a Windows user name and domain name on the forms login page and supplied a password that the ASP.NET membership provider could verify. This is not the password for the Windows account. The purpose of protocol transition is to avoid exposing Windows passwords in this way. <p>In this example, after the membership system in ASP.NET verifies the user's password, the Web application converts the user's name into the UPN form and constructs a <b>WindowsIdentity</b> object. </p><p>If you try to create a <b>WindowsIdentity</b> object for a user that does not exist, the <b>WindowsIdentity</b> constructor generates a <b>System.Security.SecurityException</b> with the message <b>Logon failure: unknown user name or bad password</b>. </p></li></li></ul></li></li></li>
+  </ol>
+  <h2>To test protocol transition and constrained delegation </h2>
+  <ol>
+    <li>Start your application. <li>Use the <b>CreateUserWizard</b> control on the login page to create two user accounts: one that has a user name that matches a domain account and also has a SQL Server login that authorizes read access to the Northwind database, and one that has a user name that does not match a domain account. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;By default, the ASP.NET login controls automatically create and configure a SQL Express membership database in the \app_data folder to act as your membership database. </blockquote><li>Use the <b>Login</b> control to log in with the user account that does not match a domain account. The login will succeed, but the attempt to impersonate the user will fail and will generate a <b>SecurityException</b> because the user name does not match a domain name. <li>Start the application again. Log in using the user name that does match a domain account name. On the Web server, the ASP.NET application impersonates the original caller and runs using the identity of the caller. The constrained delegation configuration ensures that the same identity is used to access the database. </li></li></li></li>
+  </ol>
+  <h1>Using Constrained Delegation Through Multiple Tiers</h1>
+  <p>You can use constrained delegation to pass the original caller's identity through multiple application tiers, for example from a Web server to an application server to a database server.</p>
+  <h2>Web to Application Server to Database</h2>
+  <p>In the following intranet scenario, the client's computer is on the same domain as the servers and can communicate directly with the domain controller. As a result, the ASP.NET application is configured for Windows authentication and the Web site is configured in IIS for integrated Windows authentication. </p>
+  <p>The Web server accesses middle-tier business logic exposed by a Web service on an application server. This scenario is shown in Figure 2.</p>
+  <p>
+    <img alt="" src="http://msdn2.microsoft.com/en-us/library/ms998355.f01paght00002402(en-us,MSDN.10).gif" border="0" />
+  </p>
+  <p>
+    <b>Figure 2. Use constrained delegation with or without protocol transition through multiple tiers where the original caller is authenticated with Windows authentication.</b>
+  </p>
+  <p>The key features of this scenario are: </p>
+  <ul>
+    <li>The application uses Kerberos authentication to authenticate users. As a result protocol transition is not required. <li>Constrained delegation is required to allow the Web application, while impersonating, to access the HTTP service on the application server. <li>Constrained delegation is required to allow the application server, while impersonating, to access the SQL Server (MSSQLSvc) service on the database server. <li>The Web service on the application server uses Kerberos authentication to authenticate its caller (the Web application), and then impersonates the authenticated caller while accessing the database. </li></li></li></li>
+  </ul>
+  <h2>Web Server Configuration</h2>
+  <p>To configure the Web server, you need to enable Windows authentication within IIS, configure your ASP.NET application for impersonation, and set the <b>Credentials</b> property of the Web service proxy.</p>
+  <h3>To configure your Web server and ASP.NET presentation-tier application </h3>
+  <ol>
+    <li>Use IIS to configure your Web site for Integrated Windows authentication. Make sure anonymous access is disabled. <li>Use the following settings to configure your ASP.NET application to use Windows authentication and impersonation. <div><pre>&lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authentication mode="Windows"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;identity impersonate="true"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&lt;/system.web&gt;  </pre></div><li>Set the <b>Credentials</b> property on the Web service proxy to pass the authenticated user's security context to the Web service, as shown in the following code. <div><pre>// Call the web service passing the original user's credentials<br />DataAccessWS.WebService ws = new DataAccessWS.WebService();<br />ws.Credentials = CredentialCache.DefaultCredentials;<br />&amp;nbsp; <br />ws.GetData();</pre></div></li></li></li>
+  </ol>
+  <h2>Application Server Configuration</h2>
+  <p>To configure the application server, you need to enable Windows authentication within IIS, configure your ASP.NET application for impersonation, and use Windows authentication to access the database.</p>
+  <h3>To configure your application server and Web service </h3>
+  <ol>
+    <li>Use IIS to configure your Web site for Integrated Windows authentication. Make sure anonymous access is disabled. <li>Use the following settings to configure your Web service to use Windows authentication and impersonation. <div><pre>&lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authentication mode="Windows"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;identity impersonate="true"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&lt;/system.web&gt;<br /></pre></div><li>Use Windows authentication to access the database. The impersonation configuration ensures that the authenticated user's credentials are used to access the database. You must ensure that the relevant end user account has a SQL Server login and relevant database permissions. </li></li></li>
+  </ol>
+  <h2>Active Directory Configuration</h2>
+  <p>You must configure Active Directory to allow the Web server application to use constrained delegation to access the Web service on the application server. You must also configure Active Directory to allow the Web service on the application server to access the SQL Server database.</p>
+  <h3>To configure constrained delegation for the Web server </h3>
+  <ol>
+    <li>Use the <b>Active Directory Users and Computers</b> MMC snap in to display the <b>Properties</b> dialog box for either the Web server computer (if you are using the Network Service account to run your ASP.NET Web application), or your custom user account (if you are using a custom account to run your application). <li>On the <b>Delegation</b> tab of the <b>Properties</b> window, select <b>Trust this <i>computer</i>/<i>user</i> for delegation to specified services only</b>. This enables constrained delegation for the services you will select in the bottom pane. <li>After <b>Trust this <i>computer</i>/<i>user</i> for delegation to specified services only</b>, select <b>Use Kerberos only</b>. This restricts the use of constrained delegation to scenarios where the callers are authenticated using Kerberos authentication only. Note that if you are authenticating callers to the Web server using any technique other than Kerberos you must select <b>Use any protocol</b>, and obtain a Windows token for the caller programmatically as explained in the section, "Step 1. Use Protocol Transition to Create a Windows Token for the Original Caller," in this document. <li>Click the <b>Add</b> button. This displays the <b>Add Services</b> dialog box. <li>Click the <b>Users or computers</b> button <li>In the <b>Select Users or Computers</b> dialog box, type the name of your application server, and then click <b>OK.</b><li>You will see all the available services on your application server. Select the <b>HTTP</b> service, and then click <b>OK</b>. </li></li></li></li></li></li></li>
+  </ol>
+  <h3>To configure constrained delegation for the application server</h3>
+  <p>Follow the configuration steps described above for the Web server, except restrict access to the MSSQLSvc service on the database server. </p>
+  <ul>
+    <li>In the <b>Active Directory Users and Computers</b> MMC snap-in, select the application server computer account (if you are using the default Network Service account to run Web service applications).. If your Web service applications run under a custom domain account, select that user account instead. <li>When you configure the services for which constrained delegation is permitted, select the database server computer and the <b>MSSQLSvc</b> service on that computer. </li></li>
+  </ul>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you are using a custom domain account to run your Web application, Web service or SQL Server, be sure that you have created an SPN for the account. For details about creating an SPN, see "Step 2. Configure Your Service or Machine Account."<b></b></blockquote>
+  <h1>Domain Functional Levels</h1>
+  <p>By default, a Windows Server 2003 domain runs in Windows 2000 mixed mode. You must raise the domain functional level to Windows Server 2003 to use constrained delegation and protocol transition. </p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;This change is not reversible.<b></b></blockquote>
+  <h2>To verify the domain functional level </h2>
+  <ol>
+    <li>In the left pane of the <b>Active Directory Users and Computers</b> MMC snap-in, right-click the root node for the domain, and then click <b>Properties</b>. <li>The <b>Properties</b> dialog box displays information including the domain functional level. If the domain is operating as a Windows 2000 mixed domain, you must raise the domain functional level to Windows Server 2003 before you can use constrained delegation. </li></li>
+  </ol>
+  <h2>To raise the domain functional level to Windows Server 2003 </h2>
+  <ol>
+    <li>In the Active Directory Users and Computers MMC snap-in, click the root node titled <b>Active Directory User and Computers &amp;#91;<i>machinename</i>.<i> domain</i>&amp;#93;</b>. <li>On the <b>Action</b> menu, click <b>All Tasks</b>, and then click <b>Raise Domain Functional Level</b>. <li>Select <b>Windows Server 2003</b> from the <b>Select an available domain functional level</b> dropdown box. Click <b>OK</b>. </li></li></li>
+  </ol>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,683 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1004511840" Content_Hash="-76261245">
+  <Metadata>
+    <Id>136e7586-a3a2-406c-a51a-d3ace772bf29</Id>
+    <Id_History>c47d50b7-27d5-47d2-aeaf-165dccf74439,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Perform a Security Code Review</Title>
+    <Category>Security Engineering</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author>J.D. Meier, Srinath Vasireddy, Ashish Babbar, Rico Mariani, and Alex Mackman</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Summary </h1>
+  <p>This How To shows you how to perform security code reviews. This module presents the steps involved in the activity, and techniques for analyzing your results. </p>
+  <h1>Objectives</h1>
+  <p>This How To module will help you to: </p>
+  <ul>
+    <li>Learn how to effectively analyze code for security issues. <li>Identify the type of issues that have security implications for your code. <li>Generate a list of security issues found in the code that should be prioritized for repair. </li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>A properly conducted code review can do more for the security of your code than nearly any other activity. A code review allows you to find and fix a large number of security issues before the code is tested or shipped. In addition, the code review process allows the development team to share security best practices and experience, which can prevent future security issues. </p>
+  <p>Before you conduct your code review, you should understand the patterns of bad code that you want to eliminate. You can then review your code with a clear idea of what you are looking for. If the application you are reviewing has stated security objectives, make sure that you are familiar with them. Some vulnerability types can have elevated priority and others can be out of scope based on your security objectives. </p>
+  <p>Rather than waiting until the end of a project and reviewing everything at one time, review your code each time there is a meaningful change. This allows you to focus on what has changed rather than trying to find all of the security issues at once. </p>
+  <p>If you find that you are spending too much time on any one piece of code or functional area, especially if it is not a high priority, flag it for later review and move on. </p>
+  <h1>How To Use This Module </h1>
+  <p>Use this module to conduct an effective code review for security. When you use this module, keep the following in mind: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Set clear objectives for your review</b>. A focused review is an effective review. Spend time at the beginning of your review to understand the security issues that are possible in the code that you are reviewing. </p>
+      <li>
+        <p>
+          <b>Set a time limit for your review</b>. During your code review, you might find that the details become overwhelming, and you may lose track of the higher-level security vulnerabilities that you are looking for. Set a reasonable time limit on your review, and then optimize your review for this limit. If you find yourself spending too much time in any one area (especially if it is not a high-priority area or objective), flag it for later review and move on. </p>
+        <li>
+          <p>
+            <b>Review incrementally and iteratively</b>. Limit your reviews to small, manageable pieces of code. This allows you to finish quickly, stay focused, and find a larger number of security issues in the code you are examining. </p>
+          <li>
+            <p>
+              <b>Review only for security</b>. The more objectives you have for a review, the less likely you are to meet any of them. Stay focused on the discrete set of security objectives you have for the code review. Focus on performance, reliability, and functionality issues during separate reviews. </p>
+            <li>
+              <p>
+                <b>Know your application architecture</b>. A good understanding of the application's architecture can make your code review more effective. At the least, make sure that you understand the component architecture of the application before you begin. Understanding the dataflow from the user, between components, and to any data repositories can also be very helpful during the review. </p>
+              <li>
+                <p>
+                  <b>Update your coding standards</b>. During successive code reviews, identify key characteristics that appear repeatedly and add these to your development department's coding standards. Over time, this helps raise developer awareness. </p>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Input </h1>
+  <p>At a minimum, the code must be available when you conduct the code review. Additionally, the following can help: </p>
+  <ul>
+    <li>Architecture or component diagrams <li>Data flows <li>Data schemas </li></li></li>
+  </ul>
+  <h1>Output </h1>
+  <p>The output of the code review activity is a set of identified vulnerabilities ready to be prioritized for repair. </p>
+  <h1>Summary of Steps</h1>
+  <p>The security code review activity includes the following steps: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Step 1. Identify security code review objectives.</b> Establish goals and constraints for the review. </p>
+      <li>
+        <p>
+          <b>Step 2. Perform a preliminary scan.</b> Use static analysis to find an initial set of security issues and to improve your understanding of where you will be most likely to find security issues when you review the code more fully. </p>
+        <li>
+          <p>
+            <b>Step 3. Review the code for security issues</b>. Review the code thoroughly with the goal of finding security vulnerabilities that are common to many applications. You can use the results of step 2 to focus your analysis. </p>
+          <li>
+            <p>
+              <b>Step 4. Review for security issues unique to the architecture</b>. Complete a final analysis by looking for security issues that relate to the unique architecture of your application. This step is most important if you have implemented a custom security mechanism or any feature designed specifically to mitigate a known security threat. </p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Step 1. Identify Security Code Review Objectives </h1>
+  <p>The purpose of this step is to set goals and constraints for your code review. While you should not spend too much time setting objectives, do not begin reviewing a large body of code without knowing what you are looking for. While it is possible to conduct a code review without setting goals, this increases the chances of getting overwhelmed by the code and decreases the chances of finding security problems. </p>
+  <p>When you set objectives, you should know both the types of security issues that are common for the application you are reviewing as well as any specific code changes that should be reviewed. For example, when you review a source file for the first time, you may be interested in a subset of the following categories (depending on the functionality of the code under review): </p>
+  <ul>
+    <li>SQL injection <li>Cross-site scripting <li>Input/data validation <li>Authentication <li>Authorization <li>Sensitive data <li>Code access security <li>Exception management <li>Data access <li>Cryptography <li>Unsafe and unmanaged code use <li>Configuration <li>Threading <li>Undocumented public interfaces </li></li></li></li></li></li></li></li></li></li></li></li></li></li>
+  </ul>
+  <p>During a later review, you will most likely be interested in an even smaller subset of these categories based on the changes made since the last review. </p>
+  <p>For an effective security code review, set goals and constraints for the following: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Time</b>. Set a time limit. This helps you to avoid spending too much time on a single issue. Performing multiple, smaller reviews is more effective than one long review. </p>
+      <li>
+        <p />
+        <b>Types of issues</b>. Determine what types of issues you are looking for. For example, consider the following: <ul><li>General issues that affect confidentially, integrity, and availability. <li>Issues related to your application's security quality of service requirements. <li>Issues related to your application's compliance requirements. <li>Issues related to the technologies that your application uses. <li>Issues related to the functionality your application exposes. <li>Issues you found from threat modeling if you have performed this activity. For steps on threat modeling, see <a rel="nofollow" href="http://msdn.com/ThreatModeling" title="http://msdn.com/ThreatModeling">http://msdn.com/ThreatModeling</a>. </li></li></li></li></li></li></ul><li><b>Out of scope items'</b>. Identify what you will not be looking for. Explain why these things are out of scope. For example, it is not important to look for SQL injection issues if your application has no interactions with a database. </li></li>
+    </li>
+  </ul>
+  <h2>Determining Code Review Objectives</h2>
+  <p>To determine the objectives for your review, consider the following questions: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Which common coding errors apply to the code you are reviewing?</b> Create a list of the technologies used in your application. Pay special attention to the architecture to see what other components your application interacts with. Is there a database? Does your component present data on a Web page? Does your component interact with native code? Do users supply input to your component, either directly or through an intermediary? Use this list to help you focus on the set of issues you are interested in searching for. </p>
+      <li>
+        <p>
+          <b>What is the scope of your review?</b> It is important that you know what code you will be reviewing and what you will not' be reviewing. </p>
+        <li>
+          <p>
+            <b>If you have a threat model, which of the identified threats apply to the code you are reviewing?</b> After you determine which threats apply, you can separate the threats into two categories: those for which the risk has been mitigated and those for which the risk has not been mitigated. Make a list of those threats for which the risk has been mitigated. Any countermeasure code you might have written should be included in your security code review. </p>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h2>Example Security Objectives</h2>
+  <p>The following are examples of security code review objectives: </p>
+  <ul>
+    <li>
+      <p>Make sure that all untrusted input to the component is passed to a validation routine before it is used. </p>
+      <li>
+        <p>Check error handling to make sure that exceptions are caught consistently and caught close to their source. </p>
+        <li>
+          <p>Check calculations whose results are used for memory allocation or buffer access for numeric overflow or underflow. </p>
+          <li>
+            <p>Check cryptographic routines to make sure secrets are cleared quickly. </p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>It is better to conduct multiple short reviews on small pieces of code, for example at the time of check-in. If you have a large backlog of code to review, it is even more important to set a time limit on the review. Code reviewing is detailed, tiring work, and it is easy to start making mistakes after many hours of review. Also, without a time limit, you may become engrossed too deeply in the details of a particular implementation. By setting a time limit, you can force yourself to move on to find high-value issues elsewhere. Another useful trick is to perform a code review with a partner. The resulting discussion and extra set of eyes can keep you focused for much longer than you can manage on your own. </p>
+  <p>Focused code reviews are effective code reviews. You should look at the code with specific goals, time limits, and knowledge of the issues you want to uncover. Not only will this substantially increase your chances for success, it will also reduce the amount of time you spend reviewing. </p>
+  <h1>Step 2. Perform Preliminary Scan </h1>
+  <p>In this step, you perform a scan of the code to find an initial set of security issues and to discover hot spots where additional security issues are likely to be discovered in later steps. You may need to perform the following two types of scans: </p>
+  <ul>
+    <li>Automatic scan <li>Manual scan </li></li>
+  </ul>
+  <p>You can combine these scans or you can perform just one of them, depending on your time limits and review objectives. </p>
+  <h2>Automatic Scan </h2>
+  <p>The purpose of an automatic scan is to find security issues that could be missed during a manual review. However, an automatic scan can result in a large number of false positives, and will not find every security issue that you might find in a manual review. </p>
+  <p>You can use a static analysis tool to perform an automatic scan of your code. Use the static analyzer to find a first set of security issues and to improve your understanding of where issues are likely to be discovered manually. Theoretically, anything a static analysis tool finds can be found by manual review as well. However, static analysis tools are unique in that they test the code without knowing or requiring any external states to be set. Because a static analyzer tool does not know what the application or function is intended to do, it will not make assumptions that a developer or code reviewer might make. Static analyzers tend to be good at finding careless code practices, such as missing error handlers, empty catch blocks, integer overflows, and scoping problems. </p>
+  <p>If you do not have access to a static analysis tool, you can perform text searches on your code base: for example, by using the Findstr command-line tool. </p>
+  <p>Note Security issues tend to cluster. If your scan finds a large number of security issues in a particular component or function, then you should carefully examine that area to discover security issues that may have been missed on the first pass. </p>
+  <ul>
+    <li>
+      <p>
+        <b>Managed Code Considerations</b>
+      </p>
+      <p>Managed code takes care of many of the security issues that scanners have been good at finding. In native code, you could scan reasonably accurately for buffer overruns, format string problems, use of potentially dangerous Win32 APIs, memory leaks, and so on. While managed code eliminates some types of security issues, there are still numerous problems that can occur, such as scoping problems, integer overflows, lack of cloning, exception handling, data truncation, lack of null checks, and unchecked values used for memory allocation or buffer access. </p>
+      <li>
+        <p>
+          <b>Limitations of an Automatic Scan</b>
+        </p>
+        <p>Do not expect an automatic scan to do more than locate surface errors. While automatic scanning can supplement a manual review; it cannot replace it. Even the best scanners have contextual problems. They are good at finding security issues that are caused by single lines of code, reasonable at finding security issues that span multiple lines of code in a single function, and generally bad at finding security issues whose scope spans multiple functions. </p>
+        <li>
+          <p>
+            <b>False Positives and False Negatives</b>
+          </p>
+          <p>Due to its programmatically rigorous nature, a static analysis scan may find problems that a manual review will miss. However, these analysis tools frequently find false positives. While these can be frustrating, you can gain a better understanding of the code you are reviewing by reviewing the automated scan results. The review forces you to understand why a false positive is false, which can give you a deeper understanding of the code, including control and dataflow. On the other hand, be careful not to develop a false sense of security if an automated scan shows no security issues in your code. This does not mean that your code is free of security vulnerabilities. </p>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h2>Manual Scan </h2>
+  <p>You should complete a manual scan of your code to better understand the code and to recognize patterns that will assist you in Step 3. This should be a quick scan that takes no more than 10 percent of your total code review time. In particular, you should review with the following questions in mind: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Input data validation</b>. Does the application have an input validation architecture? Is validation performed on the client, on the server, or both? Is there a centralized validation mechanism, or are validation routines spread through the code base? </p>
+      <li>
+        <p>
+          <b>Code that authenticates and authorizes users</b>. Does the application authenticate users? What roles are allowed and how do they interact? Is there custom authentication or authorization code? </p>
+        <li>
+          <p>
+            <b>Error handling code</b>. Is there a consistent error handling architecture? Does the application catch and throw structured exceptions? Are there areas of the code with especially dense or sparse error handling? </p>
+          <li>
+            <p>
+              <b>Complex code</b>. Are there areas of the code that appear especially complex? </p>
+            <li>
+              <p>
+                <b>Cryptography</b>. Does the application use cryptography? </p>
+              <li>
+                <p>
+                  <b>Interop</b>. Does the application use interop to call into native code? </p>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>The result of this scan is a set of areas that deserve further analysis in Step 3. </p>
+  <h1>Step 3. Review Code for Security Issues </h1>
+  <p>In this step, you manually review the code to find security vulnerabilities. You should look for common security vulnerabilities that are not unique to your application's architecture. You do this by tracing those paths through the code that are most likely to reveal security issues. You can use a question-driven approach in conjunction with techniques such as control flow and dataflow analysis. </p>
+  <p>Note: These techniques are most effective when used in combination. </p>
+  <h2>Techniques </h2>
+  <p>Combine the following techniques when you review the code. </p>
+  <ul>
+    <li>
+      <p>
+        <b>Control flow analysis</b>. Control flow analysis is the mechanism used to step through logical conditions in the code. The process is as follows: </p>
+      <ul>
+        <li>
+          <p>Examine a function and determine each branch condition. These can include loops, switch statements, if statements, and try/catch blocks. </p>
+          <li>
+            <p>Understand the conditions under which each block will execute. </p>
+            <li>
+              <p>Move to the next function and repeat. </p>
+            </li>
+          </li>
+        </li>
+      </ul>
+      <li>
+        <p>
+          <b>Dataflow analysis</b>. Dataflow analysis is the mechanism used to trace data from the points of input to the points of output. Because there can be many data flows in an application, use your code review objectives and the flagged areas from Step 2 to focus your work. The process is as follows: </p>
+        <ul>
+          <li>
+            <p>For each input location, determine how much you trust the source of input. When in doubt, you should give it no trust. </p>
+            <li>
+              <p>Trace the flow of data to each possible output. Note any attempts at data validation. </p>
+              <li>
+                <p>Move to the next input and continue. </p>
+              </li>
+            </li>
+          </li>
+        </ul>
+      </li>
+    </li>
+  </ul>
+  <h2>Input and Output </h2>
+  <p>While performing dataflow analysis, review the list of inputs and outputs, and then match this to the code that you need to review. Some common sources and sinks are: </p>
+  <ul>
+    <li>Public interfaces <li>User interface <li>Database interaction <li>Socket interaction <li>File I/O <li>Pipes </li></li></li></li></li></li>
+  </ul>
+  <p>Note: Prioritize any areas where the code crosses trust boundaries; for example, where the code changes trust levels. </p>
+  <h2>Trust Boundaries </h2>
+  <p>It can be difficult to determine how much you trust each input source. Your code should not trust input that comes from outside your component, and your code should fully validate all data. For performance and maintainability reasons, however, this may not always be practical. In general, you can trust code that you are most familiar with or that comes from within your enterprise, and give less trust to code that you are less familiar with. The following is an example of how to think about trust boundaries. </p>
+  <ul>
+    <li>
+      <p>
+        <b>Place high trust in the following:</b>
+      </p>
+      <ul>
+        <li>
+          <p>Input from code you are reviewing inside the component. </p>
+          <li>
+            <p>Input that comes from known good, strongly named, managed assemblies or signed/hashed native libraries. </p>
+            <li>
+              <p>Input from a database that is used only by your component and that contains data which you can prove has been properly validated. </p>
+              <li>
+                <p>Network data that has been signed by a known good source and is protected by IPSec or SSL. </p>
+              </li>
+            </li>
+          </li>
+        </li>
+      </ul>
+      <li>
+        <p>
+          <b>Place medium trust in the following:</b>
+        </p>
+        <ul>
+          <li>
+            <p>Input from known good assemblies or native libraries that have not been strongly named or signed, but are local to your server. </p>
+            <li>
+              <p>Input from a public interface that should only be accessible to trusted users. </p>
+              <li>
+                <p>Input from a user interface component that should only be accessible to trusted users. </p>
+                <li>
+                  <p>Network data that should not be accessible to an untrusted user, such as a segmented LAN internal to your datacenter. </p>
+                </li>
+              </li>
+            </li>
+          </li>
+        </ul>
+        <li>
+          <p>
+            <b>Place low trust in the following:</b>
+          </p>
+          <ul>
+            <li>
+              <p>Input that comes from assemblies or native libraries that have not been strongly named or signed and are located on the client. </p>
+              <li>
+                <p>Input that comes from client code. </p>
+                <li>
+                  <p>Input that comes over the network. </p>
+                  <li>
+                    <p>Input that comes from a file. </p>
+                    <li>
+                      <p>Input that comes from a public interface that is accessible to any user. </p>
+                      <li>
+                        <p>Input that comes from a user interface component that is accessible to any user. </p>
+                        <li>
+                          <p>Input that comes from a database that is shared with other applications. </p>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </ul>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>As you conduct your traces, carefully examine the code to make sure that input validation is performed rigorously on low-trust input and performed adequately on medium-trust input. You should have a set of common validation routines that your application can call as soon as it receives any untrusted data. This gives your application a central validation area that can be updated as new information is discovered. </p>
+  <p>When you perform dataflow analysis, pay attention to areas where the data is parsed and may go to multiple output locations. Also pay attention to intermediary output locations. For example, input can go to a database and then later be placed in Web page content. Trace data back to its source, and assign trust based on the weakest link. </p>
+  <h2>Hotspots Table </h2>
+  <p>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <p>
+              <b>Hotspot</b>
+            </p>
+          </td>
+          <td>
+            <p>
+              <b>What to Look For in Code</b>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>SQL injection</i>
+            </p>
+          </td>
+          <td>
+            <p>A SQL injection attack occurs when untrusted input can modify the semantics of a SQL query in unexpected ways. As you review the code, make sure that the SQL queries are parameterized and that any input used in a SQL query is validated. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Cross-site scripting</i>
+            </p>
+          </td>
+          <td>
+            <p>Cross-site scripting occurs when an attacker manages to inject script code into an application so that script code is echoed back and executed in the security context of the application. This can allow an attacker to steal user information, including forms data and cookies. This vulnerability can be present whenever a Web application echoes unfiltered user input back to Web content. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Data access</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for improper storage of database connection strings and proper use of authentication to the database. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Input/data validation</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for client-side validation that is not backed by server-side validation, poor validation techniques, and reliance on file names or other insecure mechanisms to make security decisions. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Authentication</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for weak passwords, clear-text credentials, overly long sessions, and other common authentication problems. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Authorization</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for failure to limit database access, inadequate separation of privileges, and other common authorization problems. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Sensitive Data</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for mismanagement of sensitive data by disclosing secrets in error messages, code, memory, files, or the network. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Unsafe Code</i>
+            </p>
+          </td>
+          <td>
+            <p>Pay particularly close attention to any code compiled with the <b>/unsafe</b> switch. This code does not have all of the protection that normal managed code has. Look for potential buffer overflows, array out of bound errors, integer underflow and overflow, as well as data truncation errors. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Unmanaged code</i>
+            </p>
+          </td>
+          <td>
+            <p>In addition to the checks performed for unsafe code, also scan unmanaged code for the use of potentially dangerous APIs such as <b>strcpy</b> and <b>strcat</b>.&nbsp;Be sure to review any interop calls as well as the unmanaged code itself to make sure that bad assumptions are not made as execution control passes from managed to unmanaged code. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Hard-coded secrets</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for hard-coded secrets in code by looking for variable names such as "<b>key</b>", "<b>password</b>", "<b>pwd</b>", "<b>secret</b>", "<b>hash</b>", and "<b>salt</b>". </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Poor error handling</i>
+            </p>
+          </td>
+          <td>
+            <p>Look for functions with missing error handlers or empty catch blocks. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Web.config (ASP.NET only)</i>
+            </p>
+          </td>
+          <td>
+            <p>Examine your configuration management settings in the Web.config file to make sure that forms authentication tickets are protected adequately, that the correct algorithms are specified in the <b>machineKey</b> element, and so on. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Code access security</i>
+            </p>
+          </td>
+          <td>
+            <p>Search for the use of asserts, link demands, and <b>allowPartiallyTrustedCallersAttribute</b> (APTCA). </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Code that uses cryptography</i>
+            </p>
+          </td>
+          <td>
+            <p>Check for failure to clear secrets as well as improper use of the cryptography APIs themselves. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Undocumented public interfaces</i>
+            </p>
+          </td>
+          <td>
+            <p>Most undocumented interfaces should not be in your application, and they are almost never given the same level of design and test scrutiny as the rest of the code. </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <i>Threading problems</i>
+            </p>
+          </td>
+          <td>
+            <p>Check for race conditions and deadlocks, especially in static methods and constructors. </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+  </p>
+  <h1>Step 4. Review for Security Issues Unique to the Architecture </h1>
+  <p>In this step, you look at the list of code review objectives, and examine anything that has not yet been reviewed. This step is especially important if your application uses a custom security mechanism or has features to mitigate known security threats. Use this final code review pass to verify the security features that are unique to your application architecture. A question-driven approach produces the best results. Consider the following questions: </p>
+  <ul>
+    <li>
+      <p>
+        <i>Does your architecture include a custom security implementation? </i>
+      </p>
+      <p>A custom security implementation is a great place to look for security issues for these reasons: </p>
+      <ul>
+        <li>
+          <p>It has already been recognized that a security problem exists, which is why the custom security code was written in the first place. </p>
+          <li>
+            <p>Unlike other areas of the product, a functional issue is very likely to result in a security vulnerability. </p>
+          </li>
+        </li>
+      </ul>
+      <li>
+        <p>
+          <i>Are there known threats that have been specifically mitigated?</i>
+        </p>
+        <p>Code that mitigates known threats needs to be carefully reviewed for problems that could be used to circumvent the mitigation. </p>
+        <li>
+          <p>
+            <i>Are there unique roles in the application?</i>
+          </p>
+          <p>The use of roles assumes that there are some users with lower privileges than others. Make sure that there are no problems in the code that could allow one role to assume the privileges of another. </p>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h2>Roles </h2>
+  <p>When you review code that supports multiple user roles, you must understand what each role should be allowed to do. Prepare a roles matrix that specifies privileges in rows and roles in columns. Mark each cell that corresponds to a privilege allowed by a role. (See Table 2 for an example.) </p>
+  <p>After you have completed the matrix, review the code for exceptions to this matrix. Even a well-designed system with clearly drawn roles can be broken by a bad assumption or a logical mistake in the roles implementation. </p>
+  <h2>Role Matrix Example </h2>
+  <p>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <strong>Objects</strong>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Subjects</strong>
+          </td>
+          <td>
+            <em>User Creation</em>
+          </td>
+          <td>
+            <em>Permission Modification</em>
+          </td>
+          <td>
+            <em>Object Creation</em>
+          </td>
+          <td>
+            <em>Object Removal</em>
+          </td>
+          <td>
+            <em>Object Read</em>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em>Admin</em>
+          </td>
+          <td>x</td>
+          <td>x</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <em>Content Creator</em>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>x</td>
+          <td>x</td>
+          <td>x</td>
+        </tr>
+        <tr>
+          <td>
+            <em>Reader</em>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>x</td>
+        </tr>
+        <tr>
+          <td>
+            <em>Anonymous</em>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>x</td>
+        </tr>
+      </tbody>
+    </table>
+  </p>
+  <h1>What to Do Next </h1>
+  <p>After you have completed your code review, do the following: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Prioritize the security issues found</b>. Prioritization should be based on the impact the security issue could have on your customers. Think through the maximum damage potential, and determine which of your customers will be affected. </p>
+      <li>
+        <p>
+          <b>Evaluate the risk of fixing the security issues</b>. Each security issue fixed can introduce a new, unknown security issue. Sometimes the security issue you know is less dangerous than the security issue you don't. </p>
+        <li>
+          <p>
+            <b>Learn from your mistakes</b>. Keep a running dialog with your team about the mistakes made, how they were found, and how they were fixed. Strive to write code that is security issue free. </p>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Code Review Scenarios </h1>
+  <p>There are several strategies for conducting code reviews, including: </p>
+  <ul>
+    <li>
+      <b>Individual Review</b>. This strategy assumes that a single person will review the code. <li><b>Team Review</b>. This strategy assumes that multiple people will review the same code. This can be a highly effective code review strategy, but it requires additional organization to be successful. </li></li>
+  </ul>
+  <p>In either strategy, you can select a reviewer who is familiar or unfamiliar with the code. </p>
+  <p>The advantage of using a reviewer who does not have prior knowledge of the code is that he or she will examine the code with fresh eyes and will be less likely to make assumptions than someone who is more familiar might be. </p>
+  <p>The advantage of using a reviewer with knowledge of the code is that he or she will be able to find subtle errors that require expert familiarity with the application under review. </p>
+  <h1>Team Roles </h1>
+  <p>During a code review, there are a several distinct tasks: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Present the objectives</b>. Describe the application/component purpose and security objectives. </p>
+      <li>
+        <p>
+          <b>Present the code</b>. Walk through the code and describe its use and intent. </p>
+        <li>
+          <p>
+            <b>Review the code</b>. Review the code and find security issues. </p>
+          <li>
+            <p>
+              <b>Take notes</b>. Take notes that describe the security issues found, any open questions, and areas for future investigation. </p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>Typically, the following roles are involved: </p>
+  <ul>
+    <li>
+      <p>
+        <b>Business analyst</b>. The business analyst describes the application purpose and security objectives. He or she is usually responsible for the presenting the objectives from a business standpoint. </p>
+      <li>
+        <p>
+          <b>Architect</b>. The architect describes the application purpose and component architecture. He or she is usually responsible for presenting the objectives from a systems architecture standpoint. </p>
+        <li>
+          <p>
+            <b>Developer</b>. The developer describes code details, reviews the code, and finds security issues. He or she is usually responsible for presenting the code </p>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

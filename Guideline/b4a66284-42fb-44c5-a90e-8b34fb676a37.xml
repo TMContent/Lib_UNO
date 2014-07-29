@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1338715661" Content_Hash="1096437194">
+  <Metadata>
+    <Id>b4a66284-42fb-44c5-a90e-8b34fb676a37</Id>
+    <Id_History>d64280e0-e703-4f31-8348-d10b5bfebf17,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Do Not Rely on StrongNameIdentityPermission to Restrict Full Trust Callers</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you protect your data access code with a link demand for a <b>StrongNameIdentityPermission</b> to restrict the code that can call your code, be aware that this only works for partial trust callers. The link demand will always succeed for full trust callers regardless of the strong name of the calling code.</p>
+  <h1>Why</h1>
+  <p>In .NET 2.0 any fully trusted assembly will satisfy any demand, including a link demand for an identity permission that the assembly does not satisfy. In .NET 1.0 this did not happen automatically. However, a fully trusted assembly could simply call <b>Assembly.Load</b>, supplying as evidence the strong name it wants to satisfy or alternatively it could turn code access security off.</p>
+  <h1>When</h1>
+  <p>This is important guideline and should be followed wehenve developing applications in .NET 2.0</p>
+  <h1>How</h1>
+  <p>The only protection against fully trusted code is to put it in a separate process and run that process with a restricted token so that its limits are enforced by the operating system. This applies whether code marks its interfaces as internal, private, or places link demands for <b>StrongNameIdentityPermission</b> on them.</p>
+  <p>The following code sample shows a method decorated with a link demand for a specific <b>StrongNameIdentityPermission</b>.</p>
+  <pre>using System.Security.Permissions;<br />. . .<br />&#91;StrongNameIdentityPermission(SecurityAction.LinkDemand,<br />                              PublicKey="002...4c6")&#93;<br />public void GetCustomerInfo(int CustId)<br />&#123;&#125;</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

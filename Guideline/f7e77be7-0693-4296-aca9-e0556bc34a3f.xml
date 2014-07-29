@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1898565147" Content_Hash="1556285544">
+  <Metadata>
+    <Id>f7e77be7-0693-4296-aca9-e0556bc34a3f</Id>
+    <Id_History>d3daa426-6af0-44c1-b857-4b13e64e56ca,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Do Not Divulge Exception Details to Clients in Production</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not divulge exception error details to clients in production. Instead develop a fault contract and return it to your client. </p>
+  <h1>Why</h1>
+  <p>By using the FaultContract attribute in a service contract you can specify the possible faults that can occur in your WCF service. This prevents exposing any other exception details to the clients. </p>
+  <h1>How</h1>
+  <p>When exceptions occur, return concise error messages to the client and log specific details on the server. Do not reveal internal system or application details, such as stack traces, SQL statement fragments, and table or database names to the client. Ensure that this type of information is not allowed to propagate to the end user or beyond your current trust boundary. If you expose any detailed exception information to the client, a malicious user could use the system-level diagnostic information to learn about your application and probe for weaknesses to exploit in future attacks.</p>
+  <p>To define a Fault contract, apply the FaultContract attribute directly on a contract operation, specifying the error detailing type as shown below:</p>
+  <pre>[ServiceContract]<br />interface ICalculator<br />{<br />   [OperationContract]<br />   [FaultContract(typeof(DivideByZeroException))]<br />   double Divide(double number1,double number2);<br />}</pre>
+  <p>In the following example, the FaultContract attribute is limited to the Divide method. Only that method can throw that fault and have it propagated to the client. </p>
+  <pre>class MyService : ICalculator<br />{<br />   public double Divide(double number1,double number2)<br />   {<br />      throw new FaultException&lt;DivideByZeroException&gt;(new DivideByZeroException());<br />   }<br />}</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For exceptions reference, see the Exceptions Reference at <a href="http://msdn2.microsoft.com/en-us/library/ms733763.aspx">http://msdn2.microsoft.com/en-us/library/ms733763.aspx</a><li>For exception management Q&A, see the Exception Management section of “WCF 3.5 Questions and Answers “ at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Questions%20and%20Answers%20%28Q%26A%29&referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Questions%20and%20Answers%20%28Q%26A%29&referringTitle=Home</a><a href="http://www.codeplex.com/WCFSecurity/Wiki/View.aspx?title=Questions%20and%20Answers&referringTitle=Home"></a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

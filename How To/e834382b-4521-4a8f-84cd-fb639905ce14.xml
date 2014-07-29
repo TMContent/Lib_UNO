@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="772262201" Content_Hash="1468721963">
+  <Metadata>
+    <Id>e834382b-4521-4a8f-84cd-fb639905ce14</Id>
+    <Id_History>58b5b49d-0bba-4c6d-a78a-9067b3406757,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>How to Test for Network Eavesdropping Bugs</Title>
+    <Category>Networking</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Network Eavesdropping Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<p />
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>
+  </p>
+  <h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>Computer networks</li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Network eavesdropping or network sniffing attacks consist of intercepting network traffic between two target network nodes, and capturing network packets exchanged between nodes.<span>&amp;nbsp; </span>Attackers commonly use this vulnerability to retrieve sensitive information, including users&amp;#8217; passwords. This attack is applicable to different types of environments, including Local Area Networks (LANs) interconnected by hubs or switches, as well as to Wireless Local Area Networks (WLANs). </p>
+  <p>Follow these steps to test for network eavesdropping bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, it is necessary to understand the different attack scenarios related to this bug:</p>
+  <ul>
+    <li>Networks using hubs<li>Switched networks<li>WLAN networks<li>Sniffing packets on the Internet</li></li></li></li>
+  </ul>
+  <h2>
+    <span>
+      <em>Scenario 1: Networks using hubs</em>
+    </span>
+  </h2>
+  <p>Hub networks work by broadcasting every network frame every host connected to the hub. Upon receiving a frame from the hub, each host checks if the frame is addressed to it. If it is, the host processes the frame. If it&amp;#8217;s not, the host ignores the frame.</p>
+  <p>In this scenario, the attacker simply needs to be connected to the same hub as the target host.<span>&amp;nbsp;&amp;nbsp; </span>Then, the attacker starts monitoring network traffic in promiscuous mode, capturing all packets sent to the target host.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>Attacker connects to same hub as one of the target nodes.<li>Attacker executes network monitoring tool in promiscuous mode to capture packets exchanged between hosts.</li></li>
+  </ol>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Scenario 2: Switch-based LANs</em>
+    </span>
+  </h2>
+  <p>Switched networks are different than hub-based networks because they don&amp;#8217;t work on the principle of broadcasts. Instead, the switch sends frames to each of the hosts connected to the switches independently, depending on the recipient. Therefore, an attacker needs an extra condition (besides being connected to the same switch) in order to redirect the network traffic between the switch and the target host through the attacker. A common way to meet this condition is to use an ARP poisoning attack, although other attacks such as DHCP spoofing, port stealing, and DNS spoofing, are also possible.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker connects to the same switch as one of the target nodes.<li>The attacker executes an attack that duplicates/redirects network traffic between switch and target node in the same switch.<li>The attacker uses a network monitoring tool to capture packets exchanged between two hosts.&amp;nbsp;</li></li></li>
+  </ol>
+  <h2>
+    <span>
+      <em>Scenario 3: WLAN networks</em>
+    </span>
+  </h2>
+  <p>Wireless Local Area Networks (WLANs) consist of a set of host computers connected through radio waves to an access point (or base station), which in turn is physically connected to a hub or switch using a traditional wired connection. Wireless networks can either be unprotected, allowing any computer to become part of the network, or encrypted, requiring a key to allow computers to become members of the network.<span>&amp;nbsp; </span><span>&amp;nbsp;&amp;nbsp;</span></p>
+  <p>In this scenario, the attacker follows the same steps of either hub or switch eavesdropping; the only difference is that the attacker must first become part of the network. This is simple if the network is unprotected; the attacker only needs a wireless interface and proximity to the WLAN&amp;#8217;s access point. If the WLAN is encrypted, the attacker must first obtain the network&amp;#8217;s encryption key and become part of the network. Once the attacker is part of the WLAN, he starts getting all packets in promiscuous mode (if the access point is in front of a hub) or executes an additional attack such as ARP poisoning (if the access point is in front of a switch) to complete the attack. Properly configured wireless access points can help to mitigate this attack.</p>
+  <h2>
+    <em>Scenario 4: Sniffing packets on the Internet</em>
+  </h2>
+  <p>Network connections that occur between two nodes that are far from each other need to travel though the Internet. Usually they are sent across<span>&amp;nbsp; </span>a series of routers set up by Internet Service Providers (ISPs). In this scenario, the attacker is not in the same LAN or WLAN as one of the target nodes; now the attacker is somewhere in the Internet, as if he was really tapping the wire. This can be done in two ways. First, an attacker might programmatically exploit flaws in the design of the Border Gateway Protocol (BGP). When a user navigates to a site, a DNS server provides the user&amp;#8217;s computer with an IP for the destination. This IP is then looked up in a BGP table belonging to the user&amp;#8217;s ISP in order to find the best route for the request. However, BGP works based on trust, and allows any ISP or network to advertise a range of IP addresses and routes for an origin IP. An attacker may advertise a malicious route for one of the target nodes&amp;#8217; IPs and thus compromise the router, allowing for an eavesdropping attack &amp;#91;i&amp;#93;. Second, a malicious ISP provider has unlimited access to all of its routers and can read the contents of all connections that pass through its routers. If sensitive data travels unencrypted, a malicious ISP administrator can easily read it.</p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>Next, it is necessary to understand what leads to network eavesdropping attacks and how to protect against them.<b><i><span></span></i></b></p>
+  <h2>
+    <span>
+      <em>Protecting at the network level</em>
+    </span>
+  </h2>
+  <p>The first type of protection available against eavesdropping attacks is done at the network level, and depends on the kind of network.</p>
+  <h2>
+    <span>
+      <em>Hub networks</em>
+    </span>
+  </h2>
+  <p>By design, networks connected via hubs are vulnerable to eavesdropping attacks. As mentioned in the previous section, a LAN composed of hubs works by broadcasting network frames to all of the hosts connected to the hub. Network eavesdropping attacks on hub networks are possible only by sniffing packets in promiscuous mode, which is a mode of operation of a network interface in which the computer reads each packet that passes through it in its entirety, even if it is not addressed to the computer. This way, instead of discarding all packets that are not intended for the host, the attacker is able to read the contents of all packets, even if they are not meant to be read by the attacker&amp;#8217;s computer. To protect against this scenario, administrators must execute network tools such as Anti Sniff (<a href="http://packetstormsecurity.org/sniffers/antisniff/">http://packetstormsecurity.org/sniffers/antisniff/</a>), which detects computers that have an interface in promiscuous mode.</p>
+  <h2>
+    <span>
+      <em>Switched networks</em>
+    </span>
+  </h2>
+  <p>Network eavesdropping attacks on switched networks are caused by different factors, depending on the condition executed to redirect/duplicate the traffic between the switch and the target host on the LAN (see scenario 2 in previous section). These methods include Man-in-the-Middle attacks on switch networks where the attacker&amp;#8217;s purpose is to sniff the network traffic as part of ARP poisoning, DHCP spoofing, DNS spoofing, and port stealing exploits.<span>&amp;nbsp; </span></p>
+  <p>To defend against each scenario, network administrators must address each case differently. For instance, if the attack is executed through ARP poisoning, the cause can be attributed to the design of the ARP protocol allowing remote ARP table modifications. Network administrators may use network inspection tools to defend against ARP poisoning at the network level, and may use tools like Xarp to defend at the host level. For more information see <i>How to - Test for ARP Poisoning Bugs</i>. The same applies to other attacks that require a specific protection based on the attack type. For more information about Man-in-the-Middle attacks on network switches, see <span>&amp;nbsp;</span><i>How to - Test for Man-in-the-Middle Bugs</i>.<i></i></p>
+  <h2>
+    <span>
+      <em>Wireless networks</em>
+    </span>
+  </h2>
+  <p>Wireless networks are vulnerable to attacks for two reasons.<span>&amp;nbsp; </span></p>
+  <p>First, to be vulnerable, a wireless network must allow an attacker to join the network. This happens when the WLAN&amp;#8217;s access point is unprotected/unencrypted and allows anyone to join. To protect against this condition, network administrators must use proper encryption (Wireless Protected Access - or WPA and Wired Equivalent Privacy - or WEP). Since these protocols have fallen target to cryptographic attacks, it is necessary to configure them using large enough keys (at least 128 bits) and strong passwords.</p>
+  <p>Second, in addition to securing access to the WLAN, it is necessary to countermeasure the risk of network eavesdropping attacks by using the defenses listed above, depending on whether the access point is in front of a hub or a switch.<span>&amp;nbsp; </span></p>
+  <h2>
+    <span>
+      <em>BGP attacks</em>
+    </span>
+  </h2>
+  <p>BGP attacks are caused by the nature of the BGP protocol, which allows for unauthenticated updates of BGP tables. To defend against BGP attacks, use techniques such as route filtering and secure BGP (S-BGP). Setting the appropriate router filters prevents against malicious updates, because the router will only allow a predefined set of routes, blocking any malicious route that might be set by an attacker. S-BGP is more secure because it requires strong authentication (based on public-key cryptography) of a router before it performs an update, and because it uses IPSec between connected BGP routers to protect against unauthorized routers. However, for S-BGP to be properly implemented, many ISPs will need to agree to use it in their routers.</p>
+  <h2>
+    <span>
+      <em>Using encryption at the application/configuration level</em>
+    </span>
+  </h2>
+  <p>Developers must complement any of these network-level defenses with proper encryption of sensitive data that travels over the network. If sensitive data is encrypted before being sent over the network, a successful eavesdropping attack will not be sufficient to read it; the attacker will only see ciphertext in the sniffed packets and not the actual sensitive data in plaintext. There are encryption protocols that go hand-in-hand with authentication (ensuring that the recipient is really who he claims to be). For instance, developers should consider using protocols such as TLS/SSL and IPSec for encrypting and authenticating connections, as well as PGP for sending encrypted email messages or sensitive files. It is important that web applications encrypt login requests from their clients before sending these requests to the application. This can be easily be done in frameworks such as ASP .NET by using forms authentication and setting the SSL-required flag. In the same way, web developers can mark cookies SSL-required so that sensitive data doesn&amp;#8217;t travel unencrypted in cookies.</p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you&amp;#8217;ve reviewed all the theoretical aspects of network eavesdropping, it is necessary to execute test cases to check if your network is vulnerable.</p>
+  <h2>
+    <span>
+      <em>Test for network eavesdropping on a LAN composed of hubs</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for network eavesdropping on a LAN composed of hubs:<b><i><span></span></i></b></p>
+  <ol>
+    <li>Connect a computer to the same hub as the target host.<li>Download and install Wireshark<span></span>(<a href="http://www.wireshark.org/download.html">http://www.wireshark.org/download.html</a>).<li>Start Wireshark and start capturing network traffic from the interface corresponding to the hub network.<span>&amp;nbsp; </span>Make sure to start capturing in promiscuous mode.</li></li></li>
+  </ol>
+  <p>Expected results: If the target host is vulnerable, you will see the captured packets sent to and from the target host in Wireshark.&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Test for network eavesdropping on a switched LAN</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for network eavesdropping on a switched LAN:<b><i><span></span></i></b></p>
+  <ol>
+    <li>Connect a computer to the same switch as the target host.<li>Download and install Cain (<a href="http://www.oxid.it/cain.html">http://www.oxid.it/cain.html</a>) and Wireshark<span></span>(<a href="http://www.wireshark.org/download.html">http://www.wireshark.org/download.html</a>).<li>Run Cain. <li>Click <b>Configure</b> in the menu and select the network interface (note that it can be a wireless interface for the next test case).<li>Click the <b>Sniffer</b> tab and then the <b>Hosts</b> sub-tab.<li>Start the sniffer and click the plus (<b>&amp;#43;</b>) sign.<li>Select a range of IPs to scan their MAC addresses (include the target box in the range), and then click <b>OK</b>. Both the gateway&amp;#8217;s and the target host&amp;#8217;s IPs (and their MACs) should appear in the hosts list.<li>Click the <b>ARP poisoning</b> sub-tab.<li>Click on the plus (<b>&amp;#43;</b>) sign and add an ARP route from the victim to the gateway.<li>Start the ARP poisoning attack by pressing the ARP button. As soon as the victim becomes active, its status changes from &amp;#8220;idle&amp;#8221; to &amp;#8220;poisoning.&amp;#8221;<span>&amp;nbsp; </span>The lower pane will begin to show the packets being intercepted.<li>Start Wireshark and start capturing network traffic from the same interface selected in Cain.</li></li></li></li></li></li></li></li></li></li></li>
+  </ol>
+  <p>Expected results: A successful ARP poisoning attack will be visible in both in Cain and Wireshark. In Cain, the lower pane of the Sniffer-&gt;ARP tab shows the packets being sniffed. <span>&amp;nbsp;</span>If the target host is vulnerable, you will see the captured packets sent to and from the target host in Wireshark.</p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Test for network eavesdropping on a WLAN</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for network eavesdropping on a WLAN:<b><i><span></span></i></b></p>
+  <ol>
+    <li>If the WLAN is unprotected/unencrypted, go to step 4.<li>Download a WEP/WAP cracking tool such as Aircrack (<a href="http://www.aircrack-ng.org/doku.php">http://www.aircrack-ng.org/doku.php</a>).<li>Use Aircrack to break encryption and connect to the WLAN.<li>Once in network, follow one of the two test cases above (depending on whether the access point is connected by a switch or a hub).</li></li></li></li>
+  </ol>
+  <p>Expected results: If the WLAN is protected, it should resist to the cryptographic attack in step 3, making it impossible to follow with the eavesdropping attack (step 4). If the network is unprotected, then the eavesdropping attack from step 4 must be checked, depending on the test case scenario (hub vs. switch).</p>
+  <h2>
+    <span>
+      <em>Test for network eavesdropping on a BGP router</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for network eavesdropping on a BGP router:<b><i><span></span></i></b></p>
+  <ol>
+    <li>Log in to computer outside of the LAN/WLAN of two target nodes.<li>Discover the IP of one of the target nodes.<li>Discover the BGP router for one of the target nodes.<li>Send <i>UDPATE</i> BGP packets to the router found in step 2, advertising a false route for the destination IP address (found in step 1) to the computer used for this test.</li></li></li></li>
+  </ol>
+  <p>Expected results: The router is vulnerable if it modifies its BGP tables with the false route advertised in step 4.</p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Network eavesdropping attacks consist of monitoring network traffic between two target nodes.<span>&amp;nbsp; </span>The attack is achieved by joining the network of one of the two target nodes, such as a hub LAN, switched LAN, or WLAN.<span>&amp;nbsp; </span>Once the attacker is in the network, he uses different techniques, depending on the type of network, to start capturing network traffic. For instance, in networks composed of hubs, the attacker just needs to run a network sniffer in promiscuous mode; in switched networks an extra condition, such as an ARP poisoning attack, is required. Wireless networks require the attacker to join the network before executing the attack on the hub or switch behind the access point. If encryption is used on the wireless access point, it would need to be circumvented prior to further testing. <span>&amp;nbsp;</span>All of these variations have different protection methods, depending on the attack type. Testing for them is done with the aid of network attack and monitoring tools.<b><i><span></span></i></b></p>
+  <div>
+    <br />
+  </div>
+  <div>
+    <hr />
+  </div>
+  <p>
+    <span>&amp;#91;i&amp;#93; <strong>Revealed: The Internet's Biggest Security Hole. </strong><a href="http://blog.wired.com/27bstroke6/2008/08/revealed-the-in.html">http://blog.wired.com/27bstroke6/2008/08/revealed-the-in.html</a></span>
+  </p>
+  <div>
+    <p>
+      <em>&amp;nbsp;</em>
+    </p>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

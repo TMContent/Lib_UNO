@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-284564227" Content_Hash="821521008">
+  <Metadata>
+    <Id>e3ee4e97-3922-4835-82a9-38d96ae86444</Id>
+    <Id_History>49b57382-f019-41bb-8b79-2b269c6e3bce,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>View State Is Encrypted If It Does Contain Sensitive Data</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>View State Is Encrypted If It Does Contain Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>If sensitive information must be stored in ViewState, check to ensure it is encrypted</p>
+  <h1>Why</h1>
+  <p>ViewState is protected against tampering by default with an HMAC integrity check.&amp;nbsp; SSL can be used to protect ViewState on the network.&amp;nbsp; However, unless ViewState encryption is used any sensitive data stored in ViewState is vulnerable on the local machine.</p>
+  <h1>How to Check</h1>
+  <p>The easiest way to check if ViewState encryption is turned on is to review the HTML source returned by your application on the client-side and scan for the VIEWSTATE hidden field:</p>
+  <pre>&lt;form name="testForm" method="post" action="viewstate.aspx" id="testForm"&gt;<br />	&lt;input type="hidden" name="__VIEWSTATE"<br /></pre>
+  <p>If ViewState is not encrypted you will see all of the server control properties in plain text.&amp;nbsp; If it is encrypted you will see only encrypted data:</p>
+  <pre>&lt;form name="testForm" method="post" action="viewstate.aspx" id="testForm"&gt;<br />	&lt;input type="hidden" name="__VIEWSTATE" <br />value="dDwxNTgzOTU2ODA7dDw7bDxpPDE+Oz47bDx0PDtsPGk8MT47PjtsPHQ8QDA8cDxwP<br />Gw8UGFnZUNvdW50O18hSXRlbUNvdW50O18hRGF0YVNvdXJjZUl0ZW1Db3VudDtEYXRhS2V5c<br />zs+O2w8aTwxPjtpPDg+O2k8OD47bDw+Oz4+Oz47Ozs7Ozs7OztAMDxAMDxwPGw8SGVhZGVyVG<br />V4dDtEYXRhRmllbGQ7U29ydEV4cHJlc3Npb247UmVhZE9ubHk7PjtsPHB1Yl9pZDtwdWJfaWQ<br />7cHViX2lkO288Zj47Pj47Ozs7PjtAMDxwPGw8SGVhZGVyVGV4dDtEYXRhRmllbGQ7U29ydEV4<br />cHJlc3Npb247UmVhZE9ubHk7PjtsPHB1Yl9uYW1lO3B1Yl9uYW1lO3B1Yl9uYW1lO288Zj47P<br />j47Ozs7PjtAMDxwPGw8SGVhZGVyVGV4dDtEYXRhRmllbGQ7U29ydEV4cHJlc3Npb247UmVhZE<br />9ubHk7PjtsPGNpdHk7Y2l0eTtjaXR5O288Zj47Pj47Ozs7PjtAMDxwPGw8SGVhZGVyVGV4dDt<br />EYXRhRmllbGQ7U29ydEV4cHJlc3Npb247UmVhZE9ubHk7PjtsPHN0YXRlO3N0YXRlO3N0YXR<br />lO288Zj47Pj47Ozs7PjtAMDxwPGw8SGVhZGVyVGV4dDtEYXRhRmllbGQ7U29ydEV4cHJlc3Np<br />b247UmVhZE9ubHk7PjtsPGNvdW50cnk7Y291bnRyeTtjb3VudHJ5O288Zj47Pj47Ozs7Pjs+O<br />z47bDxpPDA+Oz47bDx0PDtsPGk8MT47aTwyPjtpPDM+O2k8ND47aTw1PjtpPDY+O2k8Nz47aT<br />w4Pjs+O2w8dDw7bDxpPDA+O2k8MT47aTwyPjtpPDM+O2k8ND47PjtsPHQ8cDxwPGw8VGV4dDs<br />+O2w8MDczNjs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w8TmV3IE1vb24gQm9va3M7Pj47Pjs7<br />Pjt0PHA8cDxsPFRleHQ7PjtsPEJvc3Rvbjs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w8TUE7P<br />j47Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPFVTQTs+Pjs+Ozs+Oz4+O3Q8O2w8aTwwPjtpPDE+O2<br />k8Mj47aTwzPjtpPDQ+Oz47bDx0PHA8cDxsPFRleHQ7PjtsPDA4Nzc7Pj47Pjs7Pjt0PHA8cD<br />xsPFRleHQ7PjtsPEJpbm5ldCAmIEhhcmRsZXk7Pj47Pjs7Pjt0PH_u56 ?cDxsPFRleHQ7Pjt<br />sPFdhc2hpbmd0b247Pj47Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPERDOz4+Oz47Oz47dDxwPHA8<br />bDxUZXh0Oz47bDxVU0E7Pj47Pjs7Pjs+Pjt0PDtsPGk8MD47aTwxPjtpPDI+O2k8Mz47aTw0P<br />js+O2w8dDxwPHA8bDxUZXh0Oz47bDwxMzg5Oz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDxBbG<br />dvZGF0YSBJbmZvc3lzdGVtczs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w8QmVya2VsZXk7Pj4<br />7Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPENBOz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDxVU0E7<br />Pj47Pjs7Pjs+Pjt0PDtsPGk8MD47aTwxPjtpPDI+O2k8Mz47aTw0Pjs+O2w8dDxwPHA8bDxUZ<br />Xh0Oz47bDwxNjIyOz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDxGaXZlIExha2VzIFB1Ymxpc2<br />hpbmc7Pj47Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPENoaWNhZ287Pj47Pjs7Pjt0PHA8cDxsPFR<br />leHQ7PjtsPElMOz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDxVU0E7Pj47Pjs7Pjs+Pjt0PDts<br />PGk8MD47aTwxPjtpPDI+O2k8Mz47aTw0Pjs+O2w8dDxwPHA8bDxUZXh0Oz47bDwxNzU2Oz4+O<br />z47Oz47dDxwPHA8bDxUZXh0Oz47bDxSYW1vbmEgUHVibGlzaGVyczs+Pjs+Ozs+O3Q8cDxwPG<br />w8VGV4dDs+O2w8RGFsbGFzOz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDxUWDs+Pjs+Ozs+O3Q<br />8cDxwPGw8VGV4dDs+O2w8VVNBOz4+Oz47Oz47Pj47dDw7bDxpPDA+O2k8MT47aTwyPjtpPDM+<br />O2k8ND47PjtsPHQ8cDxwPGw8VGV4dDs+O2w8OTkwMTs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O<br />2w8R0dHJkc7Pj47Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPE3DvG5jaGVuOz4+Oz47Oz47dDxwPH<br />A8bDxUZXh0Oz47bDwmbmJzcFw7Oz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDxHZXJtYW55Oz4<br />+Oz47Oz47Pj47dDw7bDxpPDA+O2k8MT47aTwyPjtpPDM+O2k8ND47PjtsPHQ8cDxwPGw8VGV4<br />dDs+O2w8OTk1Mjs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w8U2Nvb3RuZXkgQm9va3M7Pj47P<br />js7Pjt0PHA8cDxsPFRleHQ7PjtsPE5ldyBZb3JrOz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bD<br />xOWTs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w8VVNBOz4+Oz47Oz47Pj47dDw7bDxpPDA+O2k<br />8MT47aTwyPjtpPDM+O2k8ND47PjtsPHQ8cDxwPGw8VGV4dDs+O2w8OTk5OTs+Pjs+Ozs+O3Q8<br />cDxwPGw8VGV4dDs+O2w8THVjZXJuZSBQdWJsaXNoaW5nOz4+Oz47Oz47dDxwPHA8bDxUZXh0O<br />z47bDxQYXJpczs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w8Jm5ic3BcOzs+Pjs+Ozs+O3Q8cD<br />xwPGw8VGV4dDs+O2w8RnJhbmNlOz4+Oz47Oz47Pj47Pj47Pj47Pj47Pj47Pg==" /&gt;</pre>
+  <h1>How to Fix</h1>
+  <p>To enable ViewState encryption use the following steps:</p>
+  <ol>
+    <li>Check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Always</b>, as shown in the following example. <pre>&lt;pages ... viewStateEncryptionMode="Always" ... /&gt;</pre><p>If you do not want every page to used encrypted ViewState, check that the <b>viewStateEncryptionMode</b> attribute of the <b>&lt;pages&gt;</b> element is set to <b>Auto</b>, as shown in the following example. </p><pre>&lt;pages ... viewStateEncryptionMode="Auto" ... /&gt;   </pre><p>Then, from within your code, call the <b>RegisterRequiresViewStateEncryption</b> method as shown in the following example. </p><pre>Page.RegisterRequiresViewStateEncryption();</pre></li>
+    <li>Specify the encryption algorithm to use on the <b>validation</b> attribute, as shown in the following example. <pre>&lt;machineKey ... validation="AES" ... /&gt;</pre><p>The <b>validation</b> attribute is overloaded and can be used to specify either the hashing algorithm or the encryption algorithm.&amp;nbsp; You can specify either <b>3DES</b> or <b>AES</b>.&amp;nbsp; (ASP.NET 2.0 introduces support for <b>AES</b>.)&amp;nbsp; Because <b>AES</b> offers larger key sizes (128 bits, 192 bits, or 256 bits) than <b>3DES</b> (56 bits), it is considered more secure and should be used.</p></li>
+    <li>Review the <b>decryptionKey</b> attribute of the <b>&lt;machineKey&gt;</b> element: <pre>&lt;machineKey decryptionKey="AutoGenerate,IsolateApps" ... /&gt;</pre><p>Unless your application is installed in a Web farm, you should leave the <b>decryptionKey</b> attribute with the default values shown in the example.</p></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application contains a server-side control that a user will fill in with social security number.&amp;nbsp; The ViewState is protected from tampering by default due to the fact it is integrity checked with HMACS.&amp;nbsp; The application's developer knows that social security information is sensitive so he requires SSL for the form post.&amp;nbsp; This protects the information on the network, however, since ViewState is not encrypted the social security information is visible on the user's computer to anyone who has access to the machine.</p>
+  <h1>Solution Example</h1>An ASP.NET application contains a server-side control that a user will fill in with social security number.&amp;nbsp; The ViewState is protected from tampering by default due to the fact it is integrity checked with HMACS.&amp;nbsp; The application's developer knows that social security information is sensitive so he requires SSL for the form post to protect the information on the network. In order to protect the information on the user's machine ViewState is encrypted using ASP.NET ViewState encryption.<hr /><p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

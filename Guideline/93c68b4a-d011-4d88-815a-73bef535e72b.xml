@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1738046893" Content_Hash="1605759713">
+  <Metadata>
+    <Id>93c68b4a-d011-4d88-815a-73bef535e72b</Id>
+    <Id_History>1a16a930-702d-4049-885a-fa37dc6dc65c,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Use Mirrored Local Accounts If Domain Accounts Are Unavailable</Title>
+    <Category>Data Access</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Mirrored Local Accounts If Domain Accounts Are Unavailable</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority> J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0&amp;nbsp;</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>You should only use mirrored local authentication to connect if domain accounts are unavailable. With mirrored local accounts, you configure two accounts on each server with identical user names and passwords. You must ensure that the passwords remain the same.</p>
+  <h1>Why</h1>
+  <p>Domain accounts offer several advantages over mirrored local accounts:</p>
+  <ul>
+    <li>You can enforce Active Directory password policies. </li>
+    <li>Active Directory provides a single identity store with a single set of management tools. You do not have to maintain a separate set of SQL accounts. </li>
+    <li>No credentials are passed over the network during authentication and you do not need to embed user names and passwords in the database connection string. This means that malicious users or attackers cannot obtain the credentials either by monitoring the network or by viewing connection strings inside your configuration files. </li>
+    <li>You benefit from centralized account management. User accounts are subject to normal account management security policies such as password expiration periods, minimum lengths, and account lockout after multiple invalid logon requests.</li>
+  </ul>
+  <p>For these reasons Mirrored Local Accounts is a less attractive option and should only be pursued if Domain accounts are unavailable.</p>
+  <h1>When</h1>
+  <p>Use Domain accounts whenever possible. If the following conditions exist, you'll need to use mirrored local accounts instead:</p>
+  <ul>
+    <li>Your database client and database server are separated by a firewall which prevents Kerberos or NTLM authentication. </li>
+    <li>Your application server and database server are in separate domains with no trust.</li>
+  </ul>
+  <h1>How</h1>
+  <ol>
+    <li>You still use Windows authentication, but you create two local accounts with the same name and password on the Web server and database server. </li>
+    <li>You configure your application to run using the local account created on the Web server and create a SQL login for the local account on the database server. </li>
+    <li>With this approach, you must ensure that the passwords of the two accounts remain in synchronization. </li>
+  </ol>
+  <p>If you use SQL Authentication you must:</p>
+  <ul>
+    <li>Manage the credentials yourself. </li>
+    <li>Protect the credentials in the connection string. </li>
+    <li>(Potentially) protect the credentials passed over the network from the Web server to the database.</li>
+  </ul>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

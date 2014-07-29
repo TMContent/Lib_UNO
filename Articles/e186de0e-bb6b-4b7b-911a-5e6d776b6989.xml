@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e186de0e-bb6b-4b7b-911a-5e6d776b6989</Id>
+    <Id_History>9d965d93-f39e-42e1-ada0-b4d1a95236be,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Monitor the Use of Privileged Accounts</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Monitor the Use of Privileged Accounts</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Do==
+
+Monitor actions taken by privileged accounts, such as administrator users.
+
+==Why==
+
+Attackers usually want to use privileged accounts, so monitoring privileged accounts provides a lot of valuable information in the event of a successful penetration. This information is also useful for detecting insider attacks.
+
+==How==
+
+Perform the following actions to implement monitoring the use of privileged user accounts:
+
+# **Identify privileged user roles.** Identify the types of privileged user accounts available in your application. Some example are: administrator, root, power user, manager, etc. Make a list of privileged user roles.
+# **Identify functionality unique to privileged users.** For each type of privileged user account, make a list of functionality that this type of account can use that a regular user cannot. Some examples are: adding or removing user accounts, changing passwords for other users, changing application settings, shutting down the application, etc. Make a list of functionality that is unique to privileged users.
+# **Identify code that implements functions unique to privileged users.** Use the list of actions available exclusively to privileged users to identify the functions that implement these actions. Make a list of these functions.
+# **Identify the logging subsystem.** The logging subsystem should provide an API that allows generating log entries from application code. If this API or the logging subsystem don't exist, write them. Make a list of functions that may be used to generate log entries and collect documentation about how to use them.
+# **Implement monitoring of privileged accounts.** Use the list of functions that perform actions unique to privileged accounts to add code that generates log entries to each of those functions. Use the list of functions in the logging subsystem when writing code that generates log entries.]]></Data>
+  </Content>
+</TeamMentor_Article>

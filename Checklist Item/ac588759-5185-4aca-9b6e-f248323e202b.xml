@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1286214864" Content_Hash="-1662419999">
+  <Metadata>
+    <Id>ac588759-5185-4aca-9b6e-f248323e202b</Id>
+    <Id_History>00321a8a-d0b1-4f45-92e8-91d1a130abb3,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>System Clocks Are Synchronized</Title>
+    <Category>Configuration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>System Clocks Are Synchronized</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author>Serge Batchilo, Jason Taylor, Joe Basirico</Author>
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 10.4 <li>PCI DSS Requirement 10.4.a <li>PCI DSS Requirement 10.4.b <li>PCI DSS Requirement 10.4.1.a <li>PCI DSS Requirement 10.4.1.b <li>PCI DSS Requirement 10.4.2.a <li>PCI DSS Requirement 10.4.2.b <li>PCI DSS Requirement 10.4.3</li></li></li></li></li></li></li></li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>All system clocks should be synchronized.</p>
+  <h1>Why</h1>
+  <p>System clocks should be synchronized by internal and external sources so that log time stamps are accurate. This allows logs from multiple sources to be correlated. External time sources may become temporarily unavailable, so at least one internal should also be maintained.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check if system clocks are synchronized in compliance with PCI DSS:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Examine documentation.</strong> Examine the network documentation to make sure it includes procedures for synchronizing system clocks on the network and configuring time related settings. </p>
+      <li>
+        <p>
+          <strong>Verify that NTP is used to synchronize system clocks on the network. </strong>A functional NTP (Network Time Protocol) implementation includes an NTP server and NTP clients deployed on host systems. Windows has an NTP client built-in. Windows Server has an NTP server and an NTP client built-in. Group Policy Objects may be used to tune the accuracy of the Windows NTP client. </p>
+        <li>
+          <p>
+            <strong>Verify that there are both an internal and external time sources.</strong> It is recommended to have one dedicated timeserver, which gets time from an external source, while Windows Server domain controllers are configured to get time from the internal timeserver. Workstations in the domain and other devices should get time information from the Windows Server domain controllers. </p>
+          <li>
+            <p>
+              <strong>Make sure the external time source(s) are explicitly defined.</strong> The recommended time sources are Stratum 1 servers. For a list of Stratum 1 servers, please see the link at the bottom of this page.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to synchronize system clocks in comliance with PCI DSS:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Install a dedicated NTP server.</strong> Configure domain controllers to get time information from the internal NTP server. Configure the workstations and network devices to get time from the internal NTP server. </p>
+      <li>
+        <p>
+          <strong>Configure the time servers.</strong> Choose a Stratum 1 timeserver. Configure the dedicated NTP server to use the external server as a source of time information. Inform the responsible staff that this is the external timeserver to use. </p>
+        <li>
+          <p>
+            <strong>Update documentation. </strong>Document your configuration and include this documentation in the network documentation as the "Time Synchronization Procedures."</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For a list of Stratum 1 Time Servers, please see "Stratum One Time Servers" at&amp;nbsp;<a href="http://support.ntp.org/bin/view/Servers/StratumOneTimeServers">http://support.ntp.org/bin/view/Servers/StratumOneTimeServers</a>. <li>For information about the CertiChron time server, please see "Detailed Analysis of SS10.4 Compliance Requirements" at <a href="http://www.fedtime.net/solutions/PCI_details.html">http://www.fedtime.net/solutions/PCI_details.html</a>. <li>For information about configuring the Windows Time Service with Group Policy Objects, please see "Windows Time Service&amp;nbsp;Group Policy Settings" at <a href="http://technet.microsoft.com/en-us/library/cc773263(WS.10).aspx#w2k3tr_times_tools_vwtt">http://technet.microsoft.com/en-us/library/cc773263(WS.10).aspx#w2k3tr_times_tools_vwtt</a>.</li></li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/5d9e94f6-6d1f-4653-9e88-cb9ce8f0ad18">Synchronize System Clocks</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

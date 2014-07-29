@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1287719914" Content_Hash="570187767">
+  <Metadata>
+    <Id>16485f82-b7cf-4fb6-b785-676715af0c08</Id>
+    <Id_History>0dbfcfb7-813b-4f9b-8a2b-559b0c9ed712,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Restrict All Role Caching Cookies to HTTPS Connections</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Restrict All Role Caching Cookies to HTTPS Connections</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Use the <b>cookieRequireSSL</b> attribute to restrict role caching cookies to HTTPS connections if role caching is being used. </p>
+  <h1>Why</h1>
+  <p>Sending cookies out exclusively over SSL makes it much harder for an attacker to sniff the cookie values off the wire.&amp;nbsp; If an attacker can get a copy of an authorization cookie, they can potentially emulate that role, allowing them to elevate their privilege in the system. </p>
+  <h1>When</h1>
+  <p>All systems which use authorization cookies should use SSL for those cookies if at all possible.&amp;nbsp; Systems which deal with any personally identifiable information or monetary transaction should use SSL in all circumstances without exception. </p>
+  <h1>How</h1>
+  <p>Set the <b>cookieRequireSSL</b> attribute to true to specify that the authorization cookie with the role information should only be returned to the server over HTTPS connections.&amp;nbsp; The following example shows a <b>&lt;roleManager&gt;</b> element configured to protect the authorization cookie. </p>
+  <pre>&lt;roleManager enabled="true"             <br />&amp;#9;cacheRolesInCookie="true"             <br />&amp;#9;cookieName=".ASPROLES"             <br />&amp;#9;cookieTimeout="30"             <br />&amp;#9;cookiePath="/"             <br />&amp;#9;cookieRequireSSL="true"             <br />&amp;#9;cookieSlidingExpiration="true"             <br />&amp;#9;cookieProtection="All"              <br />&amp;#9;createPersistentCookie="false"&gt;<br />&lt;/roleManager&gt;</pre>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/24e081c4-0c62-4c93-a91a-42a96892d74d">Use Role Caching if Role Store Lookups are too Costly</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

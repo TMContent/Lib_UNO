@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1346643955" Content_Hash="353845770">
+  <Metadata>
+    <Id>0acb75be-b539-4d82-8774-b244761f20d6</Id>
+    <Id_History>fe315624-954c-42b5-b1c9-8b38d8b1a987,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>How to Test for Repudiation Bugs</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Repudiation Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>All software applications and services that perform logging</li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Software applications that perform audit logging keep a record of when important actions are executed along with the clients responsible for executing each one of these actions. <span>&amp;nbsp;</span>Repudiation bugs enable attackers to tamper with application audit logs so that the attacker&amp;#8217;s identity is not easily discovered.<span>&amp;nbsp; </span></p>
+  <p>Follow these steps to test for insecure repudiation bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>During this first step it is necessary to understand the different attack scenarios under which repudiation bugs are exploited.<span>&amp;nbsp; </span>Repudiation is a higher level attack meaning that it is commonly achieved by using other attacks including HTTP request tampering, SQL injection, file-system tampering, and command injection.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>The attacker&amp;#8217;s goal, however, always remains the same: covering any hint that might relate the attacker&amp;#8217;s identity with the attack.</p>
+  <h2>
+    <em>Scenario 1: Repudiation through HTTP request tampering</em>
+  </h2>
+  <p>A possible way to repudiate is by exploiting a possible weakness in how web applications do event logging.<span>&amp;nbsp; </span>During this scenario the attacker modifies an HTTP request that executes certain action that merits logging to make it seem as if the action was executed by someone else.<span>&amp;nbsp;&amp;nbsp; </span>For instance, an application might use two parameters in the client-cookies; the first to identify to authenticate its clients before they execute an action and the second for logging purposes.<span>&amp;nbsp;&amp;nbsp; </span>This means that the attacker can tamper with the second cookie parameter to confuse the application into logging an incorrect user name for an action that the attacker executes.<span>&amp;nbsp; </span>This is shown in the following example &amp;#91;i&amp;#93;:</p>
+  <pre>POST <a href="http://someserver/Upload_file.jsp">http://someserver/Upload_file.jsp</a> HTTP/1.1<br />Host: tequila:8443<br />User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.4)&amp;nbsp;&amp;nbsp; <br />Gecko/20070515 Firefox/2.0.0.4<br />Accept: text/xml,application/xml,application/xhtml&amp;#43;xml,text/html;q=0.9,text/plain;q=0.8,image/png,&amp;#42;/&amp;#42;;q=0.5<br />Accept-Language: en-us,en;q=0.5<br />Accept-Charset: ISO-8859-1,utf-8;q=0.7,&amp;#42;;q=0.7<br />Keep-Alive: 300<br />Connection: keep-alive<br />Referer: <a href="http://someserver/uploads.jsp">http://someserver/uploads.jsp</a><br />Cookie: JSESSIONID=EE3BD1E764CD6EED280426128201131C; user=leornardo<br />Content-Type: multipart/form-data; boundary=--------------------------- <br />263152394310685<br />Content-Length: 321<br /></pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>The attacker can use an HTTP proxy tool like <i>Burp proxy</i> or <i>WebScarab</i> to replace the <i>user</i> variable in the cookie and make it look as the file upload came from someone else.</p>
+  <h2>
+    <em>
+    </em>&amp;nbsp;</h2>
+  <h2>
+    <em>Scenario 2: Repudiation through SQL Injection</em>
+  </h2>
+  <p>SQL injection bugs can be exploited for multiple purposes, including repudiation.<span>&amp;nbsp; </span>During this scenario the attacker injects an extra SQL command into a SQL statement to tamper or delete the application log.<span>&amp;nbsp;&amp;nbsp; </span>For instance, a SQL Server application vulnerable to SQL injection can be exploited using an injected batch UDPATE command that modifies the log table as follows:</p>
+  <pre>
+    <span>a'='a';UPDATE log_table SET user = 'some_legitimate_user' where user='attacker'--</span>
+    <span>
+    </span>
+  </pre>
+  <p>Or the attacker can drop the entire log table using the following injection string:<b><span></span></b></p>
+  <pre>
+    <span>a'='a';DROP TABLE log_table--</span>
+    <span>
+    </span>
+  </pre>
+  <p>The attacker can also use SQL injection to tamper or modify log information that is stored outside the database and in the server&amp;#8217;s file system:<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span><b><span></span></b></p>
+  <pre>
+    <span>a'='a';xp_cmdshell 'delete c:\logs\&amp;#42;.&amp;#42;'--</span>
+    <span>
+    </span>
+  </pre>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>&amp;nbsp;</p>
+  <h2>
+    <em>Scenario 3: File system tampering</em>
+  </h2>
+  <p>In many cases, log files exist in the hard drive of the computer hosting the application.<span>&amp;nbsp;&amp;nbsp; </span>Here, the application developers are responsible for storing the log file in a secure location or else a low privileged attacker can access and/or modify the contents of the logs.<span>&amp;nbsp; </span></p>
+  <p>During this attack the attacker must log in to the target computer with low privileges and browse to the folder containing the log file.<span>&amp;nbsp; </span>Then the attacker just opens the file and modifies it at will.</p>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <h2>
+    <em>Scenario 4: Command injection</em>
+  </h2>
+  <p>Another possible repudiation scenario can be executed through command injection.<span>&amp;nbsp;&amp;nbsp; </span>Command injection flaws allow attackers to insert additional shell commands such as Windows <i>del</i> or Unix <i>rm</i> that can be used to tamper with log files.<span>&amp;nbsp; </span>For instance, an attacker might use the following attack string to delete the files from the logs directory:</p>
+  <pre>
+    <span>file.txt&amp;#124;del c:\logs\&amp;#42;.&amp;#42;</span>
+    <span>
+    </span>
+  </pre>
+  <p>If the application is vulnerable to command injection it will execute the injected <i>del</i> command and the attacker will be able to get rid of any information in the log files.<b></b></p>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>During this step you will understand the different causes of repudiation bugs as well as common defenses.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>This will help you look for bugs in code and recognize safe coding practices.</p>
+  <h2>
+    <em>Consistency between authentication and logging</em>
+  </h2>
+  <p>As seen during the first HTTP request tampering scenario, an attacker can take advantage of inconsistencies in the way that an application performs its logging.<span>&amp;nbsp; </span>During this scenario, the attack is possible because the application uses one parameter to perform authentication and a different one to perform logging.<span>&amp;nbsp; </span>To prevent against this kind of variation of repudiation bugs, developers should always use the same reliable data source for both logging and authentication.<span>&amp;nbsp;&amp;nbsp; </span>For example, if they authenticate their clients using the session ID then they must log any actions also based on the session ID.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <h2>
+    <em>File permissions</em>
+  </h2>
+  <p>Another way to execute repudiation attacks is by login in into the target computer where the log files are stored and manually modifying them if access is granted.<span>&amp;nbsp;&amp;nbsp; </span>Access is granted by systems using weak Access Control Lists (ACLs) set on the log files.<span>&amp;nbsp;&amp;nbsp; </span>Weak ACLs allow any logged in user such as a low privileged user or guest to read and modify the contents of log files, making repudiation attacks possible.<span>&amp;nbsp; </span>To protect against this variation developers or application administrators should enforce strong ACLs on log files and run the application using a low-privileged account with strong ACLs. <span>&amp;nbsp;</span>This way only administrators or the actual application will be able to access the audit logs. </p>
+  <h2>
+    <em>Mitigating low level attacks</em>
+  </h2>
+  <p>Two of the scenarios in the previous section are possible only if the application is vulnerable to the other sub-attacks involved (SQL injection and command injection).<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>SQL injection is caused when an application builds SQL queries using unsanitized user input.<span>&amp;nbsp;&amp;nbsp; </span>Web applications construct SQL queries either from variables directly submitted by the client or from permanent stores.<span>&amp;nbsp;&amp;nbsp; </span>In either case, a SQL injection bug occurs if the application fails to sanitize the SQL-related variables before building the query.<span>&amp;nbsp; </span>To protect against SQL injection attacks developers should sanitize all user input against a white list consisting of only valid input constructs.<span>&amp;nbsp; </span>The application must disallow any user input that is not contained in the white list.<span>&amp;nbsp; </span>For more information on SQL injection attacks refer to Team Mentor&amp;#8217;s article <i>How to Test for SQL Injection Bugs.</i></p>
+  <p>Command injection is also a case of a bug caused by non-sanitized user input.<span>&amp;nbsp;&amp;nbsp; </span>A web application that doesn&amp;#8217;t properly check user input for additional or injected commands is vulnerable to command injection and thus to this variation of repudiation attacks.<span>&amp;nbsp; </span>To protect against command injection developers should also use a white list approach.<span>&amp;nbsp; </span>For more information on SQL injection attacks refer to Team Mentor&amp;#8217;s article <i>How to Test for Command Injection Bugs.</i></p>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Step 3: Execute test cases</span>
+  </h1>
+  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of repudiation attacks it is necessary to execute the following test cases to check if your application is vulnerable.</p>
+  <h2>
+    <em>Test for repudiation through HTTP request tampering</em>
+  </h2>
+  <p>Follow these steps to test for repudiation through HTTP request tampering:</p>
+  <ol>
+    <li>Discover an HTTP request that performs an action that is logged and that uses two different parameters for authentication and logging.<li>Download an HTTP proxy such as Burp proxy (<a href="http://portswigger.net/proxy/">http://portswigger.net/proxy/</a>).<li>Execute Burp proxy.<li>Set Internet browser to proxy through Burp proxy.<li>Navigate to page that makes request discovered in step 1.<li>Turn intercept on in Burp proxy.<li>Submit request in web browser.<li>In Burp proxy, modify the request and change the parameter used for logging to another value.<li>Check the application&amp;#8217;s log file entry for the request submitted in step 7.</li></li></li></li></li></li></li></li></li>
+  </ol>
+  <p>Expected results: The application is vulnerable if the log file associates the action for the request submitted in step 7 with the value set in step 8.</p>
+  <h2>
+    <em>
+    </em>&amp;nbsp;</h2>
+  <h2>
+    <em>Test for Repudiation through SQL injection</em>
+  </h2>
+  <p>To test for repudiation bugs using SQL injection you must execute a SQL injection string that will cause the application to drop or modify a table from the database that contains logging information.<span>&amp;nbsp; </span>For instance, you can use any of the following attack strings as seen in the scenarios section:</p>
+  <pre>
+    <span>a'='a';UPDATE log_table SET user = 'some_legitimate_user' where user='attacker'--</span>
+    <span>
+    </span>
+  </pre>
+  <pre>
+    <span>a'='a';DROP TABLE log_table--</span>
+    <span>
+    </span>
+  </pre>
+  <pre>
+    <span>a'='a';xp_cmdshell 'delete c:\logs\&amp;#42;.&amp;#42;'--</span>
+    <span>
+    </span>
+  </pre>
+  <p>Note that this is a destructive form of testing as it will permanently delete log files and database tables.<span>&amp;nbsp; </span>It is not recommended to execute the test cases above in a production environment.</p>
+  <p>To learn how to test for SQL injection bugs, see Team Mentor&amp;#8217;s article <i>How to Test for SQL Injection Bugs.</i></p>
+  <h2>
+    <em>
+    </em>&amp;nbsp;</h2>
+  <h2>
+    <em>Test for Repudiation through file system tampering</em>
+  </h2>
+  <p>Follow these steps to test for repudiation through file system tampering:</p>
+  <ol>
+    <li>Log into target computer (computer storing the logging information) using<span>&amp;nbsp; </span>a low privileged or guest account.<li>Browse to the folder containing the log files.<li>Open a log file and attempt to modify its contents.</li></li></li>
+  </ol>
+  <p>Expected results: The application is vulnerable if it allows modification of its log files using a low privileged account.</p>
+  <p>&amp;nbsp;</p>
+  <h2>Test for Repudiation through command injection</h2>
+  <p>To test for repudiation bugs using command injection, you must execute a command injection string that will cause the application to delete or modify a log file.<span>&amp;nbsp; </span>For instance, you can use any of the following attack strings:</p>
+  <pre>
+    <span>file.txt&amp;#124;del c:\logs\&amp;#42;.&amp;#42;<span>&amp;nbsp; </span><span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+    <span>(Windows)</span>
+    <span>
+    </span>
+  </pre>
+  <pre>
+    <span>file.txt;rm ../logs/&amp;#42;.&amp;#42;<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>(Unix)</span>
+    <span>
+    </span>
+  </pre>
+  <p>Again, it is not recommended to execute the test cases above in a production environment as it will permanently delete files in the log directories.</p>
+  <p>To learn how to test for command injection bugs, see Team Mentor&amp;#8217;s article <i>How to Test for Command Injection Bugs.</i></p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Repudiation is a high level attack that focuses on covering an attacker&amp;#8217;s tracks after executing a malicious action.<span>&amp;nbsp;&amp;nbsp; </span>It is a high level attack as it requires other attacks such as request tampering, SQL injection, insecure storage, and command injection in order to perform it.<span>&amp;nbsp;&amp;nbsp; </span>It is important that, before jumping into executing test cases, you understand the different attack scenarios involved as well as how are they possible and how to protect against them.<span>&amp;nbsp; </span>The test cases consist of executing each sub attack with the goal of deleting or tampering with the files or database tables that the application or system uses for logging purposes.</p>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <div>
+    <br />
+    <hr />
+    <div>
+      <p>&amp;#91;i&amp;#93; <strong>Repudiation Attack</strong>.<span>&amp;nbsp; </span>OWASP. <a href="http://www.owasp.org/index.php/Repudiation_Attack">http://www.owasp.org/index.php/Repudiation_Attack</a></p>
+      <p>
+        <span>&amp;nbsp;</span>
+      </p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

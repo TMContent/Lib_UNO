@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1144580684" Content_Hash="132850360">
+  <Metadata>
+    <Id>e2bd9af2-c735-4bc6-8188-a56cfbf359e6</Id>
+    <Id_History>e55c7c81-d80f-4943-9464-80da64d31fe3,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Luring Attack</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Luring Attack</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <br />
+  <h1>Applies To</h1>
+  <p>All applications and platforms that use and support security based on code identity such as the Code Access Security mechanism available in the Microsoft .NET Framework and similar mechanisms in Java.</p>
+  <h1>Description</h1>
+  <p>The traditional way of building applications so that they run with the current user privileges has helped increase the impact of some attacks. Attacks such as <a href="/article/0cfe0913-550f-4bf5-a66a-71cffdbbcac3">API Hijacking Attack</a> and other attacks that result in escalation of privilege have stemed from the fact that the called module usually assumes the authority of its caller.</p>
+  <p>Java and the .NET Framework provide Code Access Security mechanisms that allow enforcement of security based on <strong>code identity</strong> instead of on the user executing the code. These mechanisms allow developers to write and package code in a fashion that controls the security aspect of their invocation and execution. Using this, a developer can state the minimum security requirements that a calling module must meet before it can execute the protected module. One of the main advantages that this mechanism offers is the fact that mobile code (code downloaded from the internet) will not be able to execute protected modules that already exist on the local machine.</p>
+  <p>In a luring attack, the attacker 'lures' an application component with higher privileges than the attacker's code to do something on its behalf. This happens when a snippet of code with restricted security privileges calls a component with higher privileges into executing restricted operations. Such behavior is usually the result of lack of or insufficient permission checks on the caller of the privileged component. Luring Attacks can also be a result of a privileged library calling malicious code from an untrusted library. </p>
+  <h1>Impact</h1>
+  <ul>
+    <li>Elevation of privilege</li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>
+      <p>
+        <strong>Calling unmanaged modules from protected managed modules.</strong> This can result in escalation of privilege as the calling module may not be able to verify the authenticity of the unmanaged module.</p>
+      <li>
+        <p>
+          <strong>Failure to check the authority of the calling module. </strong>Depending upon the security options selected, the called module may check:</p>
+        <ul>
+          <li>No caller permissions - if no permissions are checked, then this could be used in a luring attack. <li>Permissions granted to the immediate caller of the module - if the module is capable of performing dangerous actions on the machine, an attacker may call another module, which in turn may call the protected module in order to launch a luring attack <li>The permissions granted to every caller in the call-stack - in this case, luring attacks will be prevented.</li></li></li>
+        </ul>
+      </li>
+    </li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>When creating packages or assemblies that could be loaded by malicious code, use platform-supplied techniques to explicitly define the security restrictions of your module. (See Example below) <li>Use LinkDemand or StackWalk techniques in both frameworks to check the permissions on any calling module.</li></li>
+  </ul>
+  <h1>Example</h1>
+  <p>Below is the code for Module P which calls an external module to perform some file operations. The functionality of the external module is beyond the control of Module P.</p>
+  <pre>  public static void doOperationPriv()<br />  &amp;#123;<br />   string dir = &amp;#64;"c:\temp\";<br />   Console.WriteLine("PrivilegedCode: Allowing read-only access to the directory &amp;#123;0&amp;#125;",dir);<br />   //allow read-only access to the current directory only<br />   FileIOPermission read = new FileIOPermission(FileIOPermissionAccess.Read &amp;#124;<br />                                                FileIOPermissionAccess.PathDiscovery, dir);<br /><strong>read.PermitOnly();<br /></strong>   Console.WriteLine("PrivilegedCode: Calling external module for operation on dir &amp;#123;0&amp;#125;",dir);<br />   Operations.doOperation(dir);<br /><strong>FileIOPermission.RevertPermitOnly();<br /></strong>  &amp;#125;</pre>
+  <p>Here, the module explicitly states that it has given up its rights to write to the disk for a short while. Now when the following external module is called:</p>
+  <pre> public class Operations<br /> &amp;#123;<br />  public static void doOperation(string dir)<br />  &amp;#123;<br />   Console.WriteLine("Rogue Utility: Deleting all text files in dir &amp;#123;0&amp;#125;",dir);<br />   DirectoryInfo di = new DirectoryInfo(dir);<br />   // delete each text file in that directory<br />   FileInfo&amp;#91;&amp;#93; fiArr = di.GetFiles("&amp;#42;.txt");</pre>
+  <pre>   foreach (FileInfo fri in fiArr)<br />   &amp;#123;<br />    Console.WriteLine("Rogue Util deleting file: &amp;#123;0&amp;#125;",fri.Name);<br />    fri.Delete();<br />   &amp;#125;<br />  &amp;#125;<br /> &amp;#125;</pre>
+  <p>A security exception will be thrown, since the calling module does not have the permission to delete files from the disk.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://www.onjava.com/pub/a/onjava/2004/01/28/javavsdotnet.html">Java vs. .NET Security - Code Projection and CAS</a>
+      <li>Section on Luring Attacks at <a href="http://msdn.microsoft.com/msdnmag/issues/01/02/CAS/">http://msdn.microsoft.com/msdnmag/issues/01/02/CAS/</a><li>For .NET: <a href="http://msdn2.microsoft.com/en-us/library/aa302424.aspx">Code Access Security in Practice</a></li></li>
+    </li>
+  </ul>
+  <li>
+    <h1>Related Items</h1>
+    <ul>
+      <li>
+        <a href="/article/0cfe0913-550f-4bf5-a66a-71cffdbbcac3">Attack: API Hijacking Attack</a>
+        <li>
+          <a href="/article/98cde44d-25b5-4262-a4f0-aada5fd31318">Attack: Reflection Injection Attack</a>
+          <li>
+            <a href="/article/eaa90597-a420-410b-a7e7-2527dba65649">Attack: Server-Side Code Injection Attack</a>
+            <li>
+              <a href="/article/abeaac3f-0f6f-4a6e-9d96-4b9dd82b5d89">Attack: Trust Relationship Attack</a>
+              <li>
+                <a href="/article/5b6c71b0-cb89-4435-b30e-2fd76347078e">Guideline: Do Not Propagate Exceptions While Impersonating </a>
+                <li>
+                  <a href="/article/fdb65a4c-d979-4ab7-b2fa-b88e908207fe">Guideline: Do Not Use Impersonation Unless Required </a>
+                  <li>
+                    <a href="/article/97dfd32f-deb6-4016-b3ff-24147a959521">Guideline: Do Not Use the LogonUser API </a>
+                    <li>
+                      <a href="/article/fab1733c-61d7-46a8-88c6-2617a643c0d9">Guideline: Use Least Privileged Accounts for Database Access </a>
+                      <li>
+                        <a href="/article/aebb10ce-aeb6-45e5-b159-e2bc76b012bf">Guideline: Use a Least-Privileged Account for Running Applications </a>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </ul>
+  </li>]]></Data>
+  </Content>
+</TeamMentor_Article>

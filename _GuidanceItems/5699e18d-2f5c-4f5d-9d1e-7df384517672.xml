@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>5699e18d-2f5c-4f5d-9d1e-7df384517672</Id>
+    <Id_History>00000000-0000-0000-0000-000000763637,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Check The Origin Attribute of Messages</Title>
+    <Category>Web Messaging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Check The Origin Attribute of Messages</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Use the //event.origin// property to ensure that messages are coming from a trusted domain.
+
+==Why==
+
+Usually, data needs to be validated on the server side. However, HTML5 applications shift some of the application logic to the client-side, which places some of the data-validation responsibility on the client-side. Check the //event.origin// property of incoming events to prevent attackers from sending malicious data to your application. If the origin property of incoming messages is not validated, an attacker might be able to cause damage such as making the application display incorrect information, for example, an incorrect balance statement or invoice data.
+
+==How==
+
+To use the //event.origin// property to ensure that messages are coming from a trusted domain:
+
+# **Identify code that receives messages from the server.** Search application code for all references to the //addEventListener// method. Create a spreadsheet to list all code that receives messages from the server.
+# **Define trusted domains.** In the spreadsheet, for each piece of code that uses //addEventListener//, add information about domains that are authorized to send messages to the application. If these domains might change after the application is deployed, it may be prudent to include a configurable option in the application to choose trusted domains, or to add logic that will calculate trusted domains based on the environment. Add all of this information to the spreadsheet.
+# **Add code that validates the origin of messages.** For each piece of code that receives messages from the server, add code that validates the //event.origin// property to match the trusted domain(s) listed in the spreadsheet. If it is necessary to calculate the trusted domain(s) based on data available at run-time, or to make choosing the trusted domain(s) a configurable option in the application, add the code for doing this as well.
+
+==Additional Resources==
+
+* For more information about validating //event.origin//, see https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
+
+==Web Messaging Guidelines==
+
+* [[00000000-0000-0000-0000-00000012aada|Do Not Evaluate Messages as Code]]
+* [[00000000-0000-0000-0000-00000010eb47|Use element.textContent to Assign Values to DOM Elements]]
+* [[00000000-0000-0000-0000-00000076ad87|Explicitly State the Expected Origin with postMessage]]
+* [[00000000-0000-0000-0000-0000006ab8ac|Validate Data Received by Event Handlers]]
+* [[00000000-0000-0000-0000-00000085babd|Validate the Origin Attribute Against the FQDN]]
+* [[00000000-0000-0000-0000-000000763637|Check The Origin Attribute of Messages]]
+
+==Web Messaging Checklist Items==
+
+* [[00000000-0000-0000-0000-0000008e9b8f|Messages Are Not Evaluated as Code]]
+* [[00000000-0000-0000-0000-00000060fefb|Element.textContent Is Used to Assign Values to DOM Elements]]
+* [[00000000-0000-0000-0000-0000004a4216|Expected Origin Is Explicitly Stated with postMessage]]
+* [[967c9b95-2319-4741-a6fd-1b4bcdf3b636|Data Received by Event Handlers Is Validated]]
+* [[16628f7f-e17a-4bd1-838a-011736bf0995|The Origin Attribute Is Validated Against the FQDN]]
+* [[f103974e-3a42-4837-b04b-7da7e87c41ec|The Origin Attribute of Messages Is Checked]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e2144b7e-fbc8-4804-9972-a2bd9325cd53</Id>
+    <Id_History>452facd6-db01-43b9-aac4-b9f177f1fab0,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Weak Keystore Protection Attack</Title>
+    <Category>Encryption</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Any</Technology>
+    <Type>Attack</Type>
+    <DirectLink>Weak Keystore Protection Attack</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <p>Applications using cryptography.</p>
+  <h1>Description</h1>
+  <p>A keystore is a secure location on disk or in memory that can be used to store cryptographic keys or trusted certificates. Typically, these keys are bound to the machine and only available to a certain application. If the application uses a weak keystore, it may be possible to recover the keys and certificates from the keystore without proper credentials.</p>
+  <h1>Impact</h1>
+  <ul>
+    <li>
+      <strong>Information disclosure:</strong>&amp;nbsp;The attacker can gain access to the keys used by the application, allowing him to decrypt data the application attempts to protect with encryption, and to spoof the application to itself or other systems which trust data encrypted with those keys.</li>
+    <li>
+      <strong>Elevation of privilege:</strong>&amp;nbsp;The attacker may also be able to add new keys to the keystore or modify existing ones. This can result in the application trusting keys controlled by the attacker for sensitive operations or communicating with other systems.</li>
+  </ul>
+  <h1>Vulnerabilities</h1>
+  <ul>
+    <li>
+      <strong>Using a weak keystore:</strong>&amp;nbsp;Many operating environments provide a variety of keystores, some of which exist only for legacy reasons. Using an older version of a keystore or a poorly implemented third party keystore is likely to result in a keystore compromise.</li>
+    <li>
+      <strong>Improperly configuring a strong keystore:</strong>&amp;nbsp;Many keystores support a variety of configuration options which allow for a wide range of security choices. Understanding the properties of your keystore is essential to using it securely.</li>
+    <li>
+      <strong>Implementing a custom or homegrown keystore:</strong>&amp;nbsp;Strong keystores are very tricky to write and require support from the operating environment. Attempting to write one should be considered on the same level as implementing a custom encryption algorithm or protocol, and should be avoided.</li>
+    <li>
+      <strong>Poor key handling:</strong>&amp;nbsp;If the application doesn't properly manages keys when it adds them to the store or reads them out from the store for use, both key compromise and key disclosure are possible, even if the keystore itself is strong.</li>
+  </ul>
+  <h1>Countermeasures</h1>
+  <ul>
+    <li>
+      <p>
+        <strong>Use a strong keystore:</strong>&amp;nbsp;Which key store to use will vary by your platform. In Scala, use the&amp;nbsp;<font face="Courier New">KeyStore</font>&amp;nbsp;class. Ensure that you are using the current version of the keystore for your platform, including any patches.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Configure your keystore correctly:</strong> Know how to properly configure the keystore in your environment. Ensure that any ACLs on the keystore are locked down as tightly as possible while still allowing your system to function. For instance, after the initial install, it is unlikely that your application will need rights to add keys to the keystore, nor rights to change the permissions on the keystore. If possible, make sure the application gives these up after installation. And, if possible, ensure that all cryptographic operations occur within the scope of the protected keystore, instead of manually exporting keys from the store or reading the bits out. If you can do this and you can lock your key store down even further, ensure that these operations cannot be performed on the keystore. If you have a choice of keys or algorithms used to protect keys in the key store, ensure that they are appropriately strong.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure Proper Key Handling:</strong>&amp;nbsp;Handle your key material very carefully. Place keys in the keystore as soon as possible and read them out as late as possible. Do not leave keys in memory when you do not need them, and ensure that the memory into which you load them is properly zeroed out. Be careful with immutable objects and garbage collection when handling key data. Under no circumstances should cleartext keys be written out to disk; among other things, make sure that you pin memory with sensitive data so that it will not be written out to swap.</p>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Related Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3ebe4394-e2f3-4f73-9c9a-b3206997836b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Hash and Salt Passwords for Storage</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3ebe4394-e2f3-4f73-9c9a-b3206997836b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Hash and Salt Passwords</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="1d36a6e8-fcbb-4205-8d3a-b2366e2f9f78" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Strong Symmetric Encryption</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="7e5f0d99-7f46-4c7f-a3cd-10e3d9f904bb" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Strong Asymmetric Encryption</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="85b85b5f-4aec-452e-9474-2c420922baa8" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Encrypt Off-site Backups</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Related Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="8acdd7d4-a3ac-489b-9de7-95e76f9aac41" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Threats to Data Are Considered</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ab9a7b0e-47d7-4746-b5dc-a8a9c0181fee" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Passwords Are Hashed and Salted for Storage</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ab9a7b0e-47d7-4746-b5dc-a8a9c0181fee" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Passwords Are Hashed and Salted</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="fc8f700d-be5f-492d-9dc1-560bcdbe7c5d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Symmetric Encryption Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="d3d5c2de-fd8a-4e85-8157-bdd39d1c8b07" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Asymmetric Encryption Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="4356770d-fff8-41eb-ae3f-32318bc05da1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Off-site Backups Are Encrypted</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

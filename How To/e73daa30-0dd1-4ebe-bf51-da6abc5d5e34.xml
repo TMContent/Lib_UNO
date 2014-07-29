@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-800150611" Content_Hash="1861428999">
+  <Metadata>
+    <Id>e73daa30-0dd1-4ebe-bf51-da6abc5d5e34</Id>
+    <Id_History>a2bc373b-9976-4438-9628-bf3a369616d5,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Validate Data Contracts with Message Inspectors Using Schemas</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Validate Data Contracts with Message Inspectors Using Schemas</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Use the following steps to validate data contracts passed to operations in WCF</p>
+  <ol>
+    <li>Create a message inspector to perform schema validation. 
+<li>Create a schema file to validate the fields of the data contract with facets in the schema file. </li></li>
+  </ol>
+  <p>See the following example in which the CustomerData complex type is validated using CustomerN and CustIDLimitor. This example limits integer to have a value no greater than 5 and the string can be no longer than 5 characters.</p>
+  <pre>&lt;?xml version="1.0" encoding="utf-8"?&gt;<br />&lt;xs:schema elementFormDefault="qualified" targetNamespace="<a href="http://Microsoft.PatternPractices.WCFGuide">http://Microsoft.PatternPractices.WCFGuide</a>" xmlns:xs="<a href="http://www.w3.org/2001/XMLSchema">http://www.w3.org/2001/XMLSchema</a>" xmlns:tns="<a href="http://Microsoft.PatternPractices.WCFGuide">http://Microsoft.PatternPractices.WCFGuide</a>"&gt;<br />  &lt;xs:element name="GetData"&gt;<br />    &lt;xs:complexType&gt;<br />      &lt;xs:sequence&gt;<br />        &lt;xs:element minOccurs="1" name="CustomerInfo" nillable="false" type="tns:CustomerData" /&gt;<br />      &lt;/xs:sequence&gt;<br />    &lt;/xs:complexType&gt;<br />  &lt;/xs:element&gt;<br />  &lt;xs:complexType name="CustomerData"&gt;<br />    &lt;xs:sequence&gt;<br />      &lt;xs:element name="CustomerID" type="tns:CustIDLimitor"&gt;<br />      &lt;/xs:element&gt;<br />      &lt;xs:element name="text" type="tns:CustomerN"&gt;<br />      &lt;/xs:element&gt;<br />    &lt;/xs:sequence&gt;<br />  &lt;/xs:complexType&gt;<br />  &lt;xs:simpleType name="CustomerN"&gt;<br />    &lt;xs:restriction base="xs:string"&gt;<br />      &lt;xs:minLength value="1" /&gt;<br />      &lt;xs:maxLength value="5" /&gt;<br />    &lt;/xs:restriction&gt;<br />  &lt;/xs:simpleType&gt;<br />  &lt;xs:simpleType name="CustIDLimitor"&gt;<br />    &lt;xs:restriction base="xs:int"&gt;<br />      &lt;xs:minInclusive value="1" /&gt;<br />      &lt;xs:maxInclusive value="5" /&gt;<br />    &lt;/xs:restriction&gt;<br />  &lt;/xs:simpleType&gt;<br />  &lt;xs:element name="GetDataResponse"&gt;<br />    &lt;xs:complexType&gt;<br />      &lt;xs:sequence&gt;<br />        &lt;xs:element minOccurs="1" name="GetDataResult" nillable="false" type="tns:CustomerData" /&gt;<br />      &lt;/xs:sequence&gt;<br />    &lt;/xs:complexType&gt;<br />  &lt;/xs:element&gt;<br />&lt;/xs:schema&gt;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see “Message Inspectors” at <a href="http://msdn.microsoft.com/en-us/library/aa717047.aspx">http://msdn.microsoft.com/en-us/library/aa717047.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="909351519" Content_Hash="1022975323">
+  <Metadata>
+    <Id>e12296cf-5330-4f20-b28e-6cae767a0925</Id>
+    <Id_History>4c14cec5-2f6c-41e6-8f4e-e6135dd2b745,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Protect Against Format String Problems</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Protect Against Format String Problems</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>C++</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Do not pass user input or any other external untrusted input to a printf statement or any other statement that takes a format string.</p>
+  <h1>Why</h1>
+  <p>C and C&amp;#43;&amp;#43; use string functions, like printf(), that allow users to pass a format for the input string. Attackers can manipulate the input parameters passed to these functions to make the function work differently. Attackers can use format string bugs to overwrite parts of the stack, corrupt memory, and crash the system. They can use this vulnerability to execute different kind of attacks such as elevation of privileges, authentication bypass, information disclosure, and denial of services.</p>
+  <h1>When</h1>
+  <p>Guard against format string problems whenever a dangerous string manipulation function is used (see list below) or any other function that accepts a format string. </p>
+  <h1>How</h1>
+  <p>Do not allow user data to pass directly to a vulnerable function. This is especially dangerous if your code does not already define the format of the string since the attacker then has free reign add format characters to their input that can be used to directly read or manipulate memory. The following Win32 APIs accept format strings and can be vulnerable to format string attacks:</p>
+  <li>printf <li>wprintf <li>sprintf <li>swprintf <li>fprintf <li>fwprintf <li>vprintf <li>scanf <li>fscanf <li>sscanf <li>fwscanf <li>wscanf <li>swscanf <li>snprintf<p>The following functions can be used as safer alternatives:</p><li>StringCbPrintf <li>StringCbPrintfEx <li>StringCchPrintf&amp;nbsp;<h1>Problem Example</h1><p>The following code demonstrates the simplest example of a format string vulnerability. In this case an attacker could add their own format characters such as &amp;#37;n or &amp;#37;s to attack your application.</p><pre>int func (char &amp;#42; buffer)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; printf(buffer);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return 0;<br />&amp;#125;</pre><p>In the following example an attacker could input a formatted string such as&amp;nbsp;"&amp;#37;.30dAAAAAAAAAAAAAAAA" to cause a&amp;nbsp;buffer overflow in the code.</p><pre>void func(char &amp;#42; input) <br />&amp;#123;&amp;nbsp;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;char&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; buffer&amp;#91;16&amp;#93;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; char&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; message&amp;#91;16&amp;#93;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; sprintf (buffer, "Name: &amp;#37;.8s", input);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; sprintf (message, buffer);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; printf(message);&amp;nbsp;<br />&amp;#125;&amp;nbsp;</pre><h1>Solution Example</h1><p>You should not pass user input to a printf function, however if it is necessary ensure that your code is supplying the format string instead of the user input. In the following code, the printf statement uses &amp;#37;s so that the input is interpreted as a string.</p><pre>int func (char &amp;#42; buffer)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; printf("&amp;#37;s", buffer);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return 0;<br />&amp;#125;</pre></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li>]]></Data>
+  </Content>
+</TeamMentor_Article>

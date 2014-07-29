@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b1096bd0-c215-4d3c-b5ed-c864996869b8</Id>
+    <Id_History>679e37ba-e939-4798-83fc-0056af42426e,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Data Is Not Concatenated Into XSL Stylesheets</Title>
+    <Category>Encoding</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Data Is Not Concatenated Into XSL Stylesheets</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Check For==
+
+Verify that user data is not concatenated into XSL stylesheets.
+
+==Why==
+
+Concatenating user data into XSL stylesheets results in XSLT injection vulnerabilities. It is possible to encode data properly and then safely insert it into XSL stylesheets, if that is really necessary. For most realistic applications, placing user data into XSL stylesheets should not be necessary, so the safest thing to do is to remove the code that does it.
+
+==How to Check==
+
+To verify that user data is not concatenated into XSL stylesheets, 
+
+# **Find code that creates or modifies XSL stylesheets.** Review application code and make a spreadsheet of all code that creates or modifies XSL stylesheets.
+# **Verify that user data is not concatenated into XSL stylesheets.** Examine each piece of code that creates XSL stylesheets and make sure that user data is never concatenated into XSL stylesheets.
+
+
+==How to Fix==
+
+To remove code that concatenates untrusted data into XSL stylesheets:
+
+# **Find code that concatenates user data into XSL stylesheets.** Make a spreadsheet of all the code that concatenates user data into XSL stylesheets. This is a very rare scenario, so this code should be easy to find if your application is doing this.
+# **Remove code that concatenates user data into XSL stylesheets.** Remove code that concatenates user data into XSL stylesheets. It should really be possible to implement most applications without including user data in XSL stylesheets, so you should be able to just remove the concatenation code and perhaps implement the application some other way. If it is absolutely necessary to include user data in XSL stylesheets, then the data must first be encoded properly. Make sure to use XML encoding functions that are known to be reliable for this purpose, such as htmlentities() with the ENT_XML1 flag set.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

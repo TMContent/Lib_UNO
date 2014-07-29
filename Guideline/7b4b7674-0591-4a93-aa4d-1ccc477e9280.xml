@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-66168091" Content_Hash="1042610936">
+  <Metadata>
+    <Id>7b4b7674-0591-4a93-aa4d-1ccc477e9280</Id>
+    <Id_History>7187c555-cd3a-4ce6-8043-06c02ae5fa0d,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Use SSL to Protect User Credentials And Authentication Cookies</Title>
+    <Category>Forms Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use SSL to Protect User Credentials And Authentication Cookies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use Secure Sockets Layer (SSL) to protect the authentication credentials and authentication cookies passed between browser and server. </p>
+  <h1>Why</h1>
+  <p>By using SSL, you make it much more difficult for an attacker to monitor the network connection and obtain authentication credentials and capture authentication cookies to gain spoofed access to your application. </p>
+  <p>SSL also can improve user trust in your application as it authenticates the server to the client, thus proving the end point for communications.</p>
+  <h1>When</h1>
+  <p>SSL should be used for forms based authentication. </p>
+  <p>If you cannot use SSL, reduce the session lifetime with the timeout attribute on the forms element.</p>
+  <h1>How</h1>
+  <p>
+    <b>Restrict the authentication cookie to HTTPS connections</b>
+  </p>
+  <p>Cookies support a "secure" property that determines whether or not browsers should send the cookie back to the server. With the secure property set, the cookie is sent by the browser only to a secure page that is requested using an HTTPS URL.</p>
+  <p>Set the secure property by using <b>requireSSL="true"</b> on the <b>&lt;forms&gt;</b> element as follows:</p>
+  <pre>&lt;forms loginUrl="Secure\Login.aspx"<br />       requireSSL="true" ... /&gt;</pre>
+  <p>&amp;nbsp;</p>
+  <p>
+    <b>Encrypt the cookie and check its integrity</b>
+  </p>
+  <p>Encrypt the cookie and check its integrity, even if you are using SSL. This prevents an attacker from viewing or modifying the cookie if he or she manages to steal it through a XSS exploit. In this event, the attacker can still use the cookie to gain access to your application. The best way to mitigate this risk is to implement the appropriate countermeasures to prevent XSS attacks (described under "Cross-Site Scripting" earlier in this chapter), and limit the cookie lifetime. <br /></p>
+  <p>A secure &lt;<b>forms</b>&gt; element configuration is shown here:</p>
+  <pre>&lt;forms loginUrl="Secure\Login.aspx"<br />       protection="All"<br />       requireSSL="true"<br />       timeout="00:30:00" <br />       slidingExpiration="true"<br />       name="YourAppName"<br />       path="/Secure" /&gt;</pre>
+  <p />
+  <br />
+  <p />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-766116240" Content_Hash="-2042092156">
+  <Metadata>
+    <Id>8553fda4-6b55-4ca0-b022-20feefda9b3a</Id>
+    <Id_History>978d8ea0-db10-4c63-866f-43374dcbc4f0,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Restrict Application Access to the Database</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ADO.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Restrict Application Access to the Database</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Chaitanya Bijwe</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ADO.NET 2.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Your application should connect to the database by using a least-privileged account. With Windows authentication, use a least-privileged account with limited operating system permissions and limited ability to access Windows resources. Regardless of the authentication mechanism, restrict the account's permissions in the database.</p>
+  <h1>Why</h1>
+  <p>This limits the damage that can be done in the event of a SQL injection attack or in the event of an attacker obtaining your account's credentials.</p>
+  <h1>When</h1>
+  <p>Regardless of authentication mechanism, always restrict the account's permissions in the database.&amp;nbsp;An account should have the minimum privileges necessary&amp;nbsp;to satisfy the application's operating constraints.</p>
+  <h1>How</h1>
+  <p>Use the following process to limit permissions in the database: </p>
+  <ol>
+    <li>Create a SQL Server login for the account. </li>
+    <li>Map the login to a database user in the required database. </li>
+    <li>Place the database user in a database role. </li>
+    <li>Grant the database role limited permissions to only those stored procedures or tables that your application needs to access.</li>
+  </ol>
+  <p>Unless there are specific reasons otherwise, the application should not be authorized to perform create, retrieve, update, and destroy/delete operations directly on any table. Instead, limit access to selected stored procedures only. If you must grant table access, grant the minimum access that the application requires.</p>
+  <p>By using a database role, you avoid granting permissions directly to a database user. This isolates you from potential changes to the database user name. For example, if you change the database user name, you can simply add the new user to the database role and remove the existing one.</p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

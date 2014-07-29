@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e1b208f4-f0e2-4b8e-8a8e-a3e61f31dc07</Id>
+    <Id_History>ab9a7b0e-47d7-4746-b5dc-a8a9c0181fee,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Passwords are Stored Securely</Title>
+    <Category>Cryptographic Storage</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Passwords are Stored Securely</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+</p>
+  <h1>What to Check For</h1>
+  <p>Verify that passwords are hashed and salted for storage.</p>
+  <h1>Why</h1>
+  <p>Hashing passwords makes it harder for an attacker to compromise them. Salting the hash exponentially increases the computational resources required for brute-forcing the stored passwords.</p>
+  <h1>How to Check</h1>
+  <p>To verify that passwords are hashed and salted for storage:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify password handling functionality.</strong>&amp;nbsp;Find code that handles and stores passwords.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Review password handling code.</strong>&amp;nbsp;Verify that the code that stores passwords hashes and salts them for storage. If framework or third-party APIs are used to encode passwords for storage, verify that the APIs hash and salt passwords.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that passwords are hashed multiple times.&amp;nbsp;</strong>It is recommended to hash passwords multiple times, because modern computers can brute-force many hashing algorithms very quickly.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Optional) Identify password storage.</strong>&amp;nbsp;Find where and how passwords are stored.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Optional) Examine password storage.</strong>&amp;nbsp;Examine the contents of password storage on a deployed application. Verify that stored passwords are hashed and salted.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To hash and salt passwords:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify password handling functionality.</strong>&amp;nbsp;Find code that handles and stores passwords. It may be the case that the framework is taking care of it completely and you don't have to implement low level password storage of your own.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify password storage capabilities offered by the framework.</strong>&amp;nbsp;Many frameworks offer a&amp;nbsp;<em>PasswordEncoder</em>&amp;nbsp;class, or some variation of it. This class can be used to hash and salt passwords for storage.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Choose password storage functionality.</strong>&amp;nbsp;Use the framework-provided implementation, if available. Choose a third party library or write your own, if necessary.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the chosen password hashing and salting mechanism.</strong>&amp;nbsp;Use the chosen API to salt and hash passwords in code that stores passwords. It is recommended to hash passwords multiple times, because modern computers can brute-force many hashing algorithms very quickly.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Related Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3ebe4394-e2f3-4f73-9c9a-b3206997836b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Store Passwords Securely</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="1d36a6e8-fcbb-4205-8d3a-b2366e2f9f78" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Strong Symmetric Encryption</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="7e5f0d99-7f46-4c7f-a3cd-10e3d9f904bb" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Strong Asymmetric Encryption</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="85b85b5f-4aec-452e-9474-2c420922baa8" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Encrypt Off-site Backups</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Related Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="8acdd7d4-a3ac-489b-9de7-95e76f9aac41" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Threats to Data Are Considered</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="fc8f700d-be5f-492d-9dc1-560bcdbe7c5d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Symmetric Encryption Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="d3d5c2de-fd8a-4e85-8157-bdd39d1c8b07" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Asymmetric Encryption Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="4356770d-fff8-41eb-ae3f-32318bc05da1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Off-site Backups Are Encrypted</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

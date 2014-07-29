@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-797577212" Content_Hash="277764692">
+  <Metadata>
+    <Id>a31bff0d-bbaf-4b39-a564-7e353fc13661</Id>
+    <Id_History>fda4a961-e647-4a7e-9cfc-e5c3f588c7c6,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>Log Exceptions on the Server</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority> J.D. Meier, Alex Mackman, Blaine Wastell, Prashant Bansode, Andy Wigley, Kishore Gopalan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 2.0 </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Log all exceptions on the server to allow tracking and analysis. </p>
+  <h1>Why</h1>
+  <p>Exceptions contain critical information on problems which occur in production systems.&nbsp; Logging them will help track down problems faster. </p>
+  <h1>When</h1>
+  <p>Always. </p>
+  <h1>How</h1>
+  <p>You should log all exceptions in the event log to record them for tracking and later analysis.&nbsp; Use code similar to the following. </p>
+  <p />
+  <pre>&lt;%@ Application Language="C#" %&gt; <br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;&nbsp; <br />&lt;script language="C#" runat="server"&gt; <br />void Application_Error(object sender, EventArgs e) <br />{&nbsp;&nbsp;&nbsp; <br />&nbsp; //get reference to the source of the exception chain&nbsp;&nbsp;&nbsp; <br />&nbsp; Exception ex = Server.GetLastError().GetBaseException();&nbsp;&nbsp;&nbsp;&nbsp; <br />&nbsp; <br />&nbsp; // log the details of the exception and page state to the&nbsp;&nbsp;&nbsp; <br />&nbsp; // event log.&nbsp;&nbsp;&nbsp; <br />&nbsp; <br />&nbsp; EventLog.WriteEntry("My Web Application","MESSAGE: " + ex.Message +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "\nSOURCE: " + ex.Source,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EventLogEntryType.Error);&nbsp;&nbsp;&nbsp;&nbsp; <br />&nbsp; <br />&nbsp; // Optional e-mail or other notification here... <br />} <br />&lt;/script&gt;</pre>
+  <p />
+  <p />
+  <hr />
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

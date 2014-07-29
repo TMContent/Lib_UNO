@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1016269653" Content_Hash="1452906939">
+  <Metadata>
+    <Id>68ac3aa6-fb02-437f-b822-4cf7772cecb6</Id>
+    <Id_History>5fa465c6-6965-40f2-8cfc-cd50ff45e4f5,</Id_History>
+    <Library_Id>ea854894-8e16-46c8-9c61-737ef46d7e82</Library_Id>
+    <Title>How To Improve Security When Hosting Multiple Applications in ASP.NET 2.0</Title>
+    <Category>Deployment Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 2.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How To Improve Security When Hosting Multiple Applications in ASP.NET 2.0</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET version 2.0 
+</li>
+    <li>Windows Server 2003 
+</li>
+    <li>Internet Information Services (IIS) 6.0 </li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How To shows how you can isolate multiple applications from one another and from shared system resources in a Web hosting environment. The hosting environment might be a Web server provided by an Internet Service Provider (ISP) that hosts multiple untrusted applications from different companies, or it might be a shared Web server in a single organization that hosts multiple applications. Without adequate isolation, a poorly designed application or an application containing malicious code can adversely affect the operations of other applications on the server.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>Objectives 
+</li>
+    <li>Overview 
+</li>
+    <li>What's New in 2.0 
+</li>
+    <li>IIS 6.0 Process-Model Isolation 
+</li>
+    <li>Summary of Steps 
+</li>
+    <li>Step 1. Configure Your Application for Partial Trust 
+</li>
+    <li>Step 2. Use Application Pool for Process Isolation 
+</li>
+    <li>Step 3. Review machineKey Settings 
+</li>
+    <li>Trust Levels Summary 
+</li>
+    <li>Additional Resources </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Use code access security to isolate multiple applications on a shared server. 
+</li>
+    <li>Run multiple applications in separate IIS 6.0 application pools with custom identities. 
+</li>
+    <li>Establish appropriate machineKey element settings for servers that host multiple applications. </li>
+  </ul>
+  <h1>Overview</h1>
+  <p>If you host multiple ASP.NET Web applications on a shared Web server, you should consider using application isolation. For example, how can you ensure that individual applications will not affect one another at run time? How can you prevent a single, poorly designed application from consuming critical system-level resources on the server that are necessary to keep other applications running properly? How can you ensure that one application from one company cannot access sensitive data contained in another company's application?</p>
+  <p>The issue of security is particularly significant for Internet Service Providers (ISPs) who host large numbers of untrusted applications from different companies. In a hosting scenario, it is essential to ensure that the installation of a new application cannot adversely affect the operation of existing applications.</p>
+  <p>The main ways to isolate ASP.NET 2.0 applications are as follows: </p>
+  <ul>
+    <li>
+      <b>Use code access security</b>. You can run each application with partial trust, for example, by using the ASP.NET Medium trust level. This provides a constrained execution environment (which is also known as a sandbox) for each application where permissions to access system resources and resources belonging to other applications are limited. 
+</li>
+    <li>
+      <b>Use separate processes for each application</b>. On Windows Server&amp;nbsp;2003 and IIS&amp;nbsp;6.0, run each application in its own application pool that is configured to run under a unique identity. This enables you to use Windows auditing to audit the activity of each application separately, and it allows you to configure Windows access control lists (ACLs) independently for each application. 
+</li>
+    <li>
+      <b>Use separate encryption and decryption keys</b>. Ensure that the keys specified in the <b>machineKey</b> element are unique for each application. These keys are used to encrypt items, including forms authentication tickets and view state. By having separate keys, you help ensure data integrity, even if data from one application is accessed by another. </li>
+  </ul>
+  <h1>What's New in 2.0</h1>
+  <p>The .NET Framework version&amp;nbsp;2.0 introduces the following changes that have implications for hosting multiple applications on a shared server: </p>
+  <ul>
+    <li>
+      <b>.NET Framework Data Providers for OLE DB, Oracle, and ODBC work in partial trust</b>. Partial-trust Web applications can now use the .NET Framework Data Providers for OLE DB, Oracle, and ODBC to access data sources because these providers no longer require Full trust. However, Medium trust policy does not grant the necessary code access security permissions by default, so you need to create custom policy if you want applications to use anything other than the .NET Framework Data Provider for SQL Server. Note that the <b>OleDbPermission</b> class supports more advanced XML declarative syntax than a simple yes or no decision. This enables you to lock down the <b>OleDbPermission</b> class settings in the machine-level Web.config file to specify which databases can be accessed. 
+<blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Medium trust policy does grant the <b>SqlClientPermission</b> permission, which means that medium-trust applications can access a SQL Server database by using the .NET Framework Data Provider for SQL Server.</blockquote></li>
+    <li>
+      <b>Decryption attribute added for the machineKey element</b>. The new <b>decryption</b>attribute of the <b>machineKey</b> element specifies the symmetric encryption algorithm that is used to encrypt and decrypt forms authentication tickets. Previously, only 3DES encryption was supported for encrypting forms authentication tickets. The default in ASP.NET&amp;nbsp;2.0 is now AES encryption, but the <b>decryption</b> attribute can be used to revert to 3DES, which was the algorithm used in ASP.NET versions 1.0 and 1.1. The <b>validation</b> attribute now supports AES as an option. This enables you to use AES to encrypt view state. </li>
+  </ul>
+  <h1>IIS 6.0 Process-Model Isolation</h1>
+  <p>In Windows Server 2003, IIS 6.0 enables multiple worker processes to be used to host separate Web applications. This is shown in Figure&amp;nbsp;1.</p>
+  <p>
+    <img alt="" src="http://msdn2.microsoft.com/en-us/library/Aa480478.iis6architecture(en-us,MSDN.10).gif" border="0" />
+  </p>
+  <p>
+    <b>Figure 1. ASP.NET architecture on Windows Server 2003 with IIS 6.0</b>
+  </p>
+  <p>Separate instances of the IIS worker process (W3wp.exe) can be used to host Web applications. By default, these processes run using the NetworkService account, which is a local account with restricted permissions that acts as the computer account over the network. A Web application that runs in the context of the NetworkService account presents the computer's credentials to remote servers for authentication.</p>
+  <p>To help provide isolation, you should run each application on a shared server by using a separate custom account. This allows you to audit the activity of each application separately, and to authorize each application with Windows access control lists (ACLs) separately.</p>
+  <h1>Summary of Steps</h1>
+  <p>To improve security when hosting multiple applications in ASP.NET, perform the following steps: </p>
+  <ul>
+    <li>Step 1. Configure your application for partial trust 
+</li>
+    <li>Step 2. Use application pools for process isolation 
+</li>
+    <li>Step 3. Review machineKey settings. </li>
+  </ul>
+  <h1>Step 1. Configure Your Application for Partial Trust</h1>
+  <p>By default, ASP.NET&amp;nbsp;2.0 Web applications and Web services run with Full trust. As a result, code access security places no restrictions on the resources and operations that applications can access, and resource access is based solely on operating-system security and ACLs.</p>
+  <p>You can use code access security to provide a constrained execution environment (or a sandbox) to restrict which resources and operations your application can perform and to isolate applications from one another. Choose the appropriate trust level for your hosting scenario. Medium trust has been provided specifically for the needs of ISPs and other deployment environments that need to enforce strict security isolation between application code bases that are written by different organizations or customers. In other scenarios, you might need to create custom policy that grants a custom permission set.</p>
+  <h2>Using Medium Trust</h2>
+  <p>If you need to host multiple applications on a shared server, such as in an ISP scenario, use the Medium trust level to constrain the applications. The ASP.NET Medium trust level provides a constrained execution environment that is suitable for isolating multiple applications hosted on ISP servers.</p>
+  <h3>To configure all applications on your server to run with Medium trust </h3>
+  <ol>
+    <li>Open the machine-level Web.config file in the %windir%\Microsoft.NET\Framework\{version}\CONFIG folder. 
+</li>
+    <li>Configure the <b>trust</b> element by changing the default setting for the <b>trust level</b> attribute from <b>Full</b> to <b>Medium</b> as shown in the following code example: 
+<div><pre>&lt;location allowOverride="true"&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trust level="Medium" originUrl="" /&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;  </pre></div><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If present, the<b> originUrl</b> attribute can be used by certain permissions, such as <b>WebPermission</b>, to restrict connectivity to a defined set of network addresses.</blockquote></li>
+    <li>Ensure that the trust setting is locked in the machine-level Web.config file to prevent individual application settings from overriding the global setting. </li>
+  </ol>
+  <h2>Lock the Trust Level</h2>
+  <p>Service providers, or anyone responsible for running multiple Web applications on the same server, should apply the trust policy setting in the machine-level Web.config file, and then lock the trust level for all Web applications.</p>
+  <p>To do this, set the <b>allowOverride</b> attribute to <b>false</b> in the machine-level Web.config file, as shown in the following code example:</p>
+  <div>
+    <pre>&lt;location allowOverride="false"&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;securityPolicy&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Full" policyFile="internal" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="High" policyFile="web_hightrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Medium"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; policyFile="web_mediumtrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Low"&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; policyFile="web_lowtrust.config" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trustLevel name="Minimal" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; policyFile="web_minimaltrust.config" /&gt;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/securityPolicy&gt;<br />&amp;nbsp; &lt;trust level="Medium" originUrl="" /&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;  </pre>
+  </div>
+  <p>Setting the <b>allowOverride</b> attribute to <b>false</b> prevents an individual developer from overriding the Medium trust setting in their application's Web.config file.</p>
+  <h2>Using Custom Policy</h2>
+  <p>If you are hosting multiple applications on a shared intranet server, you might need to develop custom policy to support the specific requirements of your applications. </p>
+  <h3>To choose an appropriate trust level </h3>
+  <ol>
+    <li>Determine the permission requirements of the application to be hosted. You can determine permission requirements manually by analyzing the code and determining the types of resources it accesses, the kind of resource access it requires (such as read/write), and the privileged operations it performs. You can also use the PermCalc tool to help. 
+</li>
+    <li>Examine each trust level, beginning with High trust. Open the Web_HighTrust.config policy file from the %windir%\Microsoft.NET\Framework\{version}\CONFIG folder, and then examine the permissions to determine whether the High trust level settings are restrictive enough for your application 
+</li>
+    <li>If your application requires fewer code access security permissions than those provided by the High trust level, then examine the Medium trust level. 
+<blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The Low and Minimal trust levels are designed for locked down execution environments or environments where most of the Web application exists in assemblies in the global assembly cache (GAC) instead of the physical .aspx page code.</blockquote></li>
+  </ol>
+  <p>This process will help you to identify a trust level that matches your application's permission requirements for code access security as closely as possible without granting permissions that your application does not need. You might need to create a custom policy file if your application's permission requirements are not directly suited to one of the provided trust levels. <br /></p>
+  <h1>Step 2. Use Application Pools for Process Isolation</h1>
+  <p>When running Windows Server&amp;nbsp;2003 and IIS&amp;nbsp;6.0, you should use multiple application pools and configure each application to run in its own worker process (W3wp.exe) with its own unique identity. This provides process-level isolation, which enables you to audit applications separately and to restrict individual applications with appropriately configured ACLs.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You can only use application pools when IIS is running in worker process isolation mode (the default) and not in IIS&amp;nbsp;5.0 isolation mode.</blockquote>
+  <h2>To use application pools for isolation </h2>
+  <ol>
+    <li>Create a set of custom local or domain accounts, one per application, to run each application-pool process instance. 
+<blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;By not running your application as the default NetworkService account, you ensure that deliberate or accidental changes to the permission of this account do not impact your applications. In addition, having separate identities enables you to benefit from separate auditing and the ability to configure ACLs separately for each application.</blockquote></li>
+    <li>Configure NTFS permissions for each account to ensure that each account has access to only the appropriate file system files and folders and cannot access critical resources, such as operating system tools. To add your custom service account to the local IIS_WPG group: 
+<ol><li>On the <b>Start</b> menu, click <b>Control Panel</b>,<b></b>click <b>Administrative</b><b>Tools</b>, and then click <b>Computer Management</b>. 
+</li><li>Double-click (expand) <b>Local Users and Groups</b>, and then double-click (expand) <b>Groups</b>. 
+</li><li>Right-click the <b>IIS_WPG</b> group, and then click <b>Add to Group</b>. 
+</li><li>Click <b>Add</b>, type the custom account name, and then click <b>OK</b>. </li></ol><p>By adding your account to the IIS_WPG group, you grant the account appropriate access rights to file-system folders and registry keys, and you give the account the necessary user rights for running a Web application process.</p></li>
+    <li>For each account, run the following ASP.NET IIS Registration Tool (Aspnet_regiis.exe) command to assign the relevant ASP.NET permissions to the account: 
+<p><b>aspnet_regiis -ga accountname</b></p><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;In Windows Server&amp;nbsp;2003, running the &lt;CODE&gt;<b><i>Aspnet_regiis.exe</i></b><b><i>-ga</i></b>&lt;/CODE&gt; command adds the account to the IIS_WPG group. The IIS_WPG group provides the <b>Log on as batch job</b> permission and ensures that the necessary file-system permissions are granted.</blockquote><p><br /></p></li>
+    <li>Create new application pools and configure them to run under the new accounts. 
+<ol><li>Start Internet Information Services (IIS) Manager and in the left pane, double-click (expand) the local computer node and then double-click (expand) <b>Application Pools</b>. 
+</li><li>Right-click Application Pools, and then click New -Application Pool 
+</li><li>In the <b>Add New Application Pool</b> dialog box, type a unique application pool name that is relevant to your hosted application. Leave the <b>Use default settings for new application pool</b> option selected and click <b>OK</b>. A new application pool with the specified name is created. 
+</li><li>Right-click the new application pool and click <b>Properties</b>. 
+</li><li>Click the <b>Identity</b> tab. In the <b>Application pool identity</b> section, click <b>Configurable</b>. 
+</li><li>Type an account name and password, and then click <b>Apply</b>. The <b>Confirm Password</b> dialog box appears. Type the password again, click <b>OK</b>, and then click <b>OK</b> again. </li></ol></li>
+    <li>Configure each application to run in its own application pool. 
+<ol><li>In IIS, right-click your hosted application's virtual directory, and then click <b>Properties</b>. 
+</li><li>On the <b>Directory</b> tab, in the <b>Application settings</b> section, select the application pool you created earlier and then click <b>OK</b>. </li></ol></li>
+  </ol>
+  <p>
+    <br />
+  </p>
+  <h1>Step 3. Review machineKey Settings </h1>
+  <p>The <b>machineKey</b> element in the Web.config file is used to specify encryption and validation algorithms and keys used to help protect forms authentication cookies, role cookies, anonymous identification cookies, and page-level view state. You should ensure that the encryption and validation keys are different for each application. This prevents cross-application authentication, authorization, and anonymous identification; and it helps ensure that view state is not accessible between different applications. By default, the validation and encryption keys are set to unique values for each application with the following default configuration: </p>
+  <div>
+    <pre>...<br />&lt;system.web&gt;<br />&amp;nbsp; &lt;machineKey validationKey="AutoGenerate,IsolateApps" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; decryptionKey="AutoGenerate,IsolateApps" ... /&gt;<br />&lt;/system.web&gt;<br />...  </pre>
+  </div>
+  <p>For additional security, you should specify custom <b>validationKey</b> and <b>decryptionKey</b> values in each application's Web.config file. </p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you deploy your application in a Web farm, you must ensure that the configuration files on each server for a specific application share the same value for <b>validationKey</b> and <b>decryptionKey</b>. This is required because you cannot guarantee which server will handle successive requests. You must also ensure that they are set to different values for separate applications.</blockquote>
+  <h1>Trust Levels Summary</h1>
+  <p>The capabilities that are available to applications running at the various trust levels are summarized in Table&amp;nbsp;1.</p>
+  <p>
+    <b>Table 1. Trust Levels and Their Key Capabilities and Restrictions</b>
+  </p>
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <th>Trust level</th>
+          <th>Key capabilities and restrictions</th>
+        </tr>
+        <tr>
+          <td>Full</td>
+          <td>No restrictions imposed by code access security.</td>
+        </tr>
+        <tr>
+          <td>High</td>
+          <td>No unmanaged code.<br />No enterprise services.<br />Can access Microsoft SQL Server and other OLE DB data sources.<br />Can send e-mail by using SMTP servers.<br />Very limited reflection permissions. No ability to invoke private code by using reflection.<br />A broad set of other framework features are available. Applications have full access to the file system and to sockets.</td>
+        </tr>
+        <tr>
+          <td>Medium</td>
+          <td>Permissions are limited to what the application can access within the directory structure of the application.<br />No file access is permitted outside of the application's virtual directory hierarchy.<br />Can access SQL Server data sources.<br />Can send e-mail by using SMTP servers.<br />Limited rights to certain common environment variables.<br />No reflection permissions whatsoever.<br />No sockets permission.<br />To access Web resources or Web services, you must explicitly add endpoint URLs — either in the <b>originUrl</b> attribute of the <b>trust</b> element or inside the policy file.</td>
+        </tr>
+        <tr>
+          <td>Low</td>
+          <td>Intended to model the concept of a read-only application with no network connectivity or an application where most of the code is located in assemblies stored in the global assembly cache.<br />Read only access for file I/O within the application's virtual directory structure.<br />No ability to change the <b>IPrincipal</b> on a thread or on the <b>HttpContext</b></td>
+        </tr>
+        <tr>
+          <td>Minimal</td>
+          <td>Execute only.<br />No ability to change the <b>IPrincipal</b> on a thread or on the <b>HttpContext</b>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>
