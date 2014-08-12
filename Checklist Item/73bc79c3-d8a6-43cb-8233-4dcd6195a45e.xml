@@ -3,13 +3,13 @@
   <Metadata>
     <Id>73bc79c3-d8a6-43cb-8233-4dcd6195a45e</Id>
     <Id_History>2e16a65a-25d2-4ea9-a513-e020d2408241,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Global Error Handlers Are Used to Catch Unhandled Exceptions</Title>
-    <Category>Exception Management</Category>
+    <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>ASP.NET 3.5</Technology>
     <Type>Checklist Item</Type>
-    <DirectLink />
+    <DirectLink>Global Error Handlers Are Used to Catch Unhandled Exceptions</DirectLink>
     <Tag />
     <Security_Demand />
     <Author />
@@ -21,17 +21,17 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure a global error handler has been defined for your application to catch any exceptions that are not handled in the code.</p>
   <h1>Why</h1>
-  <p>Even if structured exception handling is used, not all application code will be wrapped in a <strong>Try</strong>/<strong>Catch</strong>/<strong>Finally</strong> block.&nbsp;A global exception handler will ensure that these unhandled exceptions don't result in an error message to the client that will disclose internal application details.</p>
+  <p>Even if structured exception handling is used, not all application code will be wrapped in a <strong>Try</strong>/<strong>Catch</strong>/<strong>Finally</strong> block.&amp;nbsp;A global exception handler will ensure that these unhandled exceptions don't result in an error message to the client that will disclose internal application details.</p>
   <h1>How to Check</h1>
   <p>Check Global.asax the ensure an application-level global error handler has been defined. Check to ensure <strong>Application_Error</strong> has been overriden and implemented. The error handler will look similar to the following code:</p>
-  <pre>&lt;&#37;&#64; Application Language="C#" &#37;&gt;<br />&lt;&#37;&#64; Import Namespace="System.Diagnostics" &#37;&gt;<br />&lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> &#123;<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />    // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " &#43; ex.Message &#43;<br />       "\nSOURCE: " &#43; ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here...<br /> &#125;<br /> &lt;/script&gt;&nbsp;</pre>
+  <pre>&lt;&amp;#37;&amp;#64; Application Language="C#" &amp;#37;&gt;<br />&lt;&amp;#37;&amp;#64; Import Namespace="System.Diagnostics" &amp;#37;&gt;<br />&lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> &amp;#123;<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />    // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " &amp;#43; ex.Message &amp;#43;<br />       "\nSOURCE: " &amp;#43; ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here...<br /> &amp;#125;<br /> &lt;/script&gt;&amp;nbsp;</pre>
   <h1>How to Fix</h1>
   <p>Define an application-level global error handler in Global.asax to catch any exceptions that are not handled in code. Do this to avoid accidentally returning detailed error information to the client. You should log all exceptions in the event log to record them for tracking and later analysis. Use code similar to the following.</p>
-  <pre>&lt;&#37;&#64; Application Language="C#" &#37;&gt;<br />&lt;&#37;&#64; Import Namespace="System.Diagnostics" &#37;&gt;<br />&lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> &#123;<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />     // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " &#43; ex.Message &#43;<br />       "\nSOURCE: " &#43; ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here...<br /> &#125;<br /> &lt;/script&gt;</pre>
+  <pre>&lt;&amp;#37;&amp;#64; Application Language="C#" &amp;#37;&gt;<br />&lt;&amp;#37;&amp;#64; Import Namespace="System.Diagnostics" &amp;#37;&gt;<br />&lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> &amp;#123;<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />     // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " &amp;#43; ex.Message &amp;#43;<br />       "\nSOURCE: " &amp;#43; ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here...<br /> &amp;#125;<br /> &lt;/script&gt;</pre>
   <h1>Problem Example</h1>
-  <p>An ASP.NET application has code to connect to a SQL database.&nbsp;However, the application does not have a generic error handler specified. As a result, when the connection times out, application details are revealed to the client in the exception:</p>
+  <p>An ASP.NET application has code to connect to a SQL database.&amp;nbsp;However, the application does not have a generic error handler specified. As a result, when the connection times out, application details are revealed to the client in the exception:</p>
   <p>
-    <strong>Description: </strong>An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code. <strong><p /><p />Exception Details: System.Data.SqlClient.SqlException</strong>: An error has occurred while establishing a connection to the server. &nbsp;When connecting to SQL Server 2005, this failure may be caused by the fact that under the default settings SQL Server does not allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)</p>
+    <strong>Description: </strong>An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code. <strong><p /><p />Exception Details: System.Data.SqlClient.SqlException</strong>: An error has occurred while establishing a connection to the server. &amp;nbsp;When connecting to SQL Server 2005, this failure may be caused by the fact that under the default settings SQL Server does not allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)</p>
   <p>
     <b>Source Error:</b>
   </p>
@@ -44,7 +44,7 @@
           <td>
             <blockquote>
               <pre>
-                <br />Line 216:<br />Line 217:            if (conn.State &#33;= ConnectionState.Open)<br />Line 218:                conn.Open();<br />Line 219:<br />Line 220:            cmd.Connection = conn;</pre>
+                <br />Line 216:<br />Line 217:            if (conn.State &amp;#33;= ConnectionState.Open)<br />Line 218:                conn.Open();<br />Line 219:<br />Line 220:            cmd.Connection = conn;</pre>
             </blockquote>
           </td>
         </tr>
@@ -53,7 +53,7 @@
   </p>
   <p />
   <h1>Solution Example</h1>
-  <p>An ASP.NET application has code to connect to a SQL database.&nbsp;It has defined&nbsp;an application-level global error handler to trap and log all unhandled exceptions.&nbsp;This allows the application to present a generic error message to the client while logging more detailed information to the server.</p>
+  <p>An ASP.NET application has code to connect to a SQL database.&amp;nbsp;It has defined&amp;nbsp;an application-level global error handler to trap and log all unhandled exceptions.&amp;nbsp;This allows the application to present a generic error message to the client while logging more detailed information to the server.</p>
   <h1>Related Items</h1>
   <ul>
     <li>
@@ -63,6 +63,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
