@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-715966326" Content_Hash="-361399285">
+  <Metadata>
+    <Id>4318705d-2101-4c25-8427-fedd6612baca</Id>
+    <Id_History>4318705d-2101-4c25-8427-fedd6612baca,813f6c28-b130-4d5c-8dca-e92ce75e6afe,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>If You Need to Support WCF Clients Within an Intranet, Consider Using NetTcpBinding</Title>
+    <Category>Bindings</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>If You Need to Support WCF Clients Within an Intranet, Consider Using NetTcpBinding</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you need to support clients within your intranet, consider using netTcpBinding. </p>
+  <h1>Why</h1>
+  <p>The netTcpBinding has the following characteristics:</p>
+  <ul>
+    <li>It can only be consumed by WCF enabled clients. <li>Supports the WS&amp;#42; stack including reliable messaging, message security, and secure transactions. <li>Transport security is turned on by default, message security is also available. <li>The service can be hosted in IIS 5.0 or IIS 6.0, but it is not message activated, hence you can consider hosting in a Windows service or IIS 7.0 instead. <li>If you choose to use message security you can use certificates, username, Windows or Issue token authentication (Windows CardSpace). <li>If you choose to use transport security you can only use certificates or Windows authentication </li></li></li></li></li></li>
+  </ul>
+  <h1>When</h1>
+  <p>Use this binding when you want to provide a secure and reliable binding environment for .NET-to-.NET cross-machine communication.</p>
+  <h1>How</h1>
+  <p>netTcpBinding is a good choice for the intranet scenario if transport performance is important to you and it is OK to host the service as a Windows service instead of in IIS. The netTcpBinding uses the TCP protocol and provides full support for SOAP security, transactions, and reliability. </p>
+  <p>The following example shows how to configure netTcpBinding:</p>
+  <pre>&lt;system.serviceModel&gt;<br />....<br />    &lt;services&gt;<br />        &lt;service behaviorConfiguration="" name="WCFServicecHost.MyService"&gt;<br />            ...<br />            &lt;endpoint address="" binding="netTcpBinding" bindingConfiguration=""<br />                name="TcpBinding" contract="WCFServicecHost.IMyService" /&gt;<br />            ...<br />        &lt;/service&gt;<br />    &lt;/services&gt;<br />&lt;/system.serviceModel&gt;<br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on bindings, see &amp;#8220;Windows Communication Foundation Bindings&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733027.aspx">http://msdn2.microsoft.com/en-us/library/ms733027.aspx</a><li>For binding Q&amp;A, see the Binding section of &amp;#8220;WCF 3.5 Questions and Answers &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

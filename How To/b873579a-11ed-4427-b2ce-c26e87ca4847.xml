@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1702080222" Content_Hash="53752097">
+  <Metadata>
+    <Id>b873579a-11ed-4427-b2ce-c26e87ca4847</Id>
+    <Id_History>b873579a-11ed-4427-b2ce-c26e87ca4847,9f007afb-1b73-4293-87fa-e3c41c7a2e23,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How To Protect Forms Authentication in ASP.NET</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How To Protect Forms Authentication in ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Summary</h1>
+  <p>This How To shows you how to securely configure and use forms authentication with ASP.NET applications. Key factors to consider include properly securing the authentication ticket and securing the user identity store and access to that store. Failing to protect authentication tickets is a common vulnerability that can lead to unauthorized spoofing and impersonation, session hijacking, and elevation of privilege. Other common vulnerabilities include failing to secure the user store and failing to enforce strong passwords. This How To describes how to apply appropriate countermeasures such as using the defaults of SHA1 and AES for hashing and encryption, applying session lifetime restrictions, and protecting authentication tickets with SSL.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>
+      <div>Objectives</div>
+      <li>
+        <div>Overview</div>
+        <li>
+          <div>Summary of Steps</div>
+          <li>
+            <div>Step 1. Configure &lt;forms protection="All" &gt;</div>
+            <li>
+              <div>Step 2. Use SHA1 for HMAC Generation and AES for Encryption</div>
+              <li>
+                <div>Step 3. Protect Authentication Tickets with SSL</div>
+                <li>
+                  <div>Additional Considerations</div>
+                  <li>
+                    <div>Additional Resources</div>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Know which countermeasures to use to protect forms authentication. <li>Encrypt and sign forms authentication tickets. <li>Protect the user store. <li>Protect forms authentication in single server and Web farm deployments. </li></li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>ASP.NET&amp;nbsp;Web applications configured for forms authentication use an authentication ticket that is transmitted between Web server and browser either in a cookie or in a URL query string. The authentication ticket is generated when the user first logs on and it is subsequently used to represent the authenticated user. It contains a user identifier and often a set of roles to which the user belongs. The browser passes the authentication ticket on all subsequent requests that are part of the same session to the Web server. Along with the user identity store, you must protect this ticket to prevent compromise of your authentication mechanism.</p>
+  <p>Failing to properly protect forms authentication is a common vulnerability that can lead to the following: </p>
+  <ul>
+    <li>
+      <b>Elevation of privileges. </b>An attacker could elevate privileges within your application by updating the user name or the list of roles contained in the ticket, prior to posting it back to the server. An attacker who can upload malicious code to your application, perhaps in a new ASPX page, can also successfully create and modify the forms authentication tickets. <li><b>Session hijacking.</b> An attacker could capture another user's authentication ticket and use it to access your application. There are a number of ways that this could happen: <ul><li>As a result of a cross-site scripting vulnerability. <li>If the transport is not being protected using a security mechanism such as Secure Sockets Layer (SSL). <li>If the ticket is stored in the browser cache. </li></li></li></ul><li><b>Session usage after sign-out.</b> Even after the user has logged out of the application and the developer has called <b>FormsAuthentication.SignOut</b>, the authentication ticket remains valid until its time-to-live (TTL) expires, so it can be used by an attacker to impersonate another user. <li><b>Eavesdropping. </b>An attacker could look inside a forms authentication ticket to obtain any sensitive information it contains and use this information to compromise your application. <li><b>Compromise of the user identity store. </b>An attacker with access to the user identity store may obtain access to user names and passwords, either directly from the data store or by using a SQL injection attack. </li></li></li></li></li>
+  </ul>
+  <p>To offer protection against these threats, ASP.NET forms authentication provides the following countermeasures: </p>
+  <ul>
+    <li>
+      <b>Hashed MACs (HMACs).</b> These use either SHA1 or MD5 to provide tamper-proofing. Any changes to the authentication ticket are detected at the server and an exception is thrown if it has been modified. <li><b>Encryption. </b>Encryption turns the clear text data contained in the forms authentication ticket into unintelligible cipher text. ASP.NET uses AES symmetric encryption to prevent anyone from viewing the contents of the forms authentication ticket. <li><b>Session lifetime restrictions.</b> You can use lifetime restrictions to reduce the time window in which an attacker can spoof identity by using another user's captured authentication ticket. <li><b>Enforced transmission over HTTPS.</b> You can prevent authentication tickets being transmitted over HTTP connections. This prevents an attacker from being able to view or modify the authentication ticket while it crosses the network. </li></li></li></li>
+  </ul>
+  <h1>Summary of Steps</h1>
+  <p>Perform the following steps to protect your application's forms authentication tickets: </p>
+  <ul>
+    <li>
+      <b>Step 1. Configure </b>&lt;<b>forms protection="All" </b>&gt;. <li><b>Step 2. Use SHA1 for HMAC generation and AES for encryption.</b><li><b>Step 3. Protect authentication tickets with SSL.</b></li></li></li>
+  </ul>
+  <h1>Step 1. Configure &lt;forms protection="All" &gt;</h1>
+  <p>Ensure that your forms authentication tickets are encrypted and integrity checked by setting <b>protection="All" </b>on the &lt;<b>forms</b>&gt;<b></b>element. This is the default setting and you can view this in the Machine.config.comments file.</p>
+  <div>
+    <pre>&lt;forms protection="All" ... /&gt;  </pre>
+  </div>
+  <p>Make sure that your application specific Web.config file does not override this default setting. </p>
+  <h1>Step 2. Use SHA1 for HMAC Generation and AES for Encryption</h1>
+  <p>Review the &lt;<b>machineKey</b>&gt; settings to see what hashing algorithm and what encryption algorithms are used. The defaults of SHA1 and AES are recommended. Configuring as SHA1 uses the HMACSHA1 algorithm. SHA1 is preferred to MD5 hashing because it produces a larger hash size; therefore, it is considered to be more secure. AES is preferred to DES and 3DES because of its larger key sizes.</p>
+  <p>ASP.NET version 2.0 defaults to using SHA1 and AES. The following defaults are documented in the Machine.config.comments file.</p>
+  <div>
+    <pre>&lt;machineKey <br />&amp;nbsp;&amp;nbsp; validationKey="AutoGenerate,IsolateApps"<br />&amp;nbsp;&amp;nbsp; decryptionKey="AutoGenerate,IsolateApps"<br />&amp;nbsp;&amp;nbsp; decryption="Auto" <br />&amp;nbsp;&amp;nbsp; validation="SHA1" /&gt;  </pre>
+  </div>
+  <p>With the default values of <b>Auto</b> for the <b>decryption</b> attribute and <b>AutoGenerate,IsolateApps</b> for the <b>decryptionKey</b>, tickets are encrypted with AES symmetric encryption. As far as possible, ensure that both the <b>validation</b> and <b>decryption</b> keys are set to <b>AutoGenerate</b> instead of being hard-coded. </p>
+  <p>The <b>IsolateApp</b> flag should be set to <b>true</b> to ensure that a malicious Web application in a shared hosting scenario cannot compromise the authentication mechanism for other applications. Similarly, cross-application redirects must be disabled for similar reasons. You can do this by setting the <b>EnableCrossAppRedirects</b> attribute on the &lt;<b>forms</b>&gt; element to <b>false</b>.</p>
+  <p>The preceding &lt;<b>machineKey</b>&gt; settings are recommended for single server deployments and should not be changed. </p>
+  <h2>Web Farm Considerations</h2>
+  <p>For Web farm deployments, you must manually generate key values and ensure they are the same across all servers in the Web farm. </p>
+  <h1>Step 3. Protect Authentication Tickets with SSL</h1>
+  <p>To prevent forms authentication cookies from being captured and tampered with while crossing the network, ensure that you use SSL with all pages that require authenticated access and restrict forms authentication tickets to SSL channels by setting <b>requireSSL="true" </b>on the &lt;<b>forms</b>&gt; element.</p>
+  <p>
+    <b>To restrict forms authentication cookies to SSL channels</b>
+  </p>
+  <ul>
+    <li>Set <b>requireSSL="true"</b> on the &lt;<b>forms</b>&gt; element, as shown in the following code. <div><pre>&lt;forms loginUrl="Secure\Login.aspx"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="true" ... /&gt;  </pre></div><p>By setting <b>requireSSL="true"</b>, you set the <b>secure</b> cookie property that determines whether browsers should send the cookie back to the server. With the <b>secure</b> property set, the cookie is sent by the browser only to a secure page that is requested using an HTTPS URL. </p><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you are using cookieless sessions, you must ensure that the authentication ticket is never transmitted across an unsecured channel.<b></b></blockquote></li>
+  </ul>
+  <h1>Additional Considerations</h1>
+  <p>In addition to the preceding guidance, consider the following additional items to offer further protection: </p>
+  <ul>
+    <li>Consider partitioning your Web site. <li>Do not persist forms authentication cookies. <li>Consider reducing ticket lifetime. <li>Consider using a fixed expiration. <li>Enforce strong user management policies. <li>Enforce password complexity rules. <li>Perform effective data validation. <li>Use distinct cookie names and paths. <li>Keep authentication and personalization cookies separate. <li>Use absolute URLs for navigation. </li></li></li></li></li></li></li></li></li></li>
+  </ul>
+  <h2>Consider Partitioning Your Web Site</h2>
+  <p>To avoid having to use SSL across your entire site, structure your Web site so that the secure pages that require authenticated access are placed in a subdirectory that is separate from the anonymously accessible pages. This approach is shown in Figure 1.</p>
+  <p>
+    <img alt="" src="http://msdn2.microsoft.com/en-us/library/ms998310.f01paght00001201(en-us,MSDN.10).gif" border="0" />
+  </p>
+  <p>
+    <b>Figure 1. Visual Studio.NET Solution Explorer showing a partitioned Web site</b>
+  </p>
+  <p>In Figure 1, secure pages, including the application's login page, are placed in the <b>Secure</b> folder beneath the application's virtual root directory. </p>
+  <h3>To secure pages in a separate subfolder </h3>
+  <ol>
+    <li>In Microsoft Internet Information Services (IIS), configure the secure folder to require SSL. This sets the <b>AccessSSL=true</b> attribute for the folder in the IIS Metabase. Requests for pages in the secured folders are successful only if HTTPS is used for the request URL. <li>Use an &lt;<b>authorization</b>&gt; element to ensure that only authenticated users can access secure pages. Place this element beneath the closing &lt;<b>/system.web</b>&gt; tag, as shown here. <div><pre>&lt;&amp;#33;-- The secure folder is for authenticated and SSL access only. --&gt;<br />&lt;location path="Secure" &gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="?" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;  </pre></div><p>Additionally, the following configuration ensures that unauthenticated users are allowed to access pages in the application's root directory. Place this configuration in the main &lt;<b>system.web</b>&gt; element. </p><div><pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;&amp;#33;-- The virtual directory root folder contains general pages.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Unauthenticated users can view them and they do not need <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; to be secured with SSL. --&gt;<br />&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow users="&amp;#42;" /&gt;<br />&amp;nbsp; &lt;/authorization&gt;<br />&lt;/system.web&gt;  </pre></div></li></li>
+  </ol>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you use this type of site structure, your application must not rely on the user's identity on the non-SSL pages. In the preceding configuration, no forms authentication ticket is sent for requests for non-SSL pages. As a result, the user is considered anonymous. This has implications for related features, such as personalization, that require the user name.<b></b></blockquote>
+  <h2>Do Not Persist Forms Authentication Cookies</h2>
+  <p>Do not persist authentication cookies because they are stored in the user's profile on the client computer and can be stolen if an attacker gets physical access to the user's computer. </p>
+  <p>To ensure a non-persistent cookie, set the <b>DisplayRememberMe</b> property of the <b>Login</b> control to <b>false</b>. If you are not using the login controls, you can specify a non-persistent cookie when you call either the <b>RedirectFromLoginPage</b> or <b>SetAuthCookie</b> methods of the <b>FormsAuthentication</b> class after the user's credentials are validated. This is shown in the following code example (when using separate controls for the user name, password, login button, and error message).</p>
+  <div>
+    <pre>Public Sub Login_Click(sender As Object, e As EventArgs e)<br />' Is the user valid?<br />&amp;nbsp;If (Membership.ValidateUser(userName.Text, password.Text)) Then<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ' Parameter two set to false indicates non-persistent cookie<br />&amp;nbsp;&amp;nbsp; FormsAuthentication.RedirectFromLoginPage(username.Text, false)<br />&amp;nbsp;Else<br />&amp;nbsp;&amp;nbsp; Status.Text = "Invalid credentials. Please try again."<br />&amp;nbsp;End If<br />End Sub  </pre>
+  </div>
+  <h2>Consider Reducing Ticket Lifetime</h2>
+  <p>Consider reducing the cookie lifetime to reduce the time window in which an attacker can use a captured cookie to gain access to your application with a spoofed identity. This is particularly important if you cannot use SSL. The default timeout for an authentication cookie is 30 minutes. Consider reducing this to 10 minutes, as shown here.</p>
+  <div>
+    <pre>&lt;forms <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="10" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; slidingExpiration="true"... /&gt;  </pre>
+  </div>
+  <h2>Consider Using a Fixed Expiration</h2>
+  <p>In scenarios where you cannot use SSL, consider setting. <b>slidingExpiration="false"</b>. This setting ensures that an absolute expiration period exists after which the authentication ticket will no longer be valid. When <b>slidingExpiration="true"</b>, the expiration period is reset after each Web request.</p>
+  <h2>Enforce Strong User Management Policies</h2>
+  <p>Use and enforce strong passwords for all user accounts to ensure that people cannot guess one another's passwords and to mitigate the risk posed by dictionary attacks. Strong password policies include password length and complexity restrictions such as the following: </p>
+  <ul>
+    <li>Passwords cannot contain all or part of the user's account name. <li>Passwords must be at least six characters in length. <li>Passwords must contain characters from three of the following four categories: <ul><li>English uppercase characters (A through Z) <li>English lowercase characters (a through z) <li>Base 10 digits (0 through 9) <li>Non-alphanumeric characters (e.g., &amp;#33;, &amp;#36;, #, &amp;#37;) </li></li></li></li></ul></li></li></li>
+  </ul>
+  <p>Password aging should also be set to ensure passwords are changed at regular intervals. Passwords history should be maintained to ensure that when passwords are changed, there is sufficient change between the new password and previous ones. This can help prevent users from reusing the same password or variations of it.</p>
+  <p>Similarly, credentials should never be stored in clear text in an easily accessible location such as the Web.config file. The credentials data store must be adequately protected so that all access is controlled and audited. For instance, the connection string should not provide the user name and password to connect to the database and hence, it must be encrypted if it is needed. User passwords should not be stored as clear text; instead, they should be stored using a salt and a one way hash function. The data store must be protected so that a regular user cannot get direct access to the data contained within. For example, this can be done using different database server roles for credential data access and access to other non-sensitive information.</p>
+  <h2>Enforce Password Complexity Rules</h2>
+  <p>The membership provider that the <b>CreateUserWizard </b>and<b> Login</b> controls use determines password complexity requirements. For example, by default, the SQL Server membership provider requires passwords of at least 7 characters in length with at least 1 non-alphanumeric character.</p>
+  <h3>To configure provider enforced strong passwords</h3>
+  <p>To configure the precise password complexity rules enforced by your provider, you can set the following additional attributes: </p>
+  <ul>
+    <li>
+      <b>passwordStrengthRegularExpression.</b> The default is <b>""</b>. <li><b>minRequiredPasswordLength.</b> The default is <b>7</b>. <li><b>minRequiredNonalphanumericCharacters.</b> The default is <b>1</b>. </li></li></li>
+  </ul>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;These default values are for the SQL Server and the Active Directory membership providers.<b></b></blockquote>
+  <p>The following configuration provides an example of configuring the SQL Server membership provider that supplies a custom regular expression to constrain the passwords used by the membership provider.</p>
+  <div>
+    <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MySqlMembershipProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="MyAppName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; passwordStrengthRegularExpression=<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "&amp;#94;(?=.&amp;#42;\d)(?=.&amp;#42;&amp;#91;a-z&amp;#93;)(?=.&amp;#42;&amp;#91;A-Z&amp;#93;).&amp;#123;8,10&amp;#125;&amp;#36;" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlMembershipProvider, System.Web, Version=2.0.0.0, <br />&amp;#9;&amp;#9;Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/membership&gt;  </pre>
+  </div>
+  <p>The regular expression in the preceding code example constrains the password to 8-10 characters. It must also contain a combination of uppercase, lowercase, and numeric characters, with no special characters. The <b>(.&amp;#42;\d)</b> refers to digits, the (<b>.&amp;#42;&amp;#91;a-z&amp;#93;</b>) refers to lowercase characters, the <b>&amp;#42;&amp;#91;A-Z&amp;#124;&amp;#93;</b> refers to the uppercase characters, and the <b>&amp;#123;8,10&amp;#125;</b> constrains the range to 8-10 characters. </p>
+  <p>For more information about regular expressions, see <a href="http://msdn2.microsoft.com/en-us/library/ms998267.aspx">How To: Use Regular Expressions to Constrain Input in ASP.NET</a>.</p>
+  <p>Note that the SQL Server and Active Directory providers always first evaluate the password against the <b>minRequiredPasswordLength</b> and <b>minRequiredNonalphanumericCharacters</b> attributes. If the regular expression is intended to be the authoritative match, you should set the other two attributes to weaker values, such as a minimum length of 1 and 0 non-alphanumeric characters.</p>
+  <p>The following configuration uses the <b>minRequiredPasswordLength</b> and <b>minRequiredNonalphanumericCharacters</b> attributes to constrain the password.</p>
+  <div>
+    <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MySqlMembershipProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="MyAppName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; minRequiredPasswordLength="8"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; minRequiredNonalphanumericCharacters="2"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlMembershipProvider, System.Web, Version=2.0.0.0,<br />&amp;#9;&amp;#9; Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/membership&gt;  </pre>
+  </div>
+  <h3>Validating Strong Passwords</h3>
+  <p>You can also use a regular expression with the <b>CreateUserWizard</b> control to enforce passwords complexity rules. By doing this, you benefit from both client-side validation and server-side validation. </p>
+  <p>To validate a password entered through the <b>CreateUserWizard</b> control, set its <b>PasswordRegularExpression</b> property to an appropriate regular expression such as the one shown here.</p>
+  <div>
+    <pre>&amp;#94;(?=.&amp;#42;\d)(?=.&amp;#42;&amp;#91;a-z&amp;#93;)(?=.&amp;#42;&amp;#91;A-Z&amp;#93;).&amp;#123;8,10&amp;#125;&amp;#36;  </pre>
+  </div>
+  <h2>Perform Effective Data Validation</h2>
+  <p>Cross-site scripting and SQL injection can be used to spoof a legitimate user's identity in the system by obtaining either the authentication ticket or the actual credentials. Therefore, it is important to perform strict data validation to minimize the possibility of such vulnerabilities. </p>
+  <p>Ensure that the <b>ValidateRequest</b> attribute is set to <b>true</b> as shown in the following code example to obtain help prevent cross-site scripting attacks.</p>
+  <div>
+    <pre>&lt;&amp;#37;&amp;#64; Page language="c#" Codebehind="LoginForm.aspx.cs" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ValidateRequest="true"&amp;nbsp; ... &amp;#37;&gt;  </pre>
+  </div>
+  <p>Similarly, ensure the forms authentication cookie is marked as <b>HttpOnly</b> to ensure that it cannot be accessed by client-side scripts. This is not a substitute for data validation, but it does help to implement an effective defense-in-depth strategy. Also disable unused HTTP commands, such as the TRACE and OPTIONS verbs.</p>
+  <p>Avoid using dynamic SQL queries created by string concatenation of input data. Instead, use stored procedures and parameter substitution to mitigate the risk of SQL injection. </p>
+  <p>For more information about preventing injection attacks, see <a href="http://msdn2.microsoft.com/en-us/library/bb355989.aspx">How To: Protect From Injection Attacks in ASP.NET</a>.</p>
+  <h2>Use Distinct Cookie Names and Paths</h2>
+  <p>Use unique <b>name</b> and <b>path</b> attribute values on the &lt;<b>forms</b>&gt; element as follows.</p>
+  <div>
+    <pre>&lt;forms name="YourAppName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; path="/FormsAuth" ... /&gt;  </pre>
+  </div>
+  <p>By ensuring unique values for the <b>name</b> and <b>path</b> attributes, you prevent possible problems that can occur when hosting multiple applications on the same server. For example, if you do not use distinct names, it is possible for a user who is authenticated in one application to make a request to another application without being redirected to that application's logon page. By using partitioning and specific paths, you can prevent the authentication ticket from being transmitted unnecessarily and thus decrease the attack window.</p>
+  <p>Cookieless sessions are generally at greater risk because the authentication ticket cannot be protected natively using mechanisms such as <b>requireSSL</b> and <b>HttpOnly</b> described earlier. Therefore, it is recommended to always use cookies for the authentication ticket instead of the query string.</p>
+  <h2>Keep Authentication and Personalization Cookies Separate</h2>
+  <p>Keep personalization cookies that contain user-specific preferences and non-sensitive data separate from authentication cookies. A stolen personalization cookie might not represent a security threat, whereas an attacker can use a stolen authentication cookie to gain access to your application.</p>
+  <h2>Use Absolute URLs for Navigation</h2>
+  <p>Navigating between the public and restricted areas of your site (that is, between HTTP and HTTPS pages) is an issue because a redirect always uses the protocol (HTTPS or HTTP) of the current page, not the target page.</p>
+  <p>After a user logs on and browses pages in a directory that is secured with SSL, relative links such as "..\publicpage.aspx" or redirects to HTTP pages result in the pages being served using the HTTPS protocol, which incurs an unnecessary performance overhead. To avoid this, use absolute links such as "http://servername/appname/publicpage.aspx" when redirecting from an HTTPS page to an HTTP page.</p>
+  <p>Similarly, when you redirect to a secure page (for example, the logon page) from a public area of your site, you must use an absolute HTTPS path, such as "https://servername/appname/secure/login.aspx" instead of a relative path, such as "restricted/login.aspx." For example, if your Web page provides a logon button, use the following code to redirect to the secure login page.</p>
+  <div>
+    <pre>private void btnLogon_Click( object sender, System.EventArgs e )<br />&amp;#123;<br />&amp;nbsp; // Form an absolute path using the server name and v-dir name<br />&amp;nbsp; string serverName = <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; HttpUtility.UrlEncode(Request.ServerVariables&amp;#91;"SERVER_NAME"&amp;#93;);<br />&amp;nbsp; string vdirName = Request.ApplicationPath;<br />&amp;nbsp; Response.Redirect("https://" &amp;#43; serverName &amp;#43; vdirName &amp;#43; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "/Restricted/Login.aspx");<br />&amp;#125;  </pre>
+  </div>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

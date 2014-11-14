@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="592229497" Content_Hash="1797239607">
+  <Metadata>
+    <Id>743a34cc-ed5f-4550-8458-4456b9da9bf1</Id>
+    <Id_History>743a34cc-ed5f-4550-8458-4456b9da9bf1,a81ca1da-a153-4b9f-a147-62348289d4bf,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Do Not Allow Developers to Change Their Application's Trust Level</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Allow Developers to Change Their Application's Trust Level</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Prevent Developers from modifying the trust of level of&amp;nbsp;applications.&amp;nbsp; </p>
+  <h1>Why</h1>
+  <p>Developers may not be aware of other applications that are running on the hosted environment that may compromise security if isolation is not maintained. If a Web server administrator uses code access security to ensure application isolation and restrict access to system-level resources, it defeats the purpose if developers can change their permission levels at will. Developers&amp;nbsp;are prone to taking deployment&amp;nbsp;shortcuts that sometimes short-change security. Preventing modification of the trust level helps to&amp;nbsp;ensure that proper controls are not bypassed.&amp;nbsp;&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>Application service providers or anyone responsible for running multiple Web applications on the same server should lock the trust level for all Web applications. This guideline is appropriate whenever multiple applications need to be isolated from each other in a shared hosting environment,&amp;nbsp;or whenever the temptation to increase an applications privilege level for the sake of convenience is significant. </p>
+  <h1>How</h1>
+  <p>Enclose the element in the machine-level Web.config file in a &lt;LOCATION&gt; tag, and set the allowOverride attribute to false, as shown in the solution example. </p>
+  <p>To lock the trust level&amp;nbsp;set the allowOverride element to false inthe machine-level Web.config file:</p>
+  <pre>&lt;location allowOverride="false"&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp; &lt;trust level="Medium" originUrl="" /&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&amp;nbsp;&lt;/location&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>Enclose the &lt;trust&gt; element in the machine-level Web.config file in a &lt;location&gt; tag, and set the allowOverride attribute to false:<br /></p>
+  <pre>...<br />&lt;location allowOverride="false"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;trust level="Medium" originUrl=""/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />...<br />&lt;/location&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />...</pre>
+  <p>Putting these tags into the machine-level config file prevents overriding the settings contained therein.</p>
+  <h1>Related Rules</h1>
+  <ul>
+    <li>
+      <a href="/article/8ee31333-4131-4baa-beb2-3863c80ef536">A Custom Trust Policy is used if Your Application Needs Additional Permissions</a>
+      <li>
+        <a href="/article/5a4ca787-30a1-487c-be5d-9d849aaaca36">Choose a Trust Level that does Not Exceed the Application's Requirements</a>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

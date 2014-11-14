@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="609054510" Content_Hash="-474866422">
+  <Metadata>
+    <Id>ffef7554-2a1d-487f-9b0a-8b1c522bc51c</Id>
+    <Id_History>ffef7554-2a1d-487f-9b0a-8b1c522bc51c,fc529110-ddf0-430e-9e22-335277a0cc8d,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Throttle Logs</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Throttle Logs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Throttle logging of events and activity that might degrade your application's performance. </p>
+  <h1>Why</h1>
+  <p>Logging too quickly or logging large amounts of data are the ideal conditions for a denial of service attack and loss of logged entries. Poisoning the logs by repeatedly executing an operation allows an attacker to overwhelm the logging mechanism and cover up intrusions. </p>
+  <h1>When</h1>
+  <p>Ensure that event logging is throttled when a user or untrusted component can impact the quantity or rate of logging. Events for an application server should be logged to a separate machine whenever the resources (i.e., hardware and network bandwidth) are available to do so.</p>
+  <h1>How</h1>
+  <p>To perform log throttling:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the need for log throttling.</strong> Log throttling should be used when a given security event can be executed unlimited times within a limited period of time. If each occurrence of the event is logged, it can allow an attacker to poison your application's logs by overwriting more important entries.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Establish a log throttling mechanism. </strong>Determine which security events can be throttled. Be careful not to throttle or skip critical security operations. Establish a throttling policy and design the throttling mechanism around it. </p>
+      <p>Use buffer modes if your application uses the ASP.NET health monitoring system for its logging purposes. Buffer modes are used to define the buffering properties used by any provider that inherits from <em>System.Web.Management.BufferedWebEventProvider</em>. Currently, this includes <em>MailWebEventProvider</em> and <em>SqlWebEventProvider</em>. You can also derive custom Web event providers from that base class and use buffer modes.</p>
+      <p>Configure the health monitoring system's buffering to minimize the performance impact and overhead of recording events. You can use the &lt;<em>bufferModes</em>&gt;<strong></strong>element to define how long events are buffered before they are written to the provider and you can distinguish between urgent or critical events and regular events. You can use any of the default buffer modes (Critical Notification, Notification, Analysis or Logging) configured in the machine-level Web.config default file or you can configure a custom buffer mode.</p>
+      <p>
+        <strong>Note: </strong>For buffering to be enabled, you need to set <em>buffer="true"</em> on your provider configuration. You can reference the specific buffering configuration by using the <em>bufferMode</em> attribute on your provider definition as shown in the following code example.</p>
+      <pre>&lt;providers&gt;<br />  &lt;add name="providerName" buffer="true" bufferMode="bufferModeName" ... /&gt;<br />&lt;/providers&gt;</pre>
+      <p>Configure buffering to minimize the performance impact and overhead of recording events by declaring a &lt;<em>bufferModes</em>&gt; tag inside the <em>healthMonitoring</em> section of the <em>Web.config</em> file:</p>
+      <pre>&lt;healthMonitoring&gt;<br />  &lt;bufferModes&gt;<br />    &lt;add name="Extra Critical Notification"<br />      maxBufferSize="10"<br />      maxFlushSize="5"<br />      urgentFlushThreshold="1"<br />      regularFlushInterval="Infinite"<br />      urgentFlushInterval="00:01:00"<br />      maxBufferThreads="1"/&gt;<br />  &lt;/bufferModes&gt;&lt;/healthMonitoring&gt;</pre>
+      <ul>
+        <li>
+          <strong>name</strong> attribute is a name for the buffer mode used to reference it from other elements. For example, the &lt;<em>provider</em>&gt; element references the specific buffer mode configuration by referencing the name in its <em>bufferMode</em> attribute. </li>
+        <li>
+          <strong>maxBufferSize</strong> is the maximum number of events that can be buffered by a provider before flushing them out and writing them to a store. </li>
+        <li>
+          <strong>maxFlushSize</strong> is the maximum number of events per flush. Its value should be between 1 and <em>maxBufferSize</em>. </li>
+        <li>
+          <strong>urgentFlushThreshold</strong> is the minimum number of events after which the events should be flushed. Its value should be less than or equal to <em>maxBufferSize</em>. </li>
+        <li>
+          <strong>regularFlushInterval</strong> is the time interval per flush. Its value cannot be zero. </li>
+        <li>
+          <strong>urgentFlushInterval</strong> is the minimum time between flushes. Its value must be between 0 and <em>regularFlushInterval</em>. </li>
+        <li>
+          <strong>maxBufferThreads</strong> is the maximum number of threads used for flushing.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Apply the log throttling mechanism.</strong> Identify the appropriate places in your application where log throttling should be applied. Follow the established mechanism when implementing log throttling. For instance, apply the smart throttling mechanism at places where the users can perform the same action unlimited times like adding items into a shopping cart.</li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application does not use health monitoring, but logs many events via a standard SQL server database. Several of the operations that the application user performs is capable of generating quantities of log volume. An attacker begins to perform the operation many times. The logs will fill up quickly, and dramatically affect the server's ability to handle incoming requests, this results in a denial of service condition for application users. Furthermore, logs start to get dropped which allows the hacker to cover up evidence of a previous attack by flooding the logs until so that the events that indicate hacking attempts are flushed from the system.</p>
+  <h1>Solution Example</h1>
+  <p>An ASP.NET application logs many events via a standard SQL server database. The developer realizes that the application might be subjected to denial of service attempts, and configures health monitoring throttle logging by setting the <em>BufferModes</em> element in the <em>Web.config </em>file: </p>
+  <pre>&lt;healthMonitoring&gt;<br />  &lt;bufferModes&gt;<br />    &lt;add name="Extra Critical Notification"<br />      maxBufferSize="10"<br />      maxFlushSize="5"<br />      urgentFlushThreshold="3"<br />      regularFlushInterval="00:03:00"<br />      urgentFlushInterval="00:01:00"<br />      maxBufferThreads="1"/&gt;<br />  &lt;/bufferModes&gt;<br />&lt;/healthMonitoring&gt;</pre>
+  <p>It is determined that the logging facilities for the application enables an attacker to generate 6 log entries per minute, regardless of the number of connections to the application that she or he is able to achieve. The goal is to ensure that the attacker can never exceed the <em>maxBufferSize</em>, since logs will start getting dropped.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

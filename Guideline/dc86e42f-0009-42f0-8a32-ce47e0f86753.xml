@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1507786381" Content_Hash="393912989">
+  <Metadata>
+    <Id>dc86e42f-0009-42f0-8a32-ce47e0f86753</Id>
+    <Id_History>dc86e42f-0009-42f0-8a32-ce47e0f86753,e4041579-ab94-46f7-83f4-5eea83af9dab,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Lock Accounts After Consecutive Failed Login Attempts</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Lock Accounts After Consecutive Failed Login Attempts</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Consider locking users' accounts after several consecutive failed login attempts. Keep in mind that a locked account can result in a denial of service vulnerability. Depending on the needs of your application, you may instead want to implement a progressive slowdown in the authentication response.</p>
+  <h1>Why</h1>
+  <p>Multiple consecutive failed authentication attempts over a short period of time are an indication of a brute force attack on that account. Locking the account prevents an attacker from compromising and accessing the account, at the expense of a denial of service condition for the legitimate account owner.</p>
+  <h1>When</h1>
+  <p>Any password based system should consider locking accounts after multiple repeated login failures. Applications that have a high attack profile may instead a progressive slowdown in the authentication response.</p>
+  <h1>How</h1>
+  <p>Use the following steps to successfully lock accounts after consecutive failed login attempts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Determine a lockout policy: </strong>There are two variables to consider when determining a lockout policy:</p>
+      <ul>
+        <li>Number of allowed consecutive failed login attempts </li>
+        <li>Amount of time that a locked account will remain locked</li>
+      </ul>
+      <p>A simple policy would be to lock an account after 5 failed login attempts for the duration of 15 minutes. Although this is an effective method for blocking a brute force attack, it exposes your application to denial of service as an attacker can easily keep an account locked through a small stream of authentication requests. When determining the lockout policy, it is important to evaluate the risk of attacks against the user and the support costs associated with reactivating a locked account. For example, requiring the user to contact your organization's support personnel to reactivate a locked account will have a direct impact on support costs and would add general user frustration. Add extra care when designing more sophisticated variations, such as correlating a single or multiple user login attempts with a source IP, of your application's lockout policy. When adding extra levels of complexity, carefully consider and evaluate the scenarios where your application's lockout policy can be circumvented, or can harm your business. For instance, consider scenarios where an attacker would attempt to compromise a user through the use of multiple hosts, or multiple users would authenticate using a shared office IP.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce the lockout policy:</strong> The lockout policy should be enforced at all points in the application where authentication is necessary. If your application uses membership providers, specify the following attributes in your provider's configuration: </p>
+      <ul>
+        <li>
+          <strong>maxInvalidPasswordAttempts</strong>: provides the maximum number of invalid password attempts before an account is locked out </li>
+        <li>
+          <strong>passwordAttemptWindow</strong>: provides the time window, in minutes, during which a user must successfully authenticate without reaching the maximum allowed authentication attempts </li>
+        <li>
+          <strong>passwordAnswerAttemptLockoutDuration</strong>: if supported by the membership provider, this attribute specifies the duration of a lockout due to invalid password attempts</li>
+      </ul>
+      <p>Example:</p>
+      <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="false"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      passwordFormat="Hashed"<br /><strong>      maxInvalidPasswordAttempts = "4"<br /></strong><strong>passwordAttemptWindow = "10"<br /></strong>      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+      <p>Be aware that the standard .NET membership providers handle user passwords as System.string objects, which are immutable and can expose your application's user accounts. </p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code executes a database transaction that is required during authentication. Because the transaction fails to check the login attempts counter, it may be possible for an attacker to compromise an account through the use of a brute force or a dictionary attack.</p>
+  <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="false"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      passwordFormat="Hashed"<br />      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>The following code executes the database transaction that is required during authentication. Because the transaction checks the login attempts counter, it would be very expensive for an attacker to compromise an account through the use of brute force or a dictionary attack.</p>
+  <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="false"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      passwordFormat="Hashed"<br /><strong>      maxInvalidPasswordAttempts = "4"<br /></strong><strong>passwordAttemptWindow = "10"<br /></strong>      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

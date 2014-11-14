@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="620670489" Content_Hash="-894660194">
+  <Metadata>
+    <Id>2e3eb764-6dc5-4715-a4af-d89a5aff0125</Id>
+    <Id_History>2e3eb764-6dc5-4715-a4af-d89a5aff0125,3b53248d-76ae-4d92-a535-5da50c756931,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Log Files Are Protected</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Log Files Are Protected</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure log files are protected.</p>
+  <h1>Why</h1>
+  <p>Log files often contain internal application details that could enable an attacker to more effectively target your application.</p>
+  <h1>How to Check</h1>
+  <p>Use these steps to ensure log files are protected:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that the&amp;nbsp;log location is not disclosed. </strong>Scan your application's code base to verify that the location of the log files is known only to the internal logging framework.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check the file permissions of logs. </strong>Verify that the logs are set with the appropriate filesystem permissions. All entities, excluding your application and its administrators/developers, must be prohibited access to the logs. If your application backs up its logs, verify that log backups are stored into an environment that is as secure as the storage environment for the current logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check for common logging mistakes. </strong>Scan your application's code base for common logging mistakes such as:</p>
+      <ul>
+        <li>Logging data structures that contain user-supplied data </li>
+        <li>Appending user-supplied data to an exception's message and/or details </li>
+        <li>Opening logs in "write" mode and not in "append" mode</li>
+      </ul>
+    </li>
+  </ol>
+  <p>
+    <strong>Note:</strong> PCI DSS certification requires that all access to the logs is logged, that logs muct be promptly backed up to a centralized log server or media that is difficult to alter, and logs should be reviewed regularly to watch for suspicious activity that could indicate access by an attacker.</p>
+  <h1>How to Fix</h1>
+  <p>Use the following steps to protect the application's log files: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Avoid disclosing location of logs. </strong>The location of the log files should be known only by your application and its administrators. Avoid disclosing the location of the logs to users.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Set appropriate file permissions. </strong>Set the filesystem permissions so that only your application and its administrators/developers have access to its logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Keep logging framework away from users. </strong>Do not allow your application's users to interact directly with the logging framework. The logging framework should log information regarding the performance of the application but should avoid storing user-supplied data inside the logs. Some user-supplied information can aid an attacker into poisoning your application's logs. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Always use the append flag when writing to log files. </strong>Make sure that your application always appends new events to the log files. Appending to the logs reduces the risk of overwriting the existing logged events. Example:</p>
+      <pre>FileOutputStream logFile =<br /> new FileOutputStream(Environment.getLogPath() + logFilename, true);</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Consider using log rotation. </strong>Log rotation prevents your application from working with large log files. It allows you to manage and audit your application's logged events without interfering in your application's workings. Use the following steps when utilizing log rotation:</p>
+      <ul>
+        <li>
+          <strong>Define a rotation period</strong>: Schedule your log rotation on a regular basis. For example, rotate your logs every Monday. </li>
+        <li>
+          <strong>Create a new log file</strong>: Create a new log file when your application needs to rotate its log files. It is recommended to associate the new log file to the period of its creation. For example, the log file corresponding to the week of October 16, 2007 would be named 20071016.log. </li>
+        <li>
+          <strong>Back up the existing log files</strong>: Back up the existing log files when your application needs to rotate its log files. Consult your internal auditing policy to determine the period for which logs should be backed up. If your application backs up its logs, store them into an environment that is as secure as the storage environment for the current logs.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Consider using an external logging application. </strong>Using an external logging application ensures that your application's logs will be kept up-to-date even if your application abruptly terminates.</p>
+    </li>
+    <li>
+      <strong>Consider encoding output that is sent to log files</strong>. This can be useful in preventing log forging. Possible encoding mechanisms could include: 
+                  <ul><li>Stripping out certain characters [\r\n] that are known to create new lines, which can allow an attacker to forge log entries. </li><li>Encode all log output using HTML encoding, then view it in a browser to see the output.</li></ul></li>
+  </ol>
+  <p>
+    <strong>Note:</strong> PCI DSS requirements state that logs should be kept for at least&amp;nbsp;one year.</p>
+  <h1>Java Logging Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">
+      </a>
+      <a href="/article/fa45dc02-507a-4d3f-a396-ed4aaf044f98">Centralize Logging</a>
+    </li>
+    <li>
+      <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">Protect Log Files</a>
+    </li>
+    <li>
+      <a href="/article/0109ec06-1830-472d-95ed-7ec64404c961">Log Important Event Details</a>
+    </li>
+    <li>
+      <a href="/article/82abb5d8-684b-47b7-adec-34c77ecfb25a">Do Not Log Sensitive Information</a>
+    </li>
+    <li>
+      <a href="/article/b88851a8-65e9-43b0-9e0a-104889680386">Log Important Security Operations</a>
+    </li>
+    <li>
+      <a href="/article/d63904d4-7028-441c-b99e-373e3c12e9da">Log Important Business Operations</a>
+    </li>
+    <li>
+      <a href="/article/4829a4fa-8767-4e10-9d78-0982da29ac23">Monitor the Use of Privileged Accounts</a>
+    </li>
+    <li>
+      <a href="/article/96c623c9-1fb0-4596-9730-afb58e45bc85">Log Unusual Activity</a>
+    </li>
+    <li>
+      <a href="/article/0196cc1e-01c4-48ac-87d5-aab9c6fbb78c">Consider Log Throttling</a>
+    </li>
+  </ul>
+  <h1>Java Logging Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/4729ce9a-d18f-4466-a068-f6146ca4af37">Logging Is Centralized</a>
+    </li>
+    <li>
+      <a href="/article/2e3eb764-6dc5-4715-a4af-d89a5aff0125">Log Files Are Protected</a>
+    </li>
+    <li>
+      <a href="/article/1be8f39e-609a-4d66-b4c9-ad839783a164">Important Event Details Are Logged</a>
+    </li>
+    <li>
+      <a href="/article/1006f5d2-6570-4ad7-9166-0e4dcf783651">Sensitive Data Is Not Logged</a>
+    </li>
+    <li>
+      <a href="/article/56367747-607f-457e-99f2-b769db50e1fe">Important Security Operations Are Logged</a>
+    </li>
+    <li>
+      <a href="/article/45fe4509-955a-471e-96cb-625fb0ad75b4">Important Business Operations Are Logged</a>
+    </li>
+    <li>
+      <a href="/article/b0355a7e-b64e-4683-9d46-b05c8c01cf4e">Use of Privileged Accounts Is Monitored</a>
+    </li>
+    <li>
+      <a href="/article/b01f48ac-6a08-445a-8419-83e285531bfa">Unusual Activity Is Logged</a>
+    </li>
+    <li>
+      <a href="/article/e78a7f02-82d4-4e8b-9395-56d52c503010">Logging Is Throttled</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

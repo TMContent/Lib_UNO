@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-933774727" Content_Hash="874059263">
+  <Metadata>
+    <Id>892101cf-719c-4a93-8dd3-b99c29a20f7b</Id>
+    <Id_History>892101cf-719c-4a93-8dd3-b99c29a20f7b,4c0313bc-2784-4f3c-8987-76f6506dce60,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Temporary Files Are Created Securely</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Temporary Files Are Created Securely</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that temporary files are used securely.</p>
+  <h1>Why</h1>
+  <p>Placing temporary files in locations where other programs and users may access them may result in multiple vulnerabilities, depending on exactly what the temporary files are used for. In some cases, placing sensitive data in publicly available temporary files may result in information disclosure vulnerabilities. In other cases, an attacker may tamper with the contents of the temporary files and alter program behavior.</p>
+  <h1>How to Check</h1>
+  <p>Perform the following actions to verify that temporary files are created securely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that temporary files are necessary.</strong> If temporary files are used to share data with other processes, consider using other inter-process communication methods, such as sockets, shared memory, or remote procedure calls. </p>
+      <li>
+        <p>
+          <strong>Verify the temporary directory is secured.</strong> Check that the folder used to store temporary files is secured with ACLs to prevent other users and applications from using it.</p>
+        <li>
+          <p>
+            <strong>Verify that unique file names are used.</strong> Check the names that are used for the temporary files to make sure that they are difficult to predict.</p>
+          <li>
+            <p>
+              <strong>Verify that temporary files are removed before the program exits.</strong> Examine program behavior or code to verify that temporary files are not being accumulated or being made available after the program no longer needs them.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Follow these steps to assure that your temporary files are created and used securely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Avoid using temporary files.</strong> If temporary files are used to share data with other processes, consider using other inter-process communication mechanisms, such as sockets, shared memory, or remote procedure calls.</p>
+      <li>
+        <p>
+          <strong>Secure the temporary directory.</strong> Create a separate directory and secure it with ACLs. Use this directory for temporary files.</p>
+        <li>
+          <p>
+            <strong>Use unique names.</strong> Generate (pseudo-)random strings and use them for temporary file names to assure that it is difficult for an attacker to predict the names of the temporary files.</p>
+          <li>
+            <p>
+              <strong>Clean up.</strong> Remove temporary files before the program exits.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

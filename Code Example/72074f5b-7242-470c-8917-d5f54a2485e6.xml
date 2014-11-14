@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1456659571" Content_Hash="-759797161">
+  <Metadata>
+    <Id>72074f5b-7242-470c-8917-d5f54a2485e6</Id>
+    <Id_History>72074f5b-7242-470c-8917-d5f54a2485e6,2fe08da8-82b3-4a7c-be40-4d125fb896fb,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Protect Credentials Within a Connection String in Code</Title>
+    <Category>Database Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Protect Credentials Within a Connection String in Code</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code is to offer an alternative mechanism for encrypting database connection string data using the Windows Data Protection API (DPAPI) in .NET source code. </p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Protect database connection strings credentials using both encryption and access control.</li>
+    <li>Relegate encryption implementation specifics such as cipher selection encryption modes, key generation and key management to the DPAPI.</li>
+    <li>Store the data in an easily recoverable and protected fashion in the Windows Registry.</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application does not make use of ASP.NET and therefore does not have a <em>web.config</em> file, such as a client-server application.</li>
+    <li>Developer wishes to make use of user store, as opposed to machine key, to restrict database credentials access to specific user accounts.</li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>public static void StoreConnectionString(string keyName, string valueName, string connectionString){<br />    // Convert the connection string to a byte array<br />    // and encrypt the data by using the DPAPI ProtectedData class.<br />    byte[] encryptedConnStrBytes = ProtectedData.Protect(<br />    UnicodeEncoding.ASCII.GetBytes(connectionString),<br />	     null,<br />             DataProtectionScope.CurrentUser);<br /><br />    // Create a security context for a new key that we will use to store our encrypted connection string.<br />    // The security context will restrict access to only our user.<br />    string user = Environment.UserDomainName + "\\" + Environment.UserName;<br />    RegistrySecurity security = new RegistrySecurity();<br />    RegistryAccessRule rule = new RegistryAccessRule(user,<br />            RegistryRights.FullControl,<br />            InheritanceFlags.ContainerInherit,<br />            PropagationFlags.None,<br />            AccessControlType.Allow);<br />    security.AddAccessRule(rule);<br /><br />    // Actually create the new registry key and apply the security context we just came up with.<br />    RegistryKey key = Registry.CurrentUser.CreateSubKey(keyName,<br />            RegistryKeyPermissionCheck.ReadWriteSubTree,<br />            security);<br /><br />    // Write the encrypted connection string into the registry<br />    key.SetValue(valueName, encryptedConnStrBytes);<br />}</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates the use of the registry to store a cleartext database connection string.</p>
+  <pre>// Database connection string<br />string connStr =<br /> "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />// Store connection string in the registry<br />RegistryKey key = Registry.CurrentUser.CreateSubKey("PlaintextConnectionString");<br />key.SetValue("ConnStr", connStr);</pre>
+  <ul>
+    <li>Cleartext connection string details can be viewed by any user with access to the registry.</li>
+    <li>In a mixed-mode authentication scenario, credentials would be viewable by any user with access to the registry.</li>
+    <li>Lack of registry ACL's allows all systems users read access to this registry key.</li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System;<br />using System.Collections.Generic;<br />using System.Security.Cryptography;<br />using System.Security.AccessControl;<br />using System.Text;using Microsoft.Win32;</pre>
+  <p>The following test case methods store and retrieve encrypted registry data and output the results to the console.</p>
+  <pre>public static string RetrieveConnectionString(string keyName, string valueName){<br />    // Read the encrypted connection string value from the registry<br />    RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName);<br />    byte[] encryptedConnStrBytes = key.GetValue(valueName) as byte[];<br /><br />    // Decrypt the encrypted bytes using DPAPI, convert to string and return<br />    byte[] decryptedConnStrBytes = ProtectedData.Unprotect(<br />             encryptedConnStrBytes,<br />             null,<br />             DataProtectionScope.CurrentUser);<br /><br />    return(UnicodeEncoding.ASCII.GetString(decryptedConnStrBytes));<br />}<br /><br />static void Main(string[] args){<br />    // A sample connection string we might want to store<br />    string stored =<br />     "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />    Console.WriteLine("Stored String: " + stored);<br /><br />    // Create an instance of our class and pass the string we want to encrypt<br />    StoreConnectionString("EncryptedConnectionString", "CipherText", stored);<br /><br />    // Retrieve from the registry and print to make sure it worked.<br />    // You can also fire up regedit and browse to HKEY_CURRENT_USER\EncryptedConnectionString<br />    // to see the encrypted bytes.<br />    string retrieved = RetrieveConnectionString("EncryptedConnectionString", "CipherText");<br />    Console.WriteLine("Retrieved String: " + retrieved);<br />}</pre>
+  <h1>Expected Result</h1>
+  <pre>Stored String: Initial Catalog=snippets;<br />Data Source=vm-win2003\sqlexpress;Integrated Security=SSPI;<br />Retrieved String: Initial Catalog=snippets;<br />Data Source=vm-win2003\sqlexpress;Integrated Security=SSPI;</pre>
+  <h1>More Information</h1>
+  <p>This implementation makes use of the DPAPI user key as opposed to the machine key. This means that the connection string will not be accessible by other applications running under different service accounts. </p>
+  <p>This adds additional protection against a rogue application (such as a virus or Trojan) compromising connection string data but could pose problems where sharing between multiple applications running under different accounts is required.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

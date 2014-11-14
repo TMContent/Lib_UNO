@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>90c1c015-6bee-4368-80e2-5e87d630c606</Id>
+    <Id_History>90c1c015-6bee-4368-80e2-5e87d630c606,29a50575-1601-433e-98d0-df8f6a0b5d47,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Avoid Using External Commands</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Avoid Using External Commands</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Avoid using external commands for application functionality. Write PHP code to perform that functionality instead.
+
+==Why==
+
+Using external commands for application functionality creates the potential for command injection vulnerabilities. If it's possible to satisfy design requirements using PHP code, do that instead of using external commands.
+
+==How==
+
+To remove code that uses external commands:
+
+# **Find all code that uses external commands.** To identify potential trouble spots, find all the code in the application that executes operating system commands by searching for use of the following functions: exec, passthru, shell_exec, system, proc_open, popen, curl_exec, curl_multi_exec, pcntl_exec, dl. Create a spreadsheet to list all this code.
+# **Replace code that uses external commands.** Using the spreadsheet as a guide, examine each piece of code that executes operating system commands and determine whether it is absolutely necessary to the application. If possible, rewrite that code to use only PHP functions, thus removing the possibility that it contains a command injection vulnerability.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

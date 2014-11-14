@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1823450138" Content_Hash="1971336051">
+  <Metadata>
+    <Id>d411dfee-9f4d-4392-a8ac-8be858175e32</Id>
+    <Id_History>d411dfee-9f4d-4392-a8ac-8be858175e32,8c8f6214-68f4-40f8-bbd2-7d24e57c6211,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Protect Data in the Registry Using Key Permissions</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Protect Data in the Registry Using Key Permissions</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to illustrate how to secure data stored in the Windows registry through the use of registry access control list (ACL) permissions. By using these permissions, a user can programmatically control who can and cannot access data stored in the registry.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Creating an applying a registry kep security context to control which users can access data from the registry.</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application comprised of multiple components that to access the same key material for secret encryption keys. </li>
+    <li>Application needs to store data configuration data to be retrieved on startup, such as database connection strings.</li>
+    <li>Application consists of a client tier that needs to store runtime credentials to connect to other application tiers.</li>
+  </ul>
+  <h1>Problem Example</h1>
+  <pre>// Write an unprotected key and value into the registry. Default <br />// permissions allow all other users to access this key<br />RegistryKey key = Registry.CurrentUser.CreateSubKey(keyName);<br />key.SetValue(valueName, data);</pre>
+  <ul>
+    <li>Any other user on the system can access this key because no security context has been applied.</li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Security;<br />using System.Security.AccessControl;<br />using Microsoft.Win32;</pre>
+  <p>Furthermore, two distinct users must be defined on the test system. These users will be referred to in the following example as User A and User B. This test cases illustrates how a registry key secured using access control permissions by one user cannot be access by another user in the following 3 steps:</p>
+  <p>1) Store a key as "User A" (in this example, "User A" = Administrator) using the following code:</p>
+  <pre>static void Main(string[] args)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; string keyName = "AdminSecuredKey";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; string valueName = "AdminSecuredValue";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlledRegistryStore(keyName, valueName, "sensitive data");<br />}<br /><br />static void ControlledRegistryStore(string keyName, string valueName, string data)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a security context for a new key that we will use to store our data.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The security context will restrict access to only our user.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; string user = Environment.UserDomainName + "\\" + Environment.UserName;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistrySecurity security = new RegistrySecurity();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistryAccessRule rule = new RegistryAccessRule(user,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistryRights.FullControl,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; InheritanceFlags.ContainerInherit,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; PropagationFlags.None,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; AccessControlType.Allow);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; security.AddAccessRule(rule);<br /><br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Actually create the new registry key and apply the security context we just came up with.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistryKey key = Registry.CurrentUser.CreateSubKey(keyName,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;RegistryKeyPermissionCheck.ReadWriteSubTree,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;security);<br /><br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Write the data into the registry<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; key.SetValue(valueName, data);<br />}</pre>
+  <p>2) Attempt to retrieve the previously stored key as User A using the following code:</p>
+  <pre>static void Main(string[] args)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string keyName = "AdminSecuredKey";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string valueName = "AdminSecuredValue";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string data = RegistryRetrieve(Registry.Users, "\\" + keyName, valueName);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (data != null)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Console.WriteLine(data);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; else<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Console.WriteLine("*** Inaccessible key ***");<br />}<br /><br />static string RegistryRetrieve(RegistryKey parent, string keyName, string valueName)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Recursively search through each subkey of a parent key<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // checking to see if a match for the keyname exist and if<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // the data can be obtained from that key. Returns data upon<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // match and an error message otherwise. <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string childName in parent.GetSubKeyNames())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; try<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; RegistryKey child = parent.OpenSubKey(childName);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string data = null;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (child.Name.EndsWith(keyName))<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br /> &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // We found the name, try to pull out key data<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; data = child.GetValue(valueName) as string;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />        &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; else<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;         {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // No luck finding the name, try a depth-first recursive search<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; data = RegistryRetrieve(child, keyName, valueName);<br />        &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;         if (data != null) return data;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; catch (Exception ex)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Print out a message whenever we come across a <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // key we don't have permissions to open<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Console.WriteLine(childName + ": " + ex.Message);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return null;<br />}</pre>
+  <pre>
+  </pre>
+  <p>3) Repeat Step 2 while logged in as User B. Compare results.</p>
+  <h1>Expected Result</h1>
+  <pre>--------------------------------<br />"User A" (Administrator) output:<br />--------------------------------<br />C:\temp&gt;whoami<br />vm-win2003\administrator<br />C:\temp&gt;RegistrySnippet.exe<br />S-1-5-21-2537879503-2075122368-204042655-1006: Requested registry access is not<br />allowed.<br />sensitive data<br />---------------------------<br />"User B" (Joe User) output:<br />---------------------------<br />C:\temp&gt;whoami<br />vm-win2003\joeuser<br />C:\temp&gt;RegistrySnippet.exe<br />NetDDE: Requested registry access is not allowed.<br />S-1-5-19: Requested registry access is not allowed.<br />S-1-5-19_Classes: Requested registry access is not allowed.<br />S-1-5-20: Requested registry access is not allowed.<br />S-1-5-20_Classes: Requested registry access is not allowed.<br />S-1-5-21-2537879503-2075122368-204042655-1006: Requested registry access is not<br />allowed.<br />S-1-5-21-2537879503-2075122368-204042655-500: Requested registry access is not a<br />llowed.<br />S-1-5-21-2537879503-2075122368-204042655-500_Classes: Requested registry access<br />is not allowed.<br />NetDDE: Requested registry access is not allowed.<br />* Inaccessible key *&amp;nbsp;</pre>
+  <h1>More Information</h1>
+  <ul>
+    <li>Developers should not rely alone or registry permissions to control access to highly sensitive data. Consider encrypting certain data using the Data Protection API (DPAPI) in conjunction with registry access controls to add additional safeguards to more sensitive data stored in the registry.</li>
+  </ul>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

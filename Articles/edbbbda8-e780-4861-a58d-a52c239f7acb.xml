@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>edbbbda8-e780-4861-a58d-a52c239f7acb</Id>
+    <Id_History>edbbbda8-e780-4861-a58d-a52c239f7acb,a1eeb7bd-1bc2-486d-8cce-334ec61295f8,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Local Machine Credential Theft Bugs in Scala</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Local Machine Credential Theft Bugs in Scala</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+</p>
+  <h1>Summary</h1>
+  <p>Scala applications that authenticate their clients using a username and password combination must store these credentials somewhere within the application’s realm. Some Scala applications directly store credentials in a file or a database server, while others allow browsers to store client credentials in the cache or browser’s history for future logins. During a local machine credential attack, the attacker first gets access to the computer where credentials are stored and then reads the credentials to execute further attacks on the application.</p>
+  <p>Follow these steps to test for local machine credential theft bugs in Scala:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios</li>
+    <li>Step 2: Analyze causes and countermeasures</li>
+    <li>Step 3: Execute test cases</li>
+  </ul>
+  <h1>Step 1: Understand Attack Scenarios</h1>
+  <p>First it is necessary to understand the anatomy of an attack scenario for local credential theft bugs in Scala applications.</p>
+  <p>Scala applications that deal with authentication keep a record of valid credentials in a credential store such as a file or a database in a local computer. During local machine credential theft attacks, an attacker logs in to the computer used to store the target client’s Scala application credentials and uses different methods to steal the credentials from the target computer. Depending on how Scala applications implement authentication, credentials may be stored in a file or a database server. Additional credentials might be found in the cache history and browser’s store.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker logs in to the target computer (computer storing client credentials).</li>
+    <li>The attacker grabs the target client’s credentials from the credentials store, the cache history, or the browser’s store.</li>
+    <li>The attacker uses the target client’s credentials to access the Scala application.</li>
+  </ol>
+  <h1>Step 2: Analyze Causes and Countermeasures</h1>
+  <p>Next it is necessary to review the different causes and countermeasures for local credential theft bugs.</p>
+  <h2>
+    <em>Permissions on Credential Stores</em>
+  </h2>
+  <p>Scala applications that store credentials in a location accessible to any low-privileged users of the host computer are vulnerable to local machine credential attacks.&amp;nbsp;For instance, an application that stores credentials in the&amp;nbsp;<i>c:\user_files</i>&amp;nbsp;folder must make sure to set the appropriate permissions or Access Control Lists (ACLs) on this folder.&amp;nbsp;If the application uses the credential file&amp;nbsp;<i>c:\user_files\credentials.txt</i>&amp;nbsp;and doesn’t restrict its access to administrators or a low-privileged account used only by the Scala application (and not any logged-in user), the application allows any logged-in attacker to read the file and steal the credentials.The same applies to a database table: a Scala application that doesn’t set the permissions on the table used to store username and passwords allows any database server guest user to read and steal credentials from the database.</p>
+  <h2>
+    <em>Credentials in Clear Text</em>
+  </h2>
+  <p>Applications that need to store credentials must take the appropriate precautions so that if attackers steal client credentials, they can’t use them to log in to the target application.&amp;nbsp;Thus, it is recommended to store password verifiers in their encryption version as one-way hashes with an added cryptographic salt. As a result, if the attacker executes a successful local credential theft attack, he or she will only be able to get the password’s hash but fail to get the actual password required to log in to the target application.</p>
+  <h2>
+    <em>Keeping Credentials in the browser’s cache</em>
+  </h2>
+  <p>Scala applications can choose to allow their clients to remember the password for future uses.This option commonly appears as the “remember me next time” check box in the login form.&amp;nbsp;To avoid credential theft attacks, developers are encouraged to disallow this option by default and always require its clients to enter valid credentials.This will avoid credentials&amp;nbsp;being stored in the browser’s cache for future use.</p>
+  <h1>Step 3: Execute Test Cases</h1>
+  <p>Now that you’ve reviewed the theoretical aspects of local credential theft bugs, it is necessary to execute the following test cases to check if your application is vulnerable.</p>
+  <p>
+    <b>
+      <i>Test for insecure credential stores in file system</i>
+    </b>
+  </p>
+  <p>Follow these steps to test for insecure credentials in the file system:</p>
+  <ol>
+    <li>Log in to the machine where credentials are stored using a low-privileged account.</li>
+    <li>Browse to the folder/registry key used to store credentials.</li>
+    <li>Read credentials.</li>
+  </ol>
+  <p>Expected results: The application is vulnerable if it allows a low-privileged user to read client credentials from the file system or registry.</p>
+  <h2>
+    <em>Test for credentials in browser’s cache</em>
+  </h2>
+  <p>Follow these steps to test for local credential theft in the browser’s cache.</p>
+  <ol>
+    <li>Log in to the target machine using a low privileged account.</li>
+    <li>Download an HTTP proxy tool, such as Burp proxy.</li>
+    <li>Open the web browser, and set web browser connection options to use HTTP proxy.</li>
+    <li>In proxy, turn intercept off.</li>
+    <li>Browse to the application’s login page.</li>
+    <li>In proxy, turn intercept on.</li>
+    <li>Type the username of the target client. A password may appear in hidden characters.</li>
+    <li>Submit login request.</li>
+  </ol>
+  <p>Expected results: The application is vulnerable if the HTTP proxy shows the target client username and password in the intercepted login request.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Related Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3ebe4394-e2f3-4f73-9c9a-b3206997836b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Hash and Salt Passwords for Storage</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3ebe4394-e2f3-4f73-9c9a-b3206997836b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Hash and Salt Passwords</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="1d36a6e8-fcbb-4205-8d3a-b2366e2f9f78" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Strong Symmetric Encryption</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="7e5f0d99-7f46-4c7f-a3cd-10e3d9f904bb" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Strong Asymmetric Encryption</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="85b85b5f-4aec-452e-9474-2c420922baa8" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Encrypt Off-site Backups</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Related Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="8acdd7d4-a3ac-489b-9de7-95e76f9aac41" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Threats to Data Are Considered</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ab9a7b0e-47d7-4746-b5dc-a8a9c0181fee" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Passwords Are Hashed and Salted for Storage</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ab9a7b0e-47d7-4746-b5dc-a8a9c0181fee" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Passwords Are Hashed and Salted</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="fc8f700d-be5f-492d-9dc1-560bcdbe7c5d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Symmetric Encryption Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="d3d5c2de-fd8a-4e85-8157-bdd39d1c8b07" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Asymmetric Encryption Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="4356770d-fff8-41eb-ae3f-32318bc05da1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Off-site Backups Are Encrypted</a>
+      </b>
+    </li>
+  </ul>
+  <div>
+    <div>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

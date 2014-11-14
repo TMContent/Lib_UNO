@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1838224953" Content_Hash="-660964258">
+  <Metadata>
+    <Id>5d567293-f93c-4b5b-95e2-a18c9a1c8010</Id>
+    <Id_History>5d567293-f93c-4b5b-95e2-a18c9a1c8010,f025f41e-05b3-4122-b0a8-e77d23ee46ce,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Handle Unhandled Exceptions In Downstream Services</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Handle Unhandled Exceptions In Downstream Services</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Use a global exception handler to catch unhandled exceptions and prevent them from being propagated to the client.</p>
+  <p>You can handle the unhandled exceptions in a WCF service by subscribing to the Faulted event of a service host object. By subscribing to this event you can determine the cause of a failure, and then perform the necessary actions to abort or restart the service.</p>
+  <p>The following code snippet shows how to subscribe to the Faulted event:</p>
+  <pre>// hosting a WCF service <br />ServiceHost customerServiceHost;<br />customerServiceHost = new ServiceHost(…);<br />…<br />// Subscribe to the Faulted event of the customerServiceHost object<br />customerServiceHost.Faulted += new EventHandler(faultHandler);<br />…<br />// FaultHandler method - invoked when customerServiceHost enters the Faulted state<br />void faultHandler(object sender, EventArgs e)<br />{     // log the reasons for the fault…<br />}</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Fault Contracts, see “Specifying and Handling Faults in Contracts and Services” at <a href="http://msdn.microsoft.com/en-us/library/ms733721.aspx">http://msdn.microsoft.com/en-us/library/ms733721.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

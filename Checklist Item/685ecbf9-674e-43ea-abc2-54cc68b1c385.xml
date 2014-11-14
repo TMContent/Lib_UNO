@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1553990007" Content_Hash="659899366">
+  <Metadata>
+    <Id>685ecbf9-674e-43ea-abc2-54cc68b1c385</Id>
+    <Id_History>685ecbf9-674e-43ea-abc2-54cc68b1c385,d018789c-8962-4972-a76f-5032c1d47c7f,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Unusual Activity Is Logged</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Unusual Activity Is Logged</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure that the application logs events that might indicate unusual or suspicious activity. Unusual activity includes replays of old authentication tickets or too many login attempts over a specific period of time.</p>
+  <h1>Why</h1>
+  <p>Instrumenting for suspicious activity allows you to detect and react to potential problems as early as possible. </p>
+  <h1>How To Check</h1>
+  <ol>
+    <li>
+      <p />
+      <strong>Define what should be logged. </strong>Before you can check whether the correct logging is taking place, you need to&amp;nbsp;create a list that defines unusual activity for your application. Use the following list as a starting point: <ul><li>Repeated unsuccessful authentication attempts </li><li>Attempts to use stale session-related information or authentication tickets </li><li>Large and/or rapid transactions </li><li>Transactions that occur outside of normal time periods </li><li>Application errors, especially those not easily caused by user error or occurring&amp;nbsp;in deeper tiers.</li></ul></li>
+    <li>
+      <p>
+        <strong>Ensure the data is being logged. </strong>Once you understand what constitutes unusual activity for your application, check to ensure that it is&amp;nbsp;logged appropriately.&amp;nbsp;Appropriate logging depends upon the specific data being logged. Most applications will raise a custom event to indicate when unusual activity is occurring. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that logs are monitored. </strong>Monitoring needs will depend on the application. Ensure that the applicable monitoring is in place and that the responsible staff has an appropriate response plan ready in the event of any suspicious behavior.</p>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <ol>
+    <li>
+      <p />
+      <strong>Define unusual activity for your application. </strong>The first and most important step is understanding what defines suspicious activity for your application. Because the business focus of each application is unique, many of the specifics must be&amp;nbsp;determined for each application. For example, logging may be part of a larger fraud-prevention campaign. However, there are some activities that are suspicious across a wide variety of application types: <ul><li>Repeated unsuccessful authentication attempts </li><li>Attempts to use stale session-related information or authentication tickets </li><li>Large or rapid transactions </li><li>Transactions that occur outside of normal time periods </li><li>Application errors, especially those not easily caused by user error or occuring&amp;nbsp;in deeper tiers </li></ul></li>
+    <li>
+      <p>
+        <strong>Ensure sufficient data is being logged. </strong>Once you understand what constitutes unusual activity for your application, you need to ensure that it is&amp;nbsp;logged appropriately.&amp;nbsp;Appropriate logging depends upon the specific data being logged. Example: Replays of old authentication tickets automatically raise an <em>ExpiredTicketFailure</em> event. To raise an event for too many login attempts, you can write an event handler for the <em>LoginError</em> event of the <em>Login</em> control. In the handler, call <em>Membership.GetUser(Login1.UserName).IsLockedOut</em> to determine if there have been too many login attempts for the user.&amp;nbsp;You can then raise a custom event to indicate that the account has been locked out.&amp;nbsp;Custom events can also be raised for a wide variety of non-authentication-related unusual activities. Other suspicious activity will require a more application-specific approach. Some suspicious activity logging will be best accomplished by parsing existing log files and looking for anomalous activity—rapid transactions from a single host or user, unusually large orders, etc. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that logs are monitored. </strong>Logging&amp;nbsp;will not be useful&amp;nbsp;if the results never see the light of day, so the next step is ensuring that logs are monitored and the information is acted upon. Work with the operations team who will be managing the application to define a plan for monitoring and responding to log events. Depending on the environment, you may need to define this from scratch, or you may be fitting into a pre-existing framework. <br />If you are&amp;nbsp;defining a monitoring framework from scratch, here are some things you need to consider: </p>
+      <ul>
+        <li>When do the logs need to be monitored—some applications will need 24x7 coverage, but many will be fine with 8x5. </li>
+        <li>How much time will log monitoring take—if&amp;nbsp;your application is a&amp;nbsp;large ecommerce site, you may have a dedicated team for log monitoring, but a small web app may be safe enough with a sysadmin taking a look a couple times a day. </li>
+        <li>What are your response time needs—if there's a serious problem with the site, it will&amp;nbsp;show up in the logs first; is your tolerance for problems defined in minutes, hours, or days? </li>
+        <li>What will be your procedure for acting on potential issues? </li>
+        <li>How will you control access to your logs and information derived from them; how sensitive is the information likely to be? </li>
+        <li>What response capabilities will the log monitoring team have? Log monitoring on its own does no good if the information can't be acted on—compromised accounts need to be locked, machines patched or taken off line, etc.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid pitfalls for logging. </strong>Logging too much information can end up being a problem of its own. Once you have an idea of the volume of log events that you're seeing from your application, it may be worthwhile to implement some form of log throttling to reduce the flow of information to a rate at which you can act upon. Good log throttling should only eliminate redundant information&amp;nbsp;as well as&amp;nbsp;provide a way to surface the most important information first. Automatically taking action based on detection of anomalous conditions is a very dangerous thing to do and is&amp;nbsp;best avoided. While it may be reasonable to throttle the speed at which an event (say, a login attempt) may occur, preventing an action from occurring&amp;nbsp;may result in an easy-to-launch denial of service attack against your application. </p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/9cb2d7b6-3657-4330-89d6-71cd9475675a">Log Unusual Activity</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

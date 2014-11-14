@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1052502610" Content_Hash="-1043333880">
+  <Metadata>
+    <Id>9cf8aed6-22a5-49c1-a0ce-1d8e5366bebf</Id>
+    <Id_History>9cf8aed6-22a5-49c1-a0ce-1d8e5366bebf,5bca76e2-9b93-4cfc-a741-f40963266b4c,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Consider Using Two Factor Authentication</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Using Two Factor Authentication</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications written using Servlets or JSP.</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use two-factor authentication when a system is critical to business functionality and/or operates with large number of critical assets.</p>
+  <h1>Why</h1>
+  <p>Two-factor authentication is a stronger authentication mechanism that requires more than a simple password to login. As such, it offers greater security for systems that need it. </p>
+  <h1>When</h1>
+  <p>Use two-factor authentication if your application is critical to your business functionality or handles a large number of critical assets.</p>
+  <h1>How</h1>
+  <p>Two factor authentication is based on the concept of something the user knows and something the user has. Because of the associated complexity, it may be necessary to consult with a technology vendor that specializes in two factor authentication. </p>
+  <p>Two factor authentication has been implemented by some vendors such as RSA. However, there are certain problems&amp;nbsp;that hold it back from being&amp;nbsp;widely implemented:</p>
+  <ul>
+    <li>It is expensive and troublesome to implement due to the proprietary software packages that need to be deployed and maintained on the client PCs. <li>It&amp;nbsp;does not thwart certain attacks such as the man-in-the-middle and trojan attacks, details of which can be found in the article <a href="http://searchsecurity.techtarget.com/tip/1,289483,sid14_gci968784,00.html">The insecurity of two-factor authentication</a>. <li>There have been security concerns about the tools implementing this technology as they have been found to store passwords in plaintext.</li></li></li>
+  </ul>
+  <p>In spite of these problems, two-factor authentication does add a layer of security to the authentication process and is useful in thwarting certain types of attacks such as online identity theft. Hence, before implementing it, spend time carefully considering the value of the assets to be protected and the trade-offs involved in two-factor authentication.</p>
+  <p>To utilize two-factor authentication:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the necessity for two-factor authentication.</strong> Examine your application and determine the need for two-factor authentication. You may want to use two-factor authentication when your application handles a large number of assets and/or performs critical business functionality.</p>
+      <li>
+        <p>
+          <strong>Choose an authentication solution.</strong> Two factor authentication is a general solution for strong authentication. It is based on the concept of something the user knows and something the user has. For example, a debit card requires the user to have the physical card and know the PIN before any transactions can be made from the associated bank account. In the software world, two-factor authentication requires the user's credentials and the use of a device, recognized by the application, or a cryptographically developed code that evolves over time. Some of the solutions available are:</p>
+        <ul>
+          <li>RSA's SecurID product, which consists of a hardware or software token, assigned to a user, that generates an authentication code every 60 seconds. <li>VeriSign's Unified Authentication managed service, in which enterprises deploy USB tokens to all their users. <li>ActivIdentity's Strong Authentication solutions with smart cards, one-time password and USB tokens.</li></li></li>
+        </ul>
+        <p>A number of vendors use a cookie on the client machine as a "second factor," but this isn't a true implementation of the two-factor authentication mechanism. At best, a cookie ensures machine authentication, not user authentication, and even then, it does not provide a sufficient guarantee of independence from the security of the underlying platform, unlike a physically separate token.</p>
+        <li>
+          <p>
+            <strong>Apply the authentication solution.</strong> After choosing the two-factor authentication solution that best fits your application's needs, consult the appropriate vendor about the technical aspects of integrating their solution into your application.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is an online banking product. It uses single-factor authentication when verifying its users; therefore, the user would need to only supply their username and password (the single factor) in order to authenticate. If the user's credentials are not strong enough and can easily be guessed, or are leaked by means of a phishing attack, the attacker would be able to gain access to the user's bank account.</p>
+  <h1>Solution Example</h1>
+  <p>MyApp is an online banking product. It uses two-factor authentication when verifying its users. Because it implements two-factor authentication, the user would need to provide their user name, password (the first factor), and the information stored in their security token (the second factor, which is a physical "something you have" item) in order to authenticate. If the user's credentials are leaked, the account would be still protected as the attacker would not have the second required authentication token.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about strong authentication, see:&amp;nbsp;<a href="http://en.wikipedia.org/wiki/Strong_authentication">Strong authentication</a> in Wikipedia. <li>To learn about the insecurities associated with two-factor authentication, visit: <a href="http://searchsecurity.techtarget.com/tip/1,289483,sid14_gci968784,00.html">The insecurity of two-factor authentication</a>. <li>To learn about some two-factor authentication failures, see: <a href="http://www.schneier.com/essay-083.html">Two-Factor Authentication: Too Little, Too Late</a>.</li></li></li>
+  </ul>
+  <h1>Authentication Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/989e27ec-ffdf-4006-88bd-1c09fc991a28">Centralize Authentication Controls</a>
+    </li>
+    <li>
+      <a href="/article/d3a69ef7-2c63-41bc-81e4-803b0ea199d8">Use Server-side Authentication</a>
+    </li>
+    <li>
+      <a href="/article/38d12903-9c3b-46bd-9f5e-f223c3272624">Make Sure Authentication Controls Fail Securely</a>
+    </li>
+    <li>
+      <a href="/article/84fd606b-e2f2-4c48-9c6e-6b5e780c6163">Force Re-authentication When Executing Critical Functionality</a>
+    </li>
+    <li>
+      <a href="/article/c566cabe-2463-4d24-8763-22e8468d167e">Validate Usernames Before Processing Them</a>
+    </li>
+    <li>
+      <a href="/article/7ba2d49c-ff53-4755-97ae-0efcb0aa9c22">Lock Accounts After Consecutive Failed Login Attempts</a>
+    </li>
+    <li>
+      <a href="/article/4b5b1f05-aa9a-4ebc-8b2e-3cecabed03e1">Enforce Strong Passwords</a>
+    </li>
+    <li>
+      <a href="/article/ea25af24-8eca-45ad-9f41-94bad8880247">Force Password Renewal</a>
+    </li>
+    <li>
+      <a href="/article/c7825052-f281-4ac8-a786-41b776219af6">Mask All Password Fields</a>
+    </li>
+    <li>
+      <a href="/article/c4d9269f-9157-4919-952c-f0d14ccd7f60">Verify the Application's Authenticity to the User</a>
+    </li>
+    <li>
+      <a href="/article/b4f83e8e-3223-4e49-bc9c-56c8c7268582">Place Logout Links on All Pages that Require Authentication</a>
+    </li>
+    <li>
+      <a href="/article/ff95311e-797f-417f-bd0b-e6cf610f706c">Do Not Leave Passwords in Memory</a>
+    </li>
+    <li>
+      <a href="/article/bcf8adb4-8186-4b97-b490-4fa33f506bfd">Limit Access to the Credential Store</a>
+    </li>
+    <li>
+      <a href="/article/0dba2e1f-7d49-4d91-bc93-ad85480f784a">Consider Using JAAS for Authentication</a>
+    </li>
+    <li>
+      <a href="/article/9cf8aed6-22a5-49c1-a0ce-1d8e5366bebf">Consider Using Two Factor Authentication</a>
+    </li>
+  </ul>
+  <h1>Authentication Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/4e431329-73aa-41f7-b397-9b7e26294a4c">Authentication Controls Are Centralized</a>
+    </li>
+    <li>
+      <a href="/article/b103207d-73e3-4964-9a00-2b15c3e012b8">Server-side Authentication Is Used</a>
+    </li>
+    <li>
+      <a href="/article/ded06846-ad7f-4044-87d2-8bbb6b885713">Authentication Controls Fail Securely</a>
+    </li>
+    <li>
+      <a href="/article/df093ee3-ad7b-4191-935c-8bb0cad78d98">Re-authentication Is Enforced When Executing Critical Functionality</a>
+    </li>
+    <li>
+      <a href="/article/f8586505-72f9-4c14-a365-3e5049e5ca57">Usernames Are Validated Before Use</a>
+    </li>
+    <li>
+      <a href="/article/61e0e2b4-2f09-429a-b72f-f8933f2fa9b6">Accounts Are Locked After Consecutive Failed Login Attempts</a>
+    </li>
+    <li>
+      <a href="/article/7401862f-ae81-4f31-9340-981b0ec5a854">Strong Passwords Are Enforced</a>
+    </li>
+    <li>
+      <a href="/article/12889762-1d65-4b7d-a90a-58ff6c23d1e4">Password Renewal Is Enforced</a>
+    </li>
+    <li>
+      <a href="/article/09f994c9-a401-404c-bdc9-210038eba658">All Password Fields Are Masked</a>
+    </li>
+    <li>
+      <a href="/article/35851f18-13a0-4bf8-88cc-d35c371cfb12">The Application's Authenticity Is Verified to the User</a>
+    </li>
+    <li>
+      <a href="/article/493e0e57-254a-4697-8fa1-c93e706d416d">All Pages that Use Authentication Have Logout Links</a>
+    </li>
+    <li>
+      <a href="/article/55488f2e-ed85-4f0f-9f83-1d90a5d10bd0">Passwords Are Not Left in Memory</a>
+    </li>
+    <li>
+      <a href="/article/9031f577-80b0-4a2e-9652-7b470439a0df">Access to the Credential Store Is Limited</a>
+    </li>
+  </ul>
+  <h1>Authentication Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/f32846cf-35f6-40fe-8517-f0ac8a415383">How to Test for Account Lockout Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

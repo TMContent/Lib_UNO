@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1084344941" Content_Hash="-1440027394">
+  <Metadata>
+    <Id>8a6f81b8-f2e3-49c5-a5ad-1cd331fd571f</Id>
+    <Id_History>8a6f81b8-f2e3-49c5-a5ad-1cd331fd571f,68d82d05-b98e-4a80-abe3-92f9918a55ff,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Pointers Are Validated Before Use</Title>
+    <Category>Unmanaged Code</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that a pointer validation function is implemented and used when pointers are passed as arguments to functions.</p>
+  <h1>Why</h1>
+  <p>Invalid pointers may cause the program to crash or allow an attacker to execute artbitrary code.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that pointers are validated before use:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Locate the pointer validation function.</strong> Your project should have an input and data validation class or library. Verify that this class or library has a pointer validation function. The pointer validation function should throw exceptions when invalid pointers are detected.</p>
+      <li>
+        <p>
+          <strong>Verify that the validation function checks for null.</strong> Examine the pointer validation function to make sure that it checks for null pointers.</p>
+        <li>
+          <p>
+            <strong>Verify that the validation function uses dynamic_cast.</strong> Examine the pointer validation function to make sure that it uses dynamic_cast to validate pointer type.</p>
+          <li>
+            <p>
+              <strong>Verify that the validation function uses Win32 APIs, if appropriate.</strong> If the project is built on a Windows platform, verify that the pointer validation function uses the following APIs as applicable: </p>
+            <ul>
+              <li>IsBadReadPtr<li>IsBadWritePtr<li>IsBadCodePtr<li>IsBadStringPtr</li></li></li></li>
+            </ul>
+            <li>
+              <p>
+                <strong>Verify that the pointer validation function is used.</strong> Look for functions that accept pointers as arguments. Verify that the pointer validation function is used to validate pointer arguments in the very beginning of function code.</p>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to implement a pointer validation function:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Add a pointer validation function.</strong> You should have a class or library dedicated to input and data validation. Add a function to this class or library to validate pointers. The pointer validation function should throw exceptions when invalid pointers are detected.</p>
+      <li>
+        <p>
+          <strong>Check for null pointers.</strong> The first and most obvious thing to check for is null. Add code to check that the pointer is not null to your validation function.</p>
+        <li>
+          <p>
+            <strong>Use dynamic_cast.</strong>&amp;nbsp;When converting an incompatible pointer type, dynamic_cast returns a null pointer.&amp;nbsp; This makes dynamic_cast suitable for checking whether a pointer points to an object of a correct type. For the purpose of pointer validation, use it like this: <br />if (NULL == dynamic_cast(pointer)) //error</p>
+          <li>
+            <p>
+              <strong>Use Win32 APIs.</strong> The following APIs may be used to validate pointers on Windows platforms: </p>
+            <ul>
+              <li>IsBadReadPtr<li>IsBadWritePtr<li>IsBadCodePtr<li>IsBadStringPtr</li></li></li></li>
+            </ul>
+            <li>
+              <p>
+                <strong>Validate pointers.</strong> Use the pointer validation function before dereferencing them. This is most likely to be useful when pointers are passed as arguments to functions. In such cases, pointers should be validated in the very beginning of function code.</p>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/3839edb9-a877-4e4a-8826-f683566ad67a">Validate Pointers Before Use</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

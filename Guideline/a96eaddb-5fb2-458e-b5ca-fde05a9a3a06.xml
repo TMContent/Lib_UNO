@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1740838253" Content_Hash="581355024">
+  <Metadata>
+    <Id>a96eaddb-5fb2-458e-b5ca-fde05a9a3a06</Id>
+    <Id_History>a96eaddb-5fb2-458e-b5ca-fde05a9a3a06,4c43b0bb-4d09-4736-b15a-e3c893f1e1d2,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Do Not Place Sensitive Data in Parameters</Title>
+    <Category>Session Management</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Place Sensitive Data in Parameters</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Do not place sensitive data in unprotected query string parameters. Sensitive data should be either stored in sessions or encrypted before being sent to the server.</p>
+  <h1>Why</h1>
+  <p>Sensitive data stored in unprotected parameters is sent over the network in plain-text and can be easily stolen by an attacker with a network sniffer or by the operator of a web proxy.</p>
+  <h1>When</h1>
+  <p>If your application accepts sensitive data as input or uses it to track session information, avoid placing that data in unprotected parameters. </p>
+  <h1>How</h1>
+  <p>Follow these steps when handling sensitive data via parameters:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the parameters.</strong> Parameters can be used as both entry points and storage places. Locating your application's parameters helps identify potential sources of input. Because parameters are easily accessible by the client, they should be considered untrusted. Different types of parameters include:</p>
+      <ul>
+        <li>URL based parameters <li>Form based parameters <li>ViewState <li>Hidden fields <li>Cookies</li></li></li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Identify the use.</strong> Parameters can be used for several purposes. If you are using parameters to send sensitive data use the steps below to find a work around:</p>
+        <ul>
+          <li>
+            <p>
+              <strong>Submitting input</strong>: Submitting sensitive data using parameters should always be done through an encrypted channel and always using a POST request. Use SSL to ensure encryption. Avoid using hidden fields when gathering information from the user. Allowing the user to enter all information about their account ensures that they are aware of all data that is being sent. Any information regarding the user's client environment can be gathered via the HTTP headers. Avoid using GET for parameters containing sensitive data, as the data will end up in browser histories, web server logs, and proxy server logs (depending on configuration and environment).</p>
+            <p>Additionally, if your application uses the ASP.NET tracing facilities, ensure that tracing is disabled for all ASP.NET pages that accept sensitive data. Example:</p>
+            <pre>&lt;&amp;#37;&amp;#64; Page Language="C#" AutoEventWireup="true" CodeFile="Login.aspx.cs" Inherits="Login" <strong>Trace="false"</strong> &amp;#37;&gt;</pre>
+            <li>
+              <p>
+                <strong>User tracking</strong>: User tracking should always be done server-side using sessions. Avoid storing sensitive information in hidden fields and cookies. If it is necessary to store sensitive data using parameters, encrypt the data using a key that is known only by your application. If encrypted sensitive data is stored inside a cookie, avoid setting the cookie as persistent.</p>
+            </li>
+          </li>
+        </ul>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>In the following page, the credentials are sent using a GET request. When the page is submitted, the credentials will be available in the URL. As the request is sent unencrypted, it is possible for a malicious user to obtain the credentials by sniffing the HTTP traffic. The credentials will also be present in both the server logs and the client's browser history, a serious problem on a public terminal.</p>
+  <pre>&lt;html&gt;<br />  &lt;head&gt;<br />    &lt;title&gt;login form&lt;/title&gt;<br />  &lt;/head&gt;<br />  &lt;body&gt;<br />    &lt;form method="GET" action="http://login.example.com/myapp/login"&gt;<br />    &lt;input type="text" name="user" size=25&gt;&lt;br&gt;<br />    &lt;input type="password" name="pass" size=25&gt;&lt;br&gt;<br />    &lt;input type="submit" name="submit" value="log in"&gt;<br />    &lt;/form&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>In the following page, the credentials are sent using a POST request over SSL. When the page is submitted, the credentials will not be shown in the URL. The request is encrypted, so a malicious user won't be able to obtain the credentials with a network sniffer, and because the credentials are not in the URL, they won't show up in the server or client logs.</p>
+  <pre>&lt;html&gt;<br />  &lt;head&gt;<br />    &lt;title&gt;login form&lt;/title&gt;<br />  &lt;/head&gt;<br />  &lt;body&gt;<br />    &lt;form method="POST" action="https://login.example.com/myapp/login"&gt; <br />    &lt;input type="text" name="user" size=25&gt;&lt;br&gt;<br />    &lt;input type="password" name="pass" size=25&gt;&lt;br&gt;<br />    &lt;input type="submit" name="submit" value="log in"&gt;<br />    &lt;/form&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about parameter manipulation and ways to prevent it, see: <a href="http://www.cgisecurity.com/owasp/html/ch11s04.html">Parameter Manipulation</a>. <li>To learn more about session management, see: <a href="http://www.securityfocus.com/infocus/1774">Basic Web Session Impersonation</a>.</li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/7d83d845-cd2b-4067-bb4c-5fbb890b9c9e">Attack: Information Disclosure Attack</a>
+      <li>
+        <a href="/article/79cb6dbb-6c58-4c15-9c96-4a7b3f450d3c">Checklist Item: Sensitive Data is Not Placed in Parameters </a>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

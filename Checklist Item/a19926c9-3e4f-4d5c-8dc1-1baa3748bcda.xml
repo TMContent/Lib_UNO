@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2074088869" Content_Hash="1462761169">
+  <Metadata>
+    <Id>a19926c9-3e4f-4d5c-8dc1-1baa3748bcda</Id>
+    <Id_History>a19926c9-3e4f-4d5c-8dc1-1baa3748bcda,86738a26-0fe6-4e0e-940c-de6e36ad5423,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Log Files Are Protected</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Log Files Are Protected</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure access to your application's log files are restricted. </p>
+  <h1>Why</h1>
+  <p>Logged events often contain internal application details that could enable an attacker to more effectively target your application.</p>
+  <h1>How to Check</h1>
+  <p>If your application generates multiple log files, use your application to generate all the log files and follow these steps to ensure they are protected:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify location of logs is not disclosed. </strong>Scan your application's code base to verify that the location of the log files is known only to the internal logging framework.</p>
+      <li>
+        <p>
+          <strong>Ensure appropriate Access Control Lists (ACL) are set. </strong>Verify that:</p>
+        <ul>
+          <li>Logs are set with the appropriate file system permissions. <li>All entities, excluding your application and its administrators/developers, are prohibited access to the logs. <li>If your application logs are backed up, verify that the backups are stored in an environment that is secure. <li>Log files are located on a non-system NTFS volume and not on the same volume where the Web site content resides.</li></li></li></li>
+        </ul>
+        <li>
+          <p>
+            <strong>Ensure that proper log management is in place. </strong>Verify that your application enforces your organization's audit policy with respect to managing its logs. Check that:</p>
+          <ul>
+            <li>Your application does not erase older log entries before they are deemed expired by your organization's audit policy. <li>If your application performs log rotation, ensure that older logs are stored by a unique identifier to prevent unintentional deletion of older log entries. <li>Your application logs user activity but not user-supplied data. For example, log the event that a user changed their password, but not the password itself. <li>Your application does not append user-supplied data to an exception's message and/or details.</li></li></li></li>
+          </ul>
+          <li>
+            <p>
+              <strong>Verify that ASP.NET health monitoring is secured. </strong>If your application uses ASP.NET health monitoring (a feature that is enabled by default), check if the following measures are set in place:</p>
+            <ul>
+              <li>
+                <strong>Logs are throttled:</strong> Depending on your application's requirements, ensure that your application's logs are properly throttled. Consult the <a href="/article/fc33dfc5-5210-4656-bc27-e43b16c3c89e">Consider Log Throttling</a> guideline for more details. <li><strong>Connection strings are secured:</strong> Ensure that all connection strings that are used by your application's logging framework are properly secured. Use the <a href="/article/1fe40372-6648-4496-8552-794f91ff6bbf">Connection Strings are Secured</a> checklist to aid you in this task.</li></li>
+            </ul>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An e-commerce site does hundreds of transactions an hour and logs data at the web and database levels, along with a separate security log that monitors all user and security-related events. Unfortunately, the security logs are stored in a location that is hidden in the application's directory tree. An attacker finds the location of the logs and retrieves all user and security-related events.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about setting secure filesystem permission to log files, see: <a href="http://support.microsoft.com/kb/310361">How to set secure NTFS permissions on IIS 5.0 log files and virtual directories in Windows 2000</a>. <li>To learn more about log rotation in IIS, visit: <a href="http://support.microsoft.com/kb/324091">HOW TO: View and Report from Log Files</a>. <li>To learn more about securing ASP.NET health monitoring, visit <a href="http://msdn2.microsoft.com/en-us/library/ms228045(VS.80).aspx">Securing ASP.NET Health Monitoring</a>&amp;nbsp;on MSDN.</li></li></li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/0256b587-e8b1-46e0-8b87-f62b9f816c45">Guideline: Protect Log Files </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

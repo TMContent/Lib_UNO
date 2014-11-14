@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000032948</Id>
+    <Id_History>00000000-0000-0000-0000-000000032948,7860df09-5e03-446f-9b06-7688efe1ee45,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title> Access Control Checks Are Performed for All Filesystem Access</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink> Access Control Checks Are Performed for All Filesystem Access</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Check if you have configured code access security policy in your web.config or machine.config files.
+
+==How to Check==
+Code Access Security Policy helps in limiting the amount of damage a badly written snippet of code can do, if exploited by a malicious attacker. Check if there is a section delimited by <securitypolicy></securitypolicy> in either the web.config or the machine.config on your system. This should be inside the <system.web> element.
+
+{{{
+<system.web>
+  <securitypolicy>
+     ...
+     ...
+  </securitypolicy>
+</system.web>
+}}}
+
+Check if there is a policy between these lines which places restrictions on File I/O.
+
+==How to Fix==
+
+To perform access control checks for all filesystem access add the <securitypolicy> section to your web.config or machine.config as follows.
+
+{{{
+<securitypolicy>
+  <trustlevel name="Medium" policyfile="web_MediumTrust.config"></trustlevel>
+</securitypolicy>
+}}}
+
+If the 'Medium' policy doesn't match your needs and you want more customization, create a new file called customtrust.config and add the permissions for File I/O into this file. A sample set of permissions could look like this:
+
+{{{
+<permissionset class="NamedPermissionSet" version="1" name="ASP.Net">
+  ...
+     <ipermission class="RegistryPermission" version="1" unrestricted="true"></ipermission>
+     ...
+   </permissionset>  
+}}}
+
+Note that you can simply make a copy of the medium trust file and rename it to customtrust.config. Once this is done, you can modify the file according to your needs.
+
+==Additional Resources==
+
+* For more information about implementing Access Control using a Code Access Security Policy see https://teammentor.net/article/d0b1e36c-0b8d-4e5f-9d61-4851faceddca
+
+* For more information about how a Code Access Security Policy is implemented in .NET 4.0 see http://msdn.microsoft.com/en-us/library/dd984947%28v=vs.100%29.aspx#Overview]]></Data>
+  </Content>
+</TeamMentor_Article>

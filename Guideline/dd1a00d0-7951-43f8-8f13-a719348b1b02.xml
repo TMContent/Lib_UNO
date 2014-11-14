@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-313158263" Content_Hash="-2076968706">
+  <Metadata>
+    <Id>dd1a00d0-7951-43f8-8f13-a719348b1b02</Id>
+    <Id_History>dd1a00d0-7951-43f8-8f13-a719348b1b02,f644bfc6-8b67-47d0-97d2-646d8def7049,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Instrument Application for Unusual Activity</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Instrument Application for Unusual Activity</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Instrument your application and monitor events that might indicate unusual or suspicious activity.&amp;nbsp; Unusual activity includes replays of old authentication tickets or too many login attempts over a specific period of time. </p>
+  <h1>Why</h1>
+  <p>Instrumenting for suspicious activity allows you to detect and react to potential problems as early as possible.</p>
+  <h1>When</h1>
+  <p>All applications should take care to log unusual activity, but the degree of logging is largely dictated by the security footing of the application.&amp;nbsp; Although what qualifies as unusual&amp;nbsp;activity is system dependent, specific security properties of authentication protocols or other system details will dictate some specific categories.&amp;nbsp; Additional categories of unusual activity will be related to business processes.</p>
+  <h1>How</h1>
+  <p>Ensuring that all unusual activity is logged is a fairly easy, with some care.&amp;nbsp; The following steps will walk you through the process.</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define Unusual Activity For Your Application.</strong> The first and most important step is understanding what defines suspicious activity for your application.&amp;nbsp; Because the business focus of each application is unique, many of the specifics must be figured out for each application.&amp;nbsp; For example, logging may be part of a larger fraud-prevention campaign.&amp;nbsp; However, there are some activities that are suspicious across a wide variety of application types: </p>
+      <ul>
+        <li>Repeated unsuccessful authentication attempts <li>Attempts to use stale session-related information or authentication tickets <li>Large or rapid transactions <li>Transactions that occur outside of normal time periods <li>Application errors, especially those not easily caused by user error or occuring&amp;nbsp;in deeper tiers </li></li></li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Ensure Sufficient Data is being Logged.</strong> Once you understand what constitutes unusual activity for your application, you need to ensure that it's logged appropriately.&amp;nbsp;Appropriate logging depends upon the specific data being logged. Below is an example:</p>
+        <p>Replays of old authentication tickets automatically raise an ExpiredTicketFailure event.&amp;nbsp; To raise an event for too many login attempts,you can write an event handler for the <b>LoginError</b> event of the <b>Login</b> control.&amp;nbsp; In the handler, call <b>Membership.GetUser(Login1.UserName).IsLockedOut</b> to determine if there have been too many login attempts for the user.&amp;nbsp; You can then raise a custom event to indicate that the account has been locked out.&amp;nbsp; Custom events can also be raised for a wide variety of non-authentication-related unusual activities. </p>
+        <p>Other suspicious activity will require a more application-specific approach.&amp;nbsp; Some suspicious activity logging will be best accomplished by parsing existing log files and looking for anomolous activity&amp;#8212;rapid transactions from a single host or user, unsually large orders, etc. </p>
+        <li>
+          <p>
+            <strong>Ensure That Logs are Monitored.</strong> The next step is ensuring that logs are monitored and the information in them acted upon.&amp;nbsp; Logging won't do any good if the results never see the light of day.&amp;nbsp; Work with the operations team who will be managing the application to define a plan for monitoring and responding to log events.&amp;nbsp; Depending on the environment, you may need to define this from scratch, or you may be fitting into a pre-exisiting framework. </p>
+          <p>If you're defining a monitoring framework from scratch, here are some things you need to consider: </p>
+          <ul>
+            <li>When do the logs need to be monitored&amp;#8212;some applications will need 24x7 coverage, but many will be fine with 8x5. <li>How much time will log monitoring take&amp;#8212;if&amp;nbsp;your application is a&amp;nbsp;large ecommerce site, you may have a dedicated team for log monitoring, but a small web app may be safe enough with a sysadmin taking a look a couple times a day. <li>What are your response time needs&amp;#8212;if there's a serious problem with the site, it'll show up in the logs first; is your tolerance for problems defined in minutes, hours, or days? <li>What will your procedure for acting on potential issues be? <li>How will you control access to your logs and information derived from them; how sensitive is the information likely to be? <li>What response capabilities will the log monitoring team have?&amp;nbsp; Log monitoring on it's own does no good if the information can't be acted on&amp;#8212;compromised accounts need to be locked, machines patched or taken off line, etc.</li></li></li></li></li></li>
+          </ul>
+          <li>
+            <p>
+              <strong>Avoid Pitfalls for Logging.</strong> Logging too much information can end up being a problem of its own.&amp;nbsp; Once you have an idea of the volume of log events that you're seeing from your application, it may be worthwhile to implement some form of log throttling to reduce the flow of information to a rate at which you can act upon.&amp;nbsp; Good log throttling should only eliminate redundant information and should provide a way to surface the most important information first. </p>
+            <p>Automatically taking action based on detection of anomolous conditions is a very dangerous thing to do, and is&amp;nbsp;best avoided.&amp;nbsp; While it may be reasonable to throttle the speed at which an event (say, a login attempt) may occur, preventing an action from occurring&amp;nbsp;may result in an easy-to-launch denial of service attack against your application. </p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An e-commerce site does hundreds of transactions an hour, but only keeps basic web server and database transaction logs.&amp;nbsp; When an attacker finds a vulnerability in the login script and steals several accounts, making a large number of high value transactions, the break-in isn't discovered until after merchandise has been shipped.&amp;nbsp;</p>
+  <h1>Solution Example</h1>
+  <p>An e-commerce site does hundreds of transactions an hour, and keeps a seperate security log recording unusual activity for the application.&amp;nbsp; The log is monitored 24x7 by the site operations team, who can respond quickly to attacks and can contact the developers if they need more assistance.&amp;nbsp; The logs contain the following categories of information (among others):</p>
+  <ul>
+    <li>multiple account login failures for the same account or from the same address <li>unusually large transactions, based on a customer's history and site averages <li>multiple rapid transactions from the same customer <li>Any exceptions, http errors, or sql errors from security critical systems</li></li></li></li>
+  </ul>
+  <p>When an attacker finds a vulnerability in the login script and attempts to steal several accounts, the 24x7 monitoring team immediately sees the attempts in the log, locks the accounts, blocks the attacker, and works with development to deploy a fix.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

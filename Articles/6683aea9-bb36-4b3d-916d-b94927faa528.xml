@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6683aea9-bb36-4b3d-916d-b94927faa528</Id>
+    <Id_History>6683aea9-bb36-4b3d-916d-b94927faa528,e6a07e97-0944-4d0d-bfa5-d63963f11e39,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>The External Entities Feature Is Disabled</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The External Entities Feature Is Disabled</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Verify that the External Entities feature of XML parsers is disabled.
+
+==Why==
+
+Disable the external entities feature of the XML parser to prevent XML External Entity (XXE) processing vulnerabilities. The External Entities feature is rarely used in practice but can result in vulnerabilities if left enabled.
+
+==How to Check==
+
+To verify that the External Entities feature of XML parsers is disabled:
+
+# **Find code that uses the XML parser.** Search application code for all references to the XmlDocument class. Make a spreadsheet of code that uses the XmlDocument class.
+# **Verify that the External Entities feature is disabled.** Review code that uses the XmlDocument class to make sure that the XmlResolver property of each XmlDocument object is set to null before that object is used to process data.
+
+
+==How to Fix==
+
+To disable the external entities feature:
+
+# **Find code that uses the XML parser.** Search application code for all references to the XmlDocument class. Make a spreadsheet of code that uses the XmlDocument class.
+# **Disable external entity processing.** For each piece of code that uses the XmlDocument class, add code that sets the XmlResolver property of each XmlDocument object to null before that object is used to process data.
+
+==Additional Resources==
+
+* For more information about disabling external entities processing in ASP.NET applications, see http://stackoverflow.com/questions/14230988/how-to-prevent-xxe-attack-xmldocument-in-net
+]]></Data>
+  </Content>
+</TeamMentor_Article>

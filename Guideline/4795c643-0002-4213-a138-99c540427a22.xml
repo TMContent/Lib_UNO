@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1380305214" Content_Hash="870938800">
+  <Metadata>
+    <Id>4795c643-0002-4213-a138-99c540427a22</Id>
+    <Id_History>4795c643-0002-4213-a138-99c540427a22,4c02bc11-5f68-4cfc-aca7-e7d3c682c1e3,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Deny All Access by Default</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Deny All Access by Default</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Deny all access by default.</p>
+  <h1>Why</h1>
+  <p>Denying all access by default assures that only explicitly authorized access is possible.</p>
+  <h1>When</h1>
+  <p>Deny all access by default in all web applications that implement access control.</p>
+  <h1>How</h1>
+  <p>To deny all access by default:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Enumerate all sensitive pages.</strong> Make a list of all pages that handle sensitive or private information.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enable forms authentication.</strong> Add the following section to <em>Web.config</em> using the appropriate settings:</p>
+      <pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp; &lt;/authentication&gt;<br />&lt;/system.web&gt;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Deny all access by default.</strong> Configure the following tags in <em>Web.config</em>:</p>
+      <pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*" /&gt;<br />&amp;nbsp; &lt;/authorization&gt;<br />&lt;/system.web&gt;</pre>
+      <p>The line <em>&lt;deny users="*" /&gt;</em> denies access to all users, including authenticated users.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Configure authorization.</strong> For each sensitive page, add a section to <em>Web.config</em> that looks like the following: </p>
+      <pre>&lt;location path="[Filename of the page]"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="[Authorized roles]"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
+      <p>
+        <em>[Filename of the page]</em> is the file name of the sensitive page. <em>[Authorized roles]</em> is a comma separated list of roles that are authorized to use the page.</p>
+    </li>
+  </ol>
+  <br />]]></Data>
+  </Content>
+</TeamMentor_Article>

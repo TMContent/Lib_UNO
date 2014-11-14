@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-493489228" Content_Hash="1207809383">
+  <Metadata>
+    <Id>4f0cda72-ecdb-4715-9fcf-99502a935010</Id>
+    <Id_History>4f0cda72-ecdb-4715-9fcf-99502a935010,328e5ad7-6c43-4210-8b6e-e7f07d397c8f,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>When Impersonating Declaratively, Only Impersonate On the Operations That Require It</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>When Impersonating Declaratively, Only Impersonate On the Operations That Require It</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you are using declarative impersonation, only impersonate the operations that require it.</p>
+  <h1>Why</h1>
+  <p>If you impersonate on operations that do not require the additional privileges you are increasing your attack surface as well as the potential impact of an exploit.  </p>
+  <h1>When</h1>
+  <p>Consider using this guideline when using impersonation.</p>
+  <h1>How</h1>
+  <p>Only impersonate specific operations that require it. Impersonation is a costly operation and is usually used for higher privileged original callers. Use impersonation selectively only on the operations which needs it reduces the potential attack surface. You can impersonate declaratively by applying the OperationBehaviorAttribute attribute on any operation that requires client impersonation, as shown in the following code example:</p>
+  <pre>&amp;#91;OperationBehavior(Impersonation = ImpersonationOption.Required)&amp;#93;<br />public string GetData(int value)<br />&amp;#123;<br />   return &amp;#8220;test&amp;#8221;;<br />&amp;#125;<br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information, see &amp;#8220;Delegation and Impersonation with WCF&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms730088.aspx">http://msdn2.microsoft.com/en-us/library/ms730088.aspx</a><li>For impersonation and delegation Q&amp;A, see the Impersonation/Delegation section of &amp;#8220;WCF 3.5 Questions and Answers&amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

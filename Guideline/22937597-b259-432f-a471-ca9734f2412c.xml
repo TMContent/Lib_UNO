@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="482311458" Content_Hash="-786859462">
+  <Metadata>
+    <Id>22937597-b259-432f-a471-ca9734f2412c</Id>
+    <Id_History>22937597-b259-432f-a471-ca9734f2412c,cffcd338-118b-4421-b436-8e866d9687ac,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Do Not Make Security Decisions Based on Client Input</Title>
+    <Category>Session Management</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Make Security Decisions Based on Client Input</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not use client input to make security decisions. Ensure that all security decisions are made purely based on information controlled by the server. </p>
+  <h1>Why</h1>
+  <p>Client input comes in many forms, from direct input like form variables and query string parameters to less direct input like cookies and connection information.&amp;nbsp;None of it can be trusted and any information coming from the client can be completely controlled by an attacker, even with thick clients.</p>
+  <p>If security decisions are based directly on this information, an attacker can alter the outcome of those decisions.&amp;nbsp;For example, if your thick client sends a list of roles held by the user, the user can alter that list.&amp;nbsp;Role caching cookies are another example of this; unless the cookie is tamper-proofed via signing and encryption, the user can alter their role in the system at will. </p>
+  <h1>When</h1>
+  <p>Security decisions should never be made based on client input, regardless of the application type, input type, or user group. This includes making security decisions based on things like <em>Request.ServerName</em>, which is under client control, and based on the contents of non-tamper-proofed cookies.&amp;nbsp;</p>
+  <p>The only exception to this rule is the use of passwords.&amp;nbsp;While a password submitted by a client is technically client input, it is used only to make an authentication check, not to make further security decisions.</p>
+  <h1>How</h1>
+  <p>It's not difficult to ensure that security decisions are not based on client data.&amp;nbsp;These steps will lead you through the process: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all of your security decision points.</strong> Identify all points where you place someone into a role or decide if an action should proceed.&amp;nbsp;Be thorough here, because understanding this element is critical to the security of your application.&amp;nbsp;A design review specifically aimed at this aspect, possibly including a threat model to ensure completeness, is a good way to start, but you'll need to review the actual implementation as well to make sure the design was executed properly.</p>
+      <li>
+        <p>
+          <strong>Trace data.</strong> Trace the data used to make those decisions back until you can prove that none of it is based on client input. If data is round-tripped through the client, prove that it cannot be modified by the client (i.e. the data is cryptographically signed).</p>
+        <li>
+          <p>
+            <strong>Pay extra attention to dangerous areas.</strong> If there are any places where you do make security decisions based on client input, like a role editing component, document those exceptions and spend extra care auditing those code paths. Ensure that any exceptions function according to the business rules they are intended implement.&amp;nbsp;Make sure that all input with security implications is handled carefully&amp;#8212;only ask for it immediately before its use, don't cache it, and validate it before use. Also, use <em>ViewStateUserKeys</em> to protect forms, don't put the data in the query string, and generally treat the data like you would any other sensitive information.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>A web based content management system has two modes, one for normal users and one for administrators.&amp;nbsp; The system uses a cookie to distinguish between user roles.&amp;nbsp; The cookie is unsigned plaintext.&amp;nbsp; When an attacker discovers this, they can alter the cookie on their machine and impersonate an administrator in the system.</p>
+  <p>The same system also looks at the <em>Request.ServerName</em> field to determine if a user is talking to the internal or external side of the system, and users on the internal side are automatically granted administrative privileges.&amp;nbsp; By forging the HTTP 1.1 hosts header in their request to make it appear as though they were talking to the internal side of the system, an attacker can fool the authorization code into granting administrative privileges.</p>
+  <p />
+  <h1>Solution Example</h1>
+  <p>A web based content management system has two modes, one for normal users and one for administrators.&amp;nbsp; The system stores the set of roles a user has in a server-side session variable which cannot be modified by attackers.&amp;nbsp; All interfaces to the system use the same authorization code, regardless of where the request appears to be coming from.&amp;nbsp; Furthermore, if the name of the web server is needed, it's taken from a configuration variable instead of from the request object.</p>
+  <h1>Additional Resources</h1>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

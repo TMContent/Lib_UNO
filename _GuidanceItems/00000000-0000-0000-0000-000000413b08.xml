@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000413b08</Id>
+    <Id_History>00000000-0000-0000-0000-000000413b08,480ccfe4-8427-44f9-a495-e296f3cc8dda,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Logged User Data Is Validated</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Logged User Data Is Validated</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Verify that logged user data is validated.
+
+==Why==
+
+Logged user data should be validated to prevent log tampering vulnerabilities. If users can cause arbitrary data to be written to the log files, an attacker will be able to forge log entries or to corrupt the log file.
+
+To verify that logged user is validated:
+
+# **Find code that writes user data to logs.** Make a list of functions that are used to write to logs. Using these function names as search strings should make it simple to find code that writes to logs. Look through the application to find all code that writes to the log files. Make a list of source code files that have code that writes to log files. 
+# **Determine if writing user data to log files is necessary.** Examine each piece of code that writes data to logs to see if it writes user-controlled data to log files. Make a list of each instance where user data is being written to log files. For each instance where user-controlled data is being logged, consider whether this is necessary or whether it is possible to write comparable log entries without including user data.
+# **Examine validation routines.** Look through the list of code that writes user data to logs and make a list of types of user data that is being logged. Check to make sure that validation functions that handle each type of user-controlled data that is logged by the application exist. Make sure that validation routines reject input that contains special characters that may be misinterpreted by the application or the operating system if written to the log files.
+# **Verify that logged user data is validated.** Go through the list of code that writes user data to logs and add calls to the respective validation routines. Verify that validation routines are applied to the user data before user data is written to the log files.
+
+==How to Fix==
+
+To validate logged user data:
+
+# **Find code that writes user data to logs.** Make a list of functions that are used to write to logs. Using these function names as search strings should make it simple to find code that writes to logs. Look through the application to find all code that writes to the log files. Make a list of source code files that have code that writes to log files. 
+# **Avoid writing user data to logs.** Examine each piece of code that writes data to logs to see if it writes user-controlled data to log files. Make a list of each instance where user data is being written to log files. For each instance where user-controlled data is being logged, consider whether this is necessary or whether it is possible to write comparable log entries without including user data.
+# **Check for  data validation routines.** Look through the list of code that writes user data to logs and make a list of types of user data that is being logged.  Check that validation functions exist that handle each type of user-controlled data that is logged by the application. Make sure that validation routines reject or encode input that contains special characters that may be misinterpreted by the application or the operating system if written to the log files.
+# **Validate logged user data.** Go through the list of code that writes user data to logs and validate that it calls to the respective validation routines. Make sure appropriate validation routines are used to validate all user data before writing it to log files.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

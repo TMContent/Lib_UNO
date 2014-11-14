@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="843515482" Content_Hash="-1034063130">
+  <Metadata>
+    <Id>df7fec21-2ac4-4810-a949-4e77faf8350a</Id>
+    <Id_History>df7fec21-2ac4-4810-a949-4e77faf8350a,567f5eaf-606c-4242-a07d-8891e41a1513,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Tracing Is Disabled &amp;lt;trace Enable=&amp;quot;false&amp;quot;/&amp;gt;</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Tracing Is Disabled &amp;lt;trace Enable=&amp;quot;false&amp;quot;/&amp;gt;</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>Web Application</div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that tracing is disabled in the Machine.config on production servers.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>You configure tracing in Machine.config by using the <b>&lt;trace&gt;</b> element. While it is useful on development and test servers, do not enable tracing on production servers, because system-level trace information can greatly assist an attacker to profile an application and probe for weak spots.</p>
+  <p>Use the following configuration on production servers:</p>
+  <div>
+    <pre>&lt;trace enabled="false" localOnly="true" pageOutput="false"<br />        requestLimit="10" traceMode="SortByTime"/&gt;</pre>
+  </div>
+  <p>Set <b>enabled="false"</b> on production servers. If you do need to trace problems with live applications, simulate the problem in a test environment, or if necessary, enable tracing and set <b>localOnly="true"</b> to prevent trace details from being returned to remote clients.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

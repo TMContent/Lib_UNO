@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="9031201" Content_Hash="-1930701518">
+  <Metadata>
+    <Id>9b83e42d-c271-419b-9da1-fb602b7d96bd</Id>
+    <Id_History>9b83e42d-c271-419b-9da1-fb602b7d96bd,79261160-5fdc-4ce5-a71b-6ff5f1419c08,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Network Credential Sniffing Bugs in ASP .NET</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Network Credential Sniffing Bugs in ASP .NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Summary</span>
+  </h1>
+  <p>Network credential sniffing attacks are network eavesdropping attacks where the attacker&amp;#8217;s goal is to capture authentication packets in order to reveal data that might be used in an authentication scheme, such as username and password.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>Applications that don&amp;#8217;t take the necessary measures to encrypt client credentials before transmitting them over the wire or to secure the connection through which authentication occurs are vulnerable to this attack.</p>
+  <p>Follow these steps to test for network credential sniffing bugs in ASP.NET:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First, it is necessary to understand the different attack scenarios related to network credential sniffing bugs. </p>
+  <p>A network credential sniffing attack stars with an attacker selecting a victim client that authenticates with an ASP .NET application by providing a username and password combination over the network.<span>&amp;nbsp; </span>The next step is for the attacker to eavesdrop the network connection in order to monitor -or sniff- the authentication packets exchanged by the client and the application during login.<span>&amp;nbsp; </span>The attacker chooses a specific network eavesdropping attack depending on the attacker&amp;#8217;s access to the target network as well as the type of target network (hub-based, switch-based, etc.).<span>&amp;nbsp; </span>Network eavesdropping attacks include but are not limited to:</p>
+  <ul>
+    <li>hub-based networks such as promiscuous mode sniffing<li>switch-based networks attacks such as ARP poisoning or DHCP spoofing<li>WLANs attacks including attacks that require compromise of a wireless key <li>attacks where the attacker sniffs packets from the Internet such as attacking a BGP router. </li></li></li></li>
+  </ul>
+  <p>Note that a credential sniffing attack is an extension of a network eavesdropping attack.<span>&amp;nbsp;&amp;nbsp; </span>Thus, the attack scenario described here as well as the test cases in the testing section will not go into detail about network eavesdropping attack.<span>&amp;nbsp; </span>To learn how to execute network eavesdropping attacks refer to Team Mentor&amp;#8217;s article <i>How to Test for Network Eavesdropping Bugs.</i></p>
+  <p>While eavesdropping the target&amp;#8217;s client connection, the attacker uses a network monitoring tool to capture and read the authentication packets.<span>&amp;nbsp; </span>If the application doesn&amp;#8217;t properly encrypt the connection, the attacker retrieves the client&amp;#8217;s credentials in clear text or in weak encryption that can be broken later. </p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker selects a target client.<li>The attacker executes a network eavesdropping attack on the connection between the target client and the ASP application.<li>The attacker uses packet monitoring tool to capture authentication packets<li>If the application is vulnerable, the attacker reads the client credentials in clear text or with weak encryption, which is trivial to break and recover the clear text.</li></li></li></li>
+  </ol>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>Next, it is necessary to analyze what makes credential sniffing attacks possible and how to protect against them.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <h2>
+    <span>
+      <em>Authentication Schemes</em>
+    </span>
+  </h2>
+  <p>There are different authentication schemes available to ASP .NET applications.<span>&amp;nbsp;&amp;nbsp; </span>Applications that choose a weak authentication scheme such as basic or digest authentication are prone to network credential sniffing.<span>&amp;nbsp; </span>The common authentication schemes available are: basic, digest, web forms, and authentication using a secure channel such as SSL/TLS or IPSec.<span>&amp;nbsp; </span></p>
+  <p>Basic authentication sends the password as a base-64 encoded value which can be trivially decoded by attackers.<span>&amp;nbsp; </span>Most ASP .NET web applications won&amp;#8217;t use this authentication scheme for remote clients; however, applications might choose to use basic authentication for local network users.<span>&amp;nbsp; </span>Digest authentication is more secure since it uses an MD5 hash with a nonce (number used once) to encrypt the password before sending it over the wire; nonetheless, digest authentication is only secure if properly configured and it can fall victim to man-in-the-middle (MitM) attacks where an attacker that is intercepting authentication packages can tell the client to use Basic authentication or legacy digest authentication.<span>&amp;nbsp;&amp;nbsp; </span><span>&amp;nbsp;</span></p>
+  <p>Web applications can also implement authentication using common HTML web forms.<span>&amp;nbsp; </span>Here developers must add the necessary code to the application to ask for the client&amp;#8217;s username and password and send the request to the application once the form is submitted.<span>&amp;nbsp;&amp;nbsp; </span>The username and password<span>&amp;nbsp; </span>will travel in clear text unless the application encrypt the password before sending it to the server of if the authentication packet is sent over a secure connection such as SSL/TLS.<span>&amp;nbsp;&amp;nbsp; </span>To properly protect against network credential sniffing attacks applications must perform authentication through a secure channel.<span>&amp;nbsp;&amp;nbsp; </span>This means that before any authentication packets are exchanged between the client and the server, the client and server must establish an encrypted channel using public key encryption using digital certificates like those used in SSL/TLS, HTTPs, or through Kerberos authentication (integrated Windows Authentication through IIS) .<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>ASP.NET and IIS Authentication</em>
+    </span>
+  </h2>
+  <p>ASP.NET web applications can use authentication at two different levels.<span>&amp;nbsp; </span>First, developers can use Microsoft Windows Internet Information Services (IIS) to set authentication for ASP.NET web pages and virtual directories.<span>&amp;nbsp; </span>IIS supports all the authentication methods mentioned above that can be set using Windows <i>Internet Information Services Manager</i>.<span>&amp;nbsp;&amp;nbsp; </span>However, developers are not encouraged to use IIS Manager to set authentication in web applications since this configuration is not captured in code and may be deactivated when moving an ASP.NET application from one server to another.<span>&amp;nbsp; </span>The second option ASP.NET developers have it to set authentication inside ASP.NET applications by modifying application configuration and source code files.<span>&amp;nbsp;&amp;nbsp; </span>Specifically, developers need to set the authentication flag on the <i>web.config</i> file as follows:</p>
+  <pre>
+    <span>// web.config file<br />&lt;authentication mode = "&amp;#91;Windows/Forms/Passport/None&amp;#93;"&gt;<br />&lt;/authentication&gt;</span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>Note that ASP .NET authentication supports forms, Windows, and Passport (authentication through Microsoft passport services), while basic and digest are not supported within this environment.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>To properly protect against network credential sniffing attacks, applications must select one of the mentioned methods.<span>&amp;nbsp; </span>For common web applications, Form authentications is suggested as it integrates with different providers and it supports additional security options such as strong passwords.<span>&amp;nbsp;&amp;nbsp; </span>However, choosing forms authentication is not enough as credentials will still be transmitted in clear text.<span>&amp;nbsp; </span>ASP.NET developers must be sure to mark authentication web pages as SSL-required:</p>
+  <pre>
+    <span>&lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;forms requireSSL="true" /&gt;<br />&lt;/authentication&gt;</span>&amp;nbsp;</pre>
+  <p>Certificates can be issued using Microsoft Windows Certificate Manager.<span>&amp;nbsp; </span>Note, however, that in order to implement SSL/TLS in ASP.NET applications it is necessary to set the appropriate IIS configuration.<span>&amp;nbsp; </span>For more information about ASP.NET authentication options and integration with SSL/TLS and IIS refer to MSDN Security Guidance article: <i>Authentication in ASP.NET </i>(<a href="http://msdn.microsoft.com/en-us/library/ms978378.aspx">http://msdn.microsoft.com/en-us/library/ms978378.aspx</a>).</p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Protection at the Network Layer</em>
+    </span>
+  </h2>
+  <p>Network credential sniffing attacks are possible because attackers are able to eavesdrop the connection between the target client and ASP.NET applications.<span>&amp;nbsp; </span>To mitigate the risk of eavesdropping attacks, network administrators can deploy security defenses at the network layer.<span>&amp;nbsp; </span>For example, by properly deploying and configuring IPSec makes attacker unable to eavesdrop a connection. <span>&amp;nbsp;</span>To defend against promiscuous mode sniffing administrators can execute tools that check for network interfaces running in promiscuous modes, or they can run client application like Xarp to protect against ARP poisoning attacks in switched networks.<span>&amp;nbsp;&amp;nbsp; </span>For additional protection mechanisms against network eavesdropping attacks refer to Team Mentor&amp;#8217;s article <i>How to Test for Network Eavesdropping Bugs</i>.<b><i><span></span></i></b></p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <span>Step 3: Execute Test Cases</span>
+  </h2>
+  <p>Now that you&amp;#8217;ve learned the theoretical aspects of network credential sniffing bugs, it is necessary to execute the following test cases to check in your application is vulnerable.</p>
+  <h2>
+    <span>
+      <em>Test for Network Credential Sniffing</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for network credential sniffing in ASP.NET applications.</p>
+  <ol>
+    <li>Select a target client<li>Execute an eavesdropping attack between client and ASP.NET application.<span>&amp;nbsp; </span>For detail on eavesdropping attacks refer to Team Mentor&amp;#8217;s article <i>How to Test for Network Eavesdropping Bugs</i>.<li>Use network monitoring tool to check if credentials are transmitted in clear text.</li></li></li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp; </span>the application is vulnerable if credentials are sent in clear text or using weak encryption.</p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Test for Secure Transport Layer</em>
+    </span>
+  </h2>
+  <p>An additional test that is relevant to network credential sniffing testing is to check if authentication occurs over a secure transport layer such as SSL/TLS or HTTPS.<span>&amp;nbsp; </span><span>&amp;nbsp;</span>In most cases, web browsers display a padlock (or any other comparable visual indicator) in the browser&amp;#8217;s window if the connection is secure; however, there are cases where the lock doesn&amp;#8217;t show so the tester must monitor authentication packets to check if they are really going over HTTPs.</p>
+  <p>Proper testing for a secure transport layer can be done, as proposed by OWASP, by using an HTTP proxy tool and examining the URL of authentication requests &amp;#91;i&amp;#93;. <span>&amp;nbsp;</span>Execute the following steps to test for secure transport layer.</p>
+  <ol>
+    <li>Download a HTTP proxy tool such as OWASP&amp;#8217;s WebScarab or Burp Proxy and execute it.<li>Open a web browser.<li>Set web browser&amp;#8217;s connection options to use HTTP proxy.<li>Navigate to ASP .NET application login/authentication page.<li>In the HTTP proxy, turn intercept option ON.<li>In the web browser, enter username and password and make request.<li>In the HTTP proxy, check if the authentication request&amp;#8217;s URL.</li></li></li></li></li></li></li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp; </span>The application is vulnerable if the request URL is made over plain HTTP and not HTTPS.<span>&amp;nbsp; </span>If the application uses plain HTTP, the authentication request&amp;#8217;s URL will start <i>http</i>:</p>
+  <pre>POST <strong>http://www.example.com/login.aspx</strong> HTTP/1.1<br />Host: www.example.com<br />User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.14) Gecko/20080404<br />Accept: text/xml,application/xml,application/xhtml&amp;#43;xml,text/html<br />Accept-Language: it-it,it;q=0.8,en-us;q=0.5,en;q=0.3<br />Accept-Encoding: gzip,deflate<br />Accept-Charset: ISO-8859-1,utf-8;q=0.7,&amp;#42;;q=0.7<br />Keep-Alive: 300<br />Connection: keep-alive<br />Cookie: language=English; <br />Content-Type: application/x-www-form-urlencoded<br />Content-length: 27<br />&amp;nbsp;<br />username=test&amp;password=test</pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>The application is secure if the request URL is over HTTPS.<span>&amp;nbsp; </span>If the application uses HTTPS, the authentication request&amp;#8217;s URL will start <i>https </i>and it will contain the network port used by HTTPS/SSL (<i>443</i> by default):</p>
+  <pre>
+    <span>POST <strong>https://www.example.com:443/login.aspx</strong> HTTP/1.1<br />Host: www.example.com<br />User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.14) Gecko/20080404<br />Accept: text/xml,application/xml,application/xhtml&amp;#43;xml,text/html<br />Accept-Language: it-it,it;q=0.8,en-us;q=0.5,en;q=0.3<br />Accept-Encoding: gzip,deflate<br />Accept-Charset: ISO-8859-1,utf-8;q=0.7,&amp;#42;;q=0.7<br />Keep-Alive: 300<br />Connection: keep-alive<br />Referer: https://www.example.com/login.aspx<br />Cookie: language=English; <br />Content-Type: application/x-www-form-urlencoded<br />Content-length: 27<br />&amp;nbsp;<br />username=test&amp;password=test<br /></span>&amp;nbsp;</pre>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>ASP.NET applications that don&amp;#8217;t use strong encryption or a secure channel to transmit credentials over the network are vulnerable to credential sniffing attacks.<span>&amp;nbsp;&amp;nbsp; </span>To test for this vulnerability, it is recommended that you familiarize with the different attack scenarios involved as well as why this bug occurs and how to protect against it.<span>&amp;nbsp;&amp;nbsp; </span>Then you must execute practical test cases using network monitoring tools such as sniffers and tools necessary to execute network eavesdropping attacks.<span>&amp;nbsp;&amp;nbsp; </span>It is also recommended to double check the usage of a secure channel by intercepting and examining authentication packets using an HTTP client proxy tool.<span>&amp;nbsp; </span>For unencrypted HTTP traffic, testers can use a network monitoring tool such as Wireshark.</p>
+  <p>&amp;nbsp;<br />&amp;#91;i&amp;#93; <b>Testing for Credentials Transport</b>. OWASP. <a href="http://www.owasp.org/index.php/Testing_for_credentials_transport">http://www.owasp.org/index.php/Testing_for_credentials_transport</a></p>
+  <div>
+    <div>
+      <p>&amp;nbsp;</p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

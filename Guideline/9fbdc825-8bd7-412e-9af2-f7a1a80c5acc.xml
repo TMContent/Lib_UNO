@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="512932045" Content_Hash="-585730245">
+  <Metadata>
+    <Id>9fbdc825-8bd7-412e-9af2-f7a1a80c5acc</Id>
+    <Id_History>9fbdc825-8bd7-412e-9af2-f7a1a80c5acc,7257f3d1-f29e-49b6-9ecd-c610a9739322,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>If You Are Using Username Authentication, Use Membership Provider Instead of Custom Authentication</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>If You Are Using Username Authentication, Use Membership Provider Instead of Custom Authentication</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 </li>
+    <li>Microsoft Visual Studio® 2008</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you are using Username Authentication, consider using Membership Provider instead of Custom Authentication.</p>
+  <h1>How</h1>
+  <p>If you are using username authentication in WCF and your users are not in Active Directory, use a membership provider. Do not try to implement your own user authentication mechanism. </p>
+  <p>The membership feature is a good choice as it allows you to enable user name authentication without writing and maintaining custom code. The Membership Provider can be integrated into a WCF application to authenticate consumers of your service. Use a WCF binding that supports user name/password credentials, such as the wsHttpBinding and set the client credential type to UserName. Configure the membership provider in your configuration file to authenticate users against the membership store.</p>
+  <p>The following configuration snippet shows how to configure the username authentication with membership provider:</p>
+  <ol>
+    <li>Set the membership provider configuration</li>
+    <pre>&lt;connectionStrings&gt;<br />    &lt;add name="MyLocalSQLServer"<br />         connectionString="Initial Catalog=aspnetdb;data source=10.3.19.60;Integrated Security=SSPI;"/&gt;<br />  &lt;/connectionStrings&gt;</pre>
+    <pre>  &lt;system.web&gt;</pre>
+    <pre>    &lt;membership defaultProvider="MySqlMembershipProvider" &gt;<br />      &lt;providers&gt;<br />        &lt;clear/&gt;<br />        &lt;add name="MySqlMembershipProvider"<br />             connectionStringName="MyLocalSQLServer"<br />             applicationName="MyAppName"<br />             type="System.Web.Security.SqlMembershipProvider" /&gt;<br />      &lt;/providers&gt;<br />    &lt;/membership&gt;<br />  &lt;/system.web&gt;</pre>
+    <li>&amp;nbsp;Set the client credentials to UserName
+    <pre>&lt;wsHttpBinding&gt;<br /> &lt;binding name="BindingConfiguration"&gt;<br />  &lt;security&gt;<br />  &lt;message clientCredentialType="UserName" /&gt;<br />   &lt;/security&gt;<br /> &lt;/binding&gt;<br />&lt;/wsHttpBinding&gt;</pre></li>
+    <li>&amp;nbsp;Set the Service Credentials configuration to use Membership Provider
+    <pre>…<br />&lt;serviceBehaviors&gt;<br />  &lt;behavior name="BehaviorConfiguration"&gt;<br />    ….<br />    &lt;serviceCredentials&gt;<br />      &lt;userNameAuthentication userNamePasswordValidationMode="MembershipProvider"<br />        membershipProviderName=" MySqlMembershipProvider " /&gt;<br />    &lt;/serviceCredentials&gt;<br />  &lt;/behavior&gt;<br />&lt;/serviceBehaviors&gt;<br />….</pre></li>
+  </ol>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1655538220" Content_Hash="-838520876">
+  <Metadata>
+    <Id>9f0fc6bb-7dd0-4e1a-bbeb-d73ab3c25ebf</Id>
+    <Id_History>9f0fc6bb-7dd0-4e1a-bbeb-d73ab3c25ebf,10ad48f3-f88f-4934-96c0-a3fdf0db4462,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Validate All Input Passed to the Database</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate All Input Passed to the Database</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Validate all input before it is passed to the database.</p>
+  <h1>Why</h1>
+  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection, and other vulnerabilities which would allow an attacker to gain unauthorized access to sensitive data.</p>
+  <h1>When</h1>
+  <p>If your application uses a backend database server.</p>
+  <h1>How</h1>
+  <p>To properly validate input passed to database:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify application inputs.</strong> Potential sources of input include:</p>
+      <ul>
+        <li>URL based parameters </li>
+        <li>Form based parameters </li>
+        <li>Hidden fields </li>
+        <li>Cookies </li>
+        <li>Local filesystem </li>
+        <li>JavaScript variables</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Identify database entry points.</strong> Find all the locations in the system where data is pushed into the database, either directly via queries, or indirectly (via log entries, etc). Trace all database entry points to find all the paths which can contain external input.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Create a set of validators.</strong> Build a set of validators that work with the data in question and fit into the system architecture, including your general validation scheme for other data and the way the system interacts with the database. Using the Validate Input for Length, Range, Format, and Type guideline, determine the appropriate validation at each validator. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the system, and allows for easy auditing. Place the validators along the database input paths, ideally as close to the initial data input as possible. All data should pass through the validators before being transmitted to the database servers.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use Type-Safe parameters in SQL statements.</strong> Stored procedures and Parameterized queries improve your application's robustness against SQL injection based attacks. Consult the guideline Use Type Safe SQL Parameters When Constructing SQL Queries.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Audit your entry paths.</strong> Before going into production, have a reviewer who was not responsible for the development of the code in question check all the input paths to ensure that the validators are correctly implemented, that they are correctly applied, and that all input paths are checked.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code validates the user based on a given username and password. It hashes the password with a random salt. Then it compares the username and the produced hash against the data stored in the backend database. Unfortunately, the SQL query is dynamically crafted by using the user's input. If there is no proper input validation, an attacker can access the application's database server through the use of SQL injection.</p>
+  <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      byte[] salt = MyApp.generateSalt();<br />      String passHash;<br />      SqlConnection cn;<br />      SqlCommand sqlCommand;<br />      String query;<br />      passHash = hashCredentials(pass, salt);<br /><br />      // The application crafts the SQL query based on user's input<br />      cn = MyApp.getDBConnection();<br />      sqlCommand = new SqlCommand("select user from myappUsers where user = '"+<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; user + "' + and pass = '" + passHash + "' and login_attempts &lt; 3;", cn);<br />      SqlDataReader reader = sqlCommand.ExecuteReader();<br />      updateLastLoginAttempt(user);<br />      ...<br />}</pre>
+  <p />If a user submits a login request with a username of <pre>foo' or 1 = 1; drop table *; --</pre>the system will happily first authenticate the user and then drop all the tables in the database.<p /><h1>Solution Example</h1><p>The following code validates the user based on a given username and password. It hashes the password with a random salt. Then it compares the username and the produced hash against the data stored in the backend database. Because the application uses the Parameters property, it is much more difficult for an attacker to gain access to the application's database server through the use of SQL injection. </p><pre>public boolean validateUser(String user, char[] pass)<br />{<br />   byte[] salt = MyApp.generateSalt();<br />   String passHash; <br />   SqlConnection cn;<br />   SqlCommand sqlCommand;<br />   String query;     <br />   passHash = hashCredentials(pass, salt);<br />   // The application crafts the SQL query based on user's input<br />   cn = MyApp.getDBConnection();<br />   sqlCommand = new SqlCommand("select user from myappUsers where user = @user and <br />                    + pass = @passHash and login_attempts &lt; 3;", cn);<br />   sqlCommand.Parameters.Add("@user", SqlDbType.VarChar, user.Length).Value = user;<br />   sqlCommand.Parameters.Add("@passHash ", SqlDbType.VarChar, passHash.Length).Value = passHash;<br />   SqlDataReader reader = sqlCommand.ExecuteReader(); <br />   updateLastLoginAttempt(user);  <br />   ...<br />}</pre><p>Even if the user passes in an arbitrary string for a username or a password, they will not be able to alter the query or otherwise effect the database. An even better solution would involve using a stored procedure instead of a parameterized command, because that would permit the database to be locked down further.</p><hr /><p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

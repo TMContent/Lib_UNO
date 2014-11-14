@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-345935941" Content_Hash="-1385073217">
+  <Metadata>
+    <Id>f959d06a-0ae8-4e5e-b984-18173f6721c3</Id>
+    <Id_History>f959d06a-0ae8-4e5e-b984-18173f6721c3,af4be476-c647-4419-a5d3-cede35ad246c,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Remove Test Interfaces</Title>
+    <Category>Other</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Remove Test Interfaces</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Remove all public interfaces used solely for testing the application.</p>
+  <h1>Why</h1>
+  <p>Test interfaces add extra functionality that is not intended for the released application. Often these interfaces will be used by a test team to gain information or drive functionality that would be dangerous in the hands of an attacker.</p>
+  <h1>When</h1>
+  <p>If your application contains test interfaces, remove them before deployment.</p>
+  <h1>How</h1>
+  <p>To remove all test interfaces:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all test APIs</strong>: Enumerate all public APIs. Identify which APIs are intended for application use and which APIs are intended for test purposes. Ideally these interfaces will already be documented as test interfaces and can be discovered through specifications.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Remove the test interfaces</strong>: Code removal is a straight forward procedure. Once the test code is identified, it should be isolated from the application and removed from your code base. This should happen before final functional and integration testing to ensure that the system still works as intended with the test code missing.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Compile your application with release flag</strong>: Always compile your application with a release flag before shipping. This ensures that your application does not contain extra debug information in its assemblies.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code shows the user management system for an application. Because the class contains test APIs it is possible for a malicious user to execute untested code and possibly exploit any vulnerabilities in it.</p>
+  <pre>public sealed class UserManager<br />{<br />      public UserManager()<br />      {<br />            ...<br />      }<br />      public boolean AddUser(User user, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />      public boolean RemoveUser(User user)<br />      {<br />            ...<br />      }<br />      public boolean ModifyUser(User user)<br />      {<br />            ...<br />      }<br />      public boolean ChangePass(User user, char[] oldPass, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />      // The class contains test APIs<br />      public void AddTestUsers()<br />      {<br />            ...<br />      }<br />}</pre>
+  <h1>Solution Example</h1>
+  <p>The following code shows the user management system for an application. Because the test APIs is removed from the class, there is no untested code that a malicious user can attack.</p>
+  <pre>// The class contains no test APIs<br />public sealed class UserManager<br />{<br />      public UserManager()<br />      {<br />            ...<br />      }<br />      public boolean AddUser(User user, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />      public boolean RemoveUser(User user)<br />      {<br />            ...<br />      }<br />      public boolean ModifyUser(User user)<br />      {<br />            ...<br />      } <br />      public boolean ChangePass(User user, char[] oldPass, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />}</pre>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

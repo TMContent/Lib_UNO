@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000003c4a74</Id>
+    <Id_History>00000000-0000-0000-0000-0000003c4a74,2c50433b-7b47-4eac-aae0-bdb5b8948e95,</Id_History>
+    <Library_Id>f215ceee-9a08-41d9-b2c1-bbcc058a8f32</Library_Id>
+    <Title>Sign Android Applications</Title>
+    <Category>Code Integrity</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Android</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Sign Android Applications</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* All Android applications.
+
+==What to Do==
+
+Sign the application binary.
+
+==Why==
+
+Signing the application binary helps verify that the application came from a trusted source.
+
+==How==
+
+# **Generate a private key.** Use the //keytool// command to generate a suitable private key. The key will represent the entity responsible for the application. The key must have a validity period that ends after 22 October 2033. The key should be different from the debug key. It is okay for the key to be self-signed. 
+# **Protect the private key.** The private key should be kept secret to prevent attackers from signing malicious applications with it. Applications that are signed with the same private key appear to come from the same source. A crafty attacker may take advantage of this by passing malicious applications off as yours.
+# **Build the application.** Build the application in release mode. The application is not signed automatically. Export the unsigned APK package.
+# **Sign the application.** Use the //Jarsigner// tool to sign the application package. 
+# **Align the package.** Use the //zipalign// command to align the signed APK. 
+
+==Code Integrity Guidelines==
+
+* [[00000000-0000-0000-0000-0000004ef2c8|Sign Android Application Updates]]
+* [[00000000-0000-0000-0000-0000003c4a74|Sign Android Applications]]
+* [[00000000-0000-0000-0000-00000038da94|Obfuscate Code with ProGuard]]
+
+==Code Integrity Checklists==
+
+* [[00000000-0000-0000-0000-0000007571e5|Android Application Updates Are Signed]]
+* [[00000000-0000-0000-0000-00000045de75|Android Applications Are Signed]]
+* [[00000000-0000-0000-0000-0000008e33ab|Code Is Obfuscated with ProGuard]]
+
+==Additional Resources==
+
+* For more information about signing Android applications, please see http://developer.android.com/tools/publishing/app-signing.html]]></Data>
+  </Content>
+</TeamMentor_Article>

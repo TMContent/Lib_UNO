@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="522016465" Content_Hash="-1678237855">
+  <Metadata>
+    <Id>e574d1d8-acae-4c64-90db-a0f6b98ca45f</Id>
+    <Id_History>e574d1d8-acae-4c64-90db-a0f6b98ca45f,e127f66e-b56c-4d80-9392-5edf60361988,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Valuable Information Is Not Disclosed During Authentication Errors</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Valuable Information Is Not Disclosed During Authentication Errors</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure your application displays a generic message when authentication fails.</p>
+  <h1>Why</h1>
+  <p>Disclosing information&amp;nbsp;about invalid usernames and passwords can help an attacker obtain a list of valid users.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to ensure that your application displays generic messages upon failed authentication:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all segments of code that handle failed authentication. </strong>Identify all functions that handle login and perform access control on resources. Trace your application's code base to locate the origin of each&amp;nbsp;failed authentication messages. Good places to start are <em>if-else</em> statements, <em>throw</em> statements and exception handlers. It is a common practice for developers to group messages into resource files instead of hard-coding them into your application's source code.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Review the error messages. </strong>Review the returned error messages. Verify that:</p>
+      <ul>
+        <li>
+          <strong>Structure</strong>: Error messages are brief and direct. </li>
+        <li>
+          <strong>Contents</strong>: Error messages do not contain unnecessary contents such as internal debug information.<br /></li>
+        <li>
+          <strong>Variety</strong>: All error messages that pertain to failed authentication are identical. </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To provide secure error messages when authentication fails, use the following steps:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Choose an error message. </strong>The message should be very generic. It should signify "yes" or "no" to the authentication attempt. For example: "Authentication failed." </p>
+    </li>
+    <li>
+      <p>
+        <strong>Display only one message. </strong>Your application should provide feedback only after all credentials have been verified. Structure your code in a manner that allows all checks to be executed at once. For example:</p>
+      <pre>if (!validUser() || !validPass())<br />{<br />      throw new AuthenticationException("Authentication failed.");<br />}</pre>
+      <p>Because sometimes it is impossible to structure the code in a manner where all checks are performed at once, it is important that all error messages contain the exact same information. Any variation in the error messages can give away the information that a username is valid. </p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p>
+  <pre>public void login() throws AuthenticationException<br />{<br />      if (!validUser())<br />      {<br />            throw new AuthenticationException("User not found.");<br />      }<br /><br />      if (!validPass())<br />      {<br />            throw new AuthenticationException("Wrong password.");<br />      }<br /><br />      commit();<br />}</pre>
+  <h1>Solution Example</h1>
+  <p>The following code authenticates a user. Since it presents the same error message regardless of why the authentication failed, an attacker can't determine if the credentials tried represent a valid user or not.</p>
+  <pre>public void login() throws AuthenticationException<br />{<br />      if (!validUser() || !validPass())<br />      {<br />            throw new AuthenticationException("Authentication failed.");<br />      }<br /><br />      commit();<br />}</pre>
+  <h1>Java Error Handling Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/fceefe0c-900a-4c29-9c2e-ee662aa9e1f1">Use Structured Exception Handling</a>
+    </li>
+    <li>
+      <a href="/article/3e815c74-4d57-4c1b-8446-750b319ea046">Use a Global Exception Handler for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/30abc3c9-d288-4e8a-a614-fd1a1f331270">Do Not Disclose Valuable Information During Authentication Errors</a>
+    </li>
+    <li>
+      <a href="/article/56ad1852-7fc3-4d1f-b109-bbcce29170f7">Do Not Disclose Exception Details to the Client</a>
+    </li>
+    <li>
+      <a href="/article/fd4b2a8a-db2d-4594-ba30-3ce5f63ad459">Do Not Include Debug Data in Output</a>
+    </li>
+  </ul>
+  <h1>Java Error Handling Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/2739df30-b3da-417e-8856-2201a2b2a17a">Structured Exception Handling Is Used</a>
+    </li>
+    <li>
+      <a href="/article/c88e1b49-357d-4202-aafc-86ce0de485bd">A Global Exception Handler Is Used for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/e574d1d8-acae-4c64-90db-a0f6b98ca45f">Valuable Information Is Not Disclosed During Authentication Errors</a>
+    </li>
+    <li>
+      <a href="/article/d13e57d7-f6f5-4bd4-8629-26c45f9f029b">Exception Details Are Not Disclosed to the Client</a>
+    </li>
+    <li>
+      <a href="/article/d33cc3de-517c-4c84-95bd-24f14d9d99d6">Debug Data Is Not Included in Output</a>
+    </li>
+  </ul>
+  <h1>Java Error Handling Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/5556fc17-3f60-4fc0-8717-0a2ff1c12701">How to Test for Exception Information Disclosure Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

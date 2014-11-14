@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000040c40b</Id>
+    <Id_History>00000000-0000-0000-0000-00000040c40b,3102336e-b9be-4ec2-b4d3-f342d1c8faf3,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>User Input Is Not Used in Connection Strings</Title>
+    <Category>Database Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>User Input Is Not Used in Connection Strings</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+*ASP.NET
+
+==What to Check For==
+
+Make sure that connection strings do not contain any user supplied input. 
+
+==Why==
+
+Don't include user-controlled data in connection strings to prevent connection string injection attacks. If user input is inserted into a connection string, an attacker may be able to control what database server the application connects to. Giving an attacker controls over what database the application connects to is known as connection string injection vulnerability. An attacker may leverage this vulnerability to bypass authentication or cause unexpected application behavior.
+
+==How to Check==
+
+To make sure that user input is not included in connection strings:
+
+# **Identify all connection strings used by the application.** Search the code, configuration files and protected storage for connection strings. This is also a good opportunity to move any hard coded connection strings to protected storage. 
+# **Identify connection strings that include user input.** Out of the identified connection strings, find ones that include user input. There should be no connection strings that include user input. The one exception may be when an administrator is allowed to change the connection string during setup.l In that scenario, user input should be thoroughly validated. The interface that is used to configure the application shouldonly be accessible by the administrator. Once the application is configured, connection strings should be stored in protected storage using DPAPI. 
+
+==How to Fix==
+
+To prevent user input from being used in connection strings:
+
+# ** Search the code, configuration files and protected storage for connection strings. This is also a good opportunity to move any hard coded connection strings to protected storage.
+# **Identify connection strings that include user input.** Out of the identified connection strings, find ones that include user input. 
+# **Replace connection strings that include user input.** Replace connection strings that include user input, but don't hard-code the connection strings. Store connection strings in protected storage using DPAPI.
+# **Validate all user input.** If the application absolutely must get connection string parameters from the user, the user input needs to be properly validated. It's really not recommended to include user input in connection strings. Connection string parameters may need to be entered during application configuration. In this scenario, user input should be thoroughly validated. The interface that is used to configure the application should only be accessible to administrators. Once the application is configured, connection strings should be stored in protected storage using DPAPI. ]]></Data>
+  </Content>
+</TeamMentor_Article>

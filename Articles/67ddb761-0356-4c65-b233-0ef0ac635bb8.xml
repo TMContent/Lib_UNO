@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>67ddb761-0356-4c65-b233-0ef0ac635bb8</Id>
+    <Id_History>67ddb761-0356-4c65-b233-0ef0ac635bb8,873745c6-0eca-40bf-87b2-d60692a35010,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Parameterized APIs Are Used to Build XML Documents</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Parameterized APIs Are Used to Build XML Documents</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Verify that parameterized APIs are used to build XML documents.
+
+==Why==
+
+APIs that are designed for building XML documents will encode data properly to prevent attackers from manipulating XML data used by your application. A dangerous approach is to write your own set of functions to build XML documents by concatenating strings, or to modify an existing XML document by performing string operations. This means you have to take care of proper encoding yourself. Use APIs instead because they are simpler and safer.
+
+==How to Check==
+
+To verify that parameterized APIs are used to build XML documents:
+
+# **Identify code that builds XML documents.** Make a spreadsheet about all the code that creates XML documents.
+# **Review code that builds XML documents.** Examine code that builds XML documents to make sure that data is not concatenated with XML tags to build XML documents. The correct approach is to use XML parsers that provide functions for building XML documents, because these functions will then take care of properly encoding data to prevent XML injection vulnerabilities.
+
+==How to Fix==
+
+To use parameterized APIs to build XML documents:
+
+# **Identify available APIs that can be used to build XML documents.** ASP.NET provides comprehensive APIs for building XML documents, namely the XmlDocument class and the entire System.Xml namespace.
+# **Identify code that builds XML documents.** Make a spreadsheet about all the code that creates XML documents.
+# **Use parameterized APIs to build XML documents.** Update all code that builds XML documents to use the XmlDocument class and other classes from the System.Xml namespace to build XML documents. Make sure that your application never builds XML documents by using string operations.
+
+==Additional Resources==
+
+* For more information about the XmlDocument calss, see http://msdn.microsoft.com/en-us/library/system.xml.xmldocument%28v=vs.110%29.aspx
+]]></Data>
+  </Content>
+</TeamMentor_Article>

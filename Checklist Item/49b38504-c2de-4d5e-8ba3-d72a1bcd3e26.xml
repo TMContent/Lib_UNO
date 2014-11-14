@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2088277741" Content_Hash="504138753">
+  <Metadata>
+    <Id>49b38504-c2de-4d5e-8ba3-d72a1bcd3e26</Id>
+    <Id_History>49b38504-c2de-4d5e-8ba3-d72a1bcd3e26,13cfb997-f2f4-43fd-af63-7438c74dc2e4,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Session Cookies Are Protected</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Session Cookies Are Protected</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that the confidentiality of session cookies is protected.</p>
+  <h1>Why</h1>
+  <p>Session cookies are used by an application to identify the session associated with a particular user. Protecting session cookies can help prevent an attacker from hijacking the session and using the application as a legitimate user.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that your application's session cookies are handled securely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that session identifiers cannot be guessed.</strong> Ensure that your application's session identifiers cannot be guessed by an attacker. Verify that your application's session IDs meet the following requirements:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Length</strong>: Verify that your application uses long session identifiers (e.g. string of length 32).</p>
+          <li>
+            <p>
+              <strong>Triviality</strong>: Verify that your application uses randomly generated session identifiers. </p>
+            <li>
+              <p>
+                <strong>Lifetime</strong>: Verify that your application uses <strong>timeout </strong>attribute to expire sessions. </p>
+              <pre>&lt;sessionState timeout="20"<strong></strong>... &gt;   <br />...&lt;/sessionState&gt;</pre>
+              <li>
+                <p>
+                  <strong>Recycling</strong>: Verify that your application does not reuse previously used sessions.</p>
+                <pre>&lt;sessionState regenerateExpiredSessionId="false"<strong></strong>... &gt;   <br />...&lt;/sessionState&gt;</pre>
+              </li>
+            </li>
+          </li>
+        </li>
+      </ul>
+      <li>
+        <p>
+          <strong>Verify that users can invalidate their own sessions.</strong> Ensure that your application's uses <strong>Session.Abandon</strong> to allow its users to invalidate their own sessions.</p>
+        <li>
+          <p>
+            <strong>Verify that session cookies are sent over encrypted channels.</strong> Ensure your application transmits session cookies over encrypted channels. Although this is not required for non-sensitive transactions, it is mandatory for any transactions that are sensitive in nature.</p>
+          <pre>&lt;authentication mode="Forms"&gt;  <br />&lt;forms <strong>requireSSL="true" </strong>... /&gt;<br />&lt;/authentication&gt; <br />... <br />&lt;roleManager <strong>cookieRequireSSL="true" ... </strong>&gt;  <br />...<br />&lt;/roleManager&gt;</pre>If session cookies cannot be sent over an encrypted channel, ensure that <strong>cookieSlidingExpiration</strong> is set to <strong>false</strong>.<pre>&lt;authentication mode="Forms"&gt;  <br />&lt;forms <strong>slidingExpiration="false"</strong> ... /&gt;<br />&lt;/authentication&gt; <br />... <br />&lt;roleManager <strong>cookieSlidingExpiration="false" ... </strong>&gt;  <br />...<br />&lt;/roleManager&gt;</pre><li><p><strong>Verify that sensitive cookies are marked httpOnly.</strong> Ensure that cookies are marked as <strong>httpOnly</strong>. This prevents an attacker from accessing them via scripts when a <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Cross Site Scripting Attack</a>, or another script injection attack, occurs.</p><pre>&lt;system.web&gt;  <br />...   <br /><strong>&lt;httpCookies httpOnlyCookies="true" ... /&gt; </strong><br />...<br />&lt;/system.web&gt;</pre></li></li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>A web application uses SSL to provide a secure connection for user data, generates strong, new session IDs for each user, and times out and terminates sessions appropriately. However, it is susceptible to cross-site scripting flaws, and despite having a user base which mostly uses IE, does not set <strong>httpOnlyCookies</strong> on its cookies. The web.config file for this application looks like this:</p>
+  <pre>&lt;system.web&gt;<br />...  <br />&lt;httpCookies httpOnlyCookies="<strong>false</strong>" requireSSL="true" topic="" /&gt;<br />...<br />&lt;/system.web&gt;</pre>
+  <p>If a working <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Cross Site Scripting Attack</a> is discovered by an attacker, she could then use it to steal user's session cookies via a malicious script and to impersonate those users.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about session prediction attacks, see: <a href="http://www.webappsec.org/projects/threat/classes/credential_session_prediction.shtml">Credential/Session Prediction</a>.</li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/254ddab5-ecd2-4e05-a2b0-861e970bc0d9">Guideline: Protect Session Cookies&amp;nbsp;</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

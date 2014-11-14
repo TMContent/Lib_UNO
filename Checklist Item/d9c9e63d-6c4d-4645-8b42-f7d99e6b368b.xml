@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-320192308" Content_Hash="510605600">
+  <Metadata>
+    <Id>d9c9e63d-6c4d-4645-8b42-f7d99e6b368b</Id>
+    <Id_History>d9c9e63d-6c4d-4645-8b42-f7d99e6b368b,2575d2bf-560b-40d3-88ac-65403ef53b58,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>The Anonymous Account Does Not Have Write Access to Web Content Directories And Cannot Execute Command-line Tools.</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Anonymous Account Does Not Have Write Access to Web Content Directories And Cannot Execute Command-line Tools.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>Web Application</div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that the&amp;nbsp;anonymous account does not have write access to Web content directories and cannot execute command-line tools because attackers target this well known account to perform malicious actions.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>To secure the anonymous account: </p>
+  <ul>
+    <li>
+      <b>Deny write access to Web content directories</b>. 
+<p>Make sure that it is not possible for this account to write to content directories, for example, to deface Web sites. </p><li><b>Restrict access to System tools</b>. 
+<p>In particular, restrict access to command-line tools located in \WINNT\System32. </p><li><b>Assign permissions to groups instead of individual accounts</b>. 
+<p>Assigning users to groups and applying permissions to groups instead of individual accounts is good practice. For the anonymous account, create a group and add the anonymous account to it and then explicitly deny access to the group for key directories and files. Assigning permissions to a group allows you to more easily change the anonymous account or create additional anonymous accounts because you do not need to recreate the permissions. </p><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;IISLockdown denies write access to content directories for the anonymous account by applying a deny write access control entry (ACE) for the Web Anonymous Users and Web Applications groups. It also adds a deny execute ACL on command-line tools.</blockquote><li><b>Use separate accounts for separate applications</b>. 
+<p>If your Web server hosts multiple applications, use a separate anonymous account for each application. Add the accounts to an anonymous Web users group, for example, the <b>Web Anonymous Users</b> group created by IISLockdown, and then configure NTFS permissions using this group. </p><p>For more information about using multiple anonymous accounts and hosting multiple applications, see Chapter 20, "<a href="http://msdn2.microsoft.com/en-us/library/aa302436.aspx">Hosting Multiple ASP.NET Applications</a>." </p></li></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

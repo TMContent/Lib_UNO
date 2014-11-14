@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000012aada</Id>
+    <Id_History>00000000-0000-0000-0000-00000012aada,21795393-95a5-4729-99c7-93e500f89834,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Do Not Evaluate Messages as Code</Title>
+    <Category>Web Messaging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Evaluate Messages as Code</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Do not evaluate data passed in messages as code.
+
+==Why==
+
+You should prevent data passed in messages from being evaluated as code in order to prevent malicious scripts sent by an attacker from being executed within the browser. While it is possible to restrict the ability of attackers to send messages to the application by validating the origin of the message, this control could be circumvented in a Man-in-The-Middle (MitM) scenario. It is therefore best to simply not evaluate data received by the application as code. Generally speaking, //eval// is a dangerous function and should always be used with care.
+
+==How==
+
+To prevent evaluating data passed in messages as code:
+
+# **Find all references to //eval//.** Search application code for all references to the //eval// method. Create a spreadsheet to list all code that uses //eval//.
+# **Find the source of the data being evaluated.** For each piece of code that uses //eval//, determine where the data supplied as the argument to //eval// is coming from. The main concern for the purposes of this control is whether this data has been received as part of an event message. In the spreadsheet, record whether the data supplied to //eval// has been received as a part of a message.
+# **Remove code that passes message data to //eval//.** For each piece of code that passes message data to //eval//, remove the line of code that calls //eval//. Then remove the code that is no longer needed because message data is no longer being passed to //eval//. If this breaks some functionality, consider alternative ways to rewrite this functionality without calling //eval// to execute data passed in messages.
+
+==Web Messaging Guidelines==
+
+* [[00000000-0000-0000-0000-00000012aada|Do Not Evaluate Messages as Code]]
+* [[00000000-0000-0000-0000-00000010eb47|Use element.textContent to Assign Values to DOM Elements]]
+* [[00000000-0000-0000-0000-00000076ad87|Explicitly State the Expected Origin with postMessage]]
+* [[00000000-0000-0000-0000-0000006ab8ac|Validate Data Received by Event Handlers]]
+* [[00000000-0000-0000-0000-00000085babd|Validate the Origin Attribute Against the FQDN]]
+* [[00000000-0000-0000-0000-000000763637|Check The Origin Attribute of Messages]]
+
+==Web Messaging Checklist Items==
+
+* [[00000000-0000-0000-0000-0000008e9b8f|Messages Are Not Evaluated as Code]]
+* [[00000000-0000-0000-0000-00000060fefb|Element.textContent Is Used to Assign Values to DOM Elements]]
+* [[00000000-0000-0000-0000-0000004a4216|Expected Origin Is Explicitly Stated with postMessage]]
+* [[967c9b95-2319-4741-a6fd-1b4bcdf3b636|Data Received by Event Handlers Is Validated]]
+* [[16628f7f-e17a-4bd1-838a-011736bf0995|The Origin Attribute Is Validated Against the FQDN]]
+* [[f103974e-3a42-4837-b04b-7da7e87c41ec|The Origin Attribute of Messages Is Checked]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

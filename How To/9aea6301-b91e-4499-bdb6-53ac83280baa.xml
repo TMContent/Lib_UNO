@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1383085059" Content_Hash="1098242330">
+  <Metadata>
+    <Id>9aea6301-b91e-4499-bdb6-53ac83280baa</Id>
+    <Id_History>9aea6301-b91e-4499-bdb6-53ac83280baa,d052973b-db06-458a-90ca-01ec592e5d20,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Use Health Monitoring in ASP.NET</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Health Monitoring in ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>SQL Server </li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to shows you how to use health monitoring to instrument your application for a custom event. To create a custom health monitoring event, you create a class that derives from <b>System.Web.Management.WebBaseEvent</b>, configure the &lt;<b>healthMonitoring</b>&gt;<b></b>element in your application's Web.config file, and instrument your code to raise the event. Custom events are useful for recording security related events beyond those automatically recorded by ASP.NET health monitoring. For example, you could add an event that tracks successful and unsuccessful attempts to access restricted and sensitive business logic.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>
+      <div>Objectives</div>
+      <li>
+        <div>Overview</div>
+        <li>
+          <div>Event Providers</div>
+          <li>
+            <div>Summary of Steps</div>
+            <li>
+              <div>Step 1. Create a Custom Web Event</div>
+              <li>
+                <div>Step 2. Create an ASP.NET Application for Monitoring</div>
+                <li>
+                  <div>Step 3. Configure Health Monitoring</div>
+                  <li>
+                    <div>Step 4. Instrument Your Application</div>
+                    <li>
+                      <div>Step 5. Test Health Monitoring</div>
+                      <li>
+                        <div>More Information</div>
+                        <li>
+                          <div>Additional Resources</div>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Create a custom health monitoring event. <li>Configure health monitoring. <li>Instrument an application to raise a custom event. </li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>ASP.NET health monitoring supports many standard events that you can use to monitor the health of your application. Examples of security related events that are automatically generated include logon failures and successes when using the ASP.NET membership system, attempts to tamper with or reuse forms authentication tickets, and infrastructure events such as disk access failures. This How to explains how to create custom events that use the same underlying infrastructure and raise them in your code to supplement the system-defined events. </p>
+  <h1>Event Providers</h1>
+  <p>ASP.NET health monitoring supports an event provider model. Event providers encapsulate the underlying event stores and provide a consistent API. You can configure event providers to log events to different event sinks. The following providers are supported: </p>
+  <ul>
+    <li>
+      <b>SimpleMailWebEventProvider.</b> This provider sends e-mail for event notifications. <li><b>TemplatedMailWebEventProvider.</b> This provider uses templates to define and format e-mail messages sent for event notifications. <li><b>SqlWebEventProvider. </b>This provider logs event details to a SQL Server database. If you use this provider, you should encrypt the connection string in your Web.config file by using the Aspnet_regiis.exe tool. <li><b>EventLogWebEventProvider.</b> This provider logs events to the Windows application event log. <li><b>TraceWebEventProvider.</b> This provider logs events as ASP.NET trace messages. <li><b>WmiWebEventProvider.</b> This provider maps ASP.NET health monitoring events to Windows Management Instrumentation (WMI) events. </li></li></li></li></li></li>
+  </ul>
+  <p>You can also create custom event providers to write events to custom stores by creating a class that inherits from <b>System.Web.Management.WebEventProvider</b>.</p>
+  <h1>Summary of Steps</h1>
+  <p>Perform the following steps to create a custom Web event and configure health monitoring to use that event in your ASP.NET application: </p>
+  <ul>
+    <li>Step 1. Create a custom Web event. <li>Step 2. Create an ASP.NET Application for monitoring. <li>Step 3. Configure health monitoring. <li>Step 4. Instrument your application. <li>Step 5. Test health monitoring. </li></li></li></li></li>
+  </ul>
+  <h1>Step 1. Create a Custom Web Event</h1>
+  <p>In this step, you create a custom Web event by creating a class that inherits from <b>System.Web.Management.WebAuditEvent</b>.</p>
+  <h2>To create a custom Web Event </h2>
+  <ol>
+    <li>Use Visual Studio .NET to create a new class library named <b>MyWebEvents</b>. <li>Rename Class1.cs to MyCriticalEvent.cs. <li>Add a reference to <b>System.Web</b> and add the following <b>using</b> statements to the top of the MyCriticalEvent.cs. <div><pre>using System.Web;<br /> // For the reference to HttpContextusing System.Web.Management;  </pre></div><li>Derive <b>MyCriticalEvent</b> from <b>WebAuditEvent</b> and create appropriate public constructors that call the protected equivalents in the parent <b>WebAuditEvent</b> class as shown in the following code. Notice how this code also obtains some custom details from the <b>HttpContext</b> inside the event's constructors. <div><pre>public class MyCriticalEvent : WebAuditEvent<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private string userID;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private string authType;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private bool isAuthenticated;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public MyCriticalEvent(string msg, object eventSource, int eventCode)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; : base(msg, eventSource, eventCode)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain the HTTP Context and store authentication details<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; userID = HttpContext.Current.User.Identity.Name;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; authType = HttpContext.Current.User.Identity.AuthenticationType;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public MyCriticalEvent(string msg, object eventSource, int eventCode, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int eventDetailCode)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; : base(msg, eventSource, eventCode, eventDetailCode)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain the HTTP Context and store authentication details<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; userID = HttpContext.Current.User.Identity.Name;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; authType = HttpContext.Current.User.Identity.AuthenticationType;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; isAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;   </pre></div><li>If you want to log custom details, such as authentication details in this example, override the <b>FormatCustomEventDetails</b> method to augment the standard event output with custom data, as shown in the following code example. <div><pre>// Formats Web request event information.<br />// This method is invoked indirectly by the provider using one of the<br />// overloaded ToString methods. If buffering is enabled, this method is<br />// called asynchronously on a non-Web request thread, where the <br />// HttpContext is not available.<br />public override void FormatCustomEventDetails(WebEventFormatter formatter)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; base.FormatCustomEventDetails(formatter);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; formatter.AppendLine("User ID: " &amp;#43; userID);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; formatter.AppendLine("Authentication Type: " &amp;#43; authType);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; formatter.AppendLine("User Authenticated: " &amp;#43; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; isAuthenticated.ToString());<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; formatter.AppendLine("Activity Description: Critical Operation");<br />&amp;#125;  </pre></div><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;With buffering enabled for the provider, the <b>FormatCustomEventDetails</b> method is called on a separate non-Web request thread, where the <b>HttpContext</b> is not available. If you need to access information from the <b>HttpContext</b>, access the context in the class' constructor, extract the required information (do not keep the pointer to the <b>HttpContext</b> object), and save the information in the event's private instance state.</blockquote><li>Compile the assembly. If you want to use the assembly in multiple applications, you should sign the assembly with a strong-name and install it in the global assembly cache. </li></li></li></li></li></li>
+  </ol>
+  <h1>Step 2. Create an ASP.NET Application for Monitoring</h1>
+  <p>In this step, you create an ASP.NET application that you will monitor and instrument with a custom event.</p>
+  <h2>To create an ASP.NET application </h2>
+  <ol>
+    <li>Use Visual Studio .NET 2008 to create a new ASP.NET Web application. <li>Add a reference to the assembly that contains your custom Web event that you created earlier. <li>Add a Web.config file to your application so that you can configure health monitoring. </li></li></li>
+  </ol>
+  <h1>Step 3. Configure Health Monitoring</h1>
+  <p>By default, health monitoring is enabled for ASP.NET applications. You can see the default configuration in the machine-level Web.config.comments file in the <b>&amp;#37;windir&amp;#37;\Microsoft .NET\Framework\&amp;#123;version&amp;#125;\CONFIG </b>configuration file directory.</p>
+  <p>The &lt;<b>healthMonitoring</b>&gt; element contains the following sub-elements.</p>
+  <div>
+    <pre>
+      <br />&lt;healthMonitoring heartbeatInterval="0" enabled="true"&gt;<br />&amp;nbsp; &lt;bufferModes/&gt;<br />&amp;nbsp; &lt;providers/&gt;<br />&amp;nbsp; &lt;profiles/&gt;<br />&amp;nbsp; &lt;rules/&gt;<br />&amp;nbsp; &lt;eventMappings/&gt;<br />&lt;/healthMonitoring&gt;  </pre>
+  </div>
+  <p>To make further changes to health monitoring configuration, you can apply configuration settings to your application's specific Web.config file or to the machine-level Web.config file if you want to configure all Web applications on your server. </p>
+  <p>To configure health monitoring, configure the following elements: </p>
+  <ul>
+    <li>&lt;<b>bufferModes</b>&gt;. <li>&lt;<b>providers</b>&gt;. <li>&lt;<b>profiles</b>&gt;. <li>&lt;<b>rules</b>&gt;. <li>&lt;<b>eventMappings</b>&gt;. </li></li></li></li></li>
+  </ul>
+  <h2>&lt;bufferModes&gt;</h2>
+  <p>Buffer modes are used to define the buffering properties used by any provider that inherits from <b>System.Web.Management.BufferedWebEventProvider</b>. Currently, this includes <b>MailWebEventProvider</b> and <b>SqlWebEventProvider</b>. You can also derive custom Web event providers from that base class and use buffer modes.</p>
+  <p>You configure buffering to minimize the performance impact and overhead of recording events. You can use the &lt;<b>bufferModes</b>&gt;<b></b>configuration to define how long events are buffered before they are written to the provider and you can distinguish between urgent or critical events and regular events.</p>
+  <p>You can use any of the default buffer modes (Critical Notification, Notification, Analysis or Logging) configured in the machine-level Web.config.default file or you can configure a custom buffer mode.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;For buffering to be enabled, you need to set <b>buffer="true"</b> on your provider configuration. You can reference the specific buffering configuration by using the <b>bufferMode</b> attribute on your provider definition as shown in the following code example.</blockquote>
+  <div>
+    <pre>&lt;providers&gt;<br />&amp;nbsp; &lt;add name="providerName" buffer="true" bufferMode="bufferModeName" ... /&gt;<br />&lt;/providers&gt;  </pre>
+  </div>
+  <h3>To configure a custom buffer mode </h3>
+  <ul>
+    <li>Add the following configuration to your application's Web.config file. <div><pre>&lt;healthMonitoring&gt;<br />&amp;nbsp; &lt;bufferModes&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="Extra Critical Notification"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; maxBufferSize="10"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; maxFlushSize="5"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; urgentFlushThreshold="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; regularFlushInterval="Infinite"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; urgentFlushInterval="00:01:00"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; maxBufferThreads="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; /&gt;<br />&amp;nbsp; &lt;/bufferModes&gt;<br />&lt;/healthMonitoring&gt;  </pre></div></li>
+  </ul>
+  <p>The attributes are as follows: </p>
+  <ul>
+    <li>
+      <b>name. </b>This is a name for the buffer mode used to reference it from other elements. For example, the &lt;provider&gt; element references the specific buffer mode configuration by referencing the name in its <b>bufferMode</b> attribute. <li><b>maxBufferSize.</b> This is the maximum number of events that can be buffered by a provider before flushing them out and writing them to a store. <li><b>maxFlushSize.</b> This is the maximum number of events per flush. Its value should be between 1 and <b>maxBufferSize</b>. <li><b>urgentFlushThreshold.</b> This is the minimum number of events after which the events should be flushed. Its value should be less then or equal to <b>maxBufferSize</b>. <li><b>regularFlushInterval. </b>This is the time interval per flush. Its value cannot be zero. <li><b>urgentFlushInterval. </b>This is the minimum time between flushes. Its value must be between 0 and <b>regularFlushInterval</b>. <li><b>maxBufferThreads. </b>This is the maximum number of threads used for flushing. </li></li></li></li></li></li></li>
+  </ul>
+  <h2>&lt;providers&gt;</h2>
+  <p>You use the &lt;<b>providers</b>&gt; element to indicate what logging sinks are available for logged events. Note that any event providers you configure are not actually used for reporting events until you configure an event rule that specifies a configured provider. For more information, see "&lt;rules&gt;" later in this document.</p>
+  <p>The default configuration in the machine-level Web.config file defines the following providers: </p>
+  <ul>
+    <li>
+      <b>EventLogWebEventProvider. </b>This provider uses the <b>EventLogWebEventProvider</b> class to log to the Windows application event log. <li><b>SqlWebEventProvider.</b> This provider uses the <b>SqlWebEventProvider</b> class for logging to a SQL Server or SQL Server Express instance. <li><b>WmiWebEventProvider.</b> This provider uses the <b>WmiWebEventProvider</b> class for logging to WMI. </li></li></li>
+  </ul>
+  <p>You can use any of these default event providers in your own health monitoring configuration, or you can configure new providers using any of the standard Web event provider classes. You can also use any custom Web event provider class that derives from the <b>WebEventProvider</b> base class. </p>
+  <h3>To configure a SQL Server provider</h3>
+  <p>If you want to configure an event provider that writes to a SQL Server instance, you must create the database used by the <b>SqlWebEventProvider</b>, configure a connection string, and configure a provider definition. </p>
+  <ol>
+    <li>Install the Web event database by running the following command from the Visual Studio command prompt: <p><b>aspnet_regsql.exe -E -S </b>&lt;<b>ServerName</b>&gt;<b> -A w</b></p><p>This command uses the following switches: </p><ul><li><b>-E.</b> This switch indicates to use Windows authentication to connect to the database. <li><b>-S</b> &lt;<b>ServerName</b>&gt;<b>.</b> This switch indicates the name of the server where the database will be installed, or is already installed. <li><b>-A w. </b>This switch indicates to add Web event support. This creates the relevant tables and stored procedures required by the <b>SqlWebEventProvider</b>. </li></li></li></ul><li>Create a SQL Server logon for your Web application's identity. For example, create a network service and then create a database user for this logon in the Aspnetdb database. <li>Grant the database user <b>execute</b> permission on the <b>aspnet_WebEvent_LogEvent</b> stored procedure. <li>Add the following connection string to your application's Web.config file. <div><pre>&lt;connectionStrings&gt; <br />&amp;nbsp;&amp;nbsp; &lt;add name="MySqlConnection" connectionString=<br />&amp;nbsp; "Data Source=localhost;Initial Catalog=aspnetdb;Integrated Security=SSPI;" <br />&amp;nbsp;&amp;nbsp; /&gt; <br />&lt;/connectionStrings&gt;  </pre></div><li>Add the following &lt;<b>providers</b>&gt; configuration within the &lt;<b>healthMonitoring</b>&gt; section in Web.config. <div><pre>&lt;providers&gt; <br />&amp;nbsp; &lt;add connectionStringName="MySqlConnection" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; maxEventDetailsLength="1073741823" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; buffer="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; bufferMode="Extra Critical Notification"&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="MySqlWebEventProvider"&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Management.SqlWebEventProvider,System.Web,Version=3.5.0.0,<br />&amp;#9;&amp;#9;Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt; <br />&lt;/providers&gt;   </pre></div></li></li></li></li></li>
+  </ol>
+  <p>The following list describes the most important attributes you can set when configuring event providers: </p>
+  <ul>
+    <li>
+      <b>name. </b>This is a name for the buffer mode used to reference it from other elements. <li><b>type.</b> This is a fully-qualified assembly reference to the provider class. This class should implement the <b>System.Configuration.Provider.ProviderBase</b> class. <li><b>buffer.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to enable event buffering. If this attribute is <b>true</b>, you must configure the <b>bufferMode</b> attribute. The default value is <b>false</b>. <li><b>bufferMode.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to specify the friendly name of the buffer mode to be used for buffering the events. <li><b>connectionStringName.</b> If you are using the <b>SqlWebEventProvider</b>, use this attribute to specify the friendly name of the connection string used for connecting to the SQL Server database. <li><b>maxEventDetailsLength.</b> This is the maximum length of the event details. </li></li></li></li></li></li>
+  </ul>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you want to use the <b>SqlWebEventProvider</b> to write to a local or remote SQL Server instance, use the Aspnet_regsql tool to configure the necessary database tables and roles as described in "Step 3. Configure Health Monitoring."<b></b></blockquote>
+  <h2>&lt;profiles&gt;</h2>
+  <p>You use the &lt;<b>profiles</b>&gt; element to specify sets of parameters to use when configuring events. These parameters indicate the minimum number instances after which the event should be logged, the maximum number of instances, and the minimum interval between logging two similar events. This element can be critical in controlling the amount of information generated by defining when monitoring begins and when it ends by setting thresholds. </p>
+  <p>You can use this element to throttle the event occurrences. It can help prevent an attack against the eventing system itself or an event sink such as SQL Server or the event log. You can review the default settings in the machine-level Web.config file. The following code example shows the default settings from the machine-level Web.config.default file</p>
+  <div>
+    <pre>&lt;profiles&gt;<br />&amp;nbsp; &lt;add name="Default" minInstances="1" maxLimit="Infinite" minInterval="00:01:00"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; custom="" /&gt;<br />&amp;nbsp; &lt;add name="Critical" minInstances="1" maxLimit="Infinite" minInterval="00:00:00"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; custom="" /&gt;<br />&lt;/profiles&gt;  </pre>
+  </div>
+  <p>You can use the default profiles in your own health monitoring configuration, and you can create new profiles. </p>
+  <h3>To create a new profile</h3>
+  <p>Add the following configuration to your application's Web.config file inside the existing &lt;<b>healthMonitoring</b>&gt; section, as shown in the following code example.</p>
+  <div>
+    <pre>&lt;profiles&gt;<br />&amp;nbsp; &lt;add name="Throttle"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; minInstances="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; maxLimit="1000"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; minInterval="00:00:01"/&gt;<br />&lt;/profiles  </pre>
+  </div>
+  <p>The &lt;<b>add</b>&gt; child element of the &lt;<b>profiles</b>&gt; element takes the following attributes: </p>
+  <ul>
+    <li>
+      <b>name. </b>This is a name for the buffer mode used to reference it from other elements. <li><b>minInstances.</b> This is the minimum number of occurrences before an event is fired and logged. <li><b>maxLimit.</b> If you want to set a maximum limit after which the specific events should stop firing and logging, use this attribute. The default setting is <b>Infinite</b>. <li><b>minInterval.</b> If you want to set a minimum time interval between logging same event again, use this attribute. The format is "hh:mm:ss" and the default is <b>00:00:00</b>. </li></li></li></li>
+  </ul>
+  <h2>&lt;eventMappings&gt; </h2>
+  <p>Event mappings are named groups of events that you want to monitor. Note that you can include a particular event in more than one named group. The default event mappings name the most commonly required groupings of events. The default event mappings include two high-level groupings, <b>All Events</b> and <b>All Audits</b>, that include all events and all audits respectively. There are also subsets of each of those groupings. For example, <b>All Errors</b> includes all error events, and <b>Failure Audits</b> includes all audit failure events. You can review the default settings in the machine-level Web.config.default file.<b></b></p>
+  <p>You can use the default event mappings in your own health monitoring configuration or you can create new event mappings. You must create event mappings for any custom Web events you create. </p>
+  <h3>To create an event mapping for a custom Web event </h3>
+  <p>Add the following &lt;<b>eventMappings</b>&gt; element beneath the &lt;<b>healthMonitoring</b>&gt; section in your application's Web.config file. This references the custom event you created earlier.</p>
+  <div>
+    <pre>&lt;eventMappings&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="My Critical Event" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="MyWebEvents.MyCriticalEvent,MyWebEvents"/&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&lt;/eventMappings&gt;      </pre>
+  </div>
+  <p>The &lt;<b>add</b>&gt; child element of the &lt;<b>eventMappings</b>&gt; element takes the following attributes: </p>
+  <ul>
+    <li>
+      <b>name.</b> This is the event name used to reference it from rules. <li><b>type. </b>This is a fully-qualified assembly reference to the event class. <li><b>startEventCode.</b> If you want to map events of a similar type in a specific range of event codes, use this attribute to set the starting event code for the range of events codes. The default setting is <b>0</b>. <li><b>endEventCode.</b> If you want to map events of a similar type in a specific range of event codes, use this attribute to set the top end of the range of event codes. The default setting is <b>Infinite</b>. </li></li></li></li>
+  </ul>
+  <h1>Step 4. Instrument Your Application </h1>
+  <p>The ASP.NET runtime is instrumented to raise standard events at the appropriate time. You must instrument your application to raise custom events.</p>
+  <h2>To create a test application for the MyCriticalEvent custom event </h2>
+  <ol>
+    <li>Add the following <b>using</b> statements to your Default.aspx.cs file. <div><pre>using System.Web.Management;using MyWebEvents;    </pre></div><li>Add a button to your application's Default.aspx page and then add the following code to the button click event handler. The code creates a new custom event object of type <b>MyCriticalEvent</b> and calls its <b>Raise</b> method to fire the event. <div><pre>protected void Button1_Click(object sender, EventArgs e)<br />&amp;#123;<br />&amp;nbsp; MyCriticalEvent testEvent = new MyCriticalEvent(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "Critical Operation Performed", <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; this, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; WebEventCodes.WebExtendedBase &amp;#43; 1);<br />&amp;nbsp; testEvent.Raise();<br />&amp;#125;  </pre></div><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;When you raise a custom Web event, you must specify an event code that is greater than <b>System.Web.Management.WebEventCodes.WebExtendedBase</b>. Codes less than this value are reserved for system-generated events.</blockquote></li></li>
+  </ol>
+  <h3>&lt;rules&gt; </h3>
+  <p>Use the &lt;<b>rules</b>&gt; element to specify which events to log through which event provider. As an option, you can apply a profile to an event logging rule by specifying the name of a &lt;<b>profiles</b>&gt; entry, or you can apply the same attributes used in the &lt;<b>profiles</b>&gt; definition directly to a &lt;<b>rule</b>&gt; definition. </p>
+  <p>The default rule settings are defined in the machine-level Web.config.default file. The default rules cause the <b>All Errors</b> and <b>Failure Audits</b> event mappings to be logged to the Windows event log. </p>
+  <div>
+    <pre>&lt;rules&gt;<br />&amp;nbsp;&lt;add name="All Errors Default" eventName="All Errors" provider="EventLogProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; profile="Default" minInstances="1" maxLimit="Infinite" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; minInterval="00:01:00" custom="" /&gt;<br />&amp;nbsp;&lt;add name="Failure Audits Default" eventName="Failure Audits"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; provider="EventLogProvider" profile="Default" minInstances="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; maxLimit="Infinite" minInterval="00:01:00" custom="" /&gt;<br />&lt;/rules&gt;  </pre>
+  </div>
+  <p>You can disable the default rules mappings by using the &lt;<b>clear</b>&gt; child element inside the &lt;<b>rules</b>&gt; element, before adding your own rules.<b></b></p>
+  <h2>To create a new event rule for a custom event</h2>
+  <p>To create a new event rule for the custom event you created earlier, add the following &lt;<b>rules</b>&gt;<b></b>element inside the &lt;<b>healthMonitoring</b>&gt; section in your application's Web.config, as shown in the following code example.</p>
+  <div>
+    <pre>&lt;rules&gt; <br />&amp;nbsp; &lt;add name="Critical event" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; eventName="My Critical Event" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; provider="MySqlWebEventProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; profile="Throttle"/&gt;<br />&lt;/rules&gt;  </pre>
+  </div>
+  <p>You can set the following attributes when defining rules: </p>
+  <ul>
+    <li>
+      <b>name. </b>This is a name for the buffer mode used to reference it from other elements. <li><b>eventName.</b> This is the name of the event you want to monitor for which the rule is being configured. <li><b>provider.</b> Use this attribute to specify the friendly name of the provider to use to log this event. <li><b>profile. </b>If you want to use a preconfigured profile, specify the friendly name of the profile using this attribute. Note that if you specify a profile, the profile supplies the values for the <b>minInstances</b>, <b>maxLimit</b> and <b>minInterval</b> rules attributes. <li><b>minInstances. </b>If you want to specify the minimum number of occurrences before an event is fired and logged, use this attribute. If you specify a profile attribute, this attribute overrides the <b>minInstances</b> value in the profile. <li><b>maxLimit.</b> If you want to set a maximum limit after which the specific events should stop firing and logging, use this attribute. The default setting is <b>Infinite</b>. If you specify a profile attribute, this attribute overrides the <b>maxLimit</b> value in the profile. <li><b>minInterval.</b> If you want to set a minimum time interval between logging the same event again, use this attribute. The format is "hh:mm:ss" and the default is <b>00:00:00</b>. If you specify an equivalent profile attribute, this attribute overrides the <b>minInterval</b> value in the profile. </li></li></li></li></li></li></li>
+  </ul>
+  <h1>Step 5. Test Health Monitoring</h1>
+  <p>In this step you test health monitoring and verify that your custom event works as expected.</p>
+  <p>
+    <b>To test health monitoring</b>
+  </p>
+  <ol>
+    <li>Build your Web application and browse to its Default.aspx page. <li>Click the button to fire the custom event. <li>Open the aspnet_WebEvent_Events table in the Aspnetdb database on your SQL Server. The Details column contains information similar to that shown in the following code example, including the custom event information. <div><pre>Event code: 100001Event code: 100001<br />Event message: Critical Operation Performed<br />Event time: 7/11/2009 5:27:12 PM<br />Event time (UTC): 7/12/2009 12:27:12 AM<br />Event ID: 369ca7f9e5744234be2831aced671191<br />Event sequence: 8<br />Event occurrence: 1<br />Event detail code: 0<br />Application information:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Application domain: /LM/w3svc/1/ROOT/HealthMonitoring-7-127656015969887178<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Trust level: Full<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Application Virtual Path: /HealthMonitoring<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Application Path: c:\inetpub\wwwroot\HealthMonitoring\<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Machine name: MACHINENAME<br />Custom event details: <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; User ID: DomainName\UserName<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Authentication Type: Negotiate<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; User Authenticated: True<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Activity Description: Critical Operation  </pre></div></li></li></li>
+  </ol>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You can redirect the logged output to the event log by setting provider="EventLogProvider" instead of provider="MySqlWebEventProvider" as shown here:</blockquote>
+  <div>
+    <pre>&lt;rules&gt; <br />&amp;nbsp; &lt;add name="Critical event" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; eventName="My Critical Event" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; provider="EventLogProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; profile="Throttle"/&gt;<br />&lt;/rules&gt;    </pre>
+  </div>
+  <h1>More Information </h1>
+  <p>The following lists describe the optional attributes available while configuring various event logging providers that you can use to customize provider behavior.</p>
+  <h2>SimpleMailWebEventProvider and TemplatedMailWebEventProvider</h2>
+  <p>Use the <b>SimpleMailWebEventProvider</b> or <b>TemplatedMailWebEventProvider</b> to send an e-mail message when an event is raised. When you are configuring providers using these classes, set the following attributes to control the behavior of these providers. </p>
+  <ul>
+    <li>
+      <b>from</b>, <b>to</b>, <b>bcc</b> and <b>cc.</b> These specify the sender and receivers of the event notification mail. <li><b>maxEventLengthForSimpleMessage.</b> Use this attribute to limit the number of characters of event details being mailed. This setting is potentially dangerous if the message size is not limited. The default value is 5,000 characters. <li><b>maxSizeForSimpleMessage.</b> Use this attribute to limit the size of the notification message sent. The default value is 1,024 KB. <li><b>maxEventCountForTemplateMessage.</b> Use this attribute to limit the number of events in each message notification. <li><b>maxMessagesPerNotification.</b> Use this attribute to limit the number of messages per event. <li><b>priority.</b> Use this attribute to set the priority of mail messages. </li></li></li></li></li></li>
+  </ul>
+  <p>When you are using the <b>SimpleMailWebEventProvider</b>, use the following attributes to format the mail notification: </p>
+  <ul>
+    <li>
+      <b>bodyFooter. </b>Use this attribute to specify a message to be included at the bottom of the body of the notification e-mail message. <li><b>bodyHeader.</b> Use this attribute to specify a message to be included at the top of the body of the e-mail notification. <li><b>separator.</b> Use this attribute to include specific text between each event and after each section header in simple email format. <li><b>subjectPrefix.</b> Use this attribute to prefix custom text to the mail subject. This helps you distinguish event-related e-mail messages. </li></li></li></li>
+  </ul>
+  <p>When you use the <b>TemplatedMailWebEventProvider,</b> use the following attribute to format the mail notification: </p>
+  <ul>
+    <li>
+      <b>template.</b> Use this attribute to specify an .aspx page that is used to create the message body of the notification. This attribute cannot be specified along with <b>bodyHeader</b>, <b>bodyFooter</b>, or <b>separator</b> settings. </li>
+  </ul>
+  <h2>SQLEventProvider</h2>
+  <p>Use the following attributes to restrict the event size: </p>
+  <ul>
+    <li>
+      <b>maxEventDetailsLength.</b> Use this attribute to specify the maximum event details size. Set this attribute to a suitable value to limit the maximum length of data that can be written to the database. <li><b>commandTimeout.</b> Use this attribute to override the default ADO.NET command time out (30 seconds).</li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000005a126e</Id>
+    <Id_History>00000000-0000-0000-0000-0000005a126e,4c41f5ee-ab41-427e-a050-efc1f2717c47,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Validate XML Data Using a Schema</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate XML Data Using a Schema</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+* ASP.NET 
+
+==What to Do==
+Ensure that all XML data is syntactically validated on the server by using an XML schema such as XSD or DTD.
+
+==Why==
+An attacker passing malicious XML input can attempt XML injection attacks that aim to exploit your application by overwriting XML data, disclose information from arbitrary URIs, or cause the XML parser to crash or process slowly. Performing syntactic validation helps reduce these risks by ensuring that the input received matches the expected format. Syntactic validation on its own is not sufficient, as semantic validation is also needed to fully prevent these attacks, but it is an important step for both the security and reliability of your application.
+
+==When==
+All XML data that is created or consumed by an application should follow a strict XML schema. Validate XML against the schema when any XML data is consumed or created.
+
+==How==
+XML data can be validated with either an XSD or DTD. XSDs are more flexible and are generally favored over DTDs.
+
+To solve using XSD in ASP.NET use the following steps:
+# **Identify all areas where the application generates or consumes XML data.** Enumerate all areas where XML data is generated or parsed in your application.
+# **Define an XSD which describes the XML data.** Examine the XML data and define an XSD which tightly defines the structure of the XML data. An XML Schema can consist of a single file, multiple files, or in-line with the XML. If the XML is being generated dynamically via code, it is likely that an XSD can be outputted as well. XSDs can also be generated from XML data by using the //System.Xml.Schema.XmlSchemaInference// class, but the output should be tweaked by hand to ensure accuracy and validity. Finally, the XSD should tightly constrain the XML data by using element types; for example defining a birthday element and assigning it the //xs:date// type.
+# **Validate the XML with the XSD.** XML can be validated using the //System.Xml.XmlReader// and the //System.Xml.XmlReaderSettings// classes. Instantiate an //XmlReaderSettings// object and use the //XmlSchemaSetSchemas// property to add one or more XSD files. Then set the //ValidationType// property to //ValidationType.Schema//. Finally instantiate an //XmlReader// object using the //XmlReader.Create()// method which takes the XML Data and the //XmlReaderSettings// object.
+
+An example of validation using an XML Schema, XML validation errors will result in an Exception.
+{{{
+using System.Xml;
+using System.Xml.Schema;
+XmlReaderSettings xmlSettings = new XmlReaderSettings();
+xmlSettings.Schemas.Add("http://www.example.com/types", "types.xsd");
+xmlSettings.ValidationType = ValidationType.Schema;
+XmlReader xmlData = XmlReader.Create("data.xml", xmlSettings);
+}}}
+
+Using DTD instead of XSD require additional security considerations. To solve using DTD in ASP.NET use the following steps:
+# **Identify all areas where the application generates or consumes XML data.** Enumerate all areas where XML data is generated or parsed in your application.
+# **Define a DTD which describes the XML data.** Examine the XML data and define a DTD which tightly defines the structure of the XML data. DTD can consist of an externally referenced file or found in-line with the XML. The external DTD URI or the DTD data needs to be wrapped within a DOCTYPE definition tag. Finally, the DTD can be used to constrain the XML data; however it has fewer options to do so compared to XSD.
+# **Secure the XML Parser.** By default DTD processing is disabled as it can lead to Denial of Service or other attacks. Instantiate a //System.Xml.XmlReaderSettings// object and set its //ValidationType// property to //ValidationType.DTD//. Next set its //ProhibitDtd// property to //false//. Set its //MaxCharactersInDocument// property; this property prevents an attacker from performing a Denial of Service attack by submitting an excessively large XML document, the property should be set to a reasonable maximum number of characters. Set its //MaxCharactersFromEntities// Property, which limits the number of characters from entity expansion, preventing another Denial of Service attack called an XML bomb. Finally, if your XML does not use external entities, you should set the //XmlReaderSettings XmlResolver// property to //null//. If your XML does use external entities, the //XmlResolver// property should be set to an //XmlSecureResolver// which restricts the URIs that entities can be accessed from.
+# **Validate the XML.** Finally, instantiate an //XmlReader// object using the //XmlReader.Create()// method which takes the XML Data and the //XmlReaderSettings// object.
+
+An example of validation using a DTD and disabling external entities. XML validation errors will result in an Exception.
+{{{
+using System.Xml;
+XmlReaderSettings xmlSettings = new XmlReaderSettings();
+xmlSettings.ValidationType = ValidationType.DTD;
+xmlSettings.ProhibitDtd = false;
+xmlSettings.MaxCharactersInDocument = 1024;
+xmlSettings.MaxCharactersFromEntities = 300;
+xmlSettings.XmlResolver = null;
+XmlReader xmlData = XmlReader.Create("data.xml", xmlSettings);
+}}}
+
+==Problem Example==
+A registration form for a directory website has several fields, specifically, name, date of birth, phone number and employment status. Each item is collected client side, and an XML blob of the data is sent to the server for processing. No input validation or syntactic validation of the data is done other than ensuring the data is “well-formed XML” by the parser.
+
+An example of XML passed by the server.
+{{{
+<!--?xml version="1.0"?-->
+<person>
+  <name>Joe Blow</name>
+  <dob>1986-08-25</dob>
+  <phone>5558675309</phone>
+  <employmentstatus>Unemployed</employmentstatus>
+</person>
+}}}
+
+An attacker can perform a number of injection attacks, depending on how the data is processed. For example if the name is echoed to other users, XSS or content injection attack can be carried out. Or if the birthday is used in a SQL query, a SQL Injection attack can be carried out.
+
+==Solution Example==
+An XSD can be used to validate the XML data from the registration form. Not only can the XSD ensure that the XML data is properly formatted, it can also be used to perform input validation to prevent injection attacks such as content, XSS, or SQL injection.
+
+The following XSD defines the XML data.
+{{{
+<!--?xml version="1.0"?-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="person">
+    <xs:complextype>
+      <xs:sequence>
+        <xs:element name="name">
+          <xs:simpletype>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[a-zA-Z ]+"></xs:pattern>
+            </xs:restriction>
+          </xs:simpletype>
+        </xs:element>
+        <xs:element name="dob" type="xs:date"></xs:element>
+        <xs:element name="phone">
+          <xs:simpletype>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[0-9]{10}"></xs:pattern>
+            </xs:restriction>
+          </xs:simpletype>
+        </xs:element>
+        <xs:element name="employmentStatus">
+          <xs:simpletype>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="Unemployed"></xs:enumeration>
+              <xs:enumeration value="Employed"></xs:enumeration>
+            </xs:restriction>
+          </xs:simpletype>
+        </xs:element>
+      </xs:sequence>
+    </xs:complextype>
+  </xs:element>
+</xs:schema>
+}}}
+ 
+The XML parser will use the XSD to validate the received XML. It will only accept a name that’s made up of the Latin alphabet characters and spaces, a date of birth that’s in the format of YYYY-MM-DD, a phone number that’s made up of only digits and is exactly 10 digits long, and an employment status of either “Unemployed” or "Employed". So even if an attack manipulated the XML data before sending it to the server, the malicious data would be found to be invalid, and reject it if the attacker tried to perform an injection attack with special characters.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

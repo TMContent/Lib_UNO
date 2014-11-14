@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>659caeca-dba8-42be-9c39-33094ca52447</Id>
+    <Id_History>659caeca-dba8-42be-9c39-33094ca52447,ce42354d-b702-4b98-8445-185419421869,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Use of Privileged Accounts Is Monitored</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Use of Privileged Accounts Is Monitored</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Check For==
+
+Ensure your application monitors the use of privileged accounts and logs all activities performed under their credentials.
+
+==Why==
+
+Privileged accounts by their nature are allowed to do damaging activities. If compromised, they can cause the most damage. Close monitoring can catch unauthorized and/or malicious activities and help minimize any damage done.
+
+==How to Check==
+
+To check if your application monitors privileged accounts activities, follow these steps:
+
+# **Identify the privileged users and roles.** For the purposes of security monitoring, privileged accounts are those that can cause more damage than other users. Check for both privileged users and roles (Administrator or the Administrator's group, among others, or root and wheel on a Unix environment). This will vary by application and roles defined, however, some examples are:
+## Administrators
+## Power users
+## Team leaders
+# **Identify potentially dangerous activities.** Enumerate all activities enabled by the privileged accounts identified above. Some of the common activities include, but are not limited to:
+## Add, delete, and modify user accounts
+## Add, delete, and modify database tables
+## Install or remove applications
+## View or modify application configuration settings
+## View log files
+## View or modify source code
+# **Ensure all activities are logged.** Identify areas of code that perform privileged activates as identified from step 2 above. Verify that all activities, including successful and failed operations, are logged. Ensure that privileged events are logged separately in files that are not accessible to lower privileged users.
+# **Audit the logs.** Audit your application's logs regularly. Logs are the first and sometimes only place that security problems can be discovered. Use your logs to detect problems early and prevent them instead of for forensics. If there are no available logs to audit, use your application to generate enough logged sample data from the application's components that require privileged accounts. Then perform an audit to verify that the logging mechanisms have been set up correctly. Verify that:
+## The application's security policy includes scheduled log audits
+## Logs are being audited regularly
+## Information in log files is marked and categorized during audits
+## Suspicious activity is investigated
+
+==How to Fix==
+
+Perform the following actions to implement monitoring the use of privileged user accounts:
+
+# **Identify privileged user roles.** Identify the types of privileged user accounts available in your application. Some example are: administrator, root, power user, manager, etc. Make a list of privileged user roles.
+# **Identify functionality unique to privileged users.** For each type of privileged user account, make a list of functionality that this type of account can use that a regular user cannot. Some examples are: adding or removing user accounts, changing passwords for other users, changing application settings, shutting down the application, etc. Make a list of functionality that is unique to privileged users.
+# **Identify code that implements functions unique to privileged users.** Use the list of actions available exclusively to privileged users to identify the functions that implement these actions. Make a list of these functions.
+# **Identify the logging subsystem.** The logging subsystem should provide an API that allows generating log entries from application code. If this API or the logging subsystem don't exist, write them. Make a list of functions that may be used to generate log entries and collect documentation about how to use them.
+# **Implement monitoring of privileged accounts.** Use the list of functions that perform actions unique to privileged accounts to add code that generates log entries to each of those functions. Use the list of functions in the logging subsystem when writing code that generates log entries.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
