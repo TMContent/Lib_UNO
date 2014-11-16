@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1502526708" Content_Hash="157349458">
+  <Metadata>
+    <Id>ec06b8da-24a1-4e5c-873c-64b40b78bf99</Id>
+    <Id_History>ec06b8da-24a1-4e5c-873c-64b40b78bf99,4d3a7731-425c-448c-905a-f8a3e24c43ed,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Authenticate Users Against the SQL Membership Provider</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Authenticate Users Against the SQL Membership Provider</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>If your user information is already stored in the SQL membership database, or if you are building an Internet facing WCF application from scratch, you can use the SQL Membership provider to authenticate your WCF service clients. The Membership Provider authenticates all incoming client credentials against the credentials stored in the SQL Membership database. The membership feature is a good choice as it allows you to enable user name authentication without writing and maintaining custom code. </p>
+  <p>Use the following steps to configure the SQL membership provider to work with UserName authentication in your WCF application:</p>
+  <ol>
+    <li>Configure your SQL server database for membership from a VS 2008 command prompt, run the following command<pre>aspnet_regsql -S .\SQLExpress -E -A m -d &lt;&lt;YourDatabaseName&gt;&gt;</pre><ul>In this command: <ul><li>-S specifies the server, which is (.\SQLExpress) in this example.<li>-E specifies to use Windows Authentication to connect to SQL Server.<li>-A m specifies to add only the membership feature. For simple authentication against a SQL Server user store, only the membership feature is required.<li>-d specifies the SQL server database name. If this option is not used then a default database aspnetdb will be created.<li>For a complete list of the commands, run Aspnet_regsql /?</li></li></li></li></li></ul></ul><li>Modify your Web.config file in your WCF service application by adding the following sections<pre><br />&lt;connectionStrings&gt;<br />  &lt;add name="MyLocalSQLServer"<br />       connectionString="Initial Catalog=&lt;&lt;YourDatabaseName&gt;&gt;;<br />      data source=.\sqlexpress;Integrated Security=SSPI;" /&gt;<br />&lt;/connectionStrings&gt;</pre><ol><pre>&amp;#8230;<br />&lt;system.web&gt;<br />  ...<br />  &lt;membership defaultProvider="MySqlMembershipProvider" &gt;<br />    &lt;providers&gt;<br />      &lt;clear/&gt;<br />      &lt;add name="MySqlMembershipProvider"<br />           connectionStringName="MyLocalSQLServer"<br />           applicationName="MyAppName"<br />           type="System.Web.Security.SqlMembershipProvider" /&gt;<br />    &lt;/providers&gt;<br />  &lt;/membership&gt;<br />&lt;/system.web&gt;<br />&amp;#8230;</pre></ol><li>Configure the service to use the Username Authentication<ol><pre>&amp;#8230;<br />&lt;bindings&gt;<br />  &lt;wsHttpBinding&gt;<br />    &lt;binding name="wsHttpEndpointBinding"&gt;<br />      &lt;security&gt;<br />        &lt;message clientCredentialType="UserName" /&gt;<br />      &lt;/security&gt;<br />    &lt;/binding&gt;<br />  &lt;/wsHttpBinding&gt;<br />&lt;/bindings&gt;</pre></ol><li>Configure the service to use Membership Provider<ol><pre>&lt;behaviors&gt;<br />  &lt;serviceBehaviors&gt;<br />    &lt;behavior name="ServiceBehavior"&gt;</pre><pre>      &lt;serviceCredentials&gt;<br />        &lt;userNameAuthentication userNamePasswordValidationMode="MembershipProvider"<br />          membershipProviderName="MySqlMembershipProvider" /&gt;<br />      &lt;/serviceCredentials&gt;</pre><pre>    &lt;/behavior&gt;<br />  &lt;/serviceBehaviors&gt;<br />&lt;/behaviors&gt;<br />&amp;#8230;<br /></pre></ol></li></li></li></li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see &amp;#8220;How to Use Username Authentication with the SQL Server Membership Provider and Message Security in WCF from Windows Forms&amp;#8221; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=How&amp;#37;20To&amp;#37;20-&amp;#37;20Use&amp;#37;20Username&amp;#37;20Authentication&amp;#37;20with&amp;#37;20the&amp;#37;20SQL&amp;#37;20Membership&amp;#37;20Provider&amp;#37;20and&amp;#37;20Message&amp;#37;20Security&amp;#37;20in&amp;#37;20WCF&amp;#37;20from&amp;#37;20Windows&amp;#37;20Forms&amp;referringTitle=How&amp;#37;20Tos">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=How&amp;#37;20To&amp;#37;20-&amp;#37;20Use&amp;#37;20Username&amp;#37;20Authentication&amp;#37;20with&amp;#37;20the&amp;#37;20SQL&amp;#37;20Membership&amp;#37;20Provider&amp;#37;20and&amp;#37;20Message&amp;#37;20Security&amp;#37;20in&amp;#37;20WCF&amp;#37;20from&amp;#37;20Windows&amp;#37;20Forms&amp;referringTitle=How&amp;#37;20Tos</a><li>For more information see &amp;#8220;How to: Use the ASP.NET Membership Provider&amp;#8221; at <a href="http://msdn.microsoft.com/en-us/library/ms731049.aspx">http://msdn.microsoft.com/en-us/library/ms731049.aspx</a><br /></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

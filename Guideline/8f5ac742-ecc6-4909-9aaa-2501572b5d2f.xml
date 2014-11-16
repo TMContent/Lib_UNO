@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1115669332" Content_Hash="-276520102">
+  <Metadata>
+    <Id>8f5ac742-ecc6-4909-9aaa-2501572b5d2f</Id>
+    <Id_History>8f5ac742-ecc6-4909-9aaa-2501572b5d2f,3540c4f0-0623-42bb-ba02-80767d751131,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Use a Global Exception Handler for Unhandled Exceptions</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use a Global Exception Handler for Unhandled Exceptions</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PHP</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use a global exception handler to catch any unhandled exceptions. A global exception handler improves the application's robustness and minimizes the risk of information disclosure.</p>
+  <h1>Why</h1>
+  <p>Unhandled exceptions can be a serious stumbling block to an application's performance and security. Unhandled exceptions must be avoided as they can result in the application entering an unknown state and/or revealing sensitive internal application details. Using a global exception handler will prevent unhandled exceptions.</p>
+  <h1>How</h1>
+  <p>To use a global exception handler to for unhandled exceptions:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define a global exception handler. </strong>Write a function that will handle all uncaught exceptions. Place this function in the error handling subsystem. The global exception handler should accept the exception object as a parameter.</p>
+      <li>
+        <p>
+          <strong>Log detailed exception information.</strong> Add code to the global exception handler to get as much information as possible from the exception object that is passed as the parameter. Log the </p>
+        <li>
+          <p>
+            <strong>Show a simple error message.</strong> Be careful not to give away too much information to attackers. Write a simple message that lets the user know that the application has crashed, but the situation is under control. Add code that displays the error message to the global exception handler.</p>
+          <li>
+            <p />
+            <strong>Clean up and exit gracefully.</strong> Add code to the global exception handler to do the following as necessary: <ul><li>Close any open file handles. <li>Remove any temporary files used by the application. <li>Check file system permissions and reset them if necessary. <li>Close any open connections, including database connections. <li>Free any external resources in use.</li></li></li></li></li></ul><li><p><strong>Set the global exception handler.</strong> Use the <em>set_exception_handler</em> function to set the global exception handler somewhere early on in the application flow. Add the call to the <em>set_exception_handler</em> early on in every script just to be sure.</p><p><strong>Note:</strong> certain types of errors cannot be handled with user-defined error handlers in scripts that have a global exception handler. Error handling is different from exception handling. Exception handling is a newer and more logical approach than error handling. It is recommended to use exception handling instead of error handling.</p></li></li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the <em>set_exception_handler</em> function and setting a global exception handler, please see <a href="http://php.net/manual/en/function.set-exception-handler.php">http://php.net/manual/en/function.set-exception-handler.php</a></li>
+    <li>For more information about setting a global exception handler in PHP, please see <a href="http://www.w3schools.com/php/func_error_set_exception_handler.asp">http://www.w3schools.com/php/func_error_set_exception_handler.asp</a></li>
+    <li>For more information about PHP exception handling, please see <a href="http://www.w3schools.com/php/php_exception.asp">http://www.w3schools.com/php/php_exception.asp</a></li>
+  </ul>
+  <h1>PHP Error Handling Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/a706450d-653c-4928-84ea-b9f754db8644">Use Structured Exception Handling</a>
+    </li>
+    <li>
+      <a href="/article/8f5ac742-ecc6-4909-9aaa-2501572b5d2f">Use a Global Exception Handler for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/967c7738-7281-485c-8d5a-500d049c9493">Do Not Include Debugging Data in Output</a>
+    </li>
+    <li>
+      <a href="/article/07964c6c-e9ae-4411-865c-c322f8ac2ec9">Prevent Disclosure of SQL Errors</a>
+    </li>
+    <li>
+      <a href="/article/fd1d911e-c8ad-4951-a047-62e5b422f094">Display Simple Error Messages</a>
+    </li>
+  </ul>
+  <h1>PHP Error Handling Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/3fcd2a1c-d362-4a89-954d-b31a7c93df7f">Structured Exception Handling Is Used</a>
+    </li>
+    <li>
+      <a href="/article/7a4f9032-7abb-409a-b00b-58d8e890c6ea">A Global Exception Handler Is Used for Unhandled Exceptions</a>
+    </li>
+    <li>
+      <a href="/article/ecf79124-a122-4509-8ca3-a6abce9f04d4">Debugging Data Is Not Included in Output</a>
+    </li>
+    <li>
+      <a href="/article/9d0fcbd1-210a-4c8c-a50c-8153e45d06e3">SQL Error Messages Are Not Disclosed</a>
+    </li>
+    <li>
+      <a href="/article/7e9f8f71-a09e-44c2-adf6-80261985ed26">Simple Error Messages Are Used</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

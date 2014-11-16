@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>95272573-65e1-499e-8b3f-a0339816efb7</Id>
+    <Id_History>95272573-65e1-499e-8b3f-a0339816efb7,decf5c4d-b39c-4a07-9230-7a2fb37b3df2,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>WS-Routing Is Not Used</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>WS-Routing Is Not Used</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Java
+
+==What to Check For==
+
+Verify that WS-Routing is not used.
+
+==Why==
+
+Don't use WS-Routing, because WS-Routing is vulnerable to routing detour attacks. The WS-Routing protocol doesn't have sufficient security features, so it should be avoided. 
+
+==How to Check==
+
+To check whether WS-Routing is used, ask developers whether the application actually uses WS-Routing, and review application code to find code that uses WS-Routing.  Search for keywords like "WS-Routing" and "r:path" to help find code that uses WS-Routing. 
+
+If WS-Routing is used, the code that uses it should be either removed or changed to use WS-Addressing instead.
+
+==How to Fix==
+
+To avoid using WS-Routing:
+
+# **Find code that uses WS-Routing.** Ask developers whether the application actually uses WS-Routing. Review application code to find code that uses WS-Routing.
+# **Determine whether SOAP message routing functionality is needed.** Most real-life applications that use Web Services can be implemented without using SOAP message routing. Review application requirements to determine whether SOAP message routing is necessary.
+# **Remove or replace code that uses WS-Routing.** If SOAP message routing is not necessary, then remove the code that uses it. If SOAP message routing is necessary, rewrite code that uses WS-Routing to use WS-Addressing instead.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

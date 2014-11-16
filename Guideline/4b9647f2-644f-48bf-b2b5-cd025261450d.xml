@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1817066764" Content_Hash="-2051920568">
+  <Metadata>
+    <Id>4b9647f2-644f-48bf-b2b5-cd025261450d</Id>
+    <Id_History>4b9647f2-644f-48bf-b2b5-cd025261450d,f4698155-4d48-4a07-a859-e6876f514e04,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Secure the Account Administration Functionality</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Secure the Account Administration Functionality</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications written using Servlets or JSP.</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Separate the account administration from the main application interface.</p>
+  <h1>Why</h1>
+  <p>Account administration requires higher privileges than the main application interface. Separating the two interfaces decreases the risk of a normal user being able to escalate his privileges to that of an administrator.</p>
+  <h1>When</h1>
+  <p>If your application has an administrative interface, use this guideline to separate it from the main application interface.</p>
+  <h1>How</h1>
+  <p>Use the following steps when designing an administrative interface:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Only privileged users can administer all accounts. </strong>Design your application such that the administrative module is separate from the main application interface. Since the separation requires using separate authentication mechanisms&amp;nbsp;for the application and administration, there is a reduced risk&amp;nbsp;of escalation-of-privilege attacks. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Users may be allowed to administer their own accounts. </strong>It may be necessary to allow users to administer their own accounts. This involves the ability to change passwords, account details, etc. Such administration can be done through the main application interface. Because the user is modifying sensitive data, extra security precautions must be enforced:</p>
+      <ul>
+        <li>
+          <strong>Track userID at the server-side</strong>: The user should always be tracked at the server-side. Store the userID inside a session. The only data the client needs to know is the session identifier. This reduces the risk of an attacker modifying another user's account information. </li>
+        <li>
+          <strong>Force re-authentication</strong>: Enforce re-authentication when modifying the user's password. This helps verify that the user is aware of the password change and is not a victim of a session hijacking. <br /></li>
+        <li>
+          <strong>Modify accounts in sections</strong>: Do not modify all account information at once. Split the account modification procedure in sections. For example, group the account information into credentials, personal data, contact information and additional information. Modifying the account information in groups reduces the risk of information leakage when the user is updating his/her account. </li>
+        <li>
+          <strong>Use SSL when modifying&amp;nbsp;accounts</strong>: The use of SSL provides encryption when transmitting sensitive data over the network. SSL also certifies the authenticity of the application against the user.</li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Authorization Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/127d98e8-d628-40b7-8522-d903f4bf7927">Perform Role-based Security Checks</a>
+    </li>
+    <li>
+      <a href="/article/afa2d020-9b18-4861-9d4f-cb81cbcb1f2e">Require Authentication and Authorization for All Sensitive Pages</a>
+    </li>
+    <li>
+      <a href="/article/12096ed3-d1e3-47e1-834d-f59dcaf4110f">Make Authentication and Authorization Policies Configurable</a>
+    </li>
+    <li>
+      <a href="/article/c0ff64c5-cf7f-4855-b039-81d2a298e3bb">Deny All Access by Default</a>
+    </li>
+    <li>
+      <a href="/article/92839e91-8f79-45fb-9b8d-76fc9c814fea">Check Access Control Permissions When Referencing Objects</a>
+    </li>
+    <li>
+      <a href="/article/b4a87891-a19a-41be-a1a3-f8a13c7f4881">Use Indirect Object References</a>
+    </li>
+    <li>
+      <a href="/article/58e80d4a-410a-47c9-b3c5-f13cc79a3e00">Partition the Application Between Public and Private Domains</a>
+    </li>
+    <li>
+      <a href="/article/4b9647f2-644f-48bf-b2b5-cd025261450d">Secure the Account Administration Functionality</a>
+    </li>
+    <li>
+      <a href="/article/4f3147c2-7ca1-487c-9144-56630e5a6f80">Automatically Lock Inactive User Accounts</a>
+    </li>
+    <li>
+      <a href="/article/35bde9da-b8f2-4f8d-9a3f-48a3ededed4b">Consider Using JAAS for Authorization</a>
+    </li>
+  </ul>
+  <h1>Authorization Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/14f55778-8227-4d0d-85ca-41d80853bc58">Role-based Security Checks Are Performed</a>
+    </li>
+    <li>
+      <a href="/article/0d7d5d60-33bc-4fac-a088-f0be84d37cef">Authentication and Authorization Are Required for All Sensitive Pages</a>
+    </li>
+    <li>
+      <a href="/article/fb22da6b-bf1c-4315-83a5-7bc3486bf9ab">Authentication and Authorization Policies Are Configurable</a>
+    </li>
+    <li>
+      <a href="/article/98e8c0d1-d95a-4eb7-a39b-630c40c7adaf">All Access Is Denied by Default</a>
+    </li>
+    <li>
+      <a href="/article/f3747faf-6e0b-43af-ae92-ed3736be390a">Access Control Permissions Are Checked When Referencing Objects</a>
+    </li>
+    <li>
+      <a href="/article/54ea1759-e5e8-4eee-84cc-67607fef0c30">Indirect Object References Are Used</a>
+    </li>
+    <li>
+      <a href="/article/3e451992-d7aa-43fd-ade8-656a87b787f8">The Application Is Partitioned into Public and Private Domains</a>
+    </li>
+    <li>
+      <a href="/article/7cc251c5-6e57-47a6-976e-365e8830f958">Account Administration Functionality Is Secured</a>
+    </li>
+    <li>
+      <a href="/article/a4f21cca-3db6-4eae-88d2-5d6b5f7ad2bb">Inactive User Accounts Are Automatically Locked</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

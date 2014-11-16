@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-928515245" Content_Hash="896648431">
+  <Metadata>
+    <Id>576e329e-2528-4189-94c6-db64d4b99640</Id>
+    <Id_History>576e329e-2528-4189-94c6-db64d4b99640,b198132d-047a-40f6-8c51-5b3b588582f1,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Test Interfaces Are Removed</Title>
+    <Category>Hardening</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Test Interfaces Are Removed</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure all public interfaces used solely for testing the application are removed.</p>
+  <h1>Why</h1>
+  <p>Test interfaces add extra functionality that is not intended for the released application. Often these interfaces will be used by a test team to gain information or drive functionality that would be dangerous in the hands of an attacker.</p>
+  <h1>How to Check</h1>
+  <p>Verify that all test interfaces have been removed by doing the following:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all test APIs</strong>: Enumerate all public APIs. Identify which APIs are intended for application use and which APIs are intended for test purposes. Use documentation and specifications to help.</p>
+      <li>
+        <p>
+          <strong>Verify that all testing code is removed from the code base</strong>: Locate the implementation for the identified test code. Ensure that it has been isolated from the application.</p>
+        <li>
+          <p>
+            <strong>Ensure that the application was compiled with the release flag</strong>: Open the project for the application with Visual Studio. From the <strong>Build</strong> Menu select <strong>Configuration Manager</strong>. Check that the <strong>active solution configuration</strong> is set to <strong>Release</strong>.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>Care should be taken when managing different versions of builds to ensure that only release builds are used in production, as it is difficult (although possible) to determine whether a build was configured as release or debug after the fact.</p>
+  <h1>Problem Example</h1>
+  <p>The following code shows the user management system for an application. Because the class contains test APIs, it is possible for a malicious user to execute untested code and possibly exploit any vulnerabilities in it.</p>
+  <p />
+  <pre>public sealed class UserManager<br />&amp;#123;<br />      public UserManager()<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean AddUser(User user, char&amp;#91;&amp;#93; pass, char&amp;#91;&amp;#93; verifyPass)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean RemoveUser(User user)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean ModifyUser(User user)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean ChangePass(User user, char&amp;#91;&amp;#93; oldPass, char&amp;#91;&amp;#93; pass, char&amp;#91;&amp;#93; verifyPass)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      // The class contains test APIs<br />      public void AddTestUsers()<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about compiling your application with debug and release configurations, see: <a href="http://msdn2.microsoft.com/en-us/library/wx0123s5(vs.80).aspx">How to: Set Debug and Release Configurations</a>&amp;nbsp;in MSDN.</li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/880d6dff-ebeb-40b9-9bc2-d41997813dee">Guideline: Remove Test Interfaces&amp;nbsp;</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

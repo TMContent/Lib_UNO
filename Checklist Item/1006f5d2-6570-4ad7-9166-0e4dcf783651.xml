@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1229921064" Content_Hash="-1690991550">
+  <Metadata>
+    <Id>1006f5d2-6570-4ad7-9166-0e4dcf783651</Id>
+    <Id_History>1006f5d2-6570-4ad7-9166-0e4dcf783651,b52710d9-6037-4bca-9bb0-b24eba10bd7e,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Sensitive Data Is Not Logged</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Not Logged</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure no sensitive data is being logged.</p>
+  <h1>Why</h1>
+  <p>The permissions required to access log files are often less than what is required to view sensitive information in an application. By logging sensitive information you may be allowing a less privileged user to view information they would otherwise not have access to. This also&amp;nbsp;increases your attack surface by making your log files a target of interest for attackers.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that your application does not log sensitive data:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify sensitive data. </strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users.</li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Audit the logs. </strong>Audit your application's logs. If there are no available logs to audit, use your application to generate enough logged sample data from all of your application's components. During the audit, mark and categorize the information that has been logged.</p>
+        <li>
+          <p>
+            <strong>Verify that no sensitive data is logged. </strong>Analyze the results of the audit for any information that is considered sensitive data. If sensitive data is discovered in your logs, locate the component that is responsible for generating the logged instance. Raise the issue to the component's developers. </p>
+          <li>
+            <p>
+              <strong>Check for common logging mistakes. </strong>Scan your application's code base for common logging mistakes such as:</p>
+            <ul>
+              <li>Logging data structures that contain sensitive data <li>Appending sensitive data to an exception's message and/or details </li></li>
+            </ul>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use these steps to avoid logging sensitive information:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify sensitive information. </strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users.</li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Review logging architecture. </strong>Evaluate your application's logging architecture. Make sure the logging and data streams are separated. Segregating&amp;nbsp;the streams is a preventative measure against leaking sensitive data from one stream into the other. Make sure that no sensitive data is stored in data structures that will be logged. </p>
+        <li>
+          <p>
+            <strong>Avoid common logging mistakes. </strong>Common logging mistakes include, but are not limited to, storing sensitive data into exceptions or other objects that will be recorded. Clean the code from common logging mistakes. For example, do not store sensitive data into exceptions that are expected to be logged:</p>
+          <pre>if(&amp;#33;validPaymentInfo)<br />&amp;#123;<br />      throw new InvalidPaymentException(creditCardInfo.toString() &amp;#43; " is not valid.");<br />&amp;#125;</pre>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following segment displays a log entry for a multi-user application. Unfortunately, the application discloses the user's credit card information through the entry's message field:</p>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyPayment&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;&amp;#33;-- The application logs the user's credit card information --&gt;<br />  &lt;message&gt;Changed: primary_cc=4111-1111-1111-1111, exp_date=06/06, sec_code=000&lt;/message&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
+  <h1>Solution Example</h1>
+  <p>The following segment displays a log entry for a multi-user application. Fortunately, no sensitive data has been stored.</p>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyPayment&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;&amp;#33;-- The application logs a generic message when the --&gt;<br />  &lt;&amp;#33;-- user's credit card information is modified      --&gt;<br />  &lt;message&gt;Payment information is modified.&lt;/message&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
+  <h1>Java Logging Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">
+        <a href="/article/fa45dc02-507a-4d3f-a396-ed4aaf044f98">Centralize Logging</a>
+      </a>
+      <li>
+        <a href="/article/4f8d5c0f-0ee4-4dfe-8d4b-d1af1ad72305">Protect Log Files</a>
+        <li>
+          <a href="/article/0109ec06-1830-472d-95ed-7ec64404c961">Log Important Event Details</a>
+          <li>
+            <a href="/article/82abb5d8-684b-47b7-adec-34c77ecfb25a">Do Not Log Sensitive Information</a>
+            <li>
+              <a href="/article/b88851a8-65e9-43b0-9e0a-104889680386">Log Important Security Operations</a>
+              <li>
+                <a href="/article/d63904d4-7028-441c-b99e-373e3c12e9da">Log Important Business Operations</a>
+                <li>
+                  <a href="/article/4829a4fa-8767-4e10-9d78-0982da29ac23">Monitor the Use of Privileged Accounts</a>
+                  <li>
+                    <a href="/article/96c623c9-1fb0-4596-9730-afb58e45bc85">Log Unusual Activity</a>
+                    <li>
+                      <a href="/article/0196cc1e-01c4-48ac-87d5-aab9c6fbb78c">Consider Log Throttling</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Logging Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/4729ce9a-d18f-4466-a068-f6146ca4af37">Logging Is Centralized</a>
+      <li>
+        <a href="/article/2e3eb764-6dc5-4715-a4af-d89a5aff0125">Log Files Are Protected</a>
+        <li>
+          <a href="/article/1be8f39e-609a-4d66-b4c9-ad839783a164">Important Event Details Are Logged</a>
+          <li>
+            <a href="/article/1006f5d2-6570-4ad7-9166-0e4dcf783651">Sensitive Data Is Not Logged</a>
+            <li>
+              <a href="/article/56367747-607f-457e-99f2-b769db50e1fe">Important Security Operations Are Logged</a>
+              <li>
+                <a href="/article/45fe4509-955a-471e-96cb-625fb0ad75b4">Important Business Operations Are Logged</a>
+                <li>
+                  <a href="/article/b0355a7e-b64e-4683-9d46-b05c8c01cf4e">Use of Privileged Accounts Is Monitored</a>
+                  <li>
+                    <a href="/article/b01f48ac-6a08-445a-8419-83e285531bfa">Unusual Activity Is Logged</a>
+                    <li>
+                      <a href="/article/e78a7f02-82d4-4e8b-9395-56d52c503010">Logging Is Throttled</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

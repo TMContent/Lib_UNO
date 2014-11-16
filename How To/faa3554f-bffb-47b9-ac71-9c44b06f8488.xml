@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1500796372" Content_Hash="-1367848815">
+  <Metadata>
+    <Id>faa3554f-bffb-47b9-ac71-9c44b06f8488</Id>
+    <Id_History>faa3554f-bffb-47b9-ac71-9c44b06f8488,2d163cb4-9330-478d-bcc5-dedd2bfbd292,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Enable WCF Message Logging</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Enable WCF Message Logging</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can enable message logging to log the messages processed by your service. Message logging can be used to diagnose your applications and analyze the root cause of problems. Message logging is not turned on by default. Turn on message logging by setting attributes on the &lt;messagelogging&gt; element in your configuration file and add a trace listener to log the events to a file.</p>
+  <p>Use the following steps to enable WCF message logging:</p>
+  <ol>
+    <li>Open the web.config file of the WCF service using the Configuration editor tool (SvcConfigEditor.exe).
+<li>In the Configuration editor, navigate to the Diagnostics node, and click the Enable Message Logging link. 
+<li>This enables the message logging for your service and it also creates a listener (ServiceModelMessageLoggingListener) and a source (System.ServiceModel.MessageLogging) under the Listeners and Sources folder respectively. </li></li></li>
+  </ol>
+  <p>You can configure Message logging levels at both the service and the transport levels. To configure the message logging levels,</p>
+  <ol>
+    <li>In the left pane, select MessageLogging under the Diagnostics node.
+<li>Set the LogMessagesAtServiceLevel attribute to True choosing from the drop down. The LogMessagesAtTransportLevel attribute is True by default.</li></li>
+  </ol>
+  <p>To determine where the messages will be logged select ServiceModelMessageLoggingListener under the Listeners node and note the value of the InitData attribute. The default location where messages are logged is c:\inetpub\wwwroot\WCFService\web_messages.svclog.</p>
+  <p>The configuration file should look as follows:</p>
+  <pre> &lt;system.diagnostics&gt;<br /></pre>
+  <pre>  &lt;sources&gt;<br />   &lt;source name="System.ServiceModel.MessageLogging" switchValue="Warning, ActivityTracing"&gt;<br />    &lt;listeners&gt;<br />     &lt;add type="System.Diagnostics.DefaultTraceListener" name="Default"&gt;<br />       &lt;filter type="" /&gt;<br />     &lt;/add&gt;<br />     &lt;add name="ServiceModelMessageLoggingListener"&gt;<br />       &lt;filter type="" /&gt;<br />     &lt;/add&gt;<br />    &lt;/listeners&gt;<br />   &lt;/source&gt;<br />  &lt;/sources&gt;<br /></pre>
+  <pre>  &lt;sharedListeners&gt;<br />   &lt;add initializeData="c:\inetpub\wwwroot\auditingwcf\web_messages.svclog"<br />        type="System.Diagnostics.XmlWriterTraceListener, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />        name="ServiceModelMessageLoggingListener" traceOutputOptions="Timestamp"&gt;<br />          &lt;filter type="" /&gt;<br />   &lt;/add&gt;<br />  &lt;/sharedListeners&gt;</pre>
+  <pre>&lt;/system.diagnostics&gt;</pre>
+  <pre>&lt;system.serviceModel&gt;<br /> &lt;diagnostics&gt;<br />   &lt;messageLogging logMalformedMessages="true" logMessagesAtServiceLevel="true"<br />                   logMessagesAtTransportLevel="true" /&gt;<br /> &lt;/diagnostics&gt;<br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on auditing, see “Auditing Security Events” at <a href="http://msdn2.microsoft.com/en-us/library/ms731669.aspx">http://msdn2.microsoft.com/en-us/library/ms731669.aspx</a><li>For message logging information, see “Message Logging” at <a href="http://msdn2.microsoft.com/en-us/library/ms731859.aspx">http://msdn2.microsoft.com/en-us/library/ms731859.aspx</a><li>For more information see “How to: Audit Windows Communication Foundation Security Events” at <a href="http://msdn2.microsoft.com/en-us/library/ms734737.aspx">http://msdn2.microsoft.com/en-us/library/ms734737.aspx</a><li>For auditing Guidelines, see the Auditing &amp; Logging section of “WCF 3.5 Guidelines “ at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Security%20Guidelines&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Security%20Guidelines&amp;referringTitle=Home</a></li></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

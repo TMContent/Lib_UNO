@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>4e9ccc32-97e6-441e-8d0c-9e969c8634ab</Id>
+    <Id_History>4e9ccc32-97e6-441e-8d0c-9e969c8634ab,3716f538-b958-4c61-b84c-68f353f26b5f,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>All File Name and Path Input Is Canonicalized</Title>
+    <Category>Canonicalization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>All File Name and Path Input Is Canonicalized</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Java
+
+==What to Check For==
+
+Verify that all file name and path input is canonicalized before being validated.
+
+==Why==
+
+When input validation is applied to file paths and names, it only works properly when file paths and names are canonicalized. If file names and paths are not canonicalized before validation, a number of vulnerabilities may be introduced as a result. The possible vulnerabilities range from reading arbitrary files to uploading web shells. 
+
+==How to Check==
+
+To verify that all file name and path input is canonicalized before being validated:
+
+# **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
+# **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
+# **Determine whether file path and name input is necessary.** If possible, don't accept file names and/or paths from users.
+# **Verify that file name and path input is canonicalized.** If it is necessary to use file names and/or paths provided by users, then make sure that the getCanonicalPath() function is used to canonicalize them before validation.
+# **Verify that file name and path input is validated.** Review code that handles user-supplied file name and/or path input and make sure that file names and paths are validated after being canonicalized. The canonicalized forms of file names and paths should be passed to validation routines.
+
+==How to Fix==
+
+To canonicalize all file path and name input:
+
+# **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
+# **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
+# **Avoid file path and name input if possible.** If possible, remove or replace the code that allows users to enter file names or paths.
+# **Canonicalize file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use getCanonicalPath() to canonicalize file names and paths.
+# **Validate file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use positive validation on canonicalized file names and paths. Ensure that the validation routines validate that the user has sufficient rights to access the requested resource.
+
+==Additional Resources==
+
+* For more information about canonicalizing file paths in Java, see https://www.securecoding.cert.org/confluence/display/java/IDS02-J.+Canonicalize+path+names+before+validating+them
+]]></Data>
+  </Content>
+</TeamMentor_Article>

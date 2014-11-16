@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="534467449" Content_Hash="1437440254">
+  <Metadata>
+    <Id>497597e5-4f03-48f1-83c7-c3cd5356d17e</Id>
+    <Id_History>497597e5-4f03-48f1-83c7-c3cd5356d17e,c3945953-102e-4d2b-b67f-cba6b609f611,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Allow Only Trusted Hosts to Connect to Database Server</Title>
+    <Category>Database Security</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Allow Only Trusted Hosts to Connect to Database Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Prevent direct access to your database server.</p>
+  <h1>Why</h1>
+  <p>Direct access allows an attacker to use tools such as Query Analyzer (Isqlw.exe) and establish a connection to the SQL Server and issue commands. This could lead to unauthorized access to data.</p>
+  <h1>When</h1>
+  <p>When using a SQL backend with your application.</p>
+  <h1>How</h1>
+  <p>To restrict access to your SQL Server:</p>
+  <ul>
+    <li>
+      <p>
+        <strong>From the outside</strong>: Configure the firewall to make sure that SQL Server ports (TCP 1433 and UDP 1434 by default) are not visible from outside of the perimeter network. </p>
+      <li>
+        <p>
+          <strong>From within the perimeter</strong>: Restrict direct access by unauthorized internal hosts via internal firewalls when available, and by using IPSec and port filtering. IPSec can be used for computer authentication in addition to encryption and can be used to ensure that only the specific application server can connect to the database server, in order to prevent attacks from other computers. For more information, please see <a href="http://msdn2.microsoft.com/en-us/library/aa302366.aspx">How To: Use IPSec for Filtering Ports and Authentication</a>. </p>
+        <li>
+          <p>
+            <strong>Minimize exposure</strong>: The production database server should only be accessible from the application server(s) it works with and a minimum set of other maintenance systems for monitoring, external logging, backup, and administration. Development and production systems should not share the same database server, and development machines should not have access to the production servers.</p>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Problem Example</h1>
+  <p>A financial firm uses a web application to allow its agents to interact with the company database. To prevent attackers, the firm uses a firewall which restricts attackers from accessing the database server. However, one of the workstations inside the firewall gets infected with malware. This workstation is exploited by attackers to scan the internal network. When the attackers discover the SQL Server, they use tools such as the Query Analyzer to connect to and issue commands to it, using the compromised workstation as a proxy.</p>
+  <h1>Solution Example</h1>
+  <p>A financial firm uses a web application to allow its agents to interact with the company database. To prevent outside attackers the firm uses a firewall and to prevent internal threats to the database the firm uses IPSec to restrict access. Now when one of the workstations inside the firewall gets infected with malware and is exploited by attackers to scan the internal network, the attackers will not discover the SQL Server and will not be able to connect or issue commands to it.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about uses of IPSec, see: <a href="http://msdn2.microsoft.com/en-us/library/aa302366.aspx">How To: Use IPSec for Filtering Ports and Authentication</a>. <li>To learn more about the importance of trust relationships, see: <a href="http://msdn2.microsoft.com/en-us/library/aa480587.aspx">Trusted Subsystem</a>.</li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/2331944b-ec63-48f6-9467-0bc2ebb8390c">Checklist Item: Only Trusted Hosts are Allowed to Connect to Database Server </a>
+      <li>
+        <a href="/article/a92aca4f-314d-40fe-9ecd-e3bbe19a555b">Guideline: Protect Sensitive Data Over the Network&amp;nbsp;</a>
+        <li>
+          <a href="/article/6a219806-df28-4c00-bc2d-c2ce4c721b7e">Attack: Trust Relationship Attack</a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

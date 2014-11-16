@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="459457545" Content_Hash="332676946">
+  <Metadata>
+    <Id>b0dca1a8-eb34-439b-9fd8-f09cc562c122</Id>
+    <Id_History>b0dca1a8-eb34-439b-9fd8-f09cc562c122,09253b32-bfbd-4f42-9535-343583cea5df,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Create a Proxy for IIS Hosted Service with Certificate Authentication And Transport Security</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Create a Proxy for IIS Hosted Service with Certificate Authentication And Transport Security</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Use the following steps to create a proxy to a service hosted in IIS that requires certificate authentication and transport security:</p>
+  <ol>
+    <li>Create a new wsHttpBinding endpoint that on the service that implements IMexdataExchange and uses a binding configuration with certificate authentication type
+<ol><pre>&lt;services&gt;<br />   &lt;service behaviorConfiguration="returnFaults" name="MyService"&gt;<br />      &lt;endpoint binding="wsHttpBinding" bindingConfiguration=""<br />        name="wsHttpEndpoint" contract="IService" /&gt;<br />      &lt;endpoint address="mex" binding="wsMexHttpBinding" <br />        bindingConfiguration=""<br />        name="mexEndpoint" contract="IMetadataExchange" /&gt;<br />    &lt;/service&gt;<br />&lt;/services&gt;…</pre></ol><li>Create a svcutil.exe.config file on the client with configuration pointing to the certificate used to authenticate the service. The endpoint should have the contract with IMetadataExchange type and will point to a binding configuration with certificate authentication.
+<ol><pre>&lt;configuration&gt;<br />  &lt;system.serviceModel&gt;<br />    &lt;client&gt;<br />      &lt;endpoint behaviorConfiguration="ClientCertificateBehavior" <br /> binding="wsHttpBinding"<br />        bindingConfiguration="Binding1" contract="IMetadataExchange" <br />   name="https" /&gt;<br />    &lt;/client&gt;<br />    &lt;bindings&gt;<br />      &lt;wsHttpBinding&gt;<br />        &lt;binding name="Binding1"&gt;<br />          &lt;security mode="Transport"&gt;<br />            &lt;transport clientCredentialType="Certificate" /&gt;<br />          &lt;/security&gt;<br />        &lt;/binding&gt;<br />      &lt;/wsHttpBinding&gt;<br />    &lt;/bindings&gt;<br />    &lt;behaviors&gt;<br />      &lt;endpointBehaviors&gt;<br />        &lt;behavior name="ClientCertificateBehavior"&gt;<br />          &lt;clientCredentials&gt;<br />            &lt;clientCertificate findValue="CN=clienttempcert" <br />  storeLocation="CurrentUser"<br />              storeName="My" <br />  x509FindType="FindBySubjectDistinguishedName" /&gt;<br />          &lt;/clientCredentials&gt;<br />        &lt;/behavior&gt;<br />      &lt;/endpointBehaviors&gt;<br />    &lt;/behaviors&gt;<br />  &lt;/system.serviceModel&gt;<br />&lt;/configuration&gt;</pre></ol><li>Copy svcutil from <strong>C:\Program Files\Microsoft Visual Studio 8\Common7\IDE</strong> to the same location where svcutil.exe.config was created on the client and run the command <strong>svcutil serviceurl</strong></li></li></li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see “Publishing Metadata“ at <a href="http://msdn.microsoft.com/en-us/library/aa751951.aspx">http://msdn.microsoft.com/en-us/library/aa751951.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1084464533" Content_Hash="1134266670">
+  <Metadata>
+    <Id>655b5bf0-8dc9-484b-844a-b8d5f4099645</Id>
+    <Id_History>655b5bf0-8dc9-484b-844a-b8d5f4099645,db68f11f-0aa6-4076-9b28-264ce6d48a41,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Session IDs Are Changed During Authentication</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Session IDs Are Changed During Authentication</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PHP</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that session IDs are changed during login.</p>
+  <h1>Why</h1>
+  <p>Change session IDs during login to make sure that the session state corresponds to the authenticated user.</p>
+  <h1>How to Check</h1>
+  <p>To verify that session IDs are changed during login:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Find login functionality.</strong> Find the code that is responsible for authentication.</p>
+      <li>
+        <p>
+          <strong>Verify that session IDs are changed during login.</strong> Review code responsible for logging in to make sure that code exists that clears the existing session state and creates a new session ID. For example:</p>
+        <pre>session_regenerate_id(TRUE);<br /></pre>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>To change session IDs during login:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Find login functionality.</strong> Find the code that is responsible for authentication.</p>
+      <li>
+        <p />
+        <strong>Change session IDs during login.</strong> Add code that invalidates the current session ID and creates a new one. For example:<pre>session_regenerate_id(TRUE);</pre></li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the <em>session_regenerate_id</em> function, please see <a href="http://php.net/manual/en/function.session-regenerate-id.php">http://php.net/manual/en/function.session-regenerate-id.php</a></li>
+  </ul>
+  <h1>Secure Session Management Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/c940ef8d-5bca-4351-b94a-f4db44043028">Protect Session IDs</a>
+    </li>
+    <li>
+      <a href="/article/b42309de-b99e-4a32-a36e-6c4cdf9e3a6e">Use PHP Session Management</a>
+    </li>
+    <li>
+      <a href="/article/e00c3d06-d939-494d-a42c-88878f26f2fc">Use Strong Session IDs</a>
+    </li>
+    <li>
+      <a href="/article/96aa6669-a0c8-432b-9876-dd8da36ce179">Change Session IDs During Authentication</a>
+    </li>
+    <li>
+      <a href="/article/f3dacae2-77f1-44d5-96d2-1a08318e4943">Make Inactive Sessions Time-out</a>
+    </li>
+    <li>
+      <a href="/article/775c2307-9cd9-4dce-a419-6fe406fb1f20">Make Sessions Time-out</a>
+    </li>
+    <li>
+      <a href="/article/7d873b52-217e-43e8-8fe9-a5dcf52bf030">Destroy Sessions When Users Log Out</a>
+    </li>
+    <li>
+      <a href="/article/62bb739d-e0fe-425b-9fb9-af286914ac7e">Place Logout Links on All Pages That Require Authentication</a>
+    </li>
+    <li>
+      <a href="/article/4a16cea2-b475-4371-9379-f3d27d43986a">Set the Domain and Path Values on Sessions Cookies</a>
+    </li>
+    <li>
+      <a href="/article/bfdf9875-69c4-43d2-978c-b9c09d8ca6c2">Set the HTTPOnly Flag on Session Cookies</a>
+    </li>
+    <li>
+      <a href="/article/9fec2088-1a0c-42ba-86c0-445afbc48f62">Set the Secure Flag on Session Cookies</a>
+    </li>
+  </ul>
+  <h1>Secure Session Management Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/23b55746-8cef-427d-b91b-18949f2538f5">Session IDs Are Protected</a>
+    </li>
+    <li>
+      <a href="/article/bc3f332a-c395-486b-b095-6b7cc4935367">PHP Session Management Is Used</a>
+    </li>
+    <li>
+      <a href="/article/da9827ed-e835-49a8-b6d0-7feee8cb5a09">Strong Session IDs Are Used</a>
+    </li>
+    <li>
+      <a href="/article/655b5bf0-8dc9-484b-844a-b8d5f4099645">Session IDs Are Changed During Authentication</a>
+    </li>
+    <li>
+      <a href="/article/6947d991-5eb6-4433-b32a-897d77d447f2">Inactive Sessions Time-out</a>
+    </li>
+    <li>
+      <a href="/article/3b9db169-19a6-4e3c-bbf8-6423e77060b2">Sessions Have an Absolute Time-out</a>
+    </li>
+    <li>
+      <a href="/article/8f94d6fd-ece9-40f8-8db6-2f2addb82fa3">Sessions Are Destroyed When Users Log Out</a>
+    </li>
+    <li>
+      <a href="/article/197d4a9f-0a73-4fb0-913c-fc53c73c74d2">All Pages that Use Authentication Have Logout Links</a>
+    </li>
+    <li>
+      <a href="/article/1d600d77-9cca-4c20-bdb1-07707f83e676">The Domain and Path Values of Session Cookies Are Strict</a>
+    </li>
+    <li>
+      <a href="/article/c2b6ad74-7e7f-4b4d-8a55-8b55933b54ac">The HTTPOnly Flag Is Set on Session Cookies</a>
+    </li>
+    <li>
+      <a href="/article/96928660-b73e-497c-a98e-e4856ff895e6">The Secure Flag Is Set on Session Cookies</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

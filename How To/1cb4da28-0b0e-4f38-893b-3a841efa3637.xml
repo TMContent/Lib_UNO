@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="805572248" Content_Hash="559476796">
+  <Metadata>
+    <Id>1cb4da28-0b0e-4f38-893b-3a841efa3637</Id>
+    <Id_History>1cb4da28-0b0e-4f38-893b-3a841efa3637,dd235180-1f37-4bf6-bae4-22a39abeb611,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Implement a Data Contract To Propagate Exception Details for Debugging Purposes</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Implement a Data Contract To Propagate Exception Details for Debugging Purposes</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>The following steps shows how to implement a data contract to propagate exception details for debugging purposes</p>
+  <ol>
+    <li>Create a DataContract, with a member for fault reason
+<ol><pre> [DataContract]<br />    public class MyDCFaultException<br />    {<br />        private string _reason;</pre><pre>        [DataMember]<br />        public string Reason<br />        {<br />            get { return _reason; }<br />            set { _reason = value; }<br />        }<br />    }</pre></ol><li>Create a Service contract, specifiying a FaultContract with the above DataContract type for an operation 
+<ol><pre> [ServiceContract()]<br />    public interface IService<br />    {<br />        [OperationContract]<br />        [FaultContract(typeof(MyDCFaultException))]<br />        string DoSomeComplexWork();<br />    }</pre></ol><li>Implement the service operation. If there are any error in the service operation send the exception details by throwing the FaultException of type MyDCFaultException as below
+<ol><pre>  public class Service : IService<br />    {    <br />        public string DoSomeComplexWork()<br />        {<br />           try<br />            {<br /> // some complex operations<br />            }<br />            catch (Exception exp)<br />            {<br />                MyDCFaultException theFault = new MyDCFaultException();<br />                theFault.Reason = "Some Error " + exp.Message.ToString();<br />                throw new FaultException&lt;MyDCFaultException&gt;(theFault);<br />            }<br />            return "No Error";<br />        }</pre></ol><li>Call the service operation from a client application. Get the original service exception reason by using the Detail.Reason property.
+<ol><pre>  try<br />            {<br />                localhost.IService proxy = new localhost.ServiceClient();<br />                result = proxy.DoSomeComplexWork();<br />            }</pre><pre>            catch (FaultException&lt;localhost.MyDCFaultException&gt; ex)<br />            {<br />               result = "Exception: " + ex.Detail.Reason;<br />            }</pre><pre>            Console.WriteLine(result);<br />            Console.ReadLine();            <br />        }</pre></ol><li>You can also send managed exception information to the clients using the IncludeExceptionDetailInFaults property in the serviceDebug element of your service behavior. By default its value is false, you can change it to true for debugging or problem diagnosis scenarios.
+<ol><pre>&lt;system.serviceModel&gt;<br />    &lt;services&gt;<br />        &lt;service name="MyService"<br />                         behaviorConfiguration="MyServiceBehavior"&gt;<br />        &lt;/service&gt;<br />    &lt;/services&gt;<br />    &lt;behaviors&gt;<br />        &lt;serviceBehaviors&gt;<br />            &lt;behavior name="MyServiceBehavior"&gt;<br />                &lt;serviceDebug includeExceptionDetailInFaults="true"/&gt;<br />            &lt;/behavior&gt;<br />        &lt;/serviceBehaviors&gt;<br />    &lt;/behaviors&gt;<br />&lt;/system.serviceModel&gt;<br /></pre></ol></li></li></li></li></li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Fault Contracts, see “Specifying and Handling Faults in Contracts and Services” at <a href="http://msdn.microsoft.com/en-us/library/ms733721.aspx">http://msdn.microsoft.com/en-us/library/ms733721.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

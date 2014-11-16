@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1820681027" Content_Hash="166788867">
+  <Metadata>
+    <Id>bc62bfd6-a9e4-4dd3-b537-371ba32d5e34</Id>
+    <Id_History>bc62bfd6-a9e4-4dd3-b537-371ba32d5e34,0cb81e93-e5f0-47c3-ada2-c1565b4326c2,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Unnecessary ASP.NET File Type Extensions Are Mapped to &amp;quot;HttpForbiddenHandler&amp;quot; in Machine.config.</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Unnecessary ASP.NET File Type Extensions Are Mapped to &amp;quot;HttpForbiddenHandler&amp;quot; in Machine.config.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>Web Application</div>
+    </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check to ensure that unnecessary ASP.NET file type extensions are mapped to "HttpForbiddenHandler" in Machine.config.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>The following .NET&amp;nbsp;Framework file extensions are mapped to aspnet_isapi.dll: .asax,&amp;nbsp;.ascx, .ashx, .asmx, .aspx, .axd, .vsdisco, .jsl, .java, .vjsproj, .rem, .soap, .config, .cs, .csproj, .vb, .vbproj, .webinfo, .licx, .resx, and .resources.</p>
+  <p>The .NET Framework protects file extensions that should not be directly called by&amp;nbsp;clients by associating them with <b>System.Web.HttpForbiddenHandler</b> in Machine.config. The following file extensions are mapped to <b>System.Web.HttpForbiddenHandler</b> by default: .asax, .ascx, .config, .cs, .csproj,&amp;nbsp;.vb,&amp;nbsp;.vbproj, .webinfo, .asp, .licx, .resx, and .resources.</p>
+  <p>For more information on HTTP handlers, see <a href="http://msdn2.microsoft.com/en-us/library/aa302432.aspx#c16618429_024">Step 16. Machine.Config</a>.</p>
+  <h3>Additional Considerations</h3>
+  <p>Because IIS processes a Web request first, you could map .NET&amp;nbsp;Framework file extensions that you do not want clients to call, to the 404.dll directly. This does two&amp;nbsp;tasks: </p>
+  <ul>
+    <li>The 404.dll handles and rejects requests before they are passed to ASP.NET and before they are processed by the ASP.NET worker process. This eliminates unnecessary processing by the ASP.NET worker process. Moreover, blocking requests early is a good security practice. 
+<li>The 404.dll returns the message "HTTP 404 - File not found" and <b>System.Web.HttpForbiddenHandler</b> returns the message "This type of page is not served." Arguably, the "File not found" message reveals less information and thus could be considered more secure.</li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2085646665" Content_Hash="1180582880">
+  <Metadata>
+    <Id>9a19a4d6-b917-49c4-b67c-64a820970f98</Id>
+    <Id_History>9a19a4d6-b917-49c4-b67c-64a820970f98,1c1ac206-3a07-4e6b-8674-50e21780ecda,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Choose the Right Binding for Your Scenario</Title>
+    <Category>Design Considerations</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Choose the Right Binding for Your Scenario</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Consider choosing the right binding which makes sense for your scenario.</p>
+  <h1>Why</h1>
+  <p>Choosing an appropriate binding is important from security perspective as it drives your security choices like transfer security which determines your confidentiality, integrity and authentication of the messages.</p>
+  <h1>When</h1>
+  <p>The key issues to consider at design time are what bindings you will choose for your particular scenario. Additionally you need to consider what authentication and authorizations options you have and which makes sense for your scenario.</p>
+  <h1>How</h1>
+  <p>Use the following recommendations as a rule of thumb when choosing a binding option. You can fine tune your selection based on your unique needs and your infrastructure limitations.</p>
+  <ul>
+    <li>If your service needs to support legacy clients that expect an ASMX web service, consider using the basicHttpBinding. basicHttpBinding does not implement any security by default, if you require message or transport security you should configure it explicitly on this binding. Use basicHttpBinding to expose endpoints that are able to communicate with ASMX-based Web services and clients and other services that conform to the WS-I Basic Profile 1.1. When configuring transport security, basicHttpBinding defaults to no credentials just like a classic ASMX web service. basicHttpBinding allows you to host your service in II5 or IIS6. 
+<li>If your service will be called by clients over the Internet, consider using the wsHttpBinding.&amp;nbsp; wsHttpBinding is a good choice for Internet scenarios in which you do not have to support legacy clients which expect an ASMX web service. If you do need to support legacy clients, consider using basicHttpBinding instead. WsHttpBinding allows you to host your service in II5 or IIS6. 
+<li>If you need to support clients within your intranet, consider using netTcpBinding. netTcpBinding is a good choice for the intranet scenario if transport performance is important to you and it is ok to host the service in a Windows service instead of in IIS. The netTcpBinding uses the TCP protocol and provides full support for message security, transactions, and reliability. Use this binding when you want to provide a secure and reliable binding environment for .NET-to-.NET cross-machine communication.&amp;nbsp; netTcpBinding, you can host in IIS 7.0 or a Windows Service. You can also host in IIS 6.0, but you must first have to activate the host W3wp process, before using the service. 
+<li>If you need to support WCF clients on the same machine as your service, consider using the netNamedPipeBinding. The netNamedPipeBinding provides a secure and reliable binding environment for cross-process, same machine communication. Use this binding when you want to make use of the NamedPipe protocol and provide full support for SOAP security, transactions, and reliability. netNamedPipeBinding, you can host in IIS 7.0 or a Windows Service. You can also host in IIS 6.0, but you must first have to activate the host W3wp process, before using the service. 
+<li>If you need to support disconnected queuing, use the netMsmqBinding. Queuing is provided by using the MSMQ (Microsoft Message Queuing) as a transport, which enables support for disconnected operations, failure isolation, and load leveling. You can use netMsmqBinding when the client and the service do not have to be online at the same time. You can also manage any number of incoming messages by using Load leveling. MSMQ supports Failure isolation where messages can fail without affecting the processing of other messages. netMsmqBinding, you can host in IIS 7.0 or a Windows Service. You can also host in IIS 6.0, but you must first have to activate the host W3wp process, before using the service. 
+<li>If you need to support a duplex service, use wsDualHttpBinding. A duplex service is a service that uses duplex message patterns which provides the ability for a service to communicate back to the client via a callback. You can also use this binding to support communication via SOAP intermediaries.</li></li></li></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

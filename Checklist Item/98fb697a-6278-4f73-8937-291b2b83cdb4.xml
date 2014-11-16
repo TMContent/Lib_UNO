@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="268980052" Content_Hash="1447772179">
+  <Metadata>
+    <Id>98fb697a-6278-4f73-8937-291b2b83cdb4</Id>
+    <Id_History>98fb697a-6278-4f73-8937-291b2b83cdb4,e56158c8-794e-4d9e-a812-13ee2acf29c8,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Valuable Information Is Not Disclosed in Error Messages</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Valuable Information Is Not Disclosed in Error Messages</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>1</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that all error messages are generic and do not disclose any valuable or sensitive information that could be useful to an attacker.</p>
+  <h1>Why</h1>
+  <p>Attackers often probe web applications for error messages as a first attempt to understand the underlying technologies in place. An attacker will look for discrepancies between error messages to discover when different code paths are being taken or to discover information about the quality of their input. Error messages that are directly echoed from backend systems such as SQL or OS error messages can help a malicious user choose what to input&amp;nbsp;for&amp;nbsp;their next attack. </p>
+  <h1>How to Check</h1>
+  <p>
+    <strong>For every error message check that</strong>:</p>
+  <ol>
+    <li>The error message is simple and generic. In particular do not include extra information regarding: <ul><li>The quality of the information being processed <li>The mechanisms processing the data</li></li></ul><li>Debug information is not echoed to the user. <li>There is only one error message displayed on all authentication failures. This message should be basic and not contain any information that can be used to discern between the following types of failures: <ul><li>Invalid username <li>Valid username, but invalid password <li>Account locked<br />For more information about this, please refer to <a href="/article/e0ebf8be-838c-4762-8c44-0d90adf63aef">Account Lockout Attack</a></li></li></li></ul><li>A custom error message is used instead of the default error message which describes the error in detail: <ul><li>Set <strong>customErrors</strong> to <strong>RemoteOnly</strong> or <strong>On</strong> in the web.config file</li></ul></li></li></li></li>
+  </ol>
+  <p>
+    <strong>For dynamically generated error messages also ensure that</strong>:</p>
+  <ol>
+    <li>Use of dynamic error messages is minimized. <li>Error messages that report the same message are exactly the same.</li></li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p>
+  <blockquote>
+    <pre>public void login()<br />&amp;#123;<br />      if (&amp;#33;validUser())<br />      &amp;#123;<br />            throw new Exception("User not found.");<br />      &amp;#125;<br />      if (&amp;#33;validPass())<br />      &amp;#123;<br />            throw new Exception("Wrong password.");<br />      &amp;#125;<br />      commit();<br />&amp;#125;</pre>
+  </blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about best practices on authentication, visit the OWASP&amp;nbsp;<a href="http://www.owasp.org/index.php/Guide_to_Authentication">Guide to Authentication</a>. <li>For more information on proper error handling techniques, visitthe OWASP&amp;nbsp;<a href="http://www.owasp.org/index.php/Error_Handling,_Auditing_and_Logging">Error Handling, Auditing and Logging</a>.</li></li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/08f2f28f-d09a-4b82-843e-8d971fc50553">Guideline: Do Not Disclose Valuable Information in Error Messages </a>
+      <hr />
+    </li>
+  </ul>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

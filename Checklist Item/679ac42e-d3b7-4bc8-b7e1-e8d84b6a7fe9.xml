@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1453517875" Content_Hash="1283140473">
+  <Metadata>
+    <Id>679ac42e-d3b7-4bc8-b7e1-e8d84b6a7fe9</Id>
+    <Id_History>679ac42e-d3b7-4bc8-b7e1-e8d84b6a7fe9,ef45545b-726a-448e-a91a-97c60bf553c6,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>If Using SSL Is Not Possible, the SlidingExpiration Attribute Is Set to False And Limited Authentication Cookie Time-Outs Are Used</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>If Using SSL Is Not Possible, the SlidingExpiration Attribute Is Set to False And Limited Authentication Cookie Time-Outs Are Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that if using SSL is not possible&amp;nbsp;in&amp;nbsp;your application, the slidingExpiration attribute is set to false and limited authentication cookie time-outs are used. </p>
+  <h1>How to Fix</h1>
+  <p>If you cannot use SSL, limit the cookie lifetime to reduce the time window in which an attacker can use a captured cookie to gain access to your application with a spoofed identity. The default timeout for an authentication cookie is 30 minutes. Consider reducing this to 10 minutes as shown here.</p>
+  <div>
+    <pre>&lt;forms timeout="00:10:00" slidingExpiration="true" ... /&gt;  </pre>
+  </div>
+  <p>The <b>slidingExpiration="true"</b> setting ensures that the expiration period is reset after each Web request. With the preceding configuration, this means that the cookie only times out after a 10 minute period of inactivity.</p>
+  <p>If you are in a scenario where you are concerned about cookie hijacking, consider reducing the timeout and setting <b>slidingExpiration</b>=<b>"false"</b>. If sliding expiration is turned off, the authentication cookie expires after the timeout period whether or not the user is active. After the timeout period, the user must re-authenticate.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

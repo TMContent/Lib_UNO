@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="668727660" Content_Hash="-1768451084">
+  <Metadata>
+    <Id>0b672255-10f6-4eb9-a886-e8ee50a927bc</Id>
+    <Id_History>0b672255-10f6-4eb9-a886-e8ee50a927bc,d3c3ebd7-1204-41b7-b0a8-cd1c396cbe30,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Sensitive Data Is Not Cached</Title>
+    <Category>Communication Security</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Not Cached</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that caution is exercised when manipulating sensitive data, and that the data is not cached on the client.</p>
+  <h1>Why</h1>
+  <p>Sensitive data that is cached on the client can cause significant problems:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Loss of synchronization with the server. </strong>The server's data might change and become inconsistent with the cached data. This is not a security risk but could cause issues with the application's performance. </p>
+      <li>
+        <p>
+          <strong>Cache may reside on the client following application's lifespan. </strong>Once the application is closed, the cache may&amp;nbsp;be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may lookup the "<em>Temporary Internet Files</em>" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.</p>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Check</h1>
+  <p>Caching is a mechanism of storing temporary data to avoid frequent server access, which improves&amp;nbsp;an application's performance. There are&amp;nbsp;three types of web caches: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Browser caches</strong>: Browser caches let your application's users set aside a section of their computers&amp;#8217; hard disk to store any web data that they have previously obtained. This type of caching is typically useful when a user is reviewing previously visited pages or performing offline browsing. </p>
+      <li>
+        <p>
+          <strong>Proxy caches</strong>: Web proxy caches perform like the browser caches but on a larger scale. Typically deployed by network administrators, proxy servers allow hundreds or thousands of users to improve their browsing experience by caching data that is common for all users. Because proxy caches are shared, they are very good at reducing latency and network traffic.</p>
+        <li>
+          <p>
+            <strong>Gateway caches</strong>: Also known as "<em>reverse proxy caches</em>" or "<em>surrogate caches</em>", gateway caches improve the performance of your application at the server level. Typically deployed by application administrators, these caches serve to make web applications more scalable and&amp;nbsp;reliable, as well as&amp;nbsp;improve performance.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>Because caching is a very useful mechanism, developers try to cache as much data as possible. However, this&amp;nbsp;is a downfall when your application serves sensitive data. Use the following steps to ensure that your application does not perform caching when handling sensitive data:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify sensitive data. </strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users.</li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Ensure </strong>
+          <span>
+            <strong>that HTTP headers and meta tags are used to prevent caching.</strong>
+            <span>Ensure that the following techniques are used</span>
+          </span>:</p>
+        <ul>
+          <li>
+Verify that pages containing sensitive content have the appropriate meta tags set. Example:<p /><pre>&lt;HTML&gt;<br />  &lt;HEAD&gt;<br />    &lt;META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE"&gt;<br />    &lt;META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"&gt;<br />    &lt;META HTTP-EQUIV="EXPIRES" CONTENT="-1"&gt;<br />    ...<br />  &lt;/HEAD&gt;<br />  &lt;BODY&gt;<br />    ...<br />  &lt;/BODY&gt;<br />&lt;/HTML&gt;<br /></pre><li>Verify that your application includes the appropriate HTTP headers in the outputted HTTP response. Example:<p /><pre><span><p>response.setHeader("Cache-Control", "no-cache");</p><p>response.setHeader("Pragma", "no-cache");</p><p>response.setHeader("Expires", "-1");</p></span></pre></li></li>
+        </ul>
+        <li>
+          <strong>Verify that sensitive data is not stored in hidden fields or script variables. </strong>Check all hidden fields and client-side scripts in your application. Verify that no sensitive data is stored in a hidden field or a script variable. Ensure all sensitive data that needs to be passed back to the application is stored inside server-side sessions.<br /><br />An example of storing sensitive data into hidden fields:
+          <pre>&lt;input type="hidden" name="ccNum" value="4111111111111111"&gt;</pre><li><p /><strong>Verify that autocomplete attributes are used.</strong> Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&amp;nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>".&amp;nbsp;For example:<pre>&lt;input type="password" name="pass" autocomplete="off" /&gt;</pre></li></li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Javascript variables and hidden input fields must not be used to store sensitive data, which may be rendered invalid. The only thing that may be stored on the client side across browser requests should be the Session ID. Session IDs are most often stored in an HTTP cookie, though other solutions exist.</p>
+  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&amp;nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>".&amp;nbsp;For example:</p>
+  <pre>&lt;input type="password" name="pass" autocomplete="off" /&gt;</pre>
+  <p>Web pages containing sensitive data should be marked as such, using appropriate meta tags, to prevent caching. When generating/serving the web page, add the appropriate HTTP headers. This will serve as a guideline to proxies and browsers alike that the data must not be cached. A possibly negative impact of this is the invalidation of the browser "back" button.</p>
+  <p>Examples of the appropriate <em>META</em> tags and HTTP headers are below:</p>
+  <ul>
+    <li>Caching <em>META</em> tags <pre>&lt;HTML&gt;<br />  &lt;HEAD&gt;<br />    &lt;META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE"&gt;<br />    &lt;META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"&gt;<br />    &lt;META HTTP-EQUIV="EXPIRES" CONTENT="-1"&gt;<br />    ...<br />  &lt;/HEAD&gt;<br />  &lt;BODY&gt;<br />    ...<br />  &lt;/BODY&gt;<br />&lt;/HTML&gt;</pre><li>Caching HTTP Headers <pre><span><p>response.setHeader("Cache-Control", "no-cache");<br />response.setHeader("Pragma", "no-cache");</p><p>response.setHeader("Expires", "-1");</p></span></pre></li></li>
+  </ul>
+  <h1>Java Communication Security Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/172c224e-c3e5-4a5f-bf7a-26fe2db406a4">Encrypt Communication Links</a>
+      <li>
+        <a href="/article/32fb66b7-7055-4fa0-a9e3-168cfc829aa2">Protect Sensitive Data Over the Network</a>
+        <li>
+          <a href="/article/c317a2fc-cf4b-4b21-8523-4c911afca161">Use SSL</a>
+          <li>
+            <a href="/article/7cf7a8ea-d06a-4442-a2e1-3f01a86b8e8b">Use SSL for All Sensitive Pages</a>
+            <li>
+              <a href="/article/076f39f5-6055-4309-a459-6072adc6d36d">Use SSL When Transmitting Credentials</a>
+              <li>
+                <a href="/article/8684d833-6d1c-4b61-958f-2c6e120c5355">Use Valid SSL Certificates</a>
+                <li>
+                  <a href="/article/6db5af3a-1346-4cea-931f-d0400f3f87ef">Use Only Strong SSL Algorithms</a>
+                  <li>
+                    <a href="/article/e3bdbea7-92cb-4407-998a-eaa95cb955e9">Do Not Cache Sensitive Data</a>
+                    <li>
+                      <a href="/article/19a025b8-9242-4ef5-896b-932828f5f654">Do Not Place Sensitive Data in Parameters</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Communication Security Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/abd1c0b2-5557-4114-b381-f47f00a70f76">Communication Links are Encrypted</a>
+      <li>
+        <a href="/article/0d1b6821-8652-43a9-922e-07e38dc07421">Sensitive Data Is Protected Over the Network</a>
+        <li>
+          <a href="/article/b473157f-aa07-4822-8d35-53ec73da44f4">SSL Is Used</a>
+          <li>
+            <a href="/article/2fa26367-e627-456d-8931-ac0e86a8e237">SSL Is Used for All Sensitive Pages</a>
+            <li>
+              <a href="/article/a2000630-b077-45b2-9c05-5b9e2fe7dc13">SSL is Used When Transmitting Credentials</a>
+              <li>
+                <a href="/article/bcc3bb74-7cdf-4704-99fd-e396c11ce3e1">Valid SSL Certificates Are Used</a>
+                <li>
+                  <a href="/article/c4219e9d-09b1-404c-8390-15f6b0fd3929">Only Strong SSL Algorithms Are Used</a>
+                  <li>
+                    <a href="/article/0b672255-10f6-4eb9-a886-e8ee50a927bc">Sensitive Data Is Not Cached</a>
+                    <li>
+                      <a href="/article/6adf267f-db7d-4770-86c6-292f9b126874">Sensitive Data Is Not Placed in Parameters</a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Communication Security Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/1d2ac8cc-b706-4f4f-84b4-773a525a6c8d">How to Test for Network Credential Sniffing Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

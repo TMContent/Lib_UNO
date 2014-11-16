@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2139615889" Content_Hash="-1007746714">
+  <Metadata>
+    <Id>57e2da5c-f1aa-4745-ae34-0c5c77eac439</Id>
+    <Id_History>57e2da5c-f1aa-4745-ae34-0c5c77eac439,0a45a696-747d-44a0-aeda-3fa8ef19d939,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Generate an RSA Signature of a Given Message</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Generate an RSA Signature of a Given Message</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C# </li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This code demonstrates generation of an RSA signature on a given message which can be used to perform integrity checking and provides non-repudiation for the message sent by another entity.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>To create a cryptographic public key signature of a given message, to be used in providing integrity checks on data stored for periods of time or on transmitted data. <li>To provide non-repudiation of a message or piece of data which can be independently validated by users who posess the RSA public key. </li></li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Two entities in a client-server or client-client architecture need to transmit data with a mechanism to validate the authenticity of the sender and provide non-repududiation. <li>An application stores files for prolonged periods of time. The developer wants to provide non-repudiation of files stored to ensure they aren't altered over time. </li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>// In RSA signatures a message is hashed with a predefined cryptographic hashing algorithm<br />// and the digest or hash is signed with the private keypair<br />public static byte&amp;#91;&amp;#93; SignMessage(byte&amp;#91;&amp;#93; message, RSAParameters privkey)&amp;#123;<br />    byte&amp;#91;&amp;#93; signature;<br />    // Create an RSA Crypto provider, by default creating a new RSACryptoServiceProvider<br />    // causes a public / private key pair to be generated.<br />    RSACryptoServiceProvider myRsaProvider = new RSACryptoServiceProvider();<br />    // Import our private key so we can perform the signing operation<br />    myRsaProvider.ImportParameters(privkey);<br />    signature = myRsaProvider.SignData(message, new SHA1CryptoServiceProvider());<br />    return signature;<br />&amp;#125;</pre>
+  <h1>Problem Example</h1>
+  <p>Perhaps the most common pitfall developers encounter when communicating with a remote node over a public communications channel is the failure to perform any message signing such as that implemented by our Solution Example.</p>
+  <p>The next most common pitfall is to simply perform a hashed digest of the message using a public hashing algortihm demonstrated below:</p>
+  <pre>public static string GenerateDigest(string input)&amp;#123;<br />    // Instantiate the SHA1 Digest<br />    SHA1 sha = new SHA1CryptoServiceProvider();<br />    return ASCIIEncoding.ASCII.GetString(sha.ComputeHash(ASCIIEncoding.ASCII.GetBytes(input)));<br />&amp;#125;</pre>
+  <ul>
+    <li>If a message is intercepted in transit or modified in storage, an attacker may simply perform their own hash representation of the value to be included in the communications or stored along with the file on disk. </li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Text;<br />using System.Security;<br />using System.Security.Cryptography;<br />static void Main(string&amp;#91;&amp;#93; args)&amp;#123;<br />    // Create a test keypair with a strong keysize of 2048 bits. In a production application<br />     // we would load this value from a DPAPI protected registry value<br />    RSACryptoServiceProvider rsaProvider = new RSACryptoServiceProvider(2048);<br />    // The ExportParameters method below takes a boolean, which determines whether<br />    // to export the private key data within the parameters. When exporting parameters<br />    // ensure that only the public key parameter is shared with the remote party:<br />    RSAParameters rsaPubKeyParams = rsaProvider.ExportParameters(false);<br />    // We'll also export the private key for our signing operations<br />    RSAParameters rsaPrivKeyParams = rsaProvider.ExportParameters(true);<br />    string message1 = "the quick brown fox jumped over the lazy dog";<br />    string message2 = "the quick brown dog jumped over the lazy fox";<br />    byte&amp;#91;&amp;#93; sig = SignMessage(ASCIIEncoding.ASCII.GetBytes(message1), rsaPrivKeyParams);<br />    Console.Out.WriteLine("MSG: "&amp;#43;message1);<br />    Console.Out.WriteLine("\nRSA Sig: " &amp;#43;Convert.ToBase64String(sig));<br />    Console.Out.WriteLine("\nTest Case #1:");<br />    Console.Out.WriteLine("Validating signature for MSG: " &amp;#43; message1);<br />    if (VerifyMessageSignature(ASCIIEncoding.ASCII.GetBytes(message1), sig, rsaPubKeyParams)) &amp;#123;<br />        Console.Out.WriteLine("Valid signature.");<br />    &amp;#125;<br />    else &amp;#123;<br />        Console.Out.WriteLine("Invalid signature.");<br />    &amp;#125;<br />    Console.Out.WriteLine("\nTest Case #2:");<br />    Console.Out.WriteLine("Validating signature for MSG: " &amp;#43; message2);<br />    if (VerifyMessageSignature(ASCIIEncoding.ASCII.GetBytes(message2), sig, rsaPubKeyParams))<br />    &amp;#123;<br />        Console.Out.WriteLine("Valid signature.");<br />    &amp;#125;<br />    else<br />    &amp;#123;<br />        Console.Out.WriteLine("Invalid signature.");<br />    &amp;#125;<br />&amp;#125;</pre>
+  <h1>Expected Result</h1>
+  <p>Running the test case above will result in the following output:</p>
+  <pre>MSG: the quick brown fox jumped over the lazy dog<br />RSA Sig:         E1uGW7OmhpoP9LgnjfLA7IWUQhlrxL87tmHnkqGPowCssX70ftT78T4m<br />E5lF5iog4elIgBTUH5miVJdsqKXzTBK64V&amp;#43;W5gCUqsESiqcmJztchpbeyc0E9tqNBaFlo&amp;#43;8yi<br />Sp6aIsDsS9W5OsNgnj0Tn3vT2vnRqWA8qORLmifVrPXtQU4gm60sHO2RKiTsiMu81m3MfNI3I<br />s/MadLn6bwxnnvDNxJFpDADENaihVdBSrIDeEV4CBaQE59GbJJSBBfY15xC5X0ufNske0eG&amp;#43;k<br />3LURJeQDSg03oFNBHMi8ZL7oTaWHw0xRygh/aBqZCTEtTjj&amp;#43;RsLPxv5NsrxhzSFXlDw==</pre>
+  <p>Test Case #1:</p>
+  <pre>Validating signature for MSG: the quick brown fox jumped over the lazy dog<br />Valid signature.</pre>
+  <p>Test Case #2:</p>
+  <pre>Validating signature for MSG: the quick brown dog jumped over the lazy fox<br />Invalid signature.</pre>
+  <h1>More Information</h1>
+  <p>Potential pitfalls in secure communications include session replay attacks. Session replay may be mitigated through use of RSA signatures in which a message includes a timestamp or session identifier to be used once. By performing an RSA signature on the message it is possible to protect against session replay because only the sender can generate a valid signature of a message given the properties of asymmetric encryption algorithms.</p>
+  <p>Perhaps the single most important design consideration in a secure communication protocol is to include message signing altogether. However, Asymmetric encryption routines are expensive and generally performed during the initial key exchange process during which two entities agree on a common shared (secret - symmetric) key to be used in a more efficient HMAC algorithm.</p>
+  <p>Care should be taken in storage of the private key pair. Ensure that keys are stored within a container (for more information please refer to: http://msdn2.microsoft.com/en-us/library/system.security.cryptography.cspparameters(VS.80).aspx).</p>
+  <p>When sharing keys with a remote entity always ensure only the public key data is exported rather than the full RSA key. To export only the private key one may call the following methods:</p>
+  <pre>// The ExportParameters method below takes a boolean, which determines whether<br />// to export the private key data within the parameters. When exporting<br />// parameters ensure that only the public key parameter is shared with the <br />// remote party:   rsaPubKeyParams = rsaProvider.ExportParameters(false);</pre>
+  <p>Or alternatively export just the public key data as XML:</p>
+  <pre>// Setting the argument to false ensures that the private<br />// key is not exported.<br />rsaPubString = myRsaProvider.ToXmlString(false);</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>RSA Encrycryption / Signing: <a href="http://en.wikipedia.org/wiki/RSA">http://en.wikipedia.org/wiki/RSA</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

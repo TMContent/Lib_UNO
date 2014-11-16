@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000003cccf2</Id>
+    <Id_History>00000000-0000-0000-0000-0000003cccf2,2bf6013a-dbfb-48c6-bf5d-29354fda8474,</Id_History>
+    <Library_Id>b6f408c5-6e6e-4bc0-90a5-0bb10becc2ce</Library_Id>
+    <Title>Change Root Passwords on Jailbroken Devices</Title>
+    <Category>Authentication</Category>
+    <Phase>Deployment</Phase>
+    <Technology>iOS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Change Root Passwords on Jailbroken Devices</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* Jailbroken iDevices.
+
+==What to Do==
+
+Change root passwords on jailbroken devices.
+
+==Why==
+
+Changing the root password prevents unauthorized parties from being able to connect to the device remotely via SSH using the default authentication credentials. The default root password in iOS is "alpine". Jailbroken devices often run SSH by default and allow root users to login. If the default root password is not changed, attackers may be able to access the device remotely with super-user privileges and manage files or execute commands.
+
+==How==
+
+There are multiple ways to change the root password on a jailbroken devices, but they usually require a command line interface. One common approach is to use the MobileTerminal program, which is available from Cydia. MobileTerminal is not installed by default, however. SSH is usually installed by default and enabled on jailbroken devices. To use SSH to change the root password on a jailbroken device:
+
+# **Identify the IP of the jailbroken device.** There are many different ways to identify the IP of a jailbroken device. One of the simplest ways is to connect the device to a WiFi network and check its IP from the Settings application. After the device is connected to a WiFi network, go to //Settings -> Wi-Fi -> [name of your network here]// and you will see the IP Address assigned to the device.
+# **SSH into the jailbroken device.** Use your SSH client of choice to connect to the iDevice using the IP identified in the earlier step. The username is //root//. The password is //alpine//.
+# **Change the root password.** Issue the following command to change the root password: {{{passwd}}}. You will be asked to enter the new password twice.
+
+==Authentication Guidelines==
+* [[00000000-0000-0000-0000-0000003cccf2|Change Root Passwords on Jailbroken Devices]]
+* [[00000000-0000-0000-0000-00000067c695|Encrypt Authentication Credentials Sent over the Network]]
+* [[00000000-0000-0000-0000-0000006598ea|Implement a Secure Password Reset Function]]
+* [[00000000-0000-0000-0000-0000006171ed|Throttle Authentication Attempts]]
+* [[00000000-0000-0000-0000-0000005d4d08|Use Server-side Authentication]]
+
+==Authentication Checklists==
+* [[00000000-0000-0000-0000-00000076b90c|Root Passwords Have Been Changed on Jailbroken Devices]]
+* [[00000000-0000-0000-0000-0000004ce47f|Authentication Credentials Sent over the Network Are Encrypted]]
+* [[00000000-0000-0000-0000-0000006b19fc|A Secure Password Reset Function Is Implemented]]
+* [[00000000-0000-0000-0000-000000816c4a|Authentication Attempts Are Throttled]]
+* [[00000000-0000-0000-0000-0000002a3f4d|Authentication Is Implemented on the Server-side]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

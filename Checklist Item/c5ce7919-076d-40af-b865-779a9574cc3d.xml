@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1964074793" Content_Hash="-25195175">
+  <Metadata>
+    <Id>c5ce7919-076d-40af-b865-779a9574cc3d</Id>
+    <Id_History>c5ce7919-076d-40af-b865-779a9574cc3d,08f0a9b0-4583-49a5-94da-dc3b64288a1e,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>SecurityTransparent And SecurityCritical Attributes Are Used Appropriately.</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>SecurityTransparent And SecurityCritical Attributes Are Used Appropriately.</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that SecurityTransparent and SecurityCritical attributes are used when your application code calls untrusted code.</p>
+  <p />
+  <h1>How to Fix</h1>
+  <p>If you know that your code will not attempt to elevate the permissions of the call stack&amp;#8212;for example, by using assertions or stack walk modifiers&amp;#8212;consider marking the code with the <b>System.Security.SecurityTransparentAttribute</b>. This is particularly useful if your code calls untrusted code such as a third-party plug-in. If the untrusted code attempts to manipulate the permissions of the call stack, a security exception is generated. Security transparent code and the code it calls give up the right to elevate the permissions of the call stack.</p>
+  <p>In addition to providing added protection when calling untrusted code, marking code explicitly with the <b>SecurityTransparent</b> and <b>SecurityCritical</b> attributes helps people who have to review your code. Typically, the majority of your code will not elevate code access security permissions, and can therefore be marked as <b>SecurityTransparent</b>. The small amount of your code that actually performs elevations of privilege should be marked as critical. This helps reviewers to focus on those areas of code marked as security critical.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Because a transparent assembly cannot be used by partially trusted code to increase its effective permission set, any assemblies that are marked transparent do not require as thorough of a security audit as standard APTCA assemblies</blockquote>
+  <p>Marking an assembly <b>SecurityTransparent</b> forces it to abide by the following rules: </p>
+  <ul>
+    <li>It cannot assert permissions to stop a stack walk from continuing. <li>It cannot satisfy a link demand. Instead, any link demands on APIs called by the transparent assembly are automatically converted into full demands. <li>It cannot automatically use unverifiable code, even if it has <b>SkipVerification</b> permission. Instead, a full demand for <b>UnmanagedCode</b> occurs. <li>It cannot automatically make calls to P/Invoke methods, even if it has been decorated with the <b>SuppressUnmanagedCodeAttribute</b>. Instead, a full demand for <b>UnmanagedCode</b> occurs. </li></li></li></li>
+  </ul>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;By default, all assemblies compiled for .NET are security critical and contain only critical code.</blockquote>
+  <p>To make an entire assembly transparent, you can explicitly add <b>SecurityTransparent</b> to an assembly by using the following attribute:</p>
+  <div>
+    <pre> &amp;#91;assembly: SecurityTransparent&amp;#93;  </pre>
+  </div>
+  <p>This indicates that the assembly does not contain any critical code, and does not elevate the privileges of the call stack in any way. </p>
+  <p>If you need to mix critical and transparent code in the same assembly, start by marking the assembly with the <b>System.Security.SecurityCriticalAttribute</b> as shown here.</p>
+  <div>
+    <pre> &amp;#91;assembly: SecurityCritical&amp;#93;  </pre>
+  </div>
+  <p>By marking the assembly with the <b>SecurityCriticalAttribute</b>, you indicate that the assembly <i>can</i> contain critical code. However, unless explicitly marked as critical, all code within the assembly defaults to being transparent. If you want to perform security critical actions, you must explicitly mark the code that will perform the critical action with another <b>SecurityCritical</b> attribute, as shown in the following example.</p>
+  <div>
+    <pre> &amp;#91;assembly: SecurityCritical&amp;#93;public&amp;nbsp;class A&amp;#123;<br />    &amp;#91;SecurityCritical&amp;#93;<br />    public void Critical()<br />    &amp;#123;<br />        // critical<br />    &amp;#125;<br />    public int SomeProp<br />    &amp;#123;<br />        get &amp;#123;/&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />        set &amp;#123;/&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />    &amp;#125;<br />&amp;#125;<br />public class B&amp;#123;<br />    internal string SomeOtherProp<br />    &amp;#123;<br />        get &amp;#123; /&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />        set &amp;#123; /&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />    &amp;#125;<br />&amp;#125;  </pre>
+  </div>
+  <p>All of the code above is transparent (the default setting even with the assembly level <b>SecurityCritical</b> attribute), with the exception of the method <b>Critical</b>, which is explicitly marked as critical.</p>
+  <p>You can also mark all code within an entire class as critical. To do so, use the <b>SecurityCritical</b> attribute at the class level, and then pass <b>SecurityCriticalScope.Everything</b>, as shown in the following example.</p>
+  <div>
+    <pre> &amp;#91;assembly: SecurityCritical&amp;#93;<br />&amp;#91;SecurityCritical(SecurityCriticalScope.Everything)&amp;#93;<br />public class MyClass&amp;#123;  ...&amp;#125;</pre>
+  </div>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

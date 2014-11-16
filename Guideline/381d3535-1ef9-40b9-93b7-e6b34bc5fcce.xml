@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1292100012" Content_Hash="1059320613">
+  <Metadata>
+    <Id>381d3535-1ef9-40b9-93b7-e6b34bc5fcce</Id>
+    <Id_History>381d3535-1ef9-40b9-93b7-e6b34bc5fcce,84097cda-9a21-4cf2-9903-022fc75aaa0a,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Partition Your Site into SSL And Unsecured Areas</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Partition Your Site into SSL And Unsecured Areas</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>To avoid the performance overhead of using SSL across your entire site, consider using a separate folder to help protect pages that require authenticated access. Configure that folder in IIS to require SSL access. Those pages that support anonymous access can safely be accessed over HTTP connections.</p>
+  <h1>Why</h1>
+  <p>Using SSL across an entire site can incur a significant performance penalty. For sites that have pages which may be viewed without encryption or authentication, it will improve performance to separate out restricted from non-restricted pages. </p>
+  <h1>When</h1>
+  <p>This technique should be employed whenever an application has a mix of pages - some of which require authentication while others don't. </p>
+  <h1>How</h1>
+  <p>To avoid having to use SSL across your entire site, structure your Web site so that the secure pages that require authenticated access are placed in a subdirectory that is separate from the anonymously accessible pages.&amp;nbsp;Perform the following actions to secure pages in a separate subfolder:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Enable SSL.</strong> In Microsoft Internet Information Services (IIS), configure the secure folder to require SSL. This sets the<em><strong></strong>AccessSSL=true</em> attribute for the folder in the IIS Metabase. Requests for pages in the secured folders are successful only if HTTPS is used for the request URL. </p>
+    </li>
+    <li>
+      <p />
+      <strong>Require authentication.</strong> Use an &lt;<em>authorization</em>&gt; element to ensure that only authenticated users can access secure pages. Place this element beneath the closing &lt;<em>/system.web</em>&gt; tag, as shown here. <pre>&lt;!-- The secure folder is for authenticated and SSL access only. --&gt;<br />&lt;location path="Secure" &gt;<br />  &lt;system.web&gt;<br />    &lt;authorization&gt;<br />      &lt;deny users="?" /&gt;<br />    &lt;/authorization&gt;<br />  &lt;/system.web&gt;<br />&lt;/location&gt;  </pre><p />Additionally, the following configuration ensures that unauthenticated users are allowed to access pages in the application's root directory. Place this configuration in the main &lt;<em>system.web</em>&gt; element. <pre>&lt;system.web&gt;<br />  &lt;!-- The virtual directory root folder contains general pages.<br />       Unauthenticated users can view them and they do not need<br />        to be secured with SSL. --&gt;<br />  &lt;authorization&gt;<br />    &lt;allow users="*" /&gt;<br />  &lt;/authorization&gt;<br />&lt;/system.web&gt;  </pre><p><b>Note: </b>If you use this type of site structure, your application must not rely on the user's identity on the non-SSL pages. In the preceding configuration, no forms authentication ticket is sent for requests for non-SSL pages. As a result, the user is considered anonymous. This has implications for related features, such as personalization, that require the user name.<b>&amp;nbsp;</b>&amp;nbsp;</p></li>
+  </ol>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

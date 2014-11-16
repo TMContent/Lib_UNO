@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-852260880" Content_Hash="937158110">
+  <Metadata>
+    <Id>498f68f6-9178-4995-81f0-0a8043e2a9a4</Id>
+    <Id_History>498f68f6-9178-4995-81f0-0a8043e2a9a4,2b6d8826-164a-4985-bfe0-0e0861f18826,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Insecure Keystore Bugs</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Insecure Keystore Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications that utilize cryptography</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>Software applications that implement cryptography need to create and store cryptographic keys and possibly certificates to properly operate and service their clients.&amp;nbsp;&amp;nbsp; These keys and certificates might be stored in memory while the application uses them or stored in a permanent store for later use.&amp;nbsp;&amp;nbsp; In either case, developers must take the appropriate security measures to limit the access to this store also known as <i>keystore. </i>&amp;nbsp;&amp;nbsp;An insecure keystore bug allows an attacker to read cryptographic material such as keys and certificates from the keystore to use them during a cryptographic attack.</p>
+  <p>Follow these steps to test for insecure keystore bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>Step 1: Understand attack scenarios</h1>
+  <p>During this first step, it is necessary to review the different attack scenarios for insecure keystore bugs:</p>
+  <ul>
+    <li>Temporary data stores <li>Persistent data stores</li></li>
+  </ul>
+  <h2>
+    <em>Scenario 1: Temporary data stores</em>
+  </h2>
+  <p>An application can either store cryptographic keys persistently or temporarily use them by placing them in memory.&amp;nbsp;&amp;nbsp; In both cases, the location that the application uses to store the crypto keys must be protected from unauthorized users.&amp;nbsp; During this scenario, the attacker sniffs the different sources of temporary data stores such as system memory (RAM or cache) as well as page/swap files and crash dump files.&amp;nbsp;&amp;nbsp; The attacker&amp;#8217;s goal is to find the location of the keystore to recover a key in order to mount further cryptographic attacks using the stolen key.</p>
+  <h2>
+    <em>Scenario 2: Persistent data stores</em>
+  </h2>
+  <p>This scenario assumes that the keystore is stored persistently as a file or in other persistent data store location where permissions can be used, such as the Windows registry.&amp;nbsp; During this scenario the attacker logs into the target computer either locally or remotely, navigates to the folder (or registry location) where the keystore is stored, and accesses the file (or registry key) to steal its contents to execute further cryptographic attacks using the stolen keystore material.&amp;nbsp; The attack depends on weak permissions set in the keystore file or registry location that allows an unauthorized attacker to access the sensitive information.&amp;nbsp; </p>
+  <p>&amp;nbsp;</p>
+  <h1>Step 2: Analyze Causes and Countermeasures</h1>
+  <p>The next step in discovering insecure keystore bugs is to analyze what causes and how to countermeasure them.</p>
+  <h2>
+    <em>Temporary data stores attacks</em>
+  </h2>
+  <p>There are two different types of insecure keystore attacks.&amp;nbsp; The first type targets temporary data stores such as system memory (RAM or operating system&amp;#8217;s cache) or page/swap and crash dump files which are temporarily stored in the file system by the operating system.&amp;nbsp; Each attack is caused by different reasons, depending on the memory type.&amp;nbsp; For example, key material insecurely left in RAM occurs because the application doesn&amp;#8217;t properly clean out data structures used to store key: </p>
+  <pre>void Authenticate(char &amp;#42;strUser) &amp;#123; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; char key&amp;#91;64&amp;#93;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>if (ValidateKey(key, sizeof(key))) &amp;#123;</strong><br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (AuthenticateUser(strUser, key)) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Use key to authenticate user<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;<br />&amp;nbsp;<br /></pre>
+  <pre>
+  </pre>
+  <pre>
+  </pre>
+  <p>To countermeasure this attack scenario developers must properly clear the key from memory:</p>
+  <pre>void Authenticate(char &amp;#42;strUser) &amp;#123; .<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; char key&amp;#91;64&amp;#93;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (ValidateKey(key, sizeof(key))) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (AuthenticateUser(strUser, key)) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Use key to authenticate user<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp; <strong>memset(key, 0, sizeof(key));</strong><br />&amp;nbsp;<br />&amp;#125;<br />&amp;nbsp;<br /></pre>
+  <pre>
+  </pre>
+  <p>However, be careful when using <i>memset</i> since compiler optimizations might render the <i>memset</i> call useless.&amp;nbsp; It is recommended that you disable optimizations when using memset to clean out keystore material.&amp;nbsp; To secure keystore material and avoid secure compiler optimizations, CERT recommends implementing secure memset function named <i>memset_s</i> of the following form &amp;#91;i&amp;#93;:</p>
+  <pre>void &amp;#42;memset_s(void \&amp;#42;v, int c, size_t n) &amp;#123;<br />&amp;nbsp; <strong>volatile char &amp;#42;p = v;</strong><br />&amp;nbsp; while(n--)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#42;p&amp;#43;&amp;#43; = c;<br />&amp;nbsp;<br />&amp;nbsp; return v;<br />&amp;#125;<br /></pre>
+  <p />
+  <p>Developers must then replace calls to memset with the secure version for any keystore material:</p>
+  <pre>&amp;nbsp;void Authenticate(char &amp;#42;strUser) &amp;#123; .<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; char key&amp;#91;64&amp;#93;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (ValidateKey(key, sizeof(key))) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (AuthenticateUser(strUser, key)) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Use key to authenticate user<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp; <strong>memset_s(key, 0, sizeof(key));<br /></strong>&amp;nbsp;<br />&amp;#125;<br /></pre>
+  <p>Even if cleaning out cryptographic material from memory, this sensitive data might still make it to swap and crash dump files.&amp;nbsp; Developers should look at the different options like protecting keys and certificates from making it to swap files by using <i>mlock</i> or <i>VirtualLock, </i>as well as avoiding an application from producing application crash dumps using functions such as <i>setrlimit.&amp;nbsp; </i>However<i>, </i>keystore material might still make it to the file system in system wide memory dumps.&amp;nbsp; To prevent against this scenario administrators must look at system configuration options to limit the creation of system crash dumps. For details on how to countermeasure temporary memory sniffing bugs refer to Team Mentor&amp;#8217;s article <i>How to - Test for Memory Sniffing Bugs.</i></p>
+  <pre>&amp;nbsp;</pre>
+  <h2>
+    <em>Persistent data stores attacks</em>
+  </h2>
+  <p>The second scenario relates to attacks that are achieved by accessing keystore files or registry keys in the target computer and it is caused due to insecure permissions set on those files or registry keys.&amp;nbsp;&amp;nbsp;&amp;nbsp; For example, the Java code below deals with a keystore that exists in the file system:</p>
+  <pre>KeyStore keyStore = KeyStore.getInstance("JKS");<br />String fileName = System.getProperty("java.home") &amp;#43; <br />&amp;nbsp;&amp;nbsp; <strong>"/lib/security/myKeyStore.jks</strong>";<br />&amp;nbsp;<br />FileInputStream stream = new FileInputStream(new File(fileName));<br />keyStore.load( stream, "storeit".toCharArray());&amp;nbsp;</pre>
+  <p>If the folder named <i>java.home/lib/security</i> allows read permissions on all users, the application is vulnerable to insecure keystore attacks by a low privileged attacker able to log in to the target computer.</p>
+  <p>&amp;nbsp;</p>
+  <h1>Step 3: Execute Test Cases</h1>
+  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of insecure keystore bugs it is necessary to execute the necessary test cases to check if your application is vulnerable.</p>
+  <h2>
+    <em>Test for insecure keystore in RAM (temporary store)</em>
+  </h2>
+  <p>Follow these steps to create a record of physical memory in a text file in Windows platforms:</p>
+  <ol>
+    <li>Log into a Windows host running application under test. <li>Download and install ManTech&amp;#8217;s Memory DD (<a href="https://sourceforge.net/projects/mdd/)">https://sourceforge.net/projects/mdd/)</a>. <li>Open command prompt as a user possessing administrative privileges. <li>Run mdd as follows:&amp;nbsp; <b>mdd_1.3.exe -o c:\ram.txt -v</b><li>Once mdd finish executing scan through the output file <i>ram.txt</i> for sensitive information.</li></li></li></li></li>
+  </ol>
+  <p>Expected results:&amp;nbsp; ram.txt must not show any cryptographic keys.</p>
+  <h2>
+    <em>
+    </em>&amp;nbsp;</h2>
+  <h2>
+    <em>Test for insecure keystore in virtual memory (temporary store)</em>
+  </h2>
+  <p>The best way to search your application&amp;#8217;s virtual memory for secrets is to use a debugger to create a dump of the virtual memory space at any given time:</p>
+  <ol>
+    <li>Log into a Windows host running application under test. <li>Download and run user-mode Windows debugging <i>windbg.</i><li>Attach windbg to application under test. <li>Break into the debugger and specify option to create a full dump for the application&amp;#8217;s virtual memory:&amp;nbsp; <b>.dump /f c:\dump.txt</b></li></li></li></li>
+  </ol>
+  <p>Expected results:&amp;nbsp; The output file dump.txt must not show any cryptographic keys.</p>
+  <p>&amp;nbsp;</p>
+  <p>
+    <b>
+      <i>Test for insecure keystore in swap files (temporary store)</i>
+    </b>
+  </p>
+  <p>In Windows, swap files are stored in the <i>pagefile:&amp;nbsp; </i>&amp;nbsp;</p>
+  <ol>
+    <li>Log into a Windows host running application under test. <li>Find location of the pagefile<i>.</i>&amp;nbsp; It is named <i>pagefile.sys</i> and it&amp;#8217;s usually on the root drive of the Windows partition (i.e. c:\pagefile.sys). <li>Open read-only copy of file. <li>Search for sensitive key &amp;nbsp;information in the pagefile.</li></li></li></li>
+  </ol>
+  <p>Expected results:&amp;nbsp; The pagefile must not show any cryptographic keys.</p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <em>Test for insecure keystore in dump files (temporary store)</em>
+  </h2>
+  <p>Follow these steps test for insecure keystore in dump files:</p>
+  <ol>
+    <li>Log into a Windows host running application under test. <li>Find out the location of dump files (in Windows this is indicated in <i>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl</i>). <li>Open dump file and search for sensitive information. <li>Repeat for each one of the dump files.</li></li></li></li>
+  </ol>
+  <p>Expected results:&amp;nbsp; The dump files must not contain any cryptographic keys.</p>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>&amp;nbsp;</p>
+  <h2>
+    <em>Test for insecure keystore in file system (persistent store)</em>
+  </h2>
+  <p>Follow these steps to test for insecure keystore in the file system:</p>
+  <ol>
+    <li>Log into the target computer (i.e. computer storing the keystore) using&amp;nbsp; a low privileged or guest account. <li>Browse to the folder containing the keystore files. <li>Open a keystore file and read its contents.</li></li></li>
+  </ol>
+  <p>Expected results: The application is vulnerable if it allows reading the keystore files using a low privileged account.</p>
+  <p>
+    <b>
+      <i>
+      </i>
+    </b>&amp;nbsp;</p>
+  <h2>
+    <em>Test for insecure keystore in the Windows registry (persistent store)</em>
+  </h2>
+  <p>Follow these steps to test for insecure keystore in the file system:</p>
+  <ol>
+    <li>Log into a target computer (computer storing the keystore) using a low privileged or guest account. <li>Open the Windows <i>Run</i> dialog box (<b>Start Menu</b>-&gt;<b>Run</b>). <li>Type <i>regedit</i> and click OK. <li>In Registry Editor, browse to the registry location holding the keystore and read its contents.</li></li></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it allows reading the keystore registry keys using a low privileged account.</p>
+  <p>&amp;nbsp;</p>
+  <h1>Conclusions</h1>
+  <p>Applications that implement cryptography need to store cryptographic keys and certificates in a temporary or persistent memory location known as the keystore.&amp;nbsp;&amp;nbsp; If an application doesn&amp;#8217;t properly secure this location it enables attackers to retrieve the keystore contents and use the information for further cryptographic attacks.&amp;nbsp; To protect against this vulnerability, developers must properly secure keystore material both in temporary memory and in the file system.&amp;nbsp; To test for this bug it is suggested to execute memory dumping test cases as well as insecure storage test cases while searching for cryptographic keys and certificates in memory dumps, files, and registry keys.</p>
+  <div>
+    <br />
+    <hr />
+    <div>
+      <p>&amp;#91;i&amp;#93; <b>MSCxx-A. Be aware of insecure compiler optimization when dealing with sensitive data. </b>Added by Joe Damato, edited by Shaun Hedrick. CERT.&amp;nbsp; <a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=2982545&amp;navigatingVersions=true">https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=2982545&amp;navigatingVersions=true</a></p>
+      <p>&amp;nbsp;</p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

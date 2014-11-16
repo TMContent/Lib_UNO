@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000204a22</Id>
+    <Id_History>00000000-0000-0000-0000-000000204a22,061f4bc0-4cac-4362-9dc3-6c553f04941c,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Use X-Frame-Options to Prevent ClickJacking</Title>
+    <Category>HTTP Headers</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use X-Frame-Options to Prevent ClickJacking</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+When implementing HTML5 applications, use the X-Frame-Options response header to reduce the potential for clickjacking attacks.
+
+==Why==
+
+The X-Frame-Options response header instructs the browser to disallow the use of iframes across domains or limit their use to the same origin. This protects against clickjacking, a malicious technique that uses iframes to overlay (hide) a clickable link or button on a web page. In a clickjacking attack, a user thinks he or she is clicking the intended link but actually clicks the overlaid iframe link, thus sending data to an unintended website. 
+
+==When==
+
+Use this guideline when implementing HTML5 web applications where the web page is not intended for rendering in a frame or iframe.
+
+In addition, Mozilla Firefox version 18 and later supports a third option: ALLOW-FROM.  ALLOW-FROM takes a directive of a uniform resource indicator (URI) . This URI specifies the page can only be rendered in an iframe within that specified URI. 
+
+==How==
+
+You can set the X-Frame-Options header in one of three ways, which will be described in detail below: 
+
+# **Configure the web server.** Configure the web server to inject the X-Frame-Options response header after every page request to restrict framing for the entire application. If you are using Apache Web Server, add the following to the httpd.conf configuration file to deny any framing in the application: {{{ Header always append X-FRAME-OPTIONS DENY }}}. Alternatively, add the following to the httpd.conf configuration file to allow framing only from the same domain as the application: {{{ Header always append X-FRAME-OPTIONS SAMEORIGIN }}}. Restart the web server or reload the configuration.
+# **Manually build the header into the response.** In PHP, add the following to the response at the top of the PHP page to deny any framing in the page: {{{ header("x-frame-options: DENY"); }}} Alternatively, add the following to the response at the top of the PHP page to allow framing in the page only from the same domain as the application: {{{ header("x-frame-options: SAMEORIGIN"); }}}
+# **Implement a filter to inject the header in each page response.** The name of the Filter class is arbitrary, but it must implement the javax.Servlet.Filter interface. The work in the Filter class is in the doFilter method. \\ {{{ public void doFilter(ServletRequest req, ServletResponse resp,FilterChain chain) throws IOException, ServletException }}} \\ {{{ HttpServletResponse response = (HttpServletResponse) resp; }}} \\ {{{ response.addHeader(“x-frame-options”,”DENY”); }}} \\ {{{ chain.doFilter(req, resp); }}} \\ {{{ } }}} \\ Add the filter to the application web.xml file. For example, the following snippet is for a filter with the class name XframeOptionFilter: \\ {{{ <filter> }}} \\ {{{ <filter-name>XframeOptionFilter</filter-name> }}} \\ {{{ <filter-class> }}} \\ {{{ com.example.servlet.filters.XframeOptionFilter }}} \\ {{{ </filter-class> }}} \\ {{{ </filter> }}} \\ {{{ <filter-mapping> }}} \\ {{{ <filter-name>XframeOptionFilter</filter-name> }}} \\ {{{ <url-pattern>/*</url-pattern> }}} \\ {{{ </filter-mapping> }}}
+
+==Problem Example==
+
+Example.com is a popular social media site that allows users to “like” certain applications. The site does not protect against clickjacking.  As shown below, Example.com's   social_media_like_it.php page has a like button, which has been overlayed by an iframe that says "Click here for latest sports." When a user clicks for the latest sports news, he unknowingly “likes” the particular web page. 
+
+{{{
+<html> 
+<head> 
+<title>Sports Page</title> 
+</head> 
+<body"> 
+<div style="position:absolute; left:100px; top:100px;">Click here for latest sports!</DIV>
+<iframe style="opacity:0;" height="500" width="500" scrolling="no" 
+src="http://www.example.com/social_media_like_it.php"></iframe> 
+</body> 
+</html>
+}}}
+
+Here is the server header for http://www.example.com/social_media_like_it.php:
+
+{{{
+HTTP/1.1 200 OK
+Date: Tue, 16 Apr 2013 05:23:17 GMT
+Server: Apache/2.2.16 (Win32) mod_ssl/2.2.16 OpenSSL/0.9.8o
+X-Powered-By: PHP/5.3.8-ZS5.5.0 ZendServer
+Set-Cookie: ZDEDebuggerPresent=php,phtml,php3; path=/
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+Content-Type: text/html
+}}}
+
+\\
+==Solution Example==
+
+To correct the situation, Example.com developers deny framing of any of the application’s pages. In the httpd.conf configuration file of their Apache 2.0 server, they add 
+
+{{{ 
+Header always append X-FRAME-OPTIONS DENY 
+}}}
+
+and reload the Apache configuration. As a result, the social_media_like_it.php page will not be rendered. This eliminates the possibility that the user will unknowingly click Like.
+
+Server Header Response:
+
+{{{
+HTTP/1.1 200 OK
+Date: Tue, 16 Apr 2013 05:33:43 GMT
+Server: Apache/2.2.16 (Win32) mod_ssl/2.2.16 OpenSSL/0.9.8o
+X-FRAME-OPTIONS: DENY
+X-Powered-By: PHP/5.3.8-ZS5.5.0 ZendServer
+Set-Cookie: ZDEDebuggerPresent=php,phtml,php3; path=/
+Keep-Alive: timeout=5, max=99
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+Content-Type: text/html
+}}}
+\\
+==Additional Resources==
+
+* For more information about X-Frame-Options, see http://tools.ietf.org/html/draft-ietf-websec-x-frame-options-00
+* For more information about X-Frame-Options, see  https://developer.mozilla.org/en-US/docs/HTTP/X-Frame-Options
+* For more information about Clickjacking, see https://www.owasp.org/index.php/Clickjacking
+
+
+==HTTP Header Guidelines==
+
+* [[00000000-0000-0000-0000-00000028bb7d|Use X-Content-Security-Policy to Mitigate XSS]]
+* [[00000000-0000-0000-0000-0000009026c0|Use X-XSS-Protection to Prevent Reflected XSS]]
+* [[00000000-0000-0000-0000-000000204a22|Use X-Frame-Options to Prevent ClickJacking]]
+* [[9e0f93ba-0b80-4aab-b93c-c17b9af2a19c|Use a Filter to Inject X-Frame-Options]]
+* [[ae2dc4f8-af3d-4002-9417-f3f1d5c9128b|Add X-Frame Options to Responses]]
+* [[00000000-0000-0000-0000-00000063561d|Use the Strict-Transport-Security Header to Enforce HTTPS]]
+* [[00000000-0000-0000-0000-000000225f24|Use includeSubDomains with Strict-Transport-Security]]
+
+==HTTP Header Checklist Items==
+
+* [[00000000-0000-0000-0000-0000006b6766|X-Content-Security-Policy Is Used to Mitigate XSS]]
+* [[00000000-0000-0000-0000-0000007122c6|X-XSS-Protection Is Used to Prevent Reflected XSS]]
+* [[00000000-0000-0000-0000-000000498810|X-Frame-Options Are Used to Prevent Clickjacking]]
+* [[0d1871fe-76d3-4ea3-87be-ef63662dd772|A Filter Is Used to Inject X-Frame Options]]
+* [[26caffea-d597-40fd-9ed0-36fb025d188b|X-Frame Options Are Added to Responses]]
+* [[00000000-0000-0000-0000-0000001b501f|The Strict-Transport-Security Header is Used to Enforce HTTPS]]
+* [[0078cd3f-9e84-4eb4-9a2f-7f51e3100801|IncludeSubDomains is Used with Strict-Transport-Security]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

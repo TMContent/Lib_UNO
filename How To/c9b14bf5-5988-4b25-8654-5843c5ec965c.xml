@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="77126263" Content_Hash="-1392675402">
+  <Metadata>
+    <Id>c9b14bf5-5988-4b25-8654-5843c5ec965c</Id>
+    <Id_History>c9b14bf5-5988-4b25-8654-5843c5ec965c,0720fc8c-55d0-47d5-9163-389826830dab,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Dictionary Attacks</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Dictionary Attacks</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Summary</span>
+  </h1>
+  <p>A dictionary attack is a cryptographic attack where an attacker attempts to defeat cryptographic ciphers by trying numerous decryption keys or passphrases from a dictionary.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>Dictionaries are a list of possible keys and words to be tried while attempting to defeat the cryptographic cipher.<span>&amp;nbsp;&amp;nbsp; </span><span>&amp;nbsp;</span>Dictionary attacks are also applicable to applications that use credentials to log in their clients.<span>&amp;nbsp; </span>The attack is similar to the cryptanalytic attack with the difference that credential dictionary attacks focus at finding a valid password to bypass authentication, so dictionaries consist of possible password values instead of key or passphrase values.</p>
+  <p>Follow these steps to learn how to test for dictionary attacks:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Execute test cases</li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios </span>
+  </h1>
+  <p>First, it is necessary to understand the different attack scenarios involved:</p>
+  <ul>
+    <li>Cryptographic dictionary attack<li>Credentials dictionary attack<li>Encrypted password cracking attack</li></li></li>
+  </ul>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Cryptographic Dictionary Attack</em>
+    </span>
+  </h2>
+  <p>In contrast to brute-force attacks, in which numerous keys and passphrases are created systematically by performing an exhaustive search over the possible key space, dictionary attacks only try the possibilities supplied by the dictionary.<span>&amp;nbsp;&amp;nbsp; </span>Thus, the attack always starts with the attacker building the dictionary list or file that will be used to defeat the cryptographic system.<span>&amp;nbsp; </span>The attacker then finds a ciphertext to decrypt into a known (in case of known-plaintext attacks) or an unknown plaintext (in case of ciphertext-only attacks).<span>&amp;nbsp; </span>The attack continues with the attacker passing each of the keys in the attack dictionary to the decryption function in order to find a valid decryption key.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker builds an attack dictionary consisting of a list of possible keys/passphrases to use while trying to defeat the cryptographic system.<li>The attacker finds a ciphertext to decipher.<span>&amp;nbsp; </span><li>The attacker iterates through the attack dictionary trying to decrypt the ciphertext with each of the dictionary entries.</li></li></li>
+  </ol>
+  <h2>
+    <span>
+      <em>Credentials Dictionary Attack</em>
+    </span>
+  </h2>
+  <p>The credentials dictionary attack scenario is similar to the previous one with the difference that the attacker is trying to circumvent authentication instead of trying to break cryptography.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>Thus, the attacker&amp;#8217;s goal is to find valid credentials like a valid password instead of finding a decryption key.<span>&amp;nbsp; </span>The attack starts with the attacker selecting a valid username for the target user.<span>&amp;nbsp; </span>Valid usernames can be leveraged using registration pages or by social engineering.<span>&amp;nbsp;&amp;nbsp; </span>Then the attack follows a similar flow of the previous scenario.<span>&amp;nbsp; </span>The attacker builds of a dictionary containing a list of possible passwords.<span>&amp;nbsp;&amp;nbsp; </span>A resourceful attacker would also mutate the dictionary by substituting letters<span>&amp;nbsp; </span>by numbers or applying similar mutations.<span>&amp;nbsp; </span>Then the attacker locates the authentication request such as one made by a log in web page.<span>&amp;nbsp; </span>The attack continues with the attacker passing each of the passwords in the dictionary to the log in procedure in order to find a password that works and enables the attacker to log in to the target application.<span>&amp;nbsp; </span></p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker selects the target client to attack and discovers the target&amp;#8217;s username.<li>The attacker constructs the attack dictionary consisting of possible password values.<li>The attacker iterates through the attack dictionary trying to log in to the application with each of the dictionary entries.</li></li></li>
+  </ol>
+  <h2>
+    <span>
+      <em>Encrypted Password Cracking</em>
+    </span>
+  </h2>
+  <p>Sometimes the attacker&amp;#8217;s goal is not to recover a valid key or password but an encrypted/hashed version of the target password.<span>&amp;nbsp;&amp;nbsp; </span>This scenario is common when attackers have access to a password file containing a set of password hashes like the UNIX password file in which passwords appear as DES hashes or when sniffing a network connection shows passwords being transferred after they have been hashed/encrypted.<span>&amp;nbsp;&amp;nbsp; </span></p>
+  <p>&amp;nbsp;</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker gains access to a password file or a network capture showing a hashed or encrypted version of the target password and the cryptographic algorithm used to hash/encrypt the value.<li>The attacker constructs the attack dictionary consisting of possible password values.<li>For each entry in the attack dictionary the attacker:</li></li></li>
+  </ol>
+  <ul>
+    <ul>
+      <li>hashes or encrypts the entry using the algorithm discovered in step 2.<li>compares the hashed/encrypted password with the target password from step 1.</li></li>
+    </ul>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>Next, it is necessary to understand what causes dictionary attacks and how to countermeasure them.<span>&amp;nbsp; </span></p>
+  <h2>
+    <span>
+      <em>Attack causes</em>
+    </span>
+  </h2>
+  <p>Cryptographic dictionary attacks exist by design.<span>&amp;nbsp; </span>This issue cannot be identified in code since it&amp;#8217;s an attack method rather than an implementation flaw.<span>&amp;nbsp; </span>In most cases attackers will have access to the decryption function as well as the ciphertext.<span>&amp;nbsp; </span>These are the only two requirements to start a dictionary attack and, since developers are encouraged to use a public cryptographic algorithm instead of implementing their own, this attack is innate in cryptographic applications which follow security best practices.<span>&amp;nbsp; </span></p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Attack countermeasures</em>
+    </span>
+  </h2>
+  <p>For cryptanalytic dictionary attacks that target recovering a key rather than a password, choosing a large enough key reduces the likelihood of the decryption key being found by a dictionary attack.<span>&amp;nbsp; </span>Applications that implement cryptography use keys of a certain length (measured in bits) that determines the possible keys combinations -or key space.<span>&amp;nbsp; </span>For instance, a 64-bit key has 2&lt;SUP&gt; 64 &lt;/SUP&gt;possible key combinations.<span>&amp;nbsp; </span>The larger the decryption key the more difficult to construct a dictionary that includes it.<span>&amp;nbsp; </span></p>
+  <p>To protect against dictionary attacks on passwords, or similar variations such as attacks through OS password files, it is recommended to avoid using words available in dictionaries or common variation of dictionary words or names such as &amp;#8220;h0us3&amp;#8221; for &amp;#8220;house&amp;#8221; or &amp;#8220;3ric&amp;#8221; for &amp;#8220;Eric&amp;#8221;.<span>&amp;nbsp;&amp;nbsp; </span>Applications must enforce a strong-password policy with complexity requirements that limit the chances of passwords existing in attack dictionaries. Additional ways to countermeasure <i>credential</i> dictionary attacks such as using locking down accounts, introducing time delays to the log in process, asking for human interaction proofs such as CAPTCHAs or secret questions, or executing different behaviors after a number of failed attempts.<span>&amp;nbsp; </span>Note that these countermeasures are only applicable to credential dictionary attacks and not for cryptographic attacks.<span>&amp;nbsp; </span>For more information read Team Mentor&amp;#8217;s article <i>How to Test for Credential Brute-Force Attacks.</i></p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of dictionary attacks this step focuses at executing practical test cases to check if your application is vulnerable to this attack.</p>
+  <h2>
+    <em>Test for Cryptographic Dictionary Attack (Known-Plaintext)</em>
+  </h2>
+  <p>Follow these steps to test for dictionary attacks using a known-plain text attack:</p>
+  <ol>
+    <li>Build a dictionary list containing a set of possible decryptions keys.<li>Discover a ciphertext <i>C </i>and its corresponding plaintext <i>P</i>, as well as the decryption function that was used to decrypt the plaintext using the unknown decryption key <i>K</i>:<span>&amp;nbsp; </span><ul><li><i><span>&amp;nbsp;</span>P =<span>&amp;nbsp; </span><span>&amp;nbsp;</span>decrypt(C, K)).</i></li></ul><li>Iterate though all keys in the dictionary.<span>&amp;nbsp; </span><ul><li>For each key in the dictionary <i>K&amp;#8217;</i>, execute the decryption algorithm using the ciphertext discovered in the previous step:<span>&amp;nbsp; </span><i>P&amp;#8217; = decrypt (C, K&amp;#8217;).</i><li>Check if the plaintext <i>P&amp;#8217;</i> produced with the current key <i>K&amp;#8217;</i> recovers the plaintext discovered in the previous step:<span>&amp;nbsp; </span><i>P&amp;#8217;= P?</i><span>&amp;nbsp;&amp;nbsp; </span></li></li></ul></li></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it is possible to find a valid key in a reasonable amount of time.<em>&amp;nbsp;</em></p>
+  <h2>
+    <em>Test for Cryptographic Dictionary Attack (Ciphertext-Only)</em>
+  </h2>
+  <p>Follow these steps to test for dictionary attacks using a ciphertext-only attack:</p>
+  <ol>
+    <li>Build a dictionary list containing a set of possible decryptions keys.<li>Discover a ciphertext <i>C </i>as well as the target decryption function.<li>Iterate though all keys in the dictionary.<span>&amp;nbsp; </span><ul><li><span><span>a.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span></span>For each key in the dictionary <i>K&amp;#8217;</i>, execute the decryption algorithm using the ciphertext discovered in the previous step:<span>&amp;nbsp; </span><i>P&amp;#8217; = decrypt (C, K&amp;#8217;).</i><li><span><span>b.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span></span>Check if the plaintext <i>P&amp;#8217;</i> is readable.<span>&amp;nbsp;&amp;nbsp; </span></li></li></ul></li></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it is possible to find a valid key in a reasonable amount of time.</p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <em>Test for Credential Dictionary Attacks</em>
+  </h2>
+  <p>Follow these steps to test for dictionary attacks:</p>
+  <ol>
+    <li>Leverage a valid username for the target client.<li>Construct a dictionary file containing a list of possible passwords.<li>Download and install Brutus (<a href="http://www.hoobie.net/brutus/">http://www.hoobie.net/brutus/</a>).<span>&amp;nbsp; </span>Other password cracking tools can be used.<li>Run Brutus.<li>Type a target URL and authentication type.<li>In the <b>Pass Mode</b> dropdown list, select Word List.<li>Browse for the dictionary file created in step 2.<li>Click <b>Start</b>.</li></li></li></li></li></li></li></li>
+  </ol>
+  <p>Expected result: Brutus displays any matches in the<b> Positive Authentication Results</b> list box. See Figure 1.</p>
+  <p>&lt;&lt;insert Figure 1 here&gt;&gt;</p>
+  <p>
+    <b>
+      <span>Figure 1 - Brutus showing positive authentication results (username = admin, password = aaa)</span>
+    </b>
+  </p>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <h2>
+    <em>Test for Hashed/Encrypted Password Cracking</em>
+  </h2>
+  <p>Follow these steps to test for hashed/encrypted password cracking attacks:</p>
+  <ol>
+    <li>Discover a hashed/encryption password of a known username.<li>Build a dictionary list containing a set of possible passwords<li>Discover the cryptographic algorithm used to produce the hashed/encrypted password (DES, AES, or other industry standard).<li>Iterate though all values in the dictionary.<span>&amp;nbsp; </span><ul><li>For each password in the dictionary, execute the hashing/encryption algorithm to hash/encrypt the current value.<li>Check if the hashed/encrypted value equals the one from step 1.<span>&amp;nbsp;&amp;nbsp; </span></li></li></ul></li></li></li></li>
+  </ol>
+  <p>Expected results: the application is vulnerable if it is possible to find a valid password in a reasonable amount of time.</p>
+  <p>
+    <b>
+      <i>&amp;nbsp;</i>
+    </b>
+  </p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Dictionary attacks focus at discovering a valid key from a predetermined list of possible keys.<span>&amp;nbsp; </span>The attack is trivial is it only requires the attacker to discover the encryption algorithm in place and a ciphertext and iterate through the key dictionary trying to produce a readable plaintext from each of the possible keys.<span>&amp;nbsp; </span>In the credentials scenario, the attack is similar but instead of trying to defeat a cryptographic procedure it aims at circumventing authentication by trying a dictionary of possible password values.<span>&amp;nbsp;&amp;nbsp; </span>Even though this attack is innate to cryptographic systems and authentication procedures, methods to countermeasure this attack include using a large enough key and an industry standard algorithm such as AES, a strong password, account lockout policies, time delays, or human interaction proofs.<span>&amp;nbsp; </span>Testing varies depending on whether a plaintext is known or not and on the type of target system (cryptographic vs. credentials).</p>
+  <p />
+  <p>&amp;nbsp;</p>
+  <p />]]></Data>
+  </Content>
+</TeamMentor_Article>

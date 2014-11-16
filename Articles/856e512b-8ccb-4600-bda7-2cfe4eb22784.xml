@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>856e512b-8ccb-4600-bda7-2cfe4eb22784</Id>
+    <Id_History>856e512b-8ccb-4600-bda7-2cfe4eb22784,7e5b6b38-be37-4ed2-9c5a-33dede6b4534,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>The Length of XML Data Is Validated</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Length of XML Data Is Validated</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Check For==
+
+Make sure that the length of XML data is validated before XML data is passed to the parser.
+
+==Why==
+
+Validate the length of XML data to prevent multiple types of XML denial-of-service attacks. Most types of XML denial-of-service attacks can either be prevented or mitigated by limiting the size of XML data that is passed to the parser.
+
+==How to Check==
+
+To make sure that the length of XML data is validated before XML data is passed to the parser:
+
+# **Find all code that parses XML data.** Determine what XML parser your application uses. Search application code for all references to the XML parser. Make a spreadsheet about all the code that passes XML data to the parser.
+# **Make sure that the length of XML data is validated.** Examine the code that sends XML data to the parser. Make sure that the length of the XML data is checked to be less than the maximum reasonable amount before it is sent to the parser.
+
+==How to Fix==
+
+To validate the length of XML data:
+
+# **Find all code that parses XML data.** Determine what XML parser your application uses. Search application code for all references to the XML parser. Make a spreadsheet about all the code that passes XML data to the parser.
+# **Determine valid lengths of XML data.** For each piece of code that passes XML data to the parser, determine what the maximum reasonable length of the XML data is. Record this information in the spreadsheet.
+# **Validate the length of XML data before parsing.** For each piece of code that passes XML data to the parser, add code that makes sure that the XML data does not exceed the length specified in the previous step of this guideline. If the XML data exceeds the maximum reasonable length, it should not be passed to the parser and an error condition should be triggered.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

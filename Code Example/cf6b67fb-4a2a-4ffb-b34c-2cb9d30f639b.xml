@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="482333339" Content_Hash="1455951393">
+  <Metadata>
+    <Id>cf6b67fb-4a2a-4ffb-b34c-2cb9d30f639b</Id>
+    <Id_History>cf6b67fb-4a2a-4ffb-b34c-2cb9d30f639b,8c47be8a-bf18-4e61-9551-7ea79cf88837,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Encrypt a File via a Block Cipher Using AES</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Encrypt a File via a Block Cipher Using AES</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code is to demonstrate the proper use of a symmetric block cipher. This test case utilizes AES (Rijndael) which serves as the current NIST encryption standard.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>To provide confidentiality of files which are transmitted over insecure or untrusted communication channels. </li>
+    <li>To provide confidentiality of files in storage until they are needed by a user or application.</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application developer desires confidentiality for files in storage or in transit.</li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>void EncryptFile(string sInputFilename, string sOutputFilename, string sKey, string sIV)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The default AES key size under the .NET framework is 256.&amp;nbsp; The following<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // call will create an AES crypto provider and create a random initialization<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // vector and key. The crypto mode defaults to CBC ensuring the proper chaining <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // of data to mitigate repetition of cipher text blocks.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Rijndael rijndaelAlg = Rijndael.Create();<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; // One could override the default randomly generated key and initialization vector<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // by setting the following properties to the Rijndael Crypto Provider, e.g.:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; rijndaelAlg.Key = some_key_val;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; rijndaelAlg.IV = some_iv_val;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; rijndaelAlg.KeySize = 256; // other valid key sizes: 128 or 192 (defaults to 256)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Similarly a developer may wish to change the default encryption mode, e.g.:<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //&amp;nbsp; rijndaelAlg.Mode = CipherMode.CFB; // Defaults to CBC mode. Use of ECB mode is not recommended<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // as it provides no feedback chaining of ciphertext<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Set secret key For AES algorithm.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; rijndaelAlg.Key = ASCIIEncoding.ASCII.GetBytes(sKey);<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Set initialization vector.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; rijndaelAlg.IV = ASCIIEncoding.ASCII.GetBytes(sIV);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; FileStream fsPlaintext = new FileStream(sInputFilename, FileMode.Open, FileAccess.Read);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; FileStream fsCiphertext = new FileStream(sOutputFilename, FileMode.Create, FileAccess.Write);&amp;nbsp;<br /><br /> &amp;nbsp;&amp;nbsp; //Create an AES encryptor from the AES instance.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ICryptoTransform aesencrypt = rijndaelAlg.CreateEncryptor();<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Create crypto stream set to read and do an AES encryption transform on incoming bytes.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; CryptoStream cipherstream = new CryptoStream(fsCiphertext, aesencrypt, CryptoStreamMode.Write);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; byte[] bytearrayinput = new byte[fsPlaintext.Length];<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; fsPlaintext.Read(bytearrayinput, 0, bytearrayinput.Length);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; cipherstream.Write(bytearrayinput, 0, bytearrayinput.Length);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; cipherstream.Close();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; fsPlaintext.Close();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; fsCiphertext.Close();<br />}</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates an implementation of a Encryption routine containing several common secure coding issues.</p>
+  <pre>private static void ProblematicFileEncrypt(string sInputFilename, string sOutputFilename)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Rijndael rijndaelAlg = Rijndael.Create();<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Set secret key for the AES algorithm.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; rijndaelAlg.Key = ASCIIEncoding.ASCII.GetBytes("_A_SAMPLE_KEY_WE_USE_TO_ENCRYPT_");<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //We don't use an IV because the book doesn't show us an example using a <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //more secure, chained mode! If the book told us to jump off a bridge we probably would.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // rijndaelAlg.IV = ASCIIEncoding.ASCII.GetBytes("SAMPLEIV");<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Set encryption mode to an unchained value (because the book says so!)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; rijndaelAlg.Mode = CipherMode.ECB;<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Create a file stream to read the plaintext contents in.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; FileStream fsPlaintext = new FileStream(sInputFilename, FileMode.Open, FileAccess.Read);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; FileStream fsCiphertext = new FileStream(sOutputFilename, FileMode.Create, FileAccess.Write);<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Create an AES encryptor<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ICryptoTransform aesencrypt = rijndaelAlg.CreateEncryptor();<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Create crypto stream set to read and do an AES encryption transform on incoming bytes.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; CryptoStream cipherstream = new CryptoStream(fsCiphertext, aesencrypt, CryptoStreamMode.Write);<br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp; //Write the contents of the encrypted file.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; byte[] bytearrayinput = new byte[fsPlaintext.Length];<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; fsPlaintext.Read(bytearrayinput, 0, bytearrayinput.Length);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; cipherstream.Write(bytearrayinput, 0, bytearrayinput.Length);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; cipherstream.Close();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; fsPlaintext.Close();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; fsCiphertext.Close();<br />}</pre>
+  <ul>
+    <li>Cleartext encryption key can be extracted by any user with access to the source code or compiled code.</li>
+    <li>Use of a weak encryption (non-random) key, which can be brute-forced using a dictionary attack.</li>
+    <li>Insecure cipher mode (ECB), performs encryption of each blocks 128 bits independently with no feedback into subsequent blocks as CBC and other chained modes do. An attacker can rearrange or replace blocks with previous blocks they observe. </li>
+    <li>ECB mode does not utilize an initialization vector, yielding the same encrypted value for each plaintext value. An attacker can thus observe patterns in the encrypted blocks and perform known plaintext attacks (Note: Initialization vectors need not remain secret however they should be random for each encrypted value of the plaintext)</li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:&amp;nbsp;</p>
+  <pre>using System;<br />using System.Text;<br />using System.IO;<br />using System.Security.Cryptography;</pre>
+  <p>The following test case demonstrates the use of the <em>EncryptFile</em> function</p>
+  <pre>static void Main(string[] args)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Console.Out.WriteLine("Encrypting: " + args[0] + " to file: " + args[1]);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; EncryptFile(args[0], args[1], sKey, sIV);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Console.Out.WriteLine("Decrypting: " + args[1] + " to file: " + args[0] + ".new");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; DecryptFile(args[1], args[0] + ".new", sKey, sIV);<br />}&amp;nbsp;</pre>
+  <p>
+    <strong>Note:</strong> sKey and sIV are retrieved from the DataProtection API within Application code.</p>
+  <h1>Expected Result</h1>
+  <p>Comparing the decrypted file value with the original file text should yield the same text.</p>
+  <h1>More Information</h1>
+  <ul>
+    <li>Although AES defaults to 256-bit key sizes under the .NET framework, even under current cryptography standards, the default 128-bit key-size used by many crypto implementations is still considered secure. </li>
+    <li>The test case assumes use of the DataProtection API implemented within the user code to securely store and retrieve encryption keys.</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

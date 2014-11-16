@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000062c37e</Id>
+    <Id_History>00000000-0000-0000-0000-00000062c37e,5f7c8bb3-a98c-4f2b-887d-07744f39a2c2,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Session Identifiers Are Not Stored in Local Storage</Title>
+    <Category>Local Storage</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Session Identifiers Are Not Stored in Local Storage</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Check For==
+
+Verify that session identifiers are not stored in local storage.
+
+==Why==
+
+HTML5 local storage is not designed to store sensitive information and is not suitable for that purpose. Data in local storage may be accessed by JavaScript, which means that it can be compromised via cross-site scripting (XSS) attacks. Cookies with the HTTPOnly flag set may not be accessed with JavaScript, so they are much harder to compromise via XSS. 
+
+==How to Check==
+
+To verify that session identifiers are not stored in local storage:
+
+# **Find code that stores data in local storage.**  Search the application code for references to the localStorage object. Create a spreadsheet to list all code that stores or accesses session identifiers in local storage.
+# **Verify that session identifiers are not stored in local storage.** Examine each reference to the localStorage object to identify whether it is used to store or access session identifiers. 
+
+==How to Fix==
+
+To remove code that stores session identifiers in local storage:
+
+# **Find code that stores session identifiers in local storage.** Search the application code for references to the localStorage object. Examine each reference to the localStorage object to identify whether it is used to store or access session identifiers. Create a spreadsheet to list all the code that stores or accesses session identifiers in local storage.
+# **Store session tokens in protected cookies.** The recommended way to handle sessions in web applications is to store session tokens in cookies that have HTTPOnly and Secure flags set. If the application uses a mechanism for session management other than storing session identifiers in protected cookies, it should be rewritten. Most web application platforms are designed in a manner to facilitate using cookies to store session identifiers, so there should be plenty of documentation and the overall process should be pretty simple.
+# **Remove code that stores session identifiers in local storage.** Once the application stores session identifiers in protected cookies, code that stores and accesses session identifiers in local storage can be safely removed. Use the spreadsheet you created to find this code and remove it. Test these changes thoroughly, especially if you are making them to a live application.
+
+==Local Storage Guidelines==
+
+* [[00000000-0000-0000-0000-0000005c244a|Host Different Applications on Different Subdomains]]
+* [[00000000-0000-0000-0000-00000061bbb6|Do Not Store Sensitive Information in Local Storage]]
+* [[00000000-0000-0000-0000-000000233bdb|Use Session Storage Instead of Local Storage If Possible]]
+* [[00000000-0000-0000-0000-00000052241e|Do Not Store Session Identifiers in Local Storage]]
+* [[00000000-0000-0000-0000-00000052e67b|Do Not Store Authentication Information in Local Storage]]
+
+==Local Storage Checklist Items==
+
+* [[00000000-0000-0000-0000-000000358a18|Different Applications Are Hosted on Different Subdomains]]
+* [[00000000-0000-0000-0000-000000972b0b|Sensitive Information Is Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000007e3ee6|SessionStorage Is Used Instead of LocalStorage If Possible]]
+* [[00000000-0000-0000-0000-00000062c37e|Session Identifiers Are Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000004e1296|Authentication Information Is Not Stored in Local Storage]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

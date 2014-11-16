@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f0afd1b6-9fcf-4a1c-bf30-5ab74928186f</Id>
+    <Id_History>f0afd1b6-9fcf-4a1c-bf30-5ab74928186f,c5753fc8-9e86-4bbb-aec8-bc351325d95d,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Reflection Bugs in Scala</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Reflection Bugs in Scala</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+<br /></p>
+  <h1>Summary</h1>
+  <p>Scala applications that authenticate their clients using a challenge-response, Diffie-Hellman-like algorithm for mutual authentication may be vulnerable to reflection attacks. In a reflection attack, the attacker’s main goal is to trick the application into using its own response as the answer to an authentication challenge.</p>
+  <p>Follow these steps to test for reflection bugs in Scala:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios</li>
+    <li>Step 2: Analyze causes and countermeasures</li>
+    <li>Step 3: Execute test cases</li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>Step 1: Understand Attack Scenarios</h1>
+  <p>To understand the anatomy of a reflection attack scenario, let's review a common challenge-response mutual authentication process.&amp;nbsp;&amp;nbsp;&amp;nbsp;During a challenge-response authentication sequence, the client connects to the server.&amp;nbsp;&amp;nbsp;The server sends a server challenge to the client&amp;nbsp;<i>sc</i>.&amp;nbsp;&amp;nbsp;The client must then answer the challenge successfully by sending a client response&amp;nbsp;<i>cr&amp;nbsp;</i>along with its own client challenge to the application<i>&amp;nbsp;cc</i>.&amp;nbsp;&amp;nbsp;&amp;nbsp;The application authenticates the client by verifying the client’s response&amp;nbsp;<i>cr</i>&amp;nbsp;and responds to the client’s challenge&amp;nbsp;<i>cc&amp;nbsp;</i>with a server response&amp;nbsp;<i>sr.</i>&amp;nbsp;&amp;nbsp;The client then validates the server response<i>&amp;nbsp;sr</i>&amp;nbsp;and completes mutual authentication.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The client connects to the server.</li>
+    <li>The server sends a server challenge&amp;nbsp;<i>sc.</i></li>
+    <li>The client creates its own challenge&amp;nbsp;<i>cc&amp;nbsp;</i>sends it along with it’s response&amp;nbsp;<i>cr&amp;nbsp;</i>to the server’s challenge.</li>
+    <li>The server validates the client’s response&amp;nbsp;<i>cr.&amp;nbsp;&amp;nbsp;</i>&amp;nbsp;The server sends its own response&amp;nbsp;<i>sr</i>&amp;nbsp;to the client’s challenge.</li>
+    <li>The client validates the server’s response&amp;nbsp;<i>sr.</i></li>
+  </ol>
+  <p>To exploit a reflection bug an attacker connects to the target application, which in turns sends a target challenge&amp;nbsp;<i>tc</i>&amp;nbsp;to the attacker.&amp;nbsp;&amp;nbsp;&amp;nbsp;As the attacker doesn’t know how to respond to the target’s challenge to complete authentication (the attacker doesn’t know the shared secret) it opens a second connection with the target application and sends the target challenge&amp;nbsp;<i>tc&amp;nbsp;</i>as its own challenge to the application.&amp;nbsp;&amp;nbsp;&amp;nbsp;The attacker waits till the target application responds to the challenge sending a target response&amp;nbsp;<i>tr&amp;nbsp;</i>through the second connection and then uses this response as its own response to complete authentication though the first connection.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker connects to the target application.</li>
+    <li>The target app sends the attacker a challenge<i>&amp;nbsp;tc.</i></li>
+    <li>The attacker opens a second connection to the target and sends the target challenge as the attacker’s own challenge (<i>ac = tc)</i>&amp;nbsp;through the second connection.</li>
+    <li>Through the second connection, the target responds to the attacker’s challenge with a target response&amp;nbsp;<i>tr.</i></li>
+    <li>Through the original connection, the attacker uses the target response as its own response (<i>ar = tr</i>).</li>
+    <li>Through the original connection, the target validates the attacker response&amp;nbsp;<i>ar&amp;nbsp;</i>and authenticates the attacker.</li>
+  </ol>
+  <p>&amp;nbsp;</p>
+  <h1>Step 2: Analyze Causes and Countermeasures</h1>
+  <p>It is necessary to understand what causes reflection bugs and how to protect against them.&amp;nbsp;&amp;nbsp;</p>
+  <h2>
+    <em>Insecure protocol design</em>
+  </h2>
+  <p>Reflection attacks are possible because of poor implementation of mutual authentication protocols.&amp;nbsp;&amp;nbsp;For instance, in the previous scenario the attacker is able to initiate authentication and the application accepts its own response as an answer to its own challenge.&amp;nbsp;&amp;nbsp; <br /></p>
+  <p>Applications can protect against reflection attacks by using a&amp;nbsp;<i>nonce</i>&amp;nbsp;(number used once).&amp;nbsp;&amp;nbsp;When a client connects to the application, the application sends the client a nonce for that specific connection as the server challenge&amp;nbsp;<i>sc.&amp;nbsp;&amp;nbsp;</i>The client must then send his identifier along with the nonce encrypted with the shared key&amp;nbsp;<i>K.&amp;nbsp;&amp;nbsp;</i>&amp;nbsp;The application decrypts the message sent by the client.&amp;nbsp;&amp;nbsp;The application checks that the nonce sent back matches the original nonce for the connection.&amp;nbsp;&amp;nbsp;To avoid reflection attacks, the application detects and disallows a nonce used in the past or used across more than one connection.</p>
+  <p>
+    <b>&amp;nbsp;</b>
+  </p>
+  <h1>Step 3: Execute Test Cases</h1>
+  <p>Execute practical test cases to check if your application is vulnerable to reflection bugs.</p>
+  <h2>
+    <em>Test for Reflection Bugs</em>
+  </h2>
+  <p>Follow these steps to test for reflection bugs:</p>
+  <ol>
+    <li>Connect to the target application<i></i> to start authentication.&amp;nbsp;&amp;nbsp;Wait for the application to send a challenge.</li>
+    <li>Open a second connection to the target.&amp;nbsp; Through this connection, send the target challenge from the previous step.&amp;nbsp;&amp;nbsp;Wait for the target application to send a response for the challenge.</li>
+    <li>Send the response sent by the application in the previous step through the original connection.</li>
+  </ol>
+  <p>Expected results:&amp;nbsp;&amp;nbsp;The application is vulnerable to reflection attacks if you are able to successfully authenticate in step 3.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authentication Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="452eaf9a-e3e9-4d9e-ac3e-0f435af837a1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Centralize Authentication Controls</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ceb2d5c2-fa01-4fc3-bb5a-3cd14c4cf604" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Server-side Authentication</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="f2f4b099-d01d-4d93-96a2-93ba6e5d085a" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Make Sure Authentication Controls Fail Securely</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="479b9ff4-f0fb-4870-8929-8b63b2b7d0b3" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Force Re-authentication When Executing Critical Functionality</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="ba64e4ba-9d14-4054-a99e-b6594f9698d6" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Validate Usernames Before Processing Them</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="57f0990c-06b9-4f94-ac1e-063773c7988d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Lock Accounts After Consecutive Failed Login Attempts</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="6d74a22d-31d2-4584-9d93-85687ea4a637" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Enforce Strong Passwords</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="9d80865a-ddc8-49bd-be15-0f17a0e34383" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Force Password Renewal</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="15e9d2b8-445b-4163-88f8-a705e14a5804" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Mask All Password Fields</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="5534db32-d558-4e7a-af11-f11e0829c41a" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Place Logout Links on All Pages that Require Authentication</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="3142c504-e433-4f9b-bd54-28a11e04877d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Consider Using Two Factor Authentication</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authentication Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="452eaf9a-e3e9-4d9e-ac3e-0f435af837a1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication Controls Are Centralized</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="6d6ecd62-253b-47b1-84a4-f9e112ee3623" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Server-side Authentication Is Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="a4e8cb3e-1bd0-474f-853a-4226a4354262" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication Controls Fail Securely</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="fbb4cdda-8c2e-4099-8e57-e4a9c491775f" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Re-authentication Is Enforced When Executing Critical Functionality</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="33fb64e2-51e1-499e-adde-8ac5bae15b26" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Usernames Are Validated Before Use</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="40ed1ed0-8081-4675-9e8e-8b83ffbfd7b9" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Accounts Are Locked After Consecutive Failed Login Attempts</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="2643951d-7530-4c34-a4a9-3111095dedb6" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Strong Passwords Are Enforced</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="5381c4aa-09b2-44f0-bae5-32b9d0230420" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Password Renewal Is Enforced</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="bfadd27f-8ade-45cb-8b3d-6e53ff319ed8" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Password Fields Are Masked</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="9dbf9073-871e-4614-9fbf-5b542226d211" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Pages that Use Authentication Have Logout Links</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="acf6c265-cd3a-470f-bd85-24b1907d3eb1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Access to the Credential Store Is Limited</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authentication Testing</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="d4fbf960-c790-4244-9e40-470d382c5b36" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">How to Test for Account Lockout Bugs in Scala</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

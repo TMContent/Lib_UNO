@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000006598ea</Id>
+    <Id_History>00000000-0000-0000-0000-0000006598ea,3709831f-2c3a-4b0b-9cc3-8a18256aa450,</Id_History>
+    <Library_Id>b6f408c5-6e6e-4bc0-90a5-0bb10becc2ce</Library_Id>
+    <Title>Implement a Secure Password Reset Function</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>iOS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Implement a Secure Password Reset Function</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* iOS applications that authenticate to a remote server.
+
+==What to Do==
+
+Implement a secure password reset function.
+
+==Why==
+
+Password reset and recovery features are important to prevent locking out users who forgot their passwords. However, they also present a security challenge. An attacker might try to compromise user passwords by abusing the password recovery or reset functions. These functions by definition need to be accessible to unauthenticated users, so protecting them requires special diligence. Password reset is preferable to recovery - if an attacker manages to change the user's password, the user should be able to notice that a compromise has taken place.
+
+==How==
+
+To implement a secure password reset function:
+
+# **Implement password resetting on the server.** Most of the password resetting functionality should be implemented on the server. The iOS application might need a button on the login page for requesting a password reset.
+# **Verify user identity.** The exact method for verifying user identity depends on the security requirements of the application and what information is available about the user. One solution is to establish user identity by asking security questions that are associated with the account and proceeding with the reset only if the correct answer is provided. At the very least, the application should ask for the e-mail address associated with the user account for which the password reset is requested.
+# **Use a side channel to send a password reset token.** The most common and effective solution is to send a difficult-to-predict token to the e-mail address associated with the user account for which the password reset is requested.
+# **Provide a control for changing the password.** Once the user has the password reset token, the user should be able to submit that token and then change the password. This can be accomplished through a web page, a web service to the iOS application, or some combination of the two.
+# **Log the password reset event.** Both failed and successful password reset requests should be logged on the server. A large number of password reset requests may indicate an attack.
+
+==Authentication Guidelines==
+* [[00000000-0000-0000-0000-0000003cccf2|Change Root Passwords on Jailbroken Devices]]
+* [[00000000-0000-0000-0000-00000067c695|Encrypt Authentication Credentials Sent over the Network]]
+* [[00000000-0000-0000-0000-0000006598ea|Implement a Secure Password Reset Function]]
+* [[00000000-0000-0000-0000-0000006171ed|Throttle Authentication Attempts]]
+* [[00000000-0000-0000-0000-0000005d4d08|Use Server-side Authentication]]
+
+==Authentication Checklists==
+* [[00000000-0000-0000-0000-00000076b90c|Root Passwords Have Been Changed on Jailbroken Devices]]
+* [[00000000-0000-0000-0000-0000004ce47f|Authentication Credentials Sent over the Network Are Encrypted]]
+* [[00000000-0000-0000-0000-0000006b19fc|A Secure Password Reset Function Is Implemented]]
+* [[00000000-0000-0000-0000-000000816c4a|Authentication Attempts Are Throttled]]
+* [[00000000-0000-0000-0000-0000002a3f4d|Authentication Is Implemented on the Server-side]]
+
+==Additional Resources==
+
+* For a guide to implementing a password reset function, please see https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet]]></Data>
+  </Content>
+</TeamMentor_Article>

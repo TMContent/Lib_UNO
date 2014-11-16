@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="347763797" Content_Hash="387292259">
+  <Metadata>
+    <Id>4068ad23-5683-4667-9ac5-f0a7471ca5f1</Id>
+    <Id_History>4068ad23-5683-4667-9ac5-f0a7471ca5f1,6df6a9e6-681b-4329-877b-16da3bb87b07,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Log Detailed Error Messages</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Design</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Log Detailed Error Messages</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Alex Mackman, Michael Dunner, Srinath Vasireddy, Ray Escamilla and Anandha Murukan</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>
+      <div>Web Application</div>
+    </li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Do not allow exception details to propagate from your Web applications back to the client. A malicious user could use system-level diagnostic information to learn about your application and probe for weaknesses to exploit in future attacks.</p>
+  <h1>Why</h1>
+  <p>All exceptions should be logged in the event log for later analysis.</p>
+  <h1>When</h1>
+  <p>You should log exception details whenever an error occurs in your application.</p>
+  <h1>How</h1>
+  <p>Send detailed error messages to the error log. Send minimal information to the consumer of your service or application, such as a generic error message and custom error log ID that can subsequently be mapped to detailed message in the event logs. Make sure that you do not log passwords or other sensitive data.</p>
+  <p>
+    <strong>Return Generic Error Pages to the Client</strong>
+  </p>
+  <p>The <b>&lt;customErrors&gt;</b> element can be used to configure custom, generic error messages that should be returned to the client in the event of an application exception condition. The error page should include a suitably generic error message, optionally with additional support details. You can also use this element to return different error pages depending on the exception condition.</p>
+  <p>Make sure that the mode attribute is set to "<b>On</b>" and that you have specified a default redirect page as shown below:</p>
+  <div>
+    <div>
+      <pre>&lt;customErrors mode="On" defaultRedirect="YourErrorPage.htm" /&gt;</pre>
+    </div>
+  </div>
+  <p>The <b>defaultRedirect</b> attribute allows you to use a custom error page for your application, which for example might include support contact details.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Do not use <b>mode="Off"</b> because it causes detailed error pages that contain system-level information to be returned to the client.</blockquote>
+  <p>If you want separate error pages for different types of error, use one or more <b>&lt;error&gt;</b> elements as shown below. In this example, "404 (not found)" errors are redirected to one page, "500 (internal system errors)" are directed to another page, and all other errors are directed to the page specified on the <b>defaultRedirect</b> attribute.</p>
+  <div>
+    <div>
+    </div>
+    <div>
+      <pre>&lt;customErrors mode="On" defaultRedirect="YourErrorPage.htm"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;error statusCode="404" redirect="YourNotFoundPage.htm"/&gt;<br />&amp;nbsp;&amp;nbsp; &lt;error statusCode="500" redirect="YourInternalErrorPage.htm"/&gt;<br />&lt;/customErrors&gt;<br />&amp;nbsp;</pre>
+    </div>
+    <p>
+      <strong>Use a Global Error Handler to Catch&amp;nbsp;Unhandled Exceptions</strong>
+    </p>
+    <p>Make sure that the code includes an application-level global error handler in Global.asax to catch any exceptions that are not handled in code. This can prevent accidentally returning detailed error information to the client. The code should log all exceptions in the event log to record them for tracking and later analysis.</p>
+    <p>The application should contain code similar to the following:</p>
+    <div>
+      <div>
+      </div>
+      <div>
+        <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br /><br />&lt;script language="C#" runat="server"&gt;<br />void Application_Error(object sender, EventArgs e)<br />{<br />&amp;nbsp; // Get reference to the source of the exception chain<br />&amp;nbsp; Exception ex = Server.GetLastError().GetBaseException();<br /><br />&amp;nbsp; // log the details of the exception and page state to the<br />&amp;nbsp; // event log.<br />&amp;nbsp; EventLog.WriteEntry( "My Web Application",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "MESSAGE: " + ex.Message + <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "\nSOURCE: " + ex.Source, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; EventLogEntryType.Error);<br />&amp;nbsp; // Optional e-mail or other notification here...<br />}<br />&lt;/script&gt;</pre>
+      </div>
+    </div>
+  </div>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information see, "Chapter 4 - Design Guidelines for Secure Web Applications" at <a href="http://msdn2.microsoft.com/en-us/library/aa302420.aspx">http://msdn2.microsoft.com/en-us/library/aa302420.aspx</a>&amp;nbsp;&amp;nbsp;&amp;nbsp; </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

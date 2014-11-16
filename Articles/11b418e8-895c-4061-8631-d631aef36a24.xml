@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>11b418e8-895c-4061-8631-d631aef36a24</Id>
+    <Id_History>11b418e8-895c-4061-8631-d631aef36a24,12429c23-013c-43f5-b922-d900428e67f1,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Logs Are Protected</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Logs Are Protected</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Check For==
+
+Ensure log files are protected.
+
+==Why==
+
+Log files often contain internal application details that could enable an attacker to more effectively target your application.
+
+==How to Check==
+
+Use these steps to ensure log files are protected:
+
+# **Verify that the log location is not disclosed.** Scan your application's code base to verify that the location of the log files is known only to the internal logging framework.
+# **Check the file permissions of logs.** Verify that the logs are set with the appropriate file system permissions. All entities, excluding your application and its administrators/developers, must be prohibited access to the logs. If your application backs up its logs, verify that log backups are stored into an environment that is as secure as the storage environment for the current logs.
+# **Check the log server capabilities.** The log server should protect the log files. Ask the vendor for information about controls used to protect the log files on the log server.
+# **Check that only users with job-related needs have access to logs.** Verify that only authorized employees have user accounts on the log server. Examine the administration interface on the log server to get a list of users. Make sure that all the users are authorized and that their authorizations are based on legitimate job-related needs by interviewing them.
+# **Check that measures are taken to prevent tampering.** Consult the documentation or technical support to make sure the log server solution implements measures to prevent tampering. Verify that the log server is physically secure, preferably in a separate locked room.
+# **Verify that logs are current.** Get the list of network devices from the network documentation. For a random sample of devices, verify that the logs from them are present on the log server and that the logs are current.
+# **Confirm file-integrity monitoring capability.** Consult the vendor's documentation or technical support to make sure the log server solution implements some form of file-integrity monitoring.
+
+==How to Fix==
+
+Perform the following actions to secure the log files:
+
+# **Secure the log server.** All the functionality to comply with this requirement should be provided by the centralized log server. Ask the vendor for information about securing the log server.
+# **Only allow access to users with job-related needs.** Most centralized log servers have built-in access control. The flexibility of this access control is different for different solutions. To satisfy this requirement, it is sufficient to only create access accounts for authorized employees who have a legitimate job-related need to view the logs. Ideally, the authentication mechanism on the log server should be integrated with the rest of the network.
+# **Prevent tampering.** Most centralized log server solutions have built-in controls to prevent tampering. The exact controls vary, but they typically include an access control list and some means of preventing privileged users or users with physical access from altering the log files. The latter typically does not need to be configured. It is recommended to segregate the log server physically by placing it in a locked room.
+# **Configure all network devices to send logs to the log server.** Forward the logs from all compatible devices to the log server. For detailed instructions on sending the logs to the log server, please refer to the vendor's documentation or technical support.
+# **Configure file-integrity monitoring.** This feature should be implemented by the log server solution itself. It should not require configuration on the part of the staff. Please refer to the vendor's documentation or technical support to make sure that your log server is compliant with this requirement.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

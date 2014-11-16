@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-508005635" Content_Hash="-1580889046">
+  <Metadata>
+    <Id>3c5d8485-26ea-4fca-a76b-6a2f1c5c4509</Id>
+    <Id_History>3c5d8485-26ea-4fca-a76b-6a2f1c5c4509,fbc02acc-c8c2-4f07-b253-87caeee50a37,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Create a Custom Trust Policy If Your Application Needs Additional Permissions</Title>
+    <Category>Code Access Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Create a Custom Trust Policy If Your Application Needs Additional Permissions</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Ensure that applications run at the lowest possible trust level. If the provided trust levels do not match the permissions an application needs, create a custom trust level to&amp;nbsp;grant&amp;nbsp;the&amp;nbsp;minimum privilege set it can operate with. </p>
+  <h1>Why</h1>
+  <p>If an application is given unnecessary permissions, those additional privileges&amp;nbsp;might provide avenues of&amp;nbsp; attack that allow the applications's executing context to carry out operations that should not be permitted on behalf of the user.&amp;nbsp; </p>
+  <p>Creating&amp;nbsp; a custom trust level allows you&amp;nbsp;to incrementally limit your exposure to security&amp;nbsp;attacks and provides&amp;nbsp;extra degrees of appication isolation.&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>Use a custom trust policy whenever&amp;nbsp;an application&amp;nbsp;needs&amp;nbsp;privileges that&amp;nbsp;are between established&amp;nbsp;trust levels such as medium and high. For example, if your application is in a hosted environment it should typically run at the medium trust level. But what if the application also needs write access to event logs, which is only permitted in High trust level? The solution is to create a custom trust level to accomodate that need, while still denying access to the other capabilities granted by the High trust level. In hosted environments, you are unlikely to be able to use this approach to customize the trust level, because policy restrictions are most likely rigid. </p>
+  <h1>How</h1>
+  <p>To create a custom policy, perform the following steps: </p>
+  <ul>
+    <li>Use the Minimum Grant Set Determination tool (Permcalc.exe)&amp;nbsp;to estimate the permissions callers must be granted to access the public entry points of an assembly.</li>
+  </ul>
+  <pre>    PermCalc &amp;#91;options&amp;#93; assemblyName &amp;#91;assemblyDependencyName&amp;#8230;&amp;#93;s</pre>
+  <ul>
+    <li>Copy the trust level policy file that most closely matches your application's permission requirements to create a new custom policy file. <li>Locate this file in the standard policy file directory, which is &amp;#37;Windir&amp;#37;\Microsoft.NET\Framework\&amp;#123;Version&amp;#125;\CONFIG. Then add the required additional permissions to the custom policy file and configure your application to run using the custom policy. <li>Configure your application to run using the custom trust policy defined in the previous steps.&amp;nbsp;</li></li></li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>Permissions calculator tool <a href="http://msdn2.microsoft.com/en-us/library/ms165077.aspx">http://msdn2.microsoft.com/en-us/library/ms165077.aspx</a></li>
+  </ul>
+  <h1>Related Rules</h1>
+  <ul>
+    <li>
+      <a href="/article/743a34cc-ed5f-4550-8458-4456b9da9bf1">Do Not Allow Developers to Change Their Application's Trust Level</a>
+      <li>
+        <a href="/article/5a4ca787-30a1-487c-be5d-9d849aaaca36">Choose a Trust Level that does Not Exceed the Application's Requirements</a>
+        <li>
+          <a href="/article/29d960c8-3bc8-469b-957e-b6845a00f02d">Isolate Applications using Medium Trust in Hosted Environments</a>
+          <li>
+            <a href="/article/fab1733c-61d7-46a8-88c6-2617a643c0d9">Use Least Privileged Accounts for Database Access</a>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

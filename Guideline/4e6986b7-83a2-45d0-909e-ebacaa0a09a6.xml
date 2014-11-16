@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="438176460" Content_Hash="-530168822">
+  <Metadata>
+    <Id>4e6986b7-83a2-45d0-909e-ebacaa0a09a6</Id>
+    <Id_History>4e6986b7-83a2-45d0-909e-ebacaa0a09a6,039fbcc0-1ff0-4c33-80f2-ff6656a1d8d9,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>If You Need to Support Disconnected Queued Calls, Use NetMsmqBinding</Title>
+    <Category>Bindings</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>If You Need to Support Disconnected Queued Calls, Use NetMsmqBinding</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you need to support disconnected queuing, use the netMsmqBinding. </p>
+  <h1>Why</h1>
+  <p>The netMsmqBinding has the following characteristics:</p>
+  <ul>
+    <li>It supports asynchronous, disconnected operations <li>It can only be consumed by WCF enabled clients. <li>Transport security is turned on by default, message security is also available. <li>The service can be hosted in IIS 5.0 or IIS 6.0, but it is not message activated, hence you can consider hosting in a Windows service or IIS 7.0 instead. <li>If you choose to use message security you can use certificates, username, Windows or token authentication <li>If you choose to use transport security you can only use certificates or Windows authentication </li></li></li></li></li></li>
+  </ul>
+  <h1>When</h1>
+  <p>Consider using this guideline when the client and the service do not have to be online at the same time.</p>
+  <h1>How</h1>
+  <p>Queuing is provided by using the MSMQ (Microsoft Message Queuing) as a transport, which enables support for disconnected operations, failure isolation, and load leveling. You can use netMsmqBinding when the client and the service do not have to be online at the same time. You can also manage any number of incoming messages by using Load leveling. MSMQ supports failure isolation where messages can fail without affecting the processing of other messages.</p>
+  <p>The following example shows how to configure netMsmqBinding:</p>
+  <pre>&lt;system.serviceModel&gt;<br />....<br />    &lt;services&gt;<br />        &lt;service behaviorConfiguration="" name="WCFServicecHost.MyService"&gt;<br />            ...<br />            &lt;endpoint address="" binding="netMsmqBinding" bindingConfiguration=""<br />                name="MsmqBinding" contract="WCFServicecHost.IMyService" /&gt;<br />            ...<br />        &lt;/service&gt;<br />    &lt;/services&gt;<br />&lt;/system.serviceModel&gt;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on bindings, see &amp;#8220;Windows Communication Foundation Bindings&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733027.aspx">http://msdn2.microsoft.com/en-us/library/ms733027.aspx</a><li>For binding Q&amp;A, see the Binding section of &amp;#8220;WCF 3.5 Questions and Answers &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

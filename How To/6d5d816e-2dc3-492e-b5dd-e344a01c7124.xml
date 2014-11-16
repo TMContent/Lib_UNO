@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1331834971" Content_Hash="-1080191749">
+  <Metadata>
+    <Id>6d5d816e-2dc3-492e-b5dd-e344a01c7124</Id>
+    <Id_History>6d5d816e-2dc3-492e-b5dd-e344a01c7124,0d2fb99b-e3d8-4cfb-94bb-4db0401cbe18,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Create an Error Handler to Log Details of Faults for Auditing Purposes</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink />
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can create an error handler to log the fault details by implementing the IErrorHandler interface methods in your service. By using this you log and suppress the exceptions or you can log and throw them as FaultException.</p>
+  <pre>public interface IErrorHandler <br />{ <br />        bool HandleError(Exception error, MessageFault fault); <br />        void ProvideFault(Exception error, ref MessageFault fault, ref string faultAction); <br />} </pre>
+  <p>To suppress the fault message, implement the HandleError method and return false. In this method you can add your code for logging capabilities.</p>
+  <p>To raise FaultException instead of suppressing, implement the ProvideFault method to provide the MessageFault value. The following code shows a sample implementation of the ProvideFault method </p>
+  <pre>//code snippet<br />public void ProvideFault(Exception error, MessageVersion version, ref Message fault)<br />{<br />  FaultException newEx = new FaultException();<br />  MessageFault msgFault = newEx.CreateMessageFault();<br />  fault = Message.CreateMessage(version, msgFault, newEx.Action);<br />}</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Fault Contracts, see “Specifying and Handling Faults in Contracts and Services” at &lt;A href="http://msdn.microsoft.com/en-us/library/ms733721. 
+<hr /><p>Adapted from Microsoft patterns & practices guidance.</p></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

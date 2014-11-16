@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1512049307" Content_Hash="-311722888">
+  <Metadata>
+    <Id>ae1f457b-c3ef-4d5f-9471-ae793137e07e</Id>
+    <Id_History>ae1f457b-c3ef-4d5f-9471-ae793137e07e,72259510-bf20-4fdc-b9ba-cc81c8d6b421,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Do Not Cache Sensitive Data</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Cache Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>ASP.NET output caching is a great way to improve application performance, however, if your page contains data that is sensitive, such as a password, credit card number, or account status, the page should not be cached. ASP.NET output caching is off by default.</p>
+  <h1>Why</h1>
+  <p>Output caching is usually done on the client, and that has serious security implications if the page being cached has sensitive data. Output caching is similar in impact to storing sensitive data in cookies. The data may persist on the client machine, on proxy servers or on the web server. Due to this fact, it leaves interesting data available to attackers should the devices caching the data be compromised.</p>
+  <h1>When</h1>
+  <p>If a page displays sensitive info, ensure output caching is disabled.</p>
+  <h1>How</h1>
+  <p>Output caching is off by default and must be explicitly turned on in order to be activated. There are two ways that output caching can be turned on: high-level declarative API, or low-level programmatic API. The high-level declarative API is used by including the<em> &amp;#64;OutputCache</em> directive in the .aspx file for a page. The low-level programmatic API is used through the<em> Page.Response.Cache</em> property which returns an instance of the <em>HttpCachePolicy</em> class.</p>
+  <p>Use the following steps to ensure that sensitive data is not cached:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Review pages for sensitive data.</strong> Review all of your pages for instances of sensitive data. This could include, but is not limited to:</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with users. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users.</li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Review the pages for declarative Output Caching.</strong> Review the pages discovered in step 1 for the use of the <em>&amp;#64;OutputCache</em> directive. If it exists, remove it.</p>
+        <li>
+          <p>
+            <strong>Review the pages for programmatic Output Caching.</strong> Review the pages discovered in step 1 for the use of the <em>HttpCachePolicy</em> class. Generally this is accessed through the <em>Page.Response.Cache</em> property.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An ASP.NET application contains a page that asks the user for credit card information in order to complete an e-commerce transaction. For performance reasons, all pages in the application have output caching turned on through the use of the <em>&amp;#64;OutputCache</em> directive </p>
+  <pre>&lt;&amp;#37;&amp;#64; OutputCache Duration="60" VaryByParam="None" &amp;#37;&gt;</pre>
+  <p>This results in the page, including sensitive data, being cached on any HTTP 1.1 capable devices - including browsers, proxies and the web server.</p>
+  <h1>Solution Example</h1>
+  <p>An ASP.NET application contains a page that asks the user for credit card information in order to complete an e-commerce transaction. For performance reasons, almost all of the pages in the application have output caching turned on through the use of the <em>&amp;#64;OutputCache</em> directive. However sensitive pages, such as the page that includes credit card information have had the <em>&amp;#64;OutputCache</em> directive removed to prevent them from being cached on HTTP 1.1 capable devices.</p>
+  <h1>Additional Resources</h1>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

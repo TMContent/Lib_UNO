@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2108115822" Content_Hash="1815340024">
+  <Metadata>
+    <Id>fe289976-08f4-46b3-a6ec-b80828d090b6</Id>
+    <Id_History>fe289976-08f4-46b3-a6ec-b80828d090b6,5d4d6148-3a1a-4b2b-b916-03eb09c57f5c,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Disable Dangerous Functions</Title>
+    <Category>Hardening</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Disable Dangerous Functions</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PHP</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Disable unused dangerous functions by configuring PHP. Verify that if dangerous functions are used, they are used safely.</p>
+  <h1>Why</h1>
+  <p>Disabling dangerous functions helps make sure they are not used by the application and prevents attackers from using them. Most dangerous functions allow executing external system commands - this functionality is inherently dangerous, because it may allow command injection vulnerabilities if not implemented correctly. It is best to avoid such functions, if possible. If executing system commands is required, extra caution has to be taken when writing such code. </p>
+  <p>Disabling dangerous functions also makes privilege escalation more difficult for attackers. Many common attacks on PHP applications involve attackers uploading so-called "Web Shells", which are scripts that give the attacker access to system functions for the purpose of taking over the web server. Web Shells typically use the dangerous PHP functions for access to system commands. Disabling dangerous PHP functions makes using Web Shells more difficult, thus adding an extra layer of defense.</p>
+  <h1>How</h1>
+  <p>To disable dangerous functions:</p>
+  <ol>
+    <li>
+      <p />
+      <strong>Search code for dangerous functions.</strong> Search application code for the following functions and operator(s): <ul><li><em>system() </em><li><em>exec() </em><li><em>shell_exec() </em><li><em>passthru() </em><li><em>popen() </em><li><em>proc_open() </em><li><em>parse_ini_file() </em><li><em>show_source() </em><li><em>symlink() </em><li><em>'</em> (backtick operator) </li></li></li></li></li></li></li></li></li></li></ul><p>Make a list of used dangerous functions.</p><li><p><strong>Identify dangerous functions that are not used.</strong> Make a list of the functions that are not used in your application, by copying the list from Step 1 and removing any dangerous functions that are used from it.</p><li><p><strong>Disable unused dangerous functions.</strong> Use the list from Step 2 to disable unused dangerous functions in the <em>php.ini</em> file by using the <em>disable_functions</em> directive, like so:</p><pre>disable_functions = system, exec, shell_exec, passthru, popen, proc_open, parse_ini_file, show_shource, symlink.</pre><li><p><strong>Review all instances of used dangerous functions.</strong> Make sure that each case of using a dangerous function is necessary and is done in accordance with best practices. For code that passes arguments to shell commands, use <em>escapeshellarg()</em> to prevent command injection vulnerabilities. Use absolute paths when executing external commands. Do not let users execute arbitrary commands. Be particularly careful with the backtick (') operator.</p></li></li></li></li>
+  </ol>
+  <h1>PHP Security Configuration Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/fe289976-08f4-46b3-a6ec-b80828d090b6">Disable Dangerous Functions</a>
+    </li>
+    <li>
+      <a href="/article/aaf96d58-0037-4ea7-a8c7-0f98db813a2d">Disable Directory Browsing</a>
+    </li>
+    <li>
+      <a href="/article/326d84fb-2395-44ec-ac02-6554acca4a65">Design a Strong Application Architecture</a>
+    </li>
+    <li>
+      <a href="/article/815d66d1-e4c3-4997-8e87-2c9cebbb17de">Establish a Repeatable Hardening Process</a>
+    </li>
+    <li>
+      <a href="/article/87afcdc0-00f4-402c-8baf-73e1da59ba85">Keep Up with Security Updates</a>
+    </li>
+  </ul>
+  <h1>PHP Security Configuration Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/50ff859f-1562-4b27-b230-1e3d5bd8a3b9">Dangerous Functions Are Disabled</a>
+    </li>
+    <li>
+      <a href="/article/6a97132c-6047-4619-bc13-fea1797a9278">Directory Browsing Is Disabled</a>
+    </li>
+    <li>
+      <a href="/article/67ec63f4-43f5-4537-94ed-df0eb87bedf7">A Strong Application Architecture Is Used</a>
+    </li>
+    <li>
+      <a href="/article/25917fd8-7057-40f7-90dc-a765573fba41">A Repeatable Hardening Process Is Established</a>
+    </li>
+    <li>
+      <a href="/article/aa0476d9-b762-4f9e-a200-92eb3cd1748b">Latest Security Updates Are Installed</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

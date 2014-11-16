@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000972b0b</Id>
+    <Id_History>00000000-0000-0000-0000-000000972b0b,0fe6d675-45fe-4728-9e48-a3c705db4334,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Sensitive Information Is Not Stored in Local Storage</Title>
+    <Category>Local Storage</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Information Is Not Stored in Local Storage</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Verify that sensitive information is not stored in local storage.
+
+==Why==
+
+HTML5 local storage is not designed to store sensitive information and is not suitable for that purpose. Data in local storage may be accessed by JavaScript, which means that it can be compromised via cross-site scripting (XSS) attacks. Cookies with the HTTPOnly flag set cannot be accessed with JavaScript, so they are much harder to compromise via XSS. Sensitive data should be stored on the server in the session state and the client should store only the session token in a protected cookie.
+
+==How to Check==
+
+To verify that sensitive information is not stored in local storage:
+
+# **Identify sensitive data.** Make a list of types of sensitive information handled by your application. Some examples are:
+## System information
+## Filenames and paths
+## Passwords
+## Encryption keys
+## Cardholder data
+## Personal information
+# **Find code that stores data in local storage.** Search the code for references to the localStorage object. Create a spreadsheet to list the code that stores sensitive data in local storage. 
+# **Verify that sensitive data is not stored in local storage.** Examine each piece of code that references localStorage to see if it stores or accesses sensitive data in local storage.
+
+==How to Fix==
+
+To remove code that stores sensitive information in local storage:
+
+To remove code that stores sensitive information in local storage:
+
+# **Identify sensitive data.** Make a list of the types of sensitive information handled by your application. Some examples are:
+## System information
+## Filenames and paths
+## Passwords
+## Encryption keys
+## Cardholder data
+## Personal information
+# **Find code that stores sensitive data in local storage.** Search code for references to the localStorage object. Examine each piece of code that references localStorage to see if it stores or accesses sensitive data in local storage. Create a spreadsheet to list the code that stores sensitive data in local storage.
+# **Identify if storing sensitive data is necessary.** Review each piece of code that stores or accesses sensitive data in local storage and consider if that functionality is necessary for the application. If the code that stores or accesses sensitive data in local storage is not necessary, remove it.
+# **Write code that stores sensitive data in session state.** If working with sensitive data is necessary for the application, each piece of code that stores or accesses sensitive data in local storage must be replaced. Write code that stores and accesses sensitive information in server-side session state to replace the code that stores sensitive data in local storage.
+# **Store session tokens in protected cookies.** One special type of sensitive information is session identifiers. Session identifiers are used by the server to identify which session state belongs to which client. It is important to protect session identifiers in order to prevent user sessions from being hijacked. Session identifiers should not be accessed by any code for any purpose other than for the server to correlate clients to sessions. Data stored in local storage can be accessed by client-side scripts and might be shared with other applications, therefore local storage should not be used to store session identifiers. Session identifiers should be stored in cookies with Secure and HTTPOnly flags set. If there is code that stores or accesses session identifiers in local storage, rewrite this code to store and access session identifiers in protected cookies.
+# **Remove code that stores sensitive data in local storage.**  Once the application stores sensitive data on the server-side and session identifiers in protected cookies, code that stores and accesses sensitive data in local storage can be safely removed. Use the spreadsheet you created to find this code and remove it. Test these changes thoroughly, especially if you are making them to a live application.
+
+
+==Local Storage Guidelines==
+
+* [[00000000-0000-0000-0000-0000005c244a|Host Different Applications on Different Subdomains]]
+* [[00000000-0000-0000-0000-00000061bbb6|Do Not Store Sensitive Information in Local Storage]]
+* [[00000000-0000-0000-0000-000000233bdb|Use Session Storage Instead of Local Storage If Possible]]
+* [[00000000-0000-0000-0000-00000052241e|Do Not Store Session Identifiers in Local Storage]]
+* [[00000000-0000-0000-0000-00000052e67b|Do Not Store Authentication Information in Local Storage]]
+
+==Local Storage Checklist Items==
+
+* [[00000000-0000-0000-0000-000000358a18|Different Applications Are Hosted on Different Subdomains]]
+* [[00000000-0000-0000-0000-000000972b0b|Sensitive Information Is Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000007e3ee6|SessionStorage Is Used Instead of LocalStorage If Possible]]
+* [[00000000-0000-0000-0000-00000062c37e|Session Identifiers Are Not Stored in Local Storage]]
+* [[00000000-0000-0000-0000-0000004e1296|Authentication Information Is Not Stored in Local Storage]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

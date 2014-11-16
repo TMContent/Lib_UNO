@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-162307805" Content_Hash="-1295378338">
+  <Metadata>
+    <Id>6d36aa09-5b7f-4967-b3c7-661b860846e2</Id>
+    <Id_History>6d36aa09-5b7f-4967-b3c7-661b860846e2,31b23725-c50c-4801-af00-0a489dae5a9d,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Local Machine Credential Theft Bugs in Java</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology>Java</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Local Machine Credential Theft Bugs in Java</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>J2EE applications</li>
+  </ul>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>J2EE applications that authenticate their clients using a username and password combination must store these credentials somewhere within the application’s realm.<span></span>Some J2EE applications directly store credentials in a file or a database server while others allow browsers to store client credentials in the cache or browser’s history for future logins.<span></span>During a local machine credential attack, the attacker first gets access to the computer where credentials are stored and then reads the credentials to execute further attacks on the application.</p>
+  <p>Follow these steps to test for local machine credential theft bugs in J2EE:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Execute test cases</li>
+  </ul>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>First it is necessary to understand the anatomy of an attack scenario for local credential theft bugs in J2EE applications.</p>
+  <p>J2EE applications that deal with authentication keep a record of valid credentials in a credential store such as a file or a database in a local computer.<span></span>During local machine credential theft attacks, an attacker logs in to the computer used to store the target client’s J2EE application credentials and uses different methods to steal the credentials from the target computer.<span></span>Depending on how J2EE applications implement authentication, credentials may be stored in a file or a database server.<span></span>Additional credentials might be found in cache history and browser’s store.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>The attacker logs in to target computer (computer storing client credentials). </li>
+    <li>The attacker grabs the target client’s credentials from the credentials store, the cache history, or the browser’s store. </li>
+    <li>The attacker uses the target client’s credentials to access the J2EE application.</li>
+  </ol>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>Next it is necessary to review the different causes and countermeasures for local credential theft bugs.</p>
+  <h2>
+    <span>
+      <em>Permissions on Credential Stores</em>
+    </span>
+  </h2>
+  <p>J2EE applications that store credentials in a location accessible to any low-privileged users of the host computer are vulnerable to local machine credential attacks.<span>&amp;nbsp;</span>For instance, an application that stores credentials in the <i>c:\user_files</i> folder must make sure to set the appropriate permissions or Access Control Lists (ACLs) on this folder.<span>&amp;nbsp;</span>If the application uses the credential file <i>c:\user_files\credentials.txt</i> and doesn’t restrict its access to administrators or a low-privileged account that used only by the J2EE application (and not any logged-in user), the application allows any logged-in attacker to read the file and steal the credentials.<span></span>The same applies to a database table; a J2EE application that doesn’t set the permissions on the table used to store username and passwords allows any database server guest user to read and steal credentials from the database.</p>
+  <h2>
+    <span>
+      <em>Credentials in Clear Text</em>
+    </span>
+  </h2>
+  <p>Applications that need to store credentials must take the appropriate precautions so that if attackers steal client credentials, they can’t use them to log in to the target application.<span>&amp;nbsp;</span>Thus, it is recommended to store password verifiers in their encryption version as one-way hashes with an added cryptographic salt.<span></span>As a result, if the attacker executes a successful local credential theft attack, he or she will only be able to get the password’s hash but fail to get the actual password required to log in to the target application.[i]&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Keeping Credentials in the browser’s cache</em>
+    </span>
+  </h2>
+  <p>J2EE applications can choose to allow their clients to remember the password for future uses.<span></span>This option commonly appears as the “remember me next time” check box in the login form.<span>&amp;nbsp;</span>To avoid credential theft attacks, developers are encouraged to disallow this option by default and always require its clients to enter valid credentials.<span></span>This will avoid credentials&amp;nbsp;being stored in the browser’s cache for future use.</p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you’ve reviewed the theoretical aspects of local credential theft bugs, it is necessary to execute the following test cases to check if your application is vulnerable.</p>
+  <p>
+    <b>
+      <i>
+        <span>Test for insecure credential stores in file system</span>
+      </i>
+    </b>
+  </p>
+  <p>Follow these steps to test for insecure credentials in the file system:</p>
+  <ol>
+    <li>Log in to machine where credentials are stored using a low-privileged account. </li>
+    <li>Browse to folder/registry key used to store credentials. </li>
+    <li>Read credentials.</li>
+  </ol>
+  <p>Expected results:<span></span>The application is vulnerable if it allows a low-privileged user to read client credentials from the file system or registry.</p>
+  <h2>
+    <span>
+      <em>Test for credentials in browser’s cache</em>
+    </span>
+  </h2>
+  <p>Follow these steps to test for local credential theft in browser’s cache.</p>
+  <ol>
+    <li>Log in to target machine using a low privileged account. </li>
+    <li>Download an HTTP proxy tool such as Burp proxy. </li>
+    <li>Open web browser, and set web browser connection options to use HTTP proxy. </li>
+    <li>In proxy, turn intercept off. </li>
+    <li>Browse to application’s login page. </li>
+    <li>In proxy, turn intercept on. </li>
+    <li>Type the username of the target client.<span></span>A password may appear in hidden characters. </li>
+    <li>Submit login request.</li>
+  </ol>
+  <p>Expected results:<span></span>The application is vulnerable if the HTTP proxy shows the target client username and password in the intercepted login request.</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Local machine credential theft&amp;nbsp;attacks consist of logging in to the target computer (used to store credentials) and trying to recover the credentials of a legitimate user.<span> For protection, </span>J2EE applications that use authentication must&amp;nbsp; not to store credentials with poor permissions&amp;nbsp;or in clear text, as this allows for local machine credential theft attacks to be successful.<span>&amp;nbsp;</span>To test for credential theft attacks in your J2EE application, be sure to understand well the details of this bug’s attack scenarios as well as what causes it and how to protect against it.<span>&amp;nbsp;</span>Then execute the appropriate test cases depending on what credential store your J2EE application uses.<span></span>Make sure to execute an additional test case to attempt to recover credentials in the browser’s history using a low-privileged account.</p>
+  <div>
+    <br />
+    <div>
+      <p>[i]&amp;nbsp; <b>Chapter 2 - Threats and Countermeasures</b>.<span>&amp;nbsp; </span>.NET Framework Security. MSDN.<span>&amp;nbsp; </span><a href="http://msdn.microsoft.com/en-us/library/aa302418.aspx">http://msdn.microsoft.com/en-us/library/aa302418.aspx</a></p>
+    </div>
+  </div>
+  <h1>Java Cryptographic Storage Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/6e0918c1-90db-46d5-9f0e-8a98ddbcd7d5">Store Passwords Securely</a>
+    </li>
+    <li>
+      <a href="/article/b38a70c0-a014-4262-b3d6-69d6d4f0fe46">Do Not Store Plaintext Sensitive Data</a>
+    </li>
+    <li>
+      <a href="/article/66df6465-5476-4b55-90c8-ffbd7d556205">Use Strong Symmetric Encryption</a>
+    </li>
+    <li>
+      <a href="/article/f5cdd292-6f61-4584-b014-fc5134a3f9bc">Use Strong Asymmetric Encryption</a>
+    </li>
+    <li>
+      <a href="/article/1057099e-dd79-4f41-8b7e-36f00f1343e4">Use a Secure Key Storage Location</a>
+    </li>
+  </ul>
+  <h1>Java Cryptographic Storage Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/d74fe6bf-387f-4ff1-9edb-d0275eedffc0">Passwords Are Stored Securely</a>
+    </li>
+    <li>
+      <a href="/article/97bb3ed8-df73-478e-a310-d96b79678aef">Sensitive Data Is Encrypted</a>
+    </li>
+    <li>
+      <a href="/article/23019ede-9f30-4709-997d-586475a2e626">Strong Symmetric Encryption Is Used</a>
+    </li>
+    <li>
+      <a href="/article/14a46517-6c86-498e-8429-1cb5ca3ce7c1">Strong Asymmetric Encryption Is Used</a>
+    </li>
+    <li>
+      <a href="/article/08e76219-384d-4c5f-954e-09617f717558">A Secure Key Storage Location Is Used</a>
+    </li>
+  </ul>
+  <h1>Java Cryptographic Storage Code Example</h1>
+  <ul>
+    <li>
+      <a href="/article/11e7466f-001b-4c8d-b282-a3c12aa0588c">Use ESAPI Randomizer</a>
+    </li>
+  </ul>
+  <h1>Java Cryptographic Storage Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/6d36aa09-5b7f-4967-b3c7-661b860846e2">How to Test for Local Machine Credential Theft Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>
