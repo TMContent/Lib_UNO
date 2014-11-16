@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="810682170" Content_Hash="583537769">
+  <Metadata>
+    <Id>56445506-9e81-4e20-8562-52d11bf7408b</Id>
+    <Id_History>56445506-9e81-4e20-8562-52d11bf7408b,63dadf92-3537-47a8-9a3e-c1cf46129fb8,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Return Generic Error Pages with Harmless Messages to the Client</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Return Generic Error Pages with Harmless Messages to the Client</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Avoid using custom error pages to denote error states that are returned to the client. </p>
+  <h1>Why</h1>
+  <p>Exceptions contain debugging information that could constitute an information disclosure. Be careful with custom error pages they may also implicitly provide unintended information as a side effect.&amp;nbsp;&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>This&amp;nbsp;guideline is applicable whenever there are error pages to be returned&amp;nbsp;from an application. </p>
+  <h1>How</h1>
+  <p>Standardize the error pages, and scrutinize their design and presentation carefully to avoid inadvertent information disclosure. Avoid displaying debug information in error pages. See the related guidelines section that follows for more details. </p>
+  <h1>Problem Example</h1>
+  <p>Consider the following code. There are two defined error states: user is not valid for the given application, username/password combination is incorrect.</p>
+  <pre>// check<br />If(user_exists(&amp;#36;username))<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp; If(authentication_fails(&amp;#36;username, &amp;#36;password))<br />&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Display_error_page('username or password bad, please try again');<br />&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp; Else<br />&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //authentication succeeded&amp;#33; Login normally<br />&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;<br />Else<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp; Display_error_page('user does not exist, <br />&amp;#9;please &lt;a href="foobar.com/register.asp?uid='.clean(&amp;#36;username) . '"&gt;register&amp;#33;&lt;/a&gt;');<br />&amp;#125;&amp;nbsp; </pre>
+  <p>In the preceding example, the developer is clever; usernames that are not taken are presented with a URL to register for a new account using that username. But the error message for a valid user that enters a bad password is completely different&amp;#33; A subtle difference, but a keen observer will note that this enables them to discover valid accounts on the system. </p>
+  <h1>Solution Example</h1>
+  <pre>// check<br />If(user_exists(&amp;#36;username))<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp; If(authentication_fails(&amp;#36;username, &amp;#36;password))<br />&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Display_error_page('username or password bad, please try again');<br />&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp; Else<br />&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //authentication succeeded&amp;#33; Login normally<br />&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;<br />Else<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp; Display_error_page('username or password bad, please try again');<br />&amp;#125;</pre>
+  <p>The solution is rather simple; standardize the return message so that the client cannot discern these two states from the error message alone.</p>
+  <p>&amp;nbsp;NOTE: the preceding code segments are not production quality, in that there might be other avenues of attack involving parameter tampering, SQL injection, as well as others. The aforementioned examples serve only to demonstrate a point and should not be construed as secure given their present context.&amp;nbsp;</p>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/82840838-deed-4697-ad57-c6d1aafc9adf">Set the customErrors Mode to On to Prevent Detailed Error Messages</a>
+      <li>
+        <a href="/article/2e16a65a-25d2-4ea9-a513-e020d2408241">Global Error Handlers are used to Catch Unhandled Exceptions</a>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6c0bb66c-0fd6-4297-a2b6-d3cf399030fa</Id>
+    <Id_History>6c0bb66c-0fd6-4297-a2b6-d3cf399030fa,6989211b-457f-4dbe-b3d2-7ddfbdf17d58,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Parameterized APIs for Database Access</Title>
+    <Category>Database Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Parameterized APIs for Database Access</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* C++
+
+==What to Do==
+
+Use parameterized APIs to execute SQL queries. There are two ways to use parameterized APIs for database access: using prepared statements and using stored procedures. Prepared statements are generally more practical, if the database access driver supports them. Stored procedures are implemented by the database engine itself, but special care has to be taken to not concatenate user data with SQL within stored procedures themselves. Whichever approach you use, do not generate SQL statements directly from user input. 
+
+==Why==
+
+Use parameterized APIs to prevent SQL injection. This powerful attack is language independent, as it depends on the algorithm used to generate SQL strings passed to the database, and affects the database engine, not the actual application. The attacker embeds malicious SQL statements in user input, including escape sequences (such as the single quote (') or double quote (") characters). The malicious SQL statements, in turn, are embedded within the SQL query that is submitted to the database engine for execution. Successful exploitation allows an attacker to potentially compromise the entire database and often the underlying operating system. Parameterized APIs offer a simple yet efficient mitigation since they automatically contain user input in a non-escaped form, passing the input as parameters, much like a function call. By parameterizing input parameters and type-enforcing them, user input is effectively filtered. 
+
+==How==
+
+To use prepared statements to prevent SQL injection, follow these steps:
+
+# **Identify available database access APIs.** Determine what database access APIs are available to your application and whether they support prepared statements. The choice of APIs will often be dictated by the database engine used by the application. Most  database access APIs support prepared statements, but not all. All major database engines support stored procedures. 
+# **Choose whether to use prepared statements or stored procedures.** Prepared statements are usually more practical and simpler to use, but if support for them is not available, use stored procedures instead.
+# **Identify SQL queries.** Locate all SQL queries throughout your application.
+# **Identify the parameters in each SQL query.** After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data.
+# **Use paramaterized APIs for SQL queries.** Use your chosen APIs to execute each SQL query in your application.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

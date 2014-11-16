@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="2008345082" Content_Hash="-310382278">
+  <Metadata>
+    <Id>9722d1e5-90e6-4a92-8f41-67853f0f71b6</Id>
+    <Id_History>9722d1e5-90e6-4a92-8f41-67853f0f71b6,884d3af2-e91a-4568-867c-f65542771f6a,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Map Certificates with Windows Accounts</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Map Certificates with Windows Accounts</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Client certificates are not mapped to Windows accounts by default. Set the mapClientCertificateToWindowsAccount property to true to map certificates to Windows accounts.</p>
+  <p>Use the following steps to map certificates to Windows accounts:</p>
+  <ol>
+    <li>Select IIS vs Active Directory Mapping.<ul><li>IIS Mapping is useful if you need only a limited number of mappings or a different mapping on each WCF Service.<li>Use Active Directory mapping when the account mappings are identical on all IIS servers. Active Directory mapping is easier to maintain than IIS mapping because you only have to create the mapping in one location.</li></li></ul><li>Configure the IIS / Active directory for mapping the certificates.<br />Once you have enabled the client certificate mapping feature, set the mapClientCertificateToWindowsAccount property to true. </li></li>
+  </ol>
+  <blockquote>
+    <pre>&lt;serviceBehaviors&gt;<br />  &lt;behavior name="MyServiceBehaviorForWebHttp"&gt;</pre>
+    <pre>     &lt;serviceCredentials&gt;<br />      &lt;clientCertificate&gt;<br />       &lt;authentication mapClientCertificateToWindowsAccount="true" /&gt;<br />      &lt;/clientCertificate&gt;<br />     &lt;/serviceCredentials&gt;</pre>
+    <pre>  &lt;/behavior&gt;<br />&lt;/serviceBehaviors&gt;<br /></pre>
+  </blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on WCF with certificates, see &amp;#8220;Working with Certificates&amp;#8221; at <a href="http://msdn.microsoft.com/en-us/library/ms731899.aspx">http://msdn.microsoft.com/en-us/library/ms731899.aspx</a><li>For more information on mapping certificates to Windows accounts see, &amp;#8220;Map certificates to user accounts&amp;#8221; at <a href="http://technet2.microsoft.com/WindowsServer/f/?en/library/0539dcf5-82c5-48e6-be8a-57bca16c7e171033.mspx">http://technet2.microsoft.com/WindowsServer/f/?en/library/0539dcf5-82c5-48e6-be8a-57bca16c7e171033.mspx</a><li>For more information on mapping certificates to Active Directory see, &amp;#8220;Mapping Client Certificates with Directory Service Mapping&amp;#8221; at <a href="http://technet2.microsoft.com/windowsserver/en/library/7cce4299-28f2-45fa-8730-4e0cbe3be8561033.mspx?mfr=true">http://technet2.microsoft.com/windowsserver/en/library/7cce4299-28f2-45fa-8730-4e0cbe3be8561033.mspx?mfr=true</a><li>For more information on certificate mapping strategies see, &amp;#8220;Mapping Strategies&amp;#8221; at <a href="http://technet2.microsoft.com/windowsserver/en/library/aa61c564-1599-4414-a12d-2f64786f6ec31033.mspx?mfr=true">http://technet2.microsoft.com/windowsserver/en/library/aa61c564-1599-4414-a12d-2f64786f6ec31033.mspx?mfr=true</a><br /></li></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

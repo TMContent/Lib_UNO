@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="889741346" Content_Hash="-903129662">
+  <Metadata>
+    <Id>31a429d7-7d9e-41a9-83c0-39fb8409e1bf</Id>
+    <Id_History>31a429d7-7d9e-41a9-83c0-39fb8409e1bf,b4d91cc7-2c44-4e7a-8aae-64c47eb1702d,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Sensitive Data Is Encrypted in the Database</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Encrypted in the Database</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that any sensitive data that you store in a database is encrypted.</p>
+  <h1>Why</h1>
+  <p>Encrypted data in the SQL Server is a final line of defense. Even if an attacker successfully gains access to a database, the data still must be decrypted. Although key management and encryption overhead add to the cost and complexity of an application, at-rest data encryption can greatly increase application security. Furthermore, it is or will be required for some classes of personally identifiable information (such as credit card records) and can reduce corporate liability even when not required.</p>
+  <h1>How to Check</h1>
+  <p>Take the following steps to verify that sensitive data stored in your&amp;nbsp;database is encrypted:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that the appropriate encryption keys have been created.</strong>
+      </p>
+      <ul>
+        <li>
+          <p>Ensure that the Database Master Key is set up.<strong></strong>The SQL Server takes care of creating and managing the Service Master Key but the Database Master Key needs to be created by the application. This key is encrypted with triple DES and stored in&amp;nbsp;two locations:</p>
+          <ul>
+            <li>
+              <p>one storage location is in the <strong>sys.symmetric_keys</strong> database table, encrypted by the supplied password</p>
+              <li>
+                <p>the second is the <strong>sys.databases</strong> table in the master database, encrypted using the Service Master Key. <br /><br />Check these locations to verify that the Database Master Key has been created.</p>
+              </li>
+            </li>
+          </ul>
+          <li>
+            <p>Verify that sub-keys have been created for application use. Depending on the encryption you need, check that you have created any of the following types of keys: </p>
+            <ul>
+              <li>Asymmetric keys, which are used for public key cryptography with a public and private key pair. <li>Symmetric keys, which are used for shared secrets where the same key both encrypts and decrypts data. <li>Certificates, which are essentially wrappers for a public key.</li></li></li>
+            </ul>
+            <li>
+              <p>List all keys within the current database by selecting all rows from the system catalog view named <strong>symmetric_keys</strong> to check that you have created the intended keys: </p>
+            </li>
+          </li>
+        </li>
+      </ul>
+      <blockquote>
+        <blockquote>
+          <pre>SELECT &amp;#42; FROM sys.symmetric_keys;</pre>
+        </blockquote>
+      </blockquote>
+      <li>
+        <strong>Ensure that data in the database is encrypted. </strong>Check that the data in the database has been encrypted with the keys created, using the appropriate T-SQL functions that support encryption. For example, check that the functions <strong>EncryptByKey</strong>, <strong>DecryptByKey</strong>, <strong>EncryptByCert</strong> and <strong>DecryptByCert</strong> have been used in the INSERT and SELECT statements, and that the fields being encrypted in tables are of type <strong>varbinary</strong>. </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An e-commerce site uses the following definition for their customer table in the database: </p>
+  <pre>CREATE TABLE Customer <br />(    CustId int,<br />     name nvarchar(30),<br />     City varchar(20),<br />     CreditCardType varchar(10),<br />     CreditCardNumber varchar(19),<br />     Notes varchar(4000)<br />) GO</pre>
+  <p>And this query to insert new customers:</p>
+  <pre>INSERT INTO Customer VALUES<br /> (1, 'Don Kiely', 'Fairbanks', 'Visa',<br />  '1234-5678-8765-4321', 'This customer is a real flake. Don''t trust him&amp;#33;')</pre>
+  <p>When the site suffers a security breach via a SQL injection vulnerability, their entire customer database, including all the credit card numbers, is lost to the attacker.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information, see <a href="http://msdn.microsoft.com/en-us/magazine/cc163771.aspx">Keep Bad Guys at Bay with the Advanced Security Features in SQL Server 2005</a>. <li>For more information about key creation and use, see <a href="http://aspnet.4guysfromrolla.com/articles/022107-1.aspx">Using Symmetric Encryption in a SQL Server 2005 Database</a></li></li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/51b6776e-c771-4d63-b77d-b16ba295a62f">Guideline: Encrypt Sensitive Data in the Database </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

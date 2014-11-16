@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1655369421" Content_Hash="-1534624240">
+  <Metadata>
+    <Id>8d8c24b0-096b-43f4-9391-9b293313a0e8</Id>
+    <Id_History>8d8c24b0-096b-43f4-9391-9b293313a0e8,0f3bb6f1-9058-463f-a835-1106d793193b,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>All Input Is Validated</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Design</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>All Input Is Validated</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that all input is validated. Validation routines should check for length, range, format, and type. Validation should check first for known valid and safe data and then for malicious, dangerous data. </p>
+  <h1>Why</h1>
+  <p>Malicious input is the single largest cause of vulnerabilities, and in the most general sense, is the root cause of almost every issue.&amp;nbsp; The only way to ensure safety is by a defense in depth, default deny policy that starts with the fundamental supposition that all input is malicious until proven otherwise. </p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that all input is validated:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Find all input parameter sources.</strong> During design time identify all of the potential sources of input parameters to your application. Scour the source code to discover sources of input that may have been missed in the design.&amp;nbsp; Compile a list that you can use in the following steps. </p>
+      <li>
+        <p>
+          <strong>Trace data from source to sink.</strong> Trace each source of input through your application until you find its ultimate destination.&amp;nbsp; The final sink may be in memory, on the hard drive, sent over the network or stored in a database.&amp;nbsp; </p>
+        <li>
+          <p>
+            <strong>Identify validation routines.</strong> Each input source should have a data validation routine associated with it.&amp;nbsp; Ideally the validation will occur as soon after the input reaches your application as possible.&amp;nbsp; Shared validation routines are better than creating many spread throughout your code base, check for consolidation of routines to aid testing and reduce the chance of one-off bugs.&amp;nbsp; If an input source does not have a validation routine associated with it, flag it for fixing.</p>
+          <li>
+            <p>
+              <strong>Ensure quality of validation routines.</strong> Validation routines should check for length, range, format, and type. Validation should check first for known valid and safe data and then for malicious, dangerous data. Do not rely on filtering out all malicious data, it is too easy to miss something. </p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following steps to assure that all input is validated:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Centralize validation.</strong> When you develop an input- and data-validation architecture for your application, consider developing a library of validation routines in all but the smallest applications. This will help ensure that data is validated in a consistent way throughout the application and provide a single point of maintenance. You need to trace data from entry point to exit point to know how it should be validated. A good library includes routines for all of the different types of validation you need to apply, and these can be used in combination if necessary. </p>
+      <li>
+        <p>
+          <strong>Constrain, reject, and sanitize input.</strong> Constrain what you allow from the beginning. It is much easier to validate data for known valid types, patterns, and ranges (using a white list) than it is to validate data by looking for known bad characters (using a black list). When you design your application, you know what your application expects. The range of valid data is generally a more finite set than the range of potentially malicious input. However, for added defense you might want to reject known bad input and then sanitize the input. Constrain input for type, length, format, and range. Use regular expressions to help constrain text input. Use strong data typing where possible. </p>
+        <li>
+          <p>
+            <strong>Identify trust boundaries.</strong> Ensure that entry points between trust boundaries validate all input data explicitly. Make no assumptions about the data. The only exception is inside a routine that you know can only be called by other routines within the same trust boundary.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/3de41277-0cc1-4ebc-8dd7-e96d161aa0ef">Validate All Input</a>
+      <li>
+        <a href="/article/004526a6-5b2f-4094-94fa-a80d818c0a41">Canonicalize All Input Used to Identify Resources</a>
+        <li>
+          <a href="/article/62ed6d49-ca67-492a-b3ed-14c18bb8d906">Use Helper Classes to Assure Input Validation</a>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="235563839" Content_Hash="-685556687">
+  <Metadata>
+    <Id>740a1606-d091-4a93-bfd8-f0d4226adbf1</Id>
+    <Id_History>740a1606-d091-4a93-bfd8-f0d4226adbf1,435d60e8-af77-4008-89b8-70d2c447d892,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Force Re-authentication When Executing Critical Functionality</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Force Re-authentication When Executing Critical Functionality</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Force the user to re-authenticate when executing security-critical functionality including, but not limited to, password changes, account modifications, and critical transactions.</p>
+  <h1>Why</h1>
+  <p>Forcing the user to re-authenticate verifies the user's decision to execute the given functionality and preserves the application's integrity in the event that a user's account has been compromised via session hijacking.</p>
+  <h1>When</h1>
+  <p>Force re-authentication prior to executing security-critical functionality.</p>
+  <h1>How</h1>
+  <p>Follow these steps when forcing re-authentication:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify critical functionality:</strong> Evaluate your application's design and requirements and determine what parts and resources of your application are very important to your organization's business model or your application's security architecture. This could include activities such as financial transactions or resetting user passwords. Your application should force re-authentication at these points in the code. </p>
+      <li>
+        <p>
+          <strong>Adopt re-authentication mechanism:</strong> Establish a mechanism that requires the user to verify their authenticity:</p>
+        <ul>
+          <li>
+            <p>
+              <strong>Current password:</strong> The user uses their current password to confirm the identity. This technique ensures that the given user is aware of the action to be performed and holds responsibility for executing it. </p>
+            <li>
+              <p>
+                <strong>CAPTCHA:</strong> CAPTCHA are mechanisms designed to ensure that a human, not an automated script, is using the system. Using a CAPTCHA should be seen as a way of augmenting a password in this kind of situation, not a way of replacing it. Many CAPTCHA systems embed distorted letters or numbers into displayed images which the user must enter. There are a number of problems with many CAPTCHA systems, so they should not be relied on too heavily. First, many graphical CAPTCHAs can be trivially broken by optical character recognition systems, and ensuring that a CAPTCHA is sufficiently strong to be useful without having too high of a failure rate for real users is difficult. If CAPTCHAs are reused, the attacker can simply record the session IDs of CAPTCHAs with known values and replay them. CAPTCHAs can also be broken by using a man in the middle technique where the image is saved and forwarded to another site controlled by the attacker. An unsuspecting user of that site solves the CAPTCHA and the attacker forwards the answer on to the victim site. CAPTCHAs also create accessibility problems for users, as blind and sometimes even color-blind individuals can find them impossible. If you choose to implement a CAPTCHA, be aware of the trade-offs involved and ensure that the system you use is appropriately protected against the attacks you expect to see.</p>
+            </li>
+          </li>
+        </ul>
+        <li>
+          <p>
+            <strong>Enforce the re-authentication mechanism:</strong> Once the critical functionality is identified and the re-authentication mechanism is established, enforce the re-authentication mechanism at the appropriate places inside the code.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code processes a payment transaction. Unfortunately, the code executes the payment without verifying that the user is aware of the transaction.</p>
+  <pre>public void ProcessPayment(PaymentInfo paymentInfo)<br />&amp;#123;    <br />  // Prepare and execute the transaction<br />&amp;#125;</pre>
+  <h1>Solution Example</h1>
+  <p>The following code processes a payment transaction. Before executing the payment, the code verifies that the user is aware of the transaction by re-authenticating him.</p>
+  <pre>public void ProcessPayment(PaymentInfo paymentInfo, string username, string password)<br />&amp;#123;    <br />  MembershipProvider membershipProvider = Membership.Provider;     <br />  if (membershipProvider.ValidateUser(username, password))    <br />  &amp;#123;        <br />    // Prepare and execute the transaction    <br />  &amp;#125;<br />&amp;#125;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To read more about authentication best practices, see: <a href="http://www.owasp.org/index.php/Guide_to_Authentication">Guide to Authentication</a> available from OWASP. <li>For more information on CAPTCHA, see: <a href="http://en.wikipedia.org/wiki/Captcha">CAPTCHA</a> in Wikipedia and the <a href="http://www.captcha.net/">official site</a> for CAPTCHA. <li>To learn more about the challenges of implementing CAPTCHA and the approaches to resolve them, see: <a href="http://www.15seconds.com/issue/040202.htm">Fighting Spambots with .NET and AI</a> and <a href="http://www.pcmag.com/article2/0,4149,1306805,00.asp">CAPTCHA-ing the Spammer</a>. <li>To learn how to implement CAPTCHA, see <a href="http://www.aspnetworld.com/articles/2004030101.aspx">HOW TO: Implement CAPTCHA with ASP.NET</a> and <a href="http://www.codeproject.com/aspnet/CaptchaImage.asp">CAPTCHA Image</a>.</li></li></li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/fc7f567f-bbfc-434c-aaa5-23d79b458605">Guideline: Separate Account Administration from the Main Application Interface</a>
+      <li>
+        <a href="/article/862e51f1-a026-40f9-826b-7a65fa5dc563">Attack: HTTP Session Hijacking Attack</a>
+        <li>
+          <a href="/article/4b441912-33f8-43cc-b0c3-663c74700c99">Checklist Item: Re-Authentication is Enforced when Executing Critical Functionality </a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

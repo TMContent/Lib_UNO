@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000002ca360</Id>
+    <Id_History>00000000-0000-0000-0000-0000002ca360,b3efe307-3bdc-4a4a-bd2c-8b10f485bef0,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Strong Session Identifiers Are Used</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Strong Session Identifiers Are Used</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Verify that default ASP.NET session identifiers are used.
+
+==Why==
+
+Using strong session identifiers prevents attackers from easily guessing session ids and taking over users' sessions. If an attacker hijacks the session he/she can perform the same functions as the logged in user. This will lead to a compromise of user account and in case the user is an administrator, the whole application.
+
+==How to Check==
+
+To make sure that default ASP.NET session identifiers are used.
+
+# **Load the application.** Open the application in a web browser. Log in to the application. Any other way to start a session is okay, but logging in is a pretty sure way to start a session for any reasonably designed application.
+# **Examine the session identifier.** Use the browser plug-in or settings page that allows viewing the cookies. Make sure the //ASP.NET_SessionId// cookie is present. This cookie indicates that ASP.NET session state is used. Absence of this cookie should be alarming.
+# **(Optional) Review application code.** The presence of the ASP.NET session cookie is a strong indicator that the default session ID generation algorithm is being used. To be absolutely sure, review the application code that handles session state. Make sure that it either uses the default session ID generation algorithm or that it generates a strong random session identifier. The definition of what constitutes a strong session identifier is different for different standards. The default ASP.NET session ID generation algorithm has 2^120 possibilities. This number can be used as a benchmark for any custom algorithms that may be used. Another important consideration is the source or sources of entropy. ASP.NET uses multiple sources of entropy to generate session IDs and overall it is best to just use the default algorithm.
+
+==How to Fix==
+
+ASP.NET uses strong session IDs by default. Please, make sure that your application uses the default ASP.NET session IDs. Rewrite the application session state handling code, if necessary, to use the default ASP.NET session ID generation algorithm. Session cookies will automatically be created if ASP.NET session state is used.
+
+Even though it is strongly advised against, if your application must use a custom session ID, make sure that the ID generation algorithm is sufficiently random to make it difficult to predict the IDs. The default ASP.NET session ID has 2^120 possible values. Using a custom ID generation algorithm, try to get at least as much entropy as the default ASP.NET algorithm.]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="418387725" Content_Hash="-1366669729">
+  <Metadata>
+    <Id>55679e3e-7be2-40fe-84fb-e152ebaf03f0</Id>
+    <Id_History>55679e3e-7be2-40fe-84fb-e152ebaf03f0,b0931da3-b77a-4afe-ad72-89d4fb86bd4a,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Hash a Password Using a Random Salt</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Hash a Password Using a Random Salt</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C#</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to demonstrate how to implement secure password persistence using a cryptographic hashing algorithm with a randomly generated "salt" (or "nonce") value. Cryptographic hashing algorithms are one-way encryption algorithms used to store sensitive data in a non-readable format. A salt can be used in conjunction with cryptographic hashing to add additional entropy to encrypted values and to protect against pre-computed hash or dictionary attacks on a compromised hash value.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Protect user credentials <li>Avoid storing user passwords <li>Protect against certain brute-force attacks on a compromised hash value <li>Generate a cryptographically random value for the salt that cannot be predicted <li>Add enough entropy to the password hash to increase the difficulty of a cracking attempt exponentially</li></li></li></li></li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application makes use of a dedicated user account management system and stores passwords <li>Application stores a "Secret Question/Answer" credential for password reset operations <li>Application requires storage of highly sensitive data (social security number, credit card number, etc) but does not need to retrieve that data.</li></li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>using System.Security.Cryptography;</pre>
+  <pre>...</pre>
+  <pre>public static byte&amp;#91;&amp;#93; CreatePasswordHash(string password)&amp;#123;<br />    // Convert the string password value to a byte array<br />    byte&amp;#91;&amp;#93; passwordData = UnicodeEncoding.ASCII.GetBytes(password);<br />    // Create a 4-byte salt using a cryptographically secure random number generator<br />    byte&amp;#91;&amp;#93; saltData = new byte&amp;#91;4&amp;#93;;<br />    RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();<br />    rng.GetNonZeroBytes(saltData);<br />     // Append the salt to the end of the password<br />    byte&amp;#91;&amp;#93; saltedPasswordData = new byte&amp;#91;passwordData.Length &amp;#43; saltData.Length&amp;#93;;<br />    Array.Copy(passwordData, 0, saltedPasswordData, 0, passwordData.Length);<br />    Array.Copy(saltData, 0, saltedPasswordData, passwordData.Length, saltData.Length);<br />    // Create a new SHA-1 instance and compute the hash <br />    SHA1Managed sha = new SHA1Managed();<br />    byte&amp;#91;&amp;#93; hashData = sha.ComputeHash(saltedPasswordData);<br />    // Optional - add salt bytes onto end of the password hash for storage<br />    bool APPEND_SALT_TO_HASH = true;    if (APPEND_SALT_TO_HASH)<br />    &amp;#123;<br />     &amp;#9;byte&amp;#91;&amp;#93; hashSaltData = new byte&amp;#91;hashData.Length &amp;#43; saltData.Length&amp;#93;;<br />        Array.Copy(hashData, 0, hashSaltData, 0, hashData.Length);<br />        Array.Copy(saltData, 0, hashSaltData, hashData.Length, saltData.Length);<br />        return hashSaltData;<br />    &amp;#125;<br />    else<br />    &amp;#123;<br />        return hashData;<br />    &amp;#125;<br />&amp;#125;</pre>
+  <h1>Problem Example</h1>
+  <p>The following code snippet shows password hashing without the use of a salt and using a weaker hashing algorithm.</p>
+  <pre>// password is obtained from the user as a C# string<br />string password = Request.Form&amp;#91;"password"&amp;#93;;<br />// Convert the string password value to a byte<br /> arraybyte&amp;#91;&amp;#93; passwordData = UnicodeEncoding.ASCII.GetBytes(password);<br />// Create a new MD5 instance and compute the hash<br /> MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();<br />byte&amp;#91;&amp;#93; hashData = md5.ComputeHash(passwordData);</pre>
+  <ul>
+    <li>Hash values are vulnerable to pre-computed hash attacks <li>Depending on password value, password hash may also be vulnerable to a dictionary attack <li>MD5 offers less encryption strengtgh than SHA-1 and has recently been "broken" by cryptography researchers</li></li></li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Security.Cryptography;</pre>
+  <p>Execute a test encryption and comparison of a salted password hash using the following test case methods:</p>
+  <pre>static void Main(string&amp;#91;&amp;#93; args)<br />&amp;#123;<br />    // Create a Hash and compare to two subsequent hashes<br />    byte&amp;#91;&amp;#93; hash = CreatePasswordHash("foobar");<br />    Console.WriteLine("\nCreated new salted hash for 'foobar'");<br />    Console.WriteLine("foobar produces same hash:\t" &amp;#43; <br />&amp;#9;&amp;#9;ComparePasswordToHash("foobar", hash).ToString());<br />    Console.WriteLine("fo0bar produces same hash:\t" &amp;#43; <br />&amp;#9;&amp;#9;ComparePasswordToHash("f0obar", hash).ToString());<br />&amp;#125;<br />public static bool ComparePasswordToHash(string password, byte&amp;#91;&amp;#93; hashData)<br />&amp;#123;<br />    // First, pluck the four-byte salt off of the end of the hash<br />    byte&amp;#91;&amp;#93; saltData = new byte&amp;#91;4&amp;#93;;<br />    Array.Copy(hashData, hashData.Length - saltData.Length, saltData, 0, saltData.Length);<br />    // Convert Password to bytes<br />    byte&amp;#91;&amp;#93; passwordData = UnicodeEncoding.ASCII.GetBytes(password);<br />    // Append the salt to the end of the password<br />    byte&amp;#91;&amp;#93; saltedPasswordData = new byte&amp;#91;passwordData.Length &amp;#43; saltData.Length&amp;#93;;<br />    Array.Copy(passwordData, 0, saltedPasswordData, 0, passwordData.Length);<br />    Array.Copy(saltData, 0, saltedPasswordData, passwordData.Length, saltData.Length);<br />    // Create a new SHA-1 instance and compute the hash<br />     SHA1Managed sha = new SHA1Managed();<br />    byte&amp;#91;&amp;#93; newHashData = sha.ComputeHash(saltedPasswordData);<br />    // Add salt bytes onto end of the password hash for storage<br />    byte&amp;#91;&amp;#93; newHashSaltData = new byte&amp;#91;newHashData.Length &amp;#43; saltData.Length&amp;#93;;<br />    Array.Copy(newHashData, 0, newHashSaltData, 0, newHashData.Length);<br />    Array.Copy(saltData, 0, newHashSaltData, newHashData.Length, saltData.Length);<br />    // Compare and return<br />    return (Convert.ToBase64String(hashData).Equals(Convert.ToBase64String(newHashSaltData)));<br />&amp;#125;</pre>
+  <h1>Expected Result</h1>
+  <pre>Created new salted hash for 'foobar'foobar produces same hash:      True<br />fo0bar produces same hash:      False</pre>
+  <h1>More Information</h1>
+  <p>Password hash and salt values should always be securely protected in storage. An attacker able to compromise a specific hash and salt value from a database may succeed in using other types of brute-force attacks against the compromised hash. In the example given, the four-byte salt would require an attacker to maintain 4.3 trillion values for every given plaintext value. Assuming the victim required passwords of only 4 alphabetical characters in length with no other complexity requirements (a very weak password policy by our standards), defeating a four-byte salt would require the attacker to have a database of 2 x 10&amp;#94;15 precomputed hashes handy. Assuming each of these hashes only required one byte to store, this would require 2 petabytes of storage. </p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

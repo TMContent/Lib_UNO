@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>93b69439-8607-4b3b-af6a-70afa775afd3</Id>
+    <Id_History>93b69439-8607-4b3b-af6a-70afa775afd3,93095bef-9fc0-4510-8a75-92f09465eb59,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Do Not Use Redirects or Forwards if Possible</Title>
+    <Category>Redirects and Forwards</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Use Redirects or Forwards if Possible</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">What to Do</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Avoid using redirects or forwards if possible.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Why</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Redirects or forwards may be manipulated by an attacker to create hyperlinks that appear to point to legitimate sites, but actually point to attacker-controlled malicious pages. This technique is often used by phishers to trick people into trusting a fake web site.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">When</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Use this guideline when writing a web application that uses redirects or forwards. Avoid using redirects or forwards in web applications, if possible.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">How</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Perform the following actions to avoid using redirects or forwards:</p>
+  <ol style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Enumerate redirects and forwards.</strong>&amp;nbsp;Review application code to find all redirects and forwards used by the application.</p>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Review application design.</strong>&amp;nbsp;Determine how redirects and forwards figure into the application design. Consider making design changes to remove the need for redirects and forwards.</p>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Remove redirects or forwards.</strong>&amp;nbsp;Remove the redirects and forwards that are not necessary after changes to the application design.</p>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
+        <strong style="margin: 0px; padding: 0px;">Secure the remaining redirects or forwards.</strong>&amp;nbsp;If there appears to be no reasonable way to get rid of redirects or forwards, use related guidelines to secure the remaining redirects or forwards.</p>
+    </li>
+  </ol>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Problem Example</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Consider an on-line banking application that has an insecure redirect:</p>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <a href="http://www.onlinebank.com/redirect?url=[destination]">
+      <font color="#333399">
+        <b>http://www.onlinebank.com/redirect?url=[destination</b>
+      </font>]</a>
+  </p>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">A phisher may create the following hyperlink to point to his site and send it in spam messages to millions of people:</p>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
+    <a href="http://www.onlinebank.com/redirect?url=www.phisher.com/">
+      <font color="#333399">
+        <b>http://www.onlinebank.com/redirect?url=www.phisher.com</b>
+      </font>/</a>
+  </p>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">When a user sees a link that appears to point to his bank at onlinebank.com in an e-mail message, he clicks that link and sees a web site that looks exactly like the bank's, but is actually a phishing web site used to steal authentication credentials. The user enters his account number and PIN into the web page, receives an error message telling him to try again, and is redirected to the bank's real site. After entering his credentials again, the user successfully views his account. However, the phisher now has the user's online banking information.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Solution Example</h1>
+  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">The best solution to unvalidated redirects or forwards is to not use redirects or forwards at all. Considering the problem example above, a simple solution would be to remove the redirect.asp page after making the necessary changes to the application design.</p>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">Additional Resources</h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-size: small; font-weight: normal;">
+      <li style="margin: 0px; padding: 0px;">For more information about unvalidated redirects and forwards, please see&amp;nbsp;<a href="http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153); font-weight: bold;">http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards</a></li>
+    </ul>
+  </h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Redirects and Forwards Guidelines</h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <div style="margin: 0px; padding: 0px; font-size: small; font-weight: normal;">
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; background-color: rgb(255, 255, 255);">
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="b12f2cc4-e6ee-4577-9b13-84763a721803" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Calculate Destinations of Redirects and Forwards Without User Input</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="353bbdfb-3d1e-494f-978c-e581f128ed4a" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Use Mapping Values When Redirecting on User Input</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="a9d0919d-9630-4cce-87b0-5861662dfd2a" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Validate Destinations of Redirects and Forwards</a>
+          </b>
+        </li>
+      </ul>
+    </div>
+  </h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Redirects and Forwards Checklists</h1>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <div style="margin: 0px; padding: 0px; font-size: small; font-weight: normal;">
+      <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; background-color: rgb(255, 255, 255);">
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="3df8ba30-ea80-426f-b30a-5737a601a206" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Redirects and Forwards Are Not Used Unless Necessary</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="29aab3c9-027a-4d80-9963-79ea6077a61d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Destinations of Redirects and Forwards Are Calculated Without User Input</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="1a4d7984-11a7-4d95-9c48-3d44cc22800b" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Mapping Values Are Used for Redirects and Forwards</a>
+          </b>
+        </li>
+        <li style="margin: 0px; padding: 0px;">
+          <b style="margin: 0px; padding: 0px;">
+            <a href="3e73a590-557d-49d8-be77-09fdea2cb64c" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153);">Destinations of Redirects and Forwards Are Validated</a>
+          </b>
+        </li>
+      </ul>
+    </div>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

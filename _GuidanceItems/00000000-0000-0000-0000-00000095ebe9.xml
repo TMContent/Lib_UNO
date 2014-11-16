@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000095ebe9</Id>
+    <Id_History>00000000-0000-0000-0000-00000095ebe9,f2c5318d-e9a6-4a88-8950-23ace118c934,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Only Trusted Domains Are Allowed in the Access-Control-Allow-Origin Header</Title>
+    <Category>CORS</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Only Trusted Domains Are Allowed in the Access-Control-Allow-Origin Header</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Check For==
+
+Verify that only only specific trusted domains are allowed when using the Access-Control-Allow-Origin header.
+
+==Why==
+
+Only specific trusted domains should be allowed when using the Access-Control-Allow-Origin header to prevent unauthorized sites from accessing the resource. 
+
+It is possible to use the "*" as the wildcard that allows any site to access a resource when using the Access-Control-Allow-Origin. This is discouraged, because it might allow an attacker to hijack the application if the user visits a malicious page or is exposed to a XSS attack. Specifically, an attacker might cause the application to load malicious data that presents incorrect information to the user via the XMLHttpRequest API.
+
+==How to Check==
+
+To verify that only specific trusted domains are allowed when using the //Access-Control-Allow-Origin// header:
+
+# **Identify code that sends //Access-Control-Allow-Origin// headers.** Search the application code for //Access-Control-Allow-Origin// to find code that sends those headers. Create a spreadsheet to list all code that sends //Access-Control-Allow-Origin// headers.  Note that the functions for doing so are different on different platforms. **In PHP**, the //header// function is used to send custom headers, but it would be more practical to search for //Access-Control-Allow-Origin// in PHP applications. **In Java**, headers are added using the //allowedOrigins// HTTP filter in //web.xml// files; technically, this is not code, but the principle is the same. In Java, it would be most practical to search for //allowedOrigins// in //web.xml// files. It is also possible to send headers using //response.addHeader// in Java, so searching the code for //Access-Control-Allow-Origin// is a good idea. **In ASP.NET**, the //Response.Headers.Add// method can be used to add custom headers, and again it would be more practical to search for //Access-Control-Allow-Origin//. 
+# **Define trusted domains.** For each piece of code that sends the //Access-Control-Allow-Origin// header in the spreadsheet, define all trusted domains that are authorized to access the page that sends that header. If the application has to determine these domains at run-time, document how.
+# **Verify that trusted domains are specified.** For each piece of code that sends the //Access-Control-Allow-Origin// header, make sure that it specifies the corresponding trusted domain(s) as specified in the spreadsheet.
+
+==How to Fix==
+
+To allow only specific trusted domains when using the //Access-Control-Allow-Origin// header:
+
+# **Identify code that sends //Access-Control-Allow-Origin// headers.** Search the application code for //Access-Control-Allow-Origin// to find code that sends those headers. Create a spreadsheet of all code that sends //Access-Control-Allow-Origin// headers.   Note that the functions for doing so are different on different platforms. **In PHP**, the //header// function is used to send custom headers, but it would be more practical to search for //Access-Control-Allow-Origin// in PHP applications. **In Java**, headers are added using the //allowedOrigins// HTTP filter in //web.xml// files. Technically, this is not code, but the principle is the same. In Java, it would be most practical to search for //allowedOrigins// in //web.xml// files. It is also possible to send headers using //response.addHeader// in Java, so searching the code for //Access-Control-Allow-Origin// is a good idea. **In ASP.NET**, the //Response.Headers.Add// method can be used to add custom headers, and again it would be more practical to search for //Access-Control-Allow-Origin//. 
+# **Define trusted domains.** For each piece of code that sends the //Access-Control-Allow-Origin// header in the spreadsheet, define all trusted domains that are authorized to access the page that sends that header. If the application has to determine these domains at run-time, document how.
+# **Specify trusted domains in //Access-Control-Allow-Origin// headers.** For each piece of code that sends the //Access-Control-Allow-Origin// header, change it to specify the trusted domain(s) as documented in the spreadsheet. If multiple domains are authorized, the header needs to be sent multiple times, once for each domain. If trusted domains have to be determined at run-time by the application, add corresponding code to the application. If trusted domains have to be a configurable option, add corresponding code for that.
+
+==CORS Guidelines==
+
+* [[00000000-0000-0000-0000-000000690310|Allow Only Trusted Domains in the Access-Control-Allow-Origin Header]]
+* [[00000000-0000-0000-0000-0000000a3746|Validate URLs Passed to XMLHttpRequest.open]]
+
+==CORS Checklist Items==
+
+* [[00000000-0000-0000-0000-00000095ebe9|Only Trusted Domains Are Allowed in the Access-Control-Allow-Origin Header]]
+* [[00000000-0000-0000-0000-0000000be99d|URLs Passed to XMLHttpRequest.open Are Validated]]
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

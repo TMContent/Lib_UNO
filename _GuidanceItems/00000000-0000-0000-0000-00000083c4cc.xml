@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000083c4cc</Id>
+    <Id_History>00000000-0000-0000-0000-00000083c4cc,06aeed4b-19f3-472b-8638-7fd2a9f655ad,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Do Not Pass Code to Web Workers to eval()</Title>
+    <Category>Web Workers</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Do Not Pass Code to Web Workers to eval()</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Remove all code that has Web Workers execute stored user data as code.
+
+==Why==
+
+Passing code to Web Workers for evaluation might introduce a DOM-based XSS vulnerability. If user data is executed as code by Web Workers, it is possible for an attacker to supply malicious code to be executed in other users' sessions. In such a scenario, Web Workers could be used to perform a denial of service (DoS) attack within the browsers of the target users, or to carry out actions on behalf of the target users within the application. 
+
+==How==
+
+To remove all code that has Web Workers execute stored user data as code:
+
+# **Identify all Web Worker scripts.** Create a spreadsheet to list all the scripts used by Web Workers.
+# **Find all code that calls the eval function.** For each script used by Web Workers, create a spreadsheet to list all code that uses the eval function.
+# **Examine code that calls the eval function.** Code that calls the eval function should always be examined closely, because it's a dangerous function. Review each call to the eval function to identify whether it executes user-supplied data. Create a spreadsheet of all calls to eval that execute user-supplied data.
+# **Implement alternatives.** For each instance where eval is used to execute user-supplied data, consider other ways to implement the same functionality. If there are no other ways, that functionality will probably need to be removed altogether. The risk of DOM-based XSS has to be weighed against the value of this functionality and the decision has to be made by the development team. It is recommended to remove the dangerous functionality.
+# **Remove code that executes stored user data.** Go through the spreadsheet of all instances where eval is used to execute user-supplied data and remove the code that makes these dangerous function calls. In some cases, entire features may need to be removed because of this, but usually not.
+
+==Web Worker Guidelines==
+
+* [[00000000-0000-0000-0000-00000083c4cc|Do Not Pass Code to Web Workers to eval()]]
+* [[00000000-0000-0000-0000-00000006a783|Validate Data Received by Web Workers]]
+
+==Web Worker Checklist Items==
+
+* [[00000000-0000-0000-0000-000000392041|Web Workers Do Not eval() Data Pased to Them]]
+* [[00000000-0000-0000-0000-0000002f59fd|Data Received by Web Workers Is Validated]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

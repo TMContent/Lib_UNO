@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000060ef71</Id>
+    <Id_History>00000000-0000-0000-0000-00000060ef71,8f73db09-b08e-4bfb-abcd-b5a8430a0635,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Store Encryption Keys Using Protected Storage APIs</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Store Encryption Keys Using Protected Storage APIs</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Do==
+
+Store encryption keys in registry and protect them with DPAPI.
+
+==Why==
+
+Encryption keys should be stored using DPAPI to prevent them from being recovered by an attacker if the attacker gains the ability to read arbitrary files on the server. Encryption is a defense in depth measure. Encryption really comes into play once the attacker has gained access to the stored encrypted data. If the encryption keys are stored in a similar manner as the encrypted data, the purpose of encryption is defeated. If the attacker was able to recover the encrypted data, he would then be able to recover the keys too and decrypt the data.
+
+==How==
+
+To store encryption keys using protected storage APIs:
+
+# **Identify all code that uses stored encryption keys.** Find all code that handles stored encryption keys. Search for the uses of the //System.Security.Cryptography// namespace to find code that uses ASP.NET cryptographic functions.
+# **Protect the encryption key with DPAPI.** For each piece of code that stores encryption keys, make sure that the encryption key is protected with DPAPI. In the following example, //rij.Key// is the encryption key and //protectedKey// is the key protected with DPAPI.
+# **Create a security context.** It is recommended to store the protected encryption keys in the registry. To take the full advantage of the registry's access control features, create a new security context that grants access only to the application user. Apply this security context to the registry key that will be used for storing the encryption key. Store the encryption key protected with DPAPI in the registry key. For example:
+
+{{{
+byte[] protectedKey = ProtectedData.Protect(rij.Key, null, DataProtectionScope.CurrentUser);
+// Create a security context.
+string user = Environment.UserDomainName + "\\" + Environment.UserName;
+RegistrySecurity security = new RegistrySecurity();
+RegistryAccessRule rule = new RegistryAccessRule(user,
+	RegistryRights.FullControl,
+	InheritanceFlags.ContainerInherit,
+	PropagationFlags.None,
+	AccessControlType.Allow);
+security.AddAccessRule(rule);
+// Create a new registry key and apply the security context.
+Registry.CurrentUser.CreateSubKey("AESSymmetricKey",
+	RegistryKeyPermissionCheck.ReadWriteSubTree,
+	security);
+//Store the encryption key in the registry.
+Registry.SetValue(@"HKEY_CURRENT_USER\AESSymmetricKey",
+	"KeyData",
+	protectedKey);
+}}}
+
+==Additional Resources==
+
+* For more information about the //ProtectedData.Protect// method, see http://msdn.microsoft.com/en-us/library/system.security.cryptography.protecteddata.aspx
+
+==Related Items==
+
+* [[Create And Store a Symmetric Encryption Key]]
+* [[Generate RSA Keys And Store Them in Registry Using DPAPI]]
+* [[Protect Your Encryption Keys]]]]></Data>
+  </Content>
+</TeamMentor_Article>

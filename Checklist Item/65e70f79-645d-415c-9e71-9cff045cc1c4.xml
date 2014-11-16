@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1305171478" Content_Hash="1624257187">
+  <Metadata>
+    <Id>65e70f79-645d-415c-9e71-9cff045cc1c4</Id>
+    <Id_History>65e70f79-645d-415c-9e71-9cff045cc1c4,cf333b9d-908f-4dea-9d9c-4d4d43f0754b,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Directory Browsing Is Disabled</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Directory Browsing Is Disabled</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that your application has directory browsing disabled.</p>
+  <h1>Why</h1>
+  <p>Directory browsing allows an attacker to browse your application's directory structure in search of unprotected files and components.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to ensure that your application has directory browsing disabled:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify if directory browsing is enabled. </strong>Navigate to your application's directories. Identify if your application's server returns the directory contents and not an HTTP error message.</p>
+      <li>
+        <p>
+          <strong>Locate the default servlet's configuration. </strong>Open your application's deployment descriptor (e.g. web.xml) and locate the default servlet's configuration. If the default servlet is present, ensure it is mapped to the root directory of your application. Example: </p>
+        <pre>&lt;servlet&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;servlet-class&gt;<br />            org.apache.catalina.servlets.DefaultServlet<br />      &lt;/servlet-class&gt;&lt;/servlet&gt;&lt;servlet-mapping&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;url-pattern&gt;/&lt;/url-pattern&gt;<br />&lt;/servlet-mapping&gt;</pre>
+        <li>
+          <p>
+            <strong>Ensure directory browsing is disabled in the default servlet's configuration. </strong>Verify that the default servlet is initialized&amp;nbsp;to disable the directory browsing by setting&amp;nbsp;the parameter <em>listings</em> to <em>false</em>.</p>
+          <pre>&lt;servlet&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;servlet-class&gt;<br />            org.apache.catalina.servlets.DefaultServlet<br />      &lt;/servlet-class&gt;<br /><strong>&lt;init-param&gt;<br />            &lt;param-name&gt;listings&lt;/param-name&gt;<br />            &lt;param-value&gt;false&lt;/param-value&gt;<br />      &lt;/init-param&gt;<br /></strong>&lt;/servlet&gt;</pre>
+          <li>
+            <p>
+              <strong>Ensure your JSP files are located under the WEB-INF/ directory of your web application.</strong> This ensures that an attacker cannot directly access those pages, however your application can perform internal forwards to these pages.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following steps to successfully disable directory browsing:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify if directory browsing is enabled. </strong>Navigate to your application's directories. Identify&amp;nbsp;whether your application's server correctly returns an HTTP error message. If it incorrectly returns&amp;nbsp;the directory contents, continue with the following steps.</p>
+      <li>
+        <p>
+          <strong>Locate the default servlet's configuration. </strong>Open your application's deployment descriptor (e.g. web.xml), and locate the default servlet's configuration. If the default servlet is present, it is mapped to the root directory of your application. Example: </p>
+        <pre>&lt;servlet&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;servlet-class&gt;<br />            org.apache.catalina.servlets.DefaultServlet<br />      &lt;/servlet-class&gt;<br />&lt;/servlet&gt;<br />&lt;servlet-mapping&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;url-pattern&gt;/&lt;/url-pattern&gt;<br />&lt;/servlet-mapping&gt;</pre>
+        <li>
+          <p>
+            <strong>Deny directory browsing in the default servlet's configuration. </strong>Initialize the default servlet with the parameter <em>listings</em> set to <em>false</em>. Example:</p>
+          <pre>&lt;servlet&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;servlet-class&gt;<br />            org.apache.catalina.servlets.DefaultServlet<br />      &lt;/servlet-class&gt;<br /><strong>&lt;init-param&gt;<br /></strong>            &lt;param-name&gt;listings&lt;/param-name&gt;<br />            &lt;param-value&gt;false&lt;/param-value&gt;<br /><strong>      &lt;/init-param&gt;<br /></strong>&lt;/servlet&gt;<br />&lt;servlet-mapping&gt;<br />      &lt;servlet-name&gt;default_servlet&lt;/servlet-name&gt;<br />      &lt;url-pattern&gt;/&lt;/url-pattern&gt;<br />&lt;/servlet-mapping&gt;</pre>
+          <li>
+            <p>
+              <strong>Ensure your JSP files are located under the WEB-INF/ directory of your web application.</strong> This ensures that an attacker cannot directly access those pages, however your application can perform internal forwards to these pages.</p>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An application is deployed on a production server. Unfortunately, the developers did not disable directory browsing. This allows an attacker to search for unprotected configuration files.</p>
+  <h1>Solution Example</h1>
+  <p>An application is deployed on a production server. Because the developers have disabled directory browsing, it is difficult for an attacker to use HTTP browsing to search for unprotected configuration files.</p>
+  <h1>Java Deployment Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/f21f5350-826d-44dd-b758-fd824d52f592">Remove Test Accounts</a>
+      <li>
+        <a href="/article/df860f3d-2185-4939-be4b-ef26d8891855">Remove Test Interfaces</a>
+        <li>
+          <a href="/article/fd675679-e8ad-40fc-bac4-d56fc440bc00">Disable Directory Browsing</a>
+          <li>
+            <a href="/article/aebb10ce-aeb6-45e5-b159-e2bc76b012bf">Use a Least-Privileged Account for Running Applications</a>
+            <li>
+              <a href="/article/47e80747-3e12-4dd1-a522-ea5c33154a86">Protect the JAAS Policy and Configuration Files</a>
+              <li>
+                <a href="/article/3f301ff9-098d-46cb-ac53-cb3fa6897cdf">Protect Sensitive Data Inside Configuration Files</a>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Java Deployment Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/256b4884-9ff0-4a33-960c-305b824bab68">Test Accounts Are Removed</a>
+      <li>
+        <a href="/article/fe7941bc-b986-48f9-9fa3-422c34db36bd">Test Interfaces Are Removed</a>
+        <li>
+          <a href="/article/65e70f79-645d-415c-9e71-9cff045cc1c4">Directory Browsing Is Disabled</a>
+          <li>
+            <a href="/article/a2000bc9-7e22-4d0c-91b8-a9ec623985d3">A Least Privileged Account Is Used for Running Applications</a>
+            <li>
+              <a href="/article/4bc8430f-b950-455a-80c1-8cbdb524c1e3">JAAS Policy and Configuration Files Are Protected</a>
+              <li>
+                <a href="/article/f9c1e6b0-1bc4-4108-9c9a-55dca84749ac">Sensitive Data Inside Configuration Files Is Protected</a>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

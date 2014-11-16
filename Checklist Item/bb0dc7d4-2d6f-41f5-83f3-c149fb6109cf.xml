@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="548194070" Content_Hash="-1300001821">
+  <Metadata>
+    <Id>bb0dc7d4-2d6f-41f5-83f3-c149fb6109cf</Id>
+    <Id_History>bb0dc7d4-2d6f-41f5-83f3-c149fb6109cf,f7bec1a4-a121-48f1-a407-fbfc0f9754de,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Password Renewal Is Enforced</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Password Renewal Is Enforced</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure your application enforces a password expiry policy.</p>
+  <h1>Why</h1>
+  <p>Forcing users to renew their passwords reduces the risk of valid credentials becoming exposed. While this technique can prevent attackers from obtaining the valid credentials through the use of a Credentials Brute Force Attack or a Credentials Dictionary Attack attacks, it can also reduce the business risk associated with any instances of “discovered” or “leaked” valid credentials.</p>
+  <h1>How To Check</h1>
+  <p>Use the following steps to ensure your application has a password expiry policy: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Locate all authentication code.</strong> Identify all authentication procedures throughout your application.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that your application enforces password renewal.</strong> Ensure that your application addresses the need for password renewal throughout the different stages of your application's development lifecycle:</p>
+      <ul>
+        <li>
+          <strong>Requirements</strong>: Check if your application provides a password policy. Ensure that the password policy provides requirements regarding lifetime of passwords. For example, a password will expire after 45 days.&amp;nbsp; </li>
+        <li>
+          <strong>Design</strong>: Check if all password renewal routines are positioned properly throughout your application's authentication routines. For instance, if a user's password is expired, your application's authentication routine should force the user to renew their password upon a successful logon. </li>
+        <li>
+          <strong>Implementation</strong>: Check if all password renewal routines implement your application's password policy. </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Use the following steps to force users to change their passwords:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Define a password change policy. </strong>Establish a maximum password age for your application's users. Determining the maximum password age depends on the level of security required for your application as well as the likelihood of attack. Recognize that there is a tradeoff to be considered when defining any password policy; if the policy is too strict, then users tend to just write passwords down which can hurt the overall security of the application. A good baseline for password renewal is every 90 days.</p>
+      <p>You may also consider defining different frequencies for various user groups within your application. For instance, it might make sense to require more frequent changes for the system administrator passwords as this class of users typically has more privileges and is therefore a bigger target for attack.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Design a password change mechanism.</strong> Track the password age and prompt the user to change their password when the password is expiring. If your application uses ASP.NET membership providers, use MembershipUser.LastPasswordChangedDate property to track the last update of the user's password. Example:</p>
+      <pre>MembershipUser user = membershipProvider.GetUser(username, true);<br />TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce the password change policy.</strong> Embed the change of password mechanism into the authentication routine. If your application uses ASP.NET membership providers, use the ASP.NET RoleManager to identify the appropriate password change interval and prompt the user to change their password if necessary. It is recommended to place such functionality immediately after the authentication procedure. Example:</p>
+      <pre>bool changePass = false;<br />string username = HttpContext.Current.User.Identity.Name;<br />MembershipProvider membershipProvider = Membership.Provider;<br />MembershipUser user = membershipProvider.GetUser(username, true); <br />TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;<br />if (Roles.IsUserInRole("Admin") &amp;&amp; diff.Days &gt;= 30)<br />{    <br />  changePass = true;<br />} <br />if (Roles.IsUserInRole("Users") &amp;&amp; diff.Days &gt;= 90)<br />{    <br />  changePass = true;<br />} <br />if (changePass)<br />{    <br />  HttpContext.Current.Response.Redirect("ChangePass.aspx", true);<br />}</pre>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/d1495e0c-ca22-4104-ba8d-5194944e1e16">Force Password Renewal</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

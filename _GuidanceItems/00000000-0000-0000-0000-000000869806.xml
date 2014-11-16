@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000869806</Id>
+    <Id_History>00000000-0000-0000-0000-000000869806,a03a6007-5063-436b-a254-e0f8c73558d3,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Validate Data Coming from WebSockets</Title>
+    <Category>WebSockets</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate Data Coming from WebSockets</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Validate data coming from WebSockets.
+
+==Why==
+
+Validate data coming from WebSockets in order to make it more difficult for an attacker to send malicious data to the application. An attacker might be able to take over the remote end of a WebSocket and attempt to leverage this to control the user's browser. Validating data received from WebSockets severely limits the ability of attackers to attempt to exploit the client-side part of the application.
+
+==How==
+
+To validate data coming from WebSockets:
+
+# **Identify code that receives data from WebSockets.** Search the application code for all references to the //onmessage// event. Create a spreadsheet to list all code that receives data from WebSockets.
+# **Identify data formats.** For each piece of code that receives data from WebSockets, define valid data formats that are expected by the application. For example, a piece of code might be expecting a time, a name, or a social security number, and each of these data types has a distinct valid format. Add information to the spreadsheet about these expected data formats. Include examples and be as specific as possible.  
+# **Define validators.** For each distinct data type, write a validator function that determines whether a piece of data matches the correct format or not. Regular expressions are usually used for this task. Validate data length first, before using regular expressions, to prevent regular expression denial of service attacks. The general pattern for validating data formats is: validata data length, validate valid characters, validate patterns of structured data (like social security numbers or dates), and validate ranges of numerical data.
+# **Validate data.** For each piece of code that receives data from WebSockets listed in the spreadsheet, add code to validate the data immediately after receiving it. Use the validator that matches the expected data type.  Continue to process the data only if it has the correct format.
+
+==WebSocket Guidelines==
+
+* [[00000000-0000-0000-0000-000000869806|Validate Data Coming from WebSockets]]
+* [[00000000-0000-0000-0000-00000093dea4|Check the Origin Header in the WebSocket Handshake]]
+* [[00000000-0000-0000-0000-0000005f2e4a|Use TLS/SSL to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-000000736a21|Check the Origin Attribute of WebSocket Messages]]
+* [[00000000-0000-0000-0000-0000005326a8|Use the Latest WebSocket RFC 6455 Standard]]
+* [[00000000-0000-0000-0000-00000085bc2f|Do Not Tunnel TCP via WebSockets]]
+
+==WebSocket Checklist Items==
+
+* [[00000000-0000-0000-0000-00000086537e|Data Coming from WebSockets Is Validated]]
+* [[00000000-0000-0000-0000-00000077e316|The Origin Header in WebSocket Handshake is Checked]]
+* [[bd870268-f104-4f6f-ba0d-6628dc34eb2a|TLS/SSL is Used to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-0000002f39d7|The Origin Attribute of WebSocket Messages Is Checked]]
+* [[18d5564d-00a4-4afe-a853-707269df2566|Latest RFC 6455 Standard is Used]]
+* [[00000000-0000-0000-0000-00000091ce5a|TCP Is Not Tunneled via WebSockets]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

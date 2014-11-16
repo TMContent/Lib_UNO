@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1462664627" Content_Hash="211354744">
+  <Metadata>
+    <Id>c468e4b0-92cc-4558-8532-e0c77606efa5</Id>
+    <Id_History>c468e4b0-92cc-4558-8532-e0c77606efa5,28546cac-471d-49dd-ab48-4c611e7e3ccb,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Password Renewal Is Enforced</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Password Renewal Is Enforced</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure your application enforces a password expiry policy.</p>
+  <h1>Why</h1>
+  <p>Forcing users to renew their passwords reduces the risk of valid credentials becoming exposed. While this technique can prevent attackers from obtaining the valid credentials through the use of a <a href="/article/d72d0706-99df-4a65-a19d-6a83ec868a7b">Credentials Brute Force Attack</a> or a <a href="/article/e8b05112-2416-436a-9679-07d9e5626bca">Credentials Dictionary Attack</a> attacks, it can also reduce the business risk associated with any instances of &amp;#8220;discovered&amp;#8221; or &amp;#8220;leaked&amp;#8221; valid credentials.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to ensure your application has a password expiry policy: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Locate all authentication code.</strong> Identify all authentication procedures throughout your application.</p>
+      <li>
+        <p>
+          <strong>Ensure that your application enforces password renewal.</strong> Ensure that your application addresses the need for password renewal throughout the different stages of your application's development lifecycle:</p>
+        <ul>
+          <li>
+            <strong>Requirements</strong>: Check if your application provides a password policy. Ensure that the password policy provides requirements regarding lifetime of passwords. For example, a password will expire after 45 days. Consult the <a href="/article/b7dde97a-d5e3-49a8-b98b-121213bdccf4">Strong Passwords are Enforced</a> checklist for information regarding additional password requirements. <li><strong>Design</strong>: Check if all password renewal routines are positioned properly throughout your application's authentication routines. For instance, if a user's password is expired, your application's authentication routine should force the user to renew their password upon a successful logon. <li><strong>Implementation</strong>: Check if all password renewal routines implement your application's password policy. </li></li></li>
+        </ul>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code is part of the application's authentication routine. Because the application fails to force the user to renew their password, it allows more time for an attacker to guess the user's password.</p>
+  <pre>&lt;&amp;#33;-- The application's login control --&gt;<br />&lt;asp:Login ID="Login1" runat="server" DestinationPageUrl="~/Protected.aspx" /&gt;<br /> // The Page_Load method of Protected.aspxprotected<br /> void Page_Load(object sender, EventArgs e)&amp;#123;&amp;#125;</pre>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/485a8261-d637-4a47-8643-de094828bf56">Guideline: Force Password Renewal&amp;nbsp;</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

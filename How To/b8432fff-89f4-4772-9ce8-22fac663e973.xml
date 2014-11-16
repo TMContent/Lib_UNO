@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1935391610" Content_Hash="1774935976">
+  <Metadata>
+    <Id>b8432fff-89f4-4772-9ce8-22fac663e973</Id>
+    <Id_History>b8432fff-89f4-4772-9ce8-22fac663e973,be9c7a92-d706-4637-b4ca-ea3e09edcc0e,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for LDAP Injection Vulnerabilities</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for LDAP Injection Vulnerabilities</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies To</span>
+  </h1>
+  <ul>
+    <li>
+      <span>Applications that use Lightweight Directory Access Protocol (LDAP)</span>
+    </li>
+  </ul>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>
+    The Lightweight Directory Access Protocol (LDAP) is a protocol used to query and manage directory services running over TCP/IP. Corporate environments commonly use LDAP directory trees to store organizational information such as useraccounts, office locations, organizational units, printers, and fax machines. To search LDAP trees, applications build queries consisting of LDAP search filters written in Prefix, or Polish, notation. LDAP search filters consist of a set of meta-characters such as parenthesis and logical operators such as ANDs and ORs (represented by ‘<i>&amp;</i>’ and ‘<i>|</i>’ respectively).<span>&amp;nbsp;</span>For instance, the following query returns a list of objects of type user, no matter what their unique identifier (uid) is:</p>
+  <p>
+    <font face="'Courier New'">(&amp;(objectClass=user)(uid=*))</font>
+  </p>
+  <p>
+    <span>If an application passes unsanitized user data to build LDAP queries, an attacker is capable of injecting additional statements to the original query. LDAP injection vulnerabilities are exploited to execute arbitrary LDAP statements against thevulnerable directory service.<span>&amp;nbsp;</span>This vulnerability can occur with any version of LDAP since it affects the application connecting to the LDAP server and not the actual LDAP server. To properly test for LDAP injection vulnerabilities, it isrecommended that you follow these steps:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Step 1: Understand attack scenarios</span>
+    </li>
+    <li>
+      <span>Step 2: Analyze causes and countermeasures</span>
+    </li>
+    <li>
+      <span>Step 3: Start testing and exploring</span>
+    </li>
+    <li>
+      <span>Step 4: Fine-tune test cases</span>&amp;nbsp;</li>
+  </ul>
+  <h1>
+    <span>Step 1:&amp;nbsp;Understand Attack Scenarios</span>
+  </h1>
+  <p>
+    <span>First, you must understand the details of LDAP injection attack scenarios. In common with SQL and XPath injection, there are two types of LDAP injection attacks:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Normal LDAP injection</span>
+    </li>
+    <li>
+      <span>Blind LDAP injection</span>&amp;nbsp;</li>
+  </ul>
+  <h2>
+    <span>Scenario 1: Normal LDAP Injection</span>
+  </h2>
+  <p>
+    To properly follow this scenario, you must understand the background of LDAP queries and search filters. LDAP queries consist of search filters written in Prefix, or Polish, notation. For example, the following pseudo query checks if there is aclient named “<i>Bob</i>” with the password set to “<i>abc</i>”:</p>
+  <p>
+    <font face="'Courier New'">find("cn=Bob &amp; password=abc")</font>
+  </p>
+  <p>The equivalent LDAP query is written in Prefix notation (meta-characters first):</p>
+  <p>
+    <font face="'Courier New'">find("(&amp;(cn=Bob)(password=abc))")</font>
+  </p>
+  <p>LDAP uses the following meta-characters to indicate Boolean conditions and group aggregations:</p>
+  <p>
+    <font face="'Courier New'">&amp; - Boolean AND<br />| - Boolean OR<br />! - Boolean NOT<br />= - Equals<br />~= - Approximately<br />&gt;= - Greater Than<br />&lt;= - Less Than<br />* - Any Character<br />( ) - Grouping</font>
+  </p>
+  <p>Now suppose that an application builds an LDAP query to check for authentication. The query checks if there are any LDAP entries with a common name (<i>cn</i>) and password (<i>userPassword</i>) corresponding to two input values.</p>
+  <p>
+    <font face="'Courier New'">(&amp;(cn=input_value1)(userPassword=input_value2))</font>
+  </p>
+  <p>To implement the LDAP query, a PHP page uses a web form to collect the 
+    user
+     and 
+    pass 
+    variables and build the login query:</p>
+  <p>
+    <font face="'Courier New'">searchlogin = "(&amp;(cn=" . $_POST['user'] . ")(userPassword=" . $_POST['pass'] . "))";</font>
+  </p>
+  <p>An attacker then uses the web form to pass the following values:</p>
+  <p>
+    <font face="'Courier New'">user = "*)(cn=*))(|(cn=*"&amp;nbsp;password = "any"</font>
+  </p>
+  <p>As a result, the web application builds the following statement:</p>
+  <p>
+    <font face="'Courier New'">searchlogin = "(&amp;(cn=*)(cn=*))(|(cn=*)(userPassword=any)))"</font>
+  </p>
+  <p>
+    <span>This LDAP query is always true, leading to the attacker being able to bypass authentication without valid credentials.</span>
+  </p>
+  <p>
+    <span>A similar variation of normal LDAP injection leads to information disclosure. An application uses a simple LDAP query to display personal information about a single user:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">searchfilter = "(uid=" . $_GET['username'] . ")";</font>
+  </p>
+  <p>
+    <span>In normal conditions, such as with the client named </span>
+    <span>Bob</span>
+    <span>, the application builds a safe query:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">searchfilter = "(uid=Bob)";</font>
+  </p>
+  <p>However, an attacker can tamper with the 
+    
+      username
+    
+     parameter so that the resulting search filter looks like this:</p>
+  <p>
+    <font face="'Courier New'">searchfilter = "(uid=*)";</font>
+  </p>
+  <p>
+    <span>This results in the application replying to the attacker with personal information from all users of in the LDAP directory tree.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Scenario 2: Blind LDAP Injection 
+    </span>
+  </h2>
+  <p>
+    <span>Similar to blind SQL or XPath injection, blind LDAP injection consists of using simple true or false comparisons to infer data from the LDAP directory tree.<span>&amp;nbsp;</span></span>During this scenario an application displays the printer information using the following filter:</p>
+  <p>
+    <font face="'Courier New'">(&amp;(printerID=printer_id)(objectclass=printer))</font>
+  </p>
+  <p>The application uses a PHP page to build the LDAP query by obtaining the value of the 
+    
+      printer_id
+    
+    
+      
+      
+    
+    variable from the URL:</p>
+  <p>
+    <font face="'Courier New'">printerfilter = "(&amp;(printerID=" . $_GET['printer_id'] . ")(objectclass=printer))";</font>
+  </p>
+  <p>
+    <span>When a client passes the<span>&amp;nbsp; </span></span>
+    <span>HPLaserJet3015</span>
+    <span>
+    </span>
+    <span>in the</span>
+    <span>
+      printerID 
+    </span>
+    <span>parameter the resulting LDAP query looks like this:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">(&amp;(printerID=HPLaserJet3015)(objectclass=printer))</font>
+  </p>
+  <p>
+    <span>An attacker passes an additional AND condition to find out if the LDAD directory has an attribute named </span>
+    <span>accounts</span>
+    <span>:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">HPLaserJet3015)(users=*))</font>
+  </p>
+  <p>
+    <span>This results in the application building the following filter:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">(&amp;(printerID=HPLaserJet3015)(users=*))(objectclass=printer))</font>
+  </p>
+  <p>
+    <span>Only the first AND condition is processed, so the LDAP query returns true if the</span>
+    <span>users</span>
+    <span>
+    </span>
+    <span>attribute exists in the LDAP directory tree. If the </span>
+    <span>users</span>
+    <span> attribute does indeed exist, the string below extends the attack by checking if there are any users named root:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">HPLaserJet3015)(users=root))</font>
+  </p>
+  <p>
+    <span>The query will return true if a user named root exists in the LDAP directory.</span>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>
+    <span>The next step in testing for LDAP injection vulnerabilities is to understand what causes them and how to defend against them.</span>
+  </p>
+  <h2>
+    <span>
+      LDAP Injection Causes
+    </span>
+  </h2>
+  <p>
+    <span>LDAP injection is caused by failure to properly validate and sanitize the parameters used in an LDAP query. LDAP applications work by initializing an LDAP connection with an LDAP server and submitting queries built from user-supplied data to the server. LDAP queries are commonly built by creating search filters based on direct user input from text fields, web forms, URL parameters, GUI elements, and indirect user input such as data from a file or database. Failing to check and sanitize the user input when constructing LDAP queries is the cause of this vulnerability.</span>
+  </p>
+  <h2>
+    <span>
+      LDAP Injection Countermeasures
+    </span>
+  </h2>
+  <p>
+    To properly defend against LDAP injection attacks it is necessary to validate and sanitize any input data used when building LDAP search strings. There are two ways of validating and sanitizing user data: blacklisting and whitelisting.<span>&amp;nbsp;</span>Blacklisting consists of restricting any dangerous characters.&amp;nbsp;In the case of LDAP injection these characters need to include all meta-characters, especially the grouping parenthesis ( <i>() </i>), AND operator (<i>&amp;</i>), and OR operator (<i>|</i>). However, blacklisting is not completely secure unless 100 percent of all dangerous variations are accounted for. As an alternative, whitelisting consists of listing safe constructs only and rejecting any construct that does not match the safe form. Whitelisting is not concerned with accounting for all dangerous variations; whitelists just indicate what is safe, and any input that does not match a safe form is automatically denied. However, care is needed when using this defense as whitelists may be difficult to properly implement.<span>&amp;nbsp;</span>The following examples present three expressions that act as whitelists for types (checks if input type is integer), emails, and domain values:</p>
+  <p>
+    <font face="'Courier New'">int userinput = Convert.ToInt32(Request.Querystring("userinput"));<br />string email = Regex.IsMatch(Request.Querystring("email")," ^.+@[^\.].*\.[a-z]{2,}$" );<br />string country = Request.Querystring("country") in {"USA", "UK"};</font>
+  </p>
+  <p>
+    <span>An additional LDAP injection countermeasure to be used on top of input validation and sanitization consists of strengthening permissions in the LDAP directory tree.<span>&amp;nbsp;</span>LDAP directory trees have different types of attributes and it is important to understand how these attributes work in order to decide what permissions to assign to them.<span>&amp;nbsp; </span>In addition, the access level used by the application to connect to the LDAP server should be the minimum required in order to reduce the potential impact of LDAP injection attacks.</span>&amp;nbsp;</p>
+  <h1>
+    <span>Step 3: Start Testing and Exploring</span>
+  </h1>
+  <p>
+    <span>Now that you are familiar with the LDAP injection attack scenarios and can recognize both its causes and countermeasures, you must continue by executing basic test cases while observing how the application reacts.</span>
+  </p>
+  <h2>
+    <span>
+      Start with a simple test string
+    </span>
+  </h2>
+  <p>
+    <span>Similarly to when testing for other injection bugs, the first test case must check if the application performs any validation for injection characters (in this case LDAP meta-characters). Therefore, it is recommended that you start with a simple test string such as this one:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">|&amp;)(*!</font>
+  </p>
+  <p>Then look for any errors generated by the application. Specifically, you should look for error messages that indicate the execution of an invalid LDAP query, as this will be a sign that the test case data is being used as part of the query and therefore LDAP injection is possible.&amp;nbsp;Once you have successfully injected LDAP meta-characters, you should move on to the following test cases.&amp;nbsp;</p>
+  <h2>
+    <span>
+      Testing for Normal LDAP Injection Authentication Bypass 
+    </span>
+  </h2>
+  <p>
+    <span>To test for authentication bypass using normal LDAP injection you should follow these steps:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Open a client that uses LDAP for authentication (this can be a web browser if the LDAP application is implemented as a web application or a client LDAP application in traditional non-web LDAP client/server applications).</span>
+    </li>
+    <li>
+      <span>Enter a string containing an additional command that changes the result of the LDAP authentication query to true.</span>
+    </li>
+    <li>Submit the authentication form to the server.</li>
+  </ol>
+  <p>
+    <span>Expected result:<span>&amp;nbsp;</span>the application should not authenticate the client.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Testing for Normal LDAP Injection Information Disclosure
+    </span>
+  </h2>
+  <p>
+    <span>To test for information disclosure using normal LDAP injection you must follow these steps:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Open a client that uses LDAP to display user information. This can be a web browser if the LDAP application is implemented as a web application or a client LDAP application in traditional non-web LDAP client/server applications).</span>
+    </li>
+    <li>
+      <span>Modify the filter in use to expand the search over other clients.<span>&amp;nbsp;</span>For example:<br /></span>
+      <font face="'Courier New'">*<br />*|<br />*(|(objectclass=*))<br />*(|(mail=*))</font>
+    </li>
+    <li>Submit form to the server.</li>
+  </ol>
+  <p>
+    <span>Expected result:<span>&amp;nbsp;</span>the application should not display additional information, such as information about other clients or LDAP attributes.</span>&amp;nbsp;</p>
+  <h2>
+    <span>
+      Testing for Blind LDAP Injection Information Disclosure
+    </span>
+  </h2>
+  <p>
+    <span>To test for information disclosure using blind LDAP injection you should follow these steps:</span>
+  </p>
+  <ol>
+    <li>
+      <span>Open a client that uses LDAP to display user information. This can be a web browser if the LDAP application is implemented as a web application or a client LDAP application in traditional non-web LDAP client/server applications.</span>
+    </li>
+    <li>
+      <span>Modify the filter in use with true or false conditions that attempt to deduce sensitive data such as LDAP attributes.<span>&amp;nbsp;</span>For example, if your username is </span>
+      <span>Bob</span>
+      <span> then use the following string to check if the attribute </span>
+      <span>account</span>
+      <span> exists:<br /></span>
+      <font face="'Courier New'">Bob)(account=*))</font>
+    </li>
+    <li>
+      <span>Submit form to the server.</span>
+    </li>
+    <li>
+      <span>Repeat steps 2 and 3 until disclosure of sensitive information.</span>
+    </li>
+  </ol>
+  <p>
+    <span>Expected result:<span>&amp;nbsp;</span>the application should not allow the additional true and false conditions to be injected.</span>&amp;nbsp;</p>
+  <h1>
+    <span>Step 4: Fine-tune Test Case Data</span>
+  </h1>
+  <p>
+    During the final step, you must fine-tune your test case data according to the entry point you are testing through.<span>&amp;nbsp;</span>For instance, when testing through URL parameters, it may be necessary to URL-encode the AND meta-character so that it is not confused with the URL parameter name/value separator (<i>&amp;</i>).</p>
+  <p>
+    <font face="'Courier New'">*)(&amp;(name=*)) -&amp;nbsp;before encoding<br />*)(%26(name=*)) -&amp;nbsp;after URL encoding</font>
+  </p>
+  <p>Here are some other LDAP injection hex-encoded test strings you should try:</p>
+  <p>
+    <font face="'Courier New'">%28<br />%29<br />%26<br />%21<br />%7C<br />%2A%7C<br />%2A%28%7C%28mail%3D%2A%29%29<br />%2A%28%7C%28objectclass%3D%2A%29%29<br />*()|%26</font>
+  </p>
+  <p>Finally, make sure you test the application through all its entry points such as web forms, URL parameters, GUI text boxes, and indirect input sources. Remember to test through LDAP URLs of the form:</p>
+  <p>
+    <span style="font-family: 'Courier New'; ">ldap://host:port/DN?attributes?scope?</span>
+    <span style="font-family: 'Courier New'; ">filter</span>
+    <span style="font-family: 'Courier New'; ">?extensions</span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>You must modify the filter part of LDAP URLs in an attempt to inject additional LDAP statements:</span>
+  </p>
+  <p>
+    <font face="'Courier New'">ldap://ldap.example.com/cn=John%20Doe,dc=example,dc=com<br />ldap://ldap.example.com/cn=John%20Doe)(users=*,dc=example,dc=com</font>
+  </p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>
+    <span>LDAP injection vulnerabilities allow for different attack scenarios such as bypassing authentication and disclosing information about an LDAP directory tree.<span>&amp;nbsp;</span>The cause of this vulnerability lies in failure to properly validate and sanitize user input, and utilizing it to build LDAP queries. It is recommended that you begin testing for LDAP injection bugs by submitting basic test strings aimed at forcing an LDAP-specific error. Then continue by testing for different types of LDAP injection such as normal and blind injection. Finish by fine-tuning your test case data according to the entry point you are testing through.</span>
+  </p>
+  <h1>
+    <span>Additional Resources</span>
+  </h1>
+  <p>
+  </p>
+  <ul>
+    <li>For information about string representations of LDAP search filters, see&amp;nbsp;<a href="http://www.ietf.org/rfc/rfc1960.txt">http://www.ietf.org/rfc/rfc1960.txt</a></li>
+    <li>For information about testing for LDAP injection, see&amp;nbsp;<a href="http://www.owasp.org/index.php/Testing_for_LDAP_Injection">http://www.owasp.org/index.php/Testing_for_LDAP_Injection</a></li>
+    <li>For information about fuzz vectors, see&amp;nbsp;<a href="http://www.owasp.org/index.php/OWASP_Testing_Guide_Appendix_C:_Fuzz_Vectors">http://www.owasp.org/index.php/OWASP_Testing_Guide_Appendix_C:_Fuzz_Vectors</a></li>
+  </ul>
+  <p />
+  <p />
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

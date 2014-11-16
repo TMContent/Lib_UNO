@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1078777431" Content_Hash="-1499800177">
+  <Metadata>
+    <Id>af63282b-16a5-4319-82d4-d5110475db2b</Id>
+    <Id_History>af63282b-16a5-4319-82d4-d5110475db2b,8dc7a4b5-1189-4a67-907c-9f858f48acaf,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>The Application Does Not Rely Only on Request Validation</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>The Application Does Not Rely Only on Request Validation</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure that your application does not rely solely upon ASP.NET request validation to protect against malicious input.</p>
+  <h1>Why</h1>
+  <p>Request validation will catch some attacks; however, it provides only basic input validation. Do not rely on it. Use it as an extra precautionary measure in addition to your own input validation. Only you can define what represents good input for your application. </p>
+  <h1>How To Check</h1>
+  <p>To check for this problem, you must determine if your application is relying solely upon request validation to provide input and data validation. Use the following steps:&amp;nbsp;</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Find all sources of input in your application.</strong> During design time identify all of the potential sources of input to your application. Scour the source code to discover sources of input that may have been missed in the design. Compile a list that you can use in the following steps. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify validation routines.</strong> Each input source should have a data validation routine associated with it.&amp;nbsp;Ideally the validation will occur as soon after the input reaches your application as possible. Shared validation routines are better than creating many spread throughout your code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing.</p>
+      <p />
+    </li>
+    <li>
+      <p>
+        <strong>Ensure quality of validation routines.</strong> Validation routines&amp;nbsp;should check for length, range, format, and type. Validation should check first&amp;nbsp;for known valid and safe data and then for malicious, dangerous data. Do not rely on filtering out all malicious data because&amp;nbsp;it is too easy to miss something. Do not rely on client-side validation alone as it can be easily bypassed.</p>
+      <p />
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Perform the following actions to validate input from all sources:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify data to validate.</strong> Input must be validated on the server for security checks.&amp;nbsp; While it can be useful for user experience reasons to check the input on the client side, especially on things like web applications with high round-trip latencies, this client-side validation is not sufficient to provide security guarantees, as it can be circumvented by the attacker. Check for known good data and constrain input by validating it for type, length, format, and range. For Web form applications that obtain input through server controls, use the ASP.NET validator controls, such as the RegularExpressionValidator, RangeValidator, and CustomValidator, to validate and constrain input. All input not under control of the system should be validated, but input coming directly from users must be validated and should receive the most attention. Most Web applications accept input from various sources, including HTML controls, server controls, query strings, and cookies. Validate input from all of these sources to help prevent injection attacks. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Use regular expressions.</strong> Use regular expressions to help validate input. In general, validate your input against the least permissive expression possible that will accept all the input you expect for that field. If you know that the field will have certain internal structure, check for it. If there is a range of standard formats which your users may enter data in, but these formats are easily converted to a single internal format, do so.&amp;nbsp;The following example shows how to use the Regex class. </p>
+      <pre>using System.Text.RegularExpressions;<br />// Instance method:<br />Regex reg = new Regex(@"^[a-zA-Z'.\s]{1,40}$");<br />Response.Write(reg.IsMatch(Request.QueryString["Name"]));<br />// Static method:<br />if (!Regex.IsMatch(Request.QueryString["Name"],@"^[a-zA-Z'.\s]{1,40}$"))<br />{<br />&amp;nbsp;&amp;nbsp; // Name does not match expression<br />}</pre>
+      <p>If you cannot cache your regular expression for frequent use, you should use the static IsMatch method where possible for performance reasons, to avoid unnecessary object creation. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate numeric data.</strong> Check all numeric fields for type and range. If you are not using server controls, you can use regular expressions and the Regex class, and you can validate numeric ranges by converting the input value to an integer or double, ensuring the conversion was valid, and then performing a range check. If your input has an internal checksum, like a credit card number, check that too.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate address data.</strong> Address data has a fairly rich internal structure; the more of this structure your validation routine understands, the better you'll be able to validate the information. Phone numbers can be validated as a string of ten digits, or a variable number of digits beginning with the character '+' if international numbers are allowed. If needed, the country code can be determined and the exact number format looked up. While phone numbers are written several different ways, a canonical representation can be created by stripping all non-numeric characters before validation, something which will save your users time and frustration as they enter data into your site. Street addresses require a little bit more care; if the input is taken in divided into street, city, etc., each field can have a seperate safe character set defined--city names don't need numbers, for instance. Names are fairly straightforward, but are one of the cases where the "'" character is valid input, and thus they must be handled appropriately (as all input should be) at the database level. Also, don't forget to allow accented characters in names and addresses, depending on your current code page.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate reference data.</strong> Data that refers to other things can go through one final step of validation, namely looking up what it refers to insure that the reference is valid. For instance, postal codes can be validated against a canonical list to ensure correctness, and other aspects of the street address cross-checked with that. In an order management system, item IDs can be checked against a list of valid IDs.</p>
+    </li>
+  </ol>
+  <p>
+    <strong>Note:</strong> Validating input does not remove the need to format output, parametrize queries, or otherwise handle user input carefully.</p>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/d71b059a-6695-4a02-9c58-30a9e594fca8">Validate Input from All Sources for Type, Length, Format, and Range</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

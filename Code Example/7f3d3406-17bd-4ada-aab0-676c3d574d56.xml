@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="840762061" Content_Hash="1719909781">
+  <Metadata>
+    <Id>7f3d3406-17bd-4ada-aab0-676c3d574d56</Id>
+    <Id_History>7f3d3406-17bd-4ada-aab0-676c3d574d56,5711e2bf-08ca-42a1-8d0a-573364135829,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Import an RSA Public Key And Encrypt a Message</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Import an RSA Public Key And Encrypt a Message</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to illustrate how the recipient of an XML file containing containing an RSA public key can read the file and encrypt a message for the sender using this key. Please, note that this code will not work when encrypting multi-lingual characters.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Securely generate a message from an RSA key that only the owner of the key can decrypt and read. </li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Distributed client-server architecture where clients need to send confidential encrypted messages to the server but don't need to ever read those messages.</li>
+    <li>Application does not want to maintain a dedicated key store for encryption purposes.</li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>public static byte[] ReadRSAPublicKeyAndEncryptMessage(string xmlKeyData, string fileName){<br />     // Create a new RSA CSP in which to load the public key data from file<br />     RSACryptoServiceProvider yourRSA = new RSACryptoServiceProvider();<br />     yourRSA.FromXmlString(xmlKeyData);<br /><br />     // Encrypt a message and return<br />     byte[] original = Encoding.ASCII.GetBytes("The quick brown fox jumped over the lazy dog");<br />     return(yourRSA.Encrypt(original, false));<br />}</pre>
+  <h1>Problem Example</h1>
+  <p>In this example, the problem example assumes that the user simply does not use any means of encryption to transmit messages to the owner of the public key. </p>
+  <ul>
+    <li>Wherever an attacker can gain access to the data stream between the sender and the recipient of a message, the confidentiality of that message data could be compromised in transit. </li>
+    <li>Unsecured wireless networks, management consoles for networking devices, ARP-spoof and poisoning attacks are all examples of mechanisms that a malcious inidividual might used to compromise clear text traffic. </li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.IO;<br />using System.Security;<br />using System.Security.AccessControl;<br />using System.Security.Cryptography;<br />using System.Text;<br />using Microsoft.Win32;</pre>
+  <p>Execute the following code to see a plaintext message and then an encrypted version of that message created using the public key.</p>
+  <pre>static void Main(string[] args){<br />    // Read public key into a string<br />    string publicKeyXml = "&lt;RSAKeyValue&gt;" +<br />    "&lt;Modulus&gt;tnLAgAJwXXxYj+2QPX6q/mHZZf23xSvvovoBlZ1Y7RbTlkY4N2nlcGxfR<br />    6mQcTTWKfWShQ7yEaX6rVfhhRhdaHLCsg7g3AmW2BsoBxWUijD81ZeNKyWrw8t0gjnigNR4<br />    6+PqO1Xi7R9aA+PgaluhuZBBgJK2wIAlRJSPlTr5OjDr4vJlZiAG/VqmJVXioPfv1QI2hfL<br />    M86JgIcrD47L0K44tKwyhAj4PN1nsomjPeb0P9m9t3od/c+yZGKk+iJ1nwQwG02H/EXROaO<br />    6YFKb3xijNv69gv+ZLGc+qssXs7Bs7CdzqmQvSylxuXkYz5bQG++raYWm4l056WhtIRG8mqQ==&lt;/Modulus&gt;" +<br />    "&lt;Exponent&gt;AQAB&lt;/Exponent&gt;" + "&lt;/RSAKeyValue&gt;";<br /><br />    // Encrypt a message using our key and write out the results<br />    string msg = "The quick brown fox jumped over the lazy dog";<br />    byte[] encrypted = ReadRSAPublicKeyAndEncryptMessage(publicKeyXml, msg);<br />    Console.WriteLine("Original:");<br />    Console.WriteLine(msg);<br />    Console.WriteLine("\nEncrypted:");<br />    Console.WriteLine(Convert.ToBase64String(encrypted));<br />}</pre>
+  <h1>Expected Result</h1>
+  <p>Original:</p>
+  <pre>The quick brown fox jumped over the lazy dog</pre>
+  <p>Encrypted:</p>
+  <pre>EPiXscCwYg7R/o35sNWqEKsJrdKNx7I6x3RA59IMelpFP8HOhD5qi2XLvuMPpran++4SmRvE69RRLwF1<br />9NbIWv2KUx9FUFa3qWfkAKD1jk/PtgnOWBLM8po3eibs1VkwWxMbcEJrGKEp5eFBle7v66jzmAsxJDlA<br />MNoFfj/U/4CgzalMB09/ZnpBcoCq07NipwHYQxKfanyUfMDUyvfN69sYtdOKodMon6VwA2GRkCv4rN4V<br />rHO+dloWL0hJlxgTVp19/X5oMigr3ZhqFURCETGppCS4KZ3uqwpO3LC5smSwLzNBZtdnjUm57OqWaeLo<br />D2GHhhvBdKvAcmYAABFYJw==</pre>
+  <h1>More Information</h1>
+  <p>RSA is an algorithm for public key (also knows as asymmetric) cryptography in which distinct public and private keys are created. Encryption operations makes use of the public key while decryption requires the private key. This offers an advantage over symmetric cryptography because the secret key used to decrypt a message does not need to be shared in order to support encryption of messages to a recipient. </p>
+  <p>The RSA private key must be securely stored in order to maintain the confidentiality of data encrypted using an individual's public RSA key. However, the public key can be freely distributed by the owner of the key pair to anyone who wishes to send an encrypted message to that owner. </p>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

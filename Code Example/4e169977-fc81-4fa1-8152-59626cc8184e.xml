@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1215834683" Content_Hash="-122997750">
+  <Metadata>
+    <Id>4e169977-fc81-4fa1-8152-59626cc8184e</Id>
+    <Id_History>4e169977-fc81-4fa1-8152-59626cc8184e,0e93c0ba-b88f-477e-9c70-a91da2b9b28f,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Use Parameterized Queries for Secure Database Access</Title>
+    <Category>Database Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Use Parameterized Queries for Secure Database Access</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to illustrate the construction of database queries using parameterized arguments to add additional security to database operations that rely upon user-supplied application input.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Incorporate user input into database statements while protecting against potential SQL njection attacks.</li>
+    <li>Define and fix query logic during implementation of database operations.</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application needs to make use of user input of any form in database queries.</li>
+    <li>Application needs to make use of output from other database or code operations in database queries.</li>
+  </ul>
+  <h1>Solution Example</h1>
+  <pre>static void ParameterizedDBQuery(string sParam){<br />    // Create a new database connection using Integrated Security<br />    string connectionString =<br />     "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />    SqlConnection cn = new SqlConnection(connectionString);<br /><br />    // Create a new SQL Command object with our query<br />    // Note the syntax for our parameter field, "first"<br />    SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people WHERE first = @first", cn);<br /><br />    // Create a new SqlParameter object, which will contain the argument value that we wish to query<br />    // When creating the parameter we specify the parameter name, type of column in the database<br />    // and length of the argument we are passing to the query.<br />    sqlCommand.Parameters.Add("@first", SqlDbType.VarChar, sParam.Length).Value = sParam;<br /><br />    // Open connection to the server and execute query, returning a data reader<br />    cn.Open();<br />    SqlDataReader reader = sqlCommand.ExecuteReader();<br />    while (reader.Read())<br />        Console.WriteLine("Result: " + reader.GetString(0) + " " + reader.GetString(1));<br /><br />    // Close Reader and Connection.<br />    reader.Close();<br />    cn.Close();<br />}</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates the use of string concatenation to dynamically create a database query. </p>
+  <pre>string sParam = Request["first_name"];<br /><br />// Create a new database connection using Integrated Security<br />string connectionString =<br /> "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />SqlConnection cn = new SqlConnection(connectionString);<br /><br />// Create a new SQL Command object with our query<br />// Dynamically generate SQL query using passed parameter<br />SqlCommand sqlCommand = new SqlCommand(<br />   "SELECT first, last FROM people WHERE first = '" + sParam + "'", cn);<br /><br />// Open connection to the server and execute query, returning a data reader<br />cn.Open();<br />SqlDataReader reader = sqlCommand.ExecuteReader();<br />while (reader.Read())<br />            Console.WriteLine("Result: " + reader.GetString(0) + " " + reader.GetString(1));<br />// Close Reader and Connection.<br />reader.Close();<br />cn.Close();</pre>
+  <ul>
+    <li>Code does not first validate the "<em>first_name</em>" CGI data before incorporation into the database query.</li>
+    <li>
+      <em>SqlCommand</em> object makes use of a dynamically-generated string containing user input, which makes this operations vulnerable to SQL injection. For instance, the following <em>sParam</em> value could result in the deletion of the entire application database from the environment:</li>
+  </ul>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; abcxyz'; drop database snippets; -- </pre>
+  <ul>
+    <li>This example illustrates an inline <em>SELECT</em> statement. SQL injection may also be possible when stored procedures are used, if user input is incorporated dynamically, as above.</li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Data;<br />using System.Data.SqlClient;</pre>
+  <p>The test case requires performance of the following two steps:</p>
+  <ol>
+    <li>
+      <p>Run the following <em>CREATE</em> table command to add the "<em>people</em>" table used in this query to your SQL server.</p>
+      <pre>CREATE TABLE [dbo].[People]([first] [varchar](50) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,[last] [varchar](50) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,[email] [varchar](max) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,[phone] [nchar](15) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL)</pre>
+    </li>
+    <li>
+      <p>Execute the following test case code. </p>
+      <pre>static void Main(string[] args){<br />     ParameterizedDBQuery("Elvin");<br />}</pre>
+    </li>
+  </ol>
+  <h1>Expected Result</h1>
+  <pre>Result: Elvin Jones</pre>
+  <h1>More Information</h1>
+  <ul>
+    <li>User input should always be considered "tainted" and validated against a set of known and expected values or characters before acceptance by an application for processing in any type of operation, including database queries.</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

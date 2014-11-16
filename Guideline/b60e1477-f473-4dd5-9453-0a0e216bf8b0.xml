@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="394308897" Content_Hash="-605881494">
+  <Metadata>
+    <Id>b60e1477-f473-4dd5-9453-0a0e216bf8b0</Id>
+    <Id_History>b60e1477-f473-4dd5-9453-0a0e216bf8b0,78db04eb-5237-48a2-a5f6-0cb39fe4034c,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use a Global Exception Handler to Catch Unhandled Exceptions</Title>
+    <Category>Error and Exception Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use a Global Exception Handler to Catch Unhandled Exceptions</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Use a global exception handler to catch unhandled exceptions and prevent them from being propagated to the client. </p>
+  <h1>How</h1>
+  <p>You can handle the unhandled exceptions in a WCF service by subscribing to the Faulted event of a service host object. By subscribing to this event you can determine the cause of a failure, and then perform the necessary actions to abort or restart the service.</p>
+  <p>The following code snippet shows how to subscribe to the Faulted event.</p>
+  <pre>// hosting a WCF service <br />ServiceHost customerServiceHost;<br />customerServiceHost = new ServiceHost(…);<br />…<br />// Subscribe to the Faulted event of the customerServiceHost object<br />customerServiceHost.Faulted += new EventHandler(faultHandler);<br />…<br />// FaultHandler method - invoked when customerServiceHost enters the Faulted state<br />void faultHandler(object sender, EventArgs e)<br />{&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // log the reasons for the fault…<br />}<br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For exceptions reference, see the Exceptions Reference at <a href="http://msdn2.microsoft.com/en-us/library/ms733763.aspx">http://msdn2.microsoft.com/en-us/library/ms733763.aspx</a><li>For exception management Q&amp;A, see the Exception Management section of “WCF 3.5 Questions and Answers “ at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Questions%20and%20Answers%20%28Q%26A%29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Questions%20and%20Answers%20%28Q%26A%29&amp;referringTitle=Home</a><a href="http://www.codeplex.com/WCFSecurity/Wiki/View.aspx?title=Questions%20and%20Answers&amp;referringTitle=Home"></a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

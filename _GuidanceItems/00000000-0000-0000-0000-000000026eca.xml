@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000026eca</Id>
+    <Id_History>00000000-0000-0000-0000-000000026eca,89bad6c0-3b45-4759-bf2f-0d66e57d40f1,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>All File Path and Name Input Is Canonicalized</Title>
+    <Category>Canonicalization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>All File Path and Name Input Is Canonicalized</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Check For==
+
+Verify that all file paths and names obtained as user input are canonicalized before making security decisions on access to resources.
+
+==Why==
+
+When input validation is applied to file paths and names, it only works properly when file paths and names are canonicalized. If file names and paths are not canonicalized before validation, a number of vulnerabilities may be introduced as a result. The possible vulnerabilities range from reading arbitrary files to uploading web shells.
+
+==How to Check==
+
+To make sure that all file path and name input is canonicalized:
+
+# **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
+# **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
+# **Consider whether file name or path input is necessary.** Examine the code that accepts file name or path input from the user and consider other ways to do the same thing or removing this functionality altogether.
+# **Verify that file name and path input is canonicalized.** Examine each function that handles user supplied file names or paths. Make sure user supplied input is immediately canonicalized. Make sure you use the //realpath// function to canonicalize file names and paths before validation.
+# **Verify that file name and path input is validated.** Examine each function that handles user supplied file names or paths. Make sure these functions use positive validation routines on file names and paths after canonicalization.
+
+==How to Fix==
+
+To canonicalize all file path and name input:
+
+# **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
+# **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
+# **Avoid file path and name input if possible.** If possible, remove or replace the code that allows users to enter file names or paths.
+# **Canonicalize file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use //realpath// to canonicalize file names and paths.
+# **Validate file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use positive validation on canonicalized file names and paths. Ensure that the validation routines validate that the user has sufficient rights to access requested resource.
+
+==Additional Resources==
+
+* For more information about the //realpath// function, see http://php.net/manual/en/function.realpath.php]]></Data>
+  </Content>
+</TeamMentor_Article>

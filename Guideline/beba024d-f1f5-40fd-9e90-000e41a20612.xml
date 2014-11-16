@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="258487219" Content_Hash="608307018">
+  <Metadata>
+    <Id>beba024d-f1f5-40fd-9e90-000e41a20612</Id>
+    <Id_History>beba024d-f1f5-40fd-9e90-000e41a20612,1d6b6f9d-7463-49e1-9d7f-fbe6a23281d8,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Encrypt Configuration Sections That Contain Sensitive Data</Title>
+    <Category>Hardening</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encrypt Configuration Sections That Contain Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Encrypt configuration sections that contain sensitive data such as SQL connection strings. </p>
+  <h1>Why</h1>
+  <p>Configuration sections typically contain privacy sensitive resource access credentials (e.g., a connection string for a SQL server resource includes a username and password.) As a precautionary measure, they should not be stored in plaintext, because an attacker that can compromise a server will be able to read those values if they are not adequately protected.&amp;nbsp;</p>
+  <h1>When</h1>
+  <p>This guideline is applicable whenever configuration sections are utilized. </p>
+  <h1>How</h1>
+  <p>&amp;nbsp;Use DPAPI to encrypt the sensitive data in the configuration file on your WCF server machine. </p>
+  <p>To encrypt the &lt;connectionStrings&gt; section by using the DPAPI provider with the machine-key store (the default configuration), run the following command from a command window:</p>
+  <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider"</pre>
+  <p>The aspnet_regiis options are:</p>
+  <ul>
+    <li>-pe: Specifies the configuration section to encrypt.<li>-app: Specifies your Web application's virtual path. If your application is nested, you need to specify the nested path from the root directory; for example, "/test/aspnet/MachineDPAPI".<li>-prov: Specifies the provider name.</li></li></li>
+  </ul>
+  <p>
+    <strong>Note</strong>: If you need to encrypt configuration file data on multiple servers in a Web farm, use the RSA protected configuration provider because of the ease with which you can export RSA key containers.<br /></p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on using DPAPI, see &amp;#8220;How To: Encrypt Configuration Sections in ASP.NET 2.0 Using DPAPI&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998280.aspx">http://msdn2.microsoft.com/en-us/library/ms998280.aspx</a><li>For more information on using RSA, see &amp;#8220;How To: Encrypt Configuration Sections in ASP.NET 2.0 Using RSA&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998283.aspx">http://msdn2.microsoft.com/en-us/library/ms998283.aspx</a><li>For configuration management Q&amp;A, see the Configuration Management section of &amp;#8220;WCF 3.5 Questions and Answers &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

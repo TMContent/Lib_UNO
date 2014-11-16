@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1502904730" Content_Hash="-624697055">
+  <Metadata>
+    <Id>c4d9269f-9157-4919-952c-f0d14ccd7f60</Id>
+    <Id_History>c4d9269f-9157-4919-952c-f0d14ccd7f60,207861f5-6c0d-4f9a-b9e0-5dda4b3fbd8d,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Verify the Application's Authenticity to the User</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Verify the Application's Authenticity to the User</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications written using Servlets or JSP.</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Allow the user to verify the authenticity of your application.</p>
+  <h1>Why</h1>
+  <p>Some applications are targets for phishing attacks. Failure to authenticate against the user allows attackers to spoof the application. This can&amp;nbsp;fool the users into submitting their credentials or other sensitive information into an attacker's malicious application.</p>
+  <h1>When</h1>
+  <p>If your application handles sensitive data and allows public access, verify&amp;nbsp;your application's authenticity to your users.</p>
+  <h1>How</h1>
+  <p>Use the following measures to authenticate your application to its users:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use SSL. </strong>Due to the nature of the SSL certificates, SSL can be used to certify the remote host's name. Because of SSL's chain of trust and DNS limitations, spoofing a host that uses SSL is very difficult. </p>
+      <li>
+        <p>
+          <strong>Display personalized and identifiable content. </strong>Do not ask the user for credentials in one step. Instead,&amp;nbsp;after the user&amp;nbsp;enters a valid username, display personal and identifiable content to which the user can relate,&amp;nbsp;for&amp;nbsp;example:&amp;nbsp;a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password. </p>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is a financial application with a public web interface. Because the application does not use SSL to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of identifying the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface, they may be fooled into providing their credentials to the attacker.</p>
+  <h1>Solution Example</h1>
+  <p>MyApp is a financial application with a public web interface. Because the application uses SSL to certify its identity in front of the user, the user's browser uses the SSL chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and&amp;nbsp;the user will be warned that they are not accessing the real MyApp interface.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about anti-phishing techniques, see <a href="http://en.wikipedia.org/wiki/Phishing">Phishing</a> in Wikipedia.</li>
+  </ul>
+  <h1>Authentication Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/989e27ec-ffdf-4006-88bd-1c09fc991a28">Centralize Authentication Controls</a>
+    </li>
+    <li>
+      <a href="/article/d3a69ef7-2c63-41bc-81e4-803b0ea199d8">Use Server-side Authentication</a>
+    </li>
+    <li>
+      <a href="/article/38d12903-9c3b-46bd-9f5e-f223c3272624">Make Sure Authentication Controls Fail Securely</a>
+    </li>
+    <li>
+      <a href="/article/84fd606b-e2f2-4c48-9c6e-6b5e780c6163">Force Re-authentication When Executing Critical Functionality</a>
+    </li>
+    <li>
+      <a href="/article/c566cabe-2463-4d24-8763-22e8468d167e">Validate Usernames Before Processing Them</a>
+    </li>
+    <li>
+      <a href="/article/7ba2d49c-ff53-4755-97ae-0efcb0aa9c22">Lock Accounts After Consecutive Failed Login Attempts</a>
+    </li>
+    <li>
+      <a href="/article/4b5b1f05-aa9a-4ebc-8b2e-3cecabed03e1">Enforce Strong Passwords</a>
+    </li>
+    <li>
+      <a href="/article/ea25af24-8eca-45ad-9f41-94bad8880247">Force Password Renewal</a>
+    </li>
+    <li>
+      <a href="/article/c7825052-f281-4ac8-a786-41b776219af6">Mask All Password Fields</a>
+    </li>
+    <li>
+      <a href="/article/c4d9269f-9157-4919-952c-f0d14ccd7f60">Verify the Application's Authenticity to the User</a>
+    </li>
+    <li>
+      <a href="/article/b4f83e8e-3223-4e49-bc9c-56c8c7268582">Place Logout Links on All Pages that Require Authentication</a>
+    </li>
+    <li>
+      <a href="/article/ff95311e-797f-417f-bd0b-e6cf610f706c">Do Not Leave Passwords in Memory</a>
+    </li>
+    <li>
+      <a href="/article/bcf8adb4-8186-4b97-b490-4fa33f506bfd">Limit Access to the Credential Store</a>
+    </li>
+    <li>
+      <a href="/article/0dba2e1f-7d49-4d91-bc93-ad85480f784a">Consider Using JAAS for Authentication</a>
+    </li>
+    <li>
+      <a href="/article/9cf8aed6-22a5-49c1-a0ce-1d8e5366bebf">Consider Using Two Factor Authentication</a>
+    </li>
+  </ul>
+  <h1>Authentication Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/4e431329-73aa-41f7-b397-9b7e26294a4c">Authentication Controls Are Centralized</a>
+    </li>
+    <li>
+      <a href="/article/b103207d-73e3-4964-9a00-2b15c3e012b8">Server-side Authentication Is Used</a>
+    </li>
+    <li>
+      <a href="/article/ded06846-ad7f-4044-87d2-8bbb6b885713">Authentication Controls Fail Securely</a>
+    </li>
+    <li>
+      <a href="/article/df093ee3-ad7b-4191-935c-8bb0cad78d98">Re-authentication Is Enforced When Executing Critical Functionality</a>
+    </li>
+    <li>
+      <a href="/article/f8586505-72f9-4c14-a365-3e5049e5ca57">Usernames Are Validated Before Use</a>
+    </li>
+    <li>
+      <a href="/article/61e0e2b4-2f09-429a-b72f-f8933f2fa9b6">Accounts Are Locked After Consecutive Failed Login Attempts</a>
+    </li>
+    <li>
+      <a href="/article/7401862f-ae81-4f31-9340-981b0ec5a854">Strong Passwords Are Enforced</a>
+    </li>
+    <li>
+      <a href="/article/12889762-1d65-4b7d-a90a-58ff6c23d1e4">Password Renewal Is Enforced</a>
+    </li>
+    <li>
+      <a href="/article/09f994c9-a401-404c-bdc9-210038eba658">All Password Fields Are Masked</a>
+    </li>
+    <li>
+      <a href="/article/35851f18-13a0-4bf8-88cc-d35c371cfb12">The Application's Authenticity Is Verified to the User</a>
+    </li>
+    <li>
+      <a href="/article/493e0e57-254a-4697-8fa1-c93e706d416d">All Pages that Use Authentication Have Logout Links</a>
+    </li>
+    <li>
+      <a href="/article/55488f2e-ed85-4f0f-9f83-1d90a5d10bd0">Passwords Are Not Left in Memory</a>
+    </li>
+    <li>
+      <a href="/article/9031f577-80b0-4a2e-9652-7b470439a0df">Access to the Credential Store Is Limited</a>
+    </li>
+  </ul>
+  <h1>Authentication Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/f32846cf-35f6-40fe-8517-f0ac8a415383">How to Test for Account Lockout Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

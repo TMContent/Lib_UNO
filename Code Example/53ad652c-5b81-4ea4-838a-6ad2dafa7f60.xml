@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1924951917" Content_Hash="-750653668">
+  <Metadata>
+    <Id>53ad652c-5b81-4ea4-838a-6ad2dafa7f60</Id>
+    <Id_History>53ad652c-5b81-4ea4-838a-6ad2dafa7f60,cc517abb-3ac9-46f6-95f3-50821e186f45,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Scoping Data Retrieval from the Request Object</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Scoping Data Retrieval from the Request Object</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>ASP.NET 3.5</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>C# </li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code snippet is to illustrate how to securely scope calls to the ASP.NET Request object when retrieving user input data. Secure scoping of the Request object ensures that input used by the application is obtained from the intended source. </p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Protect against potential data input attacks through specific designation of data source <li>Make use of additional HTTP request data not normally captured within ASP.NET objects </li></li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>In conjunction with ViewState encryption and integrity checks to protect against user tampering of CGI data <li>Application obtains user input as CGI data directly from the Request object instead of from server-side variables <li>Application makes use of client certificates for user identity management and/or authentication <li>Application makes use of data from HTTP headers </li></li></li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <p>Several methods for obtaining Request object data follow:</p>
+  <pre>public static string GetQueryStringData(HttpRequest Request, string arg)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain input passed using HTTP GET<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return(Request.QueryString&amp;#91;arg&amp;#93;);<br />&amp;#125;</pre>
+  <pre>
+    <br />public static string GetPostData(HttpRequest Request, string arg)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain input passed using HTTP POST<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return(Request.Form&amp;#91;arg&amp;#93;);<br />&amp;#125;<br />public static HttpCookie GetHTTPCookie(HttpRequest Request, string arg)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain input passed as an HTTP Cookie<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return(Request.Cookies&amp;#91;arg&amp;#93;);<br />&amp;#125;</pre>
+  <pre>
+    <br />public static string GetClientCertData(HttpRequest Request, string attr)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain a server variable or HTTP Request Header, such as Content Length<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return(Request.ServerVariables&amp;#91;attr&amp;#93;);<br />&amp;#125;</pre>
+  <pre>
+    <br />public static string GetEnvData(HttpRequest Request, string arg)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Obtain a server variable or HTTP Request Header, such as Content Length<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return(Request.ServerVariables&amp;#91;arg&amp;#93;);<br />&amp;#125;</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates an unscoped call to the Request object to obtain user input.</p>
+  <pre>string data = Request&amp;#91;'argname'&amp;#93;;</pre>
+  <ul>
+    <li>If the application anticipates input to be passed from POST data, specifying 'argname' in the query string will result in GET data being retrieved by the application in place of the expected POST data. </li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following classes must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.Web;</pre>
+  <p>An example ASP.NET aspx test page is provided below for use with the methods defined above.</p>
+  <pre>&lt;&amp;#33;DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</a>"&gt;</pre>
+  <pre>
+    <br />&lt;script language="C#" runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; protected void Page_Load(object sender, EventArgs e)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string sUserText = GetQueryStringData(Request, "TextBox");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; sUserText = sUserText.Trim();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; System.Text.RegularExpressions.Regex wordPattern = new System.Text.RegularExpressions.Regex("&amp;#91;A-Za-z0-9&amp;#93;&amp;#42;");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (wordPattern.IsMatch(sUserText))<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; this.myLabel.Text = Server.HtmlEncode(sUserText);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&lt;/script&gt;</pre>
+  <pre>
+    <br />&lt;html xmlns="<a href="http://www.w3.org/1999/xhtml">http://www.w3.org/1999/xhtml</a>" &gt;</pre>
+  <pre>&lt;head id="Head1" runat="server"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;title&gt;Request Object Example&lt;/title&gt;<br />&lt;/head&gt;<br />&lt;body&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form id="form1" method="Get" runat="server"&gt;</pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;div&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;input type="text" name="TextBox"/&gt; &lt;br/&gt;&lt;br/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:Label ID="myLabel" runat="server" Text="Insert Text Above to See Here"&gt;&lt;/asp:Label&gt;&lt;br/&gt;&lt;br/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;input type="submit" name="textButton" value="Submit"/&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/div&gt;</pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/form&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/body&gt;<br />&lt;/html&gt;</pre>
+  <h1>Expected Result</h1>
+  <p>N/A (dependent upon input)</p>
+  <h1>More Information</h1>
+  <p>The data returned by Request('var') can come from any of the following sources, in the order listed. </p>
+  <ul>
+    <li>Query String <li>Form <li>Cookies <li>Client Certificate <li>Server Variables/HTTP Headers </li></li></li></li></li>
+  </ul>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>Request Object (ASP.NET): <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/iissdk/html/54d9972a-b6cd-4672-b62a-8793ce8ad335.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/iissdk/html/54d9972a-b6cd-4672-b62a-8793ce8ad335.asp</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

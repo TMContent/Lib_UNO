@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>798d781f-69a3-4751-a4a6-c5802edb70ce</Id>
+    <Id_History>798d781f-69a3-4751-a4a6-c5802edb70ce,28cc4f02-8f4b-470c-9e88-8a65f5510f59,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Destinations of Redirects Are Validated</Title>
+    <Category>Redirects and Forwards</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Destinations of Redirects Are Validated</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Check For==
+
+Check that destinations of redirects and forwards are validated.
+
+==Why==
+
+If destinations of redirects or forwards are not validated, an attacker may create hyperlinks that appear to point to legitimate sites, but actually point to malicious pages controlled by the attacker. This technique is often used by phishers to trick people into visiting fake sites that steal authentication credentials. In some cases, a user may gain unauthorized access by manipulating redirect or forward parameters, if destinations are not validated.
+
+==How to Check==
+
+Use the following steps to verify that destinations of redirects and forwards are validated:
+
+# **Identify redirects and forwards.** Review code to find all redirects and forwards.
+# **Enumerate destinations.** Make a list of all destinations for each redirect and forward.
+# **Identify access permissions.** Determine circumstances under which it is acceptable for each user role to access each destination.
+# **Examine each redirect and forward.** Verify that each redirect and forward uses mapping values instead of fully-qualified urls to determine destinations. Review the code of each redirect and forward to make sure that all destinations are validated to assure that users can only access resources that are authorized for them. 
+
+==How to Fix==
+
+Perform the following actions to assure validation of redirects and forwards:
+
+# **Identify redirects and forwards.** Review code to find all redirects and forwards.
+# **Map destinations.** Make a list of all destinations for each redirect and forward. Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.
+# **Define access permissions.** Determine circumstances under which it is acceptable for each user role to access each destination.
+# **Validate redirects.** Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards. Add validation routines to verify that the user has permissions to access the resource, which is the destination of the redirect or forward.]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d43d25ce-6642-4ef0-9e75-0737db2b885d</Id>
+    <Id_History>d43d25ce-6642-4ef0-9e75-0737db2b885d,26e61062-9782-4392-b9ce-d0e885391a60,</Id_History>
+    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Title>Dangerous Functions Are Disabled by Default</Title>
+    <Category>Hardening</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Dangerous Functions Are Disabled by Default</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* C++
+
+==What to Check For==
+
+Make sure that dangerous functions are disabled by default.
+
+==Why==
+
+Dangerous functions should be disabled by default so that attackers do not abuse them.
+
+==How to Check==
+
+To make sure that dangerous functions are disabled by default:
+
+# **Identify code that implements dangerous functions.** Determine which application features implemented by your application might be dangerous. Some examples are: file uploads, code execution, direct database access, and data deletion. Make a spreadsheet about all code that implements dangerous features.
+# **Verify that dangerous functions are configurable.** Examine the code that implements the dangerous functions. Make sure that this code checks configuration settings before running, and that dangerous functions are only executed if they are explicitly enabled.
+# **Verify that dangerous functions are disabled by default.** Examine the code that implements the dangerous functions. Make sure the default setting is for the dangerous functions not to run. If there are no explicit settings to enable dangerous functions, they should not run. The default settings that are present immediately after the application is installed should have dangerous functions disabled.
+# **Verify that dangerous functions are documented.** Examine documentation to make sure that all dangerous functions are documented, their security impact is explained, and the procedures to enable them are described.
+
+==How to Fix==
+
+To disable dangerous functions by default:
+
+# **Identify code that implements dangerous functions.** Determine which application features implemented by your application might be dangerous. Some examples are: file uploads, code execution, direct database access, and data deletion. Make a spreadsheet about all code that implements dangerous features.
+# **Make dangerous functions configurable.** Modify each piece of code that implements a dangerous function to check application settings to see whether the user has explicitly enabled the dangerous feature. Only allow the dangerous features to be executed if the user has explicitly enabled them.
+# **Make dangerous functions disabled by default.** For each dangerous feature, write code so that the feature can only be executed if it has been explicitly enabled by the user.
+# **Document the dangerous functions.** Add information about all the dangerous features to the documentation. Explain why each feature is dangerous. Describe how to configure each feature.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

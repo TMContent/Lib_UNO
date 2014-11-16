@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-970620387" Content_Hash="-611697778">
+  <Metadata>
+    <Id>7cc251c5-6e57-47a6-976e-365e8830f958</Id>
+    <Id_History>7cc251c5-6e57-47a6-976e-365e8830f958,62e4ee88-1794-44ac-8334-a60e7d6c64ed,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Account Administration Functionality Is Secured</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Account Administration Functionality Is Secured</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that the account administration interface is separate from the main application interface.</p>
+  <h1>Why</h1>
+  <p>Account administration requires higher privileges than the main application interface. Separating the two interfaces decreases the risk of a normal user being able to escalate privileges to that of an administrator.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to verify that the&amp;nbsp;account administration interface is separate from the main application interface: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Verify that your application has a separate administrative interface. </strong>Review your application's design and verify that your application's design specifies separation of administrative and main application interfaces. Verify that your application passes the following checks:</p>
+      <ul>
+        <li>
+          <strong>Administrative Functionality</strong>: Verify that all administrative functionality is clearly identified and separated from the rest of your application's functionality. Exceptions are allowed only when your application allows users to modify their own accounts. </li>
+        <li>
+          <strong>Code Organization</strong>: Ensure all administrative functionality is structured as a single module and not scattered throughout your application. </li>
+        <li>
+          <strong>Code Inheritance</strong>: Verify that all Java classes that handle your application's administrative tasks are declared as final. Example: <p /><blockquote><pre>public final class myappAcctAdmin<br />{<br /> ...<br />}</pre></blockquote></li>
+        <li>
+          <strong>Hosting Container</strong>: Verify that all administrative functionality operates within a Java container or a JVM that is separate from the rest of your application. Depending on the application server that your application uses, it might be necessary to run multiple instances of the application server. Additionally, check if your administrative interface operates on a different port than the rest of your application (e.g. port 3128).</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that the administrative interface is secure. </strong>Use the following steps to examine the security of your application's administrative interface:</p>
+      <ul>
+        <li>
+          <strong>Security Policy</strong>: Ensure that your application has a security policy regarding its administrative interface. </li>
+        <li>
+          <strong>Separate Authentication</strong>: Verify that privileged users are forced to re-authenticate before accessing the administrative interface. Check if your application's administrative interface uses a separate authentication module&amp;nbsp;from the rest of your application. </li>
+        <li>
+          <strong>Access Controls</strong>: Verify that only valid, privileged users can access your application's administrative interface. </li>
+        <li>
+          <strong>Connection</strong>: Depending on your application's requirements, it may be necessary to check if your application's administrative interface is utilizing SSL. Ensure your application's proper use of SSL.</li>
+      </ul>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following steps when designing an administrative interface:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Only privileged users can administer all accounts. </strong>Design your application such that the administrative module is separate from the main application interface. Since the separation requires using separate authentication mechanisms&amp;nbsp;for the application and administration, there is a reduced risk&amp;nbsp;of escalation-of-privilege attacks. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Users may be allowed to administer their own accounts. </strong>It may be necessary to allow users to administer their own accounts. This involves the ability to change passwords, account details, etc. Such administration can be done through the main application interface. Because the user is modifying sensitive data, extra security precautions must be enforced:</p>
+      <ul>
+        <li>
+          <strong>Track userID at the server-side</strong>: The user should always be tracked at the server-side. Store the userID inside a session. The only data the client needs to know is the session identifier. This reduces the risk of an attacker modifying another user's account information. </li>
+        <li>
+          <strong>Force re-authentication</strong>: Enforce re-authentication when modifying the user's password. This helps verify that the user is aware of the password change and is not a victim of a session hijacking. <br /></li>
+        <li>
+          <strong>Modify accounts in sections</strong>: Do not modify all account information at once. Split the account modification procedure in sections. For example, group the account information into credentials, personal data, contact information and additional information. Modifying the account information in groups reduces the risk of information leakage when the user is updating his/her account. </li>
+        <li>
+          <strong>Use SSL when modifying&amp;nbsp;accounts</strong>: The use of SSL provides encryption when transmitting sensitive data over the network. SSL also certifies the authenticity of the application against the user. <br /></li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Authorization Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/127d98e8-d628-40b7-8522-d903f4bf7927">Perform Role-based Security Checks</a>
+    </li>
+    <li>
+      <a href="/article/afa2d020-9b18-4861-9d4f-cb81cbcb1f2e">Require Authentication and Authorization for All Sensitive Pages</a>
+    </li>
+    <li>
+      <a href="/article/12096ed3-d1e3-47e1-834d-f59dcaf4110f">Make Authentication and Authorization Policies Configurable</a>
+    </li>
+    <li>
+      <a href="/article/c0ff64c5-cf7f-4855-b039-81d2a298e3bb">Deny All Access by Default</a>
+    </li>
+    <li>
+      <a href="/article/92839e91-8f79-45fb-9b8d-76fc9c814fea">Check Access Control Permissions When Referencing Objects</a>
+    </li>
+    <li>
+      <a href="/article/b4a87891-a19a-41be-a1a3-f8a13c7f4881">Use Indirect Object References</a>
+    </li>
+    <li>
+      <a href="/article/58e80d4a-410a-47c9-b3c5-f13cc79a3e00">Partition the Application Between Public and Private Domains</a>
+    </li>
+    <li>
+      <a href="/article/4b9647f2-644f-48bf-b2b5-cd025261450d">Secure the Account Administration Functionality</a>
+    </li>
+    <li>
+      <a href="/article/4f3147c2-7ca1-487c-9144-56630e5a6f80">Automatically Lock Inactive User Accounts</a>
+    </li>
+    <li>
+      <a href="/article/35bde9da-b8f2-4f8d-9a3f-48a3ededed4b">Consider Using JAAS for Authorization</a>
+    </li>
+  </ul>
+  <h1>Authorization Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/14f55778-8227-4d0d-85ca-41d80853bc58">Role-based Security Checks Are Performed</a>
+    </li>
+    <li>
+      <a href="/article/0d7d5d60-33bc-4fac-a088-f0be84d37cef">Authentication and Authorization Are Required for All Sensitive Pages</a>
+    </li>
+    <li>
+      <a href="/article/fb22da6b-bf1c-4315-83a5-7bc3486bf9ab">Authentication and Authorization Policies Are Configurable</a>
+    </li>
+    <li>
+      <a href="/article/98e8c0d1-d95a-4eb7-a39b-630c40c7adaf">All Access Is Denied by Default</a>
+    </li>
+    <li>
+      <a href="/article/f3747faf-6e0b-43af-ae92-ed3736be390a">Access Control Permissions Are Checked When Referencing Objects</a>
+    </li>
+    <li>
+      <a href="/article/54ea1759-e5e8-4eee-84cc-67607fef0c30">Indirect Object References Are Used</a>
+    </li>
+    <li>
+      <a href="/article/3e451992-d7aa-43fd-ade8-656a87b787f8">The Application Is Partitioned into Public and Private Domains</a>
+    </li>
+    <li>
+      <a href="/article/7cc251c5-6e57-47a6-976e-365e8830f958">Account Administration Functionality Is Secured</a>
+    </li>
+    <li>
+      <a href="/article/a4f21cca-3db6-4eae-88d2-5d6b5f7ad2bb">Inactive User Accounts Are Automatically Locked</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

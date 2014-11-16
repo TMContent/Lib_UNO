@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>4a62104f-8abf-4d1f-8959-04b59b6db3b4</Id>
+    <Id_History>4a62104f-8abf-4d1f-8959-04b59b6db3b4,1d0dc800-55b1-4c62-994d-0410b2c202e2,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Automatically Lock Inactive User Accounts</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Automatically Lock Inactive User Accounts</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+</p>
+  <h1>What to Do</h1>
+  <p>Automatically lock inactive user accounts. Log the instance when accounts have been locked.</p>
+  <h1>Why</h1>
+  <p>Inactive user accounts increase the attack surface of the application and can be used by an attacker as a means of entry.</p>
+  <h1>When</h1>
+  <p>Always lock inactive accounts after an appropriate amount of time.</p>
+  <h1>How</h1>
+  <p>To automatically lock inactive user accounts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Set a lockout policy.&amp;nbsp;</strong>Create the application's lockout policy. Determine the necessary duration of inactivity before an account can be locked/disabled. This policy can vary depending on whether the account is of a normal user or an administrator. For example, disable normal accounts after 45 days of inactivity and administrative accounts after 30 days of inactivity.</p>
+    </li>
+    <li>
+      <p />
+      <p>
+        <strong>Keep track of user inactivity.&amp;nbsp;</strong>Establish a mechanism to keep track of the last successful authentication. Successful authentication can be tracked via logs or a timestamp, which resides in the user database. Example:</p>
+      <p>
+        <i>For Mongodb:</i>
+      </p>
+      <p style="font-family: Arial, Verdana;" />
+      <pre>&gt; db.users.find({},{_id:0,username:1,last_login_date:1})<br />+----------+-----------------+<br />| username | last_login_date |<br />+----------+-----------------+<br />| adam     |  2013-05-11     |<br />| jill     |  2012-12-14     |<br />| jack     |  2013-05-10     |<br />| dinesh   |  2013-05-11     |<br />| zane     |  2001-09-23     |<br />| sam      |  2005-06-19     |<br />+----------+-----------------+</pre>
+      <i>For MySql:</i>
+      <pre>sql&gt; select username, last_login_date from users;<br /><pre>+----------+-----------------+<br />| username | last_login_date |<br />+----------+-----------------+<br />| adam     |  2013-05-11     |<br />| jill     |  2012-12-14     |<br />| jack     |  2013-05-10     |<br />| dinesh   |  2013-05-11     |<br />| zane     |  2001-09-23     |<br />| sam      |  2005-06-19     |<br />+----------+-----------------+    </pre></pre>
+      <p />
+    </li>
+    <li>
+      <p>
+        <strong>Set a lockout mechanism.&amp;nbsp;</strong>Establish a mechanism 
+to verify the current period of inactivity and automatically set the 
+disabled bit for inactive accounts. Use the application or database 
+server's scheduler to run this function during the hours with least user
+ activity. Keep in mind that inactive accounts should be disabled, but 
+not removed until it is confirmed that they should be completely 
+removed. Following the steps set in the&amp;nbsp;<a href="a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Log Important Security Operations</a>&amp;nbsp;guideline, create a log entry when an account has been disabled.</p>
+      <p>For example, the following database transaction would lock all 
+user accounts that have been inactive for more than 30 days. Such a 
+transaction should be scheduled to run once a day:</p>
+      <pre>Update users set locked = 1 where (current_date - 30) &gt; last_login_date</pre>
+      <p>
+        <strong>Note:</strong>&amp;nbsp;PCI DSS requirements state that a&amp;nbsp;user account should be locked out after no more than 90 days of inactivity.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p />
+  <p>The following segment illustrates the user database of a multi-user application. In its current state, the application logs the last time the user has logged in but does not enforce a lockout policy for its inactive users. Therefore, an attacker can gain unauthorized access to the application by compromising an inactive account.</p>
+  <i>For Mongodb:</i>
+  <p />
+  <pre>&gt; db.users.find({},{_id:0,username:1,locked:1,last_login_date:1})<br />+----------+--------+-----------------+<br />| username | locked | last_login_date |<br />+----------+--------+-----------------+<br />| adam     |      0 |      2013-05-11 |<br />| jill     |      0 |      2012-12-14 |<br />| jack     |      0 |      2013-05-10 |<br />| dinesh   |      0 |      2013-05-11 |<br />| zane     |      0 |      2001-09-23 |<br />| sam      |      0 |      2005-06-19 |<br />+----------+--------+-----------------+</pre>
+  <i>For MySql:</i>
+  <p />
+  <pre>sql&gt; select username, locked, last_login_date from users;<br /><pre>+----------+--------+-----------------+<br />| username | locked | last_login_date |<br />+----------+--------+-----------------+<br />| adam     |      0 |      2013-05-11 |<br />| jill     |      0 |      2012-12-14 |<br />| jack     |      0 |      2013-05-10 |<br />| dinesh   |      0 |      2013-05-11 |<br />| zane     |      0 |      2001-09-23 |<br />| sam      |      0 |      2005-06-19 |<br />+----------+--------+-----------------+</pre></pre>
+  <p />
+  <h1>Solution Example</h1>
+  <p />
+  <p>The following segment illustrates the user database of a multi-user application. Because the application enforces a lockout policy, all of its inactive users have been locked and denied access to the application. Therefore, an attacker cannot compromise the application through its inactive users.</p>
+  <pre>sql&gt; select username, locked, last_login_date from users;<br /></pre>
+  <i>For Mongodb:</i>
+  <pre>&gt; db.users.find({},{_id:0,username:1,locked:1,last_login_date:1})<br />+----------+--------+-----------------+<br />| username | locked | last_login_date |<br />+----------+--------+-----------------+<br />| adam     |      0 |      2013-05-11 |<br />| jill     |      1 |      2012-12-14 |<br />| jack     |      0 |      2013-05-10 |<br />| dinesh   |      0 |      2013-05-11 |<br />| zane     |      1 |      2001-09-23 |<br />| sam      |      1 |      2005-06-19 |<br />+----------+--------+-----------------+</pre>
+  <i>For MySql:</i>
+  <pre>sql&gt; select username, locked, last_login_date from users;<br /><pre>+----------+--------+-----------------+<br />| username | locked | last_login_date |<br />+----------+--------+-----------------+<br />| adam     |      0 |      2013-05-11 |<br />| jill     |      1 |      2012-12-14 |<br />| jack     |      0 |      2013-05-10 |<br />| dinesh   |      0 |      2013-05-11 |<br />| zane     |      1 |      2001-09-23 |<br />| sam      |      1 |      2005-06-19 |<br />+----------+--------+-----------------+</pre></pre>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authorization Guidelines</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="b7176093-9004-4b9f-8b6b-4a56c6e9cb87" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Require Authentication and Authorization for All Sensitive Pages</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="08b369bf-b2ff-47e1-92c7-11c8607fbe00" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Make Authentication and Authorization Policies Configurable</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="10a459c4-4a39-4325-b3a9-a3458ac43b0c" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Deny All Access by Default</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="be7b255c-ce4b-427b-8b02-66e78481179e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Check Access Control Permissions When Referencing Objects</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="0cdb8ff4-a9f0-47d8-b32c-b72e2da858d9" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Use Indirect Object References</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="42892132-de71-41b9-8c35-8f8ee23cb758" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Partition the Application Between Public and Private Domains</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="52ea4336-7d99-47b3-bea2-2ac33da6e1a2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Secure the Account Administration Functionality</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="4a62104f-8abf-4d1f-8959-04b59b6db3b4" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Automatically Lock Inactive User Accounts</a>
+      </b>
+    </li>
+  </ul>
+  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Authorization Checklists</h1>
+  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="001453f0-a647-4307-ad94-4077307f71a1" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication and Authorization Are Required for All Sensitive Pages</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="a1310a50-1c9f-49f1-ad3e-ae1002e51b00" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Authentication and Authorization Policies Are Configurable</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="e118152a-8a32-455d-b8ee-4b5d4c66742e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">All Access Is Denied by Default</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="b01e90c6-bf52-4db8-b2ce-2b5a89a40815" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Access Control Permissions Are Checked When Referencing Objects</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="42ff8254-15b9-4e5c-af6e-0ea617354b4f" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Indirect Object References Are Used</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="41a04d3f-0bb5-4904-bb28-134a109f9ce0" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Application Is Partitioned into Public and Private Domains</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="02b0be6c-99ed-4ff6-8805-8fc0a7402ae5" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Account Administration Functionality Is Secured</a>
+      </b>
+    </li>
+    <li style="margin: 0px; padding: 0px;">
+      <b style="margin: 0px; padding: 0px;">
+        <a href="1a839a80-f801-4bcd-895b-a62cddac93bc" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Inactive User Accounts Are Automatically Locked</a>
+      </b>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

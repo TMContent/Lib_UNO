@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="483875060" Content_Hash="1931267358">
+  <Metadata>
+    <Id>ca457ae8-6511-4fff-b46b-c7a1fb69423a</Id>
+    <Id_History>ca457ae8-6511-4fff-b46b-c7a1fb69423a,d5d0f554-3fe0-473d-9dfc-75ce5b06ba0d,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Require Authentication for All Private Pages</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Require Authentication for All Private Pages</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Require authentication for all private resources.</p>
+  <h1>Why</h1>
+  <p>All pages that have private information should require authentication to prevent unauthorized information disclosure.</p>
+  <h1>When</h1>
+  <p>Require authentication for all private pages in all web applications that handle sensitive or private information.</p>
+  <h1>How</h1>
+  <p>To require authentication for all private resources:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all sensitive pages.</strong> Make a list of all pages that handle sensitive or private information.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Define roles.</strong> Define access roles for your application. These roles should include administrative users and various types of users specific to your application.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Assign role-based access.</strong> Edit the <em>Web.config</em> file and configure the following markup for each sensitive page:</p>
+      <pre>&lt;location path="[Filename of the page]"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="[Authorized roles]"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
+      <p>The <em>[Filename of the page]</em> refers to the file name of the page. The <em>[Authorized roles]</em> is a comma-separated list of roles authorized to view the resource. The line <em>&lt;deny users="*"&gt;</em> fulfills the "Deny All Access by Default" principle by rejecting all access besides that explicitly authorized via role-based authorization.</p>
+    </li>
+  </ol>
+  <br />]]></Data>
+  </Content>
+</TeamMentor_Article>

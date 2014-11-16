@@ -1,0 +1,741 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-324065056" Content_Hash="1172611246">
+  <Metadata>
+    <Id>0203fbf9-8382-4c03-b9dd-7b7b47d9d90b</Id>
+    <Id_History>0203fbf9-8382-4c03-b9dd-7b7b47d9d90b,78f5fa0c-4ede-4f54-b7a7-bda0641efd8f,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Test for XPath Injection Bugs</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Test</Phase>
+    <Technology>Web Application</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for XPath Injection Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>Andres De Vivanco</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Applies to:</span>
+  </h1>
+  <ul>
+    <li>
+      <span>Web applications that use XPath to query XML data. Usually these applications are developed using ASP .Net, Java, PHP, Python and Ruby.</span>
+    </li>
+  </ul>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>
+    <span>XPath is a language to query over XML data.<span>&amp;nbsp; </span>Even though XPath is only used for querying data, it suffers from an injection vulnerability similar to SQL Injection.<span>&amp;nbsp; </span>An attacker that manipulates the parameters used in an XPath query can modify the logic of an original query to perform an authentication bypass or execute information disclosure attacks. </span>
+  </p>
+  <p>
+    <span>It is recommended that you follow these steps to test for XPath Injection vulnerabilities:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Step 1:<span>&amp;nbsp; </span>Understand Attack Scenarios</span>
+      <li>
+        <span>Step 2:<span>&amp;nbsp; </span>Analyze Causes and Countermeasures</span>
+        <li>
+          <span>Step 3:<span>&amp;nbsp; </span>Start Testing and Exploring</span>
+          <li>
+            <span>Step 4:<span>&amp;nbsp; </span>Fine-tune Test Cases</span>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 1:<span>&amp;nbsp; </span>Understand Attack Scenarios</span>
+  </h1>
+  <p>
+    <span>First, you must understand the details of XPath attack scenarios.<span>&amp;nbsp; </span>Similar to SQL injection, there are two types of XPath attacks:</span>
+  </p>
+  <ul>
+    <li>
+      <span>Normal XPath Injection </span>
+      <li>
+        <span>Blind XPath Injection</span>
+      </li>
+    </li>
+  </ul>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Scenario 1: Normal XPath Injection </em>
+    </span>
+  </h2>
+  <p>
+    <span>In order to follow this and the next scenario, you must understand the background for XPath queries.<span>&amp;nbsp;&amp;nbsp; </span>XPath is a language that queries on XML data such as the file below:</span>
+  </p>
+  <pre>
+    <span>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt; <br />&lt;users&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;user&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;username&gt;johns&lt;/username&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;password&gt;abc123&lt;/password&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;fullname&gt;John Smith&lt;/fullname&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/user&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;user&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;username&gt;billg&lt;/username&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;password&gt;qwerty&lt;/password&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;fullname&gt;Bill Graves&lt;/fullname&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/user&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;user&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;username&gt;mrt&lt;/username&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;password&gt;pr1v@t3&lt;/password&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;account&gt;Mr. T&lt;/account&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/user&gt; <br />&lt;/users&gt;<br />&amp;nbsp;</span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>
+    <span>An XPath query consists of expressions containing backslashes (/) and dots (.) that are used to select nodes from the root node down and predicates enclosed in squared brackets ([]) used to include <i>when</i> conditions:</span>
+  </p>
+  <pre>
+    <span>/users/user/username<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+  </pre>
+  <pre>
+    <span>/users/user[username/text() ='johns'] </span>
+  </pre>
+  <p>
+    <span>The first query returns all username nodes while the second uses a predicate to search all usernames that match the string <i>johns</i>.</span>
+  </p>
+  <p>
+    <span>A common scenario is to use XPath to perform authentication.<span>&amp;nbsp; </span>For example, the next query grabs a username and password from a web form and check if they match the ones of a valid user [i]:</span>
+  </p>
+  <pre>
+    <span>//users/user[username/text()='" + Request.QueryString("username") + "' and password/text()='" + Request.QueryString("password") + "']";</span>
+  </pre>
+  <p>
+    <span>If a user enters safe values (</span>
+    <span>username=test, password=123</span>
+    <span>) the application builds a standard authentication query:</span>
+  </p>
+  <pre>
+    <span>//users/user[username/text()='test' and password/text()='123']</span>
+  </pre>
+  <p>
+    <span>However an attacker can use the web form to submit the following injection string as the username and 123 as the password:</span>
+  </p>
+  <pre>
+    <strong>
+      <span>user' or '1' = '1</span>
+      <span>
+      </span>
+    </strong>
+  </pre>
+  <p>
+    <span>The resulting XPath query looks like this:</span>
+  </p>
+  <pre>
+    <span>/users/user[username/text()='<strong><span>user' or '1' = '1</span>'</strong> and password/text()='123']</span>
+  </pre>
+  <p>
+    <span>Unlike SQL, XPath disallows commenting the rest of the expression so the attacker needs to insert an <i>or</i> condition that makes the password check irrelevant.<span>&amp;nbsp; </span>The modified query returns all the users and the result is an attack against the authentication scheme in use.</span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Scenario 2: Blind XPath Injection </em>
+    </span>
+  </h2>
+  <p>
+    <span>Similar to blind SQL Injection, blind XPath Injection uses true and false conditions to infer confidential information.<span>&amp;nbsp; </span>For example, an attacker wants to retrieve another user’s password but has no way of forcing the web application to display it on screen.<span>&amp;nbsp; </span>The attacker uses blind XPath injection to steal the victim passwords character by character.<span>&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <span>In the example below, the attacker now logs in with a valid account (</span>
+    <span>johns</span>
+    <span>) and tries to steal the password of another user.<span>&amp;nbsp;&amp;nbsp; </span>The attacker passes this attack string to check if the password for the third user in the document tree (</span>
+    <span>"mrt"</span>
+    <span>) starts with an </span>
+    <span>"a" [ii]</span>
+    <span>:</span>
+  </p>
+  <pre>
+    <strong>
+      <span>johns' and substring((//user[position()=3]/child::node()[position()=2]),1,1)="a" and '1' = '1</span>
+      <span>
+      </span>
+    </strong>
+  </pre>
+  <p>
+    <span>The resulting XPath query looks the one below (note that the attacker needs to pass his valid username and password). The statement only returns true if the </span>
+    <span>substring()</span>
+    <span> condition is true:<span>&amp;nbsp; </span></span>
+  </p>
+  <pre>
+    <span>/users/user[username/text()='<span><strong>johns' and substring((//user[position()=3]/child::node()[position()=2]),1,1)="a" and '1' = '1</strong></span>' and password/text()='</span>
+    <span>abc123</span>
+    <span>']</span>
+  </pre>
+  <p>
+    <span>The attacker can craft similar blind commands to check data lengths using </span>
+    <span>string-length().</span>
+    <span>
+      <span>&amp;nbsp; </span>For instance, the next query returns true if the length of the target password is 7:</span>
+  </p>
+  <pre>
+    <span>/users/user[username/text()='<span><strong>johns' and string-length(//user[position()=3]/child::node()[position()=2]) and '1' = '1</strong></span>' and password/text()='</span>
+    <span>abc123</span>
+    <span>']</span>
+  </pre>
+  <p>
+    <span>The attacker can use additional functions such as </span>
+    <span>count(), contains()</span>
+    <span> to reveal both the contents of an XML store as well as its structure.<span>&amp;nbsp; </span>Exploring the logic and hierarchy of an XML document is known as <i>XML Crawling</i>.</span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Step 2:<span>&amp;nbsp; </span>Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>
+    <span>The following step in testing for XPath Injection bugs is to understand what causes them and how to defend against them.</span>
+  </p>
+  <h2>
+    <span>
+      <em>XPath Injection Cause</em>
+    </span>
+  </h2>
+  <p>
+    <span>XPath Injection bugs exist due to poor input validation on and failing to sanitize the parameters used in an XPath query.<span>&amp;nbsp; </span>For example, consider the following PHP code:</span>
+  </p>
+  <pre>
+    <span>&lt;?php<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; $xml = simplexml_load_file("users.xml");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; $result = $xml-&gt;xpath("//users/user[username/text()='"<strong>. $_GET['name'] </strong>. "']");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; print_r($result);<br />?&gt;</span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <p>
+    <span>The PHP application uses the value passed in the URL parameter </span>
+    <span>name</span>
+    <span> in the XPath query without checking for injected commands.</span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>Make sure to look at the API functions that your application uses to execute XPath queries.<span>&amp;nbsp;&amp;nbsp; </span>This table shows some common XPath APIs:</span>
+    <span>&amp;nbsp;</span>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <pre>
+            <b>
+              <span>Class/API</span>
+            </b>
+          </pre>
+        </td>
+        <td>
+          <p>
+            <b>
+              <span>Language</span>
+            </b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>XPath.compile() </span>
+          </pre>
+          <pre>
+            <span>XPathExpression.evaluate()</span>
+          </pre>
+          <pre>
+            <span>&amp;nbsp;</span>
+          </pre>
+          <pre>
+            <span>&amp;nbsp;</span>
+          </pre>
+        </td>
+        <td>
+          <p>
+            <span>Java</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <pre>
+            <span>XPathNavigator.Select()</span>
+          </pre>
+          <p>
+            <span>XPathNavigator.Evaluate()</span>
+            <span>
+            </span>
+          </p>
+        </td>
+        <td>
+          <p>
+            <span>ASP .NET</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <span>xpath()</span>
+          </p>
+        </td>
+        <td>
+          <p>
+            <span>PHP</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <span>findvalue()</span>
+          </p>
+        </td>
+        <td>
+          <p>
+            <span>Perl</span>
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <p>
+    <b>
+      <i>
+        <span>
+        </span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>XPath Injection Countermeasures</em>
+    </span>
+  </h2>
+  <p>
+    <span>XPath Injection vulnerabilities can be prevented by sanitizing user input.<span>&amp;nbsp; </span>Specifically, the application needs to disallow any single or double quotes inputted by a user from making it to an XPath query.<span>&amp;nbsp;&amp;nbsp; </span>Sometimes the input doesn’t come directly from the user but is read from a persistent data source such as a database or an environment variable.<span>&amp;nbsp;&amp;nbsp; </span>In these cases, the application must sanitize the data coming from the data source and into the XPath query.</span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>A proposed method [iii] consists of escaping any single quotes (VB):</span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <pre>
+    <span>Dim FindUserXPath as String<br />FindUserXPath = "//Employee[UserName/text()='" &amp;<br />Request("Username").Replace("'", "&amp;apos;") &amp; "' And<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Password/text()='" &amp; Request("Password").Replace("'", "&amp;apos;") &amp; "']"<br /></span>
+  </pre>
+  <p>
+    <span>Other methods include using parameterized XPath queries to properly handle user input. </span>
+  </p>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Step 3:<span>&amp;nbsp; </span>Start Testing and Exploring</span>
+  </h1>
+  <p>
+    <span>Now that you are familiar with the inner workings of XPath injection attacks and able to recognize both its causes and countermeasures, <span>&amp;nbsp;</span>you must continue by executing basic XPath Injection black box test cases and exploring the results.</span>
+  </p>
+  <h2>
+    <span>
+      <em>Start with a simple test string</em>
+    </span>
+  </h2>
+  <p>
+    <span>Almost all XPath Injection strings must contain either a single or a double quote.<span>&amp;nbsp; </span>Your first test pass must consist of submitting a string containing quotes to see how the application reacts to it:</span>
+  </p>
+  <pre>
+    <span>
+      <strong>abc'xyz"</strong>
+    </span>
+  </pre>
+  <p>
+    <span>If the server doesn’t return an error message and uses this string for an XPath query, it is almost certain that you’ll find an XPath Injection bug.</span>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Testing for Normal XPath Injection Authentication Bypass </em>
+    </span>
+  </h2>
+  <p>
+    <span>Hardware Requirements:<span>&amp;nbsp; </span>One client computer and one server computer running the web application.</span>
+  </p>
+  <p>
+    <span>Tools:<span>&amp;nbsp;&amp;nbsp; </span>Web browser.</span>
+  </p>
+  <p>
+    <span>Testing steps:</span>
+  </p>
+  <ol>
+    <li>
+      <span>In the client computer, open the web browser and navigate to an authentication page in the server that uses XPath.</span>
+      <li>
+        <span>Enter a string (first for the username and then for the password) containing and additional true command.</span>
+        <li>
+          <span>Submit the authentication form to the server.</span>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>Expected results:<span>&amp;nbsp; </span>The application should not authenticate the client.<span>&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Testing for Normal XPath Injection Information Disclosure</em>
+    </span>
+  </h2>
+  <p>
+    <span>Hardware Requirements:<span>&amp;nbsp; </span>One client computer and one server computer running the web application.</span>
+  </p>
+  <p>
+    <span>Tools:<span>&amp;nbsp;&amp;nbsp; </span>Web browser.</span>
+  </p>
+  <p>
+    <span>Testing steps:</span>
+  </p>
+  <ol>
+    <li>
+      <span>In the client computer, open the web browser and navigate to any web form or other entry point that the server uses to build an XPath query.</span>
+      <li>
+        <span>Enter a string containing an additional command that executes an XPath query on another user’s node.</span>
+        <li>
+          <span>Submit the form to the server.</span>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>Expected results:<span>&amp;nbsp; </span>The application should not send a response containing data from the other user’s XML node.</span>
+  </p>
+  <p>
+    <b>
+      <span>
+      </span>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Testing for Blind XPath Injection Information Disclosure</em>
+    </span>
+  </h2>
+  <p>
+    <span>Hardware Requirements:<span>&amp;nbsp; </span>One client box computer one server computer running the web application.</span>
+  </p>
+  <p>
+    <span>Tools:<span>&amp;nbsp;&amp;nbsp; </span>Web browser.</span>
+  </p>
+  <p>
+    <span>Testing steps:</span>
+  </p>
+  <ol>
+    <li>
+      <span>In the client computer, open the web browser and navigate to any web form or other entry point that the server uses to build an XPath query.</span>
+      <li>
+        <span>Enter a string containing an additional command that gathers partial knowledge of confidential information in the XML store.</span>
+        <li>
+          <span>Submit the form to the server.</span>
+          <li>
+            <span>Repeat steps 2 and 3 until the desired information is fully disclosed.</span>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>Expected results:<span>&amp;nbsp; </span>The application should not disclose the desired information.</span>
+  </p>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Step 4:<span>&amp;nbsp; </span>Fine-tune Test Case Data</span>
+  </h1>
+  <p>
+    <span>Finally, to achieve proper test case coverage, you must submit tests cases through different application entry points and adapt the format of the test data depending on the data format required for each entry point and each type of attack that can be carried out.<span>&amp;nbsp;&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h2>
+    <span>
+      <em>Tune test case data format according to entry points</em>
+    </span>
+  </h2>
+  <p>
+    <span>Like when testing for any injection bug, it is important that you adapt the data used in test cases according to the entry point under test.<span>&amp;nbsp; </span>For example, when testing through URL parameters, the first string might look like the second or the third depending on the URL-encoding schema:</span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <pre>
+    <span>user' or '1' = '1</span>
+    <span>
+      <span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>original test string</span>
+  </pre>
+  <pre>
+    <span>user'+or+'1'+=+'1<span></span></span>
+    <span>
+      <span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>string under URL encoding schema 1</span>
+  </pre>
+  <pre>
+    <span>user'%20or%20'1'%20=%20'1</span>
+    <span>
+      <span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>string under URL encoding schema 2<span></span></span>
+  </pre>
+  <p>
+    <span>You must consider tuning the test case format for different entry points below such as URL parameters, web form fields, web services methods, flash parameters, etc.</span>
+  </p>
+  <p>
+    <b>
+      <i>
+        <span>&amp;nbsp;</span>
+      </i>
+    </b>
+  </p>
+  <h2>
+    <span>
+      <em>Fine-tune test case data according to different attack objectives</em>
+    </span>
+  </h2>
+  <p>
+    <span>Finally, you must consider the different variations and constructs depending on the attack objective that the test case executed.<span>&amp;nbsp;&amp;nbsp; </span>The table below shows test case constructs depending on the objective.</span>
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>
+            <b>
+              <span>Construct</span>
+            </b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>
+              <span>Attack Objective</span>
+            </b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>
+            <br />
+          </span>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>a' or '1=1'</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>a" or "1"="1</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>a'] or '1'='1</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>a"] or "1"="1</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>' or 1=1 or ''='</span>
+          </p>
+          <p>
+            <span>&amp;nbsp;</span>
+          </p>
+        </td>
+        <td>
+          <p>
+            <span>Authentication bypass</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>(string-length(S))</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>(substring(S,N,1))</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>count(//user/child::node())</span>
+          </p>
+          <p>
+            <span>&amp;nbsp;</span>
+          </p>
+        </td>
+        <td>
+          <p>
+            <span>Blind XPath injection</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>namespace-uri(path)<a style="mso-endnote-id: edn4" title="" href="about:blank#_edn4" name="_ednref4"><span><span><span><span>[iv]</span></span></span></span></a>.</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>name(path)</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>count(path/child::node())</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>count(path/child::text())</span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>count(path/child::comment()) </span>
+          </p>
+          <p>
+            <span>
+              <span>•<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+            </span>
+            <span>count(path/child::*) count(path/child::processing-instruction()) </span>
+          </p>
+        </td>
+        <td>
+          <p>
+            <span>XML Crawling</span>
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>
+    <span>XPath Injection is a vulnerability that allows bypassing authentication and accessing an entire XML document.<span>&amp;nbsp; </span>It is caused because the vulnerable application fails to properly validate and sanitize user input and uses the input as part of an XPath query.<span>&amp;nbsp;&amp;nbsp; </span>There are different test cases to execute depending on the type of XPath Injection under test: normal or simple XPath Injection, blind XPath Injection, and XML crawling.<span>&amp;nbsp; </span></span>
+  </p>
+  <p>
+    <span>&amp;nbsp;</span>
+  </p>
+  <div>
+    <br />
+    <hr />
+    <div>
+      <p>
+        <span>[i] <strong>OWASP - XPath Injection Overview</strong>. Roberto Suggi Liverani. <a href="http://www.owasp.org/index.php/XPATH_Injection">http://www.owasp.org/index.php/XPATH_Injection</a></span>
+      </p>
+      <p>
+        <span>
+        </span>
+      </p>
+    </div>
+    <div>
+      <p>
+        <span>[ii] </span>
+        <span>
+          <b>OWASP - Blind XPath Injection.</b>
+          <a href="http://www.owasp.org/index.php/Blind_XPath_Injection">http://www.owasp.org/index.php/Blind_XPath_Injection</a>
+        </span>
+        <span>&amp;nbsp;</span>
+      </p>
+    </div>
+    <div>
+      <p>
+        <span>[iii]&amp;nbsp;</span>
+        <span>
+          <b>OWASP -XPath Injection.</b>
+          <a href="http://www.owasp.org/index.php/XPath_Injection">http://www.owasp.org/index.php/XPath_Injection</a>
+        </span>
+      </p>
+      <p>
+        <span>
+        </span>
+      </p>
+    </div>
+    <div>
+      <p>
+        <span>[iv]&amp;nbsp;</span>
+        <span>
+          <b>Blind</b>
+          <b>XPath</b>
+          <b>Injection</b>. Amit Klein. <a href="http://www.modsecurity.org/archive/amit/blind-xpath-injection.pdf">http://www.modsecurity.org/archive/amit/blind-xpath-injection.pdf</a></span>
+      </p>
+      <p>
+        <span>&amp;nbsp;</span>
+      </p>
+    </div>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

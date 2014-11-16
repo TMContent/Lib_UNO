@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1398581346" Content_Hash="540251937">
+  <Metadata>
+    <Id>83124492-cd34-49a8-98ad-ad828b1edeef</Id>
+    <Id_History>83124492-cd34-49a8-98ad-ad828b1edeef,155b089e-dd28-4285-a0d2-d3adc6db7416,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Use Authorization Manager (AzMan) with ASP.NET</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Authorization Manager (AzMan) with ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>Authorization Manager (AzMan) <li>Microsoft Windows Server 2003 or later&amp;nbsp;operating system <li>Microsoft Windows XP Professional operating system </li></li></li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to shows you how to use the Authorization Manager (AzMan) in conjunction with the ASP.NET role manager API to manage roles, check user role membership, and authorize roles to perform specific operations against an AzMan policy store. The How to also explains how to use Authorization Manager's authorization model of tasks and operations through the AzMan COM API. </p>
+  <p>The benefit of using AzMan is that it enables you to define operations, group them into tasks, and then authorize roles to perform specific tasks. It also provides an administrative console for managing roles, tasks, operations, and users.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>
+      <div>Objectives</div>
+      <li>
+        <div>Overview</div>
+        <li>
+          <div>Summary of Steps</div>
+          <li>
+            <div>Step 1. Install AzMan</div>
+            <li>
+              <div>Step 2. Create an AzMan Policy Store</div>
+              <li>
+                <div>Step 3. Define Tasks and Operations</div>
+                <li>
+                  <div>Step 4. Create Roles and Assign Users in AzMan</div>
+                  <li>
+                    <div>Step 5. Configure Your ASP.NET Application to Use AuthorizationStoreRoleProvider</div>
+                    <li>
+                      <div>Step 6. Use Role Manager to Perform a Role Check</div>
+                      <li>
+                        <div>Step 7. Use AzMan APIs to Authorize Operations</div>
+                        <li>
+                          <div>ASP.NET Web Site Configuration Tool</div>
+                          <li>
+                            <div>Security Considerations</div>
+                            <li>
+                              <div>ADAM Considerations</div>
+                              <li>
+                                <div>Additional Resources</div>
+                              </li>
+                            </li>
+                          </li>
+                        </li>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Identify when to use Authorization Manager (AzMan). <li>Create a policy store, define tasks, operations, and role assignments using AzMan. <li>Configure your Web application to use <b>AuthorizationStoreRoleProvider</b>. <li>Use AzMan APIs to authorize operations. </li></li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>Authorization Manager (AzMan) enables you to define individual operations, which can be grouped together to form tasks. You can then authorize roles to perform specific tasks and/or individual operations. AzMan provides an administration tool as a Microsoft Management Console (MMC) snap-in to manage roles, tasks, operations, and users. You can configure an AzMan policy store in an XML file, Active Directory, or in an Active Directory Application Mode (ADAM) store.</p>
+  <p>ASP.NET version 2.0 role management provides an API that enables you to manage application roles and users' membership of roles. By configuring the ASP.NET role manager to use the <b>AuthorizationStoreRoleProvider</b>, you can use the role management API against an AzMan policy store.</p>
+  <p>The <b>AuthorizationStoreRoleProvider</b> does not support AzMan business rules ("BizRules"), which are scripted extensions to authorization checks, because the current role manager implementation does not have the concept of extended data that can be passed along during an authorization check. To use AzMan BizRules, you need to use COM interop.</p>
+  <h2>Roles API vs. Authorization Manager</h2>
+  <p>ASP.NET role manager provides an API that enables you to manage application roles, add and remove users from roles, and check role membership, but it does not allow you to query whether a user is authorized to perform a named task or operation. AzMan allows you to define individual operations and combine them into tasks. With AZMan, in addition to role checks, you can also check whether a user can perform a task. Role assignment and task authorization can be configured outside of the application or performed programmatically within the application. The AzMan administration MMC snap-in allows administrators to change the tasks a role may perform at run time and to manage each user's membership of roles.</p>
+  <p>At run time, if you are using the ASP.NET roles API, you programmatically query a user's role membership. Using the AzMan COM API and the <b>AccessCheck</b> function, you query whether a user is authorized to perform a named task.</p>
+  <p>You should use AzMan to design and implement role-based authorization if you want to design a more fine-grained role-based authorization approach around operations and tasks, and if you want the additional flexibility of allowing an administrator to create, delete, and administer the permissions assigned to a role at run time.</p>
+  <h1>Summary of Steps</h1>
+  <p>To use the ASP.NET role manager to check user role membership in an Authorization Manager policy store, perform the following steps: </p>
+  <ul>
+    <li>Step 1. Install AzMan. <li>Step 2. Create an AzMan policy store. <li>Step 3. Define tasks and operations. <li>Step 4. Create roles and assign users in AzMan. <li>Step 5. Configure your ASP.NET application to use AuthorizationStoreRoleProvider. <li>Step 6. Use role manager to perform a role check. <li>Step 7. Use AzMan APIs to authorize operations. </li></li></li></li></li></li></li>
+  </ul>
+  <h1>Step 1. Install AzMan</h1>
+  <p>AzMan is supported on Windows Server 2003, Windows XP Professional, and on Windows 2000 Server.</p>
+  <p>
+    <b>To install AzMan on Windows Server 2003</b>
+  </p>
+  <p>AzMan is part of Windows 2003, SP1 or later, so you can obtain AzMan by installing this version of the operating system. You can download it from <a href="http://windowsupdate.microsoft.com/">http://windowsupdate.microsoft.com</a>.</p>
+  <p>
+    <b>To install AzMan on Windows XP Professional</b>
+  </p>
+  <p>Install the Windows Server 2003 Administration Tools Pack, which you can download from <a href="http://www.microsoft.com/downloads/details.aspx?familyid=e487f885-f0c7-436a-a392-25793a25bad7&amp;displaylang=en">http://www.microsoft.com/downloads/details.aspx?FamilyID=e487f885-f0c7-436a-a392-25793a25bad7&amp;DisplayLang=en</a>. This tools pack enables remote server management of Windows Server 2003, but it also includes AzMan. </p>
+  <p>Note that if you are running Windows XP Service Pack 2 or later, you must also install Service Pack 1 or later of the Windows Server 2003 Administration Tools Pack.</p>
+  <p>
+    <b>To install AzMan on Windows 2000</b>
+  </p>
+  <p>Install the Windows 2000 Authorization Manager Runtime, which you can download from <a href="http://www.microsoft.com/downloads/details.aspx?familyid=7edde11f-bcea-4773-a292-84525f23baf7&amp;displaylang=en">http://www.microsoft.com/downloads/details.aspx?FamilyID=7edde11f-bcea-4773-a292-84525f23baf7&amp;DisplayLang=en</a>. You must be running Windows 2000 Server Service Pack 4 or later. You must also install MSXML 4.0 or later.</p>
+  <p>Note that this installs the runtime components only; it does not install the AzMan administration MMC snap-in. You can still use the MMC snap-in on a Windows Server 2003 system, or on a Windows XP system that has the Windows Server 2003 Administration Tools Pack installed, to remotely administer AzMan on a Windows 2000 Server.</p>
+  <p>On Windows XP and Windows 2000, you must install the primary interop assembly for the AzMan COM object into the global assembly cache before you can use the ASP.NET <b>AuthorizationStoreRoleProvider</b> to work with an AzMan store. This assembly is already installed in the global assembly cache on Windows Server 2003 systems.</p>
+  <p>
+    <b>To install the primary interop assembly on Windows 2000</b>
+  </p>
+  <p>When you run the installer for the Windows 2000 Authorization Manager Runtime, it creates two subdirectories. One contains the setup file for the Authorization Manager and the second subdirectory, called <b>\pia</b>, contains the primary Interop assembly. </p>
+  <ol>
+    <li>From the Windows Control Panel, run the Microsoft .NET Framework Configuration tool. Open the <b>Manage Assembly Cache</b> option. <li>Using the <b>Add an Assembly to the Assembly Cache</b> option, navigate to the <i>Authorization Manager Runtime Installation Directory</i><b>\pia</b> folder and add the Microsoft.Interop.Security.AzRoles.dll assembly to the cache. </li></li>
+  </ol>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The <b>\pia</b> folder contains two versions of the primary interop assembly. The primary interop assembly for version 1.0 of AzMan is in the <b>\pia</b> folder, and the primary interop assembly of version 1.2 of AzMan is in the <b>\pia\1.2</b> folder. The version 1.2 AzMan COM object exposes additional interfaces that will be of interest to advanced users of AzMan, but it does not offer additional functionality to users of the ASP.NET Roles Management API.<b></b></blockquote>
+  <p>
+    <b>To install the primary interop assembly on Windows XP Professional</b>
+  </p>
+  <ol>
+    <li>To install AzMan on a computer running Windows XP, install the Windows Server 2003 Administration Tools Pack, as explained earlier. However, this download does not include the AzMan primary interop assembly. <li>To install the primary interop assembly, download the Windows 2000 Authorization Manager Runtime and run the installer to extract the component files, which includes the primary interop assembly. Follow the earlier instructions for Windows 2000. </li></li>
+  </ol>
+  <h1>
+    <br />Step 2. Create an AzMan Policy Store</h1>
+  <p>You can create AzMan policy stores in an XML file, Active Directory, or ADAM. In this step, you create an AzMan policy store in an XML file.</p>
+  <p>
+    <b>To create an AzMan Policy store</b>
+  </p>
+  <ol>
+    <li>At the Windows command prompt, enter <b>azman.msc</b> to open the Authorization Manager MMC snap-in. <li>On the <b>Action</b> menu, click <b>Options</b>, and then click <b>Developer mode</b>. Developer mode exposes options, such as store creation, that are not available in Administrator mode. <li>On the <b>Action</b> menu, click <b>New Authorization Store</b>. Set the Authorization store type as <b>XML File</b>. <li>Enter the full store name, for example: <b>C:\RolesData\AzManStore.xml</b>. You can click the <b>Locations</b> button to navigate to the AzMan store, or you can create a folder where you will store it. <li>Right-click <b>AzManStore.xml</b>, and then click <b>Properties</b>. In the Properties window, click the <b>Security</b> tab. <li>Under <b>Authorization Manager user role</b>, select <b>Administrator</b>. Click the <b>Add</b> button to add the account that ASP.NET uses (the Network Service account) to this role. </li></li></li></li></li></li>
+  </ol>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If your ASP.NET application uses impersonation to impersonate the original caller or a fixed identity, or if it runs under a different custom account, you must add the impersonated account or custom account as an Administrator, or Reader, according to the level of access required.</blockquote>
+  <p>
+    <b>To create the AzMan application</b>
+  </p>
+  <ol>
+    <li>Make sure <b>AzManStore.xml</b> is selected in the console tree. On the <b>Actions</b> menu, click <b>New Application</b>. <li>Enter a name for your application. For this example, enter <b>AzManDemo</b> in the <b>Application Name</b> box, and leave the <b>Description</b> and <b>Version Info</b> boxes empty. </li></li>
+  </ol>
+  <h1>
+    <br />Step 3. Define Tasks and Operations</h1>
+  <p>Use the following steps to define tasks and operations. Note that you do not need to perform this step if you intend to use only the ASP.NET Role Manager API, which can only authorize users on role membership; it cannot authorize users by application task or operation. Perform these steps if you want to use the AzMan COM API to authorize by task or operation.</p>
+  <p>
+    <b>To define tasks</b>
+  </p>
+  <ol>
+    <li>On the console tree, expand <b>AzManDemo</b>, and then expand <b>Definitions</b>. <li>Right-click <b>Task Definitions</b>, and then click <b>New Task Definition</b>. <li>In the <b>Name</b> box, type <b>Privileged Task</b>, and then click <b>OK</b>. </li></li></li>
+  </ol>
+  <p>
+    <b>To define operations </b>
+  </p>
+  <ol>
+    <li>On the console tree, expand <b>AzManDemo</b>, and then expand <b>Definitions</b>. <li>Right-click the <b>Operation Definitions</b>, and then click <b>New Operation Definition</b>. <li>In the <b>Name</b> box, type <b>Do Sensitive Operation</b>, type <b>1</b> in the <b>Operation number</b> box, and then click <b>OK</b>. </li></li></li>
+  </ol>
+  <p>
+    <b>To associate operations with tasks</b>
+  </p>
+  <ol>
+    <li>In the <b>Task Definitions</b> folder, double-click the <b>Privileged Task</b>, task that you previously created. <li>Click the <b>Definition</b> tab, and then click <b>Add</b>. <li>In the <b>Add Definition</b> dialog box, click the <b>Operations</b> tab, and then select the <b>Do Sensitive Operation</b> check box. Click <b>OK</b>, and then click <b>OK</b> again. This assigns the newly created operations to the task named <b>Privileged Task</b>. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;An AzMan task is an optional abstraction and if an application has only a few operations defined, it may make sense to just use operations.</blockquote></li></li></li>
+  </ol>
+  <h1>Step 4. Create Roles and Assign Users in AzMan</h1>
+  <p>In this step, you use the AzMan administration MMC snap-in to create a role named <b>Manager</b>. You then assign the task that you created in the previous step to the role.</p>
+  <p>
+    <b>To define roles with the AzMan administration MMC snap-in</b>
+  </p>
+  <ol>
+    <li>At the Windows command prompt, type <b>azman.msc</b> to open the Authorization Manager MMC snap-in. <li>On the <b>Action</b> menu, click <b>Options</b>, and then click <b>Administrator mode</b>. Administrator mode exposes fewer options than developer mode, but it exposes only those configuration options that can be changed at run time, such as assigning tasks to roles and assigning users to roles. <li>On the AzMan Management Console tree, expand <b>AzManDemo</b>, and then expand <b>Definitions</b>. <li>Right-click <b>Role Definitions</b>, and then click <b>New Role Definition</b>. <li>In the <b>Name</b> box, type <b>Manager</b>, and then click <b>OK</b>. </li></li></li></li></li>
+  </ol>
+  <p>
+    <b>To assign a user to a role with the Administration UI</b>
+  </p>
+  <ol>
+    <li>Right-click the <b>Role Assignments </b>folder, and then click <b>Assign Roles</b>. <li>In the dialog box that appears, click the <b>Manager</b> check box, and then click <b>OK</b>. <li>Right-click the <b>Manager</b> role listed after the <b>Role Assignments</b> folder in the console tree, and then click <b>Assign Windows Users and Groups</b>. <li>Type the name of the Windows user account you are logged on as, click <b>Check Names</b>, and then click <b>OK</b>. This assigns your user account to the <b>Manager</b> role. </li></li></li></li>
+  </ol>
+  <p>
+    <b>To associate tasks with roles</b>
+  </p>
+  <ol>
+    <li>In the <b>Role Definitions</b> folder, double-click the <b>Manager</b> role you created previously. <li>Click the <b>Definition</b> tab, and then click <b>Add</b>. <li>In the <b>Add Definition</b> dialog box, click the <b>Tasks</b> tab, and then click the <b>Privileged Task</b> check box (this is the task you created in the previous step). Click <b>OK</b> twice. This assigns the <b>Privileged Task</b> task to the <b>Manager</b> role. </li></li></li>
+  </ol>
+  <h1>
+    <br />Step 5. Configure Your ASP.NET Application to Use AuthorizationStoreRoleProvider</h1>
+  <p>In this step, you configure role management in an ASP.NET application to use the AzMan store.</p>
+  <p>
+    <b>To connect to the AzMan store</b>
+  </p>
+  <ol>
+    <li>Create a new ASP.NET Web site named <b>AzManRoles</b>. <li>Define a connection string to the AzMan policy store in the &lt;<b>connectionStrings</b>&gt; element of the Web.config file. For example, to create a connection string to C:\RolesData\AzManStore.xml, use the following configuration. <div><pre>&lt;configuration&gt; <br />&amp;nbsp; &lt;connectionStrings&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="LocalPolicyStore" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="msxml://c:/RolesData/azmanstore.xml" /&gt;<br />&amp;nbsp; &lt;/connectionStrings&gt; <br />&lt;/configuration&gt;   </pre></div><li>Configure the application to use the role provider by adding the following elements as children of the &lt;<b>system.web</b>&gt; element. <div><pre>&lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;roleManager <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enabled="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cacheRolesInCookie="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultProvider="RoleManagerAzManProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieName=".ASPXROLES" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookiePath="/" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieTimeout="30" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieRequireSSL="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieSlidingExpiration="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; createPersistentCookie="false" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieProtection="All"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="RoleManagerAzManProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.AuthorizationStoreRoleProvider, System.Web, Version=2.0.0.0, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Culture=neutral, publicKeyToken=b03f5f7f11d50a3a"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="LocalPolicyStore" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="AzManDemo"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/roleManager&gt;<br />&lt;/system.web&gt;  </pre></div></li></li></li>
+  </ol>
+  <p>In the preceding configuration file fragment, you define a &lt;<b>providers</b>&gt; element that uses the <b>AuthorizationStoreRoleProvider</b>, with the <b>connectionStringName</b> attribute set to the name of the connection string you defined in the previous step, and you must set the <b>applicationName</b> attribute to the name of the AzMan application you created in the AzMan store.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;By ensuring unique values for the <b>cookieName</b> and <b>cookiePath</b> attributes, you prevent possible problems that can occur when hosting multiple applications on the same server. This best practice will prevent a user on one site from using his or her role cookie on a different site hosted on the same server.</blockquote>
+  <h1>
+    <br />Step 6. Use Role Manager to Perform a Role Check</h1>
+  <p>At run time, you can use roles to authorize access in two ways: </p>
+  <ul>
+    <li>Use role authorization to restrict access to pages and folders. <li>Use the roles API to programmatically check for role membership. </li></li>
+  </ul>
+  <h2>Role Authorization</h2>
+  <p>A typical use for roles is to establish rules that allow or deny access to pages or folders. You can set up such access rules in the &lt;<b>authorization</b>&gt; section of the Web.config file. The following example allows users in the role of members to view pages in the folder named <b>memberPages</b> and denies access to anyone else.</p>
+  <div>
+    <pre>&lt;configuration&gt;<br />&amp;nbsp;&amp;nbsp; &lt;location path="memberPages"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="Manager" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="&amp;#42;" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/location&gt;<br />&amp;nbsp;&amp;nbsp; &lt;&amp;#33;-- other configuration settings here --&gt;<br />&lt;/configuration&gt;  </pre>
+  </div>
+  <h2>Roles API</h2>
+  <p>If you are using Windows authentication in your application, or if you are using Forms authentication with the ASP.NET membership feature, you can use Roles API methods such as <b>Roles.IsUserInRole("roleName")</b> to test for role membership for the currently authenticated user or <b>Roles.GetRolesForUser()</b>to return a string array of all roles for the user. </p>
+  <p>You can use <b>Roles.IsUserInRole("username", "roleName")</b> to test for role membership for a named user. </p>
+  <h1>Step 7. Use AzMan APIs to Authorize Operations</h1>
+  <p>With AzMan, the primary mechanism to determine access to a given operation is the <b>AccessCheck</b> API. In this step, you use the Authorization Manager API in an ASP.NET application to query the operations that are in a task to determine whether the current user is authorized to perform them. The ability in the AzMan API to query for authorization to perform an operation or task exceeds the capabilities of the ASP.NET Role Management API, which only supports role membership checks.</p>
+  <p>
+    <b>To connect to the AzMan store</b>
+  </p>
+  <ol>
+    <li>Create a new C# ASP.NET Web site named <b>AccessingTasks</b>. <li>Add a reference to the AzMan COM library. In the <b>Add Reference</b> dialog box, click the <b>COM</b> tab, and then select <b>azroles 1.0 Type Library</b>. Click <b>OK</b>. <li>Add the following using statements to the code page of the Default.aspx page. <div><pre>using AZROLESLib;<br />using System.Collections.Specialized;<br />using System.Security.Principal;   </pre></div><li>To open the AzMan policy store, add the following code. Use the same connection string as defined at the beginning of step 5. <div><pre>AzAuthorizationStoreClass AzManStore = new AzAuthorizationStoreClass();<br />AzManStore.Initialize(0, ConfigurationManager.ConnectionStrings<br />            &amp;#91;"LocalPolicyStore"&amp;#93;.ConnectionString, null);<br />IAzApplication azApp = AzManStore.OpenApplication("AzManDemo", null);  </pre></div></li></li></li></li>
+  </ol>
+  <p>Now check whether a user is authorized to complete the operation. The sample code in the following procedure checks if the authenticated user is authorized to perform an operation.</p>
+  <p>
+    <b>To check whether a user is authorized to perform an operation</b>
+  </p>
+  <ol>
+    <li>Construct a representation of the client's security context. The context is similar to a token in that it caches role mappings for a user. To create the client's context object: <ol><li>If your application uses Windows authentication (the application Web.config file specifies <b>authentication mode='Windows'</b>, and Microsoft Internet Information Services (IIS) has been configured to require integrated Windows authentication), construct the client context a follows. <div><pre>    // Get the current user context <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; IPrincipal userPrincipal = HttpContext.Current.User;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; WindowsIdentity userIdentity = userPrincipal.Identity as WindowsIdentity;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; IAzClientContext clientContext =<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; azApp.InitializeClientContextFromToken(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; (ulong)userIdentity.Token, null);  </pre></div><li>If your application uses an authentication mechanism where you only have the original caller's user name available, but you do not have the password, you can construct the client context as shown in the following example. <div><pre>IAzClientContext clientContext =<br />   azApp.InitializeClientContextFromName(name, domain, null);  </pre></div></li></li></ol><li>Use the client context object and AzMan to determine whether the user is authorized to perform the operations. <p>The <b>AccessCheck</b> method returns an object array that is actually an array of integers, one for each requested operation. If any of the integers are nonzero, the user is not authorized to perform the corresponding operation in the operations array. </p><div><pre>    // Create an object array describing the operation IDs to query<br />&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // In this simple example, query for the single operation called<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // 'Do Sensitive Operation' which has an ID of 1.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; object&amp;#91;&amp;#93; operationIds = new object&amp;#91;&amp;#93; &amp;#123;1&amp;#125;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Check if user has access to the operations<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // The first argument, "Auditstring", is a string that is used if you <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // have run-time auditing turned on<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; object&amp;#91;&amp;#93; result = (object&amp;#91;&amp;#93;)clientContext.AccessCheck("Auditstring",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; new object&amp;#91;1&amp;#93;, operationIds, null, null, null, null, null);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Test the integer array we got back to see which operations are<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // authorized<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; int accessAllowed = (int)result&amp;#91;0&amp;#93;;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (accessAllowed &amp;#33;= 0)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // current user not authorized to perform operation<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Write("User not authorized for operation: " &amp;#43;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "Do Sensitive Operation" &amp;#43; "&lt;br /&gt;");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; else<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // current user authorized to perform operation<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Write("User authorized for operation " &amp;#43;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "Do Sensitive Operation" &amp;#43; "&lt;br /&gt;");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;      </pre></div></li></li>
+  </ol>
+  <p>When you save and run this code, the resulting page reports whether the current user is authorized to perform the operation.</p>
+  <h1>ASP.NET Web Site Configuration Tool</h1>
+  <p>The ASP.NET Web Site Configuration tool is built into Visual Studio. You can use this tool to assign users to roles, but only if your application uses forms authentication, because user management is disabled in this tool if you are using Windows authentication.</p>
+  <p>
+    <b>To assign users to roles with the ASP.NET Web Site Configuration tool</b>
+  </p>
+  <ol>
+    <li>On the <b>Website</b> menu, click <b>ASP.NET Configuration</b>. <li>Click the <b>Security</b> tab. <li>Click <b>Create or Manage Roles</b><li>In the table of roles, click <b>Manage</b> next to the role that you want to add a user to. <li>Locate the desired user, and then click <b>Add Role</b>. </li></li></li></li></li>
+  </ol>
+  <h1>Security Considerations</h1>
+  <p>If an XML policy store is used, access rights are controlled by NTFS ACLs. Reading a policy store requires Read access. Writing a policy store requires both Read and Write access. Any account that had rights to the XML file has rights to all applications and all scopes within the file. There is no support for delegated rights with the XML policy store.</p>
+  <p>If an Active Directory or ADAM policy store is used, rights are expressed by way of roles defined in the store. Domain accounts (either a domain user or a machine account) can be added to the Reader and Administrator roles on the policy store, application, or scope using the AzMan MMC. Delegated rights are supported for Active Directory policy stores.</p>
+  <h1>ADAM Considerations</h1>
+  <p>This How to describes how to configure an AzMan policy store in an XML file. You can also create AzMan stores in Active Directory or in ADAM. </p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>
+      <a href="http://www.microsoft.com/technet/prodtechnol/windowsserver2003/technologies/management/athmanwp.mspx">Role-Based Access Control for Multi-tier Applications Using Authorization Manager</a> on Microsoft TechNet <li><a href="http://msdn2.microsoft.com/en-us/library/ms974546.aspx">Madam, I'm ADAM</a>, an introduction to ADAM, on MSDN <li>Authorize It: Use Role-Based Security in Your Middle Tier .NET Apps with Authorization Manager in <i>MSDN Magazine</i></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

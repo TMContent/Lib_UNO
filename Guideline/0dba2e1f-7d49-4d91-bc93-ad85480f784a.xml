@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1625514778" Content_Hash="1547213970">
+  <Metadata>
+    <Id>0dba2e1f-7d49-4d91-bc93-ad85480f784a</Id>
+    <Id_History>0dba2e1f-7d49-4d91-bc93-ad85480f784a,c507babd-3d09-43cb-99e7-3708ed53a9c2,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Consider Using JAAS for Authentication</Title>
+    <Category>Authentication</Category>
+    <Phase>Design</Phase>
+    <Technology>Java</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Consider Using JAAS for Authentication</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Applications written using Servlets or JSP.</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Consider using Java Authentication and Authorization Services for authentication.</p>
+  <h1>Why</h1>
+  <p>As part of Java's security model, JAAS is proven to work with stand-alone and web-based applications. JAAS is fully integrated into the Java platform and requires minimal overhead when deploying within stand-alone and web-based applications.</p>
+  <h1>When</h1>
+  <p>If your application requires authentication, authorization and access control, consider using JAAS.</p>
+  <h1>How</h1>
+  <p>To authenticate using JAAS:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Configure JAAS. </strong>The JAAS configuration assists the Java Virtual Machine (JVM) in using the appropriate <em>LoginModule</em> to handle authentication. Configuring JAAS is done through the use of config files. </p>
+      <p>Example contents of a JAAS config file:</p>
+      <pre>/** Login config for JAAS **/</pre>
+      <pre>AppLoginConfig <br />{<br />      application.auth.LoginMod required;<br />};</pre>
+      <p>Once the config files are set, they can be loaded by using the <em>-Djava.security.auth.login.config</em> flag when loading the JVM instance that will host the application. <br /></p>
+    </li>
+    <li>
+      <p>
+        <strong>Utilize the LoginContext.</strong>
+        <em>LoginContext</em> provides the mechanism for invoking the appropriate <em>LoginModule</em> in JAAS. Once the JAAS configuration is loaded, the application must specify which configuration is to be used by JAAS. After <em>LoginContext</em> is utilized, use the <em>login()</em> function to invoke the JAAS authentication procedure. Example:</p>
+      <pre>LoginContext auth = new LoginContext("AppLoginConfig", new CallbackHandler());<br /> ... <br />auth.login();</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Implement the LoginModule. </strong>The <em>LoginModule</em> provides the mechanism used when authenticating users. It is responsible for authenticating and assigning security tokens to the users. <br /></p>
+    </li>
+    <li>
+      <p>
+        <strong>Implement the security token. </strong>JAAS assigns security tokens to authenticated users. The security tokens must implement the <em>Principal</em> interface. For example:</p>
+      <pre>import java.security.Principal;<br /><br />public final class UserToken implements Principal, java.io.Serializable{<br /><br />      private String name;<br /><br />      public UserToken(String name)<br />      {<br />            if(name == null)<br />            {<br />                  // A good place to log error<br />                  throw new NullPointerException("Invalid token name.");<br />            }<br />            this.name = name;<br />      }<br /><br />      public String getName()<br />      {<br />            return name;<br />      }<br /><br />      public String toString()<br />      {<br />            return ("UserToken: " + name);<br />      }<br /><br />      public boolean equals(Object o)<br />      {<br />            if(o == null)<br />                      return false;<br />            if(this == o)<br />                      return true;<br />            if(!(o instanceof UserToken))<br />                      return false;<br /><br />            UserToken temp = (UserToken)o;<br />            return this.getName().equals(temp.getName());<br />      }<br /><br />      public int hashCode()<br />      {<br />            return name.hashCode();<br />      }<br />}</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Implement the CallbackHandler. </strong>As the link between the user interface and JAAS, the <em>CallbackHandler</em> is the mechanism used when providing user-supplied credentials to JAAS.</p>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is a multi-user financial tool. The application's developers have designed the application's access control mechanisms in-house,&amp;nbsp;investing a lot of resources into designing, developing and testing a secure and reliable access control for MyApp and its complement products.</p>
+  <h1>Solution Example</h1>
+  <p>MyApp is a multi-user financial tool. The application's developers use JAAS as the application's access control mechanism. Because JAAS is fully integrated into the Java platform, the developers can invest more resources in the actual application while still meeting the application's access control requirements.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about JAAS, visit: <a href="http://download.oracle.com/javase/1.4.2/docs/guide/security/jaas/JAASRefGuide.html">Java Authentication and Authorization Service Reference Guide</a> available from Oracle.</li>
+  </ul>
+  <h1>Authentication Guidelines</h1>
+  <ul>
+    <li>
+      <a href="/article/989e27ec-ffdf-4006-88bd-1c09fc991a28">Centralize Authentication Controls</a>
+    </li>
+    <li>
+      <a href="/article/d3a69ef7-2c63-41bc-81e4-803b0ea199d8">Use Server-side Authentication</a>
+    </li>
+    <li>
+      <a href="/article/38d12903-9c3b-46bd-9f5e-f223c3272624">Make Sure Authentication Controls Fail Securely</a>
+    </li>
+    <li>
+      <a href="/article/84fd606b-e2f2-4c48-9c6e-6b5e780c6163">Force Re-authentication When Executing Critical Functionality</a>
+    </li>
+    <li>
+      <a href="/article/c566cabe-2463-4d24-8763-22e8468d167e">Validate Usernames Before Processing Them</a>
+    </li>
+    <li>
+      <a href="/article/7ba2d49c-ff53-4755-97ae-0efcb0aa9c22">Lock Accounts After Consecutive Failed Login Attempts</a>
+    </li>
+    <li>
+      <a href="/article/4b5b1f05-aa9a-4ebc-8b2e-3cecabed03e1">Enforce Strong Passwords</a>
+    </li>
+    <li>
+      <a href="/article/ea25af24-8eca-45ad-9f41-94bad8880247">Force Password Renewal</a>
+    </li>
+    <li>
+      <a href="/article/c7825052-f281-4ac8-a786-41b776219af6">Mask All Password Fields</a>
+    </li>
+    <li>
+      <a href="/article/c4d9269f-9157-4919-952c-f0d14ccd7f60">Verify the Application's Authenticity to the User</a>
+    </li>
+    <li>
+      <a href="/article/b4f83e8e-3223-4e49-bc9c-56c8c7268582">Place Logout Links on All Pages that Require Authentication</a>
+    </li>
+    <li>
+      <a href="/article/ff95311e-797f-417f-bd0b-e6cf610f706c">Do Not Leave Passwords in Memory</a>
+    </li>
+    <li>
+      <a href="/article/bcf8adb4-8186-4b97-b490-4fa33f506bfd">Limit Access to the Credential Store</a>
+    </li>
+    <li>
+      <a href="/article/0dba2e1f-7d49-4d91-bc93-ad85480f784a">Consider Using JAAS for Authentication</a>
+    </li>
+    <li>
+      <a href="/article/9cf8aed6-22a5-49c1-a0ce-1d8e5366bebf">Consider Using Two Factor Authentication</a>
+    </li>
+  </ul>
+  <h1>Authentication Checklists</h1>
+  <ul>
+    <li>
+      <a href="/article/4e431329-73aa-41f7-b397-9b7e26294a4c">Authentication Controls Are Centralized</a>
+    </li>
+    <li>
+      <a href="/article/b103207d-73e3-4964-9a00-2b15c3e012b8">Server-side Authentication Is Used</a>
+    </li>
+    <li>
+      <a href="/article/ded06846-ad7f-4044-87d2-8bbb6b885713">Authentication Controls Fail Securely</a>
+    </li>
+    <li>
+      <a href="/article/df093ee3-ad7b-4191-935c-8bb0cad78d98">Re-authentication Is Enforced When Executing Critical Functionality</a>
+    </li>
+    <li>
+      <a href="/article/f8586505-72f9-4c14-a365-3e5049e5ca57">Usernames Are Validated Before Use</a>
+    </li>
+    <li>
+      <a href="/article/61e0e2b4-2f09-429a-b72f-f8933f2fa9b6">Accounts Are Locked After Consecutive Failed Login Attempts</a>
+    </li>
+    <li>
+      <a href="/article/7401862f-ae81-4f31-9340-981b0ec5a854">Strong Passwords Are Enforced</a>
+    </li>
+    <li>
+      <a href="/article/12889762-1d65-4b7d-a90a-58ff6c23d1e4">Password Renewal Is Enforced</a>
+    </li>
+    <li>
+      <a href="/article/09f994c9-a401-404c-bdc9-210038eba658">All Password Fields Are Masked</a>
+    </li>
+    <li>
+      <a href="/article/35851f18-13a0-4bf8-88cc-d35c371cfb12">The Application's Authenticity Is Verified to the User</a>
+    </li>
+    <li>
+      <a href="/article/493e0e57-254a-4697-8fa1-c93e706d416d">All Pages that Use Authentication Have Logout Links</a>
+    </li>
+    <li>
+      <a href="/article/55488f2e-ed85-4f0f-9f83-1d90a5d10bd0">Passwords Are Not Left in Memory</a>
+    </li>
+    <li>
+      <a href="/article/9031f577-80b0-4a2e-9652-7b470439a0df">Access to the Credential Store Is Limited</a>
+    </li>
+  </ul>
+  <h1>Authentication Testing</h1>
+  <ul>
+    <li>
+      <a href="/article/f32846cf-35f6-40fe-8517-f0ac8a415383">How to Test for Account Lockout Bugs in Java</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

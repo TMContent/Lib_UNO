@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1750713835" Content_Hash="1081189046">
+  <Metadata>
+    <Id>4058cb12-d890-4e9a-a5f7-bd741b99500c</Id>
+    <Id_History>4058cb12-d890-4e9a-a5f7-bd741b99500c,d9eafdb5-271c-44e9-a8f8-8358bf10dba4,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Impersonation Token Is Not Created by Using LogonUser API</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Impersonation Token Is Not Created by Using LogonUser API</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Check to ensure that your application does not use LogonUser API for creating impersonation token. </p>
+  <h1>How to Fix</h1>
+  <p>Avoid writing code that calls the <b>LogonUser</b> API to create impersonation tokens because this forces you to store user names and passwords on your Web server. </p>
+  <p>Instead, use a unique application pool with a specific process identity if you need a specific identity to access downstream resources. If you need multiple identities to access a range of downstream resources and services, use Windows Server 2003 protocol transition and the new <b>WindowsIdentity</b> constructor; this allows you to create a Windows token that is given only an account's user principal name (UPN). To access a network resource, you need&amp;nbsp;a delegate-level token. To get this token type, your server needs to be configured as trusted for delegation in Active Directory.</p>
+  <p>The following code shows how to use this constructor to obtain a Windows token for a given user.</p>
+  <p>
+    <pre>using System;<br />using System.Security.Principal;<br />public void ConstructToken(string upn, out WindowsPrincipal p)&amp;#123;<br />  WindowsIdentity id = new WindowsIdentity(upn);<br />  p = new WindowsPrincipal(id);<br />&amp;#125;</pre>
+  </p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;An account's UPN is guaranteed to be unique within a forest. Frequently, the UPN is the user's e-mail address, but it does not have to be. A user always has a UPN and by default, it is <i>userlogonname</i>&amp;#64;<i>fullyqualifieddomainname</i>. If you are logged into a domain, you can find your UPN name by running <b>whoami /upn</b> from a command window.</blockquote>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

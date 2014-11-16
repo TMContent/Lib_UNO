@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1230377398" Content_Hash="830330412">
+  <Metadata>
+    <Id>6f9fefbf-ecdd-465a-a09c-0769166a3ce0</Id>
+    <Id_History>6f9fefbf-ecdd-465a-a09c-0769166a3ce0,8cb66210-fdc5-4760-90c9-b9e096185f5e,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Processes Are Created Safely with CreateProcess()</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Processes Are Created Safely with CreateProcess()</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;<li>Windows</li></li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that processes are created safely.</p>
+  <h1>Why</h1>
+  <p>Improperly creating processes may allow an attacker to execute arbitrary code.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check if processes are created safely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify code the creates processes.</strong> Search code for the following functions that may be used to create processes: <em>CreateProcess(), CreateProcessAsUser(), CreateProcessWithLogon(), ShellExecute(), ShellExecuteEx(), exec(), spawn().</em></p>
+      <li>
+        <p>
+          <strong>Verify that shell or CRT APIs are not used.</strong> Review code to make sure the following APIs are not used unless absolutely necessary:<em> ShellExecute(), ShellExecuteEx(), exec(), spawn()</em>.</p>
+        <li>
+          <p>
+            <strong>Verify that CreateProcess() is used with fully-qualified names.</strong> Review code to make sure that either <em>lpApplicationName</em> or <em>lpCommandLine</em> is fully-qualified in calls to <em>CreateProcess(), CreateProcessAsUser(), or CreateProcessWithLogon()</em>.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to create processes securely:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify code the creates processes.</strong> Search code for the following functions that may be used to create processes: <em>CreateProcess(), CreateProcessAsUser(), CreateProcessWithLogon(), ShellExecute(), ShellExecuteEx(), exec(), spawn()</em>.</p>
+      <li>
+        <p>
+          <strong>Replace shell and CRT APIs with base APIs.</strong> Shell APIs and CRT functions all wrap <em>CreateProcess()</em> at some point while adding additional threats. Use <em>CreateProcess()</em> as often as possible. Shell and CRT APIs are: <em>ShellExecute(), ShellExecuteEx(), exec(), spawn()</em>.</p>
+        <li>
+          <p>
+            <strong>Use fully qualified paths with CreateProcess().</strong> Either <em>lpApplicationName</em> or <em>lpCommandLine</em> should be fully qualified. If neither of them are fully-qualified, an attacker may place an executable with the same name as the one being launched by <em>CreateProcess()</em> into the current folder and <em>CreateProcess()</em> will run it instead.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/2314618a-47ce-4ff0-9641-365fb3e262e4">Create Processes Securely with CreateProcess()<br /></a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

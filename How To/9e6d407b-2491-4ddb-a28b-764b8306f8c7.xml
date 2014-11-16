@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1846129219" Content_Hash="700344481">
+  <Metadata>
+    <Id>9e6d407b-2491-4ddb-a28b-764b8306f8c7</Id>
+    <Id_History>9e6d407b-2491-4ddb-a28b-764b8306f8c7,ec643172-50ef-4ea2-ae80-7dcacd7c2460,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Enable WCF Tracing</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Enable WCF Tracing</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>Use WCF tracing to help debug your WCF service by logging all operations on your service.</p>
+  <p>Use following steps to enable Tracing</p>
+  <ol>
+    <li>Open the web.config file of the WCF service using the Configuration editor tool (SvcConfigEditor.exe).
+<li>In the Configuration editor, navigate to the Diagnostics node, and click the Enable Tracing link. 
+<li>This enables Tracing your WCF service and it also creates a listener (ServiceModelTraceListener) and a source (System.ServiceModel) under the Listeners and Sources folder respectively.</li></li></li>
+  </ol>
+  <p>To determine where the traces will be written select ServiceModelTraceListener under the Listeners node and note the value of the InitData attribute. The default location where trace messages are written is c:\inetpub\wwwroot\auditingwcf\web_tracelog.svclog.</p>
+  <p>The configuration file should look as follows:</p>
+  <pre>    &lt;system.diagnostics&gt;<br />        &lt;sources&gt;<br />            &lt;source name="System.ServiceModel" switchValue="Warning, ActivityTracing"<br />                propagateActivity="true"&gt;<br />                &lt;listeners&gt;<br />                    &lt;add type="System.Diagnostics.DefaultTraceListener" name="Default"&gt;<br />                        &lt;filter type="" /&gt;<br />                    &lt;/add&gt;<br />                    &lt;add name="ServiceModelTraceListener"&gt;<br />                        &lt;filter type="" /&gt;<br />                    &lt;/add&gt;<br />                &lt;/listeners&gt;<br />            &lt;/source&gt;<br />        &lt;/sources&gt;<br />        &lt;sharedListeners&gt;<br />            &lt;add initializeData="c:\inetpub\wwwroot\auditingwcf\web_tracelog.svclog"<br />                type="System.Diagnostics.XmlWriterTraceListener, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />                name="ServiceModelTraceListener" traceOutputOptions="Timestamp"&gt;<br />                &lt;filter type="" /&gt;<br />            &lt;/add&gt;<br />        &lt;/sharedListeners&gt;<br />    &lt;/system.diagnostics&gt;<br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on tracing, see “Tracing” at <a href="http://msdn.microsoft.com/en-us/library/ms730342.aspx">http://msdn.microsoft.com/en-us/library/ms730342.aspx</a><li>For more information on using the service trace Viewer Tool, see “Service Viewer Trace Tool” at <a href="http://msdn.microsoft.com/en-us/library/ms732023.aspx">http://msdn.microsoft.com/en-us/library/ms732023.aspx</a> and “Examining WCF Diagnostic Traces Using Service Trace Viewer Tool (SvcTraceViewer.exe)” at <a href="http://blogs.msdn.com/alikl/archive/2007/10/23/examining-wcf-diagnostic-traces-using-service-trace-viewer-tool-svctraceviewer-exe.aspx">http://blogs.msdn.com/alikl/archive/2007/10/23/examining-wcf-diagnostic-traces-using-service-trace-viewer-tool-svctraceviewer-exe.aspx</a><li>For auditing Guidelines, see the Auditing &amp; Logging section of “WCF 3.5 Guidelines “ at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Security%20Guidelines&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Security%20Guidelines&amp;referringTitle=Home</a></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>
