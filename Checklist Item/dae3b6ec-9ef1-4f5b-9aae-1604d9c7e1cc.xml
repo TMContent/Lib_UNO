@@ -3,7 +3,7 @@
   <Metadata>
     <Id>dae3b6ec-9ef1-4f5b-9aae-1604d9c7e1cc</Id>
     <Id_History>dae3b6ec-9ef1-4f5b-9aae-1604d9c7e1cc,1d7e0d6b-58fe-4ea9-89ab-594019bcd958,</Id_History>
-    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Role-based Authorization Is Used</Title>
     <Category>Authorization</Category>
     <Phase>Design</Phase>
@@ -32,24 +32,14 @@
     <li>
       <p>
         <strong>Check if your application uses user roles.</strong> Verify that your application has established user roles and grants the appropriate access privileges to each user role. The roles and their privileges within the application should be defined in the documentation, to ensure that they have been examined in the context of the business purpose of the application, and to allow them to be checked against the application as implemented. </p>
-      <li>
-        <p>
-          <strong>Ensure that your application enforces role-based security.</strong> Verify that your application maps its access controls to the established user roles. Ensure that the roles used are sufficiently fine grained. Remember that the goal is to segment privileges within the application, not to simply control access to the entire application. Roles should be mapped to specific pages or functions within the application. Depending on your application's design, there are several ways of checking whether your application enforces role-based security: </p>
-        <ul>
-          <li>
-            <p>
-              <strong>Check for programmatic role-based security.</strong> If your application has security checks embedded inside its code base, identify all functionality that requires special privileges. Verify that each protected functionality has a permissions check associated with it.</p>
-            <li>
-              <p>
-                <strong>Check for declarative role-based security. </strong>Verify that access to protected resources is granted according to the application's security requirements. Check that each resource is associated with the appropriate user roles in the configuration file. </p>
-            </li>
-          </li>
-        </ul>
-        <li>
-          <p>
-            <strong>Verify that users are assigned into their appropriate roles.</strong> List all of your application's users. Check if each user is assigned into their appropriate role. The application should apply the security policy according to the user roles instead of the actual user.</p>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that your application enforces role-based security.</strong> Verify that your application maps its access controls to the established user roles. Ensure that the roles used are sufficiently fine grained. Remember that the goal is to segment privileges within the application, not to simply control access to the entire application. Roles should be mapped to specific pages or functions within the application. <br /></p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that users are assigned into their appropriate roles.</strong> List all of your application's users. Check if each user is assigned into their appropriate role. The application should apply the security policy according to the user roles instead of the actual user.</p>
     </li>
   </ol>
   <h1>How to Fix</h1>
@@ -58,24 +48,15 @@
     <li>
       <p>
         <strong>Understand the different types of users. </strong>Enumerate the different types of users needed for the application. Understand how they will use the application and to which resources they will need access. Create a matrix mapping the actions each role is authorized to perform with the corresponding system components. Use this matrix to identify the different types of users according to the functionality they need. Creating a threat model may be a useful step to ensure that you correctly understand the implications of this matrix.</p>
-      <li>
-        <p>
-          <strong>Establish the roles. </strong>Define which resources can be accessed by each role. There are two approaches when enforcing role-based security - programmatic and declarative.</p>
-        <ul>
-          <li>
-            <p>
-              <strong>The programmatic approach.</strong> The programmatic approach to role-based security is written inside the code and provides additional runtime flexibility. It allows your application to dynamically create and assign roles so that user privileges can be granted and revoked without the need of restarting your application. When using the programmatic approach to role-based security, place access control checks at the appropriate locations in your application. </p>
-            <li>
-              <p>
-                <strong>The declarative approach.</strong> The declarative approach to role-based security is done via the configuration files. It allows easy manageability as the declarations can be modified without having to recompile. By using the declarative approach, you can easily manage the security settings for large portions of the application without changing the source code. </p>
-            </li>
-          </li>
-        </ul>
-        <li>
-          <p>
-            <strong>Manage the users.</strong> Assign the users into their respective user roles. The application should enforce the security policy according to the user roles instead of the actual user. </p>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Establish the roles. </strong>Define which resources can be accessed by each role. Place 
+access control checks at the appropriate locations in your application.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Manage the users.</strong> Assign the users into their respective user roles. The application should enforce the security policy according to the user roles instead of the actual user. </p>
     </li>
   </ol>
   <h1>PHP Authorization Guidelines</h1>

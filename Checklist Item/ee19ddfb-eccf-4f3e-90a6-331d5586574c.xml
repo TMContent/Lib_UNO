@@ -3,11 +3,11 @@
   <Metadata>
     <Id>ee19ddfb-eccf-4f3e-90a6-331d5586574c</Id>
     <Id_History>ee19ddfb-eccf-4f3e-90a6-331d5586574c,9fad2d3a-e53f-4d3b-afae-46a08dd1f6b7,</Id_History>
-    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
-    <Title>Log Files Are Secured</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Log Files Are Protected</Title>
     <Category>Auditing and Logging</Category>
     <Phase>Design</Phase>
-    <Technology>C++</Technology>
+    <Technology> Any</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Log Files Are Secured</DirectLink>
     <Tag />
@@ -28,17 +28,19 @@
     <li>
       <p>
         <strong>Verify that log location is not disclosed.</strong> Scan your application's code base to verify that the location of the log files is known only to the internal logging framework.</p>
-      <li>
-        <p>
-          <strong>Check the file permissions of logs. </strong>Verify that the logs are set with the appropriate filesystem permissions. All entities, excluding your application and its administrators/developers, must be prohibited access to the logs. If your application backs up its logs, verify that log backups are stored into an environment that is as secure as the storage environment for the current logs.</p>
-        <li>
-          <p>
-            <strong>Check for common logging mistakes.</strong> Scan your application's code base for common logging mistakes such as:</p>
-          <ul>
-            <li>Logging data structures that contain user-supplied data <li>Appending user-supplied data to an exception's message and/or details <li>Opening logs in "write" mode and not in "append" mode</li></li></li>
-          </ul>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Check the file permissions of logs. </strong>Verify that the logs are set with the appropriate filesystem permissions. All entities, excluding your application and its administrators/developers, must be prohibited access to the logs. If your application backs up its logs, verify that log backups are stored into an environment that is as secure as the storage environment for the current logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Check for common logging mistakes.</strong> Scan your application's code base for common logging mistakes such as:</p>
+      <ul>
+        <li>Logging data structures that contain user-supplied data </li>
+        <li>Appending user-supplied data to an exception's message and/or details </li>
+        <li>Opening logs in "write" mode and not in "append" mode</li>
+      </ul>
     </li>
   </ol>
   <h1>How to Fix</h1>
@@ -47,49 +49,37 @@
     <li>
       <p>
         <strong>Consider sending logs to a centralized log server.</strong> Using a centralized log server has many advantages. A centralized log server greatly simplifies securing and monitoring logs on a network that has many log-generating devices. One common protocol for sending logs to a logserver is syslog (RFC 5424).</p>
-      <li>
-        <p>
-          <strong>Avoid disclosing location of logs.</strong> The location of the log files should be known only by your application and its administrators. Avoid disclosing the location of the logs to users.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid disclosing location of logs.</strong> The location of the log files should be known only by your application and its administrators. Avoid disclosing the location of the logs to users.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Set appropriate file permissions. </strong>Set the filesystem permissions so that only your application and its administrators/developers have access to its logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Keep logging framework away from users.</strong> Do not allow your application's users to interact directly with the logging framework. The logging framework should log information regarding the performance of the application, but should avoid storing user supplied data inside the logs. Some user-supplied information can aid an attacker into poisoning your application's logs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Consider using log rotation.</strong> Log rotation prevents your application from working with large log files. It allows you to manage and audit your application's logged events without interfering in your application's workings. Use the following steps when utilizing log rotation:</p>
+      <ul>
         <li>
           <p>
-            <strong>Set appropriate file permissions. </strong>Set the filesystem permissions so that only your application and its administrators/developers have access to its logs.</p>
-          <li>
-            <p>
-              <strong>Keep logging framework away from users.</strong> Do not allow your application's users to interact directly with the logging framework. The logging framework should log information regarding the performance of the application, but should avoid storing user supplied data inside the logs. Some user-supplied information can aid an attacker into poisoning your application's logs.</p>
-            <li>
-              <p>
-                <strong>Consider using log rotation.</strong> Log rotation prevents your application from working with large log files. It allows you to manage and audit your application's logged events without interfering in your application's workings. Use the following steps when utilizing log rotation:</p>
-              <ul>
-                <li>
-                  <p>
-                    <strong>Define a rotation period.</strong> Schedule your log rotation on a regular basis. For example, rotate your logs every Monday.</p>
-                  <li>
-                    <p>
-                      <strong>Create a new log file.</strong> Create a new log file when your application needs to rotate its log files. It is recommended to associate the new log file to the period of its creation. For example, the log file corresponding to the week of October 16, 2010 would be named 20101016.log.</p>
-                    <li>
-                      <p>
-                        <strong>Back up the existing log files.</strong> Back up the existing log files when your application needs to rotate its log files. Consult your internal auditing policy to determine the period for which logs should be backed up. If your application backs up its logs, store them into an environment that is as secure as the storage environment for the current logs.</p>
-                    </li>
-                  </li>
-                </li>
-              </ul>
-            </li>
-          </li>
+            <strong>Define a rotation period.</strong> Schedule your log rotation on a regular basis. For example, rotate your logs every Monday.</p>
         </li>
-      </li>
-    </li>
-  </ol>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/abc6bfbd-93a8-48d5-92a7-5427b155f69a">Secure the Log Files</a>
-      <li>
-        <a href="/article/099fe70b-15a6-45e4-84a8-95d9d98e9581">Send Logs to a Remote Server</a>
         <li>
-          <a href="/article/7af4efea-59f5-468a-b5a1-c423cd29744a">Centralize Logging</a>
+          <p>
+            <strong>Create a new log file.</strong> Create a new log file when your application needs to rotate its log files. It is recommended to associate the new log file to the period of its creation. For example, the log file corresponding to the week of October 16, 2010 would be named 20101016.log.</p>
         </li>
-      </li>
+        <li>
+          <p>
+            <strong>Back up the existing log files.</strong> Back up the existing log files when your application needs to rotate its log files. Consult your internal auditing policy to determine the period for which logs should be backed up. If your application backs up its logs, store them into an environment that is as secure as the storage environment for the current logs.</p>
+        </li>
+      </ul>
     </li>
-  </ul>]]></Data>
+  </ol>]]></Data>
   </Content>
 </TeamMentor_Article>
