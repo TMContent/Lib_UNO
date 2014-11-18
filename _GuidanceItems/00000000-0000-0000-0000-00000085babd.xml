@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000085babd</Id>
+    <Id_History>00000000-0000-0000-0000-00000085babd,1e069dfb-2f33-4491-bd02-0d0f1c404c3b,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Validate the Origin Attribute Against the FQDN</Title>
+    <Category>Web Messaging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate the Origin Attribute Against the FQDN</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5 and JavaScript.
+
+==What to Do==
+
+In your JavaScript code, check the origin attribute of the event message to make sure the origin’s value matches the fully qualified domain name (FQDN) you expect. The FQDN contains the server and domain name, including the top-level domain. FQDNs uniquely identify the full server name included in a URL.
+
+==Why==
+
+Validating the full FQDN eliminates the false positives that may occur if you validate only part of the domain name. For example, if you merely verify that the origin begins with or contains {{{http://www.example.com}}}, an intruder could use a malicious origin such as {{{http://www.example.com.hackers.net}}} to achieve a false positive match, and to inject malicious code or harmful values. 
+
+==When==
+
+Whenever you use message handlers with HTML5 Web Messaging, validate the origin attribute against the FQDN. 
+
+==How==
+
+To validate the origin against one or more FQDNs to ensure that the origin is acceptable:
+
+# **Create a white list of the server(s) allowed to send messages to the client.** Limit the list to only the servers that are required today. Avoid adding unnecessary servers or domains “just in case”.
+# **To validate the origin against a single server, use the JavaScript {{{===}}} operator to test equality.** The {{{===}}} operator tests equality between the expected server name and the actual server name. (While the {{{==}}} operator will also work, the {{{===}}} operator skips the type conversion and is therefore faster. Since the origin property is expected to be a string, type conversion is unnecessary.) The example below compares an origin to an expected value: \\
+{{{if (event.origin ===}}} {{{'http://www.example.com'}}}) 
+//{// do processing here because the origin is from an expected domain}//
+# **To validate the origin against several server names or ports, use a regular expression.** The following example will match the FQDN from either HTTP or HTTPS:
+
+{{{
+window.addEventListener('message', messageHandler, false);
+function messageHandler(event) {
+
+  var re = new RegExp("^https?://www.example.com$");
+
+  if (re.test(event.origin)) {
+   // validate the message as data, then process…
+  } else {
+    // the event is not from who you expect...
+  }
+}
+}}}
+\\
+==Problem Example==
+
+The following example demonstrates an event handler that does not validate the origin of the message:
+
+{{{
+window.addEventListener('message', messageHandler, false);
+function messageHandler(event) {
+    // do something here to process the message
+}
+}}}
+
+The following example validates the origin, but, because it validates only part of the domain name rather than the FQDN, it is vulnerable to accepting messages from a malicious origin:
+
+{{{
+window.addEventListener('message', messageHandler, false);
+function messageHandler(event) {
+
+  var re = new RegExp("www.example.com");
+
+  if (re.test(event.origin)) {
+   // validate the message as data, then process…
+  } else {
+    // the event is not from who you expect...
+  }
+}
+}}}
+
+Because the value www.example.com can appear anywhere in the string, a malicious FQDN such as http://www.example.com.hacker.net can send messages to this code.
+
+==Solution Example==
+
+To correct the situation, the following uses the equality operator to validate the FQDN:
+
+{{{
+window.addEventListener('message', messageHandler, false);
+
+function messageHandler(event) {
+
+  if (event.origin === 'http://www.example.com') {
+    
+  } else {
+    // the event is not from who you expect...
+  }
+}
+}}}
+
+To validate the origin using regular expressions, include a terminator to ensure that the FQDN is complete and doesn’t have any other characters after it. For example:
+
+{{{
+window.addEventListener('message', messageHandler, false);
+function messageHandler(event) {
+
+  var re = new RegExp("https://www.example.com[/:]?$");
+
+  if (re.test(event.origin)) {
+   // validate the message as data, then process…
+  } else {
+    // the event is not from who you expect...
+  }
+}
+}}}
+
+This allows only the FQDN followed by a proper URL character -- such as a forward slash (/) if a path character is trailing, or a colon (:) if a port number is included -- which signifies that the FQDN is complete.
+
+
+==Web Messaging Guidelines==
+
+* [[00000000-0000-0000-0000-00000012aada|Do Not Evaluate Messages as Code]]
+* [[00000000-0000-0000-0000-00000010eb47|Use element.textContent to Assign Values to DOM Elements]]
+* [[00000000-0000-0000-0000-00000076ad87|Explicitly State the Expected Origin with postMessage]]
+* [[00000000-0000-0000-0000-0000006ab8ac|Validate Data Received by Event Handlers]]
+* [[00000000-0000-0000-0000-00000085babd|Validate the Origin Attribute Against the FQDN]]
+* [[00000000-0000-0000-0000-000000763637|Check The Origin Attribute of Messages]]
+
+==Web Messaging Checklist Items==
+
+* [[00000000-0000-0000-0000-0000008e9b8f|Messages Are Not Evaluated as Code]]
+* [[00000000-0000-0000-0000-00000060fefb|Element.textContent Is Used to Assign Values to DOM Elements]]
+* [[00000000-0000-0000-0000-0000004a4216|Expected Origin Is Explicitly Stated with postMessage]]
+* [[967c9b95-2319-4741-a6fd-1b4bcdf3b636|Data Received by Event Handlers Is Validated]]
+* [[16628f7f-e17a-4bd1-838a-011736bf0995|The Origin Attribute Is Validated Against the FQDN]]
+* [[f103974e-3a42-4837-b04b-7da7e87c41ec|The Origin Attribute of Messages Is Checked]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

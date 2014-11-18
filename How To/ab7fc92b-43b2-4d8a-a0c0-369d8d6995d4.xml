@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-991188871" Content_Hash="429225135">
+  <Metadata>
+    <Id>ab7fc92b-43b2-4d8a-a0c0-369d8d6995d4</Id>
+    <Id_History>ab7fc92b-43b2-4d8a-a0c0-369d8d6995d4,69edca87-3381-471a-aedd-51568af56166,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Alternate Data Stream Bugs in ASP.NET</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Alternate Data Stream Bugs in ASP.NET</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<p>
+    <b>
+    </b>
+  </p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>ASP .NET applications running in an NTFS file system may be vulnerable to Alternate Data Stream (ADS) bugs that allow attackers to access file streams in order to hide data and executable programs or to steal the source code of ASP applications.<span>&amp;nbsp; </span></p>
+  <p>It is recommended to follow these steps to test for ADS bugs in ASP .NET:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios<li>Step 2: Analyze causes and countermeasures<li>Step 3: Execute test cases<li>Step 4: Fine-tune test case data</li></li></li></li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 1: Understand Attack Scenarios</span>
+  </h1>
+  <p>The first step in learning how to test for alternate data stream bugs is to understand the different attack scenarios involved:</p>
+  <ul>
+    <li>Hiding attacker data<li>Disclosing application source code</li></li>
+  </ul>
+  <h2>
+    <span>
+      <em>Scenario 1:<span>&amp;nbsp; </span>Hiding attacker data</em>
+    </span>
+  </h2>
+  <p>ASP .NET applications are not allowed to create files containing Alternate Data Stream (ADS) since the creation of this type of files is unsupported.<span>&amp;nbsp; </span>However, ASP .NET applications can still invoke a Win32 dynamic link library (DLL) to achieve this task.<span>&amp;nbsp;&amp;nbsp; </span><span>&amp;nbsp;</span>The application might use a URL parameter to specify the new file to create as well as the contents to write to the newly created file:</p>
+  <pre>
+    <span>http://some_site/example/createFile.aspx?filename=test.txt&amp;contents=any</span>
+  </pre>
+  <p>The Windows <i>dir </i>command can be used to see what file was created:</p>
+  <pre>
+    <span>C:\user_files&gt;dir /r<br />&amp;nbsp;<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ..<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 3 test.txt</span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>Nevertheless, an attacker can exploit the above URL to create a file with an Alternate Data Stream to store secret attack data:</p>
+  <pre>
+    <span>http://some_site/example/createFile?filename=<span>test.txt:hidden.txt&amp;contents=attack_data</span></span>
+  </pre>
+  <p>The Windows <i>dir </i>command only shows a <i>test.txt.<span>&amp;nbsp; </span></i><span>&amp;nbsp;</span></p>
+  <pre>C:\user_files&gt;dir<br />&amp;nbsp;<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ..<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 3 test.txt</pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>However, using the recursive flag shows the presence of an ADS named <i>hidden.txt:</i></p>
+  <pre>
+    <span>C:\user_files&gt;<strong>dir /r</strong></span>
+    <span>&amp;nbsp;</span>
+  </pre>
+  <pre>
+    <span>12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ..<br />12/02/2008&amp;nbsp; 01:10 PM&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 3 test.txt<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>11 test.txt:hidden.txt:&amp;#36;DATA</strong></span>
+  </pre>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>
+    <span>
+    </span>
+  </p>
+  <p>Furthermore, the Alternate Data Stream can be opened using Notepad:</p>
+  <pre>
+    <span>C:\user_files&gt;notepad test.txt:hidden.txt</span>
+  </pre>
+  <p>In detail, the attack scenario follows these steps:</p>
+  <ol>
+    <li>The attacker finds an application functionality in which the application uses client supplied input to create a new file.<li>The attacker passes the filename of an Alternate Data Stream file to create the ADS hidden stream.<li>The attacker writes data to the ADS hidden stream.</li></li></li>
+  </ol>
+  <h2>
+    <span>
+      <em>
+      </em>
+    </span>&amp;nbsp;</h2>
+  <h2>
+    <span>
+      <em>Scenario 2: Disclosing application source code</em>
+    </span>
+  </h2>
+  <p>ASP .NET applications running in outdated versions of Windows and hosted by Internet Information Services (IIS) are vulnerable to source code disclosure.<span>&amp;nbsp; </span>An attacker can access the application&amp;#8217;s source code using the <i>Windows:DATA</i> Alternate Data Stream (ADS) which is the default data stream that Windows creates in all NTFS files.</p>
+  <p>The attack is possible due to older versions of IIS failing to prevent direct access to the <i>:&amp;#36;DATA</i> Alternate Data Stream.<span>&amp;nbsp; </span>For example, IIS correctly prevented files with the <i>.asp</i> extension to be accessed from the URL:</p>
+  <pre>
+    <span>http://some_site/default.asp</span>
+  </pre>
+  <p>But allowed attackers to use the <i>:&amp;#36;DATA</i> ADS to access the contents of the source code file:</p>
+  <pre>http://some_site/<strong>default.asp<span>::&amp;#36;DATA</span></strong></pre>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The following step in learning how to test for ADS attacks is to understand what causes the different attack variations and how to protect against them.<span>&amp;nbsp; </span>This knowledge will help you identify ADS bugs in code and prepare you for executing the necessary test cases.</p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <em>Validating and sanitizing client input</em>
+  </h2>
+  <p>The first scenario, in which the application uses client supplied input as a filename to create a new file, is a clear case of improper input validation and sanitization.<span>&amp;nbsp; </span>In the case above, the ASP .NET application directly uses a URL parameter to create a text file without checking if the input is safe to use for a filename.<span>&amp;nbsp;&amp;nbsp; </span>Since the code lacks the proper input validation, the application allows attackers to create an alternate data stream to hide attack data.</p>
+  <p>To protect against this attack variation it is recommended to validate all input parameters used to create a new file using a <i>white list</i> approach.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span>A white list consist of all the allowed file names and constructs to be used when creating the new file and can be implemented as a regular expression or string matching function.<span>&amp;nbsp;&amp;nbsp; </span>Before creating the file, the application must check if the parameters that will be used for the file creation are contained in or match the white list.<span>&amp;nbsp; </span>Any parameters not contained in or matching the white list must be disallowed.<span>&amp;nbsp; </span></p>
+  <p>
+    <b>&amp;nbsp;</b>
+  </p>
+  <h2>
+    <em>NT IIS version</em>
+  </h2>
+  <p>The source code disclosure scenario above is caused due to an NT IIS bug in older versions of Windows such as NT 4.0, 95, and 98.<span>&amp;nbsp; </span>To protect against this variation, administrators must install the appropriate Microsoft&amp;#8217;s patch or update Windows and IIS to a more recent version.<span>&amp;nbsp;&amp;nbsp; </span>For more information about the vulnerable Windows versions and patch download location refer to Security Focus incidence page <a href="http://www.securityfocus.com/bid/149">http://www.securityfocus.com/bid/149</a>.</p>
+  <p>
+    <b>&amp;nbsp;</b>
+  </p>
+  <h1>
+    <span>Step 3: Execute Test Cases</span>
+  </h1>
+  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of ADS bugs in ASP and ASP .NET applications it is necessary to execute the appropriate test cases to check if your application is vulnerable.</p>
+  <h2>
+    <span>
+      <em>Test for ADS bugs by hiding attack data</em>
+    </span>
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Find an application&amp;#8217;s functionality where client-supplied input is used to create and write to a file.<li>Supply a filename containing an ADS streams as input to the application such as <i>test.txt:hidden.txt</i>.<li>Verify if the application created the file with the ADS by executing <i>dir /r.</i></li></li></li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp; </span>The application is vulnerable if it allows the creation of an Alternate Data Stream from client-supplied input.</p>
+  <p>&amp;nbsp;</p>
+  <h2>
+    <span>
+      <em>Test for ADS source code disclosure bugs</em>
+    </span>
+  </h2>
+  <p>Follow these steps:</p>
+  <ol>
+    <li>Open a web browser.<li>Navigate to an ASP page by supplying a normal URL:<ul><li><pre><span>http://some_site/default.asp</span></pre></li></ul><li>Enter a URL that tries accessing the Windows:DATA stream of the ASP file to the address bar:<ul><li><pre><span>http://some_site/default.asp::&amp;#37;DATA</span></pre></li></ul><li>Verify if the browser displays the source code of <i>default.asp.</i></li></li></li></li>
+  </ol>
+  <p>Expected results:<span>&amp;nbsp; </span>The application is vulnerable if discloses the source code contained in <i>default.asp.</i></p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 4: Fine-tune Test Case Data</span>
+  </h1>
+  <p>Finally, it is suggested that you modify the test case data to allow for different URL encodings as well as double-encoding scenarios.<span>&amp;nbsp;&amp;nbsp; </span>Some characters necessary to insert additional ADS such as the colon (:) might be disallowed by the application in their ASCII form but allowed in other encodings.<span>&amp;nbsp;&amp;nbsp; </span>Try different encodings for an attack stream including:</p>
+  <p>&amp;nbsp;<span><table><tbody><tr><td><p><span><strong>Test case data</strong></span></p></td><td><p><span><strong>Encoded test case data</strong></span></p></td><td><p><span><strong>Encoding</strong></span></p></td></tr><tr><td><span>test.txt:hidden.txt</span></td><td><p><span>test.txt&amp;#37;3Ahidden.txt</span></p></td><td><p><span>Hex/URL encoding</span></p></td></tr><tr><td><span>test.txt:hidden.txt</span></td><td><p><span>test.txt&amp;#37;253Ahidden.txt</span></p></td><td><p><span>Double encoding</span></p></td></tr><tr><td><span>default.asp::&amp;#37;DATA</span></td><td><p><span>default.asp</span><span>&amp;#37;3A&amp;#37;3A&amp;#37;25</span><span>DATA</span></p></td><td><p><span>Hex/URL encoding</span></p></td></tr><tr><td><span>default.asp::&amp;#37;DATA</span></td><td><p><span>default.asp</span><span>&amp;#37;253A&amp;#37;253A&amp;#37;2525</span><span>DATA</span></p></td><td><p><span>Double encoding</span></p></td></tr></tbody></table></span></p>
+  <p />
+  <span>
+    <p>
+      <span>
+      </span>
+    </p>
+  </span>Note that additional encoding/decoding schemes might be in use.<span>&amp;nbsp; </span>It is always useful to investigate the specifics encoding scheme used by the application to fine-tune the test case data appropriately.<p /><p><b><i><span>&amp;nbsp;</span></i></b></p><h1><span>Conclusions</span></h1><p>Alternate Data Stream bugs affect applications running in NTFS and may allow attackers to hide attack data or disclose the application&amp;#8217;s source code.<span>&amp;nbsp; </span>To test for ADS bugs, it is suggested to start by understanding the attack scenarios involved as well as what causes and how to protect against them.<span>&amp;nbsp; </span>Then you must execute the necessary test cases by submitting input containing an alternate data stream in an attempt of hiding attack data or accessing the application&amp;#8217;s source code.<span>&amp;nbsp;&amp;nbsp; </span>Finally, you must fine-tune test case data to cover additional encoding scenarios.</p><p><b>&amp;nbsp;</b></p>]]></Data>
+  </Content>
+</TeamMentor_Article>

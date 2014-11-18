@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8374faa6-ed13-4449-94d9-4259691abc25</Id>
+    <Id_History>8374faa6-ed13-4449-94d9-4259691abc25,27e81601-fcee-425d-aeea-9e00d63e43c5,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Authentication Controls Fail Securely</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Authentication Controls Fail Securely</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Check For==
+
+Verify that authentication controls fail securely.
+
+==Why==
+
+Designing authentication to fail securely when abnormal conditions occur reduces the risk of attackers bypassing authentication by disabling it.
+
+==How to Check==
+
+To verify that authentication controls fail securely:
+
+# **Identify error handling code.** Find error handling code in the application. Ideally, error handling code should be centralized for easy review. It may be the case that error handling code is spread out throughout the application. In that case, it may be reviewed piece by piece.
+# **Verify that generic error messages are used.** Review error handling code to make sure that generic error messages are used. Generic error messages supply the user with feedback denoting that some error happened, but do not provide too much information.
+# **Verify that a global exception handler is used.** Review error handling code to make sure that a global exception handler is used after handling any specific exceptions. Verify that "finally" blocks are used.
+# **Verify that errors are handled properly.** Review error handling code to make sure that application state is handled properly by:
+## Closing all connections to databases or other systems
+## Reverting to lower privileges, if applicable
+## Closing all sensitive files
+## Logging the failure
+
+==How to Fix==
+
+Use the following best practices to design authentication code to fail securely:
+
+# **Use generic error messages.** Show generic error messages that supply the user with feedback denoting that some error happened. These messages should be written in a broad way and should not provide too much information.
+# **Use a global exception handler.** Global exception handlers should catch any unforeseen exceptions that occur. These handlers are a safety net mechanism to ensure that the application does not behave in an unexpected way if an error occurs.
+# **Catch any specific exceptions first.** Use a generic error message, which ensures that no extra information is disclosed to an attacker through the error messages provided. In this specific exception handler, you could write an error message that is more specific to the error in order to help the user.
+# **Always catch the global exception class last.** This picks up any unforeseen errors and keeps your application from leaking potentially harmful information to an attacker or leaving your application in a vulnerable state.
+# **Use final clauses.** It is always a best practice to include finally blocks with your try statements, which will ensure that the application reverts back to a secure state when the try block ends. This block will be executed regardless of whether an exception is thrown or not.
+# **Handle errors properly.** Implement proper handling of the application state in error handling code by closing all connections to databases or other systems, reverting to lower privileges (if applicable), closing all sensitive files, and logging the failure on the server.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

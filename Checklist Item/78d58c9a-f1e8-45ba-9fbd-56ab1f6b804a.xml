@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="375850771" Content_Hash="193826307">
+  <Metadata>
+    <Id>78d58c9a-f1e8-45ba-9fbd-56ab1f6b804a</Id>
+    <Id_History>78d58c9a-f1e8-45ba-9fbd-56ab1f6b804a,7b57e779-f010-46a0-943c-68486194c82c,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Impersonation Is Reverted by Using Finally Blocks</Title>
+    <Category>Impersonation and Delegation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Impersonation Is Reverted by Using Finally Blocks</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure that impersonation is reverted by using structured exception handling&amp;nbsp;in programmatic impersonation.</p>
+  <h1>How to Fix</h1>
+  <p>If you must use programmatic impersonation, use structured exception handling and put the impersonation code inside <b>try</b> blocks. Use a <b>catch</b> block to handle exceptions and use a <b>finally</b> block to ensure that the impersonation is reverted as shown here:</p>
+  <p>
+    <pre>using System.Security.Principal;<br />...<br />WindowsIdentity winIdentity = new WindowsIdentity(<a href="mailto:username&amp;#64;domainName">username&amp;#64;domainName</a>);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />try<br />&amp;#123;<br />  // Do work<br />&amp;#125;<br />catch(Exception ex)<br />&amp;#123;<br />  // Stop impersonating  ctx.Undo();<br />&amp;#125;<br />finally<br />&amp;#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&amp;#125;</pre>
+  </p>
+  <p>By using a <b>finally</b> block, you ensure that the impersonation token is removed from the current thread whether an exception is generated or not. Also be aware that if your code fails to catch exceptions, a malicious user could use exception filters to execute code that runs under the impersonated security context. This is particularly serious if your code impersonates a privileged account.If your code does not catch the exception, exception filters higher in the call stack are executed before code in your <b>finally</b> block is executed.</p>
+  <blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;Exception filters are supported by Microsoft Intermediate Language (MSIL) and Visual Basic .NET.<b></b></blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information, see <a href="http://msdn2.microsoft.com/en-us/library/ms998351.aspx">How To: Use Impersonation and Delegation in ASP.NET</a>.</li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

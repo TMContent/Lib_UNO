@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000093dea4</Id>
+    <Id_History>00000000-0000-0000-0000-00000093dea4,fac31a46-1b14-4663-8b94-9c556023c054,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Check the Origin Header in the WebSocket Handshake</Title>
+    <Category>WebSockets</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Check the Origin Header in the WebSocket Handshake</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+When implementing a WebSocket server as a part of an HTML5 web application, check the request header for origin to restrict direct access outside of the application’s intended web page.
+
+==Why==
+
+By checking the origin, you can restrict access to the WebSocket server, allowing requests only from the same origin or specified domains. This prevents potentially malicious connections.
+
+==When==
+
+Use this guideline when implementing a WebSocket server intended to accept HTML5 browser connections from specified domains.
+
+==How==
+
+To check for origin:
+
+# **Configure the WebSocket server to check the Sec-WebSocket-Origin header value (for older WebSocket clients) or Origin header value (for newer clients).** Add code to the configuration file in accordance with your server language. For example, for PHP-WebSocket, which is an open source PHP implementation of a WebSocket server library, use the following method call to set origin checking: {{{$server->setCheckOrigin(true);}}}. This reads the value of  Sec-WebSocket-Origin  or  origin.
+# **Specify the allowed origins from which the server will accept connections.**  For example, to accept connections only from an HTML5 application residing on the same server, configure it to accept connections from the “same origin” only. If the WebSocket server and the application both reside on web.example.com, configure the WebSocket server to accept only from {{{Origin= web.example.com}}}.
+# **Iterate through the request headers to find the Origin or Sec-WebSocket-Origin header.** If the value is null or does not match the set of allowed origins, close the connection stream with a 401 response.
+
+{{{
+
+$example_origins = array('example.com',’web.example.com’);
+
+foreach ($example_origins as $origin) {
+    $server->setAllowedOrigin($origin);
+    $origin_ips[] = gethostbyname($origin);
+}
+if (!in_array($_SERVER["REMOTE_ADDR"], $origin_ips)) {
+
+// send 401 response
+}
+else {
+// begin tunnel
+}
+
+
+}}}
+
+\\
+==Problem Example==
+
+The following code shows a handshake from client to server. The server doesn’t check for the origin of the client. The host is 127.0.0.1, while the client sending the request is 192.168.56.1. The server responds with the Upgrade connection request and opens a WebSockets tunnel.
+
+{{{
+
+Client Request:
+
+Cache-Control:no-cache
+Connection:Upgrade
+Cookie:ZDEDebuggerPresent=php,phtml,php3
+Host:127.0.0.1:8000
+Origin:http://192.168.56.1
+Pragma:no-cache
+Sec-WebSocket-Extensions:x-webkit-deflate-frame
+Sec-WebSocket-Key:R2umga2XHgVSaN8UOO8xOA==
+Connection: Upgrade
+Sec-WebSocket-Version:13
+
+
+Server Response:
+
+Connection:Upgrade
+Sec-WebSocket-Accept:6dNTSIra+ZKXHDcl0oIbmdi/BY0=
+Upgrade:websocket
+
+}}}
+
+\\
+==Solution Example==
+
+To correct the situation, check for the specified origin (domain):
+
+{{{
+
+// pseudo code for server in domain web.example.com
+
+IF 
+ Origin Value IS empty OR != web.example.com
+THEN
+ Send HTTP Response of 401 AND close the stream
+ELSE 
+ Proceed to upgrade connection request and begin the tunnel
+
+}}}
+
+Client Request:
+
+{{{
+
+GET ws://127.0.0.1:8000/demo HTTP/1.1
+Pragma: no-cache
+Origin: http://192.168.56.1
+Host: 127.0.0.1:8000
+Sec-WebSocket-Key: HIbzrH6epVT4RANaBn6dOA==
+Upgrade: websocket
+Sec-WebSocket-Extensions: x-webkit-deflate-frame
+Cache-Control: no-cache
+Cookie: ZDEDebuggerPresent=php,phtml,php3
+Connection: Upgrade
+Sec-WebSocket-Version: 13
+
+}}}
+
+
+==WebSocket Guidelines==
+
+* [[00000000-0000-0000-0000-000000869806|Validate Data Coming from WebSockets]]
+* [[00000000-0000-0000-0000-00000093dea4|Check the Origin Header in the WebSocket Handshake]]
+* [[00000000-0000-0000-0000-0000005f2e4a|Use TLS/SSL to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-000000736a21|Check the Origin Attribute of WebSocket Messages]]
+* [[00000000-0000-0000-0000-0000005326a8|Use the Latest WebSocket RFC 6455 Standard]]
+* [[00000000-0000-0000-0000-00000085bc2f|Do Not Tunnel TCP via WebSockets]]
+
+==WebSocket Checklist Items==
+
+* [[00000000-0000-0000-0000-00000086537e|Data Coming from WebSockets Is Validated]]
+* [[00000000-0000-0000-0000-00000077e316|The Origin Header in WebSocket Handshake is Checked]]
+* [[bd870268-f104-4f6f-ba0d-6628dc34eb2a|TLS/SSL is Used to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-0000002f39d7|The Origin Attribute of WebSocket Messages Is Checked]]
+* [[18d5564d-00a4-4afe-a853-707269df2566|Latest RFC 6455 Standard is Used]]
+* [[00000000-0000-0000-0000-00000091ce5a|TCP Is Not Tunneled via WebSockets]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

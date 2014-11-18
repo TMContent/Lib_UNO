@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-30683164" Content_Hash="1333244825">
+  <Metadata>
+    <Id>51b0ac88-ebc0-4447-b839-a8792e3664d6</Id>
+    <Id_History>51b0ac88-ebc0-4447-b839-a8792e3664d6,7436460e-415d-4502-884b-31ef155da39a,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Test Interfaces Are Removed</Title>
+    <Category>Other</Category>
+    <Phase>Deployment</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Test Interfaces Are Removed</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure all public interfaces used solely for testing the application are removed.</p>
+  <h1>Why</h1>
+  <p>Test interfaces add extra functionality that is not intended for the released application. Often these interfaces will be used by a test team to gain information or drive functionality that would be dangerous in the hands of an attacker.</p>
+  <h1>How To Check</h1>
+  <p>Verify that all test interfaces have been removed by doing the following:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all test APIs.</strong> Enumerate all public APIs. Identify which APIs are intended for application use and which APIs are intended for test purposes. Use documentation and specifications to help.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that all testing code is removed from the code base.</strong> Locate the implementation for the identified test code. Ensure that it has been isolated from the application.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that the application was compiled with the release flag.</strong> Open the project for the application with Visual Studio. From the <em>Build</em> Menu select <em>Configuration Manager</em>. Check that the <em>active solution configuration</em> is set to <em>Release</em>.</p>
+    </li>
+  </ol>
+  <p>Care should be taken when managing different versions of builds to ensure that only release builds are used in production, as it is difficult (although possible) to determine whether a build was configured as release or debug after the fact.</p>
+  <h1>How To Fix</h1>
+  <p>To remove all test interfaces:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all test APIs</strong>: Enumerate all public APIs. Identify which APIs are intended for application use and which APIs are intended for test purposes. Ideally these interfaces will already be documented as test interfaces and can be discovered through specifications.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Remove the test interfaces</strong>: Code removal is a straight forward procedure. Once the test code is identified, it should be isolated from the application and removed from your code base. This should happen before final functional and integration testing to ensure that the system still works as intended with the test code missing.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Compile your application with release flag</strong>: Always compile your application with a release flag before shipping. This ensures that your application does not contain extra debug information in its assemblies.</p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/f959d06a-0ae8-4e5e-b984-18173f6721c3">Remove Test Interfaces</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

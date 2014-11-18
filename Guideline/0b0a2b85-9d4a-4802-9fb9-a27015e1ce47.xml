@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1535504568" Content_Hash="1323750901">
+  <Metadata>
+    <Id>0b0a2b85-9d4a-4802-9fb9-a27015e1ce47</Id>
+    <Id_History>0b0a2b85-9d4a-4802-9fb9-a27015e1ce47,a7050357-9116-4704-b722-f1e7df4bec90,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Partition Code into Separate Assemblies</Title>
+    <Category>Other</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Partition Code into Separate Assemblies</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Partition web controls, user controls, and resource access code in their own assemblies for granular security. </p>
+  <h1>Why</h1>
+  <p>Following this strategy will help you reduce the overall minimum set of privileges that your application requires.</p>
+  <h1>When</h1>
+  <p>Use this guideline when your application's components require different levels of privileges.</p>
+  <h1>How</h1>
+  <p>Use the following steps when partitioning your application:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the major components</strong>: Review your application's design and locate all major functionality.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all special security settings</strong>: Review your application's security requirements. Identify all cases where a component would require a privilege that is otherwise not needed by the rest of your application. For example, all code that accesses the file system should be placed within a single assembly.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Partition your application</strong>: Store all major functionality into separate assemblies. Adding this level of granularity to your application provides extra flexibility when applying your application's security settings. ASP.NET provides the following types of assemblies:</p>
+      <ul>
+        <li>
+          <strong>Page assemblies</strong>: By default, each ASP.NET page is compiled into its own assembly that is then loaded into the ASP.NET engine. Security configuration for such assemblies is stored inside <em>web.config</em>. </li>
+        <li>
+          <strong>Executable assemblies</strong>: Typically known as external libraries or DLL, these assemblies can be re-used outside of ASP.NET development. Security settings for such assemblies is managed through <em>app.config</em>.</li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>MyApp is the HR application for MyCorp. Among its basic features for keeping track of employee records, the application allows document and calendar sharing that allows MyCorp's HR staff to be up-to-date on daily activities. Because the application is compiled as a single assembly, it is impossible to assign different security settings for its calendar and document sharing features. Therefore a successfully exploited vulnerability in the calendar feature could lead to compromising shared documents. </p>
+  <h1>Solution Example</h1>
+  <p>MyApp is the HR application for MyCorp. Among its basic features for keeping track of employee records, the application allows document and calendar sharing that allows MyCorp's HR staff to be up-to-date on daily activities. Since the calendar and document features are compiled as separate assemblies, the developers are able to assign the appropriate security policies for each component; therefore preventing an attacker from compromising shared documents through successfully exploiting a vulnerability in the calendar feature.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

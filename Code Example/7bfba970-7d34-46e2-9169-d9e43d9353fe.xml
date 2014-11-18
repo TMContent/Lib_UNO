@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1052382033" Content_Hash="-22636215">
+  <Metadata>
+    <Id>7bfba970-7d34-46e2-9169-d9e43d9353fe</Id>
+    <Id_History>7bfba970-7d34-46e2-9169-d9e43d9353fe,8314783e-ece1-4658-b96a-89aa67016748,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Creating a Temporary File Which Avoids Canonicalization And Race Conditions</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Creating a Temporary File Which Avoids Canonicalization And Race Conditions</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>C# <li>Server-side</li></li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code sample is to demonstrate a technique to securely create files by a web application while avoiding canonicalization and race conditions</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Secure generation of temporary files within a web application which does not expose other files on the file system. <li>Secure creation and storage of temporary files which mitigate the risk of file enumeration <li>Mitigate the likelihood of race conditions through use of strong randomly generated filenames <li>Demonstrate secure retrieval of a temporary file which resides outside of the webroot upon successful authorization of user request</li></li></li></li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>A web-based application generates reports or other temporary files to a file which may be subsequently retrieved by an authorized user <li>A web application needs to periodically create temporary files which are later processed by a batch process, the temporary filenames should be unique and non-user influenced <li>Files are retrieved indirectly for users upon request, brokered by the application (e.g. files reside outside of the webroot to prevent unauthorized access).</li></li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <p>The following solution is broken up into two cases, the first in which the file is created, and the second which demonstrates how to properly retrieve and serve the file back to the user.</p>
+  <p>
+    <strong>Secure File Creation</strong>
+  </p>
+  <pre>protected void CreateFile()&amp;#123;<br />    try<br />    &amp;#123;<br />        // Generate a guid value for a strong, random and unpredictable filename<br />        string guid = Guid.NewGuid().ToString();<br />        // Ensure that file which is written resides in a directory outside of the web root.<br />        // Ideally this file should be on a filesystem separate from the OS.<br />        // None of the generated filename arguments are user influenced values<br />        StreamWriter sw = new StreamWriter("E:\\account-reports\\" &amp;#43; guid &amp;#43; ".pdf");<br />        // Fetch some data and generate the file<br />        //<br />        // ...<br />        sw.Write(strFileContents);<br />        sw.Flush();<br />        sw.Close();<br /><br />        // Insert GUID value in database associated with current user<br />        //<br />        // ...<br />    &amp;#125;<br />    catch (Exception ex)<br />    &amp;#123;<br />        // User supplied exception handling code: Log exception and perform graceful error handling<br />    &amp;#125;<br />&amp;#125; </pre>
+  <p>
+    <strong>Secure File Retrieval</strong>
+  </p>
+  <pre>protected void RetrieveFile()&amp;#123;<br />    try<br />    &amp;#123;<br />        // Retrieve file. We call a custom method to perform a database lookup which gets the<br />         // GUID value for the current user.<br />        // Replace the RetrieveGuidForUser method below with your own method which returns the<br />         // guid for the current user.<br />        string userguid = RetrieveGuidForUser(Context.User.Identity);<br />        string fullreportpath = "E:\\account-reports\\" &amp;#43; userguid &amp;#43; ".pdf";<br />        // Retrieve file length<br />        FileInfo fi = new FileInfo(fullreportpath);<br />        long fsize = fi.Length;<br />        // Serve file to user. No values in response headers should be user influenced.<br />        // We read the file from a directory outside of the web root to protect unauthorized<br />        // file access.<br />        Response.AddHeader("Content-Disposition", "attachment;filename=report.pdf");<br />        // Don't allow a user to influence the content disposition or content type otherwise<br />        // there may be possibility of header injection<br />        Response.ContentType = "application/pdf";<br />        Response.WriteFile(fullreportpath, 0, fsize);<br />    &amp;#125;<br />    catch (Exception ex)<br />    &amp;#123;<br />        // User supplied exception handling code: Log exception and perform graceful error handling<br />    &amp;#125;<br />&amp;#125; </pre>
+  <h1>Problem Example</h1>
+  <p>The following examples demonstrate the danger of relying on user supplied inputs to create and retrieve temporary files on the host:</p>
+  <p>
+    <strong>File Creation</strong>
+  </p>
+  <pre>// None of the generated filename arguments are user influenced values<br />StreamWriter sw = new StreamWriter(HttpContext.Current.Request.PhysicalApplicationPath &amp;#43; <br />                                    Request.Cookie&amp;#91;"cid"&amp;#93; &amp;#43;".pdf");<br />// Fetch some data and generate the file//<br />// ...sw.Write(strFileContents);<br />sw.Flush();<br />sw.Close();</pre>
+  <ul>
+    <li>This insecure file creation routine creates temporary files in the webroot as a result any user who has access to the web server may retrieve PDF reports associated with another user <ul><li>Files created directly or indirectly due to an action performed by a user must be created securely in which the filenames are random, and not user influenced, and reside outside of the webserver root.</li></ul><li>The Request.Cookie&amp;#91;"cid"&amp;#93; value is used to choose a filename to be written, because this value is user influenced an attacker may leverage directory traversal attacks to overwrite arbitrary files on the web server host. <li>Using a GUID we can generate a strong random value for the filename instead of relying on a user supplied cookie.</li></li></li>
+  </ul>
+  <p>
+    <strong>File Retrieval</strong>
+  </p>
+  <pre>string fid = Request.QueryString&amp;#91;"fid"&amp;#93;.ToString();<br />string ftype = hdnFtype.Value;<br /> string fullreportpath = "E:\\account-reports\\" &amp;#43; fid &amp;#43; "." &amp;#43; ftype;<br />// Retrieve file lengthFileInfo fi = new FileInfo(fullpath);<br />long fsize = fi.Length;<br />// Serve file to user. No values in response headers should be user influenced.<br />// We read the file from a directory outside of the web root to protect unauthorized<br />// file access.Response.AddHeader("Content-Disposition", "attachment;<br />filename="&amp;#43; fid &amp;#43; "."&amp;#43; ftype);Response.ContentType = "application/"&amp;#43;ftype;<br />Response.WriteFile(fullpath, 0, fsize);</pre>
+  <ul>
+    <li>Simply changing the value of the fid request querystring parameter allows us to retrieve files of other users. If the values are sequential it becomes trivial to enumerate files of other users. <li>Users can circumvent this file retrieval routine as files are stored within the web server root <li>The user supplied querystring parameter and ftype hidden form field allow users to retrieve arbitrary files from the file system by performing directory traversal attacks <li>The user supplied querystring parameter and ftype hidden form field allow an attacker to create specially formed hyperlinks which introduce response splitting and other HTTP header injection issues (e.g. HTTP Cache poisoning). <ul><li>User supplied values should never be used to identify files for manipulation, rather server-side session details which do not allow user tampering should be used instead <li>Hidden form fields do not mitigate the risk of parameter tampering; client side controls are easily circumvented <li>The content disposition filename need not necessarily be the same filename that a user created.</li></li></li></ul></li></li></li></li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>The following class must be included in any project making use of the sample code provided above:</p>
+  <pre>using System.IO;</pre>
+  <p>Running code similar to that shown below will demonstrate the uniqueness of System generated GUIDs which coincides with our goal to create temporary files which avoid canonicalization and race conditions.</p>
+  <pre>for (int i = 0; i &lt; 10; i&amp;#43;&amp;#43;)&amp;#123;<br />    Response.Output.WriteLine("GUID: " &amp;#43; Guid.NewGuid());<br />&amp;#125;</pre>
+  <h1>Expected Result</h1>
+  <pre>GUID: 1a40e34d-9985-4b2e-9c6a-8be88cfcc26b<br />GUID: 1b7bd6d5-057e-4681-b213-a193170fc5d5<br />GUID: b063f09d-d393-4fbc-b704-e5cefd708703<br /><br /><br />GUID: 088101b3-dc2e-474b-a898-53508b4a9ac5<br /><br />GUID: bffc841c-e6e8-4562-8ece-8d1ace19fd4d<br />GUID: 21ff1e43-0d10-46d7-9df6-a9053f3aabc9<br />GUID: 36f49e30-c81d-484a-94a0-cc09197839a0<br />GUID: a6d32483-bc6e-4828-b3cd-423ab1e1389e<br />GUID: d8ed1bf8-413e-4be9-97d8-ad9337030310<br />GUID: eba93b92-384d-41d2-8db3-6028932fee4d</pre>
+  <h1>More Information</h1>
+  <p>The file retrieval function demonstrates the ability to securely serve files back to users avoiding common attacks such as HTTP header injection, directory traversal and race conditions as filenames are controlled entirely by the server. In the event that the application needs to preserve original filenames, these values may be stored in the database (after data validation for known good characters) along with the system generated Guid. The original filename may then be set within the Content-Disposition header.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>Guid Structure: <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemguidclasstopic.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemguidclasstopic.asp</a><li>Wikipedia Directory Traversal Attacks: <a href="http://en.wikipedia.org/wiki/Directory_traversal">http://en.wikipedia.org/wiki/Directory_traversal</a><li>Wikipedia Race Conditions: <a href="http://en.wikipedia.org/wiki/Race_condition">http://en.wikipedia.org/wiki/Race_condition</a></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

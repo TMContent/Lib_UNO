@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-669513566" Content_Hash="-1006061932">
+  <Metadata>
+    <Id>eda2c482-6e7f-4370-9d2f-deeca845c82b</Id>
+    <Id_History>eda2c482-6e7f-4370-9d2f-deeca845c82b,9607b6e3-de61-4ff7-8ef0-9f8b44a5b27d,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Client-side Validation Is Not Relied On</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Client-side Validation Is Not Relied On</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Verify that the same or more rigorous checks are performed on the server as on&amp;nbsp;the client. Verify that client-side validation is used only for usability and to reduce the number of posts to the server.</p>
+  <h1>Why</h1>
+  <p>Client-side validation can be easily bypassed. For example, a malicious user could disable the client-side script routines by disabling JavaScript. Users may also construct their own form posts using custom HTML, or using an HTTP proxy to modify form posts. If developers rely on the controls in the client's user interface and do not validate all results on the back end, an attacker may be able to inject malicious data into the system,&amp;nbsp;potentially&amp;nbsp;leading to a range of security issues, including cross site scripting and SQL injection.</p>
+  <h1>How To Check</h1>
+  <p>Client-side validation should only be used to reduce round trips to the server and to improve the user experience. It cannot be relied upon for security&amp;nbsp;because the client controls this code. Take the following steps to ensure that input is validated on the server:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all input validation routines in client-side code. </strong>Ensure that you have identified all the routines in your web pages that validate input received from the user. These client-side validation routines usually include checks for length, range, format, and type on the input received. Some examples of client-side validators are:</p>
+      <ul>
+        <li>Form controls such as those that restrict the number of characters allowed using the <em>MAXLENGTH</em> attribute and the range of input values allowed in drop-down boxes. </li>
+        <li>JavaScript validation routines that check the length, range, type, format, etc. </li>
+        <li>Hidden fields which are sometimes used&amp;nbsp;to impose constraints on the input. Although the actual validation happens on the server, it is easy to tamper with the hidden fields on the client side.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that corresponding server-side validation routines exist. </strong>For all client-side validation routines that have been identified, check that similar, or more rigorous, validation routines have been implemented on the server side. This protects your application from cross-site scripting, SQL injection or other types of attacks in which the client-side validation has been bypassed by an attacker. The server can be easily&amp;nbsp;tested by disabling JavaScript and modifying the client-side code or by using an HTTP&amp;nbsp;proxy application.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that missing server-side validation routines are implemented. </strong>For all input that is validated on the client but not on the server, add server-side validation routines which are no less strict than the validation performed on the client. Also add validation routines for any input received from the user that is not validated on the client. Examples are validation of cookies, hidden fields, ViewState, etc.</p>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>It's important to specify what input is acceptable, rather than trying to specify all the variations of input that are illegal (whitelisting as opposed to blacklisting). Use ASP.NET validator controls to check user input on the server side and provide feedback to the user when input fails to pass validation requirements. Follow these steps on each form page in an application:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Determine the required fields.</strong> Use the required field validator control to ensure all required fields are present. Here is an example that declares a textfield in an ASP page that is a required field:</p>
+      <pre>&lt;td&gt;<br />&amp;nbsp;&amp;nbsp; &lt;asp:RequiredFieldValidator runat=server<br />&amp;nbsp;&amp;nbsp; ControlToValidate=txtName<br />&amp;nbsp;&amp;nbsp; ErrorMessage="User ID is required."&gt; *<br />&amp;nbsp;&amp;nbsp; &lt;/asp:RequiredFieldValidator&gt;<br />&lt;/td&gt;<br />&lt;td&gt;User ID:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtName&gt;&lt;/td&gt;</pre>
+      <p>The * is displayed next to the label if the input is blank. The error message is reported in a summary. The "ControlToValidate" property specifies the ID of the control to validate. The final step is to add a validation summary to the top of the page like so:</p>
+      <pre>&lt;asp:ValidationSummary runat=server<br />HeaderText="There were errors on the page:" /&gt;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce numeric range constraints.</strong> Use the RangeValidator control to ensure any numeric values are constrained to a specific, acceptable range. Here is an example that declares an integer field in an ASP page that has a valid range from 1 to 50:</p>
+      <pre>&lt;td&gt;<br />&amp;nbsp; &lt;asp:RangeValidator id="Range1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToValidate="txtState"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; MinimumValue="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; MaximumValue="50"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Type="Integer"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; EnableClientScript="false"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Text="The value must be from 1 to 10!"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; runat="server"&gt; * <br />&amp;nbsp; &lt;/asp:RangeValidator&gt;<br />&lt;/td&gt;<br />&lt;td&gt;State:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtState&gt;&lt;/td&gt;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Validate verification fields.</strong> Fields such as password entry are often verified by having the user re-type them to ensure they are correct. Use the CompareValidator control to make the comparisons and ensure validity/integrity. Here is an example that declares two password fields in an ASP page that must match in order to validate properly:</p>
+      <pre>&lt;asp:CompareValidator runat=server<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToValidate=txtRePWord<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToCompare=txtPWord<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ErrorMessage="Passwords do not match." /&gt;</pre>
+      <p>In this case, the two fields being compared are "txtPWord" and "txtRePWord". If they do not match, validation fails with the error message, "Passwords do not match".</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce type constraints on string fields.</strong> String fields are the most difficult type of input to effectively validate because the range of acceptable characters is much larger then numeric and enumerated types. Regular expressions provide a flexible mechanism for dictating valid patterns and characters. Use the <em>RegularExpressionValidator</em> to perform a variety of checks on string-based fields such as zip codes and phone numbers. Here is an example that declares an text field in an ASP page that should represent a five digit zip code, consisting entirely of numberic digits, and a validator to enforce those constraints:</p>
+      <pre>&lt;input type=text runat=server id=txtZip&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;asp:RegularExpressionValidator runat=server<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ControlToValidate="txtZip"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ErrorMessage="Zip code must be 5 digits, all numbers."<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ValidationExpression="[0-9]{5}"&gt; * <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/asp:RegularExpressionValidator&gt;<br />&lt;td&gt;Zip code:&lt;/td&gt;<br />&lt;td&gt;&lt;input type=text runat=server id=txtZip&gt;&lt;/td&gt;</pre>
+    </li>
+    <li>
+      <p>
+        <strong>Use custom validation to handle remaining input constraints.</strong> The built-in ASP.NET validation controls handle most of the cases that commonly arise in Web applications, but there may be times when they are not appropriate. The CustomValidator enables custom validation code that can plugs into the existing validation system. Here is an example that declares a text field in an ASP page. For this particular text field, there is business logic that needs to be satisfied which is not easily constrainable by the other validation constructs, so a custom validator is implementated that ensures the string in the text field does not start with the letter "a":</p>
+      <pre>&lt;%@ Page Language="vb" %&gt;<br />&lt;script runat=server&gt;</pre>
+      <pre>public sub CheckID(source as Object, args as ServerValidateEventArgs)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; args.IsValid = args.Value.substring(0, 1).tolower() &lt;&gt; "a"<br />end sub </pre>
+      <pre>&lt;/script&gt;</pre>
+      <p>To call this function, add a CustomValidator, which is designed to call developer code to perform its check. Here is the declaration:</p>
+      <pre>&lt;asp:CustomValidator runat=server<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; controltovalidate="txtName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; errormessage="ID is already in use."<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; OnServerValidate="CheckID" /&gt;</pre>
+      <p>It is worth noting that this could have been done with the RegularExpression validation control, but in this case it makes more sense to use custom validation since a type of high-level validation that could conceivably be more complex then a simple pattern match is being defined (e.g., the validation rules might change based on application state).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the Regex class to validate other sources.</strong> Most Web applications accept input from various sources, including HTML controls, server controls, query strings, and cookies. Validate input from all of these sources to help prevent injection attacks. Use regular expressions to help validate input. The following example shows how to use the Regex class.</p>
+      <pre>using System.Text.RegularExpressions ;<br />&amp;nbsp;// Instance method:<br />Regex reg = new Regex(@"^[a-zA-Z'.\s]{1,40}$");<br />Response.Write(reg.IsMatch(Request.QueryString["Name"]));<br />// Static method:<br />if (!Regex.IsMatch(Request.QueryString["Name"],@"^[a-zA-Z'.\s]{1,40}$")) <br />{<br />&amp;nbsp;&amp;nbsp; // Name does not match expression <br />}</pre>
+      <p>If you cannot cache your regular expression for frequent use, you should use the static IsMatch method where possible for performance reasons, to avoid unnecessary object creation.</p>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/14d4d65c-8bba-4fef-8261-e76895882942">Do Not Rely on Client-side Validation</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <h1>
+  </h1>
+  <h1>
+  </h1>]]></Data>
+  </Content>
+</TeamMentor_Article>

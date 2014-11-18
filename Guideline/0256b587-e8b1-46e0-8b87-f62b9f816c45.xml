@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1097528698" Content_Hash="1143006057">
+  <Metadata>
+    <Id>0256b587-e8b1-46e0-8b87-f62b9f816c45</Id>
+    <Id_History>0256b587-e8b1-46e0-8b87-f62b9f816c45,b3846b9c-002d-4a57-ae62-83c150953fbc,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Protect Log Files</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Protect Log Files</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<br />
+  <h1>What to Do</h1>
+  <p>Restrict access to protect the application's logged events.</p>
+  <h1>Why</h1>
+  <p>Logged events often contain internal application details that could help an attacker target your application.</p>
+  <h1>When</h1>
+  <p>If your application logs any type of events.</p>
+  <h1>How</h1>
+  <p>Use the following steps to protect your application's logged events: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Avoid disclosing location of logs</strong>: The location of the logs should only be known by your application and its administrators. Avoid disclosing the location of the logs to users.</p>
+      <li>
+        <p>
+          <strong>Set appropriate ACL</strong>: Set the logs' ACL so that only your application and its administrators/developers have access to them.</p>
+        <li>
+          <p>
+            <strong>Keep logging framework away from users</strong>: Do not allow your application's users to interact directly with the logging framework. The logging framework should log information regarding the performance of the application, but should avoid storing user supplied data. Storing user-supplied information can aid an attacker into poisoning your application's logs. Consult the <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Log Important Security Operations</a> and <a href="/article/fc33dfc5-5210-4656-bc27-e43b16c3c89e">Consider Log Throttling</a> guidelines when determining what data should be logged, how it should be logged, and when it should be logged.</p>
+          <li>
+            <p>
+              <strong>Always use the append flag when writing to log files</strong>: If your application stores logged events into files on disk, make sure that your application always appends new events to the log files. Appending to the log files reduces the risk of overwriting the existing logged events.</p>
+            <li>
+              <p>
+                <strong>Consider using log rotation</strong>: Log rotation prevents your application from having to deal with large log repositories. It allows you to manage and audit your application's logged events without interfering with your application's workings. Use the following steps when utilizing log rotation:</p>
+              <ul>
+                <li>
+                  <strong>Define a rotation period</strong>: Schedule your log rotation on a regular basis. For example, rotate your logs every Monday. <li><strong>Create a new log file</strong>: If your application stores logged events into files on disk, create a new log file when your application needs to rotate its logs. It is recommended to associate the new log file to the period of its creation. For example, a log file corresponding to the week of October 16, 2007 would be named 20071016.log. <li><strong>Back up the existing logs</strong>: Back up the existing logs when your application needs to rotate its log repository. Consult your internal auditing policy to determine how long log backups should be kept. If your application backs up its logs, store them into an environment that is as secure as the storage environment for the current logs.</li></li></li>
+              </ul>
+              <li>
+                <p>
+                  <strong>Consider using an external logging application.</strong> Using an external logging application ensures that your application's logs will be kept up to date even if your application abruptly terminates.</p>
+                <li>
+                  <p>
+                    <strong>Secure ASP.NET health monitoring.</strong> If your application uses ASP.NET health monitoring, consider taking the following measures:</p>
+                  <ul>
+                    <li>
+                      <strong>Throttle your application's logs</strong>: Use the <a href="/article/fc33dfc5-5210-4656-bc27-e43b16c3c89e">Consider Log Throttling</a> guideline to throttle your application's logs. <li><strong>Secure health monitoring</strong>: Consult Securing ASP.NET Health Monitoring&amp;nbsp;at <a href="http://msdn.microsoft.com/en-us/library/ms228045(VS.80).aspx">http://msdn.microsoft.com/en-us/library/ms228045(VS.80).aspx</a>,&amp;nbsp;when securing your application's logging framework. <li><strong>Secure connection strings</strong>: Follow the <a href="/article/e1992e93-39c6-4508-9b16-0e07b0939c37">Secure Connection Strings</a> guideline to secure all connection strings that your application's logging framework uses.</li></li></li>
+                  </ul>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>An e-commerce site does hundreds of transactions an hour, and logs data at the web and database levels, along with a separate security log that monitors all user and security-related events. Unfortunately, the security logs are stored in a location that is hidden in the application's directory tree. An attacker finds the location of the logs and retrieves all user and security-related events.</p>
+  <h1>Solution Example</h1>
+  <p>An e-commerce site does hundreds of transactions an hour, and logs data at the web and database levels, along with a separate security log that monitors all user and security-related events. Because the logs are rotated and stored in a secure location that is monitored and managed 24x7 by the operations team, it is impossible for an attacker to gain access to the logged events without the help of an insider.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about setting secure filesystem permission to log files, see: <a href="http://support.microsoft.com/kb/310361">How to set secure NTFS permissions on IIS 5.0 log files and virtual directories in Windows 2000</a>.<li>To learn more about log rotation in IIS, visit: <a href="http://support.microsoft.com/kb/324091">HOW TO: View and Report from Log Files</a>.<li>To learn more about securing ASP.NET health monitoring, visit <a href="http://msdn2.microsoft.com/en-us/library/ms228045(VS.80).aspx">Securing ASP.NET Health Monitoring</a>.</li></li></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Guideline: Log Important Security Operations</a>
+      <li>
+        <a href="/article/fc33dfc5-5210-4656-bc27-e43b16c3c89e">Guideline: Consider Log Throttling</a>
+        <li>
+          <a href="/article/e1992e93-39c6-4508-9b16-0e07b0939c37">Guideline: Secure Connection Strings</a>
+          <li>
+            <a href="/article/bdff2308-96e1-4787-9162-a115d1366f76">Guideline: Block Protected Files From Being Retrieved</a>
+            <li>
+              <a href="/article/ce899ba6-8ae2-4494-8706-ce863fae58e7">Guideline: Filter All User-Supplied Filename and Path Input </a>
+              <li>
+                <a href="/article/7d83d845-cd2b-4067-bb4c-5fbb890b9c9e">Attack: Information Disclosure Attack</a>
+                <li>
+                  <a href="/article/d22c8d99-a690-4a68-bccf-5cb2894af160">Attack: Repudiation Attack</a>
+                  <li>
+                    <a href="/article/079d6e64-8efb-4350-ae79-81cd0dd584a7">Attack: Creation of False Transaction Attack</a>
+                    <li>
+                      <a href="/article/a19926c9-3e4f-4d5c-8dc1-1baa3748bcda">Checklist Item: Log Files are Protected </a>
+                    </li>
+                  </li>
+                </li>
+              </li>
+            </li>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

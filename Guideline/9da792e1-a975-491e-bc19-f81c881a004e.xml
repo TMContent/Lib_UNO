@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2104976997" Content_Hash="1374363607">
+  <Metadata>
+    <Id>9da792e1-a975-491e-bc19-f81c881a004e</Id>
+    <Id_History>9da792e1-a975-491e-bc19-f81c881a004e,6b2537cf-4de3-45ba-90bc-15c376c62dff,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Use Message Logging for Debugging Purposes</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Message Logging for Debugging Purposes</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 </li>
+    <li>Microsoft Visual Studio® 2008</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>User message logging for debugging purposes.</p>
+  <h1>Why</h1>
+  <p>Message logging can be used to diagnosed application errors and performance problems.</p>
+  <h1>How</h1>
+  <p>Message logging is not turned on by default, because logging is an expensive operation that can consume disk space and processing time. Turn on message logging by setting attributes on the &lt;messagelogging&gt; element in your configuration file and adding a trace listener to log the events to a file.</p>
+  <p>
+    <strong>Important</strong>: Make sure you limit the number of messages that are written to disk for a particular service, as disk space could be limiting factor. When the message limit is reached, a trace at the Information level is produced and all message logging activities stop. </p>
+  <p>The following configuration code enables Message Logging by creating a ServiceModelMessageLoggingListener and System.ServiceModel.MessageLogging source:</p>
+  <pre>…<br />&lt;configuration&gt;<br />&lt;system.diagnostics&gt;<br />  &lt;sources&gt;<br />   &lt;source name="System.ServiceModel.MessageLogging" switchValue="Warning, ActivityTracing"&gt;<br />    &lt;listeners&gt;<br />     &lt;add type="System.Diagnostics.DefaultTraceListener" name="Default"&gt;<br />      &lt;filter type="" /&gt;<br />     &lt;/add&gt;<br />     &lt;add name="ServiceModelMessageLoggingListener"&gt;<br />      &lt;filter type="" /&gt;<br />     &lt;/add&gt;<br />    &lt;/listeners&gt;<br />   &lt;/source&gt;<br />  &lt;/sources&gt;<br />  &lt;sharedListeners&gt;<br />   &lt;add initializeData="c:\inetpub\wwwroot\WCFService\web_messages.svclog"<br />    type="System.Diagnostics.XmlWriterTraceListener, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"<br />    name="ServiceModelMessageLoggingListener" traceOutputOptions="Timestamp"&gt;<br />    &lt;filter type="" /&gt;<br />   &lt;/add&gt; <br />  &lt;/sharedListeners&gt;<br />&lt;/system.diagnostics&gt;<br />&lt;/configuration&gt;<br />…<br />…<br />&lt;system.serviceModel&gt;<br />  &lt;diagnostics&gt;<br />   &lt;messageLogging logEntireMessage="false" logMalformedMessages="true"<br />    logMessagesAtServiceLevel="false" logMessagesAtTransportLevel="true" /&gt;<br />  &lt;/diagnostics&gt;<br />…</pre>
+  <br />
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

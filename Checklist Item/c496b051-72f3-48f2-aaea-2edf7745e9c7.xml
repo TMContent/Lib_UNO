@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1254069726" Content_Hash="1381158198">
+  <Metadata>
+    <Id>c496b051-72f3-48f2-aaea-2edf7745e9c7</Id>
+    <Id_History>c496b051-72f3-48f2-aaea-2edf7745e9c7,3e01dad9-b630-4200-838b-3dc453e996be,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Access to the Credential Store Is Limited</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Access to the Credential Store Is Limited</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure all access (except for normal authentication) to the credential store is limited to your application and administrators with the correct privileges.</p>
+  <h1>Why</h1>
+  <p>Unauthorized access to the credential store can lead to users' credentials being overwritten and&amp;nbsp;allow&amp;nbsp;an attacker to gain access to application resources without obtaining valid credentials prior to the attack.</p>
+  <h1>How to Check</h1>
+  <p>Take the following steps to ensure that the credential store is properly secured: </p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify your application's authentication provider. </strong>Identify the membership provider that your application uses. To find your application's membership provider, examine the following elements within your application's web.config: </p>
+      <pre>&lt;configuration&gt;<br />&lt;system.web&gt;    <br />&lt;membership&gt;      <br />&lt;providers&gt;        <br />&lt;add/&gt;</pre>
+      <p>Common ASP.NET membership providers are:</p>
+      <ul>
+        <li>SqlMembershipProvider </li>
+        <li>ActiveDirectoryMembershipProvider</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that connection strings are encrypted. </strong>Examine the connectionStrings element inside your application's web.config. Verify that all connection strings are encrypted. Example:</p>
+      <pre>&lt;connectionStrings configProtectionProvider="DataProtectionConfigurationProvider"&gt;  <br />  &lt;EncryptedData&gt;    <br />    &lt;CipherData&gt;      <br />      &lt;CipherValue&gt;AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAACQKi74w6kku2MCd3KtVZNAQAAAACAAAAAAADZgAAqAAA        <br />      ...        <br />      8UCEwJFr3bcxihMDPpGoD536kGj5hYI7OTr9vlIdiuUqFAAAAGSs5s96JSi8XAxlgFtBQy/kehZq      <br />      &lt;/CipherValue&gt;    <br />    &lt;/CipherData&gt;  <br />  &lt;/EncryptedData&gt;<br />&lt;/connectionStrings&gt;</pre>
+    </li>
+    <li>
+      <p />
+      <p>
+        <strong>Ensure that access to the provider's store is limited. </strong>Ensure that appropriate security measures are taken for the following:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>File system and registry:</strong> Verify that all local files and registry keys that are associated with your credential store have the appropriate filesystem permissions. All entities, excluding your application, must be prohibited access to the provider's credential store. </p>
+        </li>
+        <li>
+          <p>
+            <strong>Database:</strong> If your application uses a database as its credential store, ensure that the appropriate database security is applied. All entities, excluding your application, must be prohibited access to the provider's credential store.</p>
+        </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following code authenticates a user based on their credentials. Because the code discloses the credentials to the user database, anybody with access to the application's web.config also has access to the credential store.</p>
+  <blockquote>
+    <pre>&lt;connectionStrings&gt;  <br />  &lt;add name="MyLocalSQLServer"<br />      connectionString="Server=serv03.example.com;Database=MyAppCredStore;Integrated Security=SSPI;" <br />      providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;  <br /><br /><br />&lt;membership defaultProvider="MySqlMembershipProvider"&gt;  <br />  &lt;providers&gt;    <br />    &lt;add name="MySqlMembershipProvider" <br />      connectionStringName="MyLocalSQLServer" <br />      applicationName="MyApp".../&gt;  <br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  </blockquote>
+  <h1>How to Fix</h1>
+  <p>Consider limiting access to only your application's account. Ensure that the connection string used to identify your credential store is encrypted.</p>
+  <p>Also consider storing your credential database on a physically separate server from your Web server. This makes it harder for an attacker to compromise your credential store even if he or she manages to take control of your Web server.</p>
+  <ul>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

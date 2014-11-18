@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>4804a4fe-c29c-4fe5-bd75-78a9249142ca</Id>
+    <Id_History>4804a4fe-c29c-4fe5-bd75-78a9249142ca,be229103-3e9e-4c84-b108-33bc240b4ed7,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Parameterized APIs Are Used to Build XML Documents</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Parameterized APIs Are Used to Build XML Documents</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Java
+
+==What to Check For==
+
+Verify that parameterized APIs are used to build XML documents.
+
+==Why==
+
+APIs designed for building XML documents will encode data properly to prevent attackers from manipulating XML data used by your application. A dangerous approach is to write your own set of functions to build XML documents by concatenating strings, or to modify an existing XML document by performing string operations.  This means you have to take care of proper encoding yourself. Use API’s instead because they are simpler and safer.
+
+==How to Check==
+
+To verify that parameterized APIs are used to build XML documents:
+
+# **Identify code that builds XML documents.** Make a spreadsheet of all the code that creates XML documents.
+# **Review code that builds XML documents.** Examine code that builds XML documents to make sure that data is not concatenated with XML tags to build XML documents. The correct approach is to use XML parsers that provide functions for building XML documents, because these functions will then take care of properly encoding data to prevent XML injection vulnerabilities.
+
+==How to Fix==
+
+To use parameterized APIs to build XML documents:
+
+# **Identify available APIs that can be used to build XML documents.** There are many XML parsers available for Java. They have different syntax, but all the major ones provide parameterized APIs for building XML. Choose a parser that you feel best fits your application requirements.
+# **Make sure your chosen APIs encode data correctly.** If unsure whether your chosen API encodes data correctly, write a small test application that will use your chosen XML parser to build an XML document that contains special characters, such as <, >, and " to see if they are encoded correctly.
+# **Identify code that builds XML documents.** Make a spreadsheet of all the code that creates XML documents.
+# **Use parameterized APIs to build XML documents.** Using the spreadsheet as a guide, replace the code that creates XML documents with code that uses APIs provided by your chosen parser to build XML documents. Don't use string operations to concatenate XML tags and data together, use the APIs provided by the parser instead.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

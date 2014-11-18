@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1305102690" Content_Hash="1095740457">
+  <Metadata>
+    <Id>8ad10ef2-79eb-4d45-b92a-832f01c7e66d</Id>
+    <Id_History>8ad10ef2-79eb-4d45-b92a-832f01c7e66d,90fd02ad-9450-4e4b-9dcc-79031e0738ce,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Use XML Encryption To Help Protect Sensitive Data</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>.NET 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use XML Encryption To Help Protect Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Description</h1>
+  <p>You can use the classes in the <b>System.Security.Cryptography.Xml</b> namespace, including the <b>EncryptedXml</b> class, to encrypt an entire XML document or an individual element within an XML document. For performance reasons, you should use a symmetric encryption algorithm, such as AES, to create a session key to encrypt the data; and then, if necessary, use an asymmetric encryption algorithm, such as RSA, to encrypt the symmetric session key. This enables you to transmit the session key in an encrypted format to a recipient. Only the recipient with the associated RSA private key can decrypt the session key and then decrypt the encrypted XML data. </p>
+  <p>To use XML encryption, create a session key by using a symmetric algorithm, such as AES to encrypt the XML data. Then use an RSA public key to encrypt the AES session key. This ensures that only the holder of the associated private key can decrypt the data. Use the session key to encrypt the data with the <b>EncryptedXml</b> class. Create an <b>EncryptedData</b> element, and populate it with the encrypted cipher text. This lets the recipient know which algorithm was used for the encryption, and, optionally, the encrypted session key required to decrypt the data. Finally, replace the clear text element in the XML data with the <b>EncryptedData</b> element. </p>
+  <p>Note that using XML encryption requires the recipient of encrypted XML data to use an out-of-band mechanism to distribute his or her public key to any party who needs to be able to send encrypted data to the recipient. This is normally accomplished by using X.509 digital certificates.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

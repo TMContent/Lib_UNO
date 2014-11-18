@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000410a08</Id>
+    <Id_History>00000000-0000-0000-0000-000000410a08,4ff1bdc1-2d4b-42d4-a5ad-d414c97e9f9d,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Validate and Encode Data Passed to UIWebView Controls</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>iOS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate and Encode Data Passed to UIWebView Controls</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* iOS applications that use //UIWebView// controls.
+
+==What to Do==
+
+Validate data passed to //UIWebView// controls.
+
+==Why==
+
+Validating data passed to //UIWebView// controls helps prevent Cross-Site Scripting vulnerabilities. //UIWebView// controls are capable of executing JavaScript passed to them. If unvalidated data is passed to //UIWebView// controls, it may be possible for an attacker to pass malicious JavaScript, which will then be executed in the context of the application.
+
+==How==
+
+To validate data passed to //UIWebView// controls:
+
+# **Identify data passed to //UIWebView// controls.** Examine the application design and identify what types of data are handled by //UIWebView// controls, if any.
+# **Identify code that passes data to //UIWebView// controls.** Review code to identify all //UIWebView// controls used by the application. Determine whether any of the data passed to the controls may include Javascript, and identify code that handles this data. Trouble areas may be found by searching for //stringByEvaluatingJavaScriptFromString// method calls.
+# **Write validation methods for data passed to //UIWebView// controls.** Create data validation methods that validate all data types sent to UIWebView controls used by the application. Pay particular attention to any data that may include JavaScript.
+# **Write encoding methods for data passed to //UIWebView// controls.** Write encoding routines that handle all the types of data that are passed to //UIWebView// controls. Unfortunately, there appear to be no standard libraries that handle encoding for iOS. Encoding methods should: 
+#* Convert data to the same character-encoding before validating or encoding. 
+#* Escape HTML entities, JavaScript entities, and XML entities, depending on context.
+# **Validate and encode data passed to //UIWebView// controls.** Always validate and encode each type of data with its respective validation and encoding functions before passing it to UIWebView controls.
+
+==Data Validation Guidelines==
+* [[00000000-0000-0000-0000-000000866d55|Canonicalize File Names and Paths]]
+* [[00000000-0000-0000-0000-000000590dce|Check File Paths and Names for Null Bytes]]
+* [[00000000-0000-0000-0000-00000051c329|Validate All Input]]
+* [[00000000-0000-0000-0000-0000005804d8|Validate and Encode Data Inserted into XML Documents]]
+* [[00000000-0000-0000-0000-000000410a08|Validate and Encode Data Passed to UIWebView Controls]]
+* [[00000000-0000-0000-0000-00000049bb5e|Validate File Formats]]
+
+==Data Validation Checklists==
+* [[00000000-0000-0000-0000-0000004d996e|File Names and Paths Are Canonicalized]]
+* [[00000000-0000-0000-0000-0000004446d0|File Paths and Names Are Checked for Null Bytes]]
+* [[00000000-0000-0000-0000-000000396c19|All Input Is Validated]]
+* [[00000000-0000-0000-0000-0000008c53b6|Data Inserted into XML Documents Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000647d44|Data Passed to UIWebView Controls Is Validated and Encoded]]
+* [[00000000-0000-0000-0000-000000066105|File Formats Are Validated]]
+
+==Additional Resources==
+
+* For information about //escapedTemplateForString// function, please see http://developer.apple.com/library/ios/#documentation/Foundation/Reference/NSRegularExpression_Class/Reference/Reference.html
+* For more information about //UIWebView// controls, please see http://developer.apple.com/library/ios/#documentation/uikit/reference/UIWebView_Class/Reference/Reference.html]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="959801744" Content_Hash="-236338067">
+  <Metadata>
+    <Id>48bda1b8-1b0e-42a4-8dae-6b2bf9ec7dfa</Id>
+    <Id_History>48bda1b8-1b0e-42a4-8dae-6b2bf9ec7dfa,2533a106-1063-47bf-a874-d28c9a0fa162,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Logs Are Sent to a Remote Server</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Design</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Logs Are Sent to a Remote Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Verify that logs are sent to a centralized log server.</p>
+  <h1>Why</h1>
+  <p>Sending logs to a centralized log server makes it simpler to secure and monitor logs on a network with multiple log-generating devices.</p>
+  <h1>How to Check</h1>
+  <p>Perform the following actions to verify that functionality to send logs to a remote server is implemented:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Examine documentation. </strong>If remote logging is implemented, it should be documented. Review documentation for information about remote logging functionality.</p>
+      <li>
+        <p>
+          <strong>Identify the logging subsystem.</strong> The logging subsystem should provide an API that allows generating log entries from application code. If this API or the logging subsystem don't exist, write them. Make a list of functions that may be used to generate log entries.</p>
+        <li>
+          <p>
+            <strong>Review the logging subsystem.</strong> Use the list of logging functions and trace them to determine where the log entries end up. Verify the code exists that sends log entries to a remote log server.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Use the following steps to implement sending logs to a centralized log server:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Design the logging subsystem.</strong> Design and implement a class or library specifically for logging. When designing the logging subsystem, consider sending logs to a remote log server. Consider the following factors when designing the logging subsystem:</p>
+      <ul>
+        <li>Log throttling<li>Logging important event details<li>Logging important security operations<li>Logging important business operations<li>Monitoring the use of privileged accounts<li>Logging authentication events<li>Avoiding including sensitive information in logs<li>Logging unusual activity</li></li></li></li></li></li></li></li>
+      </ul>
+      <li>
+        <p>
+          <strong>Choose a protocol for communicating with the log server.</strong> The Internet standard for sending logs remotely is syslog (RFC 5424). It is recommended to use syslog, because it is supported by most centralized logging solutions.</p>
+        <li>
+          <p>
+            <strong>Implement the logging subsystem.</strong> Write code that generates log entries and sends them to a remote log server via your protocol of choice.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about the syslog protocol, please see <a href="http://tools.ietf.org/rfc/rfc5424.txt">http://tools.ietf.org/rfc/rfc5424.txt</a></li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/099fe70b-15a6-45e4-84a8-95d9d98e9581">Send Logs to a Remote Server</a>
+      <li>
+        <a href="/article/7af4efea-59f5-468a-b5a1-c423cd29744a">Centralize Logging</a>
+      </li>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

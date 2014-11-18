@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-852810724" Content_Hash="1888162791">
+  <Metadata>
+    <Id>fd97f26a-1730-46c1-84ca-10fc44206c81</Id>
+    <Id_History>fd97f26a-1730-46c1-84ca-10fc44206c81,8c318146-3bf7-4aee-b753-fc1eb9af3b08,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Role-based Authorization Is Used</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Role-based Security Checks Are Performed</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Check For</h1>
+  <p>Ensure your application creates specific roles for different types of users. Verify when authorizing access to a resource that&amp;nbsp;security checks are performed on a per-role basis rather than on a per-user basis.</p>
+  <h1>Why</h1>
+  <p>Application roles allow multiple users to play the same role. This mechanism provides a clear way to discover and manage the least privileges necessary for the execution of a given task and&amp;nbsp;provides a more robust&amp;nbsp;means of managing the application's users.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to determine if your application uses role-based access controls:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Check if your application uses user roles.</strong> Verify that your application has established user roles and grants the appropriate access privileges to each user role. The roles and their privileges within the application should be defined in the documentation, to ensure that they have been examined in the context of the business purpose of the application, and to allow them to be checked against the application as implemented. Example:</p>
+      <pre>Roles      Actions    Access Controls    Client Accounts<br />--------------------------------------------------------<br />Manager    Connect        Always            Always<br />           Read           Always            Always<br />           Use            Always            Occasionally<br />           Modify         Never             Occasionally <br />Employee   Connect        Always            Always<br />           Read           Always            Always<br />           Use            Always            Always<br />           Modify         Never             Never</pre>
+      <li>
+        <p>
+          <strong>Ensure that your application enforces role-based security. </strong>Verify that your application maps its access controls to the established user roles.&amp;nbsp;Ensure that the roles used are sufficiently fine grained. Remember that the goal is to segment privileges within the application, not to simply control access to the entire application. Roles should be mapped to specific pages or functions within the application. Depending on your application's design, there are several ways of checking whether your application enforces role-based security: </p>
+        <ul>
+          <li>
+            <p>
+              <strong>Check for programmatically role-based security:</strong> If your application has security checks embedded inside its code base, identify all functionality that requires special privileges. Verify that each protected functionality has a permissions check associated with it.</p>
+            <p>For example, the following code verifies that users are share holders before generating the appropriate financial report:</p>
+            <blockquote>
+              <pre>public void GenerateFinancialReport(DateTime startDate, DateTime endDate)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (HttpContext.Current.User.IsInRole("ShareHolders"))<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Generate the relevant financial report<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;<br /></pre>
+            </blockquote>
+            <li>
+              <p />
+              <strong>Check for declarative role-based security:</strong> If your application uses declarative security, examine its <strong>web.config</strong> file. Verify that access to protected resources is granted according to the application's security requirements. Check that each resource is associated with the appropriate user roles in the configuration file: <ul><li><strong>roleManager</strong>: Check that the ASP.NET role manager is configured using the <strong>roleManager</strong> element if form-based authentication is used. <li><strong>authorization</strong>: Check that the authorization settings for a resource are encapsulated by the <strong>authorization</strong> element. <li><strong>allow</strong>: Check that the users and roles that are allowed access to the given resource are enumerated. <li><strong>deny</strong>: Check that the users and roles that are denied access to the given resource are enumerated. <p>Example:</p><pre>&lt;configuration&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;roleManager enabled="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cacheRolesInCookie="false"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultProvider="ProjectRoleProvider"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;clear /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="ProjectRoleProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlRoleProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="ProjectConnection"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="myapp" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="Employees, Managers" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="&amp;#42;" /&gt;</pre></li></li></li></li></ul><li><p><strong>Check for role-based security managed by Windows:</strong> If your application uses Windows <strong>Local Users and Groups</strong> to manage its role-based security needs, verify that your application's web.config is configured properly.</p><p>Example:</p><pre>&lt;configuration&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authentication mode="Windows" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="NTDomain\Employees, NTDomain\Managers" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="&amp;#42;" /&gt;</pre></li></li>
+          </li>
+        </ul>
+        <ul>
+        </ul>
+        <li>
+          <p>
+            <strong>Verify that users are assigned into their appropriate roles. </strong>List all of your application's users.&amp;nbsp;Check if each user is assigned into their appropriate role. The application should apply the security policy according to the user roles instead of the actual user. Based on your application's mechanism to enforce role-based access controls, check that one of the following techniques is used to manage your application's users</p>
+          <ul>
+            <li>
+              <p>
+                <strong>Programmatically:</strong> ASP.NET allows you to manage your application's users through the <strong>Roles</strong> class.</p>
+              <p>Check that the following methods are used to assign users into roles: </p>
+              <ul>
+                <li>
+                  <strong>AddUserToRole</strong>
+                  <li>
+                    <strong>AddUserToRoles</strong>
+                    <li>
+                      <strong>AddUsersToRole</strong>
+                      <li>
+                        <strong>AddUsersToRoles</strong>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </ul>
+              <p>Check that the following methods are used to remove users from roles:</p>
+              <ul>
+                <li>
+                  <strong>RemoveUserFromRole</strong>
+                  <li>
+                    <strong>RemoveUserFromRoles</strong>
+                    <li>
+                      <strong>RemoveUsersFromRole</strong>
+                      <li>
+                        <strong>RemoveUsersFromRoles </strong>
+                      </li>
+                    </li>
+                  </li>
+                </li>
+              </ul>
+              <li>
+                <strong>Declarative:</strong> Verify that the ASP.NET Role Manager is used to manage your application's users. To do so, connect to the database server that hosts your application's Role Manager. Using the following tables, verify that each user is assigned into the appropriate roles: <ul><li>aspnet_Users <li>aspnet_Roles <li>aspnet_UsersInRoles</li></li></li></ul><li><p><strong>Windows:</strong> If your application uses Windows authentication, use the Windows <strong>Local Users and Groups</strong> service to manage your application's users. If your application is connected to your organization's NT Domain or Active Directory forest, delegate the user and role management to your organization's network administrators.</p><p>To use the Windows <strong>Local Users and Groups</strong> service:</p><ol><li>Open <strong>Control Panel -&gt; Administrative Tools -&gt; Computer Management</strong>. <li>Under the <strong>System Tools</strong> node in the navigation tree, select <strong>Local Users and Groups</strong>. <li>Select <strong>Groups</strong>. <li>For each role, double-click on the respective group. <li>Verify that only the appropriate users are added as members for the given group. <li>Click <strong>Cancel</strong>. <li>Repeat steps 4-6 for all of your application's user roles.</li></li></li></li></li></li></li></ol></li></li>
+            </li>
+          </ul>
+          <ul>
+          </ul>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following segment illustrates an application's access control policy. Because the application does not enforce role-based security, it has a policy entry for each separate user.&amp;nbsp;This will make&amp;nbsp;managing the users' access rights quite difficult when the number of users to the application grows.</p>
+  <p />
+  <pre>&lt;authorization&gt;<br />  &lt;allow users="NTDomain\joe, NTDomain\sarah, NTDomain\bill, NTDomain\sue" /&gt;<br />  &lt;deny users="&amp;#42;" /&gt;<br />&lt;/authorization&gt;</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To learn more about the roleManager element in web.config, visit: Documentation for <a href="http://msdn2.microsoft.com/en-us/library/ms164660(vs.80).aspx">roleManager Element (ASP.NET Settings Schema)</a> in MSDN.</li>
+  </ul>
+  <h1>Related Guideline</h1>
+  <ul>
+    <li>
+      <a href="/article/17034ef0-8935-4fb2-bbae-d79982e710c7">Guideline: Perform Role-Based Security Checks </a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

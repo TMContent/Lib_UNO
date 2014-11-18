@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-00000015b09d</Id>
+    <Id_History>00000000-0000-0000-0000-00000015b09d,99544d0d-e644-4479-8bc3-c4fe8604b0db,</Id_History>
+    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Title>Parameterized APIs Are Used to Execute External Commands</Title>
+    <Category>Dangerous APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Java</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Parameterized APIs Are Used to Execute External Commands</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Java
+
+==What to Check For==
+
+Make sure that //ProcessBuilder// is used to execute external commands instead of //Runtime.exec()//. Verify that user data passed to external processes is validated.
+
+==Why==
+
+Command injection vulnerabilities typically occur when user data is used to spawn external processes. Usually, the developers don't want the users to be able to choose which external commands are executed. The most effective way to enforce which external process is executed is to use parameterized APIs to call it. This doesn't work is the external process, which is being called, is able to spawn another process based on parameters passed to it. For example, if //cmd.exe// or //bash// is used as an external process, an attacker can pass data to it to call any command - this is a command injection vulnerability.
+
+==How to Check==
+
+To make sure that //ProcessBuilder// is used to execute external commands:
+
+# **Find all code that executes external commands.** Search the application code for the following keywords to find all code that executes external commands: //getRuntime//, //exec//, //start//, //ProcessBuilder//.
+# **Avoid using external processes.** Review each case where an external process is called to make sure it is absolutely necessary. Command injection vulnerabilities are very dangerous, so calling external processes should be avoided as much as possible to reduce the risk of such vulnerabilities. Replace code that calls external processes with Java code that does the same thing, if possible.
+# **Verify that //ProcessBuilder// is used to execute external commands.** Check all code that executes external processes to make sure that //ProcessBuilder// is used to execute external processes. Make sure that //Runtime.exec()// is not used to execute external commands.
+# **Verify that user data passed to external commands is validated.** Verify that any user data that is passed to external processes as arguments via //ProcessBuilder// is first validated using positive validation routines.
+
+==How to Fix==
+
+To use //ProcessBuilder// to execute external commands:
+
+# **Find all code that executes external commands.** Search the application code for the following keywords to find all code that executes external commands: //getRuntime//, //exec//, //start//, //ProcessBuilder//.
+# **Avoid using external processes.** Review each case where an external process is called to make sure it is absolutely necessary. Command injection vulnerabilities are very dangerous, so calling external processes should be avoided as much as possible to reduce the risk of such vulnerabilities. Replace code that calls external processes with Java code that does the same thing, if possible.
+# **Don't let the user choose the external application.** This should go without saying, but the user should not be able to choose the external process which is being executed. If this is absolutely necessary, it might be an option for an administrative user, and then this functionality should be protected with access controls and ideally not exposed to the Internet. Allowing the user to choose which external command to execute is essentially the definition of a command injection vulnerability.
+# **Use parameterized APIs.** //ProcessBuilder// is the parameterized API for calling external commands in Java. Replace all code that uses //Runtime.exec()// with code that uses //ProcessBuilder//. Avoid calling processes that can spawn other processes based on parameters passed to them. For example, calling //cmd.exe// or //bash// and passing parameters to them essentially negates the use of parameterization, because shell interpreters can spawn other processes based on parameters passed to them. 
+# **Validate user data passed to external commands.** Use positive input validation on data passed to external commands. 
+
+==Additional Resources==
+
+* For more information about //ProcessBuilder//, see http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/ProcessBuilder.html]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-323925005" Content_Hash="-1022557153">
+  <Metadata>
+    <Id>115220fa-8827-4056-b69d-6b97f9efe9f6</Id>
+    <Id_History>115220fa-8827-4056-b69d-6b97f9efe9f6,c8bac2cb-a20e-45c9-a30d-421b77034a6d,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Filter Sensitive Data from Your Logs</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Filter Sensitive Data from Your Logs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can use message filters to log messages that match the filter criteria. For example you could use a message filter to remove personally identifiable information (PII) before it can get into log files.</p>
+  <p>Filters support the full XPath syntax. The following code shows how to configure a filter that records only messages that have a SOAP Header section.</p>
+  <pre>&lt;messageLogging logEntireMessage="true"<br />    logMalformedMessages="true" <br />    logMessagesAtServiceLevel="true"<br />    logMessagesAtTransportLevel="true"<br />    maxMessagesToLog="420"&gt;<br />    &lt;filters&gt;<br />        &lt;add nodeQuota="10" xmlns:soap="<a href="http://www.w3.org/2003/05/soap-envelope">http://www.w3.org/2003/05/soap-envelope</a>"&gt;<br />                 /soap:Envelope/soap:Header<br />        &lt;/add&gt;<br />     &lt;/filters&gt;<br />&lt;/messageLogging&gt;</pre>
+  <p>Filters provide a safety feature using the nodeQuota attribute, which limits the maximum number of nodes in the XPath DOM that can be examined to match the filter.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on Message Logging, see “Configuring Message Logging” at <a href="http://msdn.microsoft.com/en-us/library/ms730064.aspx">http://msdn.microsoft.com/en-us/library/ms730064.aspx</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

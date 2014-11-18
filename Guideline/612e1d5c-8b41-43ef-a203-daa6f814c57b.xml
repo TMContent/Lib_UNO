@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="474676923" Content_Hash="2089557481">
+  <Metadata>
+    <Id>612e1d5c-8b41-43ef-a203-daa6f814c57b</Id>
+    <Id_History>612e1d5c-8b41-43ef-a203-daa6f814c57b,2723ea5b-5275-42a2-a465-24c8111afccf,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Encrypt SQL Connection Strings with DPAPI</Title>
+    <Category>Database Security</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encrypt SQL Connection Strings with DPAPI</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If your application relies on SQL authentication, credentials must be protected in configuration files. Use a protected configuration provider to encrypt connection strings before storing them in configuration files.</p>
+  <h1>Why</h1>
+  <p>Connection strings contain sensitive resource access credentials (e.g., a connection string for a SQL server resource includes a username and password.) Connection strings stored in plaintext are dangerous, because an attacker that can compromise a server will be able to read those connection strings. Even if a machine is not compromised, connection strings stored in plain text are accessible to administrators and any other users with sufficient privileges on the host machine and/or Windows domain.</p>
+  <h1>When</h1>
+  <p>Always encrypt connection strings. The Windows Data Protection API (DPAPI) is the default provider and is an acceptable choice when choosing a protected configuration provider under most circumstances. However, in a Web farm environment, the RSA-protected configuration provider is a good choice because the RSA-based provider uses asymmetric (public/private key) encryption to encrypt and decrypt data keys that can be exported and imported across servers. If neither of these suffice, you can create your own custom provider.</p>
+  <h1>How</h1>
+  <p>Perform the following actions to secure the database connection strings in configuration files:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify the configuration sections to be encrypted.</strong> Encrypting and decrypting data incurs performance overhead. To keep this overhead to a minimum, encrypt only the sections of your configuration file that store sensitive data. In this case, we are interested in encrypting the &lt;<em>connectionStrings</em>&gt; element of the <em>Web.config</em> file since that is where the database connection string will reside.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Choose the protected configuration provider.</strong> Under most circumstances DPAPI will suffice, although the RSA protected configuration is the logical choice in web farms where multiple servers are employed. The .NET Framework includes a protected configuration feature that you can use to encrypt sensitive configuration file data by using a command line tool. The following two protected configuration providers are provided although you can also implement custom providers.</p>
+      <ul>
+        <li>
+          <strong>RSAProtectedConfigurationProvider.</strong> This provider uses RSA public key encryption to encrypt and decrypt data and is a good choice for web farm environments. </li>
+        <li>
+          <strong>DpapiProtectedConfigurationProvider.</strong> This is the default provider, which uses the Windows Data Protection API (DPAPI) to encrypt and decrypt data. This section describes how to use DPAPI to encrypt connection strings. Please check the related guidelines for more information on using the RSA Protected Configuration Provider and DPAPI. </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Choose the machine or user store.</strong> The <em>DataProtectionConfigurationProvider </em>supports machine-level and user-level stores for key storage. The choice of store depends largely on whether or not your application shares a server with other applications and whether or not sensitive data must be kept private for each application.</p>
+      <ul>
+        <li>
+          <strong>Machine Store.</strong> By default, the <em>DataProtectionConfigurationProvider</em> is configured to use DPAPI with the machine store. Use machine-level key storage if your application runs on its own dedicated server with no other applications, or if you have multiple applications on the same server that run and you want those applications to be able to share sensitive information. </li>
+        <li>
+          <strong>User Store.</strong> Use user-level key storage if you run your application in a shared hosting environment and you want to make sure that your application's sensitive data is not accessible to other applications on the server. In this situation, each application should run under a separate identity, and the resources for the application—such as files and databases—should be restricted to that identity. </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Encrypt your configuration file data.</strong> To encrypt the <em>connectionStrings</em> section in <em>Web.config</em> using DPAPI with the Machine Store, run the following command from a .NET command prompt:</p>
+      <pre>aspnet_regiis -pe "connectionStrings"<br /> -app "/MachineDPAPI"<br /> -prov "DataProtectionConfigurationProvider"</pre>
+      <p>The above command with the <em>-app</em> switch assumes that there is an IIS virtual directory called <em>MachineDPAPI</em>. If you are using the Visual Studio .NET Web server instead of IIS, use the <em>-pef</em> switch, which allows you to specify the physical directory location of your configuration file.</p>
+      <pre>aspnet_regiis.exe<br /> -pef "connectionStrings" C:\Projects\MachineDPAPI<br /> -prov "DataProtectionConfigurationProvider"</pre>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>Let's say that a sample web application is running in a hosted web environment. The application uses an SQL database instance and has sensitive data that should not be accessible to other applications on the same system. The <em>Web.config</em> file contains a <em>connectionString</em> section that the application uses to access the SQL database:</p>
+  <pre>&lt;connectionStrings&gt; <br />&amp;nbsp;&lt;add name="MyLocalSQLServer"&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;connectionString="Initial Catalog=pubs;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;User Id=sa;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;Password=asdasd;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;data source=localhost;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;Integrated Security=SSPI;"&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
+  <p>This connection string is dangerous, because anyone who is capable of reading the web.config file for the application is now able to discern the database, the username, and the password for the database instance, and will be able to execute statements at the same level of privilege as the application.</p>
+  <h1>Solution Example</h1>
+  <p>Since this is application is in a shared hosting environment, the user store is the appropriate choice for key storage. By default, the ASP.NET applications run under the <em>NT AUTHORITY\Network Service</em> account. When you access encrypted configuration sections using DPAPI with the user store, make sure that your application is running with the same user identity as the account you used to encrypt the data.</p>
+  <p>Using the <em>DataProtectionConfigurationProvider</em> and DPAPI with the user store requires a small amount of additional configuration in the <em>Web.config</em> file.</p>
+  <p>First, you add and configure a protected configuration provider to use the user store. To do this, the following <em>&lt;configProtectedData&gt;</em> section is added, and the directive <em>useMachineProtection= "false"</em> to instruct the provider to use the user store. It's imperative that a unique provider name is used, or a run-time error will occur.</p>
+  <pre>&lt;configProtectedData&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add useMachineProtection="false"<br />     keyEntropy="" name="MyUserDataProtectionConfigurationProvider" <br />&amp;nbsp;&amp;nbsp;   type="System.Configuration.DpapiProtectedConfigurationProvider,<br />     System.Configuration, <br />&amp;nbsp;&amp;nbsp;   Version=3.5.0.0, Culture=neutral, <br />     PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/configProtectedData&gt;&amp;nbsp; </pre>
+  <p>The following command is run from a command prompt to encrypt the connectionStrings section:</p>
+  <pre>Aspnet_regiis -pe "connectionStrings"<br /> -app "/UserDPAPI"<br /> -prov "MyUserDataProtectionConfigurationProvider"</pre>
+  <p>The <em>-pe</em> switch specifies the configuration section to encrypt. </p>
+  <p>The <em>-app</em> switch specifies your Web application's virtual path. If it is a nested application, you need to specify the nested path from the root directory; for example: "<em>/test/aspnet/UserDPAPI</em>". </p>
+  <p>The <em>-prov</em> switch specifies the provider name. In this case, this is set to "<em>MyUserDataProtectionConfigurationProvider</em>" which is the name you specified earlier.</p>
+  <p>At this point the connection string has been encrypted, which can be verified by looking at the<em> Web.config</em> file.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

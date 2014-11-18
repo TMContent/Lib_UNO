@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="790356221" Content_Hash="858687821">
+  <Metadata>
+    <Id>e2d4b11c-1bd3-4e5f-9adc-9f697a6ee594</Id>
+    <Id_History>e2d4b11c-1bd3-4e5f-9adc-9f697a6ee594,15bed9c5-e1a8-4cdf-9fa9-d4542dd01830,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Encrypting ViewState</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Code Example</Type>
+    <DirectLink>Encrypting ViewState</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>C#</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>The purpose of this code sample is to demonstrate the ability to encrypt the client-side session state (ViewState). By default the ViewState provides message integrity through a built-in MAC, however encryption is an optional configuration setting which may be enabled.</p>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Provide confidentiality of ViewState client-side session data by encrypting data contained within the ViewState object (particularly for those cases where viewstate contains internal details that should be protected so a user may not be able to learn specifics about the internal logic or data structures).</li>
+  </ul>
+  <h1>Scenarios</h1>
+  <ul>
+    <li>Application off-loads session management to clients, encryption of View State prevents application data from being exposed to web site users who decode the value, and further mitigates risk of storage in an unencrypted form (e.g. Browser Cache) <li>Application stores sensitive information such as application internals (e.g. database objects, identifiers, or authorization details) in View State not intended for viewing through client Web UI Controls or filtered by the server upon further processing.</li></li>
+  </ul>
+  <h1>Solution Example</h1>
+  <p>The default ViewState encryption mode in the .NET framework 2.0 is set to auto, meaning that so long as a control requests encryption of the ViewState object it will be encrypted. The ViewStateEncryptionMode and EnableViewStateMac settings below are the default behavior and shown for informational purposes only.</p>
+  <pre>(e.g. &lt;&amp;#37;&amp;#64; Page Language="C#" AutoEventWireup="true"&amp;nbsp; CodeFile="Default.aspx.cs" Inherits="_Default" <br />&amp;nbsp;ViewStateEncryptionMode="Auto" EnableViewStateMac="true"&amp;#37;&gt;)</pre>
+  <h1>Problem Example</h1>
+  <p>The following example demonstrates cleartext data stored within the ViewState object without encryption. See test case for further details:</p>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Page.RegisterRequiresViewStateEncryption();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ViewState&amp;#91;"secret"&amp;#93; = "some sensitive information we wish to protect";<br />&amp;#125;</pre>
+  <ul>
+    <li>In the event that sensitive data is stored in the ViewState object it is vulnerable to information disclosure by a web-site user. The viewState is stored within the HTML source as a hidden parameter and may simply be Base64 decoded. <li>Application internals and logic may be exposed to a web-site user who decodes the ViewState parameter.</li></li>
+  </ul>
+  <h1>Test Case</h1>
+  <p>Decoding the Base64 value in our problem example, reveals potentially sensitive information:</p>
+  <p>
+    <strong>Problem Example</strong>
+  </p>
+  <pre>&lt;input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" <br />&amp;nbsp; value="/wEPDwUJNzgzNDMwNTMzDxYCHgZzZWNyZXQFLXNvbWUgc2Vuc2l0aXZlIGluZm9ybWF0aW9uIHdlIHdpc2ggdG8gc<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; HJvdGVjdGRk/D&amp;#43;Ejemia&amp;#43;ssVPj/D8lfGFO7z6g=" /&gt;</pre>
+  <pre>
+    <br />The value: /wEPDwUJNzgzNDMwNTMzDxYCHgZzZWNyZXQFLXNvbWUgc2Vuc2l0aXZlIGluZm9ybWF0aW9uIHdlIHdpc2ggdG8gc<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; HJvdGVjdGRk/D&amp;#43;Ejemia&amp;#43;ssVPj/D8lfGFO7z6g=</pre>
+  <pre>
+    <br />Contains:</pre>
+  <pre>
+    <br />ff 01 0f 0f 05 09 37 38 33 34 33 30 35 33 33 0f&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .... ..78 3430 533. <br />16 02 1e 06 73 65 63 72 65 74 05 2d 73 6f 6d 65&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .... secr et.- some <br />20 73 65 6e 73 69 74 69 76 65 20 69 6e 66 6f 72&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; sen siti ve i nfor <br />6d 61 74 69 6f 6e 20 77 65 20 77 69 73 68 20 74&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; mati on w e wi sh t <br />6f 20 70 72 6f 74 65 63 74 64 64 fc 3f 84 3f e9&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; o pr otec tdd. ?.?. <br />a2 6b eb 2c 54 f8 ff 0f c9 5f 18 53 bb cf a8&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .k., T... ._.S ..</pre>
+  <p>
+    <strong>Solution Example</strong>
+  </p>
+  <pre>&lt;input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" <br />&amp;nbsp; value="XEqVgkIRKsuTZq&amp;#43;5LgNeGFAbDKGhBiO6ctuLmnJ2sFzlGsJste6CFJZb/vWojG3SrXF8<br />H1jODKvB2KJgtOQ1LeSGppXnzhB2ToaN&amp;#43;KuzwMI=" /&gt;</pre>
+  <pre>The value:XEqVgkIRKsuTZq&amp;#43;5LgNeGFAbDKGhBiO6ctuLmnJ2sFzlGsJste6CFJZb/vWojG3SrXF8<br />H1jODKvB2KJgtOQ1LeSGppXnzhB2ToaN&amp;#43;KuzwMI=</pre>
+  <pre>Contains:<br />5c 4a 95 82 42 11 2a cb 93 66 af b9 2e 03 5e 18&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; \J.. B.&amp;#42;. .f.. ..&amp;#94;. <br />50 1b 0c a1 a1 06 23 ba 72 db 8b 9a 72 76 b0 5c&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; P... ..#. r... rv.\ <br />e5 1a c2 6c b5 ee 82 14 96 5b fe f5 a8 8c 6d d2&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...l .... .&amp;#91;.. ..m. <br />ad 71 7c 1f 78 ce 0c ab c1 d8 a2 60 b4 e4 35 2d&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .q&amp;#124;. x... ...&amp;#96; ..5- <br />e4 86 a6 95 e7 ce 10 76 4e 86 3f f8 ab b3 c0 c2&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .... ...v N.?. ....  </pre>
+  <h1>Expected Result</h1>
+  <p>Once ViewState encryption has been enabled it is possible to validate the settings by attempting to Base64 decode the contents of the __VIEWSTATE parameter, looking for plaintext strings. Additionally, an encrypted ViewState configuration embeds the following hidden request parameter in the resulting pages:</p>
+  <pre>        &lt;input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" /&gt;</pre>
+  <h1>More Information</h1>
+  <p>Due to performance impact of encrypting session data, this example demonstrates encryption for a page's viewstate any time the Page.RegisterRequiresViewStateEncryption() method is called. Alternatively, a developer could modify the ASPX to contain the following ViewStateEncryptionMode:</p>
+  <pre>(e.g. &lt;&amp;#37;&amp;#64; Page Language="C#" AutoEventWireup="true"  CodeFile="Default.aspx.cs"<br />&amp;#9; Inherits="_Default" ViewStateEncryptionMode="Always" EnableViewStateMac="true"&amp;#37;&gt;)</pre>
+  <p>Care should be taken to account for additional performance impact of encrypting ViewState and should be carefully weighed with alternatively using the server-side session object for any potentially sensitive information attributed to a user session.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>How To Configure the Machine Key in ASP.NET 2.0: <a href="http://channel9.msdn.com/wiki/default.aspx/Channel9.HowToConfigureTheMachineKeyInASPNET2">http://channel9.msdn.com/wiki/default.aspx/Channel9.HowToConfigureTheMachineKeyInASPNET2</a></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

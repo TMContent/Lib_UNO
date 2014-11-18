@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1207755220" Content_Hash="797087134">
+  <Metadata>
+    <Id>ba207c2f-46a0-473d-9631-7292426b2dad</Id>
+    <Id_History>ba207c2f-46a0-473d-9631-7292426b2dad,a94dbbc5-14a1-4d1a-862e-032443633fc7,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Automatically Lock Inactive User Accounts</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Automatically Lock Inactive User Accounts</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>Automatically lock inactive user accounts. Log when accounts have been locked.</p>
+  <h1>Why</h1>
+  <p>Inactive user accounts increase the attack surface of the application and can be used by an attacker as a means of entry.</p>
+  <h1>When</h1>
+  <p>Design your application so that inactive user accounts can be detected and locked. After deployment, set the system to lock inactive accounts after an appropriate amount of time.</p>
+  <h1>How</h1>
+  <p>Use the following steps when locking inactive user accounts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Set a lockout policy. </strong>Create the application's lockout policy. Determine the necessary duration of inactivity before an account can be locked/disabled. This policy can vary depending on whether the account is of a normal user or an administrator. For example, disable normal accounts after 45 days of inactivity and administrative accounts after 30 days of inactivity.</p>
+      <li>
+        <p>
+          <strong>Keep track of user inactivity.</strong> Establish a mechanism to keep track of the last successful authentication. Successful authentication can be tracked via logs or a timestamp, which resides in the user database. Example: </p>
+        <pre>sql&gt; select username, last_login_date from users</pre>
+        <li>
+          <p>
+            <strong>Set a lockout mechanism.</strong> Establish a mechanism to verify the current period of inactivity and automatically set the disabled bit for inactive accounts. Using the application or database server's scheduler, activate such functionality to run during the hours with least user activity. Keep in mind that inactive accounts should be disabled, but not removed until it is confirmed that they should be completely removed. Following the steps set in the <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Log Important Security Operations</a> guideline, create a log entry when an account has been disabled.</p>
+          <ul>
+            <li>
+              <p>
+                <strong>Database.</strong> If your application uses a backend database as its user store, consider using a scheduled database transaction to lock inactive user accounts. For example, the following database transaction would lock all user accounts that have been inactive for more than 30 days. Such transaction should be scheduled to run once a day:</p>
+              <pre>sql&gt; update users set locked = 1 where (current_date - 30) &gt; last_login_date</pre>
+              <li>
+                <p>
+                  <strong>Active Directory.</strong> If your application uses Active Directory as its user store, inactive accounts may be required to be locked by your organization's network administrators.</p>
+              </li>
+            </li>
+          </ul>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. In its current state, the application logs the last time the user has logged in, but does not enforce a lockout policy for its inactive users; therefore an attacker can gain unauthorized access to the application by compromising an inactive account.</p>
+  <h1>Solution Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. Because the application enforces a lockout policy, all of its inactive users have been locked and denied access to the application. Therefore an attacker cannot compromise the application through its inactive users.</p>
+  <pre>sql&gt; select username, locked, last_login_date from users</pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about best practices when building e-commerce applications, see: <a href="http://www.owasp.org/images/f/f7/Security_of_Payment_cards.doc">Security of Payment cards (Credit/Debit) in E-commerce applications</a>.</li>
+  </ul>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Guideline: Log Important Security Operations </a>
+      <li>
+        <a href="/article/e0ebf8be-838c-4762-8c44-0d90adf63aef">Attack: Account Lockout Attack</a>
+        <li>
+          <a href="/article/45c2264b-1687-4363-bf10-b7e87d990a66">Checklist Item: Inactive User Accounts are Automatically Locked </a>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

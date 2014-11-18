@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8a759459-ef51-4bcf-93be-2a1d48d1cac8</Id>
+    <Id_History>8a759459-ef51-4bcf-93be-2a1d48d1cac8,3f075f12-3c8f-4428-ae1a-87023bb6b2e2,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>User Identity Is Verified when Resetting Passwords</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>User Identity Is Verified when Resetting Passwords</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Check For==
+
+Make sure that user identity is verified before resetting a forgotten password.
+
+==Why==
+
+The user's identity should be verified before resetting a forgotten password to ensure that an attacker is not pretending to be the user to gain access.
+
+==How to Check==
+
+To make sure that user identity is verified before resetting a forgotten password:
+
+# **Trigger password reset functionality.** Usually there is a link to the password reset function on the authentication page, called something like "Did you forget your password?".
+# **Make sure that user identity is verified before the password reset token is sent over a side-channel.** Go through the password reset process. Pay attention to the manner in which user identity is verified before the password reset token is sent. Make sure the information, token, and side channel that are used to verify user identity are not easily available to attackers. For example, it is not acceptable to ask people to verify their identities using information that can be looked up on social networks.
+
+==How to Fix==
+
+To verify the user's identity before sending a password reset token over a side-channel:
+
+# **Choose one or more mechanisms to verify user identity.** Some common methods include asking user-chosen questions that have user-provided answers, and sending a code via e-mail or SMS.
+# **Associate identity verification information with user accounts.** When creating a user account, collect the information necessary to verify user identity and store it together with the rest of the account information. Provide a mechanism for the user to update this information as necessary.
+# **Identify code that resets a forgotten password.** Find the code in the application that is responsible for changing user passwords when users forget them.
+# **Add user identity verification to the password reset code.** In the code that resets forgotten passwords, add code that implements the identity verification mechanism. Make sure that the code verifies user identity before it sends the password reset token. The password reset token should be sent over a side channel.
+
+==Additional Resources==
+
+* For more information about password reset security, see https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet
+]]></Data>
+  </Content>
+</TeamMentor_Article>

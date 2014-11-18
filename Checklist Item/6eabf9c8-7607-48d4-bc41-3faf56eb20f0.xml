@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-244640041" Content_Hash="1464383646">
+  <Metadata>
+    <Id>6eabf9c8-7607-48d4-bc41-3faf56eb20f0</Id>
+    <Id_History>6eabf9c8-7607-48d4-bc41-3faf56eb20f0,16f0354d-5b29-49b0-ad00-824c99f72ba3,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Least-privileged Accounts Are Used for Database Access</Title>
+    <Category>Database Security</Category>
+    <Phase>Design</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Least-privileged Accounts Are Used for Database Access</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Ensure that the application connects to databases using the least-privileged account possible.</p>
+  <h1>Why</h1>
+  <p>Connecting to the database with a least privilege account limits the damage that can be done in the event of a SQL injection attack or in the event of an attacker obtaining your account's credentials. </p>
+  <h1>How To Check</h1>
+  <p>The principle of least privilege requires that users are granted enough privileges to complete their respective tasks. If your application uses a backend database server, take the following steps to ensure that your application applies the principle of least privilege:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all database accounts that the application uses.</strong> List all of the application's database accounts existing on the various servers it uses. The database account information can usually be obtained from the connection strings in the web.config file. If hard-coded account details are found in the application code, they should be changed to refer to configurable connection strings.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the roles associated with each database account.</strong> Identify the database actions that each account performs. Using a matrix, identify the minimum set of privileges that each account requires:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Identify the minimum set of privileges that each account/role requires:</strong> Determine the tables and stored procedures accessed and the actions(read, write, drop, create, etc) performed on the tables by each account/role. This can be determined from the sections of code where the application accesses the back-end database. Use this information to create a matrix:</p>
+          <pre>Accounts     Actions    Stored Proc     Users Table<br />------------------------------------------------------<br />app_admin    Connect    Always          Always<br />             Read       Always          Always<br />             Use        Always          Occasionally<br />             Modify     Never           Occasionally <br />app_normal   Connect    Always          Always<br />             Read       Always          Always<br />             Use        Always          Always<br />             Modify     Never           Never</pre>
+        </li>
+        <li>
+          <strong>Identify the set of privileges that each account/role actually has.</strong> Determine the actual database access privileges granted to each database account. This information can be obtained from the database server.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that no extra privileges are granted to an account.</strong> Compare each account's intended privileges against its actual privileges. Verify that no account is granted extra privileges.</p>
+      <ul>
+        <li>No direct table access is provided and access is limited to selected stored procedures only. </li>
+        <li>If table access is needed, only minimum access required is granted </li>
+        <li>A database role is used to avoid granting permissions directly to a fixed user </li>
+        <li>If application is complicated, privileges are separated by partitioning the database access into different accounts</li>
+      </ul>
+    </li>
+  </ol>
+  <h1>How To Fix</h1>
+  <p>Use the following steps to apply the principle of least privilege to the application's database accounts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all database accounts.</strong> Create a list with all of your application's database accounts and the respective servers and databases that they connect to. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the roles associated with each database account.</strong> Understand the purpose of the accounts and the functionality they will be executing. Using a table, map all accounts to the privileges they require. None of the application's accounts should have administrative rights on the database server. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Set appropriate privileges.</strong> Once all accounts and their roles have been identified, set the appropriate privileges at the respective database servers. Make sure that each account has enough privileges to execute the assigned tasks only. Any extra privileges should be revoked. </p>
+      <p>Use the following guidelines to determine appropriate access permissions:</p>
+      <ul>
+        <li>
+          <p>Ideally, provide no direct table access and limit access to selected stored procedures only. </p>
+        </li>
+        <li>
+          <p>If you must grant table access, grant the minimum access that the application requires. For example, do not grant update access if read access is sufficient. </p>
+        </li>
+        <li>
+          <p>Use a database role, to avoid granting permissions directly to the database user. This isolates you from potential changes to the database user name. For example, if you change the database user name, you can simply add the new user to the database role and remove the existing one. </p>
+        </li>
+        <li>
+          <p>If an application needs to affect many databases, or if an application is complicated, consider using separation of privilege by partitioning the database access into different accounts. For example, create a database user that only has permissions necessary to setup new application users, and then create a separate database user to carry out operations permitted by legitimate application users.</p>
+        </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <em>You may find these additional articles useful</em>
+  <ul>
+    <li>
+      <a href="/article/93af668f-1c1a-422b-9cdf-1378f6acd96f">Use Least Privileged Accounts for Database Access</a>
+    </li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

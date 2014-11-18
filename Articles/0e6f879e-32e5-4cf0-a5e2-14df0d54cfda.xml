@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>0e6f879e-32e5-4cf0-a5e2-14df0d54cfda</Id>
+    <Id_History>0e6f879e-32e5-4cf0-a5e2-14df0d54cfda,2776ce43-bf12-4e7f-9bd1-b804bbc51953,</Id_History>
+    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Title>Store Uploaded Files Outside of Web Root</Title>
+    <Category>File I/O</Category>
+    <Phase>Implementation</Phase>
+    <Technology>PHP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Store Uploaded Files Outside of Web Root</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* PHP
+
+==What to Do==
+
+Store uploaded files in a location that is not web accessible.
+
+==Why==
+
+Storing uploaded files in a location that is not web accessible prevents shell upload vulnerabilities. Even if an attacker manages to upload a malicious script, they won't be able to execute it if the malicious script is stored in a location that is not accessible from the web.
+
+==How==
+
+To store uploaded files in a location that is not web accessible:
+
+# **Find all code used to upload files.** Search your application code for calls to move_uploaded_files(). Make a spreadsheet of this code. 
+# **Determine where to store uploaded files.** It's possible to store uploaded files in a folder outside of the web root or in a database.
+## Storing uploaded files outside the web root is a strong and easy to implement measure. However, it makes installing the application on a large amount of servers slightly more difficult, because the servers then need to be configured to allow storing files outside of the web root by creating a folder to store the uploaded files and granting the web server permissions to write to that folder. This additional configuration work is why many commercial applications store uploaded files in a web accessible location, and subsequently suffer from shell upload vulnerabilities. 
+## Another mitigation method is to store uploaded files in a database. Files stored in a database cannot be accessed directly via HTTP requests, so even if an attacker is able to upload a shell, they won't be able to access it. If the application is already using a database, there is no additional end-user configuration required. However, this method is harder to code, and there is some maintenance overhead because the database and backups might become quite large. 
+# **Change code to store uploaded files outside web root.** Change each piece of code that is used to handle uploaded files so that the uploaded files are stored in the chosen location that is not accessible from the web.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

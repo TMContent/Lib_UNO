@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-814703324" Content_Hash="-873125962">
+  <Metadata>
+    <Id>b4c20770-57c5-4a7b-878a-3a7ea5df1195</Id>
+    <Id_History>b4c20770-57c5-4a7b-878a-3a7ea5df1195,2c59a38f-60f5-4de9-a5ea-e476175d8511,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Memory Sniffing Bugs</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology> Any</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Memory Sniffing Bugs</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>
+    <span>Applies to</span>
+  </h1>
+  <ul>
+    <li>All software applications </li>
+  </ul>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Summary</span>
+  </h1>
+  <p>Applications must store sensitive data such as passwords or cryptographic values in system memory in order to properly operate. However, secrets may be stored in memory that is accessible to an attacker or swapped out of memory and into swaps files. During this attack, the attacker sniffs the different types of memory available, including random access memory (RAM), virtual memory, dump files, and swap files in an attempt to recover sensitive information such as passwords or cryptographic keys.</p>
+  <p>It is recommended that you follow these steps in order to test for this bug:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Start testing and exploring <li>Step 4: Execute additional testing</li></li></li></li>
+  </ul>
+  <p>
+    <b>
+      <span>&amp;nbsp;</span>
+    </b>
+  </p>
+  <h1>
+    <span>Step 1: Understand attack scenarios</span>
+  </h1>
+  <p>First, it is necessary to properly understand the types of temporary memory related to this vulnerability:</p>
+  <ul>
+    <li>RAM - physical memory that stores data used by running processes. <li>Virtual memory - logical address space given by the system to each running process. It gets copied into random access memory and swapped out to swap files by the operating system. <li>Swap files - RAM&amp;#8217;s auxiliary storage. The operating system performs paging to swap the contents of RAM in and out of swap files. <li>Memory dumps - Memory dumps are snapshots of a process&amp;#8217;s virtual memory; they are created by the system when the process crashes.&amp;nbsp;</li></li></li></li>
+  </ul>
+  <p>Note that permanent storage of user files, databases, and the Windows registry is outside of the scope of this vulnerability. Permanent memory can be protected using permissions and relate to information disclosure attacks.</p>
+  <p>Memory sniffing bugs commonly relate to local attacks requiring access to the target computer. Once the attacker is logged in, he uses a tool to recover sensitive data such as passwords or keys from temporary memory.</p>
+  <p>In detail:</p>
+  <ol>
+    <li>Attacker logs in to target machine.&amp;#42; <li>Attacker uses a script or tool to search memory for sensitive data. The attack ends if sensitive data is recovered is an unhashed/unencrypted form. <li>If sensitive data is hashed or encrypted, the attacker uses a cryptographic attack to recover sensitive data in plain-text.</li></li></li>
+  </ol>
+  <p>&amp;#42; Variations of this attack focus on capturing sensitive information without access to the target machine. For instance, forensic research shows that the contents of a computer&amp;#8217;s RAM can be retrieved through a FireWire cable &amp;#91;i&amp;#93;. Furthermore, recent discoveries indicate that sensitive information from DRAM chips can be restored by removing them after the computer has been turned off.</p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 2: Analyze Causes and Countermeasures</span>
+  </h1>
+  <p>The next step in testing for memory sniffing is to understand what causes this vulnerability and how to countermeasure it.</p>
+  <p>
+    <b>
+      <i>
+        <span>Clearing data structures containing sensitive information </span>
+      </i>
+    </b>
+  </p>
+  <p>A classic approach to protect against memory sniffing attacks is to clear data structures, such as arrays, used to temporarily store sensitive information. For instance, the code below is insecure:</p>
+  <pre>
+    <span>
+    </span>
+  </pre>
+  <pre>void GetData(char &amp;#42;MFAddr) &amp;#123; <br />&amp;#9;char pwd&amp;#91;64&amp;#93;;<br />&amp;nbsp;&amp;#9;if (GetPasswordFromUser(pwd, sizeof(pwd))) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;#9;&amp;#9;if (ConnectToMainframe(MFAddr, pwd)) &amp;#123;<br />&amp;nbsp;<br />&amp;nbsp;&amp;#9;&amp;#9;&amp;nbsp;// Interaction with mainframe<br />&amp;nbsp;<br />&amp;nbsp;&amp;#9;&amp;#9;&amp;nbsp;&amp;#125;<br />&amp;nbsp;&amp;#9;&amp;#125;<br />&amp;#125;</pre>
+  <p>The function <i>GetPasswordFromUser</i> copies a password provided by the user to the <i>pwd</i> character array. The application then returns from the function without cleaning the password from memory. To mitigate this attack, developers are encouraged to set the memory contents to zero after the process is done with the structure used to store it:<span>&amp;nbsp;</span></p>
+  <pre>
+    <span>void GetData(char &amp;#42;MFAddr) &amp;#123; <br />&amp;#9;char pwd&amp;#91;64&amp;#93;;<br />&amp;nbsp;&amp;#9;if (GetPasswordFromUser(pwd, sizeof(pwd))) &amp;#123;<br />&amp;#9;&amp;#9;if (ConnectToMainframe(MFAddr, pwd)) &amp;#123;<br />&amp;nbsp;<br />&amp;nbsp;&amp;#9;&amp;#9;&amp;nbsp;// Interaction with mainframe<br />&amp;nbsp;<br />&amp;#9;&amp;#9;&amp;nbsp;&amp;nbsp;&amp;#125;<br />&amp;nbsp;&amp;#9;&amp;#125;<br />&amp;nbsp;&amp;#9;<strong>memset(pwd, 0, sizeof(pwd));<br /></strong>&amp;#125;<br /></span>
+  </pre>
+  <p>However, it is extremely important to know that <i>memset</i> might not work as intended if compiler optimizations are on. Make sure to turn off compiler optimizations if protecting your code using <i>memset</i> as shown above. For more information, refer to <em>OWASP&amp;#8217;s Insecure Compiler Optimization </em>&amp;#91;ii&amp;#93;.</p>
+  <p>Another way of clearing out memory is by traversing the array and setting each element to zero:</p>
+  <pre>
+    <br />void erase_string(char &amp;#42;s) &amp;#123;</pre>
+  <pre>&amp;#9;while(&amp;#42;s) &amp;#123; &amp;#42;s&amp;#43;&amp;#43; = 0; &amp;#125;</pre>
+  <pre>&amp;#125;</pre>
+  <p>This technique is recommended, because it doesn&amp;#8217;t depend on compiler optimizations or knowledge of the array&amp;#8217;s size. To properly secure your application, it is suggested that you add similar zeroing-out techniques after returning from function calls that deal with sensitive data and also in every destructor of classes that deal with secrets such as passwords and cryptographic elements.</p>
+  <h2>
+    <span>
+      <em>Locking sensitive memory </em>
+    </span>
+  </h2>
+  <p>Zeroing out sensitive memory is an effective technique to keep sensitive data in virtual memory (and consequently in RAM and swap files) as briefly as possible. However, this data might still get swapped by the operating system&amp;#8217;s paging system into swap files before the application has a chance to clean it, increasing the risk of harm from a memory sniffing attack. </p>
+  <p>It is possible to mitigate this condition by locking virtual address pages from being swapped. This can be achieved in the UNIX platforms by using <i>mlock</i> as below &amp;#91;iii&amp;#93;:</p>
+  <pre>#include &lt;sys/mman.h&gt;</pre>
+  <pre>
+    <br />void &amp;#42;locking_alloc(size_t numbytes) &amp;#123;</pre>
+  <pre>&amp;#9;static short have_warned = 0;</pre>
+  <pre>&amp;nbsp;&amp;#9;void &amp;#42;mem = malloc(numbytes);</pre>
+  <pre>
+    <br />&amp;#9;if(mlock(mem, numbytes) &amp;&amp; &amp;#33;have_warned) &amp;#123;<br />&amp;nbsp;<br />&amp;#9;&amp;#9;/&amp;#42; We probably do not have permission.<br />&amp;nbsp;&amp;nbsp; &amp;nbsp; &amp;#9; &amp;#9; &amp;#42; Sometimes, it might not be possible to lock enough memory.<br />&amp;nbsp;&amp;nbsp; &amp;nbsp; &amp;#9; &amp;#9; &amp;#42;/</pre>
+  <pre>&amp;#9;&amp;#9;fprintf(stderr, "Warning: Using insecure memory&amp;#33;\n");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9;&amp;#9;have_warned = 1;<br />&amp;nbsp;<br />&amp;#9;&amp;#125; </pre>
+  <pre>&amp;#9;return mem;<br />&amp;#125;</pre>
+  <p>
+    <span>
+      <span>In Windows, the Win32 API VirtualLock is used for the same purpose.</span>
+    </span>
+  </p>
+  <h2>
+    <span>
+      <em>Disable the creation of dump files</em>
+    </span>
+  </h2>
+  <p>An attacker might execute a memory sniffing attack by crashing an application and accessing the core dumps created by the system upon the crash. Any sensitive data loaded by the application into any data structure will appear in dump files for the attacker to leverage. To mitigate this condition, processes must disable the creation of dump files right from the start. This is achieved using the <i>setrlimit</i> API both in UNIX and Windows platforms &amp;#91;iv&amp;#93;:</p>
+  <pre>
+    <span>
+      <span>char pwd&amp;#91;MAX_PWD_LEN&amp;#93;;<br />if(setrlimit(RLIMIT_CORE, 0) &amp;#33;= 0) &amp;#123;<br />&amp;#9;/&amp;#42; deal with error &amp;#42;/<br />&amp;#125;<br />&amp;nbsp;<br />fgets(pwd, MAX_PWD_LEN, stdin);</span>
+    </span>
+  </pre>
+  <h2>
+    <span>
+      <em>Additional countermeasures</em>
+    </span>
+  </h2>
+  <p>Additional defenses against memory sniffing attacks include deleting the page file on reboot or shutdown (this can be done by setting a registry value in Windows), and using forensic tools to scrub all different types of system memory. In addition, research is moving towards encrypting the contents of RAM and swap files and storing the encryption key in hardware.</p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 3: Start Testing and Exploring</span>
+  </h1>
+  <p>Now that you understand the basic theory behind memory sniffing attacks, it is necessary to execute practical test cases to check if your application is vulnerable. If you have implemented countermeasures, it is important to execute these tests before and after adding the countermeasures to test their effectiveness.</p>
+  <h2>
+    <span>
+      <em>Test for sensitive data in RAM</em>
+    </span>
+  </h2>
+  <p>In Windows platforms, follow these steps to create a record of physical memory in a text file:</p>
+  <ol>
+    <li>Log into a Windows host running the application under test. <li>Download and install ManTech&amp;#8217;s Memory DD (<a href="https://sourceforge.net/projects/mdd/)">https://sourceforge.net/projects/mdd/)</a>. <li>Open command prompt with administrative privileges. <li>Run mdd as follows: <b>mdd_1.3.exe -o c:\ram.txt -v</b><li>Once mdd finishes executing, read output file ram.txt for sensitive information.</li></li></li></li></li>
+  </ol>
+  <p>Expected results: ram.txt must not show any sensitive data.</p>
+  <h2>
+    <span>
+      <em>Test for sensitive data in virtual memory</em>
+    </span>
+  </h2>
+  <p>The best way to search your application&amp;#8217;s virtual memory for secrets is to use a debugger to create a dump of the virtual memory space at any given time:</p>
+  <ol>
+    <li>Log into a Windows host running the application under test. <li>Download and run user-mode Windows debugging <i>windbg.</i><li>Attach windbg to the application under test. <li>Break into the debugger and specify the option to create a full dump for the application&amp;#8217;s virtual memory: <b>.dump /f c:\dump.txt</b></li></li></li></li>
+  </ol>
+  <p>Expected results: dump.txt must not show any sensitive data.</p>
+  <h2>
+    <span>
+      <em>Test for sensitive data in swap files</em>
+    </span>
+  </h2>
+  <p>In Windows, swap files are stored in the <i>pagefile:</i></p>
+  <ol>
+    <li>Log into a Windows host running the application under test. <li>Find pagefile<i>. </i>It is named <i>pagefile.sys</i> and is usually on the root drive of the Windows partition (i.e. c:\pagefile.sys). <li>Open read-only copy of a file. <li>Search for sensitive information in pagefile.</li></li></li></li>
+  </ol>
+  <p>Expected results: pagefile must not show sensitive information.</p>
+  <h2>
+    <span>
+      <em>Test for sensitive data in dump files</em>
+    </span>
+  </h2>
+  <p>Follow these steps test for sensitive information in dump files:</p>
+  <ol>
+    <li>Log into a Windows host running the application under test. <li>Find the dump files (in Windows, this is indicated in HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl). <li>Open a dump file and search for sensitive information. <li>Repeat for each of the dump files</li></li></li></li>
+  </ol>
+  <p>Expected results: dump files must not show sensitive information.</p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Step 4: Execute Additional Testing</span>
+  </h1>
+  <p>If the sensitive data cannot be easily recognized, you must do additional testing. During each of the tests above, the attacker needs to interpret the output. Running each of the tools creates an output file with a large quantity of data that is irrelevant to the test. A good way to find secrets is running a command such <i>strings</i> on the output file &amp;#91;v&amp;#93; in order to display all character arrays in the file:</p>
+  <span>
+    <pre>
+      <br />C:\Documents and Settings\All Users\Documents\DrWatson&gt;strings user.dmp<br />12</pre>
+    <pre>&amp;#8230;<br />kernel32.dll<br />RASAPI32<br />C:\WINNT\tracing<br />C:\Documents and Settings\Administrator\My Documents\PGP\pubring.pkr<br />C:\Documents and Settings\Administrator\My Documents\PGP\secring.skr<br />&amp; &amp;#33;<br />IN PGP MESSAGE-----<br />Version: PGP 7.1<br />qANQR1DBwU4DSL6Q3OHRwOYQB/9pKnnhZGQRFwykWzBO1EWkzW336QOkUaHj0aVj<br />P1MgxDWQWi3kZpOfGnDg6kbQriWBiIgD/z8p5xGN&amp;#43;WcksytlLJv8OxvTGMepx7u8<br />h5aVRXZd8YPM&amp;#43;h5ROpbnNw&amp;#43;SiT/w9oCy/ChWeiCHV1swQSzwBHx2Ye&amp;#43;yxO70Moxc<br />...<br />frAG3nM7kOnChQp4jxhv2J0p7fL1vteI9EGbcimC9QCVBwC1U&amp;#43;&amp;#43;mQIqbTyIw5gWK<br />Io11yl8P&amp;#43;wKjcHsLfi2hTE&amp;#43;NIRb&amp;#43;VORWhVoCDHgNKV1nSFNTK0LEnvz84OFyRc1z<br />-----END PGP MESSAGE-----<br /><strong>&lt;pgppassphrase&amp;#33;&gt;</strong><br />&amp;#8230;<br /></pre>
+  </span>
+  <span>&amp;nbsp;</span>
+  <p>Hex editors and similar low-level file processing tools must be used to identify sensitive data. Additional techniques include performing dictionary or linear searches. For example, in Linux refer to <em>Cryptographic Key Recovery from Linux Memory Dumps </em>&amp;#91;vi&amp;#93;<em>.</em></p>
+  <p>&amp;nbsp;</p>
+  <h1>
+    <span>Conclusions</span>
+  </h1>
+  <p>Memory sniffing attacks aim at recovering sensitive data in system memory, including virtual memory, RAM, and swap files.In order to properly test for this bug, it is necessary to understand the anatomy of the attack scenario as well as why it is caused and how to protect against it.Then, you must use a set of available tools to check for it in your application by making records of the different types of memory and searching them for sensitive data.<b><span></span></b></p>
+  <p />&amp;nbsp;<br /><hr /><p /><div><div><p><span><span><span><span>&amp;#91;i&amp;#93;</span></span></span></span><b><span>Hit by a Bus: Physical Access Attacks with Firewire.<span>&amp;nbsp; </span>Adam Boileau.<span>&amp;nbsp; </span></span></b><span>Security-Assesment.com.<span>&amp;nbsp; </span></span><a href="http://www.storm.net.nz/static/files/ab_firewire_rux2k6-final.pdf"><span>http://www.storm.net.nz/static/files/ab_firewire_rux2k6-final.pdf</span></a><b><span></span></b></p><p><b><span><span></span></span></b></p><p><span><span><span><span><span><span><span><span>&amp;#91;ii&amp;#93;</span></span></span></span></span></span></span></span><b>Insecure Compiler Optimization</b>. OWASP. <a href="http://www.owasp.org/index.php/Insecure_Compiler_Optimization">http://www.owasp.org/index.php/Insecure_Compiler_Optimization</a></p><p><span><span><span><span><span><span><span><span>&amp;#91;iii&amp;#93;</span></span></span></span></span></span></span></span><b>Protecting sensitive data in memory.<span>&amp;nbsp; </span></b><span>John Viega.<span>&amp;nbsp; </span>CGI Security.<span>&amp;nbsp; </span></span><a href="http://www.cgisecurity.com/lib/protecting-sensitive-data.html"><span>http://www.cgisecurity.com/lib/protecting-sensitive-data.html</span></a></p><p><span><span><span><span><span><span><span><span>&amp;#91;iv&amp;#93;</span></span></span></span></span></span></span></span><b>VOID MSC14-A. Protect memory when working with sensitive data</b>. Alex Volkovitsky CERT.<span>&amp;nbsp; </span><a href="https://www.securecoding.cert.org/confluence/display/seccode/VOID&amp;#43;MSC14-A.&amp;#43;Protect&amp;#43;memory&amp;#43;when&amp;#43;working&amp;#43;with&amp;#43;sensitive&amp;#43;data">https://www.securecoding.cert.org/confluence/display/seccode/VOID&amp;#43;MSC14-A.&amp;#43;Protect&amp;#43;memory&amp;#43;when&amp;#43;working&amp;#43;with&amp;#43;sensitive&amp;#43;data</a></p><p><span><span><span><span><span><span><span><span>&amp;#91;v&amp;#93;</span></span></span></span></span></span></span></span><b><span>Practical Approaches to Recovering Encrypted Digital Evidence. </span></b><span>Eoghan Casey<strong>.<span>&amp;nbsp; </span></strong></span><a href="http://www.utica.edu/academic/institutes/ecii/publications/articles/A04AF2FB-BD97-C28C-7F9F4349043FD3A9.pdf"><span>http://www.utica.edu/academic/institutes/ecii/publications/articles/A04AF2FB-BD97-C28C-7F9F4349043FD3A9.pdf</span></a></p><p><span><span><span><span><span><span><span><span>&amp;#91;vi&amp;#93;</span></span></span></span></span></span></span></span><b>Cryptographic Key Recovery from Linux Memory Dumps</b>. <span>Torbj&amp;#246;rn Pettersson.<span>&amp;nbsp; </span></span><a href="http://events.ccc.de/camp/2007/Fahrplan/attachments/1300-Cryptokey_forensics_A.pdf"><span>http://events.ccc.de/camp/2007/Fahrplan/attachments/1300-Cryptokey_forensics_A.pdf</span></a><span></span></p><p>&amp;nbsp;</p></div></div>]]></Data>
+  </Content>
+</TeamMentor_Article>

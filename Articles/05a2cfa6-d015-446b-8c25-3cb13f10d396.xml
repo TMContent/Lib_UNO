@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>05a2cfa6-d015-446b-8c25-3cb13f10d396</Id>
+    <Id_History>05a2cfa6-d015-446b-8c25-3cb13f10d396,b5f4c1d9-7a0c-4c8c-83d4-c8608f48719f,</Id_History>
+    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
+    <Title>Invalidate Sessions When Users Log Out</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Invalidate Sessions When Users Log Out</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+<br /></p>
+  <h1>What to Do</h1>
+  <p>Invalidate sessions when users log out.</p>
+  <h1>Why</h1>
+  <p>Invalidating sessions when users log out makes it harder to hijack them.</p>
+  <h1>How</h1>
+  <p>To invalidate sessions when users log out:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify logout functionality.</strong>&amp;nbsp;Find code that is responsible for the logout functionality.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Add code to invalidate sessions.</strong> The below function shows how the session should be invalidated on logout.</p>
+      <pre> def gotoLogoutSucceeded(implicit request: RequestHeader): Result = {
+    gotoLogoutSucceeded(logoutSucceeded(request))
+  }
+
+  def gotoLogoutSucceeded(result: =&gt; Result)(implicit request: RequestHeader): Result = {
+    request.cookies.get(cookieName) flatMap CookieUtil.verifyHmac foreach idContainer.remove
+    result.discardingCookies(DiscardingCookie(cookieName))
+  }</pre>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For information about Logout functionlity, please see&amp;nbsp;<a href="https://github.com/t2v/play20-auth/blob/master/module/src/main/scala/jp/t2v/lab/play2/auth/LoginLogout.scala">https://github.com/t2v/play20-auth/blob/master/module/src/main/scala/jp/t2v/lab/play2/auth/LoginLogout.scala</a></li>
+  </ul>
+  <div>
+    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Session Management Guidelines</h1>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="13ad7fa3-199e-4957-9e4f-39bd931c9f1d" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Protect Session IDs</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="5d296e90-a27c-424a-bfe1-5576490b50c2" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Protect Session Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="f4218f89-d394-4162-8108-faef064f0f65" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Set the Domain and Path Values of Session Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="0c4222a4-6028-4191-8dcb-761bbb4d2661" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Set the Secure and HTTPOnly Flags on All Sensitive Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="b8e65bce-05bb-40b0-bc5b-ea6fe1e3ce96" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Change Session IDs During Authentication</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="05a2cfa6-d015-446b-8c25-3cb13f10d396" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Invalidate Sessions when Users Log Out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="6ac43864-2644-4f33-bfb2-1366c5c3cb58" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Make Inactive Sessions Time-out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="19f2779c-14ec-43fb-8e8d-4505cb0801c9" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Include Unique Tokens in HTTP Requests</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="7889a5ad-4e61-41da-97da-d40337050e17" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Do Not Make Security Decisions Based on Client-Accessible Parameters</a>
+        </b>
+      </li>
+    </ul>
+    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Session Management Checklists</h1>
+    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="9dfbcbed-d897-4df4-b212-9d80fb26cbdf" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Session IDs Are Protected</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="fe0a7400-2140-4e9e-bcc7-f185acce6974" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Session Cookies are Protected</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="932cd357-dfd4-4f95-949b-e407b5299748" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Domain and Path Values of Session Cookies Are Strict</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="0679ade9-860f-42e0-b811-2a3434410a76" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">The Secure and HTTPOnly Flags Are Set on All Sensitive Cookies</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="3328e0df-abe9-4339-9eeb-fae6eb54042e" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Session IDs Are Changed During Authentication</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="636b0c98-34d0-4aed-bf06-35f80a6e5551" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Sessions Are Invalidated When Users Log Out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="22c6bd72-94a7-4b86-9c9b-60d921fbd266" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Inactive Sessions Time-out</a>
+        </b>
+      </li>
+      <li style="margin: 0px; padding: 0px;">
+        <b style="margin: 0px; padding: 0px;">
+          <a href="178b26f6-689b-4a0e-a117-eadf1af3404c" target="_blank" style="margin: 0px; padding: 0px; color: rgb(0, 0, 0);">Unique Tokens Are Included in HTTP Requests</a>
+        </b>
+      </li>
+    </ul>
+  </div>]]></Data>
+  </Content>
+</TeamMentor_Article>

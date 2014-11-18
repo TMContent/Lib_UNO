@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8e5263d3-3fc8-43a9-9636-57094c58f4c4</Id>
+    <Id_History>8e5263d3-3fc8-43a9-9636-57094c58f4c4,90105b92-de59-4e3a-8f66-9ba5f0138cd5,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Remove Test Accounts</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Scala with Play Framework</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Remove Test Accounts</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <p>Scala and Play Framework 2.1.0+<br /></p>
+  <h1>What to Do</h1>
+  <p>Remove all test accounts from deployed applications.</p>
+  <h1>Why</h1>
+  <p>Test accounts provide access to the application's functionality during development. Since they are often poorly secured, they are a common target for attackers. Removing them before deployment is the best&amp;nbsp;option.</p>
+  <h1>When</h1>
+  <p>If you use test accounts during application testing, be sure they are removed before deployment.</p>
+  <h1>How</h1>
+  <p>Use the following steps when removing test accounts:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Enumerate all accounts.&amp;nbsp;</strong>List all the users&amp;nbsp;of your application. This should be a comprehensive list that includes, but is not limited to, active users, inactive users, users pending confirmation and test accounts.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the use of each account.&amp;nbsp;</strong>Examine the use/status of each account. Sort the accounts into groups according to their use/status.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Remove the accounts that will no longer be used.&amp;nbsp;</strong>Once the accounts are sorted into groups, list all accounts that are used for test purposes. After identifying all test accounts, remove them from your application's database.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Enforce strong passwords on the remaining accounts.&amp;nbsp;</strong>After removing all test accounts, enforce strong passwords for the remaining accounts in your application. Strong passwords decrease the probability of compromising valid users. Consult the&amp;nbsp;<a href="6d74a22d-31d2-4584-9d93-85687ea4a637">Enforce Strong Passwords</a>&amp;nbsp;guideline.</p>
+    </li>
+  </ol>
+  <p>
+    <strong>Note:</strong>&amp;nbsp;PCI DSS requirements state that passwords should be at least seven characters in length, use both letters and numbers, expire after no more than 90 days and that a user's new password should not be the same as the previous four.</p>
+  <h1>Problem Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. The database still has test accounts after deployment of the application:</p>
+  <p>For MongoDB:</p>
+  <p />
+  <pre>&gt;db.users.find({},{_id:0,username:1})</pre>
+  <pre>+----------+<br />| username |<br />+----------+<br />| joe      |<br />| adam     |<br />| dinesh   |<br />| bob      |<br />| jim      |<br />| sean     |<br />| ellen    |<br />| mary     |<br />| susan    |<br />| julie    |<br />| test01   |<br />| test02   |<br />| test03   |<br />+----------+</pre>
+  <p />
+  <p>For Mysql:</p>
+  <p />
+  <pre>sql&gt; select username from users;<br />+----------+<br />| username |<br />+----------+<br />| joe      |<br />| adam     |<br />| dinesh   |<br />| bob      |<br />| jim      |<br />| sean     |<br />| ellen    |<br />| mary     |<br />| susan    |<br />| julie    |<br />| test01   |<br />| test02   |<br />| test03   |<br />+----------+</pre>
+  <p />
+  <h1>Solution Example</h1>
+  <p>The following segment illustrates the user database of a multi-user application. The user database is populated only with active users and no test accounts:</p>
+  <p />
+  <p>For MongoDB:</p>
+  <p />
+  <pre>&gt;db.users.find({},{_id:0,username:1})</pre>
+  <pre>+----------+<br />| username |<br />+----------+<br />| joe      |<br />| adam     |<br />| dinesh   |<br />| bob      |<br />| jim      |<br />| sean     |<br />| ellen    |<br />| mary     |<br />| susan    |<br />| julie    |<br />+----------+</pre>
+  <p />
+  <p>For Mysql:</p>
+  <p />
+  <pre>sql&gt; select username from users;<br />+----------+<br />| username |<br />+----------+<br />| joe      |<br />| adam     |<br />| dinesh   |<br />| bob      |<br />| jim      |<br />| sean     |<br />| ellen    |<br />| mary     |<br />| susan    |<br />| julie    |<br />+----------+</pre>
+  <p />]]></Data>
+  </Content>
+</TeamMentor_Article>

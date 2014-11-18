@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-000000350ebf</Id>
+    <Id_History>00000000-0000-0000-0000-000000350ebf,556d8585-90c5-4f55-9ac2-2977396cef9c,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>Sensitive Data Is Not Stored in User Accessible Parameters</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Sensitive Data Is Not Stored in User Accessible Parameters</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* ASP.NET
+
+==What to Check For==
+
+Make sure that sensitive data is not stored in user accessible parameters.
+
+==Why==
+
+Placing sensitive information in user accessible parameters allows an attacker to recover and/or tamper with that information. For example, if the application stores the users' group membership information in the URL, the attacker can trivially assign himself to whatever group he chooses, usually making himself an admin and taking over the application. This used to be a suprisingly common vulnerability during the early days of web applications. Other possible vulnerabilities include allowing an attacker to retrieve sensitive information from parameters using man-in-the-middle attacks. The exact nature of possible vulnerabilities depends on the type of sensitive information that is stored in user accessible parameters. All of these vulnerabilities can be prevented by using ASP.NET session state.
+
+==How to Check==
+
+Review the application to find all parameters that may contain sensitive information. Unless this information is documented, there are two approaches to doing this: using the application with a web browser or reviewing the application code. Different people are better at different things. Choose the approach that is less time-consuming for your team.
+
+==How to Fix==
+
+To prevent storing sensitive data in user accessible parameters:
+
+# **Identify all parameters that contain data with security implications.** Review the application to find all parameters that may contain sensitive information. Unless this information is documented, there are two approaches to doing this: using the application with a web browser or reviewing the application code. Different people are better at different things. Choose the approach that is less time-consuming for your team.
+# **Find code that handles security sensitive parameters.** Find the code that is responsible for each user accessible parameter that contains sensitive information.
+# **Replace sensitive user-accessible parameters with ASP.NET session state.** Rewrite the code that stores sensitive information in user accessible parameters to store it using ASP.NET session state instead. 
+# **Protect the session ID.** Configure IIS to store the session ID in cookies. Configure IIS to set //HTTPOnly// and //Secure// flags on session cookies. Make sure that the page is configured to use SSL/TLS and session state. Don't generate weak session IDs - use the default ASP.NET session IDs or generate strong session IDs if you really have to.
+
+==Additional Resources==
+
+* For information about ASP.NET session state, see http://msdn.microsoft.com/en-us/library/ms178581(v=vs.100).aspx]]></Data>
+  </Content>
+</TeamMentor_Article>

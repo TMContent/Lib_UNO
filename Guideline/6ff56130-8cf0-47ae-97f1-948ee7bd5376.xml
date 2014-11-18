@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1469029705" Content_Hash="-2004202530">
+  <Metadata>
+    <Id>6ff56130-8cf0-47ae-97f1-948ee7bd5376</Id>
+    <Id_History>6ff56130-8cf0-47ae-97f1-948ee7bd5376,5ac480aa-87a4-4421-9150-c1cdc739af4f,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>Set CookieSlidingExpiration to False And Limit Authorization Cookie Lifetimes If SSL Cannot Be Used</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Set CookieSlidingExpiration to False And Limit Authorization Cookie Lifetimes If SSL Cannot Be Used</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>2</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>What to Do</h1>
+  <p>If SSL cannot be used to protect authorization cookies for an application, set <b>cookieSlidingExpiration</b> to <b>false</b> and set cookie timeouts to limit the lifetime of authorization cookies. </p>
+  <h1>Why</h1>
+  <p>There are a few cases where SSL is not possible; one such scenario might be mobile devices which lack SSL support.&amp;nbsp; In these cases expiring authentication cookies reduces the window of opportunity for an attacker intent on stealing the cookie to falsly authenticate. This is not a replacement for SSL, however, and offers much less security.</p>
+  <h1>When</h1>
+  <p>An application which can not use SSL to protect authorization cookies should use these techniques to offer a minimal level of protection. </p>
+  <h1>How</h1>
+  <p>If you cannot use SSL, the following steps will help mitigate the risk to your application.</p>
+  <ol>
+    <li>
+      <p>Limit the cookie lifetime to reduce the time window in which an attacker can use a captured cookie to gain access to your application with a spoofed identity.&amp;nbsp; The default timeout for an authentication cookie is 30 minutes.&amp;nbsp; Consider reducing this to 10 minutes as shown here:</p>
+      <pre>&lt;roleManager ...<br />             cookieTimeout="10"<br />             ...&gt;<br />&lt;/roleManager&gt;</pre>
+      <li>
+        <p>The default setting of <b>cookieSlidingExpiration="true"</b> ensures that the cookie expiration period is reset after each Web request.&amp;nbsp; If the user interaction model will allow you or if you are in a scenario where you are concerned about cookie hijacking, consider setting <b>cookieSlidingExpiration="false"</b>.&amp;nbsp; If you do so, the authorization cookie expires after the timeout period whether or not the user is active and&amp;nbsp;the user must re-authorize/re-authenticate.&amp;nbsp; The following code will turn off <strong>cookieSlidingExpiration</strong>: </p>
+        <pre>&lt;roleManager&amp;nbsp;...<br />             cookieSlidingExpiration="true"<br />             ...&gt;<br />&lt;/roleManager&gt;</pre>
+      </li>
+    </li>
+  </ol>
+  <h1>Problem Example</h1>
+  <p>A web site normally used by mobile customers without SSL uses the default settings for authorization cookie management.&amp;nbsp; A user temporarily uses a public terminal to connect to the site, checks their account status briefly, and then browses other (unsecured) parts of the site.&amp;nbsp; Because they're still refreshing the site, when an attacker sits down at their machine ten minutes after they get up, the attacker is&amp;nbsp;able to go directly to the site and alter the user's settings without needing to log in again.</p>
+  <p />
+  <h1>Solution Example</h1>
+  <p>A web site normally used by mobile customers without SSL locks down their settings for authorization cookie management.&amp;nbsp; A user temporarily uses a public terminal to connect to the site, checks their account status briefly, and then browses other (unsecured) parts of the site.&amp;nbsp; As soon as ten minutes have elapsed since their login, their authorization cookies expire, but this doesn't affect them browsing.&amp;nbsp; When an attacker sits down at their machine ten minutes after the user&amp;nbsp;gets up, the attacker is locked out of the site.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  </Content>
+</TeamMentor_Article>

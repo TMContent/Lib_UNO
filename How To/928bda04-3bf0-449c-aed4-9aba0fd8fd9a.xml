@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-2073699288" Content_Hash="-1272152437">
+  <Metadata>
+    <Id>928bda04-3bf0-449c-aed4-9aba0fd8fd9a</Id>
+    <Id_History>928bda04-3bf0-449c-aed4-9aba0fd8fd9a,c221c3b3-2450-4d2f-a2ec-f5847167e61c,</Id_History>
+    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Title>How to Use Forms Authentication with SQL Server</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Forms Authentication with SQL Server</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>This How to shows you how you can use forms authentication with the SQL Server membership provider. Forms authentication with SQL Server is most applicable in situations where users of your application are not part of your Windows domain, and as a result, they do not have Active Directory accounts. This How to explains how to create a login page using the new membership <em>Login</em> control, configure your Web application to use forms authentication, create the user store database, grant database access to your Web application account, configure ASP.NET membership settings, and set password complexity rules.</p>
+  <h1>Contents</h1>
+  <ul>
+    <li>Objectives <li>Overview <li>Summary of Steps <li>Step 1. Create a Web Application with a Login Page <li>Step 2. Configure the Web Application for Forms Authentication <li>Step 3. Configure ASP.NET for Membership <li>Step 4. Test the Forms Authentication <li>Deployment Considerations <li>Security Considerations <li>Additional Considerations <li>Additional Resources</li></li></li></li></li></li></li></li></li></li></li>
+  </ul>
+  <h1>Objectives</h1>
+  <ul>
+    <li>Use the SqlMembershipProvider with forms authentication. <li>Set up the SQL Server membership database. <li>Restrict the forms authentication cookie to HTTPS connections. <li>Use the membership feature to enforce password complexity rules. <li>Learn key production considerations when using membership and forms authentication. <li>Learn key security considerations when using membership and forms authentication. </li></li></li></li></li></li>
+  </ul>
+  <h1>Overview</h1>
+  <p>The ASP.NET membership feature provides an abstraction for the underlying data store used to maintain user credentials such as user names and passwords, and it provides an API that allows you to easily validate user credentials and manage the user database. ASP.NET supports SQL Server and Active Directory providers, and you can also create your own providers for custom stores.</p>
+  <p>This How to shows you how to develop a simple Web site that uses forms authentication with the SQL Server membership provider. This provider uses an underlying SQL Server database as its user store.</p>
+  <h1>Summary of Steps</h1>
+  <p>To develop a simple application that uses forms authentication with the SQL Server membership provider, perform the following steps: </p>
+  <ul>
+    <li>Step 1. Create a Web application with a login page. <li>Step 2. Configure the Web application for forms authentication. <li>Step 3. Configure ASP.NET for membership. <li>Step 4. Test the forms authentication. </li></li></li></li>
+  </ul>
+  <h1>Step 1. Create a Web Application with a Login Page </h1>
+  <p>In this step, you create a simple Web application with a default page and a login page. The login page allows existing users to login and new users to register by creating new accounts.</p>
+  <h3>To create a Web application with a login page </h3>
+  <ol>
+    <li>Start Visual Studio .NET and create a new ASP.NET Web site named <em>FormsAuthSQL</em>. <li>Use Solution Explorer to add a new Web form named <em>Login.aspx</em> to the site. <li>Add a <em>Login</em> control to <em>Login.aspx</em>. <p>By default, this control displays user name and password fields and a <em>Remember me next time</em> check box. If the user selects this check box, a persistent authentication cookie is created and the user's browser stores it on the user's hard disk. To prevent an attacker from stealing an authentication cookie from the client's computer, you should generally not create persistent authentication cookies. To disable this feature, set the <em>DisplayRememberMe</em> property of the <em>Login</em> control to <em>false</em>. Note that when a user clicks <b>login</b> on the <b>Login</b> control, it automatically validates the user by calling the configured membership provider, creates a forms authentication ticket, and then redirects the user back to the originally requested page. It executes code similar to the following example. </p><pre>if (Membership.ValidateUser(username, password))<br />&amp;#123;<br />&amp;nbsp; // User has supplied valid credentials<br />&amp;nbsp; // In the following method call, the second Boolean parameter <br />&amp;nbsp; // determines whether a persistent authentication cookie<br />&amp;nbsp; // is created.<br />&amp;nbsp; FormsAuthentication.RedirectFromLoginPage(username,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; rememberMeIsChecked);<br />&amp;#125;  </pre><li>Add a <em>CreateUserWizard</em> control beneath the <em>Login</em> control to allow new users to register with your site and create new accounts. </li></li></li></li>
+  </ol>
+  <h1>Step 2. Configure the Web Application for Forms Authentication </h1>
+  <p>In this step, you configure the ASP.NET application to use forms authentication.</p>
+  <h3>To configure the Web application for forms authentication </h3>
+  <ol>
+    <li>Use Solution Explorer to add a <em>Web.config</em> file to your project. <li>Locate the &lt;<em>authentication</em>&gt; element, and then change the <em>mode</em> attribute to <em>"Forms"</em>. <li>Add the following &lt;<em>forms</em>&gt; element as a child of the &lt;<em>authentication</em>&gt; element, and then set the <em>name</em> and <em>timeout</em> attributes as follows. <pre>&lt;authentication mode="Forms"&gt;<br />&amp;nbsp; &lt;forms<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="SqlAuthCookie"&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="10" /&gt;<br />&lt;/authentication&gt;  </pre><p>If you just set the <em>mode</em> attribute of the &lt;<em>authentication</em>&gt; element and omit the &lt;<em>forms</em>&gt; element, default settings are used for the &lt;<em>forms</em>&gt;<b></b>configuration. You should configure only those attributes that you need to overwrite. The default settings for forms authentication as defined in the <em>Machine.config.comments </em>file are shown here. </p><pre>&lt;forms name=".ASPXAUTH" loginUrl="login.aspx" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultUrl="default.aspx" protection="All" timeout="30" path="/" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="false" slidingExpiration="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieless="UseDeviceProfile" domain="" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enableCrossAppRedirects="false"&gt;<br />&amp;nbsp; &lt;credentials passwordFormat="SHA1" /&gt;<br />&lt;/forms&gt;  </pre><li>Add the following &lt;<em>authorization</em>&gt; element under the &lt;<em>authentication</em>&gt;<b></b>element in the <em>Web.config</em> file. This allows all authenticated users to access your Web site. <pre>&lt;authorization&gt; <br />&amp;nbsp; &lt;deny users="?" /&gt;<br />&amp;nbsp; &lt;allow users="&amp;#42;" /&gt;<br />&lt;/authorization&gt;  </pre><p>The preceding configuration allows only authenticated users to access the application. The <em>"?"</em> indicates unauthenticated users and the <em>"&amp;#42;"</em> indicates all users. By denying unauthenticated users, any requests made by unauthenticated users are redirected to the login page. The <em>loginUrl</em> attribute of the &lt;<em>forms</em>&gt; element determines the name of the login page. The default setting of this attribute in the <em>Machine.config.comments</em> file is <em>Login.aspx</em>. </p></li></li></li></li>
+  </ol>
+  <h1>Step 3. Configure ASP.NET for Membership</h1>
+  <p>In this step, you configure the SQL Server membership provider by performing the following actions: </p>
+  <ul>
+    <li>Create a user store database. <li>Grant database access to your Web application account. <li>Configure ASP.NET membership settings. </li></li></li>
+  </ul>
+  <h2>Create a User Store Database</h2>
+  <p>The SQL Server membership provider stores user information in a SQL Server database. You can create your SQL Server user store manually by using <em>Aspnet_regsql.exe</em> from the command line. Alternatively, you can run <em>Aspnet_regsql.exe</em> in Wizard mode or use the ASP.NET Web Site Configuration tool available on the <em>Website</em> menu in Visual Studio.</p>
+  <h3>To create the user store database</h3>
+  <p>Use <em>Aspnet_regsql.exe</em> to create the membership database. From a Visual Studio command prompt, run the following command.</p>
+  <pre>aspnet_regsql -S (local) -E -A m</pre>
+  <p>
+    <em>-S</em> specifies the server, which is <em>(local)</em> in this example.</p>
+  <p>
+    <em>-E</em> specifies to use Windows authentication to connect to SQL Server.</p>
+  <p>
+    <em>-A m</em> specifies to add only the membership feature. For simple authentication against a SQL Server user store, only the membership feature is required.</p>
+  <p>For a complete list of the commands, run <em>Aspnet_regsql /?</em>.</p>
+  <h3>Expected Results</h3>
+  <p>If the Aspnetdb database does not exist, two database files are created: </p>
+  <ul>
+    <li>
+      <em>Aspnetdb.mdf </em>
+      <li>
+        <em>Aspnetdb_log.LDF </em>
+      </li>
+    </li>
+  </ul>
+  <p>Within the <em>Aspnetdb</em> database, the following tables are created if they do not exist: </p>
+  <ul>
+    <li>
+      <em>aspnet_Applications </em>
+      <li>
+        <em>aspnet_Membership </em>
+        <li>
+          <em>aspnet_SchemaVersions </em>
+          <li>
+            <em>aspnet_Users </em>
+          </li>
+        </li>
+      </li>
+    </li>
+  </ul>
+  <h2>Grant Database Access to Your Web Application Account</h2>
+  <p>Your Web application process account requires access to the <em>Aspnetdb</em> database.&amp;nbsp;The <em>NT AUTHORITY\Network Service</em> account is used by default to run Web applications.</p>
+  <h3>To grant database access </h3>
+  <ol>
+    <li>Create a SQL Server login for <em>NT AUTHORITY\Network Service</em>. <li>Grant the login access to the <em>Aspnetdb</em> database by creating a database user. <li>Add the user to the <em>aspnet_Membership_FullAccess</em> database role. </li></li></li>
+  </ol>
+  <p>You can perform these steps by using Enterprise Manager or you can run the following script in SQL Query Analyzer.</p>
+  <pre>-- Create a SQL Server login for the Network Service account<br />sp_grantlogin 'NT AUTHORITY\Network Service'<br /><br />-- Grant the login access to the membership database<br />USE aspnetdb<br />GO<br />sp_grantdbaccess 'NT AUTHORITY\Network Service', 'Network Service'<br /><br />-- Add user to database role<br />USE aspnetdb<br />GO<br />sp_addrolemember 'aspnet_Membership_FullAccess', 'Network Service'  </pre>
+  <h2>Configure ASP.NET Membership Settings</h2>
+  <p>In this step, you specify membership settings for the Web site.</p>
+  <h3>To configure the Membership settings </h3>
+  <ol>
+    <li>In the <em>Web.config</em> file, add a connection string similar to the following to point to your membership database. <pre>&lt;connectionStrings&gt;<br />&amp;nbsp;&lt;add name="MyLocalSQLServer"<br />&amp;nbsp;&amp;nbsp;connectionString="Initial Catalog=aspnetdb;data source=localhost;Integrated Security=SSPI;" /&gt;<br />&lt;/connectionStrings&gt;  </pre><p>In this case, <em>MyLocalSQLServer</em> is the name you will use for this connection. Set the <em>connectionString</em> attribute to the membership database you created earlier. </p><li>Add a &lt;<em>membership</em>&gt; element after the &lt;<em>authorization</em>&gt; element as shown in the following example. Note the use of the &lt;<em>clear/</em>&gt; element. This prevents the default provider from being loaded and then never used. <pre>&lt;membership defaultProvider="MySqlMembershipProvider" &gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;clear/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MySqlMembershipProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="MyLocalSQLServer"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="MyAppName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlMembershipProvider, System.Web, Version=2.0.0.0,<br />&amp;#9;&amp;#9;&amp;#9; Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" /&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/membership&gt;  </pre><p>Make sure you set the <em>connectionStringName</em> attribute to the same name ("<em>MyLocalSQLServer</em>") you specified earlier in the <em>connectionStrings</em> section. Also set the <em>applicationName</em> attribute to a unique value representing the application. User details are organized by application name within the membership database. </p><p><b>Note: </b>You must set the <em>defaultProvider</em> attribute of the &lt;<em>membership</em>&gt; element to point to the provider definition. The login controls use this attribute to determine which property to use by default. However, these controls also expose a <em>MembershipProvider</em> property that lets you use non-default providers with the controls. While you can also set the <em>MembershipProvider</em> property of the login controls, it is good practice to set the <em>defaultProvider</em> attribute.<b></b></p></li></li>
+  </ol>
+  <h1>Step 4. Test the Forms Authentication</h1>
+  <p>In this step, you test forms authentication.</p>
+  <h2>Add a Page_Load Event Handler</h2>
+  <p>Add the following code to the <em>Page_Load</em> event handler of your <em>Default.aspx</em> page. This page should only be displayed to authenticated users. To prove that this is the case, the code displays information obtained from the forms authentication ticket issued to authenticated users.</p>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />&amp;#123;<br />&amp;nbsp; Response.Write("Hello, " &amp;#43; Server.HtmlEncode(User.Identity.Name));<br />&amp;nbsp; FormsIdentity id = (FormsIdentity)User.Identity;<br />&amp;nbsp; FormsAuthenticationTicket ticket = id.Ticket;<br />&amp;nbsp; Response.Write("&lt;p/&gt;TicketName: " &amp;#43; ticket.Name );<br />&amp;nbsp; Response.Write("&lt;br/&gt;Cookie Path: " &amp;#43; ticket.CookiePath);<br />&amp;nbsp; Response.Write("&lt;br/&gt;Ticket Expiration: " &amp;#43;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ticket.Expiration.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;Expired: " &amp;#43; ticket.Expired.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;Persistent: " &amp;#43; ticket.IsPersistent.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;IssueDate: " &amp;#43; ticket.IssueDate.ToString());<br />&amp;nbsp; Response.Write("&lt;br/&gt;UserData: " &amp;#43; ticket.UserData);<br />&amp;nbsp; Response.Write("&lt;br/&gt;Version: " &amp;#43; ticket.Version.ToString());<br />&amp;#125;  </pre>
+  <h2>Create a New User</h2>
+  <p>In this step, you create a new user to test the login functionality.</p>
+  <h3>To create a new user </h3>
+  <ol>
+    <li>Browse to your application's <em>Default.aspx</em> page. <p>The earlier configuration of the &lt;<em>authorization</em>&gt; element prevents unauthenticated users from accessing any pages in the application and redirects you to the <em>Login.aspx</em> page. </p><li>Create a new user with a strong password. The default rules applied by the SQL membership provider for the password are as follows: <ul><li>The password must be at least 7 characters long. <li>The password must contain at least 1 non-alphanumeric character. </li></li></ul><li>Log in with your new user account. If successful, you should be redirected to the Default.aspx page that you initially requested, and details from the forms authentication ticket should be displayed. </li></li></li>
+  </ol>
+  <h1>Deployment Considerations</h1>
+  <p>When using forms authentication, you should consider the following when you deploy your application: </p>
+  <ul>
+    <li>Connecting to a remote database <li>Connecting to a remote database without Windows authentication </li></li>
+  </ul>
+  <h2>Connecting to a Remote Database</h2>
+  <p>If your database is on a remote server, you should use Windows authentication to connect. By using Windows authentication, you avoid storing credentials in connection strings and avoid passing passwords over the network to the database server. To use Windows authentication, you usually use a custom domain service account to run your application. This account's identity is then used to authenticate against the remote server. </p>
+  <h3>To authorize your application's domain account in the database</h3>
+  <p>Use the following T-SQL commands to create a SQL Server login for your domain account and grant it access to the membership database.</p>
+  <pre>-- Create a SQL Server login for your application's domain account<br />sp_grantlogin 'domain\webservername&amp;#36;'<br /><br />-- Grant the login access to the membership database<br />USE aspnetdb<br />GO<br />sp_grantdbaccess 'domain\webservername&amp;#36;', 'Web Server Name'<br /><br />-- Add user to database role<br />USE aspnetdb<br />GO<br />sp_addrolemember 'aspnet_Membership_FullAccess', 'domain\webservername&amp;#36;'  </pre>
+  <p>You should also encrypt your connection string in the <em>Web.config</em> file to avoid disclosing server and database names. To do this, use either the DPAPI or RSA protected configuration providers. If you deploy your application in a Web farm, use RSA because it is easy to export and import RSA keys across servers.</p>
+  <h3>Connecting to a Remote Database Without Windows Authentication</h3>
+  <p>When you use Windows authentication to connect to SQL Server, you use either Kerberos or NTLM authentication, depending on the configuration of your servers and domain. You might not be able to use Windows authentication if: </p>
+  <ul>
+    <li>Your database client and database server are separated by a firewall that prevents Kerberos or NTLM authentication. <li>Your application server and database server are in separate domains with no trust. </li></li>
+  </ul>
+  <p>In these situations, you can use either mirrored local accounts or SQL Authentication. With mirrored local accounts, you configure two accounts on each server with identical user names and passwords. You must ensure that the passwords remain the same.</p>
+  <p>If you use SQL Authentication, you must: </p>
+  <ul>
+    <li>Manage the credentials yourself. <li>Protect the credentials in the connection string, for example by encrypting the connection string in the <em>Web.config</em> file. <li>(Potentially) protect the credentials passed over the network from the Web server to the database. </li></li></li>
+  </ul>
+  <h1>Security Considerations</h1>
+  <p>Failing to protect authentication tickets is a common vulnerability that can lead to unauthorized spoofing and impersonation, session hijacking, and elevation of privilege. When you use forms authentication, consider the following recommendations to help ensure a secure authentication approach: </p>
+  <ul>
+    <li>
+      <b>Restrict the authentication cookie to HTTPS connections.</b> To prevent forms authentication cookies from being captured and tampered with while crossing the network, ensure that you use Secure Sockets Layer (SSL) with all pages that require authenticated access and restrict forms authentication tickets to SSL channels. <li><b>Partition the site for SSL.</b> This allows you to avoid using SSL for the entire site.<b></b><li><b>Do not persist forms authentication cookies.</b> Do not persist authentication cookies because they are stored in the user's profile on the client computer and can be stolen if an attacker gets physical access to the user's computer <li><b>Consider reducing ticket lifetime.</b> Consider reducing the cookie lifetime to reduce the time window in which an attacker can use a captured cookie to gain access to your application with a spoofed identity. <li><b>Consider using a fixed expiration. </b>In scenarios where you cannot use SSL, consider setting <em>slidingExpiration="false"</em>. <li><b>Enforce strong user management policies.</b> Use and enforce strong passwords for all user accounts to ensure that people cannot guess one another's passwords and to mitigate the risk posed by dictionary attacks. <li><b>Enforce password complexity rules.</b> Validate passwords entered through the <em>CreateUserWizard</em> control, by setting its <em>PasswordRegularExpression</em> property to an appropriate regular expression. Also configure the membership provider on the server to use the same regular expression.<b></b><li><b>Perform effective data validation on all requests.</b> Perform strict data validation to minimize the possibilities of SQL injection and cross-site scripting. <li><b>Use distinct cookie names and paths. </b>By ensuring unique cookie names and paths, you prevent possible problems that can occur when hosting multiple applications on the same server. <li><b>Keep authentication and personalization cookies separate.</b> Keep personalization cookies that contain user-specific preferences and non-sensitive data separate from authentication cookies. <li><b>Use absolute URLs for navigation.</b> This is to avoid potential issues caused by redirecting from HTTP to HTTPS pages. </li></li></li></li></li></li></li></li></li></li></li>
+  </ul>
+  <h1>Additional Considerations</h1>
+  <p>In addition to the preceding guidance, consider the following additional items to offer further protection: </p>
+  <ul>
+    <li>Password complexity <li>Account lockout </li></li>
+  </ul>
+  <h2>Password Complexity</h2>
+  <p>The membership provider that the <em>CreateUserWizard</em> and <em>Login</em> controls use determines password complexity requirements. For example, by default, the SQL Membership provider requires passwords of at least seven characters in length with at least one non-alphanumeric character.</p>
+  <h3>Configuring Provider Enforced Strong Passwords</h3>
+  <p>To configure the precise password complexity rules enforced by the <em>SqlMembershipProvider</em>, you can set the following additional attributes: </p>
+  <ul>
+    <li>
+      <em>passwordStrengthRegularExpression</em>. The default is "". <li><em>minRequiredPasswordLength</em>. The default is seven. <li><em>minRequiredNonalphanumericCharacters</em>. The default is one. </li></li></li>
+  </ul>
+  <p>The following configuration supplies a custom regular expression to constrain the passwords used by the membership provider.</p>
+  <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MySqlMembershipProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="MyAppName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; passwordStrengthRegularExpression=<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "&amp;#94;(?=.&amp;#42;\d)(?=.&amp;#42;&amp;#91;a-z&amp;#93;)(?=.&amp;#42;&amp;#91;A-Z&amp;#93;).&amp;#123;8,10&amp;#125;&amp;#36;" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlMembershipProvider, System.Web, Version=3.5.0.0,<br />&amp;#9;&amp;#9; Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/membership&gt;  </pre>
+  <p>The regular expression in the preceding fragment constrains the password to between 8 and 10 characters. It must also contain a combination of uppercase, lowercase, and numeric digits, with no special characters. The (.&amp;#42;\d) refers to the digits, the (.&amp;#42;&amp;#91;a-z&amp;#93;) refers to the lowercase characters, the &amp;#42;&amp;#91;A-Z&amp;#93; refers to the uppercase characters and the &amp;#123;8,10&amp;#125; constrains the range to be between 8 to 10 characters. </p>
+  <p>Note that the <em>SqlMembershipProvider</em> always first evaluates the password against the <em>minRequiredPasswordLength</em> and <em>minRequiredNonalphanumericCharacters</em> attributes. If the regular expression is intended to be the authoritative match, you should set the other two attributes to weaker values; for example, a minimum length of 1 and zero non-alphanumeric characters.</p>
+  <p>The following configuration uses the <em>minRequiredPasswordLength</em> and <em>minRequiredNonalphanumericCharacters</em> attributes to constrain the password.</p>
+  <pre>&lt;membership defaultProvider="MySqlMembershipProvider"&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MySqlMembershipProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="MyAppName"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; minRequiredPasswordLength="8"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; minRequiredNonalphanumericCharacters="2"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlMembershipProvider, System.Web, Version=3.5.0.0, <br />&amp;#9;&amp;#9;&amp;#9;Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/&gt;<br />&amp;nbsp; &lt;/providers&gt;<br />&lt;/membership&gt;  </pre>
+  <h3>Validating Strong Passwords</h3>
+  <p>You can also use a regular expression with the <em>CreateUserWizard</em> control to enforce passwords complexity rules. By doing this, you benefit from both client-side validation and server-side validation. </p>
+  <p>To validate a password entered through the <em>CreateUserWizard</em> control, set its <em>PasswordRegularExpression</em> property to an appropriate regular expression, such as the one&amp;nbsp;that follows. However, note that you should then also configure a similar regular expression on the server with the membership provider. You should not rely on the client-side checks.</p>
+  <pre>&amp;#94;(?=.&amp;#42;\d)(?=.&amp;#42;&amp;#91;a-z&amp;#93;)(?=.&amp;#42;&amp;#91;A-Z&amp;#93;).&amp;#123;8,10&amp;#125;&amp;#36;  </pre>
+  <h2>Account Lockout </h2>
+  <p>You can configure the account lockout policy. To do this, use the following two provider attributes: </p>
+  <ul>
+    <li>
+      <em>maxInvalidPasswordAttempts</em>
+      <strong>.</strong> This defines the number of failed password attempts or failed password answer attempts that are allowed before locking out a user's account. When the number of failed attempts equals the value set in this attribute, the user's account is locked out. The default value is five. <li><em>passwordAttemptWindow</em><strong>.</strong> This defines the time window, in minutes, during which failed password attempts and failed password answer attempts are tracked. The default value is ten. </li></li>
+  </ul>
+  <p>With these defaults, if there are five failed login attempts within ten minutes, the account will be locked out.</p>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

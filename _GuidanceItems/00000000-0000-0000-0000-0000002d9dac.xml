@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000002d9dac</Id>
+    <Id_History>00000000-0000-0000-0000-0000002d9dac,039b37ac-9147-428f-998a-3c01bd343aad,</Id_History>
+    <Library_Id>b6f408c5-6e6e-4bc0-90a5-0bb10becc2ce</Library_Id>
+    <Title>Code Integrity Checks Are Implemented</Title>
+    <Category>Code Integrity</Category>
+    <Phase>Implementation</Phase>
+    <Technology>iOS</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Code Integrity Checks Are Implemented</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="WikiText">
+    <Data><![CDATA[==Applies To==
+
+* All iOS applications.
+
+==What to Check For==
+
+Verify that code integrity checks are implemented.
+
+==Why==
+
+Code integrity checks help prevent software piracy and unauthorized modifications to the application. Code integrity checks do not provide 100% assurance of code integrity, but they make it harder for an attacker to modify the application binary code without breaking it.
+
+==How to Check==
+
+To verify that code integrity checks are implemented:
+
+# **Identify piracy check functions.** It's best if someone knows whether piracy checks exist and where they are. Otherwise it might be necessary to examine each function individually to determine its purpose.
+# **Identify integrity check functions.** It's best if someone knows whether integrity checks exist and where they are. Otherwise it might be necessary to examine each function individually to determine its purpose.
+# **Verify that integrity check functions protect piracy check functions.** Find calls to the piracy check functions and make sure that integrity check functions are also called to verify that piracy check functions have not been tampered with.
+# **Verify that piracy check and integrity check functions are scattered throughout the application.** Find calls to the piracy and integrity check functions to make sure they are called multiple times throughout the application.
+
+
+==How to Fix==
+
+To check code for integrity:
+
+# **Write piracy check functions.** Piracy check functions often try to determine whether the application is running on a jailbroken device. The application is not necessarily pirated if it is on a jailbroken device, but there are no foolproof anti-piracy or code integrity measures for jailbroken devices. Piracy checks can determine whether a device is jailbroken by checking for the existence of files that only appear on jailbroken devices, such as Cydia. If piracy is not a concern, this step may be omitted.
+# **Write integrity check functions.** The most common ways to implement code integrity checks is to check classes for expected addresses or checksums. The //class_getMethodImplementation// method returns a pointer to a method; checking the value of this pointer against the expected value provides reasonable assurance that the method has not been modified during runtime.
+# **Define integrity check functions as inline.** The integrity check functions written in the previous step should be defined as //inline// so that the compiler inserts the full integrity checking code wherever it is invoked.
+# **Scatter integrity check functions throughout the application.** Multiple integrity check function calls spread out throughout the application make it harder for an attacker to find them all and patch them.
+
+==Code Integrity Guidelines==
+* [[00000000-0000-0000-0000-0000002e3de4|Implement Code Integrity Checks]]
+* [[00000000-0000-0000-0000-000000470103|Sign iOS Application Updates]]
+* [[00000000-0000-0000-0000-000000986af1|Sign iOS Applications]]
+
+==Code Integrity Checklists==
+* [[00000000-0000-0000-0000-0000002d9dac|Code Integrity Checks Are Implemented]]
+* [[00000000-0000-0000-0000-000000892dc7|iOS Application Updates Are Signed]]
+* [[00000000-0000-0000-0000-00000039db6a|iOS Applications Are Signed]]
+
+==Additional Resources==
+
+* For more information about the //class_getMethodImplementation// method, please see https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html]]></Data>
+  </Content>
+</TeamMentor_Article>

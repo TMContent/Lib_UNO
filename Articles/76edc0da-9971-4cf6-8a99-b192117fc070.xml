@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>76edc0da-9971-4cf6-8a99-b192117fc070</Id>
+    <Id_History>76edc0da-9971-4cf6-8a99-b192117fc070,ab508c7e-4442-4efb-9f4e-2640d82d35cd,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Password Renewal Is Enforced</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Web Application</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Password Renewal Is Enforced</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* Web Applications
+
+==What to Check For==
+
+Ensure your application enforces a password expiration policy.
+
+==Why==
+
+Forcing users to renew their passwords reduces the risk of valid credentials becoming exposed. While this technique can prevent attackers from obtaining the valid credentials through the use of a Brute Force Attack or a Dictionary Attack, it can also reduce the business risk associated with any instances of discovered or leaked valid credentials.
+
+==How to Check==
+
+Use the following steps to ensure your application has a password expiry policy: 
+
+# **Locate all authentication code.** Identify all authentication procedures throughout your application.
+# **Ensure that your application enforces password renewal.** Ensure that your application addresses the need for password renewal throughout the different stages of your application's development lifecycle:
+## **Requirements:** Check if your application provides a password policy. Ensure that the password policy provides requirements regarding the lifetime of passwords. For example, require that a password will expire after 45 days. Consult the Strong Passwords are Enforced checklist for information regarding additional password requirements. 
+## **Design:** Check if all password renewal routines are positioned properly throughout your application's authentication routines. For instance, if a user's password is expired, your application's authentication routine should force the user to renew their password upon a successful logon. 
+## **Implementation:** Check if all password renewal routines implement your application's password policy. 
+
+==How to Fix==
+
+Use the following steps to force users to change their passwords:
+
+# **Define a password change policy.** Establish a maximum password age for your application's users. For example, require that users must change passwords every 60 days and privileged users must change passwords every 30 days. PCI DSS requirements state that a user's password must be renewed at most every 90 days and that the new password cannot be the same as the previous four.
+# **Design a password change mechanism.** Track the password age and prompt the user to change their password when the password expires. 
+# **Enforce the password change policy.** Embed the change of password mechanism into the authentication routine. 
+# **(Optional) Check against previous hashed passwords to verify that passwords are not being repeated.** One common password policy is to prevent users from using the same passwords repeatedly. To implement this, store the hashes of the previously used passwords and check the hashes of the new passwords against the stored ones.]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-969111469" Content_Hash="-517431858">
+  <Metadata>
+    <Id>9075bfd3-2ad8-4bac-9ab7-e0c3d96a99ae</Id>
+    <Id_History>9075bfd3-2ad8-4bac-9ab7-e0c3d96a99ae,653dddc8-b05a-4729-ae76-f764341ec3cc,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Use Health Monitoring in WCF</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Use Health Monitoring in WCF</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can use Health Monitoring to log custom events in your service based on business logic. You can use health monitoring to Instrument your application and monitor user management events around authentication and authorization. This instrumentation can help you to detect and react to potentially suspicious behavior. It also enables you to gather operations data; for example, to track who is accessing your application and when user account passwords need to be reset.</p>
+  <p>Use the following steps to configure your WCF service to use Health Monitoring:</p>
+  <ol>
+    <li>Create a custom health monitoring event. <li>Configure your WCF service for health monitoring. <li>Instrument your application to raise a custom event.</li></li></li>
+  </ol>
+  <p>
+    <strong>Create a custom health monitoring event</strong>
+    <br />Create a Custom user management web event, by creating a class library and then create a class that inherits from WebAuditEvent.</p>
+  <pre>using System.Web.Management;</pre>
+  <pre> public class MyEvent : WebAuditEvent<br />    &amp;#123;</pre>
+  <pre>        public MyEvent(string msg, object eventSource, int eventCode)<br />            : base(msg, eventSource, eventCode)<br />        &amp;#123;<br />        &amp;#125;</pre>
+  <pre>        public MyEvent(string msg, object eventSource, int eventCode, int eventDetailCode)<br />            : base(msg, eventSource, eventCode, eventDetailCode)<br />        &amp;#123;<br />        &amp;#125;<br />   public override void FormatCustomEventDetails(WebEventFormatter formatter)<br />        &amp;#123;<br />            base.FormatCustomEventDetails(formatter);</pre>
+  <pre>            // Display some custom event message<br />            formatter.AppendLine("Some Critical Event Fired");<br /> &amp;#125;</pre>
+  <p>
+    <strong>Configure your WCF Service for Health Monitoring</strong>
+    <br />Add a health monitoring element to your configuration file as follows:</p>
+  <pre>&amp;#8230;<br />&lt;system.web&gt;<br /> &lt;healthMonitoring&gt;<br />  &lt;eventMappings&gt;<br />   &lt;add name="Some Custom Event" type="MyEventLibrary.MyEvent, MyEventLibrary"/&gt;<br />  &lt;/eventMappings&gt;<br />  &lt;rules&gt;<br />   &lt;add name="Custom event" eventName="Some Custom Event" provider="EventLogProvider" minInterval="00:00:01"/&gt;<br />  &lt;/rules&gt;<br /> &lt;/healthMonitoring&gt;<br />&lt;/system.web&gt;<br />&amp;#8230;</pre>
+  <p>
+    <strong>Instrument your application to raise a custom event</strong>
+  </p>
+  <p>Instrument the WCF Service by raising the custom event in a service contract.</p>
+  <pre>&amp;#91;OperationContract&amp;#93;<br />string InvokeCriticalEvent();</pre>
+  <pre>public string InvokeCriticalEvent()<br />    &amp;#123;<br />        MyEvent obj = new MyEvent("Invoking Some Custom Event", this, WebEventCodes.WebExtendedBase &amp;#43; 1);<br />        obj.Raise();<br />        return "Critical event invoked";<br />    &amp;#125;</pre>
+  <p>When these steps are complete you can verify that the custom events are in the system event log after calling the service method from a test client.</p>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on health monitoring, see &amp;#8220;How to: Use Health Monitoring in ASP.NET 2.0&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998306.aspx">http://msdn2.microsoft.com/en-us/library/ms998306.aspx</a><li>For more information see &amp;#8220;ASP.NET Health Monitoring Overview&amp;#8221; at <a href="http://msdn.microsoft.com/en-us/library/bb398933.aspx">http://msdn.microsoft.com/en-us/library/bb398933.aspx</a><li>For auditing Guidelines, see the Auditing &amp; Logging section of &amp;#8220;WCF 3.5 Guidelines &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home</a></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

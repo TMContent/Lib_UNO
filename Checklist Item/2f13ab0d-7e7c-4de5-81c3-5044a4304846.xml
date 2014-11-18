@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-65962724" Content_Hash="-141664232">
+  <Metadata>
+    <Id>2f13ab0d-7e7c-4de5-81c3-5044a4304846</Id>
+    <Id_History>2f13ab0d-7e7c-4de5-81c3-5044a4304846,f7f41985-f1b6-4132-bcae-633ce6b3c923,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Bounds Are Checked When Using Arrays</Title>
+    <Category>Memory Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Bounds Are Checked When Using Arrays</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>C&amp;#43;&amp;#43;</li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check that array indices are confirmed to be within bounds before use.</p>
+  <h1>Why</h1>
+  <p>Array indexing errors, such as buffer overruns can lead to memory being overwritten at arbitrary locations. This can lead to application instability or, with a carefully constructed attack, can lead to code injection.</p>
+  <h1>How to Check</h1>
+  <p>Perform the following actions to verify that bounds are checked when using arrays:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all functions that use arrays.</strong> Identify functions where array elements are addressed to verify that array indices are validated before use.</p>
+      <li>
+        <p>
+          <strong>Make sure bounds are not exceeded when iterating through array elements.</strong> Make sure that indices run from zero to n-1, where n is the number of array elements. </p>
+        <li>
+          <p>
+            <strong>Where possible, make sure that code does not use input parameters as array indices.</strong> If it is absolutely necessary, make sure that any input parameters used as array indices are validated and constrained to ensure that the maximum and minimum array bounds cannot be exceeded.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Follow these steps to assure that all array indices are within bounds:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all functions that use arrays.</strong> Identify functions where array elements are addressed to verify that array indices are validated before use.</p>
+      <li>
+        <p>
+          <strong>Iterate through array elements safely.</strong> When iterating through array elements, make sure that indices run from zero to n-1, where n is the number of array elements. Array indices start at 0, so the index of the last element of an array is n-1, where n is the number of elements in the array. This is a basic programming concept and is mentioned here for completeness.</p>
+        <li>
+          <p>
+            <strong>Avoid using input parameters as array indices.</strong> Write code that does not use input parameters as array indices. If the application requires it, validate and constrain any input parameters used as array indices to ensure that the maximum and minimum array bounds cannot be exceeded.</p>
+        </li>
+      </li>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>
+      <a href="/article/155aadfd-39f0-454e-8d45-53553eb612d1">Check Array Indexes Before Use</a>
+    </li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1859605391" Content_Hash="-117944096">
+  <Metadata>
+    <Id>8c18e0f3-425d-49a0-8c91-bd55ee2ad3d2</Id>
+    <Id_History>8c18e0f3-425d-49a0-8c91-bd55ee2ad3d2,815e7038-56b6-4d60-abb7-a7f6822650cf,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>If You Need to Support Interoperability, Consider Setting NegotiateServiceCredentials to False</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>If You Need to Support Interoperability, Consider Setting NegotiateServiceCredentials to False</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
+<li>Microsoft Visual Studio® 2008</li></li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>If you need to support interoperability, consider setting negotiateServiceCredentials to False.</p>
+  <h1>When</h1>
+  <p>When you need to support clients which does not understand the WS-Trust and WS-SecureConversation.</p>
+  <h1>How</h1>
+  <p>If you need to support clients which does not understand the WS-Trust and WS-SecureConversation, set the negotiateServiceCredentials attribute to False. </p>
+  <p>For Anonymous, Username or Certificate client credential types, setting this property to false implies that the service certificate must be available at the client out of band and that the client must specify the service's certificate to use. In the case of Windows credentials, setting this property to false causes an authentication based on KerberosToken. This requires that the client and service be part of a Kerberos domain.</p>
+  <p>Here is a configuration example:</p>
+  <pre>&lt;wsHttpBinding&gt;<br />  &lt;binding name="MessageAndUserName"&gt;<br />    &lt;security mode="Message"&gt;<br />      &lt;message clientCredentialType="UserName" negotiateCredentials=”false” algorithmSuite="Default" /&gt;<br />    &lt;/security&gt;<br />  &lt;/binding&gt;<br />&lt;/wsHttpBinding&gt;<br /></pre>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on message protection, see “Message Security” at <a href="http://msdn2.microsoft.com/en-us/library/ms733137.aspx">http://msdn2.microsoft.com/en-us/library/ms733137.aspx</a><li>For message security Q&amp;A, see the Message Protection section of “WCF 3.5 Questions and Answers“ at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Questions%20and%20Answers%20%28Q%26A%29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF%20Questions%20and%20Answers%20%28Q%26A%29&amp;referringTitle=Home</a></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

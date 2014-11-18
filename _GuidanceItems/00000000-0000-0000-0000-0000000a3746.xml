@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>00000000-0000-0000-0000-0000000a3746</Id>
+    <Id_History>00000000-0000-0000-0000-0000000a3746,bc2cc51f-21be-4684-ab4a-6b96bca20c69,</Id_History>
+    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
+    <Title>Validate URLs Passed to XMLHttpRequest.open</Title>
+    <Category>CORS</Category>
+    <Phase>Implementation</Phase>
+    <Technology>HTML5</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Validate URLs Passed to XMLHttpRequest.open</DirectLink>
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==Applies To==
+
+* HTML5
+
+==What to Do==
+
+Validate URLs passed to //XMLHttpRequest.open// to ensure that they can be trusted.
+
+==Why==
+
+Validating URLs passed to the //XMLHttpRequest.open// function prevents remote attackers from controlling your request.
+
+==When==
+
+Always validate URLs when passed to //XMLHttpRequest.open//.
+
+==How==
+
+To validate URLs passed to //XMLHttpRequest.open//:
+
+# **Identify all pages that use //XMLHttpRequest.open//.** Search application code for calls to //XMLHttpRequest.open//. Create a spreadsheet to list all code that uses //XMLHttpRequest.open//.
+# **Define trusted web sites.** Create a spreadsheet to list the sites that are considered trustworthy data sources by each piece of code that calls //XMLHttpRequest.open//. Define a RegEx for each trusted site in the spreadsheet. 
+# **Create anchors.** For each piece of code that calls //XMLHttpRequest.open//, use JavaScript to create an invisible DOM object that can be used to validate URLs.
+# **Assign href vaues to anchors.** For each anchor created in the previous step, assign the URL that needs to be validated as the href value to the anchor object. The URL that needs to be validated is the URL that is passed to the //XMLHttpRequest.open// method.
+# **Use the //hostname// property to validate URLs.** Use the //hostname// property of the anchor objects to validate the URLs assigned to them. The //hostname// property contains the hostname of the URL. Validate the hostname of the URLs against the corresponding RegEx in the spreadsheet of trusted sites. 
+
+{{{
+function validateURL(url) {
+  var anchor = document.createElement('a'),
+      isValid = false;
+  anchor.href = url;
+  alert(anchor.hostname)
+  if(/^www\.mywebsite\.com$/.test(anchor.hostname)) {
+    isValid = true;
+  }
+  anchor = null;
+  return isValid;
+}
+}}}
+
+==Problem Example==
+
+MyWebsite uses a variable to define the URL to be used within the XMLHttpRequest.open function. A remote attacker changes the value of this variable to another server, which causes a security threat.
+
+{{{
+/*
+* <http://mywebsite.com>:
+*/
+<html>
+<head>
+<script>
+var xhReq = new XMLHttpRequest();
+var xhrUrl = "http://www.mywebsite.com/filename.html";
+xhReq.open("GET", xhrUrl, false);
+xhReq.send(null);
+document.getElementById(‘response’).innerHTML = xhReq.responseText;
+</script>
+</head>
+
+<body>
+<div id=”response”></div>
+</body>
+</html>
+
+/*
+* <remote attacker from console>:
+*/
+xhrUrl = “http://www.maliciouswebsite.com/filename.html”;
+
+}}}
+
+\\
+
+==Solution Example==
+
+MyWebsite uses a variable to define the URL to be used within the XMLHttpRequest.open function. A remote attacker changes the value of this variable to another server, which causes a security threat. However, MyWebsite validates the URL to verify if it is coming from the same domain before making the request, which prevents a security threat.
+
+{{{
+/*
+* <http://mywebsite.com>:
+*/
+<html>
+<head>
+<script>
+var xhReq = new XMLHttpRequest();
+var xhrUrl = "http://www.mywebsite.com/filename.html";//would normally be a controllable value
+function validateURL(url) {
+  var anchor = document.createElement('a'),
+      isValid = false;
+  anchor.href = url;
+  alert(anchor.host)
+  if(/^www\.mywebsite\.com([:]\d+)?$/.test(anchor.host)) {
+    isValid = true;
+  }
+  anchor = null;
+  return isValid;
+}
+if(validateURL('http://www.mywebsite.com')) {
+    xhReq.open("GET", xhrUrl, false);
+    xhReq.send(null);
+    document.getElementById(‘response’).innerHTML = xhReq.responseText;
+}
+</script>
+</head>
+
+<body>
+<div id=”response”></div>
+</body>
+</html>
+
+/*
+* <remote attacker from console>:
+*/
+xhrUrl = “http://www.maliciouswebsite.com/filename.html”;
+
+}}}
+\\
+
+==Additional Resources==
+* For more information about XMLHttpRequest, see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest.
+* For more information about XMLHttpRequest.Open, see http://msdn.microsoft.com/en-us/library/windows/desktop/ms757849%28v=vs.85%29.aspx
+\\
+
+==CORS Guidelines==
+
+* [[00000000-0000-0000-0000-000000690310|Allow Only Trusted Domains in the Access-Control-Allow-Origin Header]]
+* [[00000000-0000-0000-0000-0000000a3746|Validate URLs Passed to XMLHttpRequest.open]]
+
+==CORS Checklist Items==
+
+* [[00000000-0000-0000-0000-00000095ebe9|Only Trusted Domains Are Allowed in the Access-Control-Allow-Origin Header]]
+* [[00000000-0000-0000-0000-0000000be99d|URLs Passed to XMLHttpRequest.open Are Validated]]
+]]></Data>
+  </Content>
+</TeamMentor_Article>

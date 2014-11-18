@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="595472889" Content_Hash="213071806">
+  <Metadata>
+    <Id>e50f4854-c427-470e-b9a7-2638ae697722</Id>
+    <Id_History>e50f4854-c427-470e-b9a7-2638ae697722,4d2a6bb5-dbd5-4570-9ebb-f421dc16b6d1,</Id_History>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>How to Test for Double Encoding Vulnerabilities</Title>
+    <Category>Testing</Category>
+    <Phase>Test</Phase>
+    <Technology>ASP.NET 4.0</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Test for Double Encoding Vulnerabilities</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies To</h1>
+  <ul>
+    <li>ASP.NET 4.0</li>
+  </ul>
+  <h1>Summary</h1>
+  <p>During a double encoding attack, the attacker encodes attack data twice using <i>hex representation of a character (using methods known as percent encoding or URL encoding)</i>&amp;nbsp;so that the attack data is not detected by security filters. This vulnerability is often used during SQL injection, cross-site scripting, and path traversal attacks in order to submit malicious data through request parameters.&amp;nbsp;A vulnerable application decodes the attack data twice before executing the malicious command.&amp;nbsp; </p>
+  <p>Follow these steps to test for double encoding bugs:</p>
+  <ul>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Start testing and exploring </li>
+    <li>Step 4: Execute additional testing<b>&amp;nbsp;</b></li>
+  </ul>
+  <h1>Step 1:&amp;nbsp; Understand Attack Scenarios</h1>
+  <p>The first step in testing for double encoding vulnerabilities is to understand the common attack scenarios:</p>
+  <ul>
+    <li>Path traversal </li>
+    <li>Cross-site scripting (XSS)&amp;nbsp;</li>
+  </ul>
+  <h2>
+    Scenario 1: Path Traversal
+  </h2>
+  <p>During a path traversal attack, an attacker traverses a directory in order to find a secret document:</p>
+  <p>
+    <font face="'Courier New'">http://victim/documents/getDocs.aspx?docname=../../secret.doc</font>
+  </p>
+  <p>However, the page <i>getDocs.aspx </i>filters out the filename provided in the URL and denies any sequence of two dots followed by a slash: "<em>../</em>" (without the quotes). To get around this, the attacker replaces the dots and &amp;nbsp;slashes with their URL-encoded equivalent (<em>%2e</em> and <em>%2f</em>, respectively):</p>
+  <p>
+    <font face="'Courier New'">%2e%2e%2f%2e%2e%2fprivate/secret.pdf</font>
+  </p>
+  <p>However, the application also recognizes the sequence <i>%2e%2e%2f</i> as a path traversal construct, and so denies the attack string. So the attacker executes a double encoding attack by re-encoding the percent (<em>%</em>) character with its URL-encoded equivalent (<em>%25</em>):</p>
+  <p>
+    <font face="'Courier New'">%252e%252e%252f%252e%252e%252fprivate/secret.pdf</font>
+  </p>
+  <p>A vulnerable application decodes the malicious string twice and translates it to a path traversal string, completing the attack.&amp;nbsp;</p>
+  <h2>
+    Scenario 2: Cross-site Scripting
+  </h2>
+  <p>During a cross-site scripting attack, an attacker needs to submit special characters like pointed brackets, slashes, and backslashes. The attacker might first try to execute a string like this:</p>
+  <p>
+    <font face="'Courier New'">&lt;script&gt;alert('XSS')&lt;/script&gt;</font>
+  </p>
+  <p>If the above string doesn’t work, the attacker might try to URL-encode special characters one time:</p>
+  <p>
+    <font face="'Courier New'">%3Cscript%3Ealert('XSS')%3C%2Fscript%3E</font>
+  </p>
+  <p>However, the application disallows this string because it contains dangerous URL-encoded characters such as <i>%3C and %3E.</i></p>
+  <p>Next, the attacker tries double encoding the attack string:&amp;nbsp;</p>
+  <p>
+    <font face="'Courier New'">%253Cscript%253Ealert('XSS')%253C%252Fscript%253E</font>
+  </p>
+  <p>Note that the new construct no longer contains singly encoded dangerous hex characters like <em>%3C</em>. The application recognizes the string as safe, and, because it is vulnerable to double encoding, it double decodes the string, translating it to the original XSS construct.&amp;nbsp;</p>
+  <h1>Step 2: Analyze causes and countermeasures</h1>
+  <p>The next step in testing for double encoding bugs is to understand what causes them and how to protect against them.</p>
+  <p />
+  <p>Some applications protect against malicious input by filtering out dangerous characters. Incoming strings are checked against a list, known as a <i>blacklist</i>, of dangerous constructs<i>. </i>If the input contains a blacklisted construct like “<em>../</em>”, the application doesn’t allow the operation. For instance, the following code implements a blacklist check in <i>exsistsInBlacklist:</i></p>
+  <p>
+    <font face="'Courier New'">if (!existsInBlackList(Request.QueryString["filename"])) &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;<strong>(1)<br /></strong>{&amp;nbsp;<br />&amp;nbsp; string filename =&amp;nbsp;Server.UrlDecode(Request.QueryString["filename"]);<br />&amp;nbsp; StreamReader streamReader = new StreamReader(filename);&amp;nbsp;&amp;nbsp; &amp;nbsp;<strong>&amp;nbsp; &amp;nbsp; &amp;nbsp;(2)<br /></strong>&amp;nbsp; while (streamReader.Peek() &gt;= 0)<br />&amp;nbsp; {<br />&amp;nbsp; &amp;nbsp; Response.Write(streamReader.ReadLine());<br />&amp;nbsp; }<br />&amp;nbsp; streamReader.Close();<br />}</font>
+  </p>
+  <p>If the application wants to protect against path traversal, it would need to include double-encoded characters sequences such as <i>%252e%252e%252f </i>in its blacklist. Failing to do so would lead to a double encoding vulnerability. A better option would be implementing the check for a malicious construct on the canonical form. However, blacklists are not recommended because they must account for 100% of dangerous constructs; any dangerous construct not covered in the blacklist allows attacks on the application.</p>
+  <p>To protect against this vulnerability, use a <i>whitelist</i> approach. Whitelists allow only valid constructs; any construct not in the whitelist is automatically disallowed. This way, developers need only define what is good, and don’t have to worry about covering 100% of all dangerous constructs. For instance, the code below enforces a whitelist that uses a regular expression to check for safe input filenames. The regular expression allows only filenames of five to eight upper- or lower-case letters followed by the “<em>.doc</em>” string (with no quotes). Any string that doesn’t match this form, like the path traversal string “<em>../</em>”, causes the application to produce an error message:</p>
+  <p>
+    <font face="'Courier New'">string filename = Server.UrlDecode(Request.QueryString["filename"]);&amp;nbsp;<strong> (1)<br /></strong>Regex validFilename = new Regex("^[a-zA-Z]{5,8}\.doc$");&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <strong>(2)<br /></strong>if (!validFilename.IsMatch(filename)) &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;<br />{<br />&amp;nbsp; Response.Write("invalid input");<br />}<br />else<br />{<br />&amp;nbsp; StreamReader streamReader = new StreamReader(filename);<br />&amp;nbsp; while (streamReader.Peek() &gt;= 0)<br />&amp;nbsp; /* continue opening file */&amp;nbsp;<br />}</font>
+  </p>
+  <p>Note that the code uses the whitelist approach on the canonical form of the input. It first decodes the input (1) and then calls the regular expression on the decoded input (2).<b>&amp;nbsp;</b></p>
+  <h1>Step 3: Start Testing and Exploring</h1>
+  <p>Now that you’ve looked at double encoding attack scenarios and understand what causes them and how to protect against them, it is necessary to include double encoding issues when testing for different security issues.&amp;nbsp; </p>
+  <h2>
+    Test for Double Encoding during Path Traversal
+  </h2>
+  <p>Follow the next steps to test for double encoding bugs during path traversal attacks:</p>
+  <ol>
+    <li>Identify all locations in the application where the input is used to find a file on the server. </li>
+    <li>Submit path traversal attack strings on all such locations. Modify any path traversal attack string with a double encoding string.<i>&amp;nbsp;&amp;nbsp; </i></li>
+    <li>Check if the path is traversed.</li>
+  </ol>
+  <p>Expected results:&amp;nbsp; No paths should be allowed to be traversed.</p>
+  <p>
+    Example Attack Strings:
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>
+            <b>Attack String</b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>Single encoding</b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>Double encoding</b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>../../..</p>
+        </td>
+        <td>
+          <p>..%2F..%2F..</p>
+        </td>
+        <td>
+          <p>..%252F..%252F..</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>../../..</p>
+        </td>
+        <td>
+          <p>%2E%2E%2F%2E%2E%2F%2E%2E</p>
+        </td>
+        <td>
+          <p>%252E%252E%252F%252E%252E%252F%252E%252E</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <b>&amp;nbsp;</b>
+  </p>
+  <p>Note that some attack strings can be single-encoded differently. This applies to all of the remaining attacks.<b>&amp;nbsp;</b></p>
+  <h2>
+    Test for Double Encoding during Cross-site Scripting (XSS)
+  </h2>
+  <p>Follow the next steps to test for double encoding bugs during cross-site scripting:</p>
+  <ol>
+    <li>Identify all locations in the application where the input is a) reflected from web forms, b) URL parameters, or c) loaded from a persistent store such as a database. </li>
+    <li>Submit XSS attack strings on all such locations. Modify any URL-encoded XSS attack string with a double-encoded string. </li>
+    <li>Reload the page containing the modified location and check if the injected script executes.</li>
+  </ol>
+  <p />
+  <p>Expected results:&amp;nbsp;None of the injected scripts should execute.</p>
+  <p>
+    Example Attack Strings:
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>
+            <b>Attack String</b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>Single encoding</b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>Double encoding</b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>&lt;script&gt;alert('XSS')<br />&lt;/script&gt;</p>
+        </td>
+        <td>
+          <p>%3Cscript%3Ealert('XSS')%3C%2Fscript%3E</p>
+          <p>&amp;nbsp;</p>
+        </td>
+        <td>
+          <p>%253Cscript%253Ealert('XSS')%253C%252Fscript%253E</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>&gt;"'&gt;<br />&lt;img src='javascript:alert('XSS');"&gt;</p>
+        </td>
+        <td>
+          <p>%3E%22%27%3E%3Cimg%20src%3D%27javascript%3Aalert%28%27XSS%27%29%3B%22%3E</p>
+        </td>
+        <td>
+          <p>%253E%2522%2527%253E%253Cimg%2520src%253D%2527javascript%253Aalert%2528%2527XSS%2527%2529%253B%2522%253E</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>
+    Test for Double Encoding during SQL Injection
+  </h2>
+  <p>Follow the next steps to test for double encoding bugs in SQL injection scripting:</p>
+  <ol>
+    <li>Identify all locations in the application where input is a) reflected from web forms, b) URL parameters, c) GUIs, or d) loaded from a persistent store such as a database. </li>
+    <li>Submit SQ<i>L injection strings </i>on all such locations<i>.&amp;nbsp;</i><b></b>Modify any URL-encoded SQL injection attack string with a double-encoded string.<i>&amp;nbsp;&amp;nbsp; </i></li>
+    <li>Check if the application processed the injected SQL statement.</li>
+  </ol>
+  <p />
+  <p>Expected results: None of the injected statements should be allowed.</p>
+  <p>
+    Example Attack Strings:
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>
+            <b>Attack String</b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>Single encoding</b>
+          </p>
+        </td>
+        <td>
+          <p>
+            <b>Double encoding</b>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>a' or 1=1--</p>
+        </td>
+        <td>
+          <p>a%27%20or%201%3D1--</p>
+        </td>
+        <td>
+          <p>a%2527%2520or%25201%253D1--</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>') or ('a'='a</p>
+        </td>
+        <td>
+          <p>%27%29%20or%20%28%27a%27%3D%27a</p>
+        </td>
+        <td>
+          <p>%2527%2529%2520or%2520%2528%2527a%2527%253D%2527a</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h1>Step 4: Execute Additional Testing</h1>
+  <p>The final step in testing for double encoding vulnerabilities is to look for them when executing any attacks that use hex character encoding. Additional attacks may include:</p>
+  <ul>
+    <li>XML injection </li>
+    <li>LDAP injection </li>
+    <li>Command injection </li>
+    <li>HTTP response splitting </li>
+    <li>URL parameter tampering </li>
+    <li>XPath injection&amp;nbsp;</li>
+  </ul>
+  <h1>Conclusions</h1>
+  <p>Attackers commonly use double encoding to bypass security filters when attacking the application through HTTP request parameters. To test for double encoding bugs, you must understand the attack scenarios, what causes them, and how to defend against them. Apply this knowledge when testing for request parameter bugs such as XSS, SQL injection, and path traversal. Finally, include double encoding test cases for any security vulnerability payloads tested via HTTP request parameters.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>

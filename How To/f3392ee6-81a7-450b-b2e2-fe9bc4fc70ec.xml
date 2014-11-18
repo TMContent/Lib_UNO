@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1553191707" Content_Hash="-957549037">
+  <Metadata>
+    <Id>f3392ee6-81a7-450b-b2e2-fe9bc4fc70ec</Id>
+    <Id_History>f3392ee6-81a7-450b-b2e2-fe9bc4fc70ec,db4ad5ba-ebdb-4c80-bfa3-d7087a6a42a2,</Id_History>
+    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Title>How to Audit Security Events</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology>WCF 3.5</Technology>
+    <Type>How To</Type>
+    <DirectLink>How to Audit Security Events</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority>J.D. Meier, Jason Taylor, Prashant Bansode, Carlos Farre, Madhu Sundararajan, Rob Boucher, Steve Gregersen</Priority>
+    <Status />
+    <Source>SI</Source>
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+  </ul>
+  <h1>Description</h1>
+  <p>You can use WCF Auditing to audit security events such as authentication and authorization failures. WCF service auditing can allow you to detect an attack that has occurred or is in progress. In addition, auditing can help you debug security-related problems. For example, if an error in the configuration of the authorization or checking policy accidentally denies access to an authorized user, you can discover and isolate the cause of this error by examining the auditing events in the event log.</p>
+  <p>Use the following steps to enable authentication and authorization auditing for your WCF service:</p>
+  <ol>
+    <li>Open the web.config file of the WCF service using the Configuration editor tool (SvcConfigEditor.exe). <li>In the Configuration editor, navigate to the Advanced node. <li>Select the Behavior: ServiceBehavior section and add a new service behaviour extension element. <li>In the Adding Behavior Element Extension Sections dialog box select serviceSecurityAudit and click Add button. <li>In the Configuration section, select serviceSecurityAudit option, under Service Behaviors. <li>Set the MessageAuthenticationAuditLevel attribute to SuccessOrFailure choosing from the drop down. <li>Set the ServiceAuthorizationAuditLevel attribute to SuccessOrFailure choosing from the drop down. <li>On the configuration editor dialog, go to the File menu and select Save. <li>In Visual Studio, verify your configuration. The configuration should look as follows.</li></li></li></li></li></li></li></li></li>
+  </ol>
+  <blockquote>
+    <pre>&amp;#8230;<br />&lt;behaviors&gt;<br />  &lt;serviceBehaviors&gt;<br />    &lt;behavior name="ServiceBehavior"&gt;<br />      &lt;serviceMetadata httpGetEnabled="true" /&gt;<br />      &lt;serviceDebug includeExceptionDetailInFaults="false" /&gt;<br />        &lt;serviceSecurityAudit messageAuthenticationAuditLevel="SuccessOrFailure" /&gt;<br />        &lt;serviceSecurityAudit serviceAuthorizationAuditLevel="SuccessOrFailure" /&gt;<br />    &lt;/behavior&gt;<br />  &lt;/serviceBehaviors&gt;<br />&lt;/behaviors&gt;<br />&amp;#8230;<br /></pre>
+  </blockquote>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information on auditing, see &amp;#8220;Auditing Security Events&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms731669.aspx">http://msdn2.microsoft.com/en-us/library/ms731669.aspx</a><li>For more information see &amp;#8220;How to: Audit Windows Communication Foundation Security Events&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms734737.aspx">http://msdn2.microsoft.com/en-us/library/ms734737.aspx</a><li>For auditing Guidelines, see the Auditing &amp; Logging section of &amp;#8220;WCF 3.5 Guidelines &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home</a><br /></li></li></li>
+  </ul>
+  <hr />
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  </Content>
+</TeamMentor_Article>
