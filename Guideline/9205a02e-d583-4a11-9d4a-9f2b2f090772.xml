@@ -3,11 +3,11 @@
   <Metadata>
     <Id>9205a02e-d583-4a11-9d4a-9f2b2f090772</Id>
     <Id_History>9205a02e-d583-4a11-9d4a-9f2b2f090772,8a59f1c9-bfe2-4b9f-a0e9-9a67c948599a,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Automatically Lock Inactive User Accounts</Title>
     <Category>Authentication</Category>
     <Phase>Design</Phase>
-    <Technology>ASP.NET 4.0</Technology>
+    <Technology> Any</Technology>
     <Type>Guideline</Type>
     <DirectLink>Automatically Lock Inactive User Accounts</DirectLink>
     <Tag />
@@ -18,11 +18,7 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Do</h1>
+    <Data><![CDATA[<h1>What to Do</h1>
   <p>Automatically lock inactive user accounts. Log when accounts have been locked.</p>
   <h1>Why</h1>
   <p>Inactive user accounts increase the attack surface of the application and can be used by an attacker as a means of entry.</p>
@@ -42,18 +38,8 @@
     </li>
     <li>
       <p>
-        <strong>Set a lockout mechanism.</strong> Establish a mechanism to verify the current period of inactivity and automatically set the disabled bit for inactive accounts. Using the application or database server's scheduler, activate such functionality to run during the hours with least user activity. Keep in mind that inactive accounts should be disabled, but not removed until it is confirmed that they should be completely removed.</p>
-      <ul>
-        <li>
-          <p>
-            <strong>Database.</strong> If your application uses a backend database as its user store, consider using a scheduled database transaction to lock inactive user accounts. For example, the following database transaction would lock all user accounts that have been inactive for more than 30 days. Such transaction should be scheduled to run once a day:</p>
-          <pre>sql&gt; update users set locked = 1 where (current_date - 30) &gt; last_login_date</pre>
-        </li>
-        <li>
-          <p>
-            <strong>Active Directory.</strong> If your application uses Active Directory as its user store, inactive accounts may be required to be locked by your organization's network administrators.</p>
-        </li>
-      </ul>
+        <strong>Set a lockout mechanism.</strong> Establish a mechanism to verify the current period of inactivity and automatically set the disabled bit for inactive accounts. Using the application or database server's scheduler, activate such functionality to run during the hours with least user activity. Keep in mind that inactive accounts should be disabled, but not removed until it is confirmed that they should be completely removed. If your application uses a backend database as its user store, consider using a scheduled database transaction to lock inactive user accounts. For example, the following database transaction would lock all user accounts that have been inactive for more than 30 days. Such transaction should be scheduled to run once a day:</p>
+      <pre>sql&gt; update users set locked = 1 where (current_date - 30) &gt; last_login_date</pre>
     </li>
   </ol>
   <h1>Problem Example</h1>
