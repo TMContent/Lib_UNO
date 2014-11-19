@@ -3,7 +3,7 @@
   <Metadata>
     <Id>38342130-4e4b-47df-afd9-c7e8c86f77ee</Id>
     <Id_History>38342130-4e4b-47df-afd9-c7e8c86f77ee,d0ca6a60-50c7-4476-9485-00bbd36b9e9f,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Use ESAPI Executor</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
@@ -37,28 +37,9 @@
   <h1>Solution Example</h1>
   <span>
     <p>The following (insecure) example shows an application using dynamic data to execute a system command.</p>
-    <pre>
-      <p>//DO NOT USE THIS</p>
-      <p>HttpServletRequest request = ...;</p>
-      <p>String command = request.getParameter("cmd") &amp;#43; " -a 123 -b 456";</p>
-      <p>System.getRuntime().exec(command);</p>
-    </pre>
+    <pre>//DO NOT USE THIS<br />HttpServletRequest request = ...;<br />String command = request.getParameter("cmd") + " -a 123 -b 456";<br />System.getRuntime().exec(command);    </pre>
     <p>The following example shows an application using ESAPI executing a known system command while using dynamic data. Because the executor is used, only a command from the whitelist will be executed. Any other commands will be rejected.</p>
-    <pre>
-      <p>HttpServletRequest request = ...;</p>
-      <p>List&lt;String&gt; params = ...;</p>
-      <p>String cmdRef = request.getParameter("cmdRef"); </p>
-      <p>//Map indirect command reference to actual command</p>
-      <p>//ex. something like "Ax7PrTz3" might map to "C:\myapp\myother.exe"</p>
-      <p>//This prevents users specifying actual commands as request parameters.</p>
-      <p>//They just specify a random identifier and the server contains</p>
-      <p>//the mappings (indirect object reference)</p>
-      <p>String cmd = getActualCommand(cmdRef);</p>
-      <p>try &amp;#123;</p>
-      <p>&amp;#9;ESAPI.executor().executeSystemCommand(command, params) throws &amp;#123;</p>
-      <p>&amp;#125; catch (ExecutorException ee) &amp;#123;</p>
-      <p>&amp;#9;//an invalid command was attempted ... handle exception here</p>
-      <p>&amp;#125;</p>
+    <pre>HttpServletRequest request = ...;<br />List&lt;String&gt; params = ...;<br />String cmdRef = request.getParameter("cmdRef"); <br /><br />//Map indirect command reference to actual command<br />//ex. something like "Ax7PrTz3" might map to "C:\myapp\myother.exe"<br />//This prevents users specifying actual commands as request parameters.<br />//They just specify a random identifier and the server contains<br />//the mappings (indirect object reference)<br />String cmd = getActualCommand(cmdRef);<br />try {<br />	ESAPI.executor().executeSystemCommand(command, params) throws {<br />} catch (ExecutorException ee) {<br />	//an invalid command was attempted ... handle exception here<br />}
     </pre>
     <p>In addition to using this function, you'll need to update the <em>ESAPI.properties</em> file for your application to inform ESAPI what the acceptable executables are for your application. An example of the snippet you need to update is below:</p>
     <pre>Executor.ApprovedExecutables=C:\\myapp\\myprog.exe,C:\\myapp\\myother.exe</pre>
@@ -81,8 +62,8 @@
     </li>
     <li>
       <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">
-        <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">Validate All Input Passed to the Database</a>
       </a>
+      <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">Validate All Input Passed to the Database</a>
     </li>
     <li>
       <a href="/article/a5491c44-164b-4046-94d3-b575b9745e8b">Filter All User-Supplied Filename and Path Input</a>
