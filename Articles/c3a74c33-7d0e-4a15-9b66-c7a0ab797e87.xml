@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>c3a74c33-7d0e-4a15-9b66-c7a0ab797e87</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Force Change of First-use Passwords</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Do==
+
+Force the change of the first-use password.
+
+==Why==
+
+Force the change of the first-use password to make sure that only the user knows the password. Otherwise, whoever set the first-use password will also know it.
+
+==How==
+
+To force the change of the first-use password:
+
+# **Identify authentication code.** Make a spreadsheet about the code that implements authentication in the application. Record the names of the functions and the source code files containing them in the spreadsheet.
+# **Check if the password needs to be changed.** Identify the function that validates the entered passwords. If it doesn't already do so, modify it to check whether the password needs to be changed. The easiest way to do this is to have a flag associated with the stored authentication credentials that indicates whether a given password needs to be changed. For example, if password hashes are stored in a relational database table, the flag can be an additional boolean column or field in the table schema - the value of this field should be checked during authentication to determine whether the user needs to change the password.
+# **Trigger password change after first successful authentication.** Find code that validates the entered passwords. If it doesn't already do so, modify it to prompt the user to change the password after successfully entering the password, if the password changing flag is set. The user should not be able to do anything else until the password is changed, so that the user doesn't just ignore the password change prompt.
+# **Set a flag to force password change on passwords that are assigned to the user.** Find code that allows setting the user's password by an administrator. If it doesn't already do so, modify it to set the flag that indicates that the user has to change the password upon successful authentication.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
