@@ -19,247 +19,142 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>
-    <span>Applies to</span>
-  </h1>
+Applies to
+</h1>
   <ul>
     <li>J2EE applications</li>
   </ul>
   <p>
     <b>
-      <span>
-      </span>
     </b>
   </p>
   <h1>
-    <span>Summary</span>
-  </h1>
-  <p>Integer underflow bugs occur when an application doesn&amp;#8217;t properly check the boundaries of an arithmetic operation involving integer variables, allowing one of the integer variables to take a value that is less than the minimum integer.<span></span>When this happens, the underflowed integer variable wraps up to a very large integer and ends up holding an unexpected value.<span>&amp;nbsp;&amp;nbsp; </span></p>
-  <p>Integer underflows are similar to integer overflows with the only difference being&amp;nbsp;that the goal of an&amp;nbsp;integer underflow attacks is to generate a value that is lower than the lower boundary of an integer while overflows target at exceeding the higher boundary of the integer.<span></span>Attackers use integer underflow bugs to execute attacks on the business logic of J2EE Web applications.</p>
+Summary
+</h1>
+  <p>Integer underflow bugs occur when an application doesn’t properly check the boundaries of an arithmetic operation involving integer variables, allowing one of the integer variables to take a value that is less than the minimum integer.When this happens, the underflowed integer variable wraps up to a very large integer and ends up holding an unexpected value.   </p>
+  <p>Integer underflows are similar to integer overflows with the only difference being that the goal of an integer underflow attacks is to generate a value that is lower than the lower boundary of an integer while overflows target at exceeding the higher boundary of the integer.Attackers use integer underflow bugs to execute attacks on the business logic of J2EE Web applications.</p>
   <p>Follow these steps to test for integer underflows in J2EE:</p>
   <ul>
-    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Execute test cases</li></li></li>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Execute test cases</li>
   </ul>
   <p>
     <b>
-      <span>
-      </span>
     </b>
   </p>
   <h1>
-    <span>Step 1: Understand Attack Scenarios</span>
-  </h1>
-  <p>The first step in learning how to test for integer underflow bugs is to understand the anatomy of an integer underflow scenario.<span>&amp;nbsp;</span>In unmanaged applications written in languages like C or C&amp;#43;&amp;#43;, attackers use integer underflow conditions to create an incorrect buffer size&amp;nbsp;and trigger a stack or heap overflow to execute arbitrary code or to crash the application to create a denial-of-service attack.<span>&amp;nbsp;</span>Although these two attacks are not possible in J2EE environments, attackers can exploit integer underflow conditions to execute logical attacks on J2EE applications.</p>
-  <p>An integer underflow attack is possible when an application uses client-supplied input as a variable in an integer operation.<span>&amp;nbsp;</span>To trigger the underflow,<span>&amp;nbsp;</span>an attacker usually passes a small or large enough value, depending on the underlying application,<span></span>so that the result of the operation is unexpected.<span></span>Consider the following code:</p>
-  <pre>
-    <span>&amp;nbsp;<br />response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />int fixed_score&amp;nbsp; = 10000;<br />int current_score&amp;nbsp; = 0;<br />int errors&amp;nbsp; = Integer.parseInt(request.getParameter("errors"));<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />if (errors &gt; 0)<br />&amp;#123;<br /><strong>current_score&amp;nbsp; = fixed_score -(errors &amp;#42; 50);</strong><br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; out.write("Current score is: " &amp;#43; Integer.toString(current_score));<br />&amp;#125;<br />else<br />&amp;#123;<br />      out.write("Invalid input");<br />&amp;#125;<br />out.close();<br /></span>
-    <span>&amp;nbsp;</span>
-  </pre>
-  <p>The application uses the code above to calculate a score for its clients.<span>&amp;nbsp;</span>It starts from a fixed score set to 10,000 and subtracts error points (50 points for each error) from the URL parameter <strong>errors</strong>.<span></span>If the application uses a normal error count like 10, the score is calculated as expected:</p>
-  <pre>
-    <span>http://some_site/example/getScore?errors=10</span>
-  </pre>
-  <pre>
-    <span>Current score is: 9500</span>
-  </pre>
+Step 1: Understand Attack Scenarios
+</h1>
+  <p>The first step in learning how to test for integer underflow bugs is to understand the anatomy of an integer underflow scenario. In unmanaged applications written in languages like C or C++, attackers use integer underflow conditions to create an incorrect buffer size and trigger a stack or heap overflow to execute arbitrary code or to crash the application to create a denial-of-service attack. Although these two attacks are not possible in J2EE environments, attackers can exploit integer underflow conditions to execute logical attacks on J2EE applications.</p>
+  <p>An integer underflow attack is possible when an application uses client-supplied input as a variable in an integer operation. To trigger the underflow, an attacker usually passes a small or large enough value, depending on the underlying application,so that the result of the operation is unexpected.Consider the following code:</p>
+  <pre>response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br /><br />int fixed_score  = 10000;<br />int current_score = 0;<br />int errors  = Integer.parseInt(request.getParameter("errors"));<br /><br />if (errors &gt; 0)<br />{<br /><strong>current_score  = fixed_score -(errors * 50);</strong><br />out.write("Current score is: " + Integer.toString(current_score));<br />}<br />else<br />{<br />out.write("Invalid input");<br />}<br />out.close();
+</pre>
+  <p>The application uses the code above to calculate a score for its clients. It starts from a fixed score set to 10,000 and subtracts error points (50 points for each error) from the URL parameter <strong>errors</strong>.If the application uses a normal error count like 10, the score is calculated as expected:</p>
+  <pre>http://some_site/example/getScore?errors=10
+<br />
+Current score is: 9500
+</pre>
   <p>However an attacker might tamper with the <em>errors </em>URL parameter and pass a value that generates an underflow when used by the application to calculate the current score:</p>
-  <pre>
-    <span>http://some_site/example/getScore?e</span>
-    <span>rrors=<span><strong>42949873</strong></span></span>
-  </pre>
-  <pre>
-    <span>
-      <strong>Current score is: 2147483646</strong>
-    </span>
-  </pre>
+  <pre>http://some_site/example/getScore?errors=42949873
+Current score is: 2147483646
+</pre>
   <p>
-    <span>This occurs because the application multiplies </span>42949873 by 50 and subtracts the result from 10000.<span>&amp;nbsp;</span>This generates an exceedingly large negative number which exceeds the lower integer boundary (-2147483647 in case of 32-bit signed integers).<span>&amp;nbsp; </span>As a consequence, the result of the operation wraps up to a large positive integer.<span><span></span>Attackers can exploit this flaw to set higher scores for themselves.</span></p>
+This occurs because the application multiplies 42949873 by 50 and subtracts the result from 10000. This generates an exceedingly large negative number which exceeds the lower integer boundary (-2147483647 in case of 32-bit signed integers).  As a consequence, the result of the operation wraps up to a large positive integer.Attackers can exploit this flaw to set higher scores for themselves.</p>
   <p>
-    <span>In summary, an integer underflow attack follows these steps:</span>
-  </p>
+In summary, an integer underflow attack follows these steps:
+</p>
   <ol>
     <li>
-      <span>The attacker finds an input variable that takes an integer value.</span>
-      <li>
-        <span>The attacker modifies the input variable with an unexpected value, far from the default.</span>
-        <li>
-          <span>The attacker submits a request including modified input variable.</span>
-          <li>
-            <span>The attacker observers how the application reacts.</span>
-          </li>
-        </li>
-      </li>
-    </li>
+  The attacker finds an input variable that takes an integer value.
+</li>
+    <li>
+  The attacker modifies the input variable with an unexpected value, far from the default.
+</li>
+    <li>
+  The attacker submits a request including modified input variable.
+</li>
+    <li>
+  The attacker observers how the application reacts.
+</li>
   </ol>
   <h1>
-    <span>Step 2: Analyze Causes and Countermeasures</span>
-  </h1>
+Step 2: Analyze Causes and Countermeasures
+</h1>
   <p>
-    <span>Next it is necessary to analyze what causes integer underflow bugs and&amp;nbsp;and how to protect against them.<span>&amp;nbsp;</span>This knowledge will help you identify integer underflow vulnerabilities in source code and prepare to test for them in your application.</span>
-  </p>
+Next it is necessary to analyze what causes integer underflow bugs and and how to protect against them. This knowledge will help you identify integer underflow vulnerabilities in source code and prepare to test for them in your application.
+</p>
   <p>
-    <span>Integer underflows occur when an application uses a client-supplied value in an arithmetic operation involving integer variables without checking if the supplied value will cause one of the integer variables to exceed its minimum bondary.<span></span>For instance, in the previous scenario the application calculates the current score with an integer variable that is directly provided by<i></i>client using the <em>errors </em>URL parameter:</span>
-  </p>
-  <pre>
-    <span>current_score<span>&amp;nbsp; </span>= fixed_score -(errors &amp;#42; 50);</span>
-    <span>
-    </span>
-  </pre>
+Integer underflows occur when an application uses a client-supplied value in an arithmetic operation involving integer variables without checking if the supplied value will cause one of the integer variables to exceed its minimum bondary.For instance, in the previous scenario the application calculates the current score with an integer variable that is directly provided by<i></i>client using the <em>errors </em>URL parameter:
+</p>
+  <pre>current_score  = fixed_score - (errors * 50);
+</pre>
   <p>
-    <span>Even though the application checks for errors being a negative (so that attackers don&amp;#8217;t add their error points directly), it failes to check for an upper boundary of errors and allows for an underflow situation.</span>
-  </p>
+Even though the application checks for errors being a negative (so that attackers don’t add their error points directly), it failes to check for an upper boundary of errors and allows for an underflow situation.
+</p>
   <p>
-    <span>
-    </span>
-    <span>To protect against an underflow situation, the application could have added an additional check for a maximum number of errors:</span>
-    <span>
-    </span>
-  </p>
-  <pre>
-    <span>response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />int fixed_score&amp;nbsp; = 10000;<br />int maximum_errors = 500;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />int current_score&amp;nbsp; = 0;<br />int errors&amp;nbsp; = Integer.parseInt(request.getParameter("errors"));<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br /><strong>if (errors &gt; 0 &amp;&amp; errors &lt;= maximum_errors)</strong><br />&amp;#123;<br />      current_score&amp;nbsp; = fixed_score -(errors &amp;#42; 50);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; out.write("Current score is: " &amp;#43; Integer.toString(current_score));<br />&amp;#125;<br />else<br />&amp;#123;<br />      out.write("Invalid input");<br />&amp;#125;<br />out.close();<br />&amp;nbsp;</span>
-  </pre>
+
+
+To protect against an underflow situation, the application could have added an additional check for a maximum number of errors:
+
+
+</p>
+  <pre>response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br /><br />int fixed_score  = 10000;<br />int maximum_errors = 500;<br />int current_score  = 0;<br />int errors  = Integer.parseInt(request.getParameter("errors"));<br /><br /><strong>if (errors &gt; 0 &amp;&amp; errors &lt;= maximum_errors)</strong><br />{<br />      current_score  = fixed_score -(errors * 50);<br />      out.write("Current score is: " + Integer.toString(current_score));<br />}<br />else<br />{<br />      out.write("Invalid input");<br />}<br />out.close();
+<br /></pre>
   <h1>
-    <span>Step 3: Execute Test Cases</span>
-  </h1>
-  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of integer underflow bugs, it is necessary to execute practical test cases to check for them in your J2EE application.</p>
+Step 3: Execute Test Cases
+</h1>
+  <p>Now that you’ve reviewed the theoretical aspects of integer underflow bugs, it is necessary to execute practical test cases to check for them in your J2EE application.</p>
   <h2>
-    <span>
-      <em>Test for Integer Underflow Bugs</em>
-    </span>
+    <em>Test for Integer Underflow Bugs</em>
   </h2>
-  <p>It is recommended to test for integer underflow bugs by modifying any client-accessible integer variable such as a URL parameter as shown in the scenarios section.<span></span>Follow these steps to test for integer underflow bugs:</p>
+  <p>It is recommended to test for integer underflow bugs by modifying any client-accessible integer variable such as a URL parameter as shown in the scenarios section.Follow these steps to test for integer underflow bugs:</p>
   <ol>
-    <li>Identify an input variable that takes an integer variable.<span></span>Such as input variables are usually passed in URL parameters, Web forms (using visible or hidden input tags), cookies, or Flash parameters. <li>Modify the input variable with an expected integer value and see how the application reacts.<span>&amp;nbsp; </span><li>Modify the input variable with a value that is close to the minimum and maximum integer value (see Table 1 below).<br />During this step, consider cases where the application performs an arithmetic operation on the client input such as the scenario shown in Section 1.<span></span>Note that in the scenario, the attacker modifies the integer variable with 42949873, a variable that is not close to any of the integer type boundaries.<span>&amp;nbsp;</span>However, the application multiplies the input by 50 and subtracts the result from 10,000, so the attacker is actually trying to modify the target unsigned integer<span></span>to -2147483648, a value that is close the boundary.</li></li></li>
+    <li>Identify an input variable that takes an integer variable.Such as input variables are usually passed in URL parameters, Web forms (using visible or hidden input tags), cookies, or Flash parameters. </li>
+    <li>Modify the input variable with an expected integer value and see how the application reacts.  </li>
+    <li>Modify the input variable with a value that is close to the minimum and maximum integer value (see Table 1 below).<br />During this step, consider cases where the application performs an arithmetic operation on the client input such as the scenario shown in Section 1.Note that in the scenario, the attacker modifies the integer variable with 42949873, a variable that is not close to any of the integer type boundaries. However, the application multiplies the input by 50 and subtracts the result from 10,000, so the attacker is actually trying to modify the target unsigned integerto -2147483648, a value that is close the boundary.</li>
   </ol>
-  <p>Expected results:&amp;nbsp;A vulnerable application will most likely show a different behavior or output for Steps 2 and 3.<span>&amp;nbsp; </span>For instance, it might display an exceedingly large number for Step 3 while displaying expected output for Step 2 .</p>
+  <p>Expected results: A vulnerable application will most likely show a different behavior or output for Steps 2 and 3.  For instance, it might display an exceedingly large number for Step 3 while displaying expected output for Step 2 .</p>
   <table>
     <tbody>
       <tr>
         <td>
-          <pre>
-            <span>Data type</span>
-          </pre>
-        </td>
+Data type
+
+	</td>
         <td>
-          <pre>
-            <span>Minimum / Maximum Value</span>
-          </pre>
-        </td>
+Minimum / Maximum Value
+
+	</td>
       </tr>
       <tr>
         <td>
-          <pre>
-            <span>int</span>
-          </pre>
-        </td>
+int
+
+	</td>
         <td>
-          <pre>
-            <span>-2147483647 / 2147483647</span>
-          </pre>
-        </td>
+-2147483647 / 2147483647
+
+	</td>
       </tr>
       <tr>
         <td>
-          <pre>
-            <span>short</span>
-          </pre>
-        </td>
+short
+
+	</td>
         <td>
-          <pre>
-            <span>- </span>
-            <span>32767 / 32767</span>
-          </pre>
-        </td>
+-32767 / 32767
+	  
+	</td>
       </tr>
     </tbody>
   </table>
   <p>
-    <span>
-      <strong>Table 1 - Minimum and maximum integer values for integer-related types in Java</strong>
-    </span>
+    <strong>Table 1 - Minimum and maximum integer values for integer-related types in Java</strong>
   </p>
   <h1>
-    <span>Conclusions</span>
-  </h1>
-  <p>Integer underflow vulnerabilities occur due to implementation flaws that allow attackers to alter an integer variable that is used by an application&amp;nbsp;in an arithmetic operation. Attackers attempt to store in the target integer variable a value that is less than the minimum allowed by the variable&amp;#8217;s type.<span>&amp;nbsp;</span>Integer underflows can be used by attackers to attack the business logic of an application such as calculating incorrect scores and so on.<span>&amp;nbsp;</span>To test for them, it is first necessary to understand how integer underflow attacks occur and how to protect against them, then alter any input integer variable with a value close to the minimum or maximum boundaries for that data type.</p>
-  <h1>Input and Data Validation Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/b531d29c-86f7-4812-90ce-5f3f0f780aba">Validate Input from All Sources</a>
-    </li>
-    <li>
-      <a href="/article/c98695c5-cf02-44a1-96bf-1f8046b8ad9d">Validate Input for Length, Range, Format, and Type</a>
-    </li>
-    <li>
-      <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">
-        <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">Validate All Input Passed to the Database</a>
-      </a>
-    </li>
-    <li>
-      <a href="/article/a5491c44-164b-4046-94d3-b575b9745e8b">Filter All User-Supplied Filename and Path Input</a>
-    </li>
-    <li>
-      <a href="/article/9f21442f-2aee-4573-8be6-a5b51d9c89b8">Do Not Rely on Client-Side Validation</a>
-    </li>
-  </ul>
-  <h1>Input and Data Validation Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/7f8deb21-cd52-41be-80b4-8897612021dc">Input from All Sources Is Validated</a>
-    </li>
-    <li>
-      <a href="/article/61869793-2c10-40c0-b82a-babcc0312697">Input Is Validated for Length, Range, Format and Type</a>
-    </li>
-    <li>
-      <a href="/article/42f4b565-14f7-42f4-8c5a-0f78f357e4c0">All Database Input Is Validated</a>
-    </li>
-    <li>
-      <a href="/article/17884af0-fc83-412a-b613-4def4a6f84ad">User-Supplied Filenames and Paths Are Validated</a>
-    </li>
-    <li>
-      <a href="/article/b1803c35-9579-4a38-9a63-30202160ef25">The Application Does Not Rely on Client-Side Validation</a>
-    </li>
-  </ul>
-  <h1>Input and Data Validation Code Examples</h1>
-  <ul>
-    <li>
-      <a href="/article/0f49430b-2abe-408f-b046-89fa739f5d53">Input Validation Using JSF</a>
-    </li>
-    <li>
-      <a href="/article/18ac74df-602b-4a58-8998-52f638f3a045">Input Validation Using SpringMVC</a>
-    </li>
-    <li>
-      <a href="/article/d124abb1-e230-43ef-8762-1caa0dbb89ca">Input Validation Using Struts 1</a>
-    </li>
-    <li>
-      <a href="/article/2f917654-65a8-49c9-b000-c17f9765bf42">Input Validation Using Struts 2</a>
-    </li>
-    <li>
-      <a href="/article/38342130-4e4b-47df-afd9-c7e8c86f77ee">Use ESAPI Executor</a>
-    </li>
-  </ul>
-  <h1>Input and Data Validation Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/fd3ecaaa-cb7c-43a2-a91a-f19862f736d4">How to Test for Server-Side Code Injection in Java</a>
-    </li>
-    <li>
-      <a href="/article/c00b9149-1290-4c9e-bcd0-392a9c5a6fb0">How to Test for Path Manipulation Bugs in Java</a>
-    </li>
-    <li>
-      <a href="/article/5c99da7b-b4eb-4315-b48c-ac2598c13144">How to Test for Double Encoding Bugs in Java</a>
-    </li>
-    <li>
-      <a href="/article/fc95c5e5-667a-4e66-b1cf-f7d0529c4c2f">How to Test for Client-side Validation Bypass Bugs in Java</a>
-    </li>
-    <li>
-      <a href="/article/6f4e927b-bd45-498b-95c4-78fd2c3287c1">How to Test for Integer Overflows in Java</a>
-    </li>
-    <li>
-      <a href="/article/ed20009a-59ef-415d-8e72-0ff3221a1346">How to Test for Integer Underflow Bugs in Java</a>
-    </li>
-    <li>
-      <a href="/article/d7682043-0095-4700-97dd-01ce797c4ada">How to Test for Deserialization of Untrusted Data Bugs in Java</a>
-    </li>
-  </ul>]]></Data>
+Conclusions
+</h1>
+  <p>Integer underflow vulnerabilities occur due to implementation flaws that allow attackers to alter an integer variable that is used by an application&amp;nbsp;in an arithmetic operation. Attackers attempt to store in the target integer variable a value that is less than the minimum allowed by the variable’s type.&amp;nbsp;Integer underflows can be used by attackers to attack the business logic of an application such as calculating incorrect scores and so on.&amp;nbsp;To test for them, it is first necessary to understand how integer underflow attacks occur and how to protect against them, then alter any input integer variable with a value close to the minimum or maximum boundaries for that data type.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

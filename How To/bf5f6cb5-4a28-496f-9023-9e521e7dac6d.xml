@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Compiled code (C/C&amp;#43;&amp;#43;)</li>
+    <li>Compiled code (C/C++)</li>
   </ul>
   <h1>Summary</h1>
   <p>Testing for buffer overflows involves the following 4 steps:</p>
@@ -28,61 +28,82 @@
   <h1>1. Identify entry points</h1>
   <p>Entry points are the means by which you can provide input to the application under test. The following are common entry points:</p>
   <ul>
-    <li>Public APIs <li>Web service methods <li>DCOM methods <li>Network ports <li>UI input fields <li>File input (can take the form of configuration, data, or serialization information) <li>Registry input</li></li></li></li></li></li></li>
+    <li>Public APIs </li>
+    <li>Web service methods </li>
+    <li>DCOM methods </li>
+    <li>Network ports </li>
+    <li>UI input fields </li>
+    <li>File input (can take the form of configuration, data, or serialization information) </li>
+    <li>Registry input</li>
   </ul>
   <p>As you explore the set of entry points look for the ability to provide string input or data that may be used to calculate a buffer.</p>
   <p>Some examples of string input entry points are:</p>
   <ul>
-    <li>Web application UI input field such as username, password, or search box. <li>Thick client application UI input field such as configuration options, search, or username <li>Public API with a string parameter type <li>String data in a file <li>String data in a registry key <li>String data in a network packet</li></li></li></li></li></li>
+    <li>Web application UI input field such as username, password, or search box. </li>
+    <li>Thick client application UI input field such as configuration options, search, or username </li>
+    <li>Public API with a string parameter type </li>
+    <li>String data in a file </li>
+    <li>String data in a registry key </li>
+    <li>String data in a network packet</li>
   </ul>
   <p>There are a couple of common scenarios in which input data may be used to calculate a buffer:</p>
   <ul>
-    <li>&amp;nbsp;&amp;nbsp;Public API that contains a parameter indicating size of a buffer parameter. For instance:</li>
-  </ul>
-  <pre>&amp;nbsp;char &amp;#42;myCopy(byte &amp;#42;byteBuf, int bufSize);</pre>
-  <ul>
-    <li>&amp;nbsp;&amp;nbsp;File formats that contain field lengths as part of the format.</li>
-  </ul>
-  <p>For instance:</p>
-  <pre>&amp;nbsp;...FieldLength,Field...FieldLength,Field</pre>
-  <p>Which in the file would like like:</p>
-  <pre>&amp;nbsp;...3,ABC...6,ABCDEF</pre>
-  <ul>
+    <li>Public API that contains a parameter indicating size of a buffer parameter. For instance:
+  <pre>char *myCopy(byte *byteBuf, int bufSize);</pre></li>
+    <li>File formats that contain field lengths as part of the format. For instance:
+  <pre>Field1Length,Field1,Field2Length,Field2</pre><p>Which in the file would look like:</p><pre>3,ABC,6,ABCDEF</pre></li>
     <li>Network protocols that contain field lengths as part of the format. This is very similar to the file example shown above.</li>
   </ul>
   <h1>2. Craft attack data for an entry point</h1>
   <p>When crafting attack data for an input that may be used to calculate an internal buffer size you should try the following:</p>
   <ul>
-    <li>0 <li>-1 <li>Maximum size allowed by the datatype <li>Minimum size allowd by the datatype</li></li></li></li>
+    <li>0 </li>
+    <li>-1 </li>
+    <li>Maximum size allowed by the datatype </li>
+    <li>Minimum size allowed by the datatype</li>
   </ul>
-  <p>If the input is a length parameter on an API that is tied to a buffer that you are also passing to the API you should additioinally try the following:</p>
+  <p>If the input is a length parameter on an API that is tied to a buffer that you are also passing to the API you should additionally try the following:</p>
   <ul>
-    <li>Size of buffer - 1 <li>Size of buffer &amp;#43; 1</li></li>
+    <li>Size of buffer - 1 </li>
+    <li>Size of buffer + 1</li>
   </ul>
   <p>If the input is a length identifier in a network protocol or file format you should additionally try the following:</p>
   <ul>
-    <li>Size of existing value - 1 <li>Size of existing value &amp;#43; 1</li></li>
+    <li>Size of existing value - 1 </li>
+    <li>Size of existing value + 1</li>
   </ul>
   <p>When crafting attack data for a string input you should try the following:</p>
   <ul>
-    <li>String composed entirely of the character 'a' of size 10,000. <li>Random string of size 10,000 characters. <li>If the application rejects due to size constraints, vary the size of the string until you understand the constraint. Try a string size exactly at the constraint, one over the constraint, and one under the constraint. <li>If the application accepts the string but shows no failure symptoms increase the size of the string until you can ascertain failure or rejection based on size.</li></li></li></li>
+    <li>String composed entirely of the character 'a' of size 10,000. </li>
+    <li>Random string of size 10,000 characters. </li>
+    <li>If the application rejects due to size constraints, vary the size of the string until you understand the constraint. Try a string size exactly at the constraint, one over the constraint, and one under the constraint. </li>
+    <li>If the application accepts the string but shows no failure symptoms increase the size of the string until you can ascertain failure or rejection based on size.</li>
   </ul>
-  <p>Important: If the input has to conform to a known format construct your string input around this format. Apply the 4 steps above between each delimeter of the format independently and in combination. For instance if you were testing an url format of 'http://sitename/dirname' you would do the following:</p>
-  <pre>&amp;nbsp;LONGSTRING://sitename/dirname<br />&amp;nbsp;<a href="http://longstring/dirname">http://LONGSTRING/dirname</a><br />&amp;nbsp;<a href="http://sitename/LONGSTRING">http://sitename/LONGSTRING</a><br />&amp;nbsp;LONGSTRING://LONGSTRING/LONGSTRING</pre>
+  <p>Important: If the input has to conform to a known format construct your string input around this format. Apply the 4 steps above between each delimiter of the format independently and in combination. For instance if you were testing an url format of 'http://sitename/dirname' you would do the following:</p>
+  <pre>LONGSTRING://sitename/dirname<br />http://LONGSTRING/dirname<br />http://sitename/LONGSTRING<br />LONGSTRING://LONGSTRING/LONGSTRING</pre>
   <p>If you don't know the format to which the string input must conform you can:</p>
   <ul>
-    <li>Look for explanatory error messages <li>Use random strings to explore the possibilities <li>Use standard delimeters such as</li></li></li>
-  </ul>
-  <p>&amp;nbsp;, . ; : ' "</p>
-  <ul>
-    <li>Explore specifications to learn more about the application <li>Explore source code or assembly code to learn how the input data is parsed and copied to various internal buffers</li></li>
+    <li>Look for explanatory error messages </li>
+    <li>Use random strings to explore the possibilities </li>
+    <li>Use standard delimiters such as
+  <p>, . ; : ' "</p></li>
+    <li>Explore specifications to learn more about the application </li>
+    <li>Explore source code or assembly code to learn how the input data is parsed and copied to various internal buffers</li>
   </ul>
   <p>Data fuzzing is a powerful technique to automate the creation of attack strings. Data fuzzing relies on the modification of existing files or network packets in order to start from a known good format and produce input that is most likely to discover a buffer overrun. Some effective techniques which do not require the automation to be format aware are, randomly select a byte or bytes and:</p>
   <ul>
-    <li>Add one to the value <li>Subtract one from the value <li>Replace with a bitwise XOR of the original value <li>Insert additional bytes at this location <li>Replace with a random byte <li>Replace a random number of bytes starting at this location <li>Insert a 0 <li>Replace with a 0 <li>Pick another random byte and transpose</li></li></li></li></li></li></li></li></li>
+    <li>Add one to the value </li>
+    <li>Subtract one from the value </li>
+    <li>Replace with a bitwise XOR of the original value </li>
+    <li>Insert additional bytes at this location </li>
+    <li>Replace with a random byte </li>
+    <li>Replace a random number of bytes starting at this location </li>
+    <li>Insert a 0 </li>
+    <li>Replace with a 0 </li>
+    <li>Pick another random byte and transpose</li>
   </ul>
   <h1>3. Pass attack data to an entry point</h1>
-  <p>It is possible to manually test for buffer overruns. However, due to the large number of variations in attack strings and the ease of automation it is preferrable to use automation that can pass your attack strings to the target interface. This is easier with programmatic methods such as an API or web service but is also possible with UI. A combination of automated attack generation and automated attack execution can allow your automation to find buffer overruns while you focus on other tasks. </p>
+  <p>It is possible to manually test for buffer overruns. However, due to the large number of variations in attack strings and the ease of automation it is preferable to use automation that can pass your attack strings to the target interface. This is easier with programmatic methods such as an API or web service but is also possible with UI. A combination of automated attack generation and automated attack execution can allow your automation to find buffer overruns while you focus on other tasks. </p>
   <h1>4. Look for application crashes</h1>
   <p>When an application crashes due to a buffer overrun attack it is necessary to investigate further to determine if the crash is due to a buffer overrun.</p>
   <p>To make it as easy as possible to investigate crashes, run your buffer overrun tests while the application is under a debugger. This allows you to more easily determine the reason for the crash, inspect the stack, inspect the heap and inspect your processor's registers for evidence of your attack string.</p>
