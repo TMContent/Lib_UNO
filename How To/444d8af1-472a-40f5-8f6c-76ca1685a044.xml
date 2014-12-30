@@ -19,150 +19,172 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>
-    <span>Applies to</span>
+    Applies to
   </h1>
   <ul>
     <li>J2EE applications</li>
   </ul>
   <h1>
-    <span>Summary</span>
+    Summary
   </h1>
-  <p>J2EE applications running in an NTFS file system may be vulnerable to Alternate Data Stream (ADS) bugs that allow attackers to access alternate file streams in order to hide data and executable programs or to steal the source code of J2EE applications.<span>&amp;nbsp; </span></p>
+  <p>J2EE applications running in an NTFS file system may be vulnerable to Alternate Data Stream (ADS) bugs that allow attackers to access alternate file streams in order to hide data and executable programs or to steal the source code of J2EE applications.  </p>
   <p>It is recommended to follow these steps to test for ADS bugs in J2EE:</p>
   <ul>
-    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Execute test cases <li>Step 4: Fine-tune test case data</li></li></li></li>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Execute test cases </li>
+    <li>Step 4: Fine-tune test case data</li>
   </ul>
-  <p>
-    <span>
-    </span>
-  </p>
   <h1>
-    <span>Step 1: Understand Attack Scenarios</span>
+    Step 1: Understand Attack Scenarios
   </h1>
   <p>The first step in learning how to test for Alternate Data Stream bugs is to understand the different attack scenarios involved:</p>
   <ul>
-    <li>Hiding attacker data <li>Disclosing application source code</li></li>
+    <li>Hiding attacker data </li>
+    <li>Disclosing application source code</li>
   </ul>
-  <p>
-    <b>
-      <i>
-        <span>
-        </span>
-      </i>
-    </b>
-  </p>
   <h2>
-    <span>
-      <em>Scenario 1:<span>&amp;nbsp; </span>Hiding attacker data</em>
-    </span>
+    <em>Scenario 1:  Hiding attacker data</em>
   </h2>
-  <p>During this scenario, the attacker uses an Alternate Data Stream to hide data that is useful for the attacker.<span>&amp;nbsp;</span>This can occur when a J2EE application uses input taken from the client to create a new file, allowing the client to name the file that will be created at the server.<span>&amp;nbsp;</span>Consider this code:</p>
-  <pre>response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />String filename = "c:\\user_files\\" &amp;#43;<br />&amp;nbsp;request.getParameter("filename").toString();<br />String contents = request.getParameter("contents").toString();<br />&amp;nbsp;<br />File file = new File(filename);<br />&amp;nbsp;<br />if(&amp;#33;file.exists())<br />&amp;#123;<br />      file.createNewFile();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; FileWriter fw = new FileWriter(file);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; BufferedWriter bw = new BufferedWriter(fw);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; bw.write(contents);&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; bw.close();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; fw.close();<br />&amp;#125;</pre>
-  <p>The code above uses the URL to request a filename and data from an Internet client.<span></span>It creates a new file based on the <em>filename </em>URL parameter and writes the contents specified by the <em>contents</em> URL parameter to the new file.<span>&amp;nbsp;&amp;nbsp; </span>For example, the following URL creates a file named <em>test.txt</em> in the output directory and writes the string <i>this is a test file</i> to the new file:</p>
-  <pre>
-    <span>http://some_site/example/createFile?filename=<strong>test.txt</strong>&amp;contents=any</span>
-  </pre>
+  <p>During this scenario, the attacker uses an Alternate Data Stream to hide data that is useful for the attacker. This can occur when a J2EE application uses input taken from the client to create a new file, allowing the client to name the file that will be created at the server. Consider this code:</p>
+  <pre>response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br /><br />String filename = "c:\\user_files\\" +<br />      request.getParameter("filename").toString();<br />String contents = request.getParameter("contents").toString();<br /><br />File file = new File(filename);<br /><br />if(!file.exists())<br />{<br />      file.createNewFile();<br />      FileWriter fw = new FileWriter(file);<br />      BufferedWriter bw = new BufferedWriter(fw);<br />      bw.write(contents);    <br />      bw.close();<br />      fw.close();<br />}</pre>
+  <p>The code above uses the URL to request a filename and data from an Internet client.It creates a new file based on the <em>filename </em>URL parameter and writes the contents specified by the <em>contents</em> URL parameter to the new file.   For example, the following URL creates a file named <em>test.txt</em> in the output directory and writes the string <i>this is a test file</i> to the new file:</p>
+  <pre>http://some_site/example/createFile?filename=<strong>test.txt</strong>&amp;contents=any
+</pre>
   <p>The Windows <em>dir </em>command can be used to see what file was created:</p>
-  <pre>C:\user_files&gt;dir /r<br />&amp;nbsp;<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ..<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 3 test.txt<span>&amp;nbsp;</span></pre>
+  <pre>C:\user_files&gt;dir /r<br /><br />12/02/2008  01:08 PM    &lt;DIR&gt;          .<br />12/02/2008  01:08 PM    &lt;DIR&gt;          ..<br />12/02/2008  01:08 PM                 3 test.txt </pre>
   <p>Nevertheless, an attacker can exploit the above URL to create a file with an Alternate Data Stream to store secret attack data:</p>
-  <pre>
-    <span>http://some_site/example/createFile?filename=<span><strong>test.txt:hidden.txt</strong>&amp;contents=attack_data</span></span>
+  <pre>http://some_site/example/createFile?filename=<strong>test.txt:hidden.txt</strong>&amp;contents=attack_data</pre>
+  <p>The Windows <em>dir</em> command only shows a <em>test.txt.</em></p>
+  <pre>C:\user_files&gt;dir /r<br /><br />12/02/2008  01:08 PM    &lt;DIR&gt;          .<br />12/02/2008  01:08 PM    &lt;DIR&gt;          ..<br />12/02/2008  01:08 PM                 3 test.txt 
   </pre>
-  <p>The Windows <em>dir</em> command only shows a <em>test.txt.</em><span>&amp;nbsp; &amp;nbsp;</span></p>
-  <pre>
-    <span>C:\user_files&gt;dir /r<br />&amp;nbsp;<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ..<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 3 test.txt<span>&amp;nbsp;</span></span>
-  </pre>
-  <p>
-    <span>
-    </span>
-  </p>
   <p>However, using the recursive flag shows the presence of an ADS named <em>hidden.txt:</em></p>
-  <pre>
-    <span>C:\user_files&gt;<strong>dir /r</strong><br />&amp;nbsp;<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .<br />12/02/2008&amp;nbsp; 01:08 PM&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;DIR&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ..<br />12/02/2008&amp;nbsp; 01:10 PM&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 3 test.txt<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 11 <strong>test.txt:hidden.txt:&amp;#36;DATA</strong></span>
-  </pre>
+  <pre>    C:\user_files&gt;<strong>dir /r</strong><br /><br />12/02/2008  01:08 PM    &lt;DIR&gt;          .<br />12/02/2008  01:08 PM    &lt;DIR&gt;          ..<br />12/02/2008  01:10 PM                 3 test.txt<br />                                    11 <strong>test.txt:hidden.txt:$DATA</strong></pre>
   <p>Furthermore, the Alternate Data Stream can be opened using Notepad:</p>
-  <pre>
-    <span>C:\user_files&gt;notepad test.txt:hidden.txt</span>
-  </pre>
+  <pre>C:\user_files&gt;notepad test.txt:hidden.txt
+</pre>
   <p>In detail, the attack scenario follows these steps:</p>
   <ol>
-    <li>The attacker finds an application functionality in which the application uses client-supplied input to create a new file. <li>The attacker passes the filename of an alternate data stream file to create the ADS hidden stream. <li>The attacker writes data to the ADS hidden stream.</li></li></li>
+    <li>The attacker finds an application functionality in which the application uses client-supplied input to create a new file. </li>
+    <li>The attacker passes the filename of an alternate data stream file to create the ADS hidden stream. </li>
+    <li>The attacker writes data to the ADS hidden stream.</li>
   </ol>
   <h2>
-    <span>
-      <em>Scenario 2: Disclosing application source code</em>
-    </span>
+    <em>Scenario 2: Disclosing application source code</em>
   </h2>
-  <p>J2EE applications running in outdated versions of Windows and hosted by Internet Information Services (IIS) are vulnerable to source code disclosure.<span></span>An attacker can access the application&amp;#8217;s source code using the <i>Windows:DATA</i> Alternate Data Stream (ADS) which is the default data stream that Windows creates in all NTFS files.</p>
-  <p>The attack is possible due to older versions of IIS failing to prevent direct access to the <i>:&amp;#36;DATA</i> Alternate Data Stream.<span></span>For example, IIS correctly prevented files with the <i>.jsp</i> extension to be accessed from the URL:</p>
-  <pre>
-    <span>http://some_site/default.jsp</span>
-  </pre>
-  <p>But allowed attackers to use the <i>:&amp;#36;DATA</i> ADS to access the contents of the source code file:</p>
-  <pre>http://some_site/<strong>default.jsp<span>::&amp;#36;DATA</span></strong></pre>
+  <p>J2EE applications running in outdated versions of Windows and hosted by Internet Information Services (IIS) are vulnerable to source code disclosure.An attacker can access the application’s source code using the <i>Windows:DATA</i> Alternate Data Stream (ADS) which is the default data stream that Windows creates in all NTFS files.</p>
+  <p>The attack is possible due to older versions of IIS failing to prevent direct access to the <i>:$DATA</i> Alternate Data Stream.For example, IIS correctly prevented files with the <i>.jsp</i> extension to be accessed from the URL:</p>
+  <pre>http://some_site/default.jsp
+</pre>
+  <p>But allowed attackers to use the <i>:$DATA</i> ADS to access the contents of the source code file:</p>
+  <pre>http://some_site/<strong>default.jsp::$DATA</strong></pre>
   <h1>
-    <span>Step 2: Analyze Causes and Countermeasures</span>
+    Step 2: Analyze Causes and Countermeasures
   </h1>
-  <p>The&amp;nbsp;second step in learning how to test for ADS attacks is to understand what causes the different attack variations and how to protect against them.<span></span>This knowledge will help you identify ADS bugs in code and prepare you for executing the necessary test cases.</p>
+  <p>The second step in learning how to test for ADS attacks is to understand what causes the different attack variations and how to protect against them.This knowledge will help you identify ADS bugs in code and prepare you for executing the necessary test cases.</p>
   <h2>
-    <span>
-      <em>Validating and sanitizing client input</em>
-    </span>
+    <em>Validating and sanitizing client input</em>
   </h2>
-  <p>The first scenario, in which the application uses client-supplied input as a filename to create a new file, is a clear case of improper input validation and sanitization.<span></span>In the case above, the J2EE application directly uses a URL parameter to create a text file without checking if the input is safe to use for a filename.<span>&amp;nbsp;</span>Since the code lacks the proper input validation, the application allows attackers to create an Alternate Data Stream to hide attack data.</p>
-  <p>To protect against this attack variation, it is recommended to validate all input parameters used to create a new file using a <i>white list</i> approach.<span>&amp;nbsp;</span>A white list consist of all the allowed file names and constructs to be used when creating the new file and can be implemented as a regular expression or string matching function.<span></span>Before creating the file, the application must check if the parameters that will be used for the file creation are contained in or match the white list.<span></span>Any parameters not contained in or matching the white list must be disallowed.<span>&amp;nbsp; </span></p>
+  <p>The first scenario, in which the application uses client-supplied input as a filename to create a new file, is a clear case of improper input validation and sanitization.In the case above, the J2EE application directly uses a URL parameter to create a text file without checking if the input is safe to use for a filename. Since the code lacks the proper input validation, the application allows attackers to create an Alternate Data Stream to hide attack data.</p>
+  <p>To protect against this attack variation, it is recommended to validate all input parameters used to create a new file using a <i>white list</i> approach. A white list consist of all the allowed file names and constructs to be used when creating the new file and can be implemented as a regular expression or string matching function.Before creating the file, the application must check if the parameters that will be used for the file creation are contained in or match the white list.Any parameters not contained in or matching the white list must be disallowed.  </p>
   <h2>
-    <span>
-      <em>Windows and IIS version</em>
-    </span>
+    <em>Windows and IIS version</em>
   </h2>
-  <p>The source code disclosure scenario above is caused due to an NT IIS bug in older versions of Windows such as NT 4.0, 95, and 98.<span></span>To protect against this variation, administrators must install the appropriate Microsoft patch or update Windows and IIS to a more recent version.<span>&amp;nbsp;</span>For more information about the vulnerable Windows versions and patch download location, refer to Symantec's Security Focus incidence page <a href="http://www.securityfocus.com/bid/149">http://www.securityfocus.com/bid/149</a>.</p>
+  <p>The source code disclosure scenario above is caused due to an NT IIS bug in older versions of Windows such as NT 4.0, 95, and 98.To protect against this variation, administrators must install the appropriate Microsoft patch or update Windows and IIS to a more recent version. For more information about the vulnerable Windows versions and patch download location, refer to Symantec's Security Focus incidence page <a href="http://www.securityfocus.com/bid/149">http://www.securityfocus.com/bid/149</a>.</p>
   <h1>
-    <span>Step 3: Execute Test Cases</span>
+    Step 3: Execute Test Cases
   </h1>
-  <p>Now that you&amp;#8217;ve reviewed the theoretical aspects of ADS bugs in J2EE applications, it is necessary to execute the appropriate test cases to check if your application is vulnerable.</p>
+  <p>Now that you’ve reviewed the theoretical aspects of ADS bugs in J2EE applications, it is necessary to execute the appropriate test cases to check if your application is vulnerable.</p>
   <h2>
-    <span>
-      <em>Test for ADS bugs by hiding attack data</em>
-    </span>
+    <em>Test for ADS bugs by hiding attack data</em>
   </h2>
   <p>Follow these steps:</p>
   <ol>
-    <li>Find an application&amp;#8217;s functionality where client-supplied input is used to create and write to a file. <li>Supply a filename containing an ADS streams as input to the application such as <em>test.txt:hidden.txt</em>. <li>Verify if the application created the file with the ADS by executing <em>dir /r.</em></li></li></li>
+    <li>Find an application’s functionality where client-supplied input is used to create and write to a file. </li>
+    <li>Supply a filename containing an ADS streams as input to the application such as <em>test.txt:hidden.txt</em>. </li>
+    <li>Verify if the application created the file with the ADS by executing <em>dir /r.</em></li>
   </ol>
-  <p>Expected results:<span>&amp;nbsp;</span>The application is vulnerable if it allows the creation of an Alternate Data Stream from client-supplied input.</p>
+  <p>Expected results: The application is vulnerable if it allows the creation of an Alternate Data Stream from client-supplied input.</p>
   <h2>
-    <span>
-      <em>Test for ADS source code disclosure bugs</em>
-    </span>
+    <em>Test for ADS source code disclosure bugs</em>
   </h2>
   <p>Follow these steps:</p>
   <ol>
-    <li>Open a Web browser. <li>Navigate to a JSP page by supplying a normal URL: <span><a href="http://some_site/default.jsp">http://some_site/default.jsp</a></span></li><li>Enter a URL to the address bar&amp;nbsp;that tries accessing the Windows:DATA stream of the JSP file: <span>http://some_site/default.jsp::&amp;#37;DATA</span><li>Verify if the browser displays the source code of<em><strong> default.jsp</strong>.</em></li></li></li>
+    <li>Open a Web browser. </li>
+    <li>Navigate to a JSP page by supplying a normal URL: <a href="http://some_site/default.jsp">http://some_site/default.jsp</a></li>
+    <li>Enter a URL to the address bar that tries accessing the Windows:DATA stream of the JSP file: http://some_site/default.jsp::%DATA</li>
+    <li>Verify if the browser displays the source code of<em><strong> default.jsp</strong>.</em></li>
   </ol>
-  <p>Expected results:<span>&amp;nbsp;</span>The application is vulnerable if discloses the source code contained in <em>default.jsp.</em></p>
+  <p>Expected results: The application is vulnerable if discloses the source code contained in <em>default.jsp.</em></p>
   <h1>
-    <span>Step 4: Fine-tune Test Case Data</span>
+    Step 4: Fine-tune Test Case Data
   </h1>
-  <p>Finally, it is suggested that you modify the test case data to allow for different URL encodings as well as double-encoding scenarios.<span></span>Some characters necessary to insert additional ADS, such as the colon (:), might be disallowed by the application in their ASCII form but allowed in other encodings.</p>
+  <p>Finally, it is suggested that you modify the test case data to allow for different URL encodings as well as double-encoding scenarios.Some characters necessary to insert additional ADS, such as the colon (:), might be disallowed by the application in their ASCII form but allowed in other encodings.</p>
   <p>Try different encodings for an attack stream including:</p>
   <p />
-  <p />
-  <span>
-    <p />&amp;nbsp;<span><table><tbody><tr><td><p><span><strong>Test case data</strong></span></p></td><td><p><span><strong>Encoded test case data</strong></span></p></td><td><p><span><strong>Encoding</strong></span></p></td></tr><tr><td><pre><span>test.txt:hidden.txt</span></pre></td><td><pre><span>test.txt&amp;#37;3Ahidden.txt</span></pre></td><td><pre><span>Hex/URL encoding</span></pre></td></tr><tr><td><pre><span>test.txt:hidden.txt</span></pre></td><td><pre><span>test.txt&amp;#37;253Ahidden.txt</span></pre></td><td><pre><span>Double encoding</span></pre></td></tr><tr><td><pre><span>default.asp::&amp;#37;DATA</span></pre></td><td><pre><span>default.asp</span><span>&amp;#37;3A&amp;#37;3A&amp;#37;25</span><span>DATA</span></pre></td><td><pre><span>Hex/URL encoding</span></pre></td></tr><tr><td><pre><span>default.asp::&amp;#37;DATA</span></pre></td><td><pre><span>default.asp</span><span>&amp;#37;253A&amp;#37;253A&amp;#37;2525</span><span>DATA</span></pre></td><td><pre><span>Double encoding</span></pre></td></tr></tbody></table></span><span></span></span>
-  <p />
-  <p>Note that additional encoding/decoding schemes might be in use.<span></span>It is always useful to investigate the specifics encoding scheme used by the application to fine-tune the test case data appropriately.</p>
-  <p>
-    <b>
-      <i>
-        <span>
-        </span>
-      </i>
-    </b>
-  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Test case data</strong>
+        </td>
+        <td>
+          <strong>Encoded test case data</strong>
+        </td>
+        <td>
+          <strong>Encoding</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          test.txt:hidden.txt
+        </td>
+        <td>
+          test.txt%3Ahidden.txt
+        </td>
+        <td>
+          Hex/URL encoding
+        </td>
+      </tr>
+      <tr>
+        <td>
+          test.txt:hidden.txt
+        </td>
+        <td>
+          test.txt%253Ahidden.txt
+        </td>
+        <td>
+          Double encoding
+        </td>
+      </tr>
+      <tr>
+        <td>
+          default.asp::%DATA
+        </td>
+        <td>
+          default.asp%3A%3A%25DATA
+        </td>
+        <td>
+          Hex/URL encoding
+        </td>
+      </tr>
+      <tr>
+        <td>
+          default.asp::%DATA
+        </td>
+        <td>
+          default.asp%253A%253A%2525DATA
+        </td>
+        <td>
+          Double encoding
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Note that additional encoding/decoding schemes might be in use.It is always useful to investigate the specifics encoding scheme used by the application to fine-tune the test case data appropriately.</p>
   <h1>
-    <span>Conclusions</span>
+    Conclusions
   </h1>
-  <p>Alternate Data Stream bugs affect applications running in NTFS and may allow attackers to hide attack data or disclose the application&amp;#8217;s source code.<span>&amp;nbsp;</span>To test for ADS bugs, it is suggested to start by understanding the attack scenarios involved as well as&amp;nbsp;the causes and how to protect against them.<span>&amp;nbsp;</span>Then you must execute the necessary test cases by submitting input containing an Alternate Data Stream in an attempt of hiding attack data or accessing the application&amp;#8217;s source code.<span></span>Finally, you must fine-tune test case data to cover additional encoding scenarios.<b><i></i></b></p>]]></Data>
+  <p>Alternate Data Stream bugs affect applications running in NTFS and may allow attackers to hide attack data or disclose the application’s source code. To test for ADS bugs, it is suggested to start by understanding the attack scenarios involved as well as the causes and how to protect against them. Then you must execute the necessary test cases by submitting input containing an Alternate Data Stream in an attempt of hiding attack data or accessing the application’s source code.Finally, you must fine-tune test case data to cover additional encoding scenarios.<b><i></i></b></p>]]></Data>
   </Content>
 </TeamMentor_Article>
