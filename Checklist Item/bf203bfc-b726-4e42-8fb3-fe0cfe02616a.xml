@@ -3,7 +3,7 @@
   <Metadata>
     <Id>bf203bfc-b726-4e42-8fb3-fe0cfe02616a</Id>
     <Id_History>bf203bfc-b726-4e42-8fb3-fe0cfe02616a,c40ec881-bd3d-4ba6-b97a-92813232a969,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>User-Supplied Filenames And Paths Are Validated</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure&amp;nbsp;that user supplied filename and path input is carefully validated and that the input is checked for format and validity of location within the context of the application.</p>
   <h1>Why</h1>
-  <p>Filtering paths and filenames helps to avoid a <a href="/article/f9f0a869-98fe-4ac5-9de3-3eaf33306c4b">Canonicalization Attack</a> where your application&amp;nbsp;can be&amp;nbsp;made to read or write to arbitrary files on the server.</p>
+  <p>Filtering paths and filenames helps to avoid a Canonicalization Attack where your application&amp;nbsp;can be&amp;nbsp;made to read or write to arbitrary files on the server.</p>
   <h1>How to Check</h1>
   <p>Make these checks&amp;nbsp;to ensure that user-supplied filename and path input have been validated:</p>
   <ol>
@@ -32,7 +32,7 @@
     <li>
       <p>
         <strong>Ensure that MapPath has been used to prevent cross application mapping. </strong>In order to constrain file access to the application's virtual directory hierarchy, check that the overloaded <strong>Request.MapPath</strong> method,&amp;nbsp;which accepts a <strong>bool</strong> parameter, has been used. This method prevents cross-application mapping by throwing an exception when an attempt is made to traverse outside the virtual directory when its last parameter is set to 'false'. </p>
-      <pre>try<br />{<br />    string mappedPath = <a href="http://msdn2.microsoft.com/en-us/library/3z2189ck(VS.80).aspx">Request.MapPath</a>( inputPath.Text,<br />     Request.ApplicationPath, false);<br />}<br />catch (HttpException)<br />{<br />    // Cross-application mapping attempted<br />}</pre>
+      <pre>try<br />{<br />    string mappedPath = Request.MapPath( inputPath.Text,<br />     Request.ApplicationPath, false);<br />}<br />catch (HttpException)<br />{<br />    // Cross-application mapping attempted<br />}</pre>
     </li>
     <li>
       <p>
@@ -44,12 +44,7 @@
   <p>In the following code example, the server receives a filename from the user. The server appends the user-supplied filename to the a hardcoded path and verifies to see if this file exists on the server. If the file exists, the server opens the file and performs operations on it.</p>
   <pre>&lt;%@ Page Language="C#" ValidateRequest="false" %&gt;<br /> &lt;script runat="server"&gt;<br />   void submitBtn_Click(object sender, EventArgs e)<br />   {<br />             String fileName = "c:\\configfiles\\" + inputPath.Text;<br />       if (System.IO.File.Exists (fileName))<br />       {<br />            System.IO.FileStream fs = System.IO.File.Open(fileName, System.IO.FileMode.Open);<br />       }<br />   }<br /> &lt;/script&gt;<br /> &lt;html xmlns="http://www.w3.org/1999/xhtml" &gt;<br />   &lt;body&gt;<br />     &lt;form id="form1" runat="server"&gt;<br />       &lt;div&gt;<br />         &lt;asp:TextBox ID="inputPath" Runat="server"<br />              TextMode="MultiLine" Width="382px" Height="152px"&gt;<br />         &lt;/asp:TextBox&gt;<br />         &lt;asp:Button ID="submitBtn" Runat="server" Text="Submit"<br />                     OnClick="submitBtn_Click" /&gt;<br />       &lt;/div&gt;<br />     &lt;/form&gt;<br />   &lt;/body&gt;<br /> &lt;/html&gt;</pre>
   <p>Here one can clearly notice that the intention of the developer is to limit access to the <strong>C:\ConfigFiles</strong> folder. However, if a user supplied the input "..\windows\system32\critical.ini" then the application will join the user-supplied input with the hardcoded path and give the attacker access to critical system files.</p>
-  <h1>Related Guideline</h1>
-  <ul>
-    <li>
-      <a href="/article/ce899ba6-8ae2-4494-8706-ce863fae58e7">Guideline: Filter All User-Supplied Filename and Path Input </a>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

@@ -3,7 +3,7 @@
   <Metadata>
     <Id>0c6693ed-e3c2-4640-a795-c7c9c2a63cbc</Id>
     <Id_History>0c6693ed-e3c2-4640-a795-c7c9c2a63cbc,fdf4a0d8-3a8b-4e04-8cb7-db0a674c7280,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Define a Security Policy</Title>
     <Category>Code Access Security</Category>
     <Phase>Design</Phase>
@@ -56,7 +56,6 @@
         <li>
           <p>Locate this file in the standard policy file directory, which is %Windir%\Microsoft.NET\Framework\{Version}\CONFIG. Add the required additional permissions to the custom policy file and configure your application to run using the custom policy. Example:</p>
           <pre>&lt;configuration&gt;<br />   &lt;mscorlib&gt;<br />      &lt;security&gt;<br />         &lt;policy&gt;<br />            &lt;PolicyLevel version="1"&gt;<br />               &lt;SecurityClasses&gt;<br />                  ...<br />                  &lt;SecurityClass Name="DnsPermission" Description="..."/&gt;<br />                  ...<br />               &lt;/SecurityClasses&gt;<br />               &lt;NamedPermissionSets&gt;<br />                  ...<br />                  &lt;PermissionSet<br />                        class="NamedPermissionSet"<br />                        version="1"<br />                        Name="ASP.Net"&gt;<br />                     &lt;IPermission<br />                           class="AspNetHostingPermission"<br />                           version="1"<br />                           Level="High"<br />                     /&gt;<br />                     &lt;IPermission<br />                           class="ConfigurationPermission"<br />                           version="1"<br />                           Unrestricted="true"<br />                     /&gt;<br />                     ...<br />                  &lt;/PermissionSet&gt;<br />                  ...<br />               &lt;/NamedPermissionSets&gt;<br />               &lt;CodeGroup<br />                     class="FirstMatchCodeGroup"<br />                     version="1"<br />                     PermissionSetName="Nothing"&gt;<br />                  &lt;IMembershipCondition<br />                        class="AllMembershipCondition"<br />                        version="1"<br />                  /&gt;<br />                  &lt;CodeGroup<br />                        class="UnionCodeGroup"<br />                        version="1"<br />                        PermissionSetName="ASP.Net"&gt;<br />                  ...<br />                  &lt;/CodeGroup&gt;<br />                  ...<br />               &lt;/CodeGroup&gt;<br />            &lt;/PolicyLevel&gt;<br />         &lt;/policy&gt;<br />      &lt;/security&gt;<br />   &lt;/mscorlib&gt;<br />&lt;/configuration&gt;</pre>
-          <p>To learn more about the different code access permissions, visit <a href="http://msdn2.microsoft.com/en-us/library/h846e9b3(vs.80).aspx">Code Access Permissions</a>.</p>
         </li>
         <li>
           <p>Configure your application to run using the custom trust policy defined in the previous steps. Example:</p>
@@ -66,7 +65,7 @@
     </li>
     <li>
       <p>
-        <strong>Do not allow developers to change trust levels.</strong> Use the <a href="/article/01aa845d-9256-42e8-8504-df338a47a01e">Lock Configuration Settings to Enforce Policy Settings</a> guideline to lock the trust level set in your application's root web.config:</p>
+        <strong>Do not allow developers to change trust levels.</strong> Lock the trust level set in your application's root web.config:</p>
       <pre>&lt;location allowOverride="false"&gt;<br />   &lt;system.web&gt;<br />      &lt;trust level="Medium" originUrl="" /&gt;<br />   &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
     </li>
   </ol>
@@ -83,36 +82,8 @@
       <strong>Socket Access.</strong> The application relies on an older auditing package that employs a custom, socket based communication protocol. The application needs the ability to create a socket connection and read/write data from/to it.</li>
   </ul>
   <p>The developer looks at the Predefined trust levels, and determines that the lowest level of trust that the application can use and still satisfy it's requirements is the high trust level. She sets the trust level by adding an xml directive to the web config file:</p>
-  <pre>&lt;system.web&gt;  ...  &lt;trust level="High" originUrl="" /&gt;  ...&lt;/system.web&gt;</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about ASP.NET trust levels and policy files, visit: <a href="http://msdn2.microsoft.com/en-us/library/wyts434y(VS.80).aspx">ASP.NET Trust Levels and Policy Files</a>. </li>
-    <li>To learn more about ASP.NET code access security, visit: <a href="http://msdn2.microsoft.com/en-us/library/87x8e4d1(VS.80).aspx">ASP.NET Code Access Security</a>. </li>
-    <li>To learn more about the Permissions Calculator tool, visit: Documentation for <a href="http://msdn2.microsoft.com/en-us/library/ms165077(VS.80).aspx">Permission Calculator Tool</a> in MSDN. </li>
-    <li>To learn more about the different code access permissions, visit: <a href="http://msdn2.microsoft.com/en-us/library/h846e9b3(vs.80).aspx">Code Access Permissions</a>. </li>
-    <li>To learn more about configuring the security settings for a .NET assembly, visit: <a href="http://msdn2.microsoft.com/en-us/library/cb6t8dtz(VS.80).aspx">Code Access Security Policy Tool</a> in MSDN.</li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/01aa845d-9256-42e8-8504-df338a47a01e">Guideline: Lock Configuration Settings to Enforce Policy Settings </a>
-    </li>
-    <li>
-      <a href="/article/eb5dbadd-49ab-46e1-bc0d-d299eeb465f6">Guideline: Partition Code Into Separate Assemblies </a>
-    </li>
-    <li>
-      <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Guideline: Log Important Security Operations </a>
-    </li>
-    <li>
-      <a href="/article/6a219806-df28-4c00-bc2d-c2ce4c721b7e">Attack: Trust Relationship Attack</a>
-    </li>
-    <li>
-      <a href="/article/88134c36-4e54-47ca-8a83-fafe271ca05a">Attack: Luring Attack</a>
-    </li>
-    <li>
-      <a href="/article/257481d8-fcc5-4ed2-a8d8-c198bb399c77">Checklist Item: A Security Policy is Defined</a>
-    </li>
-  </ul>
+  <pre>&lt;system.web&gt;<br />  ...<br />  &lt;trust level="High" originUrl="" /&gt;<br />  ...<br />&lt;/system.web&gt;</pre>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

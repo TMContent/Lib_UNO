@@ -3,7 +3,7 @@
   <Metadata>
     <Id>12b0959c-774b-4dde-86b9-a4ff3d264317</Id>
     <Id_History>12b0959c-774b-4dde-86b9-a4ff3d264317,3d4cf7a2-3c6c-4d61-b030-e57b65acd2f3,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Windows Authentication Is Used for Web Users If Possible</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
@@ -30,33 +30,28 @@
     <strong>Verify that your application is configured to use Windows Authentication</strong>:</p>
   <ol>
     <li>
-      <p />Start Internet Information Services (IIS). <ol><li><p>Right-click your application's virtual directory and go to Properties. </p><li><p>Click the Directory Security tab. </p><li><p>Under Anonymous access and authentication control, click Edit. </p><li><p />Verify that: <ul><li>Anonymous access check box is not selected <li>Integrated Windows authentication is the only selected check box. </li></li></ul></li></li></li></li></ol><li><p>Locate the <strong>authentication</strong>&gt; element in your application's Web.config file or in the machine-level Web.config file. Verify that the authentication mode is set to Windows. For example:</p><pre>
-...
+      <p />Start Internet Information Services (IIS). <ol><li><p>Right-click your application's virtual directory and go to Properties. </p></li><li><p>Click the Directory Security tab. </p></li><li><p>Under Anonymous access and authentication control, click Edit. </p></li><li><p />Verify that: <ul><li>Anonymous access check box is not selected </li><li>Integrated Windows authentication is the only selected check box. </li></ul></li></ol></li>
+    <li>
+      <p>Locate the <strong>authentication</strong>&gt; element in your application's Web.config file or in the machine-level Web.config file. Verify that the authentication mode is set to Windows. For example:</p>
+      <pre>...
   &lt;system.web&gt; 
     ...  
       &lt;authentication mode="Windows"&gt; &lt;/authentication&gt;   
    ...
   &lt;/system.web&gt; 
 ...
-</pre></li></li>
+</pre>
+    </li>
   </ol>
   <p>
     <strong>Check for protection against Protect against Cross-Site Request Forgery attacks</strong>:</p>
   <ol>
     <li>Check that a unique key is assigned to each user's ViewState.</li>
-    <li>Verify that single GET requests are: <ul><li>only used when necessary <li>never allowed to change the state of the web application</li></li></ul></li>
+    <li>Verify that single GET requests are: <ul><li>only used when necessary </li><li>never allowed to change the state of the web application</li></ul></li>
   </ol>
   <h1>Problem Example</h1>
   <p>John created a payroll ASP.Net Web Application for his company and decided to use ASP.Net Forms Authentication with the Active Directory Membership Provider because it seemed to be the simplest option at the time. He had no idea that Forms Authentication sends passwords and authentication cookies in plain text over the network. One week after the application was released, an employee used this vulnerability to impersonate a manager and increase&amp;nbsp;his salary.</p>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/5b641c0a-a63a-4524-8ce8-432150e6df6d">Guideline: Use Windows Authentication for Web Users if Possible</a>
-      <li>
-        <a href="/article/6ae71499-095c-49bd-bed0-4e08303a4324">Cross Site Request Forgery</a>
-      </li>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

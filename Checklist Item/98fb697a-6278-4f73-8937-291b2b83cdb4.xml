@@ -26,29 +26,28 @@
   <p>
     <strong>For every error message check that</strong>:</p>
   <ol>
-    <li>The error message is simple and generic. In particular do not include extra information regarding: <ul><li>The quality of the information being processed <li>The mechanisms processing the data</li></li></ul><li>Debug information is not echoed to the user. <li>There is only one error message displayed on all authentication failures. This message should be basic and not contain any information that can be used to discern between the following types of failures: <ul><li>Invalid username <li>Valid username, but invalid password <li>Account locked<br />For more information about this, please refer to <a href="/article/e0ebf8be-838c-4762-8c44-0d90adf63aef">Account Lockout Attack</a></li></li></li></ul><li>A custom error message is used instead of the default error message which describes the error in detail: <ul><li>Set <strong>customErrors</strong> to <strong>RemoteOnly</strong> or <strong>On</strong> in the web.config file</li></ul></li></li></li></li>
+    <li>The error message is simple and generic. In particular do not include extra information regarding: <ul><li>The quality of the information being processed </li><li>The mechanisms processing the data</li></ul></li>
+    <li>Debug information is not echoed to the user. </li>
+    <li>There is only one error message displayed on all authentication failures. This message should be basic and not contain any information that can be used to discern between the following types of failures: <ul><li>Invalid username </li><li>Valid username, but invalid password </li><li>Account locked<br /></li></ul></li>
+    <li>A custom error message is used instead of the default error message which describes the error in detail: <ul><li>Set <strong>customErrors</strong> to <strong>RemoteOnly</strong> or <strong>On</strong> in the web.config file</li></ul></li>
   </ol>
   <p>
     <strong>For dynamically generated error messages also ensure that</strong>:</p>
   <ol>
-    <li>Use of dynamic error messages is minimized. <li>Error messages that report the same message are exactly the same.</li></li>
+    <li>Use of dynamic error messages is minimized. </li>
+    <li>Error messages that report the same message are exactly the same.</li>
   </ol>
   <h1>Problem Example</h1>
   <p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p>
   <blockquote>
-    <pre>public void login()<br />&amp;#123;<br />      if (&amp;#33;validUser())<br />      &amp;#123;<br />            throw new Exception("User not found.");<br />      &amp;#125;<br />      if (&amp;#33;validPass())<br />      &amp;#123;<br />            throw new Exception("Wrong password.");<br />      &amp;#125;<br />      commit();<br />&amp;#125;</pre>
+    <pre>public void login()<br />{<br />      if (!validUser())<br />      {<br />            throw new Exception("User not found.");<br />      }<br />      if (!validPass())<br />      {<br />            throw new Exception("Wrong password.");<br />      }<br />      commit();<br />}</pre>
   </blockquote>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information about best practices on authentication, visit the OWASP&amp;nbsp;<a href="http://www.owasp.org/index.php/Guide_to_Authentication">Guide to Authentication</a>. <li>For more information on proper error handling techniques, visitthe OWASP&amp;nbsp;<a href="http://www.owasp.org/index.php/Error_Handling,_Auditing_and_Logging">Error Handling, Auditing and Logging</a>.</li></li>
+    <li>For more information about best practices on authentication, visit the OWASP&amp;nbsp;<a href="http://www.owasp.org/index.php/Guide_to_Authentication">Guide to Authentication</a>. </li>
+    <li>For more information on proper error handling techniques, visitthe OWASP&amp;nbsp;<a href="http://www.owasp.org/index.php/Error_Handling,_Auditing_and_Logging">Error Handling, Auditing and Logging</a>.</li>
   </ul>
-  <h1>Related Guideline</h1>
-  <ul>
-    <li>
-      <a href="/article/08f2f28f-d09a-4b82-843e-8d971fc50553">Guideline: Do Not Disclose Valuable Information in Error Messages </a>
-      <hr />
-    </li>
-  </ul>
+  <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

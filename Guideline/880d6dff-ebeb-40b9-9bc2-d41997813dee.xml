@@ -30,38 +30,23 @@
     <li>
       <p>
         <strong>Identify all test APIs</strong>: Enumerate all public APIs. Identify which APIs are intended for application use and which APIs are intended for test purposes. Ideally these interfaces will already be documented as test interfaces and can be discovered through specifications.</p>
-      <li>
-        <p>
-          <strong>Remove the test interfaces</strong>: Code removal is a straight forward procedure. Once the test code is identified, it should be isolated from the application and removed from your code base. This should happen before final functional and integration testing to ensure that the system still works as intended with the test code missing.</p>
-        <li>
-          <p>
-            <strong>Compile your application with release flag</strong>: Always compile your application with a release flag before shipping. This ensures that your application does not contain extra debug information in its assemblies.</p>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Remove the test interfaces</strong>: Code removal is a straight forward procedure. Once the test code is identified, it should be isolated from the application and removed from your code base. This should happen before final functional and integration testing to ensure that the system still works as intended with the test code missing.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Compile your application with release flag</strong>: Always compile your application with a release flag before shipping. This ensures that your application does not contain extra debug information in its assemblies.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>The following code shows the user management system for an application. Because the class contains test APIs it is possible for a malicious user to execute untested code and possibly exploit any vulnerabilities in it.</p>
-  <pre>public sealed class UserManager<br />&amp;#123;<br />      public UserManager()<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean AddUser(User user, char&amp;#91;&amp;#93; pass, char&amp;#91;&amp;#93; verifyPass)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean RemoveUser(User user)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean ModifyUser(User user)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean ChangePass(User user, char&amp;#91;&amp;#93; oldPass, char&amp;#91;&amp;#93; pass, char&amp;#91;&amp;#93; verifyPass)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      // The class contains test APIs<br />      public void AddTestUsers()<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />&amp;#125;</pre>
+  <pre>public sealed class UserManager<br />{<br />      public UserManager()<br />      {<br />            ...<br />      }<br />      public boolean AddUser(User user, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />      public boolean RemoveUser(User user)<br />      {<br />            ...<br />      }<br />      public boolean ModifyUser(User user)<br />      {<br />            ...<br />      }<br />      public boolean ChangePass(User user, char[] oldPass, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />      // The class contains test APIs<br />      public void AddTestUsers()<br />      {<br />            ...<br />      }<br />}</pre>
   <h1>Solution Example</h1>
   <p>The following code shows the user management system for an application. Because the test APIs is removed from the class, there is no untested code that a malicious user can attack.</p>
-  <pre>// The class contains no test APIs<br />public sealed class UserManager<br />&amp;#123;<br />      public UserManager()<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean AddUser(User user, char&amp;#91;&amp;#93; pass, char&amp;#91;&amp;#93; verifyPass)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean RemoveUser(User user)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      public boolean ModifyUser(User user)<br />      &amp;#123;<br />            ...<br />      &amp;#125; <br />      public boolean ChangePass(User user, char&amp;#91;&amp;#93; oldPass, char&amp;#91;&amp;#93; pass, char&amp;#91;&amp;#93; verifyPass)<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />&amp;#125;</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about compiling your application with debug and release configurations, see: <a href="http://msdn2.microsoft.com/en-us/library/wx0123s5(vs.80).aspx">How to: Set Debug and Release Configurations</a>.</li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/058ce803-1871-4365-acc1-51219a7f8a1b">Guideline: Remove Test Accounts&amp;nbsp;</a>
-      <li>
-        <a href="/article/e49c6b3a-880f-46db-a07d-80dc2177a36a">Attack: Business Rule Attack</a>
-        <li>
-          <a href="/article/576e329e-2528-4189-94c6-db64d4b99640">Checklist Item: Test Interfaces are Removed </a>
-        </li>
-      </li>
-    </li>
-  </ul>
+  <pre>// The class contains no test APIs<br />public sealed class UserManager<br />{<br />      public UserManager()<br />      {<br />            ...<br />      }<br />      public boolean AddUser(User user, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />      public boolean RemoveUser(User user)<br />      {<br />            ...<br />      }<br />      public boolean ModifyUser(User user)<br />      {<br />            ...<br />      } <br />      public boolean ChangePass(User user, char[] oldPass, char[] pass, char[] verifyPass)<br />      {<br />            ...<br />      }<br />}</pre>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>

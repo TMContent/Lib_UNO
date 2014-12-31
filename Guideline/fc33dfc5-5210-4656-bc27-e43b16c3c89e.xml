@@ -3,7 +3,7 @@
   <Metadata>
     <Id>fc33dfc5-5210-4656-bc27-e43b16c3c89e</Id>
     <Id_History>fc33dfc5-5210-4656-bc27-e43b16c3c89e,9570cc1f-f4ed-45cc-87f8-ce665a43cb9c,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Consider Log Throttling</Title>
     <Category>Auditing and Logging</Category>
     <Phase>Design</Phase>
@@ -30,24 +30,36 @@
     <li>
       <p>
         <strong>Identify the need for log throttling.</strong> Log throttling should be used when a given security event can be executed unlimited times within a limited period of time. If each occurrence of the event is logged, it can allow an attacker to poison your application's logs by overwriting more important entries.</p>
-      <li>
-        <p>
-          <strong>Establish a log throttling mechanism. </strong>Determine which security events can be throttled. Be careful not to throttle or skip critical security operations. Establish a throttling policy and design the throttling mechanism around it. </p>
-        <p>Use buffer modes if your application uses the ASP.NET health monitoring system for its logging purposes. Buffer modes are used to define the buffering properties used by any provider that inherits from <strong>System.Web.Management.BufferedWebEventProvider</strong>. Currently, this includes <strong>MailWebEventProvider</strong> and <strong>SqlWebEventProvider</strong>. You can also derive custom Web event providers from that base class and use buffer modes.</p>
-        <p>Configure the health monitoring system's buffering to minimize the performance impact and overhead of recording events. You can use the &lt;<strong>bufferModes</strong>&gt;<strong></strong>element to define how long events are buffered before they are written to the provider and you can distinguish between urgent or critical events and regular events. You can use any of the default buffer modes (Critical Notification, Notification, Analysis or Logging) configured in the machine-level Web.config.default file or you can configure a custom buffer mode.</p>
-        <p>
-          <strong>Note: </strong>For buffering to be enabled, you need to set <strong>buffer="true"</strong> on your provider configuration. You can reference the specific buffering configuration by using the <strong>bufferMode</strong> attribute on your provider definition as shown in the following code example.</p>
-        <pre>&lt;providers&gt;<br />  &lt;add name="providerName" buffer="true" bufferMode="bufferModeName" ... /&gt;<br />&lt;/providers&gt;</pre>
-        <p>Configure buffering to minimize the performance impact and overhead of recording events by declaring a &lt;bufferModes&gt; tag inside the <strong>healthMonitoring</strong> section of the web.config file:</p>
-        <pre>&lt;healthMonitoring&gt;<br />  &lt;bufferModes&gt;<br />    &lt;add name="Extra Critical Notification"<br />      maxBufferSize="10"<br />      maxFlushSize="5"<br />      urgentFlushThreshold="1"<br />      regularFlushInterval="Infinite"<br />      urgentFlushInterval="00:01:00"<br />      maxBufferThreads="1"/&gt;<br />  &lt;/bufferModes&gt;&lt;/healthMonitoring&gt;</pre>
-        <ul>
-          <li>
-            <strong>name</strong> attribute is a name for the buffer mode used to reference it from other elements. For example, the &lt;provider&gt; element references the specific buffer mode configuration by referencing the name in its bufferMode attribute. <li><strong>maxBufferSize</strong> is the maximum number of events that can be buffered by a provider before flushing them out and writing them to a store. <li><strong>maxFlushSize</strong> is the maximum number of events per flush. Its value should be between 1 and maxBufferSize. <li><strong>urgentFlushThreshold</strong> is the minimum number of events after which the events should be flushed. Its value should be less than or equal to maxBufferSize. <li><strong>regularFlushInterval</strong> is the time interval per flush. Its value cannot be zero. <li><strong>urgentFlushInterval</strong> is the minimum time between flushes. Its value must be between 0 and regularFlushInterval. <li><strong>maxBufferThreads</strong> is the maximum number of threads used for flushing.</li></li></li></li></li></li></li>
-        </ul>
-        <li>
-          <strong>Apply the log throttling mechanism.</strong> Identify the appropriate places in your application where log throttling should be applied. Follow the established mechanism when implementing log throttling. For instance, apply the smart throttling mechanism at places where the users can perform the same action unlimited times like adding items into a shopping cart.</li>
-      </li>
     </li>
+    <li>
+      <p>
+        <strong>Establish a log throttling mechanism. </strong>Determine which security events can be throttled. Be careful not to throttle or skip critical security operations. Establish a throttling policy and design the throttling mechanism around it. </p>
+      <p>Use buffer modes if your application uses the ASP.NET health monitoring system for its logging purposes. Buffer modes are used to define the buffering properties used by any provider that inherits from <strong>System.Web.Management.BufferedWebEventProvider</strong>. Currently, this includes <strong>MailWebEventProvider</strong> and <strong>SqlWebEventProvider</strong>. You can also derive custom Web event providers from that base class and use buffer modes.</p>
+      <p>Configure the health monitoring system's buffering to minimize the performance impact and overhead of recording events. You can use the &lt;<strong>bufferModes</strong>&gt;<strong></strong>element to define how long events are buffered before they are written to the provider and you can distinguish between urgent or critical events and regular events. You can use any of the default buffer modes (Critical Notification, Notification, Analysis or Logging) configured in the machine-level Web.config.default file or you can configure a custom buffer mode.</p>
+      <p>
+        <strong>Note: </strong>For buffering to be enabled, you need to set <strong>buffer="true"</strong> on your provider configuration. You can reference the specific buffering configuration by using the <strong>bufferMode</strong> attribute on your provider definition as shown in the following code example.</p>
+      <pre>&lt;providers&gt;<br />  &lt;add name="providerName" buffer="true" bufferMode="bufferModeName" ... /&gt;<br />&lt;/providers&gt;</pre>
+      <p>Configure buffering to minimize the performance impact and overhead of recording events by declaring a &lt;bufferModes&gt; tag inside the <strong>healthMonitoring</strong> section of the web.config file:</p>
+      <pre>&lt;healthMonitoring&gt;<br />  &lt;bufferModes&gt;<br />    &lt;add name="Extra Critical Notification"<br />      maxBufferSize="10"<br />      maxFlushSize="5"<br />      urgentFlushThreshold="1"<br />      regularFlushInterval="Infinite"<br />      urgentFlushInterval="00:01:00"<br />      maxBufferThreads="1"/&gt;<br />  &lt;/bufferModes&gt;&lt;/healthMonitoring&gt;</pre>
+      <ul>
+        <li>
+          <strong>name</strong> attribute is a name for the buffer mode used to reference it from other elements. For example, the &lt;provider&gt; element references the specific buffer mode configuration by referencing the name in its bufferMode attribute. </li>
+        <li>
+          <strong>maxBufferSize</strong> is the maximum number of events that can be buffered by a provider before flushing them out and writing them to a store. </li>
+        <li>
+          <strong>maxFlushSize</strong> is the maximum number of events per flush. Its value should be between 1 and maxBufferSize. </li>
+        <li>
+          <strong>urgentFlushThreshold</strong> is the minimum number of events after which the events should be flushed. Its value should be less than or equal to maxBufferSize. </li>
+        <li>
+          <strong>regularFlushInterval</strong> is the time interval per flush. Its value cannot be zero. </li>
+        <li>
+          <strong>urgentFlushInterval</strong> is the minimum time between flushes. Its value must be between 0 and regularFlushInterval. </li>
+        <li>
+          <strong>maxBufferThreads</strong> is the maximum number of threads used for flushing.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Apply the log throttling mechanism.</strong> Identify the appropriate places in your application where log throttling should be applied. Follow the established mechanism when implementing log throttling. For instance, apply the smart throttling mechanism at places where the users can perform the same action unlimited times like adding items into a shopping cart.</li>
   </ol>
   <h1>Problem Example</h1>
   <p>An ASP.NET application does not use health monitoring, but logs many events via a standard SQL server database. Several of the operations that the application user performs is capable of generating quantities of log volume. An attacker begins to perform the operation many times. The logs will fill up quickly, and dramatically affect the servers ability to handle incoming requests, this results in a denial of service condition for application users. Furthermore, logs start to get dropped which allows the hacker to cover up evidence of a previous attack by flooding the logs until so that the events that indicate hacking attempts are flushed from the system.</p>
@@ -55,19 +67,7 @@
   <p>An ASP.NET application logs many events via a standard SQL server database. The developer realizes that the application might be subjected to denial of service attempts, and configures health monitoring throttle logging by setting the <strong>BufferModes </strong>element in the web.config file: </p>
   <pre>&lt;healthMonitoring&gt;<br />  &lt;bufferModes&gt;<br />    &lt;add name="Extra Critical Notification"<br />      maxBufferSize="10"<br />      maxFlushSize="5"<br />      urgentFlushThreshold="3"<br />      regularFlushInterval="00:03:00"<br />      urgentFlushInterval="00:01:00"<br />      maxBufferThreads="1"/&gt;<br />  &lt;/bufferModes&gt;<br />&lt;/healthMonitoring&gt;</pre>
   <p>It is determined that the logging facilities for the application enables an attacker to generate 6 log entries per minute, regardless of the number of connections to the application that she or he is able to achieve. The goal is to ensure that the attacker can never exceed the maxBufferSize, since logs will start getting dropped.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about auditing security events, see: <a href="http://technet.microsoft.com/en-us/library/cc738320(WS.10).aspx">Auditing Security Events Concepts</a>.</li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/92fed6bc-b075-486f-9a25-d77fddd6cf13">Attack: Denial of Service Attack</a>
-      <li>
-        <a href="/article/079d6e64-8efb-4350-ae79-81cd0dd584a7">Attack: Creation of False Transaction Attack</a>
-      </li>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>

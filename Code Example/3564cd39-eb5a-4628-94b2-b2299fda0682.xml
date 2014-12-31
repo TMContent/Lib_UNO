@@ -3,7 +3,7 @@
   <Metadata>
     <Id>3564cd39-eb5a-4628-94b2-b2299fda0682</Id>
     <Id_History>3564cd39-eb5a-4628-94b2-b2299fda0682,4e1cf479-dab9-433a-9101-2b35b90d7edb,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Avoid Canonicalization And Race Conditions When Creating a Temporary File</Title>
     <Category>Canonicalization</Category>
     <Phase>Implementation</Phase>
@@ -76,7 +76,7 @@
   <p>Running code similar to that shown below will demonstrate the uniqueness of System generated GUIDs which coincides with our goal to create temporary files which avoid canonicalization and race conditions.</p>
   <pre>for (int i = 0; i &lt; 10; i++){<br />    Response.Output.WriteLine("GUID: " + Guid.NewGuid());<br />}</pre>
   <h1>Expected Result</h1>
-  <pre>GUID: 1a40e34d-9985-4b2e-9c6a-8be88cfcc26b<br />GUID: 1b7bd6d5-057e-4681-b213-a193170fc5d5<br />GUID: b063f09d-d393-4fbc-b704-e5cefd708703<br /><br /><br />GUID: 088101b3-dc2e-474b-a898-53508b4a9ac5<br /><br />GUID: bffc841c-e6e8-4562-8ece-8d1ace19fd4d<br />GUID: 21ff1e43-0d10-46d7-9df6-a9053f3aabc9<br />GUID: 36f49e30-c81d-484a-94a0-cc09197839a0<br />GUID: a6d32483-bc6e-4828-b3cd-423ab1e1389e<br />GUID: d8ed1bf8-413e-4be9-97d8-ad9337030310<br />GUID: eba93b92-384d-41d2-8db3-6028932fee4d</pre>
+  <pre>GUID: 1a40e34d-9985-4b2e-9c6a-8be88cfcc26b<br />GUID: 1b7bd6d5-057e-4681-b213-a193170fc5d5<br />GUID: b063f09d-d393-4fbc-b704-e5cefd708703<br />GUID: 088101b3-dc2e-474b-a898-53508b4a9ac5<br />GUID: bffc841c-e6e8-4562-8ece-8d1ace19fd4d<br />GUID: 21ff1e43-0d10-46d7-9df6-a9053f3aabc9<br />GUID: 36f49e30-c81d-484a-94a0-cc09197839a0<br />GUID: a6d32483-bc6e-4828-b3cd-423ab1e1389e<br />GUID: d8ed1bf8-413e-4be9-97d8-ad9337030310<br />GUID: eba93b92-384d-41d2-8db3-6028932fee4d</pre>
   <h1>More Information</h1>
   <p>The file retrieval function demonstrates the ability to securely serve files back to users avoiding common attacks such as HTTP header injection, directory traversal and race conditions as filenames are controlled entirely by the server. In the event that the application needs to preserve original filenames, these values may be stored in the database (after data validation for known good characters) along with the system generated Guid. The original filename may then be set within the Content-Disposition header.</p>
   <h1>Additional Resources</h1>

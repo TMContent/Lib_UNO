@@ -49,25 +49,7 @@
   <h1>Solution Example</h1>
   <p>An ASP.NET application has code to connect to a SQL database. It has defined an application-level global error handler to trap and log all unhandled exceptions. This allows the application to present a generic error message to the client while logging more detailed information to the server. </p>
   <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br /> &lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> {<br />     // Add the appropriate logging code<br />     Exception ex = Server.GetLastError();<br />     if (ex.GetType().Name.Equals("SQLException"))<br />     { <br />        Server.Transfer("dbError.html");<br />     }<br />     else<br />     {<br />         Server.Transfer("genericError.html");<br />     }<br />         Server.ClearError();<br /> }<br /> &lt;/script&gt;</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about creating custom errors in ASP.NET, visit <a href="http://support.microsoft.com/kb/306355">How to create custom error reporting pages in ASP.NET</a>.</li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/b8a062a5-d2f0-48f4-a2ad-12e3606d7469">Guideline: Use Structured Exception Handling </a>
-    </li>
-    <li>
-      <a href="/article/74be8616-ad22-4d1d-a7fc-8ff3d145fc61">Guideline: Do Not Disclose Exception Details to the Client </a>
-    </li>
-    <li>
-      <a href="/article/dc172f55-185d-4c34-996a-1e368662f3f7">Attack: Exception Information Disclosure Attack</a>
-    </li>
-    <li>
-      <a href="/article/4d3f994b-3be7-4e3d-8183-e213612cf5c4">Checklist Item: A Global Exception Handler is Used for Unhandled Exceptions </a>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

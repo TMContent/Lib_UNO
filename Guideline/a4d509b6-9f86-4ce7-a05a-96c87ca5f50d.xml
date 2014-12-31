@@ -28,50 +28,31 @@
   <h1>How</h1>
   <p>ASP.NET runs with the following configuration:</p>
   <ul>
-    <li>IIS 5: Applications run by default using the least privileged ASPNET account. <li>IIS 6 and later: Applications run inside an application pool using the least privileged Network Service account. If you need to use a custom service account to run your ASP.NET Web application, create a least-privileged account. You might need to create a custom service account to isolate your application from other applications on the same server or to be able to audit each application separately. </li></li>
+    <li>IIS 6 and later: Applications run inside an application pool using the least privileged Network Service account. If you need to use a custom service account to run your ASP.NET Web application, create a least-privileged account. You might need to create a custom service account to isolate your application from other applications on the same server or to be able to audit each application separately. </li>
   </ul>
   <p>To create a least privileged account:</p>
   <ol>
     <li>
       <p>Create a local or domain Windows account.</p>
-      <li>
-        <p>Run the following <strong>aspnet_regiis.exe</strong> utility to assign the relevant ASP.NET permissions to the account:</p>
-        <blockquote>
-          <pre>aspnet_regiis.exe -ga machineName\userName </pre>
-        </blockquote>
-        <p>On Windows Server, running the <strong>aspnet_regiis.exe -ga</strong> command will add the account to the IIS_WPG group. The IIS_WPG group provides the <strong>log on as a batch job</strong> user right and ensures that the necessary file system permissions are granted.</p>
-        <li>
-          <p>Use the Local Security Policy tool to grant the <strong>deny logon locally</strong> user right to the Windows account. This reduces the privileges of the account and prevents anyone logging onto Windows locally with the account.</p>
-          <li>
-            <p>If your application is hosted on IIS 6, use IIS Manager to create an application pool running under the new account's identity and assign your ASP.NET application to the pool.</p>
-          </li>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>Run the following <strong>aspnet_regiis.exe</strong> utility to assign the relevant ASP.NET permissions to the account:</p>
+      <blockquote>
+        <pre>aspnet_regiis.exe -ga machineName\userName </pre>
+      </blockquote>
+      <p>On Windows Server, running the <strong>aspnet_regiis.exe -ga</strong> command will add the account to the IIS_WPG group. The IIS_WPG group provides the <strong>log on as a batch job</strong> user right and ensures that the necessary file system permissions are granted.</p>
+    </li>
+    <li>
+      <p>Use the Local Security Policy tool to grant the <strong>deny logon locally</strong> user right to the Windows account. This reduces the privileges of the account and prevents anyone logging onto Windows locally with the account.</p>
+    </li>
+    <li>
+      <p>If your application is hosted on IIS 6, use IIS Manager to create an application pool running under the new account's identity and assign your ASP.NET application to the pool.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>MyApp is an HR application that uses the company's shares to store its documents. The application is operating with a privilege set that exceeds the minimum set of privileges necessary for it to complete its tasks. Using a canonicalization attack, an intruder exploits the application's report download feature and is able to gain access to important company records that would otherwise only be available to senior members of the staff.</p>
   <h1>Solution Example</h1>
   <p>MyApp is an HR application that uses the company's shares to store its documents. The application is operating with the minimum set of privileges necessary for it to complete its tasks. Using a canonicalization attack, an intruder exploits the application's report download feature and is able to gain access to arbitrary files on the company's share. Because of the application's account privileges, the intruder is only able to access files that are available to MyApp, but nothing more.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about system accounts and deploying applications on Windows server platforms securely, see these two chapters from the Microsoft's TechNet article <strong>Security Guidance for Server Security</strong>: <a href="http://www.microsoft.com/technet/security/guidance/serversecurity/serviceaccount/sspgch02.mspx">The Approach to Running Services More Securely</a> and <a href="http://www.microsoft.com/technet/security/guidance/serversecurity/serviceaccount/sspgch03.mspx#EHFAC">How To Run Services More Securely</a>.</li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/0c6693ed-e3c2-4640-a795-c7c9c2a63cbc">Guideline: Define a Security Policy</a>
-      <li>
-        <a href="/article/e49c6b3a-880f-46db-a07d-80dc2177a36a">Attack: Business Rule Attack</a>
-        <li>
-          <a href="/article/88134c36-4e54-47ca-8a83-fafe271ca05a">Attack: Luring Attack</a>
-          <li>
-            <a href="/article/6a219806-df28-4c00-bc2d-c2ce4c721b7e">Attack: Trust Relationship Attack</a>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>

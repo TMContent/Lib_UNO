@@ -3,7 +3,7 @@
   <Metadata>
     <Id>97dfd32f-deb6-4016-b3ff-24147a959521</Id>
     <Id_History>97dfd32f-deb6-4016-b3ff-24147a959521,eb83c129-039c-4c56-80e3-2419e34ba6d8,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Do Not Use the LogonUser API</Title>
     <Category>Impersonation and Delegation</Category>
     <Phase>Design</Phase>
@@ -25,111 +25,115 @@
   <h1>When</h1>
   <p>You should avoid using LogonUser API when:</p>
   <ul>
-    <li>Your application does not obtain Windows credentials <strong>directly</strong> from the user. <li>You are not fully confident in your application's ability to securely handle Windows credentials. <li>Your application operates in an environment that is governed by a Windows 2003 domain.</li></li></li>
+    <li>Your application does not obtain Windows credentials <strong>directly</strong> from the user. </li>
+    <li>You are not fully confident in your application's ability to securely handle Windows credentials. </li>
+    <li>Your application operates in an environment that is governed by a Windows 2003 domain.</li>
   </ul>
   <h1>How</h1>
   <p>Use the following steps when determining whether your application is suitable for using LogonUser:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify the need for impersonation.</strong> Using the <a href="/article/fdb65a4c-d979-4ab7-b2fa-b88e908207fe">Do Not Use Impersonation Unless Required</a> guideline, determine whether your application needs to perform programmatic impersonation.</p>
-      <li>
-        <p>
-          <strong>Identify if your application accepts Windows credentials from the user.</strong> Review your application's design and security requirements. Identify the locations in your code where users are asked for their credentials. Identify if your application's impersonation code can access the users' credentials.</p>
+        <strong>Identify the need for impersonation.</strong> Determine whether your application needs to perform programmatic impersonation.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify if your application accepts Windows credentials from the user.</strong> Review your application's design and security requirements. Identify the locations in your code where users are asked for their credentials. Identify if your application's impersonation code can access the users' credentials.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify if your application uses Active Directory.</strong> If you have administrative rights on your application's server, check if the server is a member of a Windows domain. If you do not have administrative rights on your application's server, contact your network administrators regarding the issue.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Choose an impersonation mechanism.</strong> Use the following criteria when choosing an impersonation mechanism:</p>
+      <ul>
         <li>
           <p>
-            <strong>Identify if your application uses Active Directory.</strong> If you have administrative rights on your application's server, check if the server is a member of a Windows domain. If you do not have administrative rights on your application's server, contact your network administrators regarding the issue.</p>
-          <li>
-            <p>
-              <strong>Choose an impersonation mechanism.</strong> Use the following criteria when choosing an impersonation mechanism:</p>
-            <ul>
-              <li>
-                <p>
-                  <strong>IIS.</strong> By default, IIS impersonates the user when performing Windows authentication. If your application uses Windows authentication, this is the preferred method of impersonating the current user. Using Windows authentication your application can permanently or temporarily impersonate the current user inside the scope of the current session.</p>
-                <ul>
-                  <li>
-                    <strong>Permanent.</strong> Configure IIS with Integrated Windows Authentication enabled and all other authentication methods disabled. Configure your ASP.NET application by adding the following configuration to the <strong>&lt;system.web&gt;</strong> section of your application's Web.config file. <blockquote><pre>&lt;authentication mode="Windows" /&gt;<br />&lt;identity impersonate="true" /&gt;</pre></blockquote><p>With this configuration, ASP.NET impersonates the IIS authenticated user, and the ASP.NET request threads that execute your Web application's code have the impersonation token attached to them. </p><p>While the above configuration ensures that all resource access is performed using the identity of the original caller, if you need to access specific resources such as local files by using the process identity, you can temporarily remove the impersonation token from the ASP.NET request thread by using the following code: </p><blockquote><pre>// Stop impersonation<br />WindowsImpersonationContext ctx = WindowsIdentity.Impersonate(IntPtr.Zero);<br />try<br />&amp;#123;<br />  // Thread is now running under the process identity.<br />  // Any resource access here uses the process identity.<br />&amp;#125;<br />finally <br />&amp;#123;<br />  // Resume impersonation<br />  ctx.Undo(); <br />&amp;#125;</pre></blockquote><li><p><strong>Temporary.</strong> To temporarily impersonate the original caller within a particular method, you need to obtain the <strong>WindowsIdentity</strong> object that represents the authenticated user, and then call its <strong>Impersonate</strong> method. </p><ol><li><p><strong>Ensure that impersonation is disabled for your ASP.NET application</strong>. Use the following configuration in the Web.config file to disable impersonation:</p><blockquote><pre>&lt;identity impersonate="false" /&gt;</pre></blockquote><li><p><strong>Obtain the authenticated token. </strong>Add the following code to the method that requires impersonation.</p><blockquote><pre>using System.Security.Principal;<br />...<br />// Obtain the authenticated user's Identity<br />WindowsIdentity winId = (WindowsIdentity)HttpContext.Current.User.Identity;<br />WindowsImpersonationContext ctx = null;<br />try<br />&amp;#123;<br />  // Start impersonating<br />  ctx = winId.Impersonate();<br />  // Now impersonating<br />  // Access resources using the identity of the authenticated user<br />&amp;#125;<br />// Prevent exceptions from propagating<br />catch<br />&amp;#123;<br />&amp;#125;<br />finally<br />&amp;#123;<br />  // Revert impersonation<br />  if (ctx &amp;#33;= null)<br />  ctx.Undo();<br />&amp;#125;<br />// Back to running under the default ASP.NET process identity</pre></blockquote><p>This code impersonates the original caller. The original caller's identity is maintained in the HttpContext.Current.User.Identity object. </p><p>Notice how the preceding code uses a finally block to ensure that impersonation is reverted even in the event of an exception. The code also uses a catch block to ensure that an exception cannot propagate itself up the call stack while the thread is impersonating.</p></li></li></ol></li></li>
-                </ul>
-                <li>
-                  <p>
-                    <strong>&lt;identity&gt;.</strong> The &lt;identity&gt; element inside <strong>web.config</strong> is the preferred way of doing impersonation. It is used when your application needs to impersonate a specific account. Use the <a href="/article/faada3f5-3f50-42fc-b863-5058e3d848cb">Protect Sensitive Data Inside Configuration Files</a> guideline to protect the &lt;identity&gt; element. Example:</p>
-                  <blockquote>
-                    <pre>&lt;identity impersonate="true" userName="registry:HKLM\Software\MyApp\Identity\ASPNET_SETREG,userName"<br />                              password="registry:HKLM\Software\MyApp\Identity\ASPNET_SETREG,password" /&gt;</pre>
-                  </blockquote>
-                  <li>
-                    <p>
-                      <strong>Kerberos.</strong> Because the impersonation privileges are managed by the Active Directory, Kerberos is the preferred way of doing programmatic impersonation. The use of Active Directory allows your application to impersonate a user without the need of explicitly handling the user's credentials. However, your application must have the appropriate privileges in the Active Directory to perform such task. Example:</p>
-                    <blockquote>
-                      <pre>WindowsIdentity winIdentity = new WindowsIdentity(<a href="mailto:username&amp;#64;domainName">username&amp;#64;domainName</a>);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();</pre>
-                    </blockquote>
-                    <li>
-                      <p>
-                        <strong>LogonUser.</strong> LogonUser may be used if and only if your application already handles its users' Windows credentials as part of its authentication schema. Otherwise it is recommended to use the other two approaches. Example:</p>
-                      <blockquote>
-                        <pre>IntPtr token;<br />bool result; <br />result = LogonUser("user", "domain", "pass", LogonTypes.Batch, LogonProviders.Default, out token); <br />if (result)<br />&amp;#123;<br />    WindowsIdentity winIdentity = new WindowsIdentity(token);<br />    CloseHandle(token);<br />    WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />&amp;#125;<br /> ... <br />&amp;#91;DllImport("advapi32.dll", SetLastError = true)&amp;#93;<br />static extern bool LogonUser(  string principal,  string authority,<br />  string password,  LogonTypes logonType,  LogonProviders logonProvider,<br />  out IntPtr token);<br />&amp;#91;DllImport("kernel32.dll", SetLastError = true)&amp;#93;<br />static extern bool CloseHandle(IntPtr handle); <br />enum LogonTypes : uint<br />&amp;#123;<br />    Interactive = 2,    Network,    Batch,    Service,    NetworkCleartext = 8,    NewCredentials<br />&amp;#125;<br /><br />enum LogonProviders : uint<br />&amp;#123;<br />    Default = 0, // default for platform <br />    WinNT35, // sends smoke signals to authority<br />    WinNT40, // uses NTLM<br />    WinNT50      // negotiates Kerb or NTLM&amp;#125;</pre>
-                      </blockquote>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </ul>
+            <strong>IIS.</strong> By default, IIS impersonates the user when performing Windows authentication. If your application uses Windows authentication, this is the preferred method of impersonating the current user. Using Windows authentication your application can permanently or temporarily impersonate the current user inside the scope of the current session.</p>
+          <ul>
+            <li>
+              <strong>Permanent.</strong> Configure IIS with Integrated Windows Authentication enabled and all other authentication methods disabled. Configure your ASP.NET application by adding the following configuration to the <strong>&lt;system.web&gt;</strong> section of your application's Web.config file. <blockquote><pre>&lt;authentication mode="Windows" /&gt;<br />&lt;identity impersonate="true" /&gt;</pre></blockquote><p>With this configuration, ASP.NET impersonates the IIS authenticated user, and the ASP.NET request threads that execute your Web application's code have the impersonation token attached to them. </p><p>While the above configuration ensures that all resource access is performed using the identity of the original caller, if you need to access specific resources such as local files by using the process identity, you can temporarily remove the impersonation token from the ASP.NET request thread by using the following code: </p><blockquote><pre>// Stop impersonation<br />WindowsImpersonationContext ctx = WindowsIdentity.Impersonate(IntPtr.Zero);<br />try<br />{<br />  // Thread is now running under the process identity.<br />  // Any resource access here uses the process identity.<br />}<br />finally <br />{<br />  // Resume impersonation<br />  ctx.Undo(); <br />}</pre></blockquote></li>
             <li>
               <p>
-                <strong>Apply the impersonation mechanism.</strong> Apply the appropriate impersonation mechanism. Keep in mind the following considerations:</p>
-              <ul>
+                <strong>Temporary.</strong> To temporarily impersonate the original caller within a particular method, you need to obtain the <strong>WindowsIdentity</strong> object that represents the authenticated user, and then call its <strong>Impersonate</strong> method. </p>
+              <ol>
                 <li>
-                  <p>Always impersonate as close as possible to the code that requires impersonation. This ensures that no extra functionality is executed within the context of the impersonated user.</p>
-                  <li>
-                    <p>Keep impersonation as short as possible. Execute the functionality that requires it and exit the impersonated context. Use the <strong>finally</strong> block to ensure that the impersonation is always terminated:</p>
-                    <blockquote>
-                      <pre>using System.Security.Principal;<br />...<br />WindowsIdentity winIdentity = new WindowsIdentity(<a href="mailto:username&amp;#64;domainName">username&amp;#64;domainName</a>);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />try<br />&amp;#123;<br />  // Do work<br />&amp;#125;<br />catch(Exception ex)<br />&amp;#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&amp;#125;<br />finally<br />&amp;#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&amp;#125;</pre>
-                    </blockquote>
-                    <li>
-                      <p>Keep impersonation occurrences to a minimum. If your application needs to do multiple impersonations, try to group these actions together as possible. Do not use LogonUser if you need to impersonate in multiple locations throughout your code.</p>
-                      <li>
-                        <p>Do not propagate exceptions. Use the <a href="/article/5b6c71b0-cb89-4435-b30e-2fd76347078e">Do Not Propagate Exceptions While Impersonating</a> guideline to properly handle exceptions inside the impersonated context.</p>
-                      </li>
-                    </li>
-                  </li>
+                  <p>
+                    <strong>Ensure that impersonation is disabled for your ASP.NET application</strong>. Use the following configuration in the Web.config file to disable impersonation:</p>
+                  <blockquote>
+                    <pre>&lt;identity impersonate="false" /&gt;</pre>
+                  </blockquote>
                 </li>
-              </ul>
+                <li>
+                  <p>
+                    <strong>Obtain the authenticated token. </strong>Add the following code to the method that requires impersonation.</p>
+                  <blockquote>
+                    <pre>using System.Security.Principal;<br />...<br />// Obtain the authenticated user's Identity<br />WindowsIdentity winId = (WindowsIdentity)HttpContext.Current.User.Identity;<br />WindowsImpersonationContext ctx = null;<br />try<br />{<br />  // Start impersonating<br />  ctx = winId.Impersonate();<br />  // Now impersonating<br />  // Access resources using the identity of the authenticated user<br />}<br />// Prevent exceptions from propagating<br />catch<br />{<br />}<br />finally<br />{<br />  // Revert impersonation<br />  if (ctx != null)<br />  ctx.Undo();<br />}<br />// Back to running under the default ASP.NET process identity</pre>
+                  </blockquote>
+                  <p>This code impersonates the original caller. The original caller's identity is maintained in the HttpContext.Current.User.Identity object. </p>
+                  <p>Notice how the preceding code uses a finally block to ensure that impersonation is reverted even in the event of an exception. The code also uses a catch block to ensure that an exception cannot propagate itself up the call stack while the thread is impersonating.</p>
+                </li>
+              </ol>
             </li>
-          </li>
+          </ul>
         </li>
-      </li>
+        <li>
+          <p>
+            <strong>&lt;identity&gt;.</strong> The &lt;identity&gt; element inside <strong>web.config</strong> is the preferred way of doing impersonation. It is used when your application needs to impersonate a specific account. Example:</p>
+          <blockquote>
+            <pre>&lt;identity impersonate="true" userName="registry:HKLM\Software\MyApp\Identity\ASPNET_SETREG,userName"<br />                              password="registry:HKLM\Software\MyApp\Identity\ASPNET_SETREG,password" /&gt;</pre>
+          </blockquote>
+        </li>
+        <li>
+          <p>
+            <strong>Kerberos.</strong> Because the impersonation privileges are managed by the Active Directory, Kerberos is the preferred way of doing programmatic impersonation. The use of Active Directory allows your application to impersonate a user without the need of explicitly handling the user's credentials. However, your application must have the appropriate privileges in the Active Directory to perform such task. Example:</p>
+          <blockquote>
+            <pre>WindowsIdentity winIdentity = new WindowsIdentity(username@domainName);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();</pre>
+          </blockquote>
+        </li>
+        <li>
+          <p>
+            <strong>LogonUser.</strong> LogonUser may be used if and only if your application already handles its users' Windows credentials as part of its authentication schema. Otherwise it is recommended to use the other two approaches. Example:</p>
+          <blockquote>
+            <pre>IntPtr token;<br />bool result; <br />result = LogonUser("user", "domain", "pass", LogonTypes.Batch, LogonProviders.Default, out token); <br />if (result)<br />{<br />    WindowsIdentity winIdentity = new WindowsIdentity(token);<br />    CloseHandle(token);<br />    WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />}<br /> ... <br />[DllImport("advapi32.dll", SetLastError = true)]<br />static extern bool LogonUser(  string principal,  string authority,<br />  string password,  LogonTypes logonType,  LogonProviders logonProvider,<br />  out IntPtr token);<br />[DllImport("kernel32.dll", SetLastError = true)]<br />static extern bool CloseHandle(IntPtr handle); <br />enum LogonTypes : uint<br />{<br />    Interactive = 2,    Network,    Batch,    Service,    NetworkCleartext = 8,    NewCredentials<br />}<br /><br />enum LogonProviders : uint<br />{<br />    Default = 0, // default for platform <br />    WinNT35, // sends smoke signals to authority<br />    WinNT40, // uses NTLM<br />    WinNT50      // negotiates Kerb or NTLM}</pre>
+          </blockquote>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Apply the impersonation mechanism.</strong> Apply the appropriate impersonation mechanism. Keep in mind the following considerations:</p>
+      <ul>
+        <li>
+          <p>Always impersonate as close as possible to the code that requires impersonation. This ensures that no extra functionality is executed within the context of the impersonated user.</p>
+        </li>
+        <li>
+          <p>Keep impersonation as short as possible. Execute the functionality that requires it and exit the impersonated context. Use the <strong>finally</strong> block to ensure that the impersonation is always terminated:</p>
+          <blockquote>
+            <pre>using System.Security.Principal;<br />...<br />WindowsIdentity winIdentity = new WindowsIdentity(username@domainName);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />try<br />{<br />  // Do work<br />}<br />catch(Exception ex)<br />{<br />  // Stop impersonating<br />  ctx.Undo();<br />}<br />finally<br />{<br />  // Stop impersonating<br />  ctx.Undo();<br />}</pre>
+          </blockquote>
+        </li>
+        <li>
+          <p>Keep impersonation occurrences to a minimum. If your application needs to do multiple impersonations, try to group these actions together as possible. Do not use LogonUser if you need to impersonate in multiple locations throughout your code.</p>
+        </li>
+        <li>
+          <p>Do not propagate exceptions. <br /></p>
+        </li>
+      </ul>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>MyApp is the HR application at MyCorp. Although MyCorp's IT network is operated using an Active Directory, MyApp performs a certificate-based single sign-on. MyApp operates under the ASP.NET local system account. However, certain actions, such as file uploads, are performed using the users' Windows accounts. To meet this requirement, the application stores the users' credentials into its own credential repository and uses LogonUser to impersonate its users. An attacker compromises MyApp credential repository; therefore compromising valid users in MyCorp's Active Directory.</p>
   <blockquote>
-    <pre>HttpClientCertificate cert = HttpContext.Current.Request.ClientCertificate;<br />if (cert.IsPresent)<br />&amp;#123;<br />    IntPtr token;<br />    bool result;<br />    string cn = cert.Get("SUBJECT CN");<br />    string username = MyApp.GetUsername(cn);<br />    string password = MyApp.GetPassword(username);<br />    string domain = "NTDOMAIN";<br />    result = LogonUser(username, domain, password, LogonTypes.Batch, LogonProviders.Default, out token);<br />    if (result)<br />    &amp;#123;<br />        WindowsIdentity winIdentity = new WindowsIdentity(token);<br />        CloseHandle(token);<br />        WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />        // Store the uploaded file<br />    &amp;#125;<br />&amp;#125;</pre>
+    <pre>HttpClientCertificate cert = HttpContext.Current.Request.ClientCertificate;<br />if (cert.IsPresent)<br />{<br />    IntPtr token;<br />    bool result;<br />    string cn = cert.Get("SUBJECT CN");<br />    string username = MyApp.GetUsername(cn);<br />    string password = MyApp.GetPassword(username);<br />    string domain = "NTDOMAIN";<br />    result = LogonUser(username, domain, password, LogonTypes.Batch, LogonProviders.Default, out token);<br />    if (result)<br />    {<br />        WindowsIdentity winIdentity = new WindowsIdentity(token);<br />        CloseHandle(token);<br />        WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />        // Store the uploaded file<br />    }<br />}</pre>
   </blockquote>
   <h1>Solution Example</h1>
   <p>MyApp is the HR application at MyCorp. Although MyCorp's IT network is operated using an Active Directory, MyApp performs a certificate-based single sign-on. MyApp operates under the ASP.NET local system account. However, certain actions, such as file uploads, are performed using the users' Windows accounts. To meet this requirement, the application is authorized to impersonate its own users using Kerberos and the company's Active Directory service. Therefore compromising MyApp does not compromise the users in MyCorp's Active Directory.</p>
   <blockquote>
-    <pre>HttpClientCertificate cert = HttpContext.Current.Request.ClientCertificate;<br />if (cert.IsPresent)<br />&amp;#123;<br />    string cn = cert.Get("SUBJECT CN");<br />    string username = MyApp.GetUsername(cn);<br />    WindowsIdentity winIdentity = new WindowsIdentity(username &amp;#43; "&amp;#64;NTDOMAIN");<br />    WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />    // Store the uploaded file<br />&amp;#125;</pre>
+    <pre>HttpClientCertificate cert = HttpContext.Current.Request.ClientCertificate;<br />if (cert.IsPresent)<br />{<br />    string cn = cert.Get("SUBJECT CN");<br />    string username = MyApp.GetUsername(cn);<br />    WindowsIdentity winIdentity = new WindowsIdentity(username + "@NTDOMAIN");<br />    WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />    // Store the uploaded file<br />}</pre>
   </blockquote>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/faada3f5-3f50-42fc-b863-5058e3d848cb">Guideline: Protect Sensitive Data Inside Configuration Files</a>
-      <li>
-        <a href="/article/fdb65a4c-d979-4ab7-b2fa-b88e908207fe">Guideline: Do Not Use Impersonation Unless Required </a>
-        <li>
-          <a href="/article/5b6c71b0-cb89-4435-b30e-2fd76347078e">Guideline: Do Not Propagate Exceptions While Impersonating </a>
-          <li>
-            <a href="/article/88134c36-4e54-47ca-8a83-fafe271ca05a">Attack: Luring Attack</a>
-            <li>
-              <a href="/article/6a219806-df28-4c00-bc2d-c2ce4c721b7e">Attack: Trust Relationship Attack</a>
-              <li>
-                <a href="/article/618d21b2-e380-4b43-8e51-854a0855c74e">Checklist Item: The LogonUser API is Not Used </a>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

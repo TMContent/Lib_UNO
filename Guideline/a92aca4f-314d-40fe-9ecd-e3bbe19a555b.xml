@@ -46,7 +46,7 @@
       <ul>
         <li>
           <p>
-            <strong>Encrypt the communication channel.</strong> Depending on the current infrastructure and the other network party, it is possible to encrypt the connections using SSL, IPSec, or any technologies supported by the remote party. For more information, consult the <a href="/article/b070122f-f1d1-47da-a378-57f845d5db61">Encrypt Communication Links</a> guideline.</p>
+            <strong>Encrypt the communication channel.</strong> Depending on the current infrastructure and the other network party, it is possible to encrypt the connections using SSL, IPSec, or any technologies supported by the remote party. <br /></p>
         </li>
         <li>
           <p>
@@ -62,7 +62,7 @@
             <li>
               <p>
                 <strong>Encrypting</strong>: If encryption is used, use a key size of 256-bit or higher for symmetric encryption and 2048-bit or higher for public/private key encryption. Use AES for symmetric encryption or RSA for public/private key encryption. You should use symmetric encryption if and only if your application is the only entity that will access the encrypted data. If the data will be accessed by more than one parties, use public/private key encryption. Public/private key encryption allows your application to share sensitive data with multiple entities without disclosing its own encryption key.</p>
-              <pre>Rijndael encMD;ICryptoTransform encCT;<br />byte[] digest;<br />// The following code obtains the encryption key and initialization vector<br />// from the application's key repository. Consult the <a href="/article/cd4ccbbb-be9c-4ff4-8b20-d116819b634b">Use a Secure Key Storage Location</a><br />// guideline for more details when handling encryption keys.<br />encMD = Rijndael.Create();<br />encMD.Key = MyApp.Crypto.GetEncryptionKey();<br />encMD.IV = MyApp.Crypto.GetEncryptionIV();<br />encCT = encMD.CreateEncryptor(); <br />// Note that sensitiveData is of type byte[] and contains<br />// data that is sensitive in nature<br />digest = encCT.TransformFinalBlock(sensitiveData, 0, sensitiveData.Length);<br />encMD.Clear();</pre>
+              <pre>Rijndael encMD;ICryptoTransform encCT;<br />byte[] digest;<br />// The following code obtains the encryption key and initialization vector<br />// from the application's key repository. <br />encMD = Rijndael.Create();<br />encMD.Key = MyApp.Crypto.GetEncryptionKey();<br />encMD.IV = MyApp.Crypto.GetEncryptionIV();<br />encCT = encMD.CreateEncryptor(); <br />// Note that sensitiveData is of type byte[] and contains<br />// data that is sensitive in nature<br />digest = encCT.TransformFinalBlock(sensitiveData, 0, sensitiveData.Length);<br />encMD.Clear();</pre>
             </li>
           </ul>
         </li>
@@ -80,40 +80,6 @@
   <p>An e-commerce application written in ASP.NET enables customers to pay their bills online through a unified broker. The application's web component relies on an independent account management system that resides on another server. The web component communicates with the account management system using a SQL socket connection. The two servers are located in a competitively priced data center that houses a number of other customers, all of which are able to access the building at all times. The application's developers encrypt the payment information before transmitting it to the other network entity.</p>
   <pre>void ProcessPayment(byte[] ccInfo, float amount)<br />{<br />    byte[] ccDigest = MyApp.Crypto.EncryptCCInfo(ccInfo);<br />    SqlConnection connection;<br />    SqlCommand command;<br />    SqlDataReader result; <br />    string query = "execute QueuePayment @ccDigest @amount;";<br />    connection = MyApp.DBManager.GetDBConnection();<br />    command = new SqlCommand(query, connection);<br />    command.Parameters.Add("@ccDigest", System.Data.SqlDbType.Binary);<br />    command.Parameters["@ccDigest"].Value = ccDigest;<br />    command.Parameters.Add("@amount", System.Data.SqlDbType.Float);<br />    command.Parameters["@amount"].Value = amount;<br />    ...<br />} <br />... <br />public byte[] EncryptCCInfo(byte[] ccInfo)<br />{<br />    Rijndael encMD;<br />    ICryptoTransform encCT;<br />    byte[] digest;<br />    encMD = Rijndael.Create();<br />    encMD.Key = MyApp.Crypto.GetEncryptionKey();<br />    encMD.IV = MyApp.Crypto.GetEncryptionIV();<br />    encCT = encMD.CreateEncryptor();<br />    digest = encCT.TransformFinalBlock(ccInfo, 0, ccInfo.Length);<br />    encMD.Clear();<br />    return digest;<br />}</pre>
   <p>Because data between the two components is encrypted, the transmission medium is less likely to affect the application's ability to securely transmit payment information.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information on setting up SSL, see: <a href="http://msdn2.microsoft.com/en-us/library/ms181053(VS.80).aspx">Set Up Secure Sockets Layer (SSL)</a></li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/b070122f-f1d1-47da-a378-57f845d5db61">Guideline: Encrypt Communication Links </a>
-    </li>
-    <li>
-      <a href="/article/cd4ccbbb-be9c-4ff4-8b20-d116819b634b">Guideline: Use a Secure Key Storage Location </a>
-    </li>
-    <li>
-      <a href="/article/bd63d4b0-205d-4d95-9022-86a3f0af5232">Guideline: Use SSL When Transmitting Credentials </a>
-    </li>
-    <li>
-      <a href="/article/4e938b66-254d-42ce-b714-a5de348b37e7">Attack: Traffic Analysis Attack</a>
-    </li>
-    <li>
-      <a href="/article/7d83d845-cd2b-4067-bb4c-5fbb890b9c9e">Attack: Information Disclosure Attack</a>
-    </li>
-    <li>
-      <a href="/article/74e70134-b639-4cdc-b3e7-fe2952256d98">Attack: Network Credential Sniffing Attack</a>
-    </li>
-    <li>
-      <a href="/article/cf06603e-440e-4118-85d5-ad360817fabc">Attack: Network Eavesdropping Attack</a>
-    </li>
-    <li>
-      <a href="/article/a048eed9-ad5a-4dac-a8d3-68f42da69dbd">Attack: Man in the Middle Attack</a>
-    </li>
-    <li>
-      <a href="/article/e2a7e430-e0fd-4443-89d4-76cd4f970d9d">Checklist Item: Sensitive Data is Protected Over the Network </a>
-    </li>
-  </ul>
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

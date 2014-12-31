@@ -31,82 +31,59 @@
       <p>
         <strong>Identify the need for a key store.</strong> Your application should use a key store only when it encrypts and decrypts sensitive data. Common components that will require the use of a key store include:</p>
       <ul>
-        <li>Storing encryption keys used to exchange encrypted sensitive data with other systems <li>Storing keys or certificates used to authenticate to other systems <li>Storing keys used to sign documents</li></li></li>
+        <li>Storing encryption keys used to exchange encrypted sensitive data with other systems </li>
+        <li>Storing keys or certificates used to authenticate to other systems </li>
+        <li>Storing keys used to sign documents</li>
       </ul>
-      <li>
-        <p>
-          <strong>Choose the appropriate mechanism for handling encryption keys.</strong> Carefully choose the appropriate mechanism for handling your application's encryption keys.</p>
-        <ul>
-          <li>
-            <p>
-              <strong>Windows Registry</strong>: If you store your application's encryption keys into the Windows Registry, ensure that DPAPI, available through the ProtectData class, is used to protect them. Example:</p>
-            <pre>encKey = ProtectedData.Protect(encKey, salt, DataProtectionScope.CurrentUser);<br />RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\MyApp\\KeyStore", true);<br />rk.SetValue("encKey", wBuff, RegistryValueKind.Binary);</pre>
-            <li>
-              <p>
-                <strong>web.config</strong>: If you store your application's encryption keys into web.config, ensure that they are stored into the <strong>appSettings</strong> section. Additionally, use the <strong>aspnet_regiis</strong> utility to ensure that the <strong>appSettings</strong> section is encrypted. Example:</p>
-              <pre>aspnet_regiis -pe "appSettings" -app "/&lt; your application's name &gt;"<br />  -prov "DataProtectionConfigurationProvider"</pre>
-            </li>
-          </li>
-        </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Choose the appropriate mechanism for handling encryption keys.</strong> Carefully choose the appropriate mechanism for handling your application's encryption keys.</p>
+      <ul>
         <li>
           <p>
-            <strong>Protect the key store.</strong>
-          </p>
-          <ul>
-            <li>
-              <strong>Set appropriate permissions</strong>: Apply the appropriate filesystem permissions such that the configuration files can be only accessed by your application and its administrators. <li><strong>IIS metabase</strong>: Grant only the necessary users access to the IIS metabase. These users should be the administrators and the ASP.NET account only. See <a href="http://support.microsoft.com/kb/326902">Microsoft's KB 326902</a> for more information.</li></li>
-          </ul>
-          <li>
-            <p>
-              <strong>Avoid common mistakes.</strong>
-            </p>
-            <ul>
-              <li>
-                <strong>Do not hard-code keys in the application</strong>: Hard-coding the encryption keys into the source code, hoping that an attacker will not reverse engineer the application, is security through obscurity. A determined attacker will usually find a way to defeat such mechanism. <li><strong>Do not place keys into configuration files</strong>: Obfuscating the encryption keys and placing them into configuration files other than web.config is security through obscurity. A determined attacker will usually find a way to defeat such mechanism. <li><strong>Unload keys from memory after their use</strong>: Leaving the encryption keys in memory after their final use allows the operating system to page them from memory and onto the hard drive. A determined attacker may find a way to obtain the encryption keys from the operating system's page file.</li></li></li>
-            </ul>
-          </li>
+            <strong>Windows Registry</strong>: If you store your application's encryption keys into the Windows Registry, ensure that DPAPI, available through the ProtectData class, is used to protect them. Example:</p>
+          <pre>encKey = ProtectedData.Protect(encKey, salt, DataProtectionScope.CurrentUser);<br />RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\MyApp\\KeyStore", true);<br />rk.SetValue("encKey", wBuff, RegistryValueKind.Binary);</pre>
         </li>
-      </li>
+        <li>
+          <p>
+            <strong>web.config</strong>: If you store your application's encryption keys into web.config, ensure that they are stored into the <strong>appSettings</strong> section. Additionally, use the <strong>aspnet_regiis</strong> utility to ensure that the <strong>appSettings</strong> section is encrypted. Example:</p>
+          <pre>aspnet_regiis -pe "appSettings" -app "/&lt; your application's name &gt;"<br />  -prov "DataProtectionConfigurationProvider"</pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Protect the key store.</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>Set appropriate permissions</strong>: Apply the appropriate filesystem permissions such that the configuration files can be only accessed by your application and its administrators. </li>
+        <li>
+          <strong>IIS metabase</strong>: Grant only the necessary users access to the IIS metabase. These users should be the administrators and the ASP.NET account only. <br /></li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid common mistakes.</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>Do not hard-code keys in the application</strong>: Hard-coding the encryption keys into the source code, hoping that an attacker will not reverse engineer the application, is security through obscurity. A determined attacker will usually find a way to defeat such mechanism. </li>
+        <li>
+          <strong>Do not place keys into configuration files</strong>: Obfuscating the encryption keys and placing them into configuration files other than web.config is security through obscurity. A determined attacker will usually find a way to defeat such mechanism. </li>
+        <li>
+          <strong>Unload keys from memory after their use</strong>: Leaving the encryption keys in memory after their final use allows the operating system to page them from memory and onto the hard drive. A determined attacker may find a way to obtain the encryption keys from the operating system's page file.</li>
+      </ul>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>The following code shows a hard-coded encryption key inside the application. A determined attacker will be able to compromise the key once they gain access to the source code.</p>
-  <pre>byte&amp;#91;&amp;#93; salt = MyApp.Crypto.GenerateSalt();string secretString = "application's encryption key";<br />HMACSHA512 md = new HMACSHA512(salt);md.Initialize();<br />byte&amp;#91;&amp;#93; rawKey = md.ComputeHash(Encoding.ASCII.GetBytes(secretString));md.Clear();<br />Rijndael encMD = Rijndael.Create();encMD.Key = rawKey;<br />encMD.IV = salt;ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
+  <pre>byte[] salt = MyApp.Crypto.GenerateSalt();string secretString = "application's encryption key";<br />HMACSHA512 md = new HMACSHA512(salt);md.Initialize();<br />byte[] rawKey = md.ComputeHash(Encoding.ASCII.GetBytes(secretString));md.Clear();<br />Rijndael encMD = Rijndael.Create();encMD.Key = rawKey;<br />encMD.IV = salt;ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
   <h1>Solution Example</h1>
   <p>The following code shows an application that securely stores its encryption keys. Because the keys are stored into the Windows Registry and are protected with the ASP.NET's DPAPI encryption keys, it is impossible for an attacker to steal the actual key without compromising the password associated with the ASP.NET local system account.</p>
-  <pre>byte&amp;#91;&amp;#93; salt = MyApp.Crypto.GenerateSalt(); <br />RegistryKey regKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\MyApp\\KeyStore", true);<br />byte&amp;#91;&amp;#93; rawKey = (byte&amp;#91;&amp;#93;)regKey.GetValue("encKey", null);<br />rawKey = ProtectedData.Unprotect(rawKey, salt, DataProtectionScope.CurrentUser); <br />Rijndael encMD = Rijndael.Create();<br />encMD.Key = rawKey;encMD.IV = salt;<br />ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information on restricting metabase access, see: <a href="http://support.microsoft.com/kb/326902">KB 326902</a></li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/c6f3e32d-57b8-44cf-818a-c346d0014c06">Guideline: Do Not Store Plaintext Sensitive Data </a>
-      <li>
-        <a href="/article/23c21386-b64a-4872-8727-714977ba84a4">Guideline: Clear Sensitive Data from Memory when No Longer Used</a>
-        <li>
-          <a href="/article/faada3f5-3f50-42fc-b863-5058e3d848cb">Guideline: Protect Sensitive Data Inside Configuration Files </a>
-          <li>
-            <a href="/article/29e3d723-354f-4d82-ac7b-b004dc759c2f">Attack: Chosen Plaintext Attack</a>
-            <li>
-              <a href="/article/350d9e10-d3d2-4e15-af89-f6ea84c01320">Attack: Key Bruteforce Attack</a>
-              <li>
-                <a href="/article/6223be91-b703-41cb-83db-ceb4afb98c78">Attack: Weak Keystore Protection Attack</a>
-                <li>
-                  <a href="/article/340f0d7d-6226-4948-9934-84a07b3064bf">Attack: Chosen Ciphertext Attack</a>
-                  <li>
-                    <a href="/article/f45de1f9-3801-4677-966e-433241bfdd91">Checklist Item: A Secure Key Storage Location is Used </a>
-                    <hr />
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
+  <pre>byte[] salt = MyApp.Crypto.GenerateSalt(); <br />RegistryKey regKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\MyApp\\KeyStore", true);<br />byte[] rawKey = (byte[])regKey.GetValue("encKey", null);<br />rawKey = ProtectedData.Unprotect(rawKey, salt, DataProtectionScope.CurrentUser); <br />Rijndael encMD = Rijndael.Create();<br />encMD.Key = rawKey;encMD.IV = salt;<br />ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
+  <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>
