@@ -31,7 +31,7 @@
   <ol>
     <li>
       <p>
-        <strong>Identify all sources of user input.</strong> At design time and again at the code review stage during development, determine all the possible tainted inputs to the application. Determine the intended characteristics of each input (length, format, etc.) and create validators for them. The following list includes some common input sources:</p>
+        <strong>Identify all sources of user input.</strong> Determine all the possible tainted inputs to the application. The following list includes some common input sources:</p>
       <ul>
         <li>Form Fields </li>
         <li>Query strings </li>
@@ -42,38 +42,45 @@
     </li>
     <li>
       <p>
-        <strong>Identify all output that includes user input.</strong> At design time and again at the code review stage during development, trace all inputs to the system though and determine all of the places where they may be output. In each case, identify the context in which the output occurs.</p>
+        <strong>Identify all output that includes user input.</strong> Trace all inputs to the system though and determine all the code that will output it as a part of HTML, URL, JavaScript, CSS and XML contexts. Make a spreadsheet that contains all this information.<br /></p>
     </li>
     <li>
-      <p>
-        <strong>Ensure all user-controllable data is properly encoded before being sent as output.</strong> In each location where data is output, it must be encoded according to the context of the output.</p>
-      <p>Do not rely on the <em>Server.HtmlEncode</em> function to protect your application against cross-site scripting attacks. Instead use the Microsoft Anti-Cross-Site Scripting Library.<a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyID=f4cd231b-7e06-445b-bec7-343e5884e651"></a></p>
-      <p>Do not attempt to use a character block list; when taking into account Unicode characters, etc., along with new emerging attack forms, block lists are guaranteed to be ineffective. </p>
-      <p>Ensure that allow list encoding is performed so that all non-alphanumeric characters are encoded instead of certain specific characters like '&lt;', '&gt;, etc. </p>
-      <p>Encoding must be selected appropriately based upon how the output is returned to the client- either as HTML content or in a URL. Verify the context in which the output is used and ensure it is properly encoded. </p>
-      <p>If you are using the Microsoft Anti-Cross-Site Scripting Library, ensure that the <em>Microsoft.Security.Application.AntiXss.HtmlEncode</em> method is being used to encode HTML tags and their attributes. Similarly, in case your application constructs certain URLs from input data or data from a shared database, ensure that the <em>Microsoft.Security.Application.AntiXss.UrlEncode</em> method is being used to make them safe. Whether you are using <em>HttpUtility</em> encoding methods or the methods&amp;nbsp;from the Microsoft <em>AntiXss</em> library, the context matters. <em>HtmlEncode</em> cannot be used in all situations, for example for un-trusted data that is used to create URLs, <em>UrlEncode</em> should be used.</p>
-      <p>Make sure that you encode data at the last possible opportunity before the data is returned to the client. If you encode any earlier than this, you may not know the exact context that the data will be used in, and hence the format you need to encode into. Also, early encoding of some data can result in double encoding problems.</p>
-      <p>If data is being written out into an HTML context, the following code will ensure that only known safe characters get through and help prevent a large majority of known XSS attacks. It will increase the size of the resulting HTML and does require more processing overhead, but it is definitely safe for use in most scenarios:</p>
-      <pre>public static string HtmlEncode(string x){<br />  if (x == null)<br />  {<br />      return x;<br />  }<br />  return Regex.Replace(x, "^[a-zA-Z0-9]+$",<br />   new MatchEvaluator(WebUtility.EncodeMatch));<br />}</pre>
-    </li>
+      <b>Make sure the Microsoft AntiXSS library is used to encode special characters in data that is being displayed in HTML, URL, JavaScript, CSS and XML contexts.</b> Examine each piece of code that displays untrusted data in HTML, URL, JavaScript, CSS and XML contexts and make sure that corresponding functions from the AntiXSS library are used to encode the special characters in each piece of untrusted data at the very last moment before that piece of data is output. <br /></li>
   </ol>
   <h1>How To Fix</h1>
   <p>If you write output that includes user input or data from a shared database or a local file that you do not trust, encode it. Encoding the data ensures that it is treated as literal text and not as script. Use the following guidelines to encode user input:</p>
   <ol>
     <li>
+      <b>Use the Microsoft AntiXSS library. </b>The AntiXSS library is a part of .NET starting with .NET 4.5. For projects using .NET 4.0, it has to be added using NuGet. The AntiXSS library can encoded data in HTML, URL, JavaScript, CSS and XML contexts.<br /></li>
+    <li>
       <p>
-        <strong>Do not rely on HtmlEncode.</strong>&amp;nbsp;ASP.NET's Server.HtmlEncode function is often used to protect against cross-site scripting attacks. However, this function only encodes &lt;&gt;"&amp; characters. This is not sufficient to protect against all possible attacks.</p>
+        <strong>Identify all sources of user input.</strong> Determine all the possible tainted inputs to the application. The following list includes some common input sources:</p>
+      <ul>
+        <li>Form Fields </li>
+        <li>Query strings </li>
+        <li>Databases and data access methods </li>
+        <li>Cookie collection </li>
+        <li>Session and application variables</li>
+      </ul>
     </li>
     <li>
       <p>
-        <strong>Encode all special characters.</strong> The safest solution is to encode all non-alphanumeric characters. Only this type of whitelist solution will catch all possible XSS attacks, regardless of context.&amp;nbsp; This&amp;nbsp;requires more overhead in terms of processing time and size of the resulting HTML, but it is the safest encoding mechanism for all HTML contexts:</p>
-      <pre>public static string HtmlEncode(string x)<br />{<br />   if (x == null)<br />   {<br />   &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;return x;<br />   }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;return Regex.Replace(x, "^[a-zA-Z0-9]+$",<br />    new MatchEvaluator(WebUtility.EncodeMatch));<br />}</pre>
+        <strong>Identify all output that includes user input.</strong> Trace all inputs to the system though and determine all the code that 
+will output it as a part of HTML, URL, JavaScript, CSS and XML contexts.
+ Make a spreadsheet that contains all this information.</p>
     </li>
     <li>
-      <p />
-      <strong>Use the Microsoft Anti-XSS Library.</strong> If you are using the Anti-Cross Site Scripting Library, you can use the <em>Microsoft.Security.Application.AntiXss.HtmlEncode</em> method.&amp;nbsp;Similarly, if you write URLs that might contain unsafe characters because they have been constructed from input data or data from a shared database, use <em>Microsoft.Security.Application.AntiXss.UrlEncode</em> to make them safe. <p><b>Note: </b>Make sure that you encode data at the last possible opportunity before the data is returned to the client.&amp;nbsp;If you encode any earlier than this, you may not know the exact context that the data will be used in, and hence the format you need to encode into. Also, early encoding of some data can result in double encoding problems.</p></li>
+      <p>
+        <strong>Encode all special characters based on context.</strong> Use the corresponding functions in the Microsoft AntiXSS library to encode the data that is being displayed in HTML, URL, JavaScript, CSS and XML contexts. Encode that data at the last possible moment before displaying it to reduce the possibility of double-encoding bugs.<br /></p>
+    </li>
   </ol>
-  <br />
+  <ol>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>To download the Anti-XSS library, go to <a href="https://www.nuget.org/packages/AntiXSS/">https://www.nuget.org/packages/AntiXSS/
+</a></li>
+  </ul>
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
