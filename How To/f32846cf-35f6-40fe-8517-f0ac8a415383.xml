@@ -26,20 +26,24 @@
   <p>A Web application uses an account lockout policy to protect against clients attempting to log into accounts not belonging to them. However, this protection mechanism can be abused for malicious purposes. Account lockout bugs occur when attackers use an account lockout policy to lock out a legitimate client, thus putting the victim client in a denial-of-service (DoS) situation.</p>
   <p>Follow these steps to test for account lockout bugs:</p>
   <ul>
-    <li>Step 1: Understand attack scenarios <li>Step 2: Analyze causes and countermeasures <li>Step 3: Start testing and exploring</li></li></li>
+    <li>Step 1: Understand attack scenarios </li>
+    <li>Step 2: Analyze causes and countermeasures </li>
+    <li>Step 3: Start testing and exploring</li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
-  <p>An account lockout attack is a type of DoS attack aimed at preventing a legitimate client from accessing the application. The attacker needs to know a valid credential from the target client, such as the email address or username that the client uses to log into the application. Once this valid credential is discovered, an attacker launches the account lockout attack simply by trying to log in to the application using the valid credential but an invalid password (or other factor of authentication). The login attempt is repeated until the application&amp;#8217;s lockout policy locks the account. If the attack is successful, the victim is unable to access the application until the account is unlocked.</p>
+  <p>An account lockout attack is a type of DoS attack aimed at preventing a legitimate client from accessing the application. The attacker needs to know a valid credential from the target client, such as the email address or username that the client uses to log into the application. Once this valid credential is discovered, an attacker launches the account lockout attack simply by trying to log in to the application using the valid credential but an invalid password (or other factor of authentication). The login attempt is repeated until the application’s lockout policy locks the account. If the attack is successful, the victim is unable to access the application until the account is unlocked.</p>
   <p>In detail:</p>
   <ol>
-    <li>Attacker finds out valid credential from target client (username, email address, etc.). <li>Attacker tries to log in to the application using valid credential but an invalid password. <li>Attacker repeats Step 2 until the application indicates that the account has been locked.</li></li></li>
+    <li>Attacker finds out valid credential from target client (username, email address, etc.). </li>
+    <li>Attacker tries to log in to the application using valid credential but an invalid password. </li>
+    <li>Attacker repeats Step 2 until the application indicates that the account has been locked.</li>
   </ol>
   <h2>
-    <em>EBay Attack &amp;#91;i&amp;#93;</em>
+    <em>EBay Attack [i]</em>
   </h2>
   <p>EBay is a classic example of how attackers exploit account lockout bugs. In one example, a malicious user who wanted to beat his bidding competitors placed a bid for an item and then tried logging into the application three times using the email addresses of the competing bidders, but using incorrect passwords. As a result, eBay locked the accounts of the competitors, who were unable to log in and place a higher bid, allowing the attacker to win the auction.</p>
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
-  <p>Account lockout bugs exist by design. Locking an account after a certain number of failed login attempts protects users from the risk of credential brute-force/dictionary attacks. To fully avoid this vulnerability, the application must apply&amp;nbsp;an account lockout policy that doesn&amp;#8217;t block a legitimate client from using the application,&amp;nbsp;which is insecure because it opens the application to brute-force/dictionary attacks. Therefore, account lockout bugs can be seen as a necessary side effect of implementing account credential brute-force protection. To protect against this bug, stakeholders must weigh the risk of an account being locked (thus, putting the victim in a DoS scenario) against the risk of an account being broken into using credential brute-force/dictionary attacks.</p>
+  <p>Account lockout bugs exist by design. Locking an account after a certain number of failed login attempts protects users from the risk of credential brute-force/dictionary attacks. To fully avoid this vulnerability, the application must apply&amp;nbsp;an account lockout policy that doesn’t block a legitimate client from using the application,&amp;nbsp;which is insecure because it opens the application to brute-force/dictionary attacks. Therefore, account lockout bugs can be seen as a necessary side effect of implementing account credential brute-force protection. To protect against this bug, stakeholders must weigh the risk of an account being locked (thus, putting the victim in a DoS scenario) against the risk of an account being broken into using credential brute-force/dictionary attacks.</p>
   <h2>
     <em>Creating an account lockout policy for J2EE applications</em>
   </h2>
@@ -62,7 +66,9 @@
   </h2>
   <p>Follow these steps to test manually for account lockout bugs:</p>
   <ol>
-    <li>Open a Web browser and navigate to the login page. <li>Enter a valid username and an incorrect password and attempt to log in. <li>Check the response to see if the account was locked out. If the account is locked out, the test case is finished;&amp;nbsp;if not, repeat Step 2&amp;nbsp;ten times.&amp;nbsp;The number of failed login attempts can be increased, but it is recommended to use an automated tool for an increased number of login attempts (see the next test case).</li></li></li>
+    <li>Open a Web browser and navigate to the login page. </li>
+    <li>Enter a valid username and an incorrect password and attempt to log in. </li>
+    <li>Check the response to see if the account was locked out. If the account is locked out, the test case is finished;&amp;nbsp;if not, repeat Step 2&amp;nbsp;ten times.&amp;nbsp;The number of failed login attempts can be increased, but it is recommended to use an automated tool for an increased number of login attempts (see the next test case).</li>
   </ol>
   <p>Expected result: The application is vulnerable if the account is locked out.</p>
   <h2>
@@ -71,7 +77,12 @@
   <p>You can use a web-based password cracking tool to automate the login process. Keep in mind that the goal here is to execute repeated login attempts rather than to discover a password.&amp;nbsp; </p>
   <p>Follow these steps to automatically test for account lockout bugs:</p>
   <ol>
-    <li>Download and install Brutus (<a href="http://www.hoobie.net/brutus/">http://www.hoobie.net/brutus/</a>). <li>Run Brutus. <li>Type a target URL and authentication type. <li>In the <em>Pass Mode</em> dropdown list, select <em>Brute Force</em>. <li>Select range of characters to use. You must use these setting to determine how many number of failed login attempts you want to try.&amp;nbsp; <li>Click <em>Start</em>.</li></li></li></li></li></li>
+    <li>Download and install Brutus (<a href="http://www.hoobie.net/brutus/">http://www.hoobie.net/brutus/</a>). </li>
+    <li>Run Brutus. </li>
+    <li>Type a target URL and authentication type. </li>
+    <li>In the <em>Pass Mode</em> dropdown list, select <em>Brute Force</em>. </li>
+    <li>Select range of characters to use. You must use these setting to determine how many number of failed login attempts you want to try.&amp;nbsp; </li>
+    <li>Click <em>Start</em>.</li>
   </ol>
   <p>Expected result: The application is vulnerable if the account is locked out.</p>
   <h1>Conclusions </h1>
@@ -79,102 +90,6 @@
   <div>
     <hr />
   </div>
-  <p>&amp;#91;i&amp;#93; Account lockout attack. OWASP.&amp;nbsp; <a href="http://www.owasp.org/index.php/Account_lockout_attack">http://www.owasp.org/index.php/Account_lockout_attack</a></p>
-  <h1>Authentication Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/989e27ec-ffdf-4006-88bd-1c09fc991a28">Centralize Authentication Controls</a>
-    </li>
-    <li>
-      <a href="/article/d3a69ef7-2c63-41bc-81e4-803b0ea199d8">Use Server-side Authentication</a>
-    </li>
-    <li>
-      <a href="/article/38d12903-9c3b-46bd-9f5e-f223c3272624">Make Sure Authentication Controls Fail Securely</a>
-    </li>
-    <li>
-      <a href="/article/84fd606b-e2f2-4c48-9c6e-6b5e780c6163">Force Re-authentication When Executing Critical Functionality</a>
-    </li>
-    <li>
-      <a href="/article/c566cabe-2463-4d24-8763-22e8468d167e">Validate Usernames Before Processing Them</a>
-    </li>
-    <li>
-      <a href="/article/7ba2d49c-ff53-4755-97ae-0efcb0aa9c22">Lock Accounts After Consecutive Failed Login Attempts</a>
-    </li>
-    <li>
-      <a href="/article/4b5b1f05-aa9a-4ebc-8b2e-3cecabed03e1">Enforce Strong Passwords</a>
-    </li>
-    <li>
-      <a href="/article/ea25af24-8eca-45ad-9f41-94bad8880247">Force Password Renewal</a>
-    </li>
-    <li>
-      <a href="/article/c7825052-f281-4ac8-a786-41b776219af6">Mask All Password Fields</a>
-    </li>
-    <li>
-      <a href="/article/c4d9269f-9157-4919-952c-f0d14ccd7f60">Verify the Application's Authenticity to the User</a>
-    </li>
-    <li>
-      <a href="/article/b4f83e8e-3223-4e49-bc9c-56c8c7268582">Place Logout Links on All Pages that Require Authentication</a>
-    </li>
-    <li>
-      <a href="/article/ff95311e-797f-417f-bd0b-e6cf610f706c">Do Not Leave Passwords in Memory</a>
-    </li>
-    <li>
-      <a href="/article/bcf8adb4-8186-4b97-b490-4fa33f506bfd">Limit Access to the Credential Store</a>
-    </li>
-    <li>
-      <a href="/article/0dba2e1f-7d49-4d91-bc93-ad85480f784a">Consider Using JAAS for Authentication</a>
-    </li>
-    <li>
-      <a href="/article/9cf8aed6-22a5-49c1-a0ce-1d8e5366bebf">Consider Using Two Factor Authentication</a>
-    </li>
-  </ul>
-  <h1>Authentication Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/4e431329-73aa-41f7-b397-9b7e26294a4c">Authentication Controls Are Centralized</a>
-    </li>
-    <li>
-      <a href="/article/b103207d-73e3-4964-9a00-2b15c3e012b8">Server-side Authentication Is Used</a>
-    </li>
-    <li>
-      <a href="/article/ded06846-ad7f-4044-87d2-8bbb6b885713">Authentication Controls Fail Securely</a>
-    </li>
-    <li>
-      <a href="/article/df093ee3-ad7b-4191-935c-8bb0cad78d98">Re-authentication Is Enforced When Executing Critical Functionality</a>
-    </li>
-    <li>
-      <a href="/article/f8586505-72f9-4c14-a365-3e5049e5ca57">Usernames Are Validated Before Use</a>
-    </li>
-    <li>
-      <a href="/article/61e0e2b4-2f09-429a-b72f-f8933f2fa9b6">Accounts Are Locked After Consecutive Failed Login Attempts</a>
-    </li>
-    <li>
-      <a href="/article/7401862f-ae81-4f31-9340-981b0ec5a854">Strong Passwords Are Enforced</a>
-    </li>
-    <li>
-      <a href="/article/12889762-1d65-4b7d-a90a-58ff6c23d1e4">Password Renewal Is Enforced</a>
-    </li>
-    <li>
-      <a href="/article/09f994c9-a401-404c-bdc9-210038eba658">All Password Fields Are Masked</a>
-    </li>
-    <li>
-      <a href="/article/35851f18-13a0-4bf8-88cc-d35c371cfb12">The Application's Authenticity Is Verified to the User</a>
-    </li>
-    <li>
-      <a href="/article/493e0e57-254a-4697-8fa1-c93e706d416d">All Pages that Use Authentication Have Logout Links</a>
-    </li>
-    <li>
-      <a href="/article/55488f2e-ed85-4f0f-9f83-1d90a5d10bd0">Passwords Are Not Left in Memory</a>
-    </li>
-    <li>
-      <a href="/article/9031f577-80b0-4a2e-9652-7b470439a0df">Access to the Credential Store Is Limited</a>
-    </li>
-  </ul>
-  <h1>Authentication Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/f32846cf-35f6-40fe-8517-f0ac8a415383">How to Test for Account Lockout Bugs in Java</a>
-    </li>
-  </ul>]]></Data>
+  <p>[i] Account lockout attack. OWASP.&amp;nbsp; <a href="http://www.owasp.org/index.php/Account_lockout_attack">http://www.owasp.org/index.php/Account_lockout_attack</a></p>]]></Data>
   </Content>
 </TeamMentor_Article>

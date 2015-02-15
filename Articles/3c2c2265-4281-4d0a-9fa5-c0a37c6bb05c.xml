@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>3c2c2265-4281-4d0a-9fa5-c0a37c6bb05c</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Logs Are Kept for At Least One Year</Title>
+    <Category>Auditing and Logging</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Check For==
+
+Verify that the application does not delete logs. Logs should be stored on the centralized log server and managed there. Make sure that there is no way for the application to delete these logs.
+
+
+==Why==
+
+Logs should be kept for at least a year to facilitate investigations of compromises and other suspicious incidents. Often a compromise may last a year or more before it is discovered, which means that logs should be kept for an extended time period to provide a reasonable degree of assurance.
+
+
+==How to Check==
+
+To verify that the application does not delete logs, review the logging subsystem to make sure that there are no features for removing logs.
+
+
+==How to Fix==
+
+To prevent the application from deleting logs:
+
+# **Find code that deletes logs.** A centralized log server solution should not allow the application to delete logs. If for some reason there is a feature in the application that allows clearing logs, find the code that implements that feature.
+# **Remove code that deletes logs.** Remove the feature that allows clearing logs and the code that implements this feature.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

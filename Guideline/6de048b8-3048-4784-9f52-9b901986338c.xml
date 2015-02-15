@@ -3,7 +3,7 @@
   <Metadata>
     <Id>6de048b8-3048-4784-9f52-9b901986338c</Id>
     <Id_History>6de048b8-3048-4784-9f52-9b901986338c,204d043b-c0eb-42d0-870b-af2ff3a67d45,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Do Not Use XML Style Commenting in JSP Code</Title>
     <Category>Other</Category>
     <Phase>Implementation</Phase>
@@ -25,7 +25,7 @@
   <h1>What to Do</h1>
   <p>Avoid using XML style commenting in JSP code.</p>
   <h1>Why</h1>
-  <p>XML style comments in JSP code can be seen by the client. These comments may contain sensitive information that you don't want an attacker to gain access to. This can also reveal source code if the developer gets confused and uses XML comments (<!--    -->) in place of JSP comments (&lt;%-- xxx --%&gt;).</p>
+  <p>XML style comments in JSP code can be seen by the client. These comments may contain sensitive information that you don't want an attacker to gain access to. This can also reveal source code if the developer gets confused and uses XML comments (<!--     -->) in place of JSP comments (&lt;%-- xxx --%&gt;).</p>
   <h1>When</h1>
   <p>Always use JSP style commenting inside JSP code.</p>
   <h1>How</h1>
@@ -37,7 +37,7 @@
       <pre>&lt;%-- Connect to the back-up database server using a privileged account --%&gt;<br />String connString = getConnectionString();<br />Properties prop = loadDatabaseCredentials();<br />DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());<br />Connection cn = DriverManager.getConnection(connString, prop);</pre>
     </li>
     <li>
-      <p>Comments that are ok for the browser to see should be created using<strong></strong><em><!-- ...    --></em> tags.</p>
+      <p>Comments that are ok for the browser to see should be created using<strong></strong><em><!-- ...     --></em> tags.</p>
       <p>Any comments related to your application's appearance can be displayed to the browser. Such comments include comments regarding graphical design, color schema and layout of your application's presentation layer. For example, comments concerning different regions in the generated page may be disclosed with the browser as they help the graphical designers and web developers design the presentation layer of your application.</p>
     </li>
   </ul>
@@ -46,19 +46,10 @@
   <pre>&lt;!-- Filename: /myapp/index.jsp  --&gt;
 &lt;!-- The application initiates a test that determines  --&gt;
 &lt;!-- whether cookies are enabled  --&gt;
-&lt;%<br />Cookie testCookie = new Cookie("myappTestCookie","testVal");<br />testCookie.setMaxAge(300);<br />response.addCookie(testCookie);<br />%&gt;<br />&lt;_jsp3a_forward page="/myapp/login.jsp"&gt;<!--_jsp3a_forward  --></pre>
+&lt;%<br />Cookie testCookie = new Cookie("myappTestCookie","testVal");<br />testCookie.setMaxAge(300);<br />response.addCookie(testCookie);<br />%&gt;<br />&lt;_jsp3a_forward page="/myapp/login.jsp"&gt;<!--_jsp3a_forward   --></pre>
   <h1>Solution Example</h1>
   <p>The following code initiates a test for determining whether the browser supports cookies. Because the developers have used JSP style commenting, the comments are visible only within the source code and not to the browser.</p>
-  <pre>&lt;%-- Filename: /myapp/index.jsp --%&gt;<br />&lt;%-- The application initiates a test that determines --%&gt;<br />&lt;%-- whether cookies are enabled --%&gt;<br />&lt;%<br />Cookie testCookie = new Cookie("myappTestCookie","testVal");<br />testCookie.setMaxAge(300);<br />response.addCookie(testCookie);<br />%&gt;<br />&lt;_jsp3a_forward page="/myapp/login.jsp"&gt;<!--_jsp3a_forward  --></pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about JSP comments, see: <a href="http://java.sun.com/developer/technicalArticles/javaserverpages/code_convention/">Code Conventions for the JavaServer Pages</a>. </li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/5aae21ac-2eb3-4f3d-ab10-ce31e490a261">Attack: Information Disclosure Attack</a>
-    </li>
-  </ul>]]></Data>
+  <pre>&lt;%-- Filename: /myapp/index.jsp --%&gt;<br />&lt;%-- The application initiates a test that determines --%&gt;<br />&lt;%-- whether cookies are enabled --%&gt;<br />&lt;%<br />Cookie testCookie = new Cookie("myappTestCookie","testVal");<br />testCookie.setMaxAge(300);<br />response.addCookie(testCookie);<br />%&gt;<br />&lt;_jsp3a_forward page="/myapp/login.jsp"&gt;<!--_jsp3a_forward   --></pre>
+  <br />]]></Data>
   </Content>
 </TeamMentor_Article>

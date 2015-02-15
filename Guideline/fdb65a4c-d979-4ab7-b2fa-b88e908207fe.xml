@@ -3,7 +3,7 @@
   <Metadata>
     <Id>fdb65a4c-d979-4ab7-b2fa-b88e908207fe</Id>
     <Id_History>fdb65a4c-d979-4ab7-b2fa-b88e908207fe,ea648f36-b3fc-4618-b9e1-7bf5d0605953,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Do Not Use Impersonation Unless Required</Title>
     <Category>Impersonation and Delegation</Category>
     <Phase>Design</Phase>
@@ -23,53 +23,38 @@
   <h1>Why</h1>
   <p>If programmatic impersonation is not done properly, it can introduce security vulnerabilities. It is difficult to get impersonation correct, particularly in multithreaded applications. When possible, use alternative approaches such as a custom domain process identity for resource access. You should avoid programmatic impersonation where possible for the following reasons:</p>
   <ul>
-    <li>It is easy to introduce errors because of thread switches where the thread impersonation token is not propagated across threads. <li>Some programmatic techniques require you to store credentials which should be avoided. <li>Some programmatic techniques require you to grant additional privileges to your process account, which you should avoid. For example, you must grant your process account "Act as part of the operating system" if you call <strong>LogonUser</strong> on Windows Server 2000 or to obtain an impersonate-level token on Windows Server 2003 when you use the new <strong>WindowsIdentity</strong> constructor that generates a token from a user principal name. <li>If exceptions occur while impersonating, it is possible for malicious code higher in the call stack to run using the impersonated identity. This can present security issues, particularly if you impersonate a highly privileged account. To read more about this please see <a href="/article/5b6c71b0-cb89-4435-b30e-2fd76347078e">Do Not Propagate Exceptions While Impersonating</a>.</li></li></li></li>
+    <li>It is easy to introduce errors because of thread switches where the thread impersonation token is not propagated across threads. </li>
+    <li>Some programmatic techniques require you to store credentials which should be avoided. </li>
+    <li>Some programmatic techniques require you to grant additional privileges to your process account, which you should avoid. For example, you must grant your process account "Act as part of the operating system" if you call <strong>LogonUser</strong> on Windows Server 2000 or to obtain an impersonate-level token on Windows Server 2003 when you use the new <strong>WindowsIdentity</strong> constructor that generates a token from a user principal name. </li>
+    <li>If exceptions occur while impersonating, it is possible for malicious code higher in the call stack to run using the impersonated identity. This can present security issues, particularly if you impersonate a highly privileged account. <br /></li>
   </ul>
   <h1>When</h1>
-  <p>Always limit your application's use of impersonation as much as possible. If your application needs to impersonate, read the <a href="/article/97dfd32f-deb6-4016-b3ff-24147a959521">Do Not Use the LogonUser API</a> guideline to determine the appropriate methods for impersonating users.</p>
+  <p>Always limit your application's use of impersonation as much as possible. <br /></p>
   <h1>How</h1>
   <p>By default ASP.NET runs with the following configuration:</p>
   <ul>
-    <li>IIS 5: Applications run by default using the least privileged ASPNET account. <li>IIS 6 and later: Applications run inside an application pool using the least privileged Network Service account. If you need to use a custom service account to run your ASP.NET Web application, create a least-privileged account. You might need to create a custom service account to isolate your application from other applications on the same server or to be able to audit each application separately.</li></li>
+    <li>IIS 5: Applications run by default using the least privileged ASPNET account. </li>
+    <li>IIS 6 and later: Applications run inside an application pool using the least privileged Network Service account. If you need to use a custom service account to run your ASP.NET Web application, create a least-privileged account. You might need to create a custom service account to isolate your application from other applications on the same server or to be able to audit each application separately.</li>
   </ul>
   <p>Impersonation is potentially very dangerous. Although it is possible to use it safely, impersonation should be avoided when it is not absolutely required. </p>
-  <p>Do not use impersonation when you merely need to securely pass the identity of a user downstream, as opposed to their entire security context. For instance, if a database backend needs to know the identity of the user connecting to it, the web front end can act as a trusted subsystem and authenticate and authorize users, passing the user id to the database over a secure connection instead of impersonating that user to the database. Not only is not using impersonation in these cases more secure, it's also faster&amp;#8212;impersonating a user in this situation prevents use of connection pools, adding a lot of overhead.</p>
+  <p>Do not use impersonation when you merely need to securely pass the identity of a user downstream, as opposed to their entire security context. For instance, if a database backend needs to know the identity of the user connecting to it, the web front end can act as a trusted subsystem and authenticate and authorize users, passing the user id to the database over a secure connection instead of impersonating that user to the database. Not only is not using impersonation in these cases more secure, it's also faster—impersonating a user in this situation prevents use of connection pools, adding a lot of overhead.</p>
   <p>Whenever possible, avoid impersonating a single user to gain access to resources. A more appropriate solution is to either alter ACLs as needed so as to grant the application's normal process identity access, or to use a trusted subsystem solution where an intermediate point handles access control. While care must be taken with both ACLs and trusted subsystems, they have the advantage of only providing the calling process the single specific ability they need, instead of allowing the process to do anything the impersonated identity can do. </p>
   <p>The most common situations where impersonation might be required for application functionality are: </p>
   <ul>
     <li>
-      <strong>Impersonating the original caller.</strong> You want to access Windows resources that are protected with ACLs configured for your application's domain user accounts. This method is also valid when your application is located behind a firewall as access to your organization's domain controller will be restricted. <li><strong>Impersonating the original caller programmatically. </strong>You want to access resources predominantly by using the application's process identity, but specific methods need to use the original caller's identity. <li><strong>Impersonating a specific Windows identity.</strong> You need to use a specific identity or several Windows identities to access particular resources.</li></li></li>
+      <strong>Impersonating the original caller.</strong> You want to access Windows resources that are protected with ACLs configured for your application's domain user accounts. This method is also valid when your application is located behind a firewall as access to your organization's domain controller will be restricted. </li>
+    <li>
+      <strong>Impersonating the original caller programmatically. </strong>You want to access resources predominantly by using the application's process identity, but specific methods need to use the original caller's identity. </li>
+    <li>
+      <strong>Impersonating a specific Windows identity.</strong> You need to use a specific identity or several Windows identities to access particular resources.</li>
   </ul>
   <p>These are all valid uses of impersonation, but care should be taken to ensure that the action cannot be accomplished without using impersonation before implementing it.</p>
   <h1>Problem Example</h1>
   <p>MyApp is the HR application at MyCorp. In order to provide security for user data in the database, the application impersonates the connecting user when talking to the database, instead of enforcing the security policy locally. This allows an attack to potentially take actions as a real user in the domain, instead of just as the application account. In the case of SQL injection to an unhardened SQL server, this could be potentially critical.</p>
-  <pre>WindowsIdentity winIdentity = new WindowsIdentity(username &amp;#43; "&amp;#64;NTDOMAIN");WindowsImpersonationContext ctx = winIdentity.Impersonate(); // Access the database</pre>
+  <pre>WindowsIdentity winIdentity = new WindowsIdentity(username + "@NTDOMAIN");<br />WindowsImpersonationContext ctx = winIdentity.Impersonate(); // Access the database</pre>
   <h1>Solution Example</h1>
   <p>MyApp is the HR application at MyCorp. In order to provide security for user data in the database, the application carefully enforces the intended set of business rules at the application layer and uses a single, low privilege account to connect to the database with. The account is not a full domain user, and has not privileges in the databse other than running a pre-specified set of stored procedures. Even if a SQL injection or code injection compromise occurs, the system will not be running with an elevated privilege.</p>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/97dfd32f-deb6-4016-b3ff-24147a959521">Guideline: Do Not Use the LogonUser API </a>
-      <li>
-        <a href="/article/5b6c71b0-cb89-4435-b30e-2fd76347078e">Guideline: Do Not Propagate Exceptions While Impersonating </a>
-        <li>
-          <a href="/article/56a1ea9e-8981-4315-a048-127a2bea2285">Guideline: Monitor the Use of Privileged Accounts</a>
-          <li>
-            <a href="/article/fab1733c-61d7-46a8-88c6-2617a643c0d9">Guideline: Use Least Privileged Accounts for Database Access </a>
-            <li>
-              <a href="/article/88134c36-4e54-47ca-8a83-fafe271ca05a">Attack: Luring Attack</a>
-              <li>
-                <a href="/article/6a219806-df28-4c00-bc2d-c2ce4c721b7e">Attack: Trust Relationship Attack</a>
-                <li>
-                  <a href="/article/3d7727d0-18ca-47c3-90f6-5c6c715c4f35">Checklist Item: Impersonation is Not Used Unless Required </a>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>

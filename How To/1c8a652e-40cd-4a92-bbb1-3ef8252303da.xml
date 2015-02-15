@@ -19,15 +19,9 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies To</h1>
-  <p>
-  </p>
   <ul>
     <li>All applications that interact with databases</li>
   </ul>
-  <p />
-  <ul>
-  </ul>
-  <p />
   <h1>Summary</h1>
   <p>SQL Injection is a common type of web database related vulnerability. SQL injection is common to web site applications that interact with a database backend. These sites construct SQL commands or queries based on user input. For example they might search a product database based on a description a user typed in a web form. An application is vulnerable to SQL injection when it builds SQL queries without filtering the user's input, without using store procedure, or without binding parameters variables. This can lead to an attacker adding additional clauses, conditions, or even commands that execute along the original query. Attackers can use SQL Injection bugs to execute different types of attacks such as data theft and tampering, authentication bypass, information disclosure, and elevation of privileges.</p>
   <p>Below is a summary of steps needed for testing for SQL injection bugs</p>
@@ -38,7 +32,6 @@
     <li>Step 3: Start testing and exploring </li>
     <li>Step 4: Tune of test data</li>
   </ul>
-  <p />
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>It is important to understand attack scenarios so that you know what to look for when testing for SQL injection. Here are some common attack scenarios:</p>
   <ul>
@@ -57,46 +50,51 @@
   </p>
   <p>The server might use code like this in the search component:</p>
   <p>
-    <font face="'Courier New'">$query = "select item, description from productTable where description LIKE '%" . $_GET["prod"] . "%'"&amp;nbsp;&amp;nbsp; (PHP)<br />var query = "select item, description from productTable where description LIKE '%" + Request.QueryString("prod") + "%'"&amp;nbsp; (ASP)</font>
+    <font face="'Courier New'">$query = "select item, description from productTable where description LIKE \'%" . $_GET["prod"] . "%\'"   (PHP)<br />var query = "select item, description from productTable where description LIKE '%" + Request.QueryString("prod") + "%'"  (ASP)</font>
   </p>
   <p>In both of the cases above the attacker can modify the URL and inject SQL statements that will be concatenated to the query and executed as part of the SQL query. If the attacker changes the value passed in <i>prod </i>with the following:</p>
   <p>
-    <font face="'Courier New'">any OR 1=1</font>
+    <font face="'Courier New'">any%' OR 1=1; --</font>
   </p>
   <p>Then the query will return all of the rows in the table since the second condition <i>1=1</i> will be always true:</p>
   <p>
-    <font face="'Courier New'">SELECT * item, description FROM products WHERE description LIKE 'any' OR 1=1</font>
+    <font face="'Courier New'">SELECT * item, description FROM products WHERE description LIKE '%any%' OR 1=1; --%'</font>
   </p>
   <h2>Forms Authentication Scenario</h2>
-  <p>Another example of a high risk component is the code used in forms authentication. For example, the code below, accepts credentials to build a <i>SELECT </i>query to validate the user. The data is passed to the <i>login.php</i> page through a web form's POST using username and password variables.&amp;nbsp; </p>
+  <p>Another example of a high risk component is the code used in forms authentication. For example, the code below, accepts credentials to build a <i>SELECT </i>query to validate the user. The data is passed to the <i>login.php</i> page through a web form's POST using username and password variables.  </p>
   <p>A SQL injection vulnerability is present in this code:</p>
-  <p>
-    <font face="'Courier New'">$query = "SELECT * FROM Accounts WHERE UserName = '" . $_POST['name'] . "'" . " AND password = '" . $_POST['pass'] . "'";&amp;nbsp;<br />$result = odbc_exec($connection, $query);<br />if ($result_count == 0) {<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; print('unable to login');<br />}<br />else {<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; print('user logged in');<br />}</font>
-  </p>
+  <pre>$query = "SELECT * FROM Accounts WHERE <br />  UserName = \'" . $_POST['name'] . "\'" . " AND password = \'" . $_POST['pass'] . "\'"; 
+$result = odbc_exec($connection, $query);
+if ($result_count == 0) {
+ print('unable to login');
+}
+else {
+ print('user logged in');
+}</pre>
   <p>An attacker can submit the same string as in the first scenario:</p>
   <p>
-    <font face="'Courier New'">any OR 1=1</font>
+    <font face="'Courier New'">any' OR 1=1; --</font>
   </p>
   <p>This will result in the following statement constructed:</p>
   <p>
-    <font face="'Courier New'">SELECT * FROM Accounts WHERE UserName = any or 1=1</font>
+    <font face="'Courier New'">SELECT * FROM Accounts WHERE UserName = 'any' or 1=1; -- AND password = ''</font>
   </p>
   <p>The statement returns all rows from the <i>Accounts </i>table. The <i>if</i> condition in the code will be false and the attacker will be able to log in without a valid password.</p>
   <h2>Stored Procedure Scenario</h2>
   <p>SQL injection bugs aren't necessarily restricted to the application layer. For instance, a stored procedure used at the database layer may also suffer from SQL injection. Consider the following procedure that takes a parameter for a product name and searches a database by building a dynamic <i>SELECT </i>statement inside:</p>
   <p>
-    <font face="'Courier New'">CREATE PROCEDURE sp_SearchProducts @prodname varchar(400) = NULL AS<br />DECLARE @sql nvarchar(4000)<br />SELECT @sql = ' SELECT ProductID, ProductName, Category, Price ' +<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ' FROM Product Where ProductName LIKE ''' + @prodname + ''''<br />EXEC (@sql)&amp;nbsp;</font>
+    <font face="'Courier New'">CREATE PROCEDURE sp_SearchProducts @prodname varchar(400) = NULL AS<br />DECLARE @sql nvarchar(4000)<br />SELECT @sql = 'SELECT ProductID, ProductName, Category, Price ' +<br />              ' FROM Product Where ProductName LIKE \'%' + @prodname + '%\''<br />EXEC (@sql) </font>
   </p>
   <p>The attacker can invoke the procedure at the application layer like this:</p>
   <p>
-    <font face="'Courier New'">exec sp_SearchProducts('any'' OR 1=1--')</font>
+    <font face="'Courier New'">exec sp_SearchProducts('any%\' OR 1=1; --')</font>
   </p>
   <p>The final statement will look like this:</p>
   <p>
-    <font face="'Courier New'">SELECT ProductID, ProductName, Category, Price FROM Product Where ProductName LIKE 'any' OR 1=1—'&amp;nbsp;</font>
+    <font face="'Courier New'">SELECT ProductID, ProductName, Category, Price FROM Product Where ProductName LIKE '%any%' OR 1=1; —%' </font>
   </p>
   <p>This will return all rows of the <i>product </i>table.</p>
-  <p>Be careful with this type of scenario since it is a common misconception that using stored procedures and bound parameters solves SQL injection automatically.&amp;nbsp;</p>
+  <p>Be careful with this type of scenario since it is a common misconception that using stored procedures and bound parameters solves SQL injection automatically. </p>
   <h1>Step 2: List High Risk Components and Entry Points</h1>
   <p>The next step for SQL Injection testing is to list all the places where code builds SQL statements from user supplied input; to understand how and where our application manipulates statements and talks to a database. The most common are:</p>
   <ul>
@@ -108,10 +106,10 @@
     <li>Database system-level clients</li>
   </ul>
   <h2>Identify all high risk components </h2>
-  <p>After understanding the details of SQL Injection, list their high risk components in a table that includes the method that hosts the code, the name of the query string if available, and the variable names that influence the construction of the query&amp;nbsp;</p>
+  <p>After understanding the details of SQL Injection, list their high risk components in a table that includes the method that hosts the code, the name of the query string if available, and the variable names that influence the construction of the query </p>
   <p>Look at code like the one shown in the scenarios above - code where SQL statements are built using web input, then list all of these web pages as high risk components.</p>
   <h2>Match High Risk Components with Entry Points</h2>
-  <p>After listing all areas in the application where SQL statements are built at run-time, you&amp;nbsp; must identify the ways in which data gets to these places. For example, you listed a web page named <i>search.asp</i> above that constructs SQL statements dangerously. Here you list how this page gets its input; what are its entry points. Keep in mind that entry points can be both intended (expected by the program or application) and unintended (unexpected by program or application). A common list of entry points for SQL injection high risk components include:</p>
+  <p>After listing all areas in the application where SQL statements are built at run-time, you  must identify the ways in which data gets to these places. For example, you listed a web page named <i>search.asp</i> above that constructs SQL statements dangerously. Here you list how this page gets its input; what are its entry points. Keep in mind that entry points can be both intended (expected by the program or application) and unintended (unexpected by program or application). A common list of entry points for SQL injection high risk components include:</p>
   <ul>
     <li>URL bar contents </li>
     <li>Web form input values </li>
@@ -122,7 +120,7 @@
     <li>Application UI text fields </li>
     <li>Inter Process Communication pipe</li>
   </ul>
-  <p>The first three are the most common entry points for web services and application. Nonetheless, always look for new entry points additional entry points not listed here. Make sure that the data manipulated by the component at risk is not passed by any other means.&amp;nbsp;Ideally by the end of step 2 you will have a list to systematically guide test execution.</p>
+  <p>The first three are the most common entry points for web services and application. Nonetheless, always look for new entry points additional entry points not listed here. Make sure that the data manipulated by the component at risk is not passed by any other means. Ideally by the end of step 2 you will have a list to systematically guide test execution.</p>
   <h1>Step 3: Start Testing and Exploring </h1>
   <p>The following step is to start supplying input to the application that gives hints of possible SQL injection bugs. With the list made during step 2, you can systematically walk through all variables and start exploring how the test input is handled. In this step, we recommend to execute a first pass using fuzz strings and basic conditions.</p>
   <h2>Start with a simple fuzz string</h2>
@@ -132,20 +130,20 @@
   </p>
   <p>Then see how the server reacts to it. In some cases it will strip out the special characters: this is a sign that it protects against injection. However, in other cases the application may return a SQL related error messages because a special character such as the single quote unexpectedly closed a statement. It then can be deduced that the statement was being built dynamically. This is a clear indication that you need to keep looking to see whether a SQL injection bug actually exists.</p>
   <h2>Continue with simple true and false conditions</h2>
-  <p>The next step is to try to add a simple SQL statement. The simplest you can try is an integer comparison such as <i>1=1</i> or <i>2&gt;1</i> or a character comparison such as <i>'a'='a'</i>&amp;nbsp;preceded&amp;nbsp;by an <i>OR</i>. For example:</p>
+  <p>The next step is to try to add a simple SQL statement. The simplest you can try is an integer comparison such as <i>1=1</i> or <i>2&gt;1</i> or a character comparison such as <i>'a'='a'</i> preceded by an <i>OR</i>. For example:</p>
   <p>
-    <font face="'Courier New'">xyz' OR 1=1 --</font>
+    <font face="'Courier New'">xyz' OR 1=1; --</font>
   </p>
   <p>Then observe the results. Look for any indication that the injected true statement returned all rows of a table. Then try a false statement and look at the difference.</p>
   <p>
-    <font face="'Courier New'">xyz' OR 1&gt;2 --</font>
+    <font face="'Courier New'">xyz' OR 1&gt;2; --</font>
   </p>
   <p>If the results are visibly different in quantity or in server behavior, then the possibility for a SQL injection bugs is high. Even if no information about the database structure or no other serious attack is possible, you can determine SQL injection by observing basic server and error messages.</p>
-  <p>Consider the following scenario. The string <font face="'Courier New'">xyz' OR 1=1 --</font>&amp;nbsp; is submitted and the server returns a 500 error that says:</p>
+  <p>Consider the following scenario. The string <font face="'Courier New'">xyz' OR 1=1; --</font>  is submitted and the server returns a 500 error that says:</p>
   <p>
     <font face="'Courier New'">"Results Buffer too Large"</font>
   </p>
-  <p>and when <font face="'Courier New'">xyz' OR 1&gt;2 --</font>&amp;nbsp;is submitted the server returns a valid page saying that there were no matches. So when the condition is true the server chokes with results. When it's false it returns no results. In this case, the processing of the injected condition is evident and means that there is a SQL injection vulnerability. It might not be exploitable but it exists and this simple difference in server behavior is enough to prove that it does.</p>
+  <p>and when <font face="'Courier New'">xyz' OR 1&gt;2; --</font> is submitted the server returns a valid page saying that there were no matches. So when the condition is true the server chokes with results. When it's false it returns no results. In this case, the processing of the injected condition is evident and means that there is a SQL injection vulnerability. It might not be exploitable but it exists and this simple difference in server behavior is enough to prove that it does.</p>
   <p>
     
       NOTE: Be careful with valid numerical results
@@ -154,43 +152,43 @@
   <p>Make sure that when using numerical comparisons the results are different because of the comparison and not because of the content. For example, if when using <i>1=1</i> the server returns phone numbers with "11" and when <i>1&gt;2</i> returns phone numbers with "12" then it means that is not processing the actual comparison. The results are different because the application is querying over the numbers 1 and 2. The server is not executing the extra conditions as separate statements; it is correctly including them as part of the data to search, and there is no evidence of a SQL injection vulnerability. You need to be careful about this scenario and realize when the extra condition is actually being executed separately or not.</p>
   <h1>Step 4: Tune test cases data </h1>
   <p>At this point you have started executing an exploratory pass through the input variables. During step 4 you need to concentrate on covering all entry points of each variable in your variable table.</p>
-  <h2>Learn&amp;nbsp;database&amp;nbsp;type and version</h2>
+  <h2>Learn database type and version</h2>
   <p>Different database applications and versions process queries differently. For example SQL Server uses + to concatenate strings in a statement while Oracle uses ||. SQL Server allows execution of batched or multiple SQL commands within a statement as long as they are separated with a semicolon (;) while Oracle and MySQL forbids this. You can gather database brand and versions by scanning network ports at the server, sniffing network traffic, or looking at SQL related error messages.</p>
   <h2>Consider string format and encoding according to entry point</h2>
-  <p>As you walk through the risky variables and entry points take into account the different formats that apply to each entry point.&amp;nbsp; For example, this article described passing the following string to a web form:</p>
+  <p>As you walk through the risky variables and entry points take into account the different formats that apply to each entry point.  For example, this article described passing the following string to a web form:</p>
   <p>
-    <font face="'Courier New'">xyz' OR 1=1 --</font>
+    <font face="'Courier New'">xyz' OR 1=1; --</font>
   </p>
-  <p>However, you can't pass a string like the one above in a URL since the URL doesn't allow blank spaces. Server applications use different encoding functions to transmit URL contents. They encode data and then decode it at the server end.&amp;nbsp; The encoding and decoding depends on the server's programming language. For example, sometimes the encoding function replaces the blank spaces with a plus (+) sign so the string above looks like this:</p>
+  <p>However, you can't pass a string like the one above in a URL since the URL doesn't allow blank spaces. Server applications use different encoding functions to transmit URL contents. They encode data and then decode it at the server end.  The encoding and decoding depends on the server's programming language. For example, sometimes the encoding function replaces the blank spaces with a plus (+) sign so the string above looks like this:</p>
   <p>
-    <font face="'Courier New'">xyz'+OR+1=1+--</font>
+    <font face="'Courier New'">xyz'+OR+1=1;+--</font>
   </p>
   <p>In other encoding case, the server might replace the blank space with a <i>%20</i>. In that case, the test string will need to look like this:</p>
   <p>
-    <font face="'Courier New'">xyz'%20OR%201=1%20--</font>
+    <font face="'Courier New'">xyz'%20OR%201=1;%20--</font>
   </p>
   <p>This common encoding scheme consists of replacing spaces with their hexadecimal values <i>%HH</i>. In addition, it is recommended to also encode reserved characters such as the single quote. The encoded string will then look like this:</p>
   <p>
-    <font face="'Courier New'">xyz%27+OR+1%3D1+--</font>
+    <font face="'Courier New'">xyz%27+OR+1;%3D1+--</font>
   </p>
   <p>The Java URL encode function translates special characters using a string like this one <i>%uXXXX</i> where <i>XXXX </i>is the character´s Unicode value represented as four digits. The above string will look like this one:</p>
   <p>
-    <font face="'Courier New'">xyz%u2019+OR+1%3D1+--</font>
+    <font face="'Courier New'">xyz%u2019+OR+1;%3D1+--</font>
   </p>
   <p>There are different types of encoding mechanisms. It is important that you do a quick source review to see what encoding functions are used and then at the documentation available for the specific functions.</p>
   <h2>Try to use double encoding</h2>
   <p>It is important to attempt to execute double encoding cases. Double encoding is a specific encoding aimed at bypassing security controls. It consists of replacing the percent character by its hexadecimal value (25). If you are testing using single encoding like this:</p>
   <p>
-    <font face="'Courier New'">xyz%27+OR+1%3D1+--</font>
+    <font face="'Courier New'">xyz%27+OR+1;%3D1+--</font>
   </p>
   <p>Then try the following string for double encoding:</p>
   <p>
-    <font face="'Courier New'">xyz%2527+OR+1%253D1+--</font>
+    <font face="'Courier New'">xyz%2527+OR+1;%253D1+--</font>
   </p>
   <h2>Try different syntax</h2>
   <p>SQL injection testing aims at changing the logic of the original SQL statement by adding additional ones. But for the additional statements to execute, the attacked query has to remain syntactically correct or else it will fail to execute. Consider different variants of test input to deal with the closing of quotes and parenthesis. Here are a few variations to try:</p>
   <p>
-    <font face="'Courier New'">x' or 1=1 --<br />x' or 'a'='a<br />x" or 1=1 #<br />x%' or 1=1 --<br />x%" or 1=1 #<br />x') or 1=1 #<br />x') or 'a'='a' --<br />x') or ('a'='a</font>
+    <font face="'Courier New'">x' or 1=1; --<br />x' or 'a'='a<br />x" or 1=1 #<br />x%' or 1=1; --<br />x%" or 1=1 #<br />x') or 1=1 #<br />x') or 'a'='a'; --<br />x') or ('a'='a</font>
   </p>
   <h2>Consider the different ways of getting test results</h2>
   <p>There are different channels to retrieve SQL injection data:</p>
@@ -216,7 +214,7 @@
     <li>An additional <i>UPDATE </i>statement to replace existing data in a table</li>
   </ul>
   <p>You need to try different payloads. We recommend listing all the payloads that can be executed against the database under test. Then to execute each payload with the syntactic variations previously mentioned. By doing this, you will expand their SQL injection test cases to get maximum testing coverage. </p>
-  <p>Nevertheless, keep in mind that it is also important not to overdo payload testing. If you realize that a specific variable-entry point is not susceptible to SQL injection (it might be parameterized or escaped of its command characters) then move on to the next variable and not spend unnecessary time testing numerous payloads.&amp;nbsp; </p>
+  <p>Nevertheless, keep in mind that it is also important not to overdo payload testing. If you realize that a specific variable-entry point is not susceptible to SQL injection (it might be parameterized or escaped of its command characters) then move on to the next variable and not spend unnecessary time testing numerous payloads.  </p>
   <h2>Use proper test monitors or indicators</h2>
   <p>When testing injection, especially out of bands that opens a separate channel to send data back, make sure to have in indicator that waits for the test to pass or fail. If the payload opens a backdoor then connect to the backdoor. If the payload copies a database to a remote database then have that server set up and ready to receive the stolen data. Having proper indicators and monitors in place is the only way to find out the results of all test cases.</p>
   <h2>Learn database structure and use to tune test cases</h2>

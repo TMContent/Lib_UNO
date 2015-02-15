@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>806abffc-7528-454e-aa90-826b2fad60a6</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Authentication Credentials in Transit Are Protected</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Check For==
+
+Verify that credentials sent over the network are protected using TLS.
+
+
+==Why==
+
+Using TLS prevents the credentials from being sniffed or tampered with as they are transmitted over the network. TLS only provides assurance against tampering if valid certificates are used.
+
+
+==How to Check==
+
+To verify that TLS is used to protect authentication credentials in transit:
+
+# **Make sure valid TLS certificates are used.** Examine the certificates used by the application. Identify the Certificate Authority that has signed the certificates and check with the Certificate Authority to make sure that the certificates are still valid.
+# **Identify authentication code.** Find the code that sends authentication credentials to the server for verification. Make a spreadsheet about all the code that sends authentication credentials over the network.
+# **Verify that TLS is used to protect authentication credentials in transit.** Examine code that sends authentication credentials over the network. Make sure that authentication credentials are only sent through sockets that are protected using TLS and that valid certificates are used when opening TLS-protected sockets.
+
+
+==How to Fix==
+
+To use TLS to protect authentication credentials in transit:
+
+# **Purchase a valid TLS certificate.** You may purchase a valid TLS key from VeriSign, Thawte, or your web hosting provider. Follow the vendor's instructions for purchasing the TLS certificate. The certificate is usually a .cer file. Make sure the certificate matches all domains used by the application.
+# **Identify authentication code.** Find the code that sends authentication credentials to the server for verification. Make a spreadsheet about all the code that sends authentication credentials over the network.
+# **Use TLS to protect authentication credentials in transit.** Modify all code that sends authentication credentials over the network to send these credentials only through sockets protected using TLS. Use valid certificates when opening TLS protected sockets.]]></Data>
+  </Content>
+</TeamMentor_Article>

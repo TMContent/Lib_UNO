@@ -22,7 +22,7 @@
   <h1>What to Do</h1>
   <p>Do not echo input back to the user without first validating and/or encoding the data. Data which can be modified by a user must be treated as untrusted data.</p>
   <h1>Why</h1>
-  <p>Echoing input directly back to the user makes your application susceptible to some code injection attacks, such as the <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Cross Site Scripting Attack</a>. What constitutes malicious input varies widely depending on the system in question. On the web, it normally means some kind of JavaScript.</p>
+  <p>Echoing input directly back to the user makes your application susceptible to some code injection attacks, such as the Cross Site Scripting Attack. What constitutes malicious input varies widely depending on the system in question. On the web, it normally means some kind of JavaScript.</p>
   <h1>When</h1>
   <p>When echoing user supplied data back to a webpage. There are various sources from which this type of input might come, including:</p>
   <ul>
@@ -121,30 +121,12 @@
   <pre>&lt;%@ Page clienttarget="downlevel" %&gt;<br />&lt;html&gt;<br />&lt;body&gt;<br />&lt;script language="C#" runat="server"&gt;void btnSubmit_Click(Object Sender, EventArgs E)<br />{<br />    //show new te3stimonial to current user<br /><strong>lblTestimonials.Text += "&lt;br/&gt;" + txtTestimonial.Text;<br /></strong>    //also store lblTestimonials.Text in server database for other users<br />}<br />&lt;/script&gt;<br />&lt;form id="Form1" runat="server"&gt;<br />    &lt;asp:TextBox ID="txtTestimonial" runat="server" Rows="5" Height="102px" Width="298px"&gt;&lt;/asp:TextBox&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CausesValidation="False"/&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Label ID="lblTestimonials" runat="server" Height="102px" Width="297px"&gt;<br />&lt;/asp:Label&gt;<br />&lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</pre>
   <p>Since this page does not encode the output which depends upon the user supplied value <strong>txtTestimonial.Text</strong>, malicious user input may lead to cross site scripting attacks.</p>
   <p>
-    <strong>Note:</strong> While simple XSS attacks will not work for this webpage since ASP.NET enables request validation by default, some more complex attack will be successful. Read more about this problem here: <a href="/article/88f49e05-f101-4764-b8e3-b31cd7507071">Do Not Rely on Request Validation</a>.</p>
+    <strong>Note:</strong> While simple XSS attacks will not work for this webpage since ASP.NET enables request validation by default, some more complex attack will be successful. <br /></p>
   <h1>Solution Example</h1>
   <p>We need to encode the user supplied data before it is used to construct output data. As mentioned above, using the <strong>Server.HtmlEncode</strong> method is not sufficient. Therefore in the example below, we use our own HtmlEncode method.</p>
   <pre>&lt;%@ Page clienttarget="downlevel" %&gt;<br />&lt;html&gt;<br />&lt;body&gt;<br />&lt;script language="C#" runat="server"&gt;<br />  public static string <strong>HtmlEncode</strong>(string x)<br />  {<br />    if (x == null)<br />    {<br />        return x;<br />    }<br />    return Regex.Replace(x, "[^a-zA-Z0-9]+", new MatchEvaluator(WebUtility.EncodeMatch));<br />  }<br />  void btnSubmit_Click(Object Sender, EventArgs E)<br />  {<br />      //show new te3stimonial to current user<br /><strong>lblTestimonials.Text += "&lt;br/&gt;" + HtmlEncode (txtTestimonial.Text);<br /></strong>      //also store lblTestimonials.Text in server database for other users<br />  }<br />&lt;/script&gt;&lt;form id="Form1" runat="server"&gt;<br />    &lt;asp:TextBox ID="txtTestimonial" runat="server" Rows="5" Height="102px" Width="298px"&gt;&lt;/asp:TextBox&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CausesValidation="False"/&gt;<br />    &lt;br /&gt;<br />    &lt;asp:Label ID="lblTestimonials" runat="server" Height="102px" Width="297px"&gt;&lt;/asp:Label&gt;<br />&lt;/form&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</pre>
   <p>Now, when an attacker submits malicious input, it will be encoded when the result is reflected back to the client and XSS attacks will be prevented.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information about the limitations of ASP.NET encoding, see: <a href="http://msmvps.com/blogs/calinoiu/archive/2006/06/13/102957.aspx">http://msmvps.com/blogs/calinoiu/archive/2006/06/13/102957.aspx</a>.</li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/61f8ac64-c4e1-4c31-9521-f20a1a64b6fd">Attack: Cross Site Scripting Attack</a>
-    </li>
-    <li>
-      <a href="/article/733be22b-8cda-4c76-9009-1bafbb223ddc">Attack: Response Splitting Attack</a>
-    </li>
-    <li>
-      <a href="/article/14def5f6-6ddf-450f-9a7e-36a8550b22f5">Attack: AJAX Injection Attack</a>
-    </li>
-    <li>
-      <a href="/article/d898d2a2-f20a-45bb-b232-6713cb618de8">Checklist Item: All Output Data is Encoded </a>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>

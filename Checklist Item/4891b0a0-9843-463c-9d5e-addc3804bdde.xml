@@ -3,7 +3,7 @@
   <Metadata>
     <Id>4891b0a0-9843-463c-9d5e-addc3804bdde</Id>
     <Id_History>4891b0a0-9843-463c-9d5e-addc3804bdde,a49f7c2c-9460-4519-8c38-dbc28c34e59b,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>ASP.NET Session State Is Protected</Title>
     <Category>Session Management</Category>
     <Phase>Deployment</Phase>
@@ -30,21 +30,29 @@
       <p>
         <strong>Verify that the default session state port is changed. </strong>Verify that the port value in the following key is different from the default value of 42424:</p>
       <pre>HKLM\SYSTEM\CurrentControlSet\Services\aspnet_state\Parameters </pre>
-      <li>
-        <p>
-          <strong>Ensure the out-of-process session state management is properly secured. </strong>Keep in mind the following considerations when verifying the security of the out-of-process state management:</p>
-        <ul>
-          <li>Verify that the service operates using the Network Service account or another low-privileged account. <li>Use the <a href="/article/dffb5d33-3dca-4cea-999c-60f0a5deff63">Communication Links are Encrypted</a> checklist to ensure that the session state communication channel is protected. <li>Using Step 1, verify that the default session state port is changed. <li>Using the <a href="/article/693e1ae5-e381-41fd-93f7-844aaeca3ef8">Sensitive Data Inside Configuration Files is Protected</a> checklist, verify that the session state connection strings are secured.</li></li></li></li>
-        </ul>
-        <li>
-          <p>
-            <strong>If unused, verify that the ASP.NET state service is turned off.</strong>
-          </p>
-          <ol>
-            <li>Navigate to Administrative Tools <strong>-&gt;</strong> Internet Information Services. <li>Select the appropriate instance of IIS that is associated with your application. <li>Right-click on the IIS instance and select Properties. <li>Select the Configuration option under the Home Directory tab. <li>Navigate to the Options tab. <li>Verify that the "Enable session state" option in unchecked. </li></li></li></li></li></li>
-          </ol>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure the out-of-process session state management is properly secured. </strong>Keep in mind the following considerations when verifying the security of the out-of-process state management:</p>
+      <ul>
+        <li>Verify that the service operates using the Network Service account or another low-privileged account. </li>
+        <li>Ensure that the session state communication channel is protected. </li>
+        <li>Using Step 1, verify that the default session state port is changed. </li>
+        <li>Verify that the session state connection strings are secured.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>If unused, verify that the ASP.NET state service is turned off.</strong>
+      </p>
+      <ol>
+        <li>Navigate to Administrative Tools <strong>-&gt;</strong> Internet Information Services. </li>
+        <li>Select the appropriate instance of IIS that is associated with your application. </li>
+        <li>Right-click on the IIS instance and select Properties. </li>
+        <li>Select the Configuration option under the Home Directory tab. </li>
+        <li>Navigate to the Options tab. </li>
+        <li>Verify that the "Enable session state" option in unchecked. </li>
+      </ol>
     </li>
   </ol>
   <h1>Problem Example</h1>
@@ -56,16 +64,7 @@
     <strong>Consider the following problem if your application does not require the session state</strong>
   </p>
   <p>MyApp is a monitoring tool. Although it does not require the ASP.NET state service, its administrators have not disabled the service, allowing a skilled attacker to compromise the application through the ASP.NET state service.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about configuring the ASP.NET session state, see: <a href="http://technet2.microsoft.com/windowsserver/en/library/17866624-359b-4fbf-8a3a-05fb13dee6811033.mspx?mfr=true">Configuring Out-of-Process Session State with the ASP.NET State Service</a>.</li>
-  </ul>
-  <h1>Related Guideline</h1>
-  <ul>
-    <li>
-      <a href="/article/2c48bbd6-2677-4ab0-80df-57985b90bee4">Guideline: Protect ASP.NET Session State (ASP.NET)</a>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

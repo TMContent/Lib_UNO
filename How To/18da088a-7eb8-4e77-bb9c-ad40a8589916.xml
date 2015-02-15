@@ -29,11 +29,11 @@
     <li>Step 1: Understand attack scenarios </li>
     <li>Step 2: Analyze causes and countermeasures </li>
     <li>Step 3: Start testing and exploring </li>
-    <li>Step 4: Execute additional testing&amp;nbsp;</li>
+    <li>Step 4: Execute additional testing </li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>The first step in testing for path manipulation bugs is to understand the anatomy of an attack scenario. </p>
-  <p>To exploit this vulnerability, the attacker manipulates a file path in an HTTP request. If the application is vulnerable, it uses the manipulated file path to perform a file system operation. The attack starts with the attacker discovering an HTTP request that invokes a server-side file system operation such as reading, modifying, deleting, emailing, or printing a file. This request comes either from a web page or from a client-side script (such as in AJAX applications) and contains a variable (URL parameter, web form input, etc) that the server uses to determine what file to handle.&amp;nbsp;To execute the attack, the attacker submits the request but modifies this variable in an attempt to manipulate a server-side file, exploiting an intended functionality of the application for malicious purposes. If the attack is successful, the value provided by the attacker causes the server to access a file in a different path. In most cases, the attacker will be able to tell if the attack is successful shortly after executing it.</p>
+  <p>To exploit this vulnerability, the attacker manipulates a file path in an HTTP request. If the application is vulnerable, it uses the manipulated file path to perform a file system operation. The attack starts with the attacker discovering an HTTP request that invokes a server-side file system operation such as reading, modifying, deleting, emailing, or printing a file. This request comes either from a web page or from a client-side script (such as in AJAX applications) and contains a variable (URL parameter, web form input, etc) that the server uses to determine what file to handle. To execute the attack, the attacker submits the request but modifies this variable in an attempt to manipulate a server-side file, exploiting an intended functionality of the application for malicious purposes. If the attack is successful, the value provided by the attacker causes the server to access a file in a different path. In most cases, the attacker will be able to tell if the attack is successful shortly after executing it.</p>
   <p>In detail:</p>
   <ol>
     <li>The attacker finds an HTTP request that invokes a file system operation at the server. </li>
@@ -43,18 +43,22 @@
   </ol>
   <h2>Attack Variants
   </h2>
-  <p>Attackers can employ path manipulation attacks to achieve different threats. For example, an attacker can manipulate a path to read server configuration and password files, or to read files belonging to another user, in order to execute an information disclosure attack on the application.&amp;nbsp;Similarly, an attacker can manipulate a path to force the ASP.NET application into deleting a file needed to properly service its users, generating a denial of service situation.&amp;nbsp;</p>
+  <p>Attackers can employ path manipulation attacks to achieve different threats. For example, an attacker can manipulate a path to read server configuration and password files, or to read files belonging to another user, in order to execute an information disclosure attack on the application. Similarly, an attacker can manipulate a path to force the ASP.NET application into deleting a file needed to properly service its users, generating a denial of service situation. </p>
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
-  <p>Next, before executing practical test cases, it is necessary to understand why these bugs exist and how to avoid them.&amp;nbsp;Path manipulation bugs affect ASP.NET applications that use input provided by clients to build a file path. For instance, the code below gets an input value from the user in an URL parameter named <i>filename</i>:</p>
-  <p>
-    <font face="'Courier New'">string filename = "/public/user_files/" +&amp;nbsp;<br />Server.UrlDecode(Request.QueryString["filename"]);<br /><br />StreamReader streamReader = new StreamReader(filename);<br />while (streamReader.Peek() &gt;= 0)<br />{<br />&amp;nbsp; Response.Write(streamReader.ReadLine());<br />}<br />streamReader.Close();</font>
-  </p>
-  <p />
+  <p>Next, before executing practical test cases, it is necessary to understand why these bugs exist and how to avoid them. Path manipulation bugs affect ASP.NET applications that use input provided by clients to build a file path. For instance, the code below gets an input value from the user in an URL parameter named <i>filename</i>:</p>
+  <pre>string filename = "/public/user_files/" + 
+Server.UrlDecode(Request.QueryString["filename"]);
+StreamReader streamReader = new StreamReader(filename);
+while (streamReader.Peek() &gt;= 0)
+{
+ Response.Write(streamReader.ReadLine());
+}
+streamReader.Close();</pre>
   <p>If the user provides an expected file name such as <i>file.txt</i>, the application returns an expected user file:</p>
   <p>
     <font face="'Courier New'">http://example.com.pe/example.aspx?filename=file.txt</font>
   </p>
-  <p>However, during a path manipulation scenario, an attacker provides a malicious value for the variable, hoping that the application uses it to determine a different file path:&amp;nbsp;</p>
+  <p>However, during a path manipulation scenario, an attacker provides a malicious value for the variable, hoping that the application uses it to determine a different file path: </p>
   <p>
     <font face="'Courier New'">http://example.com.pe/example.aspx?filename=../../private/secret.txt</font>
   </p>
@@ -65,10 +69,23 @@
   <p>The above string causes the application to go up two directories, navigate to the <i>private</i> folder, and display <i>secret.txt.</i> The example above is a common scenario of information disclosure due to path manipulation. Notice that the attack is possible because the code shown trusts the filename provided by the client; it starts by directly copying the input to the internal variable used to determine the filename, without properly validating it.</p>
   <p>To protect against this bug ASP.NET applications must properly validate user input. Specifically, they must check if the input is safe to use in determining a file path. Developers can use blacklists that contain a list of all disallowed filename constructs such as “../” (without the quotes) and check if the user input appears in a blacklist. The problem with blacklists is that any variant of an attack that is not accounted for will execute unnoticed; to be effective, blacklists must account for all 100% of all attack variants -- which is unreasonable. The recommended approach to defend against this bug is to use <i>whitelists. </i>Whitelists specify only safe constructs, and disallow any user input that doesn’t match any of the specified safe constructs. By doing this, they only need to specify what is good and don’t have to account for 100% of all attack variants. </p>
   <p>A common way of implementing a whitelist is by using a regular expression to specify what is safe and to disallow all input that doesn’t match the regular expression:</p>
-  <p>
-    <font face="'Courier New'">Regex validFilename = new Regex("^[a-zA-Z]{4,8}\.txt$");<br />string input = Server.UrlDecode(Request.QueryString["filename"]);<br /><br />if (!validFilename.IsMatch(input))<br />{<br />&amp;nbsp; Response.Write("invalid input");<br />}<br />else<br />{<br />&amp;nbsp; string filename = "/public/user_files/" +&amp;nbsp;Server.UrlDecode(Request.QueryString["filename"]);<br />&amp;nbsp; StreamReader streamReader = new StreamReader(filename);<br />&amp;nbsp; while (streamReader.Peek() &gt;= 0)<br />&amp;nbsp; {<br />&amp;nbsp; &amp;nbsp; Response.Write(streamReader.ReadLine());<br />&amp;nbsp; }<br />&amp;nbsp; streamReader.Close();<br />}</font>
-  </p>
-  <p>The input must consist of four to eight consecutive upper- or lower-case letters followed by the extension <i>“.txt”</i>. Any input that doesn’t match this form results in the application giving an <i>invalid input</i> error.&amp;nbsp;</p>
+  <pre>Regex validFilename = new Regex("^[a-zA-Z]{4,8}\.txt$");
+string input = Server.UrlDecode(Request.QueryString["filename"]);
+if (!validFilename.IsMatch(input))
+{
+ Response.Write("invalid input");
+}
+else
+{
+ string filename = "/public/user_files/" + Server.UrlDecode(Request.QueryString["filename"]);
+ StreamReader streamReader = new StreamReader(filename);
+ while (streamReader.Peek() &gt;= 0)
+ {
+  Response.Write(streamReader.ReadLine());
+ }
+ streamReader.Close();
+}</pre>
+  <p>The input must consist of four to eight consecutive upper- or lower-case letters followed by the extension <i>“.txt”</i>. Any input that doesn’t match this form results in the application giving an <i>invalid input</i> error. </p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you’ve learned the common attack scenarios as well as the causes and countermeasures for path manipulation bugs, it is necessary to execute basic test cases to check if your application is vulnerable.</p>
   <p>Success in testing for path manipulation bugs depends on your ability to determine the variables the application uses to build a file path. Applications commonly use URL and web form variables, so it is necessary to understand how to test through these two input points. </p>
@@ -98,23 +115,25 @@
     <em>Attack strings</em>
   </h2>
   <p>The following attack strings contain path manipulation characters (dots, slashes, and backslashes) and common UNIX- and Windows-related file paths in different encodings. Depending on the relative location of the web application on the server, the number of “../” or “..\” clauses may need to be increased or decreased in order to realize an attack:</p>
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          <pre>../etc/passwd<br />..\boot.ini<br />../boot.ini<br />folder_name/file_name<br />..\..\folder_name\file_name<br />../../folder_name/file_name<br />C:\boot.ini<br />%2e%2e\%2e%2e\<br />..%2f..%2f<br />%2e%2e%2f%2e%2e%2ffolder_name%2ffile_name<br />..%2f..%2ffolder_name%2ffile_name<br />..%c0%af..%c0%affolder_name..%c0%affile_name </pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <p />
+  <pre>../etc/passwd
+..\boot.ini
+../boot.ini
+folder_name/file_name
+..\..\folder_name\file_name
+../../folder_name/file_name
+C:\boot.ini
+%2e%2e\%2e%2e\
+..%2f..%2f
+%2e%2e%2f%2e%2e%2ffolder_name%2ffile_name
+..%2f..%2ffolder_name%2ffile_name
+..%c0%af..%c0%affolder_name..%c0%affile_name</pre>
   <p>
     <b>Table 1 - Path Manipulation Attack Strings</b>
   </p>
   <h2>
     Look for error messages that indicate file operations
   </h2>
-  <p>While executing the basic test cases mentioned above, it is important to look for different type of error messages. For instance, “<em>invalid input</em>” or “<em>incorrect format</em>” error messages indicate that an application is safe, while “<em>file not found</em>” or HTTP 404 errors indicate that the application may be using the attack string to find a file in a different path and may be vulnerable to this bug.<b>&amp;nbsp;</b></p>
+  <p>While executing the basic test cases mentioned above, it is important to look for different type of error messages. For instance, “<em>invalid input</em>” or “<em>incorrect format</em>” error messages indicate that an application is safe, while “<em>file not found</em>” or HTTP 404 errors indicate that the application may be using the attack string to find a file in a different path and may be vulnerable to this bug.<b></b></p>
   <h1>Step 4: Execute Additional Testing</h1>
   <p>Finally, it is important to execute additional testing for double encoding scenarios, as well as to cover all of the application’s input points.<b><i></i></b></p>
   <h2>
@@ -122,13 +141,13 @@
   </h2>
   <p>Since this attack requires passing malicious input to a web application, it is necessary to add double encoding test cases for proper coverage. Double encoding consists of re-encoding the percent sign (%) in percent-encoded values with its percent-encoded equivalent (%25). For instance, translating the first URL into the second one:</p>
   <p>
-    <font face="'Courier New'">../../ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; (no encoding)<br />..%2f..%2f&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; (single encoding)<br />..%252f..%252f (double encoding)</font>
+    <font face="'Courier New'">../../         (no encoding)<br />..%2f..%2f     (single encoding)<br />..%252f..%252f (double encoding)</font>
   </p>
   <p>Make sure to add a double encoded test case for every attack string you use.</p>
   <h2>
     Test through all input points
   </h2>
-  <p>Although path manipulation attacks commonly happen through the URL or web forms, it is important to look at additional application input points. Web applications can also take input from client cookies, web methods, extended frameworks (such as Flash/Flex), and third-party APIs (such as Facebook) parameters. Make sure to test for path manipulation in every place where input is taken.&amp;nbsp;</p>
+  <p>Although path manipulation attacks commonly happen through the URL or web forms, it is important to look at additional application input points. Web applications can also take input from client cookies, web methods, extended frameworks (such as Flash/Flex), and third-party APIs (such as Facebook) parameters. Make sure to test for path manipulation in every place where input is taken. </p>
   <h1>Conclusions</h1>
   <p>Path manipulation bugs allow attackers to access a server-side file to execute attacks such as information disclosure and denial of service. They occur because applications don’t properly validate user input against a white list and allow path manipulating characters such as dots and slashes to be processed by the application. To test for this vulnerability you must identify the file path determining variable, commonly sent in the URL or in a web form, and replace it with an attack string while looking for an error message that indicates that the attack string is being used. Finally, to achieve proper test coverage of this bug, be sure to consider double encoding scenarios and to test through all of the application’s input points.</p>]]></Data>
   </Content>

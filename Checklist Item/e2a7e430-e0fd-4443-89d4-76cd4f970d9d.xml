@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that encryption is used to protect sensitive data that is transmitted over the network.</p>
   <h1>Why</h1>
-  <p>When data is sent over the network, it typically passes through several intermediate relays on its way towards some final destination. Using a safe protocol to transmit information is important because it adds protection against a <a href="/article/cf06603e-440e-4118-85d5-ad360817fabc">Network Eavesdropping Attack</a> or <a href="/article/a048eed9-ad5a-4dac-a8d3-68f42da69dbd">Man in the Middle Attack</a> during transport.</p>
+  <p>When data is sent over the network, it typically passes through several intermediate relays on its way towards some final destination. Using a safe protocol to transmit information is important because it adds protection against a Network Eavesdropping Attack or Man in the Middle Attack during transport.</p>
   <h1>How to Check</h1>
   <p>When an application transmits sensitive data over the network, it is necessary to ensure that it is encrypted to protect the data from being stolen or modified in transit. To ensure this, follow the steps outlined below:</p>
   <ol>
@@ -29,56 +29,66 @@
       <p>
         <strong>Identify sensitive information.</strong> Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords, and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
       <ul>
-        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. <li>Information that a user provides that they would not want shared with other users of the application. <li>Information that comes from an external trusted source that is not designed to be shared with users</li></li></li>
+        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others. </li>
+        <li>Information that a user provides that they would not want shared with other users of the application. </li>
+        <li>Information that comes from an external trusted source that is not designed to be shared with users</li>
       </ul>
       <strong>
       </strong>
-      <li>
-        <p>
-          <strong>Verify that sensitive data is securely transmitted.</strong> Ensure that your application transmits sensitive data in a secured fashion. Check if your application uses the following approaches:</p>
-        <ul>
-          <li>
-            <p>
-              <strong>Encrypting the communication links.</strong> Using the <a href="/article/dffb5d33-3dca-4cea-999c-60f0a5deff63">Communication Links are Encrypted</a> checklist, check if your application's communication links are properly secured.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that sensitive data is securely transmitted.</strong> Ensure that your application transmits sensitive data in a secured fashion. Check if your application uses the following approaches:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Encrypting the communication links.</strong> Check if your application's communication links are properly secured.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Encrypting application data.</strong> If your application encrypts its application data, check if your application securely transforms its application data before transmitting it over the network: </p>
+          <ul>
             <li>
               <p>
-                <strong>Encrypting application data.</strong> If your application encrypts its application data, check if your application securely transforms its application data before transmitting it over the network: </p>
+                <strong>Hashing. </strong>Hashing is a one-way mechanism for storing sensitive data in a non-retrievable way. If your application uses hashing as means for storing sensitive data, verify that the following pieces are in place:</p>
               <ul>
                 <li>
-                  <p>
-                    <strong>Hashing. </strong>Hashing is a one-way mechanism for storing sensitive data in a non-retrievable way. If your application uses hashing as means for storing sensitive data, verify that the following pieces are in place:</p>
-                  <ul>
-                    <li>
-                      <strong>Salt</strong>: Check if your application generates its salt using the <strong>RNGCryptoServiceProvider</strong> class. <li><strong>Function</strong>: Check if your application uses SHA-256, SHA-384, or SHA-512 as its hash function. <li><strong>Invocation</strong>: Check if your application invokes the <strong>HMAC.ComputeHash</strong> method to perform the hashing procedure. <li><strong>Clean-up</strong>: Check if your application securely cleans-up all instances of the sensitive data after the hashing procedure has been completed. Consult the <a href="/article/48ebd4c2-b51d-47b6-8c4c-f7bc37edfb1f">Sensitive Data is Cleared from Memory when No Longer Used</a> checklist for more details.</li></li></li></li>
-                  </ul>
-                  <li>
-                    <p>
-                      <strong>Encryption.</strong> Encryption is a mechanism for storing and transmitting sensitive data in a retrievable way. If your application uses encryption as means for storing sensitive data, verify that the following pieces are in place:</p>
-                    <ul>
-                      <li>
-                        <strong>Encryption Key</strong>: Verify that your application's encryption keys are securely stored inside your application's key store. Consult the <a href="/article/f45de1f9-3801-4677-966e-433241bfdd91">A Secure Key Storage Location is Used</a> checklist for more details. <li><strong>Function</strong>: Check if your application uses AES, AES256, or a similar modern strong symmetric encryption function. 3DES and other, older algorithms should be avoided for new development. <li><strong>Invocation</strong>: Check if your application invokes the <strong>SymmetricAlgorithm.Create</strong> and <strong>ICryptoTransform.TransformFinalBlock</strong> methods to perform the encryption procedure. <li><strong>Clean-up</strong>: Check if your application securely cleans-up all instances of the sensitive data and their encryption keys after the encryption procedure has been completed. Consult the <a href="/article/48ebd4c2-b51d-47b6-8c4c-f7bc37edfb1f">Sensitive Data is Cleared from Memory when No Longer Used</a> checklist for more details.</li></li></li></li>
-                    </ul>
-                  </li>
-                </li>
+                  <strong>Salt</strong>: Check if your application generates its salt using the <strong>RNGCryptoServiceProvider</strong> class. </li>
+                <li>
+                  <strong>Function</strong>: Check if your application uses SHA-256, SHA-384, or SHA-512 as its hash function. </li>
+                <li>
+                  <strong>Invocation</strong>: Check if your application invokes the <strong>HMAC.ComputeHash</strong> method to perform the hashing procedure. </li>
+                <li>
+                  <strong>Clean-up</strong>: Check if your application securely cleans-up all instances of the sensitive data after the hashing procedure has been completed. <br /></li>
               </ul>
             </li>
-          </li>
-        </ul>
-      </li>
+            <li>
+              <p>
+                <strong>Encryption.</strong> Encryption is a mechanism for storing and transmitting sensitive data in a retrievable way. If your application uses encryption as means for storing sensitive data, verify that the following pieces are in place:</p>
+              <ul>
+                <li>
+                  <strong>Encryption Key</strong>: Verify that your application's encryption keys are securely stored inside your application's key store.</li>
+                <li>
+                  <strong>Function</strong>: Check if your application uses AES, AES256, or a similar modern strong symmetric encryption function. 3DES and other, older algorithms should be avoided for new development. </li>
+                <li>
+                  <strong>Invocation</strong>: Check if your application invokes the <strong>SymmetricAlgorithm.Create</strong> and <strong>ICryptoTransform.TransformFinalBlock</strong> methods to perform the encryption procedure. </li>
+                <li>
+                  <strong>Clean-up</strong>: Check if your application securely cleans-up all instances of the sensitive data and their encryption keys after the encryption procedure has been completed. <br /></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>An e-commerce application written in ASP.NET enables customers to pay their bills online through a unified broker. The application's web component relies on an independent account management system that resides on another server. The web component communicates with the account management system using a SQL socket connection. The two servers are located in a competitively priced data center that houses a number of other customers, all of which are able to access the building at all times. A malicious user purchases hosting services at the same company, and after exploring the hosting environment, learns that the hosted accounts are networked using a shared bus topology that allows for network snooping. The attacker is able to setup a sniffer, and captures all of the communication between the account management component and the web component, since SQL connections are not encrypted by default. The attacker can now log in as a legitimate user on the account management server and make changes at will.</p>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information about the SHA hashing functions, visit: <a href="http://en.wikipedia.org/wiki/SHA_hash_functions">SHA hash functions</a>. <li>For more information about symmetric cryptography, visit: <a href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">Symmetric-key algorithm</a>.</li></li>
+    <li>For more information about the SHA hashing functions, visit: <a href="http://en.wikipedia.org/wiki/SHA_hash_functions">SHA hash functions</a>. </li>
+    <li>For more information about symmetric cryptography, visit: <a href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">Symmetric-key algorithm</a>.</li>
   </ul>
-  <h1>Related Guideline</h1>
-  <ul>
-    <li>
-      <a href="/article/a92aca4f-314d-40fe-9ecd-e3bbe19a555b">Guideline: Protect Sensitive Data Over the Network </a>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8f9abcf2-db84-4e46-9be6-9d2b166315ad</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Protect Authentication Credentials in Transit</Title>
+    <Category>Authentication</Category>
+    <Phase>Implementation</Phase>
+    <Technology> Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Do==
+
+Do not send credentials via unencrypted connections. Use TLS when transmitting credentials.
+
+
+==Why==
+
+Using TLS prevents the credentials from being sniffed or tampered with as they are transmitted over the network. TLS only provides assurance against tampering if valid certificates are used.
+
+
+==How==
+
+To use TLS to protect authentication credentials in transit:
+
+# **Purchase a valid TLS certificate.** You may purchase a valid TLS key from VeriSign, Thawte, or your web hosting provider. Follow the vendor's instructions for purchasing the TLS certificate. The certificate is usually a .cer file. Make sure the certificate matches all domains used by the application.
+# **Identify authentication code.** Find the code that sends authentication credentials to the server for verification. Make a spreadsheet about all the code that sends authentication credentials over the network.
+# **Use TLS to protect authentication credentials in transit.** Modify all code that sends authentication credentials over the network to send these credentials only through sockets protected using TLS. Use valid certificates when opening TLS protected sockets.]]></Data>
+  </Content>
+</TeamMentor_Article>

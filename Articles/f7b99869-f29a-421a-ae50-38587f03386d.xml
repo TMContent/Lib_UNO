@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f7b99869-f29a-421a-ae50-38587f03386d</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Test Accounts Are Removed Before Deployment</Title>
+    <Category>Administration</Category>
+    <Phase>Deployment</Phase>
+    <Technology> Any</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[==What to Check For==
+
+Verify that all test accounts are removed before deployment.
+
+
+==Why==
+
+Test accounts provide access to the application's functionality during development. Since they are often poorly secured and monitored, they are a common target for attackers.
+
+
+==How to Check==
+
+Use the following steps to ensure your application has all test accounts removed:
+
+# **Check if your application has existing test users.** Enumerate all of your application's users. Verify that there are no test accounts in your application's user database. Common test accounts include, but are not limited to: any account name that includes the application's name, any account name containing the word "test", and any account that has been identified in your application's documentation as being a test account.
+# **Check if your application has hard-coded users.** Verify that your application's code base does not contain any hard-coded users. A hard-coded user is a username and password that is initialized to a fixed value when your application starts. Common locations to look for hard-coded users include: authentication procedures, authorization procedures, procedures that involve change of privileges, and components that require access controls.
+# **Check if your application has existing test roles.** Verify that there are no existing test roles left in your application. Common test roles are any roles containing the word "test" and any roles that are identified as test roles in your application's documentation.
+# **Check if your application has special privileges for test roles.** Verify that there are no conditions throughout your application's code base that grant special permissions to test roles. Common locations to look for special privileges to test roles include authorization procedures, procedures that involve change of privileges, and components that require access controls.
+
+
+==How to Fix==
+
+To remove all test accounts from applications before deployment:
+
+# **Enumerate all accounts.** List all the users to your application. This should be a full comprehensive list that includes, but is not limited to, active users, inactive users, users pending confirmation, and test accounts.
+# **Identify their use.** Examine the use/status of each account. Sort the accounts into groups according to their use/status.
+# **Remove the accounts that will no longer be used.** Once the accounts are sorted into groups, list all accounts that are used for test purposes. After identifying all test accounts, remove them from your application's database.
+# **Enforce strong passwords on the remaining accounts.** After removing all test accounts, enforce strong passwords for the remaining accounts in your application. Strong passwords decrease the probability of compromising valid users.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -25,12 +25,12 @@
     <strong>ViewState </strong>is the mechanism used by ASP.NET to keep track of server control state values that don't otherwise post back as part of the HTTP form. It's a hidden form field managed by the ASP.NET page framework and is an encoded aggregate of values of controls on a page. View state is enabled by default in ASP.NET and it can be disabled or re-enabled at the machine, application, page and control level by setting the <strong>EnableViewState</strong> property to 'false' or 'true' in config files.</p>
   <p>By default, there's nothing in the view state that ties its content to a particular user. The attacker can easily reuse the view state he/she obtained making legal access to the page to build a bogus request on behalf of another user. This is where a <strong>ViewStateUserKey</strong> is useful.</p>
   <p>The <strong>ViewStateUserKey</strong> property adds user-specific information to the view state. Setting the <strong>ViewStateUserKey</strong> property of the page in the <strong>Page_Init</strong> event handler helps prevent Cross Site Request Forgery attacks by ensuring that any form information submitted came from the same user who requested the original page. It binds the content of the <strong>ViewState</strong> variable to individual users so that the malicious users cannot use the variable to generate an attack.</p>
-  <p>This prevents <a href="/article/6ae71499-095c-49bd-bed0-4e08303a4324">Cross Site Request Forgery</a> attacks, where attackers attempt to use their <strong>ViewState</strong> in the context of another user, or to otherwise post form data as though they were another user. These attacks are also called one-click attacks.</p>
+  <p>This prevents Cross Site Request Forgery attacks, where attackers attempt to use their <strong>ViewState</strong> in the context of another user, or to otherwise post form data as though they were another user. These attacks are also called one-click attacks.</p>
   <h1>When</h1>
   <p>The <strong>ViewStateUserKey </strong>property should be used when a web application accepts input that alters the state of the application from authenticated or trusted users without requiring the users to authorize the specific action. The actions that alter the state of the application could include, but are not limited to, modifying the contents of a database, modifying the state of user accounts, submitting data to other systems, etc. Such web applications are more at risk than those that just provide information, and hence, need to use <strong>ViewStateUserKey</strong> to ensure that the user is not allowed to modify state maliciously.</p>
   <h1>How</h1>
   <p>Set the <strong>ViewStateUserKey</strong> property to a value that you know is unique for each user, such as username, user ID, or a session ID as shown below:</p>
-  <pre>void Page_Init (object sender, EventArgs e)&amp;#123;   ViewStateUserKey = Session.SessionID;&amp;#125;</pre>
+  <pre>void Page_Init (object sender, EventArgs e){   ViewStateUserKey = Session.SessionID;}</pre>
   <p>Session ID is a much better fit because a session ID is unpredictable, times out, and varies on a per-user basis.</p>
   <h1>Problem Example</h1>
   <p>A web application does not set the <strong>ViewStateUserKey</strong> property in the Page_Init event handler. If this application allows a user to change the state of the application in a single request, it is susceptible to a Cross Site Request Forgery Attack. </p>
@@ -38,29 +38,17 @@
   <p>This GET request looks like this:</p>
   <pre>GET http://teammentorexample.com/adduser.aspx?username=joe&amp;password=1234&amp;usertype=user HTTP/1.1</pre>
   <p>The attacker discovers that this request will create a new user and creates his own request which he embeds an e-mail with the following image tag:</p>
-  <pre>&lt;img src=&amp;#8221; http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin&amp;#8221; /&gt;</pre>
-  <p>When the victim&amp;#8217;s (the administrator in this case) e-mail client attempts to download the image located at the above source the request is made without the knowledge of the victim. </p>
+  <pre>&lt;img src=” http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin” /&gt;</pre>
+  <p>When the victim’s (the administrator in this case) e-mail client attempts to download the image located at the above source the request is made without the knowledge of the victim. </p>
   <p>The Web page contains a hidden form field named __VIEWSTATE that is already filled with ViewState data. The ViewState can be re-used from a valid request that the attacker had previously made to the application. The ViewState content is not checked on the server or is only checked against tampering.The attacker lures the unsuspecting user into opening the email containing the malicious URL, causing the request to be sent to the server where the ViewState is valid. The server has no way of knowing that the ViewState originated from the attacker. ViewState validation does not counter this attack because the ViewState is valid and the page is executed under the security context of the victim user.</p>
   <h1>Solution Example</h1>
   <p>A web application correctly sets the ViewStateUserKey property in the Page_Init event handler as follows:</p>
-  <pre>void Page_Init (object sender, EventArgs e)&amp;#123;   ViewStateUserKey = m_username;&amp;#125;</pre>
+  <pre>void Page_Init (object sender, EventArgs e){   ViewStateUserKey = m_username;}</pre>
   <p>Now, when an attacker creates a Web page that contains a hidden form field named __VIEWSTATE that is already filled with ViewState data and lures an unsuspecting user into browsing to the page, the server knows that the ViewState does not belong to the victim, but that it originated from the attacker, and the attack is not successful. </p>
   <p>For example, when the attacker sends an email containing the image tag</p>
-  <pre>&lt;img src=&amp;#8221;http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin&amp;#8221; /&gt;</pre>
+  <pre>&lt;img src=”http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin” /&gt;</pre>
   <p>to the victim (the administrator), and the "add user" request is made without the knowledge of the victim, the server denies the request because it detects that the request does not belong to the logged-in user it seems to be coming from.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about ViewState, see: <a href="http://msdn2.microsoft.com/en-us/library/ms972427.aspx">Taking a Bite Out of ASP.NET ViewState</a>, <a href="http://www.aspnetresources.com/articles/ViewState.aspx">ASP.NET State Management: View State</a>, and <a href="http://www.asp101.com/lessons/viewstate.asp">Form Viewstate</a>. <li>To learn more about security features in ASP.NET, see: <a href="http://msdn2.microsoft.com/en-us/library/ms972969.aspx">Take Advantage of ASP.NET Built-in Features to Fend Off Web Attacks</a>. <li>For more information about the ViewStateUserKey property in ASP.NET, visit the documentation on the <a href="http://msdn2.microsoft.com/en-us/library/system.web.ui.page.viewstateuserkey.aspx">Page.ViewStateUserKey</a> in MSDN.</li></li></li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/6ae71499-095c-49bd-bed0-4e08303a4324">Attack: Cross Site Request Forgery</a>
-      <li>
-        <a href="/article/43c19a37-285d-4cdd-a43b-bdea78eb1686">Attack: HTTP Replay Attack</a>
-      </li>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>

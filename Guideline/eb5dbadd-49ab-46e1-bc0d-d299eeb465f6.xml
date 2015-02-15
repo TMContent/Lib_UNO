@@ -3,7 +3,7 @@
   <Metadata>
     <Id>eb5dbadd-49ab-46e1-bc0d-d299eeb465f6</Id>
     <Id_History>eb5dbadd-49ab-46e1-bc0d-d299eeb465f6,8c1b2132-1bb5-4dea-85dd-5b350e2a1093,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Partition Code into Separate Assemblies</Title>
     <Category>Code Access Security</Category>
     <Phase>Design</Phase>
@@ -30,22 +30,24 @@
     <li>
       <p>
         <strong>Identify the major components</strong>: Review your application's design and locate all major functionality.</p>
-      <li>
-        <p>
-          <strong>Identify all special security settings</strong>: Review your application's security requirements. Identify all cases where a component would require a privilege that is otherwise not needed by the rest of your application. For example, all code that accesses the file system should be placed within a single assembly.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify all special security settings</strong>: Review your application's security requirements. Identify all cases where a component would require a privilege that is otherwise not needed by the rest of your application. For example, all code that accesses the file system should be placed within a single assembly.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Partition your application</strong>: Store all major functionality into separate assemblies. Adding this level of granularity to your application provides extra flexibility when applying your application's security settings. ASP.NET provides the following types of assemblies:</p>
+      <ul>
         <li>
-          <p>
-            <strong>Partition your application</strong>: Store all major functionality into separate assemblies. Adding this level of granularity to your application provides extra flexibility when applying your application's security settings. ASP.NET provides the following types of assemblies:</p>
-          <ul>
-            <li>
-              <strong>Page assemblies</strong>: By default, each ASP.NET page is compiled into its own assembly that is then loaded into the ASP.NET engine. Security configuration for such assemblies is stored inside <strong>web.config</strong>. <li><strong>Executable assemblies</strong>: Typically known as external libraries or DLL, these assemblies can be re-used outside of ASP.NET development. Security settings for such assemblies is managed through <strong>app.config</strong> and the <strong>caspol.exe</strong> utility.</li></li>
-          </ul>
-          <li>
-            <p>
-              <strong>Apply the appropriate security settings</strong>: Using the <a href="/article/0c6693ed-e3c2-4640-a795-c7c9c2a63cbc">Define a Security Policy</a> guideline, define a security policy that best meets each assembly's security requirements.</p>
-          </li>
-        </li>
-      </li>
+          <strong>Page assemblies</strong>: By default, each ASP.NET page is compiled into its own assembly that is then loaded into the ASP.NET engine. Security configuration for such assemblies is stored inside <strong>web.config</strong>. </li>
+        <li>
+          <strong>Executable assemblies</strong>: Typically known as external libraries or DLL, these assemblies can be re-used outside of ASP.NET development. Security settings for such assemblies is managed through <strong>app.config</strong> and the <strong>caspol.exe</strong> utility.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Apply the appropriate security settings</strong>: Define a security policy that best meets each assembly's security requirements.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
@@ -58,34 +60,7 @@
   <blockquote>
     <pre>&lt;location allowOverride="false"&gt;<br />   &lt;system.web&gt;<br />      &lt;securityPolicy&gt;<br />         &lt;trustLevel name="MyAppCalendarTrustLevel" policyFile="myapp_calendartrust.config" /&gt;<br />      &lt;/securityPolicy&gt;<br />      &lt;trust level="MyAppCalendarTrustLevel" originUrl="~/Calendar/" /&gt;<br />   &lt;/system.web&gt;<br />&lt;/location&gt;<br />&lt;location allowOverride="false"&gt;<br />   &lt;system.web&gt;<br />      &lt;securityPolicy&gt;<br />         &lt;trustLevel name="MyAppDocumentTrustLevel" policyFile="myapp_documentstrust.config" /&gt;<br />      &lt;/securityPolicy&gt;<br />      &lt;trust level="MyAppDocumentTrustLevel" originUrl="~/Documents/" /&gt;<br />   &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
   </blockquote>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about the contents of a .NET assembly, visit: <a href="http://msdn2.microsoft.com/en-us/library/zst29sk2(vs.80).aspx">Assembly Contents</a>. <li>To learn more about configuring the security settings for a .NET assembly, visit: <a href="http://msdn2.microsoft.com/en-us/library/cb6t8dtz(VS.80).aspx">Code Access Security Policy Tool</a> in MSDN.</li></li>
-  </ul>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/0c6693ed-e3c2-4640-a795-c7c9c2a63cbc">Guideline: Define a Security Policy </a>
-      <li>
-        <a href="/article/a5b7e377-103e-4805-a567-6092cbbaeba7">Guideline: Partition Application Between Public and Private Domains </a>
-        <li>
-          <a href="/article/a5b7e377-103e-4805-a567-6092cbbaeba7">Guideline: Partition Application Between Public and Private Domains </a>
-          <li>
-            <a href="/article/ff3f8f9f-5689-4827-93b8-e8e053661b58">Attack: API Hijacking Attack</a>
-            <li>
-              <a href="/article/88134c36-4e54-47ca-8a83-fafe271ca05a">Attack: Luring Attack</a>
-              <li>
-                <a href="/article/0e42f173-1bae-4c59-b1a5-b265642c95da">Attack: Reflection Injection Attack</a>
-                <li>
-                  <a href="/article/d4143ba9-d87b-4455-8053-d888489a0013">Checklist Item: Code is Partitioned Into Separate Assemblies </a>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
+  <br />
   <hr />
   <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
