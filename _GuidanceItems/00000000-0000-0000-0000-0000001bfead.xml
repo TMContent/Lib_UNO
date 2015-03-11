@@ -21,7 +21,7 @@
   <p>
   </p>
   <p>Injection flaws allow attackers to relay malicious code through a web application to another system. These attacks include calls to the operating system via system calls, the use of external programs via shell commands, as well as calls to a backend database via querying process (SQL/NoSQL). Whole scripts written in perl, python, and other languages can be injected into poorly designed web applications and executed. <strike><br /></strike></p>
-  <p>Databases use SQL/NoSQL queries to retrieve or modify data in the database tables. In most applications, the input entered by the user is used to dynamically construct the query to be sent to the database.&amp;nbsp; When an attacker enters ' OR 1=1;-- in the Username field of the Login page, the input (' OR 1=1) becomes a part of the query, which will look something like:</p>
+  <p>Databases use SQL/NoSQL queries to retrieve or modify data in the database tables. In most applications, the input entered by the user is used to dynamically construct the query to be sent to the database.&nbsp; When an attacker enters ' OR 1=1;-- in the Username field of the Login page, the input (' OR 1=1) becomes a part of the query, which will look something like:</p>
   <p>
   </p>
   <pre>SELECT * FROM _tablename_ WHERE username = '' OR 1=1;--' AND password = 'somepassword' ;--</pre>
@@ -30,8 +30,8 @@
   </p>
   <p>
     The rest of the statement after –- is commented out, and the OR condition has been evaluated to true. So, the database returns all rows and the application authenticates the user as the first user in the database. <br /></p>
-  <p>Alternatively, an attacker can enter&amp;nbsp; &lt;validusername&gt;' or '1'='1;--&amp;nbsp; to log in to the application as the specified &lt;validusername&gt;, even when a wrong password is entered. Thus, the attacker can enter username as admin' or '1'='1;--&amp;nbsp; to log in as "admin." <br /></p>
-  <p>NoSQL database engines that process JavaScript containing user specified parameters can also be vulnerable. MongoDB, for example, supports the use of JavaScript functions for query specifications and map/reduce operations. Since MongoDB databases, like other NoSQL databases, do not have strictly defined database schemas, developers can use JavaScript query syntax to write arbitrarily complex queries against disparate document structures.&amp;nbsp;</p>
+  <p>Alternatively, an attacker can enter&nbsp; &lt;validusername&gt;' or '1'='1;--&nbsp; to log in to the application as the specified &lt;validusername&gt;, even when a wrong password is entered. Thus, the attacker can enter username as admin' or '1'='1;--&nbsp; to log in as "admin." <br /></p>
+  <p>NoSQL database engines that process JavaScript containing user specified parameters can also be vulnerable. MongoDB, for example, supports the use of JavaScript functions for query specifications and map/reduce operations. Since MongoDB databases, like other NoSQL databases, do not have strictly defined database schemas, developers can use JavaScript query syntax to write arbitrarily complex queries against disparate document structures.&nbsp;</p>
   <p>For example, say a MongoDB collection contains some documents that represent books, some that represent movies, and some that represent music albums. The following JavaScript query function will select all documents in the specified collection that were written, filmed, or recorded in the specified year:</p>
   <p>
   </p>
@@ -73,7 +73,7 @@ $cursor = $collection-&gt;find(array('$where' =&gt; $query));</pre>
     <div>
       Some injection attacks can be very easy to discover and exploit, but others can<strike></strike> be extremely obscure. The consequences can run the gamut from trivial to complete system compromise or destruction. In any case, the use of external calls is quite widespread, so the likelihood of a web application having a command injection flaw should be considered high.</div>
     <div>
-      <br />In addition to SQL injection, there are other ways of compromising the server through injection attacks. For example a malicious parameter could modify a system call: By including path traversal “../” characters as part of a filename request, a call which normally retrieves the current user’s file would instead access another user’s file.&amp;nbsp; Or, a command such as “; rm –r *” could be tacked on to the end of a parameter passed to a shell script to execute an additional shell command along with the intended command.</div>
+      <br />In addition to SQL injection, there are other ways of compromising the server through injection attacks. For example a malicious parameter could modify a system call: By including path traversal “../” characters as part of a filename request, a call which normally retrieves the current user’s file would instead access another user’s file.&nbsp; Or, a command such as “; rm –r *” could be tacked on to the end of a parameter passed to a shell script to execute an additional shell command along with the intended command.</div>
     <div>
       <br />The following shows how easy it is to run external commands in Scala if “sys.process” is imported in the application:</div>
     <div>
@@ -135,7 +135,7 @@ drwxr-xr-x 3 Al staff 102 Apr 4 17:58 ..
   <h1>How to Fix</h1>
   <p>
   </p>
-  <p>There are two main causes for injection attack vulnerabilities: 1) input is not validated before constructing the query, and 2) input is used to build dynamic queries.&amp;nbsp; To address these issues, follow these security measures:</p>
+  <p>There are two main causes for injection attack vulnerabilities: 1) input is not validated before constructing the query, and 2) input is used to build dynamic queries.&nbsp; To address these issues, follow these security measures:</p>
   1.
   
     <b>Use parameterized SQL queries.</b>

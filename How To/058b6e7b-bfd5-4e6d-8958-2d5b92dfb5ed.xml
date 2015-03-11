@@ -31,18 +31,18 @@
   <p>Secure Keypair.snk, which contains both the private and public keys. For example, put it on a compact disc, and physically secure it. Then make Publickey.snk available to all developers. For example, put it on a network share. </p>
   <p>To delay sign the assembly, click the <b>Signing</b> tab from the project properties page in Visual Studio, and then select the <b>Sign the assembly</b> and <b>Delay sign only</b> check boxes. Select your strong-name key file and then build your assembly. </p>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;A delay-signed project will not run and cannot be debugged. You can, however, use the Strong Name Tool (Sn.exe) with the <b>-Vr</b> option to skip verification during development.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;A delay-signed project will not run and cannot be debugged. You can, however, use the Strong Name Tool (Sn.exe) with the <b>-Vr</b> option to skip verification during development.</blockquote>
   <p>The delay signing process and the absence of an assembly signature mean that the assembly will fail verification at load time. To work around this, to disable verification for a specific assembly, use the following command: </p>
   <pre>sn -Vr assembly.dll </pre>
   <p>To disable verification for all assemblies that have a particular public key, use the following command: </p>
-  <pre>sn -Vr &amp;#42;,publickeytoken </pre>
+  <pre>sn -Vr &#42;,publickeytoken </pre>
   <p>To extract the public key and key token (a truncated hash of the public key), use the following command: </p>
   <pre>sn -Tp assembly.dll </pre>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Use an uppercase <b>-T</b> switch.<b></b></blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;Use an uppercase <b>-T</b> switch.<b></b></blockquote>
   <p>To fully complete the signing process and create a digital signature to restrict access to the assembly, use the following command. This requires the private key, and as a result, the operation is normally performed as part of the formal build and release process. The following command re-signs an assembly called Assembly.dll with a strong name using the Keypair.snk key file. </p>
   <pre>sn -R assembly.dll keypair.snk </pre>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

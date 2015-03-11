@@ -18,7 +18,7 @@
     <Data><![CDATA[<h1>Applies to</h1>
   <p>Scala and Play Framework 2.1.0+<br /></p>
   <h1>What to Check For</h1>
-  <p>Ensure that accounts&amp;nbsp;are locked after consecutive failed login attempts.</p>
+  <p>Ensure that accounts&nbsp;are locked after consecutive failed login attempts.</p>
   <h1>Why</h1>
   <p>Multiple, consecutive failed login attempts over a short time period can sometimes be a symptom of an attack. Locking the account will prevent the attacker from continuing the break-in attempt.</p>
   <h1>How to Check</h1>
@@ -26,7 +26,7 @@
   <ol>
     <li>
       <p>
-        <strong>Verify that your application has a lockout policy.&amp;nbsp;</strong>An account lockout policy is typically application specific. Review your application's requirements and design specifications and verify the&amp;nbsp;following functionality:</p>
+        <strong>Verify that your application has a lockout policy.&nbsp;</strong>An account lockout policy is typically application specific. Review your application's requirements and design specifications and verify the&nbsp;following functionality:</p>
       <ul>
         <li>A mechanism to determine failed login attempts.</li>
         <li>A mechanism to specify an allowed number of login attempts.<br /></li>
@@ -40,12 +40,12 @@
     </li>
     <li>
       <p>
-        <strong>Verify that your application enforces the lockout policy. </strong>Ensure that all authentication procedures enforce your application's lockout policy. The implementation should&amp;nbsp;match the lockout policy per the business requirements of your organization, which may change over time.</p>
+        <strong>Verify that your application enforces the lockout policy. </strong>Ensure that all authentication procedures enforce your application's lockout policy. The implementation should&nbsp;match the lockout policy per the business requirements of your organization, which may change over time.</p>
     </li>
   </ol>
   <blockquote>
     <p>
-      <strong>Note &amp;nbsp;</strong> PCI DSS certification requires that logs must include failed login attempts, and that an account must be locked for at least 30 minutes after no more than six failed login attempts.</p>
+      <strong>Note &nbsp;</strong> PCI DSS certification requires that logs must include failed login attempts, and that an account must be locked for at least 30 minutes after no more than six failed login attempts.</p>
   </blockquote>
   <h1>How to Fix</h1>
   <p>To successfully lock accounts after consecutive failed login attempts:</p>
@@ -58,7 +58,7 @@
         <li>Amount of time that a locked account will remain locked</li>
       </ul>
       <p>A
- simple policy would be to lock an account after&amp;nbsp;five failed login 
+ simple policy would be to lock an account after&nbsp;five failed login 
 attempts for the duration of 15 minutes. Although this is an effective 
 method for blocking a brute force attack, it exposes your application to
  denial of service as an attacker can easily keep an account locked 
@@ -66,9 +66,9 @@ through a small stream of authentication requests.<br /><br />When
 determining the lockout policy, it is important to evaluate the risk of 
 attacks against the user and the support costs associated with 
 reactivating a locked account. For example, requiring the user to 
-contact your organization's support staff&amp;nbsp;to reactivate a locked account
+contact your organization's support staff&nbsp;to reactivate a locked account
  will have a direct impact on support costs and would add general user 
-frustration.&amp;nbsp;However, it is important to use extra care when designing 
+frustration.&nbsp;However, it is important to use extra care when designing 
 more sophisticated variations of your application's lockout policy, such
  as correlating a single or multiple user login attempts with a source 
 IP. When adding extra levels of complexity, carefully consider and 
@@ -90,14 +90,14 @@ office IP.</p>
     </li>
     <li>
       <p>
-        <strong>Set an unlocking mechanism.&amp;nbsp;</strong>Keep track of the lockout period. Based on your application's lockout 
+        <strong>Set an unlocking mechanism.&nbsp;</strong>Keep track of the lockout period. Based on your application's lockout 
 policy, unlock the account after the lockout period has expired. Example:</p>
       <pre>-- Unlock all locked accounts whose 45 minute lockout period has expired<br />sql&gt; update users set login_attempts = 0<br />      where last_login </pre>
     </li>
   </ol>
   <blockquote>
     <p>
-      <strong>Note &amp;nbsp;</strong> PCI DSS requirements state that an account must be locked for at least 30 minutes after no more than six failed login attempts.</p>
+      <strong>Note &nbsp;</strong> PCI DSS requirements state that an account must be locked for at least 30 minutes after no more than six failed login attempts.</p>
   </blockquote>
   <h1>Problem Example</h1>
   <p>The following code executes the database transaction required during authentication. Because the transaction fails to check the login counter, it is possible for an attacker to compromise an account through the use of a brute force or a dictionary attack.</p>

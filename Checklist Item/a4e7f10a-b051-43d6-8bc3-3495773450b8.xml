@@ -35,22 +35,22 @@
           <strong>Verify that each transaction uses Stored Procedures where possible. </strong>Verify that your application interacts with the backend database through the use of Stored Procedures. Ensure that SQL queries look like:</p>
         <pre>SqlCommand myCommand = new SqlCommand("sp_SelectUser", myConnection);<br />//Specify our command is a stored procedure<br />myCommand.CommandType = CommandType.StoredProcedure; </pre>
         <p>and not like:</p>
-        <pre>string SQLstr = "SELECT &amp;#42; from users<br />&amp;#9; WHERE username = '" &amp;#43; un.Text &amp;#43; "'<br />&amp;#9; AND password = '" &amp;#43; pass.Text &amp;#43; "'";<br />SqlCommand myCommand = new SqlCommand(SQLstr, myConnection);</pre>
+        <pre>string SQLstr = "SELECT &#42; from users<br />&#9; WHERE username = '" &#43; un.Text &#43; "'<br />&#9; AND password = '" &#43; pass.Text &#43; "'";<br />SqlCommand myCommand = new SqlCommand(SQLstr, myConnection);</pre>
         <li>
           <p>
             <strong>Verify that type-safe parameters are used. </strong>Verify that type-safe parameters are used in the dynamic SQL queries or stored procedures by using the SqlParameterCollection class. Example:</p>
-          <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />&amp;#123;<br />  connection.Open();<br />  SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />         "SELECT &amp;#42; from users WHERE username = '&amp;#64;uname' AND password = '&amp;#64;pwd'", connection);<br />  myCommand.SelectCommand.Parameters.Add("&amp;#64;uname", SqlDbType.VarChar, 24);<br />  myCommand.SelectCommand.Parameters.Add("&amp;#64;pwd", SqlDbType.VarChar, 16);<br />  myCommand.SelectCommand.Parameters&amp;#91;"&amp;#64;uname"&amp;#93;.Value = un.Text;<br />  myCommand.SelectCommand.Parameters&amp;#91;"&amp;#64;pwd"&amp;#93;.Value = pass.Text;<br />  myDataAdapter.Fill(userDataset);  ...  connection.Close();<br />&amp;#125;</pre>
+          <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />&#123;<br />  connection.Open();<br />  SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />         "SELECT &#42; from users WHERE username = '&#64;uname' AND password = '&#64;pwd'", connection);<br />  myCommand.SelectCommand.Parameters.Add("&#64;uname", SqlDbType.VarChar, 24);<br />  myCommand.SelectCommand.Parameters.Add("&#64;pwd", SqlDbType.VarChar, 16);<br />  myCommand.SelectCommand.Parameters&#91;"&#64;uname"&#93;.Value = un.Text;<br />  myCommand.SelectCommand.Parameters&#91;"&#64;pwd"&#93;.Value = pass.Text;<br />  myDataAdapter.Fill(userDataset);  ...  connection.Close();<br />&#125;</pre>
         </li>
       </li>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>Consider an ASP.NET application that handles employee payroll functionality for a small company. One of the pages requires retrieving an employee record from a table based on a username and password supplied via a login dialog. The developer of the application created an SQL SELECT query to accomplish said task:</p>
-  <pre>using (SqlConnection myConnection = new SqlConnection(connectionString))<br />&amp;#123;<br />  connection.Open();<br />  string SQLstr = "SELECT &amp;#42; from users WHERE username = '" &amp;#43; un.Text &amp;#43; "'<br />&amp;#9; AND password = '" &amp;#43; pass.Text &amp;#43; "'";<br />  SqlCommand myCommand = new SqlCommand(SQLstr, myConnection);<br />  SqlDataAdapter myDataAdapter = new SqlDataAdapter(myCommand);<br />  myCommand.Connection.Open();<br />  SqlDataReader myReader = myCommand.ExecuteReader();<br />  ...<br />&amp;#125;</pre>
+  <pre>using (SqlConnection myConnection = new SqlConnection(connectionString))<br />&#123;<br />  connection.Open();<br />  string SQLstr = "SELECT &#42; from users WHERE username = '" &#43; un.Text &#43; "'<br />&#9; AND password = '" &#43; pass.Text &#43; "'";<br />  SqlCommand myCommand = new SqlCommand(SQLstr, myConnection);<br />  SqlDataAdapter myDataAdapter = new SqlDataAdapter(myCommand);<br />  myCommand.Connection.Open();<br />  SqlDataReader myReader = myCommand.ExecuteReader();<br />  ...<br />&#125;</pre>
   <p>In the preceding example, the SELECT statement will work as expected, assuming that the input is perfectly constrained. However, what happens if a user enters unexpected input such as '1234' for a password, and this for a username:</p>
   <pre>mjones' AND 1=1; -- </pre>
   <p>This will result in the SQL statement being executed at the database level:</p>
-  <pre>SELECT &amp;#42; from users WHERE username = 'mjones' AND 1=1; --'  AND password = '1234';</pre>
+  <pre>SELECT &#42; from users WHERE username = 'mjones' AND 1=1; --'  AND password = '1234';</pre>
   <p>This will allow the person entering data into the dialog box to select the account details of mjones without the correct password.</p>
   <h1>Additional Resources</h1>
   <ul>
@@ -63,6 +63,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

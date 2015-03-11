@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>C&amp;#43;&amp;#43;</li>
+    <li>C&#43;&#43;</li>
   </ul>
   <h1>What to Check For</h1>
   <p>Verify that operations using unsigned integers do not result in values that are higher than the maximum or minimum allowed for the integer type.</p>
@@ -32,10 +32,10 @@
   <p>Identify all operations that assign values to unsigned integers. Add code to perform range checks before assigning values to unsigned integers. Use constants, such as UINT_MAX, defined by the platform for range checks. The minimum valid value for unsigned integers is of course 0.</p>
   <h1>Problem Example</h1>
   <p>The following code may result in an unexpected value of a. If the value of variable a is then used to control program flow, index arrays, or perform memory operations, an arbitrary code execution vulnerability may result.</p>
-  <pre>unsigned short a, b, c;<br />// assign values to b and c<br />a = b &amp;#43; c;</pre>
+  <pre>unsigned short a, b, c;<br />// assign values to b and c<br />a = b &#43; c;</pre>
   <h1>Solution Example</h1>
   <p>To prevent integer wrapping, perform checks to make sure the resulting value is valid for the unsigned integer type. For the problem example above, the following code implements the correct range check:</p>
-  <pre>unsigned short a, b, c;<br />// assign values to b and c<br />if((b&amp;#43;c) &lt; UINT_MAX) a = b &amp;#43; c;<br />else &amp;#123;/&amp;#42;handle error&amp;#42;/&amp;#125;</pre>
+  <pre>unsigned short a, b, c;<br />// assign values to b and c<br />if((b&#43;c) &lt; UINT_MAX) a = b &#43; c;<br />else &#123;/&#42;handle error&#42;/&#125;</pre>
   <h1>Related Items</h1>
   <ul>
     <li>

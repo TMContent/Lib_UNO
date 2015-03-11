@@ -50,15 +50,15 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The application should not contain code similar to the following example. </p>
-  <pre>public void ProcessInput()<br />&amp;#123;<br />&amp;nbsp;char&amp;#91;&amp;#93; data = new char&amp;#91;255&amp;#93;;&amp;nbsp; <br />&amp;nbsp;GetData(data);<br />&amp;#125;</pre>
-  <pre>public void GetData(char&amp;#91;&amp;#93; buffer)<br />&amp;#123;<br />int ch = 0;<br />fixed (char&amp;#42; pBuf = buffer)<br />&amp;#123;<br />&amp;nbsp; do<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ch = System.Console.Read();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#42;(pBuf&amp;#43;&amp;#43;) = (char)ch;<br />&amp;nbsp; &amp;#125; while(ch &amp;#33;= '\n');<br />&amp;#125;<br />&amp;#125; </pre>
+  <pre>public void ProcessInput()<br />&#123;<br />&nbsp;char&#91;&#93; data = new char&#91;255&#93;;&nbsp; <br />&nbsp;GetData(data);<br />&#125;</pre>
+  <pre>public void GetData(char&#91;&#93; buffer)<br />&#123;<br />int ch = 0;<br />fixed (char&#42; pBuf = buffer)<br />&#123;<br />&nbsp; do<br />&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp; ch = System.Console.Read();<br />&nbsp;&nbsp;&nbsp; &#42;(pBuf&#43;&#43;) = (char)ch;<br />&nbsp; &#125; while(ch &#33;= '\n');<br />&#125;<br />&#125; </pre>
   <p>In this code example, an overflow occurs whenever a single line is more than 255 characters long. There are two problems in this code: </p>
   <ul>
     <li>The <b>ProcessInput</b> function allocates only enough space for 255 characters. <li>The <b>GetData</b> function does not check the size of the array as it fills it. </li></li>
   </ul>
   <h1>Solution Example</h1>
-  <p>In the following code, the <strong>GetData</strong>&amp;nbsp;function checks the size of the array before filling it.</p>
-  <pre>public void ProcessInput()<br />&amp;#123;<br /><br /> char&amp;#91;&amp;#93; data = new char&amp;#91;ARRAY_SIZE&amp;#93;;&amp;nbsp; <br />&amp;nbsp;GetData(data, ARRAY_SIZE);<br />&amp;#125;</pre>
-  <pre>public void GetData(char&amp;#91;&amp;#93; buffer, int bufferSize)<br />&amp;#123;<br />int ch = 0;<br />bool done = false;<br />fixed (char&amp;#42; pBuf = buffer)<br />&amp;#123;<br />&amp;nbsp; for (int i = 0; i &lt; bufferSize &amp;&amp; &amp;#33;done; i&amp;#43;&amp;#43;)<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ch = System.Console.Read();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#42;(pBuf&amp;#43;&amp;#43;) = (char)ch;<br />    if ('\n' == ch)<br />    &amp;#123;<br /> &amp;#9;done = true;<br />    &amp;#125;<br />&amp;nbsp; &amp;#125; <br />&amp;#125;<br />&amp;#125; </pre>]]></Data>
+  <p>In the following code, the <strong>GetData</strong>&nbsp;function checks the size of the array before filling it.</p>
+  <pre>public void ProcessInput()<br />&#123;<br /><br /> char&#91;&#93; data = new char&#91;ARRAY_SIZE&#93;;&nbsp; <br />&nbsp;GetData(data, ARRAY_SIZE);<br />&#125;</pre>
+  <pre>public void GetData(char&#91;&#93; buffer, int bufferSize)<br />&#123;<br />int ch = 0;<br />bool done = false;<br />fixed (char&#42; pBuf = buffer)<br />&#123;<br />&nbsp; for (int i = 0; i &lt; bufferSize && &#33;done; i&#43;&#43;)<br />&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp; ch = System.Console.Read();<br />&nbsp;&nbsp;&nbsp; &#42;(pBuf&#43;&#43;) = (char)ch;<br />    if ('\n' == ch)<br />    &#123;<br /> &#9;done = true;<br />    &#125;<br />&nbsp; &#125; <br />&#125;<br />&#125; </pre>]]></Data>
   </Content>
 </TeamMentor_Article>

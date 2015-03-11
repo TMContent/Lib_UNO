@@ -28,19 +28,19 @@
   <ol>
     <li>
       <p>
-        <strong>Establish a base directory.&amp;nbsp;</strong>The base directory is where your application should store any user-supplied files.</p>
+        <strong>Establish a base directory.&nbsp;</strong>The base directory is where your application should store any user-supplied files.</p>
       <ul>
-        <li>Choose the location of the base directory carefully. It should not be a subdirectory of any important directory such as&amp;nbsp;<em>/etc</em>&amp;nbsp;or&amp;nbsp;<em>C:\Windows</em>.</li>
+        <li>Choose the location of the base directory carefully. It should not be a subdirectory of any important directory such as&nbsp;<em>/etc</em>&nbsp;or&nbsp;<em>C:\Windows</em>.</li>
         <li>Allow write access only to the base directory and its children, but not to its parents.</li>
         <li>Because of read access misuses, do not store sensitive information inside any of the base directory's parents.</li>
         <li>Prohibit read/write access outside the base directory and its parents. <br /></li>
         <li>Use whitelist validation on the user-supplied filename and ensure strict access control from the filesystem.</li>
-        <li>Avoid setting your application's local user account as owner of any of the base directory's parents.<br /><br /><strong>Note:</strong>&amp;nbsp;If your application is Windows based, create your base directory in a partition different than the partition hosting all critical system services. Because Windows prohibits changing partitions through canonicalization, it is impossible for an attacker to access a resource that is located in another partition. For instance, if your Windows installation is located at&amp;nbsp;<em>C:\Windows</em>, place your base directory at <em>d:\myapp\temp</em>.</li>
+        <li>Avoid setting your application's local user account as owner of any of the base directory's parents.<br /><br /><strong>Note:</strong>&nbsp;If your application is Windows based, create your base directory in a partition different than the partition hosting all critical system services. Because Windows prohibits changing partitions through canonicalization, it is impossible for an attacker to access a resource that is located in another partition. For instance, if your Windows installation is located at&nbsp;<em>C:\Windows</em>, place your base directory at <em>d:\myapp\temp</em>.</li>
       </ul>
     </li>
     <li>
       <p>
-        <strong>Validate via whitelisting.&amp;nbsp;</strong>The syntax for accessing filesystems is well known. Use whitelist techniques to allow good input and discard bad input. Be careful with canonicalization issues. Canonicalization problems occur when the user attempts to traverse directories by using special pathname sequences to direct your application into a directory it should not access.&amp;nbsp; For example:<br /><br />Assume your application has created the file</p>
+        <strong>Validate via whitelisting.&nbsp;</strong>The syntax for accessing filesystems is well known. Use whitelist techniques to allow good input and discard bad input. Be careful with canonicalization issues. Canonicalization problems occur when the user attempts to traverse directories by using special pathname sequences to direct your application into a directory it should not access.&nbsp; For example:<br /><br />Assume your application has created the file</p>
       <pre>d:\myapp\temp\file.dat</pre>
       <p>The following strings can also represent the same file:</p>
       <pre>d:\myapp\temp\..\temp\file.dat d:\myapp\temp\..\temp\..\temp\file.dat d%3A%5Cmyapp%5Ctemp%5Cfile.dat</pre>
@@ -62,22 +62,22 @@
       <ul>
         <li>
           <p>
-            <strong>Use the Java File object.</strong> As mentioned in the <a href="http://www.playframework.com/documentation/2.0/ScalaStream">Scala guidelines</a>, always use a&amp;nbsp;<em>java.io.File</em>&amp;nbsp;object to represent a file, rather than a&amp;nbsp;<em>String </em>or <em>val</em>&amp;nbsp;object. Using the&amp;nbsp;<em>File</em>&amp;nbsp;object allows you to access the actual file and some useful and relevant information such as the file's size, parent, path, etc. Example:</p>
+            <strong>Use the Java File object.</strong> As mentioned in the <a href="http://www.playframework.com/documentation/2.0/ScalaStream">Scala guidelines</a>, always use a&nbsp;<em>java.io.File</em>&nbsp;object to represent a file, rather than a&nbsp;<em>String </em>or <em>val</em>&nbsp;object. Using the&nbsp;<em>File</em>&nbsp;object allows you to access the actual file and some useful and relevant information such as the file's size, parent, path, etc. Example:</p>
           <pre>File file = new File("d:\myapp\temp\file.dat");</pre>
         </li>
         <li>
           <p>
-            <strong>Verify the canonical path.</strong>&amp;nbsp;The&amp;nbsp;<em>File</em>&amp;nbsp;object provides the file's path in&amp;nbsp;three different forms -- original, absolute and canonical. Always use the canonical path when using whitelisting to verify the file's path.</p>
+            <strong>Verify the canonical path.</strong>&nbsp;The&nbsp;<em>File</em>&nbsp;object provides the file's path in&nbsp;three different forms -- original, absolute and canonical. Always use the canonical path when using whitelisting to verify the file's path.</p>
           <p />For instance, the file<pre>d:\myapp\temp\..\temp\..\temp\file.dat</pre><p>would have the following paths:</p><pre>d:\myapp\temp\..\temp\..\temp\file.dat<br /> (Original via the <strong>File.getPath</strong> method)<br />d:\myapp\temp\..\temp\..\temp\file.dat<br /> (Absolute via the <strong>File.getAbsolutePath</strong> method)<br />D:\myapp\temp\file.dat<br /> (Canonical via the <strong>File.getCanonicalPath</strong> method)</pre></li>
         <li>
           <p>
-            <strong>Verify&amp;nbsp;that the filesystem is case-sensitive.</strong>&amp;nbsp;Always be sure&amp;nbsp;that your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems,<em> FILE.DAT</em>&amp;nbsp;and&amp;nbsp;<em>file.dat</em>&amp;nbsp;represent&amp;nbsp;two different files. However, Windows has a case-insensitive filesystem; therefore,&amp;nbsp;<em>FILE.DAT</em>&amp;nbsp;and&amp;nbsp;<em>file.dat</em>&amp;nbsp;represent the same file. If your application's filesystem is case-insensitive, make sure to specify the&amp;nbsp;<em>CASE_INSENSITIVE</em>&amp;nbsp;flag when using regular expressions to validate your file inputs. Example:</p>
+            <strong>Verify&nbsp;that the filesystem is case-sensitive.</strong>&nbsp;Always be sure&nbsp;that your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems,<em> FILE.DAT</em>&nbsp;and&nbsp;<em>file.dat</em>&nbsp;represent&nbsp;two different files. However, Windows has a case-insensitive filesystem; therefore,&nbsp;<em>FILE.DAT</em>&nbsp;and&nbsp;<em>file.dat</em>&nbsp;represent the same file. If your application's filesystem is case-insensitive, make sure to specify the&nbsp;<em>CASE_INSENSITIVE</em>&nbsp;flag when using regular expressions to validate your file inputs. Example:</p>
           <pre>val goodPattern = "d:(\\\\|/)myapp(\\\\|/)temp(\\\\|/)(\\w|\\s|\\.|-|){1,20}";
 val issafe = goodPattern.pattern.matcher(thepattern).matches</pre>
         </li>
         <li>
           <p>
-            <strong>Verify the filesystem's path delimiters.</strong>&amp;nbsp;Verify the path delimiters that your application's filesystem uses and keep them consistent throughout the code. For example, Windows uses '<strong><em>\</em></strong>' or '/' to distinguish directories inside a path while UNIX based systems use only '/' to accomplish the same task.</p>
+            <strong>Verify the filesystem's path delimiters.</strong>&nbsp;Verify the path delimiters that your application's filesystem uses and keep them consistent throughout the code. For example, Windows uses '<strong><em>\</em></strong>' or '/' to distinguish directories inside a path while UNIX based systems use only '/' to accomplish the same task.</p>
         </li>
       </ul>
     </li>

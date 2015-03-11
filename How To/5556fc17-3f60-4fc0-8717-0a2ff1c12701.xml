@@ -87,7 +87,7 @@ javax.servlet.http.HttpServlet.service(HttpServlet.java:803)</pre>
   <pre>try
 {
 Class.forName("com.mysql.jdbc.Driver");
-String connectionUrl = "jdbc:mysql://localhost:3306/example?" + "user=root&amp;password=pass";
+String connectionUrl = "jdbc:mysql://localhost:3306/example?" + "user=root&password=pass";
 Connection conn = DriverManager.getConnection(connectionUrl);
 Statement statement = conn.createStatement();
 }
@@ -124,9 +124,9 @@ out.println(e.toString());
     <em>Change data types</em>
   </h2>
   <p>Applications may also fail due to incorrect handling of types. For instance, an application uses the <em>id</em> parameter of the URL below to identify a user and get the user’s profile:</p>
-  <pre>http://www.example.com/getProfile?id=112&amp;username=testuser</pre>
+  <pre>http://www.example.com/getProfile?id=112&username=testuser</pre>
   <p>Changing the type of the <em>id</em> to a string might generate and invalid type exception:</p>
-  <pre>http://www.example.com/getProfile?id=abc&amp;username=testuser</pre>
+  <pre>http://www.example.com/getProfile?id=abc&username=testuser</pre>
   <h2>
     <em>Remove parameters</em>
   </h2>
@@ -144,8 +144,8 @@ out.println(e.toString());
     <em>Use different encodings</em>
   </h2>
   <p>Java Web applications might choose to use different encoding methods, depending on the underlying platform. For instance, both of these URLs have the same meaning:</p>
-  <pre>http://www.example.com/getProfile?id=a'+OR+1%3D1%23&amp;username=testuser
-http://www.example.com/getProfile?id=a'%20OR%021=1#&amp;username=testuser</pre>
+  <pre>http://www.example.com/getProfile?id=a'+OR+1%3D1%23&username=testuser
+http://www.example.com/getProfile?id=a'%20OR%021=1#&username=testuser</pre>
   <p>Escape and special characters can have different interpretations. It is important that you try different encodings to cause the application to fail.</p>
   <h2>
     <em>Automate Test Cases</em>

@@ -39,8 +39,8 @@
       <li>
         <p>
           <strong>Verify that only the allowed components utilize JNI. </strong>Identify all uses of JNI in your application's code base, by looking for "<em>JNIEnv</em>" and "<em>jobject</em>" strings, which are tell-tale signs of JNI:</p>
-        <pre>#include &lt;jni.h&gt;<br />#include &lt;sys/types.h&gt;<br />#include &lt;fcntl.h&gt;<br />#include &lt;stdio.h&gt;<br />#include &lt;atlbase.h&gt;<br />#include &lt;windows.h&gt;<br />#include &lt;wtypes.h&gt;<br /><br />JNIEXPORT jboolean JNICALL Java_ActiveX_invokeObject<br />           (JNIEnv &amp;#42; env, jobject jobj, jstring jguid)<br />&amp;#123;<br />      ...<br />&amp;#125;</pre>
-        <p>Using the list of components specified&amp;nbsp;for JNI use&amp;nbsp;that was identified in&amp;nbsp;Step 1, compare all actual uses of JNI against your application's intended use of native code. Ensure that all actual use of JNI is within the intended scope.</p>
+        <pre>#include &lt;jni.h&gt;<br />#include &lt;sys/types.h&gt;<br />#include &lt;fcntl.h&gt;<br />#include &lt;stdio.h&gt;<br />#include &lt;atlbase.h&gt;<br />#include &lt;windows.h&gt;<br />#include &lt;wtypes.h&gt;<br /><br />JNIEXPORT jboolean JNICALL Java_ActiveX_invokeObject<br />           (JNIEnv &#42; env, jobject jobj, jstring jguid)<br />&#123;<br />      ...<br />&#125;</pre>
+        <p>Using the list of components specified&nbsp;for JNI use&nbsp;that was identified in&nbsp;Step 1, compare all actual uses of JNI against your application's intended use of native code. Ensure that all actual use of JNI is within the intended scope.</p>
       </li>
     </li>
   </ol>

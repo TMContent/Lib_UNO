@@ -38,7 +38,7 @@
         <strong>Ensure that your application enforces password renewal.</strong> Ensure that your application addresses the need for password renewal throughout the different stages of your application's development lifecycle:</p>
       <ul>
         <li>
-          <strong>Requirements</strong>: Check if your application provides a password policy. Ensure that the password policy provides requirements regarding lifetime of passwords. For example, a password will expire after 45 days.&amp;nbsp; </li>
+          <strong>Requirements</strong>: Check if your application provides a password policy. Ensure that the password policy provides requirements regarding lifetime of passwords. For example, a password will expire after 45 days.&nbsp; </li>
         <li>
           <strong>Design</strong>: Check if all password renewal routines are positioned properly throughout your application's authentication routines. For instance, if a user's password is expired, your application's authentication routine should force the user to renew their password upon a successful logon. </li>
         <li>
@@ -62,7 +62,7 @@
     <li>
       <p>
         <strong>Enforce the password change policy.</strong> Embed the change of password mechanism into the authentication routine. If your application uses ASP.NET membership providers, use the ASP.NET RoleManager to identify the appropriate password change interval and prompt the user to change their password if necessary. It is recommended to place such functionality immediately after the authentication procedure. Example:</p>
-      <pre>bool changePass = false;<br />string username = HttpContext.Current.User.Identity.Name;<br />MembershipProvider membershipProvider = Membership.Provider;<br />MembershipUser user = membershipProvider.GetUser(username, true); <br />TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;<br />if (Roles.IsUserInRole("Admin") &amp;&amp; diff.Days &gt;= 30)<br />{    <br />  changePass = true;<br />} <br />if (Roles.IsUserInRole("Users") &amp;&amp; diff.Days &gt;= 90)<br />{    <br />  changePass = true;<br />} <br />if (changePass)<br />{    <br />  HttpContext.Current.Response.Redirect("ChangePass.aspx", true);<br />}</pre>
+      <pre>bool changePass = false;<br />string username = HttpContext.Current.User.Identity.Name;<br />MembershipProvider membershipProvider = Membership.Provider;<br />MembershipUser user = membershipProvider.GetUser(username, true); <br />TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;<br />if (Roles.IsUserInRole("Admin") && diff.Days &gt;= 30)<br />{    <br />  changePass = true;<br />} <br />if (Roles.IsUserInRole("Users") && diff.Days &gt;= 90)<br />{    <br />  changePass = true;<br />} <br />if (changePass)<br />{    <br />  HttpContext.Current.Response.Redirect("ChangePass.aspx", true);<br />}</pre>
     </li>
   </ol>
   <h1>Related Items</h1>
@@ -73,7 +73,7 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>
   <h1>
   </h1>
   <h1>

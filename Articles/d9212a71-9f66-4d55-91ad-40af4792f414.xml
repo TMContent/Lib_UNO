@@ -26,19 +26,19 @@
   <ol>
     <li>
       <p>
-        <strong>Identify the connections used for transmitting sensitive data.&amp;nbsp;</strong>Identify the sensitive data that is sent over the network and enumerate&amp;nbsp;the respective connections that are used for such communication.</p>
+        <strong>Identify the connections used for transmitting sensitive data.&nbsp;</strong>Identify the sensitive data that is sent over the network and enumerate&nbsp;the respective connections that are used for such communication.</p>
     </li>
     <li>
       <p>
-        <strong>Verify that connections are secured.&amp;nbsp;</strong>Using a network sniffer, verify that your application utilizes either IPSec or TLS/SSL. Then check the following:</p>
+        <strong>Verify that connections are secured.&nbsp;</strong>Using a network sniffer, verify that your application utilizes either IPSec or TLS/SSL. Then check the following:</p>
       <ul>
         <li>
           <p>
-            <strong>IPSec.</strong> If your application uses IPSec, verify that&amp;nbsp;all packets from your sniffed traffic between the specified hosts contain an Authentication Header (AH) and Encapsulating Security Payload (ESP) fields after the IP headers.</p>
+            <strong>IPSec.</strong> If your application uses IPSec, verify that&nbsp;all packets from your sniffed traffic between the specified hosts contain an Authentication Header (AH) and Encapsulating Security Payload (ESP) fields after the IP headers.</p>
         </li>
         <li>
           <p>
-            <strong>TLS/SSL.</strong> If your application uses TLS/SSL, verify that&amp;nbsp;your sniffed traffic between the specified hosts contains an SSL handshake. Keep in mind the following considerations when verifying your application's use of SSL:</p>
+            <strong>TLS/SSL.</strong> If your application uses TLS/SSL, verify that&nbsp;your sniffed traffic between the specified hosts contains an SSL handshake. Keep in mind the following considerations when verifying your application's use of SSL:</p>
           <ul>
             <li>
               <p>
@@ -58,7 +58,7 @@
             </li>
             <li>
               <p>
-                <strong>Server Configuration</strong>. Verify that your application's environment has enabled HTTPS. Verify that transactions of sensitive nature are transmitted only over HTTPS connections. Check if your <i>ssl</i>&amp;nbsp;parameter in the nginx configuration file is enabled on <i>listening sockets</i> in the <i>server</i> block.&amp;nbsp;</p>
+                <strong>Server Configuration</strong>. Verify that your application's environment has enabled HTTPS. Verify that transactions of sensitive nature are transmitted only over HTTPS connections. Check if your <i>ssl</i>&nbsp;parameter in the nginx configuration file is enabled on <i>listening sockets</i> in the <i>server</i> block.&nbsp;</p>
             </li>
           </ul>
         </li>
@@ -70,21 +70,21 @@
   <ol>
     <li>
       <p>
-        <strong>Identify the connections used for transmitting sensitive data.&amp;nbsp;</strong>Enumerate all connections between the different servers with other servers or with the application. Identify the sensitive data that is sent over the network and the respective connections that are used for such communication.</p>
+        <strong>Identify the connections used for transmitting sensitive data.&nbsp;</strong>Enumerate all connections between the different servers with other servers or with the application. Identify the sensitive data that is sent over the network and the respective connections that are used for such communication.</p>
     </li>
     <li>
       <p>
-        <strong>Choose the appropriate encryption mechanism.&amp;nbsp;</strong>Depending on the infrastructure, you may consider using IPSec or TLS/SSL.</p>
+        <strong>Choose the appropriate encryption mechanism.&nbsp;</strong>Depending on the infrastructure, you may consider using IPSec or TLS/SSL.</p>
       <ul>
         <li>
           <strong>IPSec.</strong> IPSec is used when the encryption needs to be applied across all involved parties. Since IPSec is designed to secure connections between static hosts that are "always on," use IPSec to secure the network connections between your application's servers. Due to its nature, IPSec requires low level support. Therefore, your application would need support from the operating system or a JNI component to manage it.</li>
         <li>
-          <strong>TLS/SSL.</strong> TLS/SSL provides granular protection which&amp;nbsp;allows only&amp;nbsp;the traffic containing sensitive data to be encrypted. Because TLS/SSL has a certificate based design, it allows the protection of data between mobile hosts. Use TLS/SSL to secure the communication channel between your application and its users.<br /><br />While Scala provides APIs for handling SSL encrypted traffic, it is recommended to follow the manuals associated with the&amp;nbsp;third party software that&amp;nbsp;is being used. For example, if your application connects to a database server, follow the database server's manual on setting up the encryption; if your application is web-oriented, follow the web server's documentation on setting up the SSL certificate. If your application uses SSL, ensure that you use SSL 3.0 and disable the cryptographically weak SSL 2.0 protocols.</li>
+          <strong>TLS/SSL.</strong> TLS/SSL provides granular protection which&nbsp;allows only&nbsp;the traffic containing sensitive data to be encrypted. Because TLS/SSL has a certificate based design, it allows the protection of data between mobile hosts. Use TLS/SSL to secure the communication channel between your application and its users.<br /><br />While Scala provides APIs for handling SSL encrypted traffic, it is recommended to follow the manuals associated with the&nbsp;third party software that&nbsp;is being used. For example, if your application connects to a database server, follow the database server's manual on setting up the encryption; if your application is web-oriented, follow the web server's documentation on setting up the SSL certificate. If your application uses SSL, ensure that you use SSL 3.0 and disable the cryptographically weak SSL 2.0 protocols.</li>
       </ul>
     </li>
     <li>
       <p>
-        <strong>Apply the appropriate encryption mechanism.&amp;nbsp;</strong>Apply the encryption mechanism of choice at the appropriate locations in the code. Such locations include all functionality that establishes a connection between your application and another entity.</p>
+        <strong>Apply the appropriate encryption mechanism.&nbsp;</strong>Apply the encryption mechanism of choice at the appropriate locations in the code. Such locations include all functionality that establishes a connection between your application and another entity.</p>
     </li>
   </ol>
   <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Guidelines</h1>

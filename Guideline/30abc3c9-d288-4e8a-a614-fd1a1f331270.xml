@@ -37,17 +37,17 @@
       <li>
         <p>
           <strong>Display only one message. </strong>Your application should provide feedback only after all credentials have been verified. Structure your code in a manner that allows all checks to be executed at once. For example:</p>
-        <pre>if (&amp;#33;validUser() &amp;#124;&amp;#124; &amp;#33;validPass())<br />&amp;#123;<br />      throw new AuthenticationException("Authentication failed.");<br />&amp;#125;</pre>
+        <pre>if (&#33;validUser() &#124;&#124; &#33;validPass())<br />&#123;<br />      throw new AuthenticationException("Authentication failed.");<br />&#125;</pre>
         <p>Because sometimes it is impossible to structure the code in a manner where all checks are performed at once, it is important that all error messages contain the exact same information. Any variation in the error messages can give away the information that a username is valid. </p>
       </li>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p>
-  <pre>public void login() throws AuthenticationException<br />&amp;#123;<br />      if (&amp;#33;validUser())<br />      &amp;#123;<br />            throw new AuthenticationException("User not found.");<br />      &amp;#125;<br /><br />      if (&amp;#33;validPass())<br />      &amp;#123;<br />            throw new AuthenticationException("Wrong password.");<br />      &amp;#125;<br /><br />      commit();<br />&amp;#125;</pre>
+  <pre>public void login() throws AuthenticationException<br />&#123;<br />      if (&#33;validUser())<br />      &#123;<br />            throw new AuthenticationException("User not found.");<br />      &#125;<br /><br />      if (&#33;validPass())<br />      &#123;<br />            throw new AuthenticationException("Wrong password.");<br />      &#125;<br /><br />      commit();<br />&#125;</pre>
   <h1>Solution Example</h1>
   <p>The following code authenticates a user. Since it presents the same error message regardless of why the authentication failed, an attacker can't determine if the credentials tried represent a valid user or not.</p>
-  <pre>public void login() throws AuthenticationException<br />&amp;#123;<br />      if (&amp;#33;validUser() &amp;#124;&amp;#124; &amp;#33;validPass())<br />      &amp;#123;<br />            throw new AuthenticationException("Authentication failed.");<br />      &amp;#125;<br /><br />      commit();<br />&amp;#125;</pre>
+  <pre>public void login() throws AuthenticationException<br />&#123;<br />      if (&#33;validUser() &#124;&#124; &#33;validPass())<br />      &#123;<br />            throw new AuthenticationException("Authentication failed.");<br />      &#125;<br /><br />      commit();<br />&#125;</pre>
   <h1>Additional Resources</h1>
   <ul>
     <li>To read more about authentication best practices, see: <a href="http://www.owasp.org/index.php/Guide_to_Authentication">Guide to Authentication</a> available from OWASP.</li>

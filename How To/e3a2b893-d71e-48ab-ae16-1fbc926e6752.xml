@@ -143,9 +143,9 @@ print($quote);</p></pre>
     <i>Start with a simple fuzz string</i>
   </h3>
   <p>Success in finding XSS bugs depends on whether the tester is able to store or reflect an HTML script in or through the server.  In almost all cases scripts are included in between SCRIPT tags (other tags also worked as explained later).  During this step, it is recommended to start exploring how the server application's high risk components react to tag related input.  A good idea is to start testing a simple fuzz string like this one:</p>
-  <pre>'&gt;;!--"&gt;&lt;XYZ&gt;&lt;=&amp;{()}</pre>
+  <pre>'&gt;;!--"&gt;&lt;XYZ&gt;&lt;=&{()}</pre>
   <p>Then look for the string XYZ in server's response to see how the server processed the special script related characters.  It might turn out that the server uses the string inside of a tag:</p>
-  <pre>&lt;<b>input</b> type="text" name="keyword" id="keyword" maxlength="255" value='&gt;;!--"&gt;&lt;<b>XYZ</b>&gt;&lt;=&amp;{()}" style="height:10px; color:#000;" /&gt;</pre>
+  <pre>&lt;<b>input</b> type="text" name="keyword" id="keyword" maxlength="255" value='&gt;;!--"&gt;&lt;<b>XYZ</b>&gt;&lt;=&{()}" style="height:10px; color:#000;" /&gt;</pre>
   <p>Continue by modifying the initial string to try displaying an alert.  The double quotes of the original fuzz string closed the <i>value</i> property so whatever came before doesn't matter.  Also, after the closing parenthesis next to the letter Z the string can be anything.  Taking the string can be simplified to this:</p>
   <pre>"&gt;&lt;XYZ&gt;</pre>
   <p>The server might reply with:</p>
@@ -179,14 +179,14 @@ print($quote);</p></pre>
     <i>URL Contents</i>
   </h3>
   <p>A web application is vulnerable to XSS through the value passed in the password variable: </p>
-  <pre>http://www.xvulnerablesite.com/login.asp?username=[value]&amp;password=[value]</pre>
+  <pre>http://www.xvulnerablesite.com/login.asp?username=[value]&password=[value]</pre>
   <p>If testers want to test the following string in the password value: </p>
   <pre>&lt;script&gt;alert('Works')&lt;/script&gt;</pre>
   <p>They will need to modify the above URL in this way:</p>
-  <pre>http://www.xvulnerablesite.com/login.asp?username=any&amp;password=&lt;script&gt;alert('Works')&lt;/script&gt;</pre>
+  <pre>http://www.xvulnerablesite.com/login.asp?username=any&password=&lt;script&gt;alert('Works')&lt;/script&gt;</pre>
   <p>When executing test cases through the URL it is important to try different encodings of the test string.   For instance, one can execute the first attack string below and it causes no effect.  Then execute the second one and the alert box works.  In this case the web application didn't allow the symbol characters (except the round brackets) in ASCII but did in their hexadecimal encodings: </p>
   <pre>&lt;img src="javascript:alert('Works');"&gt;
-http://www.xvulnerablesite.com/login.asp?username=any&amp;password=&lt;img%20src%3d%22javascript:alert(%27Works%27)%22&gt;</pre>
+http://www.xvulnerablesite.com/login.asp?username=any&password=&lt;img%20src%3d%22javascript:alert(%27Works%27)%22&gt;</pre>
   <p>When testing through the URL and sometimes in other places, it is necessary to investigate what type of encodings the server is using and modify test cases according to them.</p>
   <h3>
     <i>Cookie contents</i>
@@ -255,7 +255,7 @@ fw.WriteLine(Request.QueryString("testcase"))
 fw.Close
 %&gt;</pre>
   <p> Then generate test cases by modifying or creating new HTTP requests to the target server.  Instead of displaying alert the script invokes results.asp passing its corresponding test case number (using the src property of HTML tags).  For example the tester wants to cover XSS through the img tag in the password field of the login page.  He labels this test case number 17.  Then passes the following string using automation:</p>
-  <pre>http://www.xvulnerablesite.com/login.asp?username=any&amp;password=&lt;img src="http://xyoursite.com/results.asp?testcase=17"&gt;</pre>
+  <pre>http://www.xvulnerablesite.com/login.asp?username=any&password=&lt;img src="http://xyoursite.com/results.asp?testcase=17"&gt;</pre>
   <p> If this test case fails then the value 17 appears in the results.txt file and the tester knows that a XSS bug was found and what caused it.  Testers can code hundreds of test cases like this and a test generator like an HTTP client to guide the automation. </p>
   <p>In addition, look at the different fuzzers available for free at <a href="http://en.wikipedia.org/wiki/Fuzz_testing">http://en.wikipedia.org/wiki/Fuzz_testing</a>.  Many of these have the capability of executing XSS test cases and help in uncovering vulnerabilities.</p>
   <h1>Conclusions</h1>

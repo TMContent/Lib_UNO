@@ -36,7 +36,7 @@
     </li>
     <li>
       <p>
-        <strong>Verify that all exception handlers are positioned appropriately. </strong>Make sure that all known exceptions are handled appropriately by either catching them explicitly or through their parental classes.<br /><br />If an exception is caught explicitly, its handler should be placed before the handler for its parental class. Explicit exceptions should be caught as close as possible to the code that raised them as&amp;nbsp;this will allow more adequate handling and mitigation to take place. Example: </p>
+        <strong>Verify that all exception handlers are positioned appropriately. </strong>Make sure that all known exceptions are handled appropriately by either catching them explicitly or through their parental classes.<br /><br />If an exception is caught explicitly, its handler should be placed before the handler for its parental class. Explicit exceptions should be caught as close as possible to the code that raised them as&nbsp;this will allow more adequate handling and mitigation to take place. Example: </p>
       <pre>try<br />{<br />      Class.forName("com.mysql.jdbc.Driver").newInstance();<br />      dbConnection = DriverManager.getConnection(connectionString, dbCredentials);<br />}<br />catch(SQLException se)<br />{<br />      dbConnection = null;<br />      // Add logging}catch (Exception e)<br />{<br />      // Add logging<br />      throw new ApplicationCriticalException("Cannot connect to database server.");<br />}</pre>
     </li>
   </ol>

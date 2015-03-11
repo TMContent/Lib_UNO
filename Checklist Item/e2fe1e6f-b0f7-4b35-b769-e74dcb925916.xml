@@ -19,16 +19,16 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Check to ensure that your application&amp;nbsp;considers restricting permissions to the delegate as when it allows partially trusted callers.</p>
+  <p>Check to ensure that your application&nbsp;considers restricting permissions to the delegate as when it allows partially trusted callers.</p>
   <p />
   <h1>How to Fix</h1>
   <p>You can either use an appropriate permission demand to authorize the external code when it passes the delegate to your code, or you can use a deny or permit-only stack modifier to restrict the delegate's permissions just prior to calling it. For example, the following code grants the delegate code only execution permission to constrain its capabilities.</p>
   <div>
     <pre>
-      <pre>using System.Security;<br />using System.Security.Permissions;<br />...<br />// Delegate definitionpublic <br />delegate void SomeDelegate(string text);<br />    public void ExecDelegateWithExcePerm()&amp;#123;<br />        // Permit only execution, prior to calling the delegate. This prevents the<br />        // delegate code accessing resources or performing other privileged<br />        // operations<br />        new SecurityPermission(SecurityPermissionFlag.Execution).PermitOnly();<br />        // Now call the "constrained" delegate<br />        SomeDelegate del = new SomeDelegate(DisplayResults);<br />        // Revert the permit only stack modifier<br />        CodeAccessPermission.RevertPermitOnly();<br />&amp;#125;<br />private void DisplayResults(string result)<br />&amp;#123;<br />...<br />&amp;#125;</pre>
+      <pre>using System.Security;<br />using System.Security.Permissions;<br />...<br />// Delegate definitionpublic <br />delegate void SomeDelegate(string text);<br />    public void ExecDelegateWithExcePerm()&#123;<br />        // Permit only execution, prior to calling the delegate. This prevents the<br />        // delegate code accessing resources or performing other privileged<br />        // operations<br />        new SecurityPermission(SecurityPermissionFlag.Execution).PermitOnly();<br />        // Now call the "constrained" delegate<br />        SomeDelegate del = new SomeDelegate(DisplayResults);<br />        // Revert the permit only stack modifier<br />        CodeAccessPermission.RevertPermitOnly();<br />&#125;<br />private void DisplayResults(string result)<br />&#123;<br />...<br />&#125;</pre>
     </pre>
   </div>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

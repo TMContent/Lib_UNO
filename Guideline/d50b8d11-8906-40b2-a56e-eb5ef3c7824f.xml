@@ -19,7 +19,7 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Do</h1>
-  <p>Do not accept file names or paths from users.&amp;nbsp; If you must accept a file name or a path from a user, sanitize it very carefully. </p>
+  <p>Do not accept file names or paths from users.&nbsp; If you must accept a file name or a path from a user, sanitize it very carefully. </p>
   <h1>Why</h1>
   <p>Accepting file names or paths from users can result in attackers coercing your application into accessing arbitrary files and resources. </p>
   <h1>When</h1>
@@ -28,16 +28,16 @@
   <ol>
     <li>
       <p>
-        <strong>File Names.</strong> Ensure that file paths only refer to files within your application's virtual directory hierarchy if that is appropriate.&amp;nbsp; When checking file names, obtain the full name of the file by using the <b>System.IO.Path.GetFullPath</b> method. </p>
+        <strong>File Names.</strong> Ensure that file paths only refer to files within your application's virtual directory hierarchy if that is appropriate.&nbsp; When checking file names, obtain the full name of the file by using the <b>System.IO.Path.GetFullPath</b> method. </p>
       <li>
         <p>
           <strong>File Paths. </strong>If you use <b>MapPath</b> to map a supplied virtual path to a physical path on the server, use the overloaded <b>Request.MapPath</b> method that accepts a <b>bool</b> parameter so that you can prevent cross-application mapping. The following code example shows this technique. </p>
-        <pre>try<br />&amp;#123;<br /> string mappedPath = Request.MapPath( inputPath.Text,<br />                                       Request.ApplicationPath, false);<br />&amp;#125;<br />catch (HttpException)<br />&amp;#123;<br /> // Cross-application mapping attempted <br />&amp;#125;</pre>
-        <p>The final <b>false</b> parameter prevents cross-application mapping.&amp;nbsp; This means that a user cannot successfully supply a path that contains ".." to traverse outside of your application's virtual directory hierarchy. Any attempt to do this results in an exception of type <b>HttpException</b>. </p>
+        <pre>try<br />&#123;<br /> string mappedPath = Request.MapPath( inputPath.Text,<br />                                       Request.ApplicationPath, false);<br />&#125;<br />catch (HttpException)<br />&#123;<br /> // Cross-application mapping attempted <br />&#125;</pre>
+        <p>The final <b>false</b> parameter prevents cross-application mapping.&nbsp; This means that a user cannot successfully supply a path that contains ".." to traverse outside of your application's virtual directory hierarchy. Any attempt to do this results in an exception of type <b>HttpException</b>. </p>
       </li>
     </li>
   </ol>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

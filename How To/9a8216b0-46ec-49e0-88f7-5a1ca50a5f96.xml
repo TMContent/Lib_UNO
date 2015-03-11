@@ -22,7 +22,7 @@
     <span>Applies To</span>
   </h1>
   <ul>
-    <li>All software applications&amp;nbsp;</li>
+    <li>All software applications&nbsp;</li>
   </ul>
   <h1>
     <span>Summary</span>
@@ -33,7 +33,7 @@
     <li>Step 1: Understand attack scenarios </li>
     <li>Step 2: Analyze causes and countermeasures </li>
     <li>Step 3: Start testing and exploring </li>
-    <li>Step 4: Execute additional testing<b>&amp;nbsp;</b></li>
+    <li>Step 4: Execute additional testing<b>&nbsp;</b></li>
   </ul>
   <h1>
     <span>Step 1: Understand attack scenarios</span>
@@ -43,7 +43,7 @@
     <li>RAM - physical memory that stores data used by running processes. </li>
     <li>Virtual memory - logical address space given by the system to each running process. It gets copied into random access memory and swapped out to swap files by the operating system. </li>
     <li>Swap files - RAM’s auxiliary storage. The operating system performs paging to swap the contents of RAM in and out of swap files. </li>
-    <li>Memory dumps - Memory dumps are snapshots of a process’s virtual memory; they are created by the system when the process crashes.&amp;nbsp;</li>
+    <li>Memory dumps - Memory dumps are snapshots of a process’s virtual memory; they are created by the system when the process crashes.&nbsp;</li>
   </ul>
   <p>Note that permanent storage of user files, databases, and the Windows registry is outside of the scope of this vulnerability. Permanent memory can be protected using permissions and relate to information disclosure attacks.</p>
   <p>Memory sniffing bugs commonly relate to local attacks requiring access to the target computer. Once the attacker is logged in, he uses a tool to recover sensitive data such as passwords or keys from temporary memory.</p>
@@ -53,7 +53,7 @@
     <li>Attacker uses a script or tool to search memory for sensitive data. The attack ends if sensitive data is recovered is an unhashed/unencrypted form. </li>
     <li>If sensitive data is hashed or encrypted, the attacker uses a cryptographic attack to recover sensitive data in plain-text.</li>
   </ol>
-  <p>* Variations of this attack focus on capturing sensitive information without access to the target machine. For instance, forensic research shows that the contents of a computer’s RAM can be retrieved through a FireWire cable. Furthermore, recent discoveries indicate that sensitive information from DRAM chips can be restored by removing them after the computer has been turned off.&amp;nbsp;</p>
+  <p>* Variations of this attack focus on capturing sensitive information without access to the target machine. For instance, forensic research shows that the contents of a computer’s RAM can be retrieved through a FireWire cable. Furthermore, recent discoveries indicate that sensitive information from DRAM chips can be restored by removing them after the computer has been turned off.&nbsp;</p>
   <h1>
     <span>Step 2: Analyze Causes and Countermeasures</span>
   </h1>
@@ -63,16 +63,16 @@
   </h2>
   <p>A classic approach to protect against memory sniffing attacks is to clear data structures, such as arrays, used to temporarily store sensitive information. For instance, the code below is insecure:</p>
   <p>
-    <font face="'Courier New'">void GetData(char *MFAddr) {&amp;nbsp;<br />&amp;nbsp;char pwd[64];<br />&amp;nbsp; if (GetPasswordFromUser(pwd, sizeof(pwd))) {<br />&amp;nbsp; &amp;nbsp; if (ConnectToMainframe(MFAddr, pwd)) {<br />&amp;nbsp; &amp;nbsp; // Interaction with mainframe<br />&amp;nbsp; &amp;nbsp; }<br />&amp;nbsp; }<br />}</font>
+    <font face="'Courier New'">void GetData(char *MFAddr) {&nbsp;<br />&nbsp;char pwd[64];<br />&nbsp; if (GetPasswordFromUser(pwd, sizeof(pwd))) {<br />&nbsp; &nbsp; if (ConnectToMainframe(MFAddr, pwd)) {<br />&nbsp; &nbsp; // Interaction with mainframe<br />&nbsp; &nbsp; }<br />&nbsp; }<br />}</font>
   </p>
-  <p>The function <i>GetPasswordFromUser</i> copies a password provided by the user to the <i>pwd</i> character array. The application then returns from the function without cleaning the password from memory. To mitigate this attack, developers are encouraged to set the memory contents to zero after the process is done with the structure used to store it:&amp;nbsp;</p>
+  <p>The function <i>GetPasswordFromUser</i> copies a password provided by the user to the <i>pwd</i> character array. The application then returns from the function without cleaning the password from memory. To mitigate this attack, developers are encouraged to set the memory contents to zero after the process is done with the structure used to store it:&nbsp;</p>
   <p>
-    <font face="'Courier New'">void GetData(char *MFAddr) {&amp;nbsp;<br />&amp;nbsp;char pwd[64];<br />&amp;nbsp; if (GetPasswordFromUser(pwd, sizeof(pwd))) {<br />&amp;nbsp; if (ConnectToMainframe(MFAddr, pwd)) {<br />&amp;nbsp; &amp;nbsp; // Interaction with mainframe<br />&amp;nbsp; &amp;nbsp; }<br />&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;memset(pwd, 0, sizeof(pwd));<br />}</font>
+    <font face="'Courier New'">void GetData(char *MFAddr) {&nbsp;<br />&nbsp;char pwd[64];<br />&nbsp; if (GetPasswordFromUser(pwd, sizeof(pwd))) {<br />&nbsp; if (ConnectToMainframe(MFAddr, pwd)) {<br />&nbsp; &nbsp; // Interaction with mainframe<br />&nbsp; &nbsp; }<br />&nbsp; }<br />&nbsp;&nbsp;memset(pwd, 0, sizeof(pwd));<br />}</font>
   </p>
   <p>However, it is extremely important to know that <i>memset</i> might not work as intended if compiler optimizations are on. Make sure to turn off compiler optimizations if protecting your code using <i>memset</i> as shown above.</p>
   <p>Another way of clearing out memory is by traversing the array and setting each element to zero:</p>
   <p>
-    <font face="'Courier New'">void erase_string(char *s) {<br />&amp;nbsp;while(*s) { *s++ = 0; }<br />}</font>
+    <font face="'Courier New'">void erase_string(char *s) {<br />&nbsp;while(*s) { *s++ = 0; }<br />}</font>
   </p>
   <p>This technique is recommended, because it doesn’t depend on compiler optimizations or knowledge of the array’s size. To properly secure your application, it is suggested that you add similar zeroing-out techniques after returning from function calls that deal with sensitive data and also in every destructor of classes that deal with secrets such as passwords and cryptographic elements.</p>
   <h2>
@@ -83,7 +83,7 @@
   <p>Zeroing out sensitive memory is an effective technique to keep sensitive data in virtual memory (and consequently in RAM and swap files) as briefly as possible. However, this data might still get swapped by the operating system’s paging system into swap files before the application has a chance to clean it, increasing the risk of harm from a memory sniffing attack. </p>
   <p>It is possible to mitigate this condition by locking virtual address pages from being swapped. This can be achieved in the UNIX platforms by using <i>mlock</i> as below:</p>
   <p>
-    <font face="'Courier New'">#include &lt;sys/mman.h&gt;<br /><br />void *locking_alloc(size_t numbytes){<br />&amp;nbsp; static short have_warned = 0;<br />&amp;nbsp; void *mem = malloc(numbytes);<br /><br />&amp;nbsp; if(mlock(mem, numbytes) &amp;&amp; !have_warned) {<br />&amp;nbsp;		/* We probably do not have permission.<br />&amp;nbsp; &amp;nbsp;* Sometimes, it might not be possible to lock enough memory.<br />&amp;nbsp; &amp;nbsp;*/<br />&amp;nbsp; fprintf(stderr, "Warning: Using insecure memory!\n");<br />&amp;nbsp; have_warned = 1;<br />&amp;nbsp;}&amp;nbsp;<br />&amp;nbsp;return mem;<br />}</font>
+    <font face="'Courier New'">#include &lt;sys/mman.h&gt;<br /><br />void *locking_alloc(size_t numbytes){<br />&nbsp; static short have_warned = 0;<br />&nbsp; void *mem = malloc(numbytes);<br /><br />&nbsp; if(mlock(mem, numbytes) && !have_warned) {<br />&nbsp;		/* We probably do not have permission.<br />&nbsp; &nbsp;* Sometimes, it might not be possible to lock enough memory.<br />&nbsp; &nbsp;*/<br />&nbsp; fprintf(stderr, "Warning: Using insecure memory!\n");<br />&nbsp; have_warned = 1;<br />&nbsp;}&nbsp;<br />&nbsp;return mem;<br />}</font>
   </p>
   <p>
     <span>
@@ -97,7 +97,7 @@
   </h2>
   <p>An attacker might execute a memory sniffing attack by crashing an application and accessing the core dumps created by the system upon the crash. Any sensitive data loaded by the application into any data structure will appear in dump files for the attacker to leverage. To mitigate this condition, processes must disable the creation of dump files right from the start. This is achieved using the <i>setrlimit</i> API both in UNIX and Windows platforms:</p>
   <p>
-    <font face="'Courier New'">char pwd[MAX_PWD_LEN];<br />if(setrlimit(RLIMIT_CORE, 0) != 0) {<br />&amp;nbsp;/* deal with error */<br />}<br />fgets(pwd, MAX_PWD_LEN, stdin);</font>
+    <font face="'Courier New'">char pwd[MAX_PWD_LEN];<br />if(setrlimit(RLIMIT_CORE, 0) != 0) {<br />&nbsp;/* deal with error */<br />}<br />fgets(pwd, MAX_PWD_LEN, stdin);</font>
   </p>
   <h2>
     <span>
@@ -117,7 +117,7 @@
   <p>In Windows platforms, follow these steps to create a record of physical memory in a text file:</p>
   <ol>
     <li>Log into a Windows host running the application under test. </li>
-    <li>Download and install ManTech’s <i>Memory DD</i> from&amp;nbsp;<a href="https://sourceforge.net/projects/mdd/)">https://sourceforge.net/projects/mdd/)</a></li>
+    <li>Download and install ManTech’s <i>Memory DD</i> from&nbsp;<a href="https://sourceforge.net/projects/mdd/)">https://sourceforge.net/projects/mdd/)</a></li>
     <li>Open command prompt with administrative privileges. </li>
     <li>Run <i>mdd </i>as follows: <font face="'Courier New'">mdd_1.3.exe -o c:\ram.txt -v</font></li>
     <li>Once <i>mdd</i> finishes executing, read output file<i> ram.txt</i> for sensitive information.</li>
@@ -161,15 +161,15 @@
     <li>Open a dump file and search for sensitive information. </li>
     <li>Repeat for each of the dump files</li>
   </ol>
-  <p>Expected results: dump files must not show sensitive information.&amp;nbsp;</p>
+  <p>Expected results: dump files must not show sensitive information.&nbsp;</p>
   <h1>
     <span>Step 4: Execute Additional Testing</span>
   </h1>
   <p>If the sensitive data cannot be easily recognized, you must do additional testing. During each of the tests above, the attacker needs to interpret the output. Running each of the tools creates an output file with a large quantity of data that is irrelevant to the test. A good way to find secrets is running a command such <i>strings</i> on the output file in order to display all character arrays in the file:</p>
   <p>
-    <font face="'Courier New'">C:\Documents and Settings\All Users\Documents\DrWatson&gt;strings user.dmp<br />12<br />…<br />kernel32.dll<br />RASAPI32<br />C:\WINNT\tracing<br />C:\Documents and Settings\Administrator\My Documents\PGP\pubring.pkr<br />C:\Documents and Settings\Administrator\My Documents\PGP\secring.skr<br />&amp; !<br />IN PGP MESSAGE-----<br />Version: PGP 7.1<br />qANQR1DBwU4DSL6Q3OHRwOYQB/9pKnnhZGQRFwykWzBO1EWkzW336QOkUaHj0aVj<br />P1MgxDWQWi3kZpOfGnDg6kbQriWBiIgD/z8p5xGN+WcksytlLJv8OxvTGMepx7u8<br />h5aVRXZd8YPM+h5ROpbnNw+SiT/w9oCy/ChWeiCHV1swQSzwBHx2Ye+yxO70Moxc<br />...<br />frAG3nM7kOnChQp4jxhv2J0p7fL1vteI9EGbcimC9QCVBwC1U++mQIqbTyIw5gWK<br />Io11yl8P+wKjcHsLfi2hTE+NIRb+VORWhVoCDHgNKV1nSFNTK0LEnvz84OFyRc1z<br />-----END PGP MESSAGE-----<br />&lt;pgppassphrase!&gt;<br />…&amp;nbsp;</font>
+    <font face="'Courier New'">C:\Documents and Settings\All Users\Documents\DrWatson&gt;strings user.dmp<br />12<br />…<br />kernel32.dll<br />RASAPI32<br />C:\WINNT\tracing<br />C:\Documents and Settings\Administrator\My Documents\PGP\pubring.pkr<br />C:\Documents and Settings\Administrator\My Documents\PGP\secring.skr<br />& !<br />IN PGP MESSAGE-----<br />Version: PGP 7.1<br />qANQR1DBwU4DSL6Q3OHRwOYQB/9pKnnhZGQRFwykWzBO1EWkzW336QOkUaHj0aVj<br />P1MgxDWQWi3kZpOfGnDg6kbQriWBiIgD/z8p5xGN+WcksytlLJv8OxvTGMepx7u8<br />h5aVRXZd8YPM+h5ROpbnNw+SiT/w9oCy/ChWeiCHV1swQSzwBHx2Ye+yxO70Moxc<br />...<br />frAG3nM7kOnChQp4jxhv2J0p7fL1vteI9EGbcimC9QCVBwC1U++mQIqbTyIw5gWK<br />Io11yl8P+wKjcHsLfi2hTE+NIRb+VORWhVoCDHgNKV1nSFNTK0LEnvz84OFyRc1z<br />-----END PGP MESSAGE-----<br />&lt;pgppassphrase!&gt;<br />…&nbsp;</font>
   </p>
-  <p>Hex editors and similar low-level file processing tools must be used to identify sensitive data. Additional techniques include performing dictionary or linear searches.&amp;nbsp;</p>
+  <p>Hex editors and similar low-level file processing tools must be used to identify sensitive data. Additional techniques include performing dictionary or linear searches.&nbsp;</p>
   <h1>
     <span>Conclusions</span>
   </h1>

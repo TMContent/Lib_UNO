@@ -26,13 +26,13 @@
   <p>During HTTP replay attacks, an adversary records and then replays an HTTP data transmission (sequence of HTTP packets). The most common purpose of this attack is to bypass authentication in order for the adversary to masquerade themselves as a legitimate user.</p>
   <p>The following steps are recommended in order to test for HTTP replay attacks:</p>
   <ul>
-    <li>Step 1:&amp;nbsp; Understand Attack Scenarios. 
+    <li>Step 1:&nbsp; Understand Attack Scenarios. 
 </li>
-    <li>Step 2:&amp;nbsp; Analyze Root Causes and Mitigations. 
+    <li>Step 2:&nbsp; Analyze Root Causes and Mitigations. 
 </li>
-    <li>Step 3:&amp;nbsp; Start Testing and Exploring. 
+    <li>Step 3:&nbsp; Start Testing and Exploring. 
 </li>
-    <li>Step 4:&amp;nbsp; Tune Test Cases.</li>
+    <li>Step 4:&nbsp; Tune Test Cases.</li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>First, you need to understand the fundamental details of an HTTP replay attack. The following scenario illustrates two common purposes for replay attacks:</p>
@@ -79,7 +79,7 @@
     <li>The attacker replays the saved packets or sends new packets with particular information crafted from the sniffed data to carry out the fraudulent transaction on the victim's behalf.</li>
   </ol>
   <h1>Step 2: Analyze Root Cause and Mitigations</h1>
-  <p>Once you understand replay attack scenarios, the next step is to analyze what causes them. In doing so, you will also learn how applications protect against this attack. Knowing the root cause of security vulnerabilities helps you to identify them in both design and implementation (source code). In addition, understanding mitigations in detail tells you if the bug exists when you have the source code available. When lacking source code access, knowing the mitigation techniques helps to guide security testing for this bug; any poorly implemented mitigation will lead to an HTTP replay vulnerability.<b><i>&amp;nbsp;</i></b></p>
+  <p>Once you understand replay attack scenarios, the next step is to analyze what causes them. In doing so, you will also learn how applications protect against this attack. Knowing the root cause of security vulnerabilities helps you to identify them in both design and implementation (source code). In addition, understanding mitigations in detail tells you if the bug exists when you have the source code available. When lacking source code access, knowing the mitigation techniques helps to guide security testing for this bug; any poorly implemented mitigation will lead to an HTTP replay vulnerability.<b><i>&nbsp;</i></b></p>
   <h2>Root Cause</h2>
   <p>The cause for this bug is that HTTP systems perform legitimate new actions based on reused data. For instance, as seen in the first scenario above, a server performs a legitimate new action (authenticate the attacker as the victim) based on reused data (captured victim auth packets).</p>
   <h2>Mitigations</h2>
@@ -114,9 +114,9 @@
 </li>
     <li>Save the capture of the log in process. 
 </li>
-    <li>Analyze network packets and look for some indicator of a timestamp, a session token, or a nonce.&amp;nbsp; </li>
+    <li>Analyze network packets and look for some indicator of a timestamp, a session token, or a nonce.&nbsp; </li>
   </ol>
-  <p>Expected result: The application server uses a timestamp, a session token, or nonce during authentication.&amp;nbsp;Although this is a clear indicator that your application should prevent replay attacks, you should still replay this packet as in the previous test to see if this prevention actually works.</p>
+  <p>Expected result: The application server uses a timestamp, a session token, or nonce during authentication.&nbsp;Although this is a clear indicator that your application should prevent replay attacks, you should still replay this packet as in the previous test to see if this prevention actually works.</p>
   <p>
     <b>
       <i>
@@ -133,7 +133,7 @@
 </li>
     <li>Use <i>Wireshark </i>(or a similar tool) to set a capture filter to show only "<i>ssl</i>" packets.</li>
   </ol>
-  <p>Expected result: The server uses SSL for authentication and you can see an SSL handshake.&amp;nbsp;</p>
+  <p>Expected result: The server uses SSL for authentication and you can see an SSL handshake.&nbsp;</p>
   <h1>Step 4: Tune Test Cases</h1>
   <p>During this step you must test for additional payloads of this attack. For example, record a specific transaction such as a purchase of an item or of specific services. Then try to replay the transaction from outside a valid user session (without legitimate authentication). There are multiple replay attacks that you can try depending on what you have in mind. Make sure to cover the following attacks (these are examples; specific scenarios relevant to your application should be tested):</p>
   <ul>

@@ -26,12 +26,12 @@
   <p>This is important guideline and should be followed wehnever working with programmatic impersonation.</p>
   <h1>How</h1>
   <p>If you use programmatic impersonation, use structured exception handling and put the impersonation code inside <b>try</b> blocks. Use a <b>catch</b> block to handle exceptions and to prevent exceptions propagating. Use a <b>finally</b> block to ensure that the impersonation is reverted, as shown in the following example.</p>
-  <pre>using System.Security.Principal;<br />. . .<br />WindowsIdentity winIdentity = new WindowsIdentity("<a href="mailto:username&amp;#64;domainName">username&amp;#64;domainName</a>");<br />WindowsImpersonationContext ctx = null;<br />try<br />&amp;#123;</pre>
-  <pre>&amp;nbsp; ctx = winIdentity.Impersonate();<br />&amp;nbsp; // Do work.<br />&amp;nbsp; ...<br />&amp;#125;<br />// Do not let the exception propagate. Catch it here.<br />catch(Exception ex)<br />&amp;#123;<br />&amp;nbsp; ...<br />&amp;#125;<br />finally<br />&amp;#123;<br />&amp;nbsp; // Stop impersonating.<br />&amp;nbsp; ctx.Undo();<br />&amp;#125;  </pre>
+  <pre>using System.Security.Principal;<br />. . .<br />WindowsIdentity winIdentity = new WindowsIdentity("<a href="mailto:username&#64;domainName">username&#64;domainName</a>");<br />WindowsImpersonationContext ctx = null;<br />try<br />&#123;</pre>
+  <pre>&nbsp; ctx = winIdentity.Impersonate();<br />&nbsp; // Do work.<br />&nbsp; ...<br />&#125;<br />// Do not let the exception propagate. Catch it here.<br />catch(Exception ex)<br />&#123;<br />&nbsp; ...<br />&#125;<br />finally<br />&#123;<br />&nbsp; // Stop impersonating.<br />&nbsp; ctx.Undo();<br />&#125;  </pre>
   <p>By using a <b>finally</b> block, you make ensure that the impersonation token is removed from the current thread, even if an exception is generated. By preventing the exception from propagating from the <b>catch</b> block, you make sure that exception filter code higher in the call stack does not execute while the thread still has an impersonation token attatched to it.</p>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Exception filters are supported by Microsoft Intermediate Language (MSIL) and Visual Basic .NET.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;Exception filters are supported by Microsoft Intermediate Language (MSIL) and Visual Basic .NET.</blockquote>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

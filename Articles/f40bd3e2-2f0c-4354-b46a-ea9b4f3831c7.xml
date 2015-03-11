@@ -24,11 +24,11 @@
   <h1>Why</h1>
   <p>Encoding echoed input prevents injection attacks such as cross-site scripting.</p>
   <h1>How to Check</h1>
-  <p>An application can take input via various&amp;nbsp;sources, such as a web interface, database, file system or other software running on the server, and then use that same input in various outputs. Use the following steps to establish a validation strategy:</p>
+  <p>An application can take input via various&nbsp;sources, such as a web interface, database, file system or other software running on the server, and then use that same input in various outputs. Use the following steps to establish a validation strategy:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify all sources of input.&amp;nbsp;</strong>At design time identify all potential sources of input to your application. Once implemented, scour source code to discover sources of input that may have been missed in the design. Potential sources of input in a web application typically include:</p>
+        <strong>Identify all sources of input.&nbsp;</strong>At design time identify all potential sources of input to your application. Once implemented, scour source code to discover sources of input that may have been missed in the design. Potential sources of input in a web application typically include:</p>
       <ul>
         <li>URL based parameters</li>
         <li>Form based parameters</li>
@@ -43,9 +43,9 @@
         <li>DNS results or host names</li>
         <li>External component call return values (COM, AJAX, ActiveX)</li>
       </ul>
-      <p>Once you&amp;nbsp;have listed the sources of input your application&amp;nbsp;can use, look for all entry points. Good starting points are method parameters and assignment statements. For example:</p>
+      <p>Once you&nbsp;have listed the sources of input your application&nbsp;can use, look for all entry points. Good starting points are method parameters and assignment statements. For example:</p>
       <p>
-        <font face="Arial, Verdana" size="2">This method uses the&amp;nbsp;<i>jobId</i>&amp;nbsp;variable.</font>
+        <font face="Arial, Verdana" size="2">This method uses the&nbsp;<i>jobId</i>&nbsp;variable.</font>
       </p>
       <pre>def findJobDetail(jobId: String): Action[play.api.mvc.AnyContent] = Action { implicit request =&gt;
     val job: Option[JobEntity] = Job.findJobDetail(new ObjectId(jobId))
@@ -56,38 +56,38 @@
 
   }</pre>
       <p>
-        <font face="Arial, Verdana" size="2">This assignment stores data from a&amp;nbsp;</font>
+        <font face="Arial, Verdana" size="2">This assignment stores data from a&nbsp;</font>
         <em>GET</em>
-        <font face="Arial, Verdana" size="2">&amp;nbsp;request parameter named&amp;nbsp;</font>
+        <font face="Arial, Verdana" size="2">&nbsp;request parameter named&nbsp;</font>
         <font face="Arial, Verdana">
-          <font size="2">jobIds&amp;nbsp;and stores it in the string&amp;nbsp;</font>
+          <font size="2">jobIds&nbsp;and stores it in the string&nbsp;</font>
           <i style="font-size: small;">jobId</i>
           <font size="2">. Ensure that this input is validated.</font>
         </font>
       </p>
       <pre>String <span style="font-size: 10pt;">jobId</span><span style="font-size: 10pt;"> = request.params.get("<span style="font-size: 10pt;">jobIds</span></span><span style="font-size: 10pt;">")</span></pre>
       <p>
-        <font face="Arial, Verdana" size="2">This assignment uses the input that was gathered above to store more input from a database. Verify that&amp;nbsp;<i>jobId</i>&amp;nbsp;is validated before this use, and also ensure that&amp;nbsp;</font>
+        <font face="Arial, Verdana" size="2">This assignment uses the input that was gathered above to store more input from a database. Verify that&nbsp;<i>jobId</i>&nbsp;is validated before this use, and also ensure that&nbsp;</font>
         <em>data</em>
-        <font face="Arial, Verdana" size="2">&amp;nbsp;is validated as another source of input.</font>
+        <font face="Arial, Verdana" size="2">&nbsp;is validated as another source of input.</font>
       </p>
     </li>
     <li>
       <p>
-        <strong>Trace data from source to sink.&amp;nbsp;</strong>Trace each source of input from the immediate source, through your application, to its final destination. The final sink may be in memory, on the hard drive, sent over the network or stored in a data store such as a database. Create a list of the input sources that are echoed back to the user through output - whether directly, through a file, in a URL or through a database or other intermediary source.</p>
+        <strong>Trace data from source to sink.&nbsp;</strong>Trace each source of input from the immediate source, through your application, to its final destination. The final sink may be in memory, on the hard drive, sent over the network or stored in a data store such as a database. Create a list of the input sources that are echoed back to the user through output - whether directly, through a file, in a URL or through a database or other intermediary source.</p>
     </li>
     <li>
       <p>
         <strong>Ensure input is properly encoded before being used as output</strong>. Ensure that you have encoded input from each of the input sources identified above before it is used as output. Select appropriate encoding based upon how the output is returned to the client. Verify the context in which the output is used and ensure it is properly encoded. A couple example contexts are shown below (URL, HTML entity):</p>
       <ul>
         <li>
-          <font face="Arial, Verdana" size="2">URL Encoding-&amp;nbsp;<i>@helper.urlEncode(URL) ie&amp;nbsp;&lt;a href="@helper.urlEncode(foo)"&gt;my href is urlencoded&lt;/a&gt;</i></font>
+          <font face="Arial, Verdana" size="2">URL Encoding-&nbsp;<i>@helper.urlEncode(URL) ie&nbsp;&lt;a href="@helper.urlEncode(foo)"&gt;my href is urlencoded&lt;/a&gt;</i></font>
         </li>
         <li>
-          <font face="Arial, Verdana" size="2">HTML Format Escaping-&amp;nbsp;</font>
-          <i style="font-family: Arial, Verdana; font-size: small;">&amp;nbsp;HtmlFormat.escape(userparam)</i>
+          <font face="Arial, Verdana" size="2">HTML Format Escaping-&nbsp;</font>
+          <i style="font-family: Arial, Verdana; font-size: small;">&nbsp;HtmlFormat.escape(userparam)</i>
         </li>
-        <li>HTML Entity Encoding&amp;nbsp;</li>
+        <li>HTML Entity Encoding&nbsp;</li>
         <li>HTML Attribute Encoding</li>
         <li>JavaScript Encoding</li>
         <li>CSS Encoding</li>
@@ -110,7 +110,7 @@
   <ol>
     <li>
       <p>
-        <strong>Identify all echoed input.&amp;nbsp;</strong>Locate all places inside your application where user-supplied data will be returned to the client. Such data can be of a reflective or persistent nature:</p>
+        <strong>Identify all echoed input.&nbsp;</strong>Locate all places inside your application where user-supplied data will be returned to the client. Such data can be of a reflective or persistent nature:</p>
       <ul>
         <li>
           <strong>Reflective</strong>: In a reflective setting, the input is immediately returned to the client. For example, search engines present the searched query when displaying the results.</li>
@@ -120,11 +120,11 @@
     </li>
     <li>
       <p>
-        <strong>Determine the&amp;nbsp;type of encoding.&amp;nbsp;</strong>After identifying all echoed input, determine how the input is returned to client. Data is said to be in an HTML context when that data is rendered as a part of an HTML document and is understood by the browser to be HTML. There are other contexts available to Web Applications, such as JavaScript context, CSS context, etc. Data is said to be in a JavaScript context when it is included in JavaScript code and is interpreted as JavaScript by the browser, and so on. Data has to be encoded differently for different contexts to prevent Cross-Site Scripting vulnerabilities. Differences in encoding arise from the fact that different contexts have different special symbols and keywords. Output encoding routines have to be designed with the understanding of the context of the output in mind.</p>
+        <strong>Determine the&nbsp;type of encoding.&nbsp;</strong>After identifying all echoed input, determine how the input is returned to client. Data is said to be in an HTML context when that data is rendered as a part of an HTML document and is understood by the browser to be HTML. There are other contexts available to Web Applications, such as JavaScript context, CSS context, etc. Data is said to be in a JavaScript context when it is included in JavaScript code and is interpreted as JavaScript by the browser, and so on. Data has to be encoded differently for different contexts to prevent Cross-Site Scripting vulnerabilities. Differences in encoding arise from the fact that different contexts have different special symbols and keywords. Output encoding routines have to be designed with the understanding of the context of the output in mind.</p>
       <ul>
         <li>
           <p>
-            <strong>URL encoding</strong>: URL encoding allows your application to maintain the original URL, yet display it to the user in a non-malicious way. Because HTTP headers allow a substitution schema, all characters/symbols are preserved by displaying their ASCII codes instead of the actual character/symbol. For example,&amp;nbsp;<em>&lt;</em>&amp;nbsp;is represented by&amp;nbsp;<em>%3C</em>&amp;nbsp;where&amp;nbsp;<em>3C</em>&amp;nbsp;is the ASCII value for&amp;nbsp;<em>&lt;.</em></p>
+            <strong>URL encoding</strong>: URL encoding allows your application to maintain the original URL, yet display it to the user in a non-malicious way. Because HTTP headers allow a substitution schema, all characters/symbols are preserved by displaying their ASCII codes instead of the actual character/symbol. For example,&nbsp;<em>&lt;</em>&nbsp;is represented by&nbsp;<em>%3C</em>&nbsp;where&nbsp;<em>3C</em>&nbsp;is the ASCII value for&nbsp;<em>&lt;.</em></p>
         </li>
         <li>
           <p>
@@ -145,8 +145,8 @@
                   <td>&gt;</td>
                 </tr>
                 <tr>
-                  <td>&amp;</td>
-                  <td>&amp;</td>
+                  <td>&</td>
+                  <td>&</td>
                 </tr>
                 <tr>
                   <td>"</td>
@@ -162,7 +162,7 @@
         </li>
         <li>
           <p>
-            <strong>HTML attribute encoding</strong>: Use HTML attribute encoding to encode dynamic data that is output in an attribute of an HTML tag, except&amp;nbsp;URL, CSS, and JavaScript event handler attributes.</p>
+            <strong>HTML attribute encoding</strong>: Use HTML attribute encoding to encode dynamic data that is output in an attribute of an HTML tag, except&nbsp;URL, CSS, and JavaScript event handler attributes.</p>
         </li>
         <li>
           <p>
@@ -180,7 +180,7 @@
     </li>
     <li>
       <p>
-        <strong>Apply the encoding.&amp;nbsp;</strong>After you identify the echoed input and determine the appropriate encoding method, apply the encoding before the input is returned to the client. There are different encoding libraries available. Different libraries have different capabilities and weaknesses. Please, refer to the vendor's documentation for each potential encoding library.</p>
+        <strong>Apply the encoding.&nbsp;</strong>After you identify the echoed input and determine the appropriate encoding method, apply the encoding before the input is returned to the client. There are different encoding libraries available. Different libraries have different capabilities and weaknesses. Please, refer to the vendor's documentation for each potential encoding library.</p>
     </li>
   </ol>
   <p />]]></Data>

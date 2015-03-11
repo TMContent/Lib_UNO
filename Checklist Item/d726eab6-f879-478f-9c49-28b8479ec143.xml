@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that sensitive information is not being transmitted between client and server through a query string.</p>
   <h1>Why</h1>
-  <p>Sensitive data in the query string may be logged by web proxies, and will also appear in the user's browser history and in your own web server logs.&amp;nbsp; Additionally, if sensitive content is being sent through the user, the query string does not offer an easy way of protecting the content from user reading or tampering. </p>
+  <p>Sensitive data in the query string may be logged by web proxies, and will also appear in the user's browser history and in your own web server logs.&nbsp; Additionally, if sensitive content is being sent through the user, the query string does not offer an easy way of protecting the content from user reading or tampering. </p>
   <h1>How to Check</h1>
   <p>Use the following steps to check for this problem:</p>
   <ol>
@@ -44,25 +44,25 @@
     <p>
       <strong>Session State</strong>
     </p>
-    <p>Session State is an acceptable mechanism for maintaining sensitive information on the server during a user session.&amp;nbsp;If your application is using session state you'll see code similar to: </p>
-    <pre>Session&amp;#91;"SessionVarName"&amp;#93; = SensitiveObject.SensitiveData;</pre>
+    <p>Session State is an acceptable mechanism for maintaining sensitive information on the server during a user session.&nbsp;If your application is using session state you'll see code similar to: </p>
+    <pre>Session&#91;"SessionVarName"&#93; = SensitiveObject.SensitiveData;</pre>
     <p>
       <strong>HTTP POST</strong>
     </p>
-    <p>Sending sensitive information in&amp;nbsp;an HTTP POST form submit is an acceptable mechanism for transmitting the data to the server.&amp;nbsp;Verify that&amp;nbsp;the form submit is over SSL to ensure the information is protected on the wire. </p>
+    <p>Sending sensitive information in&nbsp;an HTTP POST form submit is an acceptable mechanism for transmitting the data to the server.&nbsp;Verify that&nbsp;the form submit is over SSL to ensure the information is protected on the wire. </p>
     <p>
       <strong>ViewState</strong>
     </p>
-    <p>ViewState can be used to store sensitive information if <strong>ViewStateEncryption</strong> is used. By default, an HMAC integrity check is applied to the ViewState and SSL can protect the sensitive information over the wire.&amp;nbsp;<strong>ViewStateEncryption</strong> ensures the confidentiality of the sensitive information on the local machine. To check whether ViewState encryption is used properly, see the&amp;nbsp;Checklist Item, <a name="View_State_is_Encrypted_if_it_Does_Cont">View State is Encrypted if it Contains Sensitive Data</a>, linked at the bottom of this article.&amp;nbsp; </p>
+    <p>ViewState can be used to store sensitive information if <strong>ViewStateEncryption</strong> is used. By default, an HMAC integrity check is applied to the ViewState and SSL can protect the sensitive information over the wire.&nbsp;<strong>ViewStateEncryption</strong> ensures the confidentiality of the sensitive information on the local machine. To check whether ViewState encryption is used properly, see the&nbsp;Checklist Item, <a name="View_State_is_Encrypted_if_it_Does_Cont">View State is Encrypted if it Contains Sensitive Data</a>, linked at the bottom of this article.&nbsp; </p>
     <p>
       <strong>HTTP GET in the query string</strong>
     </p>
-    <p>Avoid using HTTP GET in the query string.&amp;nbsp; If your application uses this technique for transferring sensitive data to the&amp;nbsp;server, you'll see a URL such as the following in your address bar as well as in your browser history:</p>
-    <pre>http://www.teammentorexample.com/results.asp?queryParam=SensitiveData&amp;queryParam2=MoreSensitiveData</pre>
+    <p>Avoid using HTTP GET in the query string.&nbsp; If your application uses this technique for transferring sensitive data to the&nbsp;server, you'll see a URL such as the following in your address bar as well as in your browser history:</p>
+    <pre>http://www.teammentorexample.com/results.asp?queryParam=SensitiveData&queryParam2=MoreSensitiveData</pre>
   </blockquote>
   <p />
   <h1>How to Fix</h1>
-  <p>If a user is submitting sensitive data, they should submit it as a form field via an HTTP POST, not in the query string.&amp;nbsp;Whenever possible, avoid the problem entirely&amp;#8212;do not send sensitive data on a round trip to the user unless they need to edit the data. Instead, store sensitive session data on the server side. If sensitive data must be sent through the user, use an encrypted ViewState instead of a query string parameter.</p>
+  <p>If a user is submitting sensitive data, they should submit it as a form field via an HTTP POST, not in the query string.&nbsp;Whenever possible, avoid the problem entirely&#8212;do not send sensitive data on a round trip to the user unless they need to edit the data. Instead, store sensitive session data on the server side. If sensitive data must be sent through the user, use an encrypted ViewState instead of a query string parameter.</p>
   <p>If your application is using query string to communicate sensitive data to the server, use the following steps to fix the issue:</p>
   <ol>
     <li>
@@ -70,7 +70,7 @@
       <li>
         <p>Store sensitive data server-side instead of repeatedly passing it as a query string parameter. The best way to keep sensitive information safe is to leave it somewhere inaccessible. </p>
         <li>
-          <p>If sensitive data must be sent through the user&amp;#8212;during a server transition, for instance&amp;#8212;send it via an encrypted ViewState instead of a query string parameter. ViewStates are designed to support integrity and confidentiality, as needed, and are the best way of ensuring that sensitive data is not tampered with or disclosed when it is sent past the user. </p>
+          <p>If sensitive data must be sent through the user&#8212;during a server transition, for instance&#8212;send it via an encrypted ViewState instead of a query string parameter. ViewStates are designed to support integrity and confidentiality, as needed, and are the best way of ensuring that sensitive data is not tampered with or disclosed when it is sent past the user. </p>
         </li>
       </li>
     </li>
@@ -78,7 +78,7 @@
   <h1>Problem Example</h1>
   <p>An ASP.NET application requests the user's social security number to gain access to financial information. Instead of using a form submit to post this information to the server, the application uses an HTTP GET and places the social security number in the query string:</p>
   <pre>http://www.teammentorexample.com/results.asp?SocialSecurityNum=123001234</pre>
-  <p>The problem with this implementation is that the sensitive information (social security number) is persisted in&amp;nbsp; the&amp;nbsp;browser history, in the cache, and is not being sent over SSL so it is not protected on the wire.</p>
+  <p>The problem with this implementation is that the sensitive information (social security number) is persisted in&nbsp; the&nbsp;browser history, in the cache, and is not being sent over SSL so it is not protected on the wire.</p>
   <h1>Solution Example</h1>
   <p>An ASP.NET application requests the user's social security number to gain access to financial information. The application uses a form post over SSL to send the information to the server:</p>
   <pre>POST results.asp?SocialSecurityNum=123001234</pre>
@@ -97,6 +97,6 @@
   </ul>
   <p />
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

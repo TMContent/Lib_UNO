@@ -43,15 +43,15 @@
       <ul>
         <li>
           <p>
-            <strong>Policy Requirements</strong>:&amp;nbsp;Verify that&amp;nbsp;your application's security requirements have established a policy regarding acceptable usernames. Such policy should state the length and input set for valid usernames as well as password requirements. <br /></p>
+            <strong>Policy Requirements</strong>:&nbsp;Verify that&nbsp;your application's security requirements have established a policy regarding acceptable usernames. Such policy should state the length and input set for valid usernames as well as password requirements. <br /></p>
         </li>
         <li>
           <p>
-            <strong>Design</strong>:&amp;nbsp;Verify that&amp;nbsp;all username validation routines are positioned properly at the trust boundaries of all of your application's routines that handle user credentials. For instance, all validation should occur before the username is processed by any component within your application.</p>
+            <strong>Design</strong>:&nbsp;Verify that&nbsp;all username validation routines are positioned properly at the trust boundaries of all of your application's routines that handle user credentials. For instance, all validation should occur before the username is processed by any component within your application.</p>
         </li>
         <li>
           <p>
-            <strong>Implementation:</strong>&amp;nbsp;Verify that&amp;nbsp;all username validation routines implement your application's username&amp;nbsp;policy. Verify that the implementation is using whitelist and not blacklist validation techniques. Example:</p>
+            <strong>Implementation:</strong>&nbsp;Verify that&nbsp;all username validation routines implement your application's username&nbsp;policy. Verify that the implementation is using whitelist and not blacklist validation techniques. Example:</p>
           <pre>public boolean validateUsername(String input)<br />{<br />      String goodPattern = "(\\w|\\d)+";<br />      int goodLength = 6;<br />      if(input.length() &lt; goodLength)<br />      {<br />           return false;<br />      }<br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br />                if(!m.matches())<br />      {<br />            return false;<br />      }<br />      return true;<br />}</pre>
           <p>Ensure that all error or exception conditions are handled correctly. Verify that all authentication procedures exit immediately in a graceful manner upon failed username validation.<br /></p>
         </li>
@@ -63,7 +63,7 @@
   <ol>
     <li>
       <p>
-        <strong>Establish username requirements. </strong>Determine what is the acceptable character set and length that should be allowed within a username. For instance, require that usernames should be at least&amp;nbsp;six characters long and must contain alpha-numeric characters only.</p>
+        <strong>Establish username requirements. </strong>Determine what is the acceptable character set and length that should be allowed within a username. For instance, require that usernames should be at least&nbsp;six characters long and must contain alpha-numeric characters only.</p>
     </li>
     <li>
       <p>

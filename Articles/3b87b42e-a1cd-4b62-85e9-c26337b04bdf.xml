@@ -20,26 +20,26 @@
   <h1>What to Check For</h1>
   <p>Ensure that sensitive data is not placed in unprotected parameters.</p>
   <h1>Why</h1>
-  <p>Sensitive data stored in unprotected parameters is sent on the network in plaintext and can be easily&amp;nbsp;read by an attacker who steals it&amp;nbsp;using a network sniffer.</p>
+  <p>Sensitive data stored in unprotected parameters is sent on the network in plaintext and can be easily&nbsp;read by an attacker who steals it&nbsp;using a network sniffer.</p>
   <h1>How to Check</h1>
   <p>Sensitive data may be transmitted between a user's browser and your application for the following purposes:</p>
   <ol>
     <li>
       <p>
-        <strong>Submitting input to your application:</strong>&amp;nbsp;A user can provide input to your application via URL and form-based parameters.</p>
+        <strong>Submitting input to your application:</strong>&nbsp;A user can provide input to your application via URL and form-based parameters.</p>
     </li>
     <li>
       <p>
-        <strong>Tracking user activity:</strong>&amp;nbsp;Your application may use cookies or hidden fields to track user activity.</p>
+        <strong>Tracking user activity:</strong>&nbsp;Your application may use cookies or hidden fields to track user activity.</p>
     </li>
   </ol>
   <p>Since HTTP-based parameters are handled in plaintext form, use the following steps to ensure your application's proper use of HTTP-based parameters when handling sensitive data:</p>
   <p>
-    <span>1.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+    <span>1.<span>&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>
     <b>
       <span>Identify
-sensitive data.&amp;nbsp;</span>
+sensitive data.&nbsp;</span>
     </b>
     <span>Sensitive data is any
 information that is kept secret and should be disclosed only to authorized
@@ -53,7 +53,7 @@ data. Sensitive data can be defined as follows:</span>
   <p />
   <p />
   <p class="MsoNormal" style="margin-left: 1in; text-indent: -0.25in;">
-    <span style="font-size: 10pt; font-family: 'Courier New';">o<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+    <span style="font-size: 10pt; font-family: 'Courier New';">o<span>&nbsp;&nbsp;&nbsp; </span></span>
     <span>Information that either contains personally
 identifiable information or can be used to derive personally identifiable
 information that should not be shared with others.</span>
@@ -61,42 +61,42 @@ information that should not be shared with others.</span>
   <p />
   <p />
   <p class="MsoNormal" style="margin-left: 1in; text-indent: -0.25in;">
-    <span style="font-size: 10pt; font-family: 'Courier New';">o<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+    <span style="font-size: 10pt; font-family: 'Courier New';">o<span>&nbsp;&nbsp;&nbsp; </span></span>
     <span>Information that a user provides that they would
 not want shared with other users of the application.</span>
   </p>
   <p />
   <p />
   <p class="MsoNormal" style="margin-bottom: 13.5pt; margin-left: 1in; text-indent: -0.25in;">
-    <span style="font-size: 10pt; font-family: 'Courier New';">o<span>&amp;nbsp;&amp;nbsp;&amp;nbsp; </span></span>
+    <span style="font-size: 10pt; font-family: 'Courier New';">o<span>&nbsp;&nbsp;&nbsp; </span></span>
     <span>Information that comes from an external trusted
 source that is not designed to be shared with users.</span>
   </p>
   <p />
   <p />
   <p>
-    <span>2.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+    <span>2.<span>&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>
     <b>
       <span>Verify
 that your application uses HTTPS for all sensitive pages.</span>
     </b>
-    <span>&amp;nbsp;Identify all sensitive pages and use a web
+    <span>&nbsp;Identify all sensitive pages and use a web
 browser to navigate through them. Use the facilities built-into the web browser
 to make sure that all sensitive pages are protected with SSL.</span>
   </p>
   <p />
   <p />
   <p>
-    <span>3.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+    <span>3.<span>&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>
     <b>
       <span>Verify
-that your application uses POST requests.&amp;nbsp;</span>
+that your application uses POST requests.&nbsp;</span>
     </b>
     <span>Ensure that your application accepts sensitive
 data only via HTTP POST requests. Verify that the following items are in
-place:&amp;nbsp;</span>
+place:&nbsp;</span>
   </p>
   <p />
   <p />
@@ -116,22 +116,22 @@ place:&amp;nbsp;</span>
   <p>
   </p>
   <p>
-    <span>4.<span>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+    <span>4.<span>&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>
     <b>
       <span>Verify
-that no sensitive data is stored in HTTP parameters or cookies.&amp;nbsp;</span>
+that no sensitive data is stored in HTTP parameters or cookies.&nbsp;</span>
     </b>
     <span>Ensure that your application does not store
 sensitive data in HTTP parameters or cookies. Verify that all sensitive data is
-stored into sessions. Consult the&amp;nbsp;<a href="06c0bd2f-6d23-45ce-9c08-5145215ca9d8"><span style="color:blue">Sensitive Data is Not Cached</span></a>&amp;nbsp;checklist for
+stored into sessions. Consult the&nbsp;<a href="06c0bd2f-6d23-45ce-9c08-5145215ca9d8"><span style="color:blue">Sensitive Data is Not Cached</span></a>&nbsp;checklist for
 additional information.</span>
   </p>
   <p />
   <p />
   <h1>How to Fix</h1>
 Follow these steps when handling sensitive data via parameters:
-  <ol><li><strong>Identify the parameters.</strong>&amp;nbsp;Parameters can be used both as entry points and storage places. Locating your application's parameters helps identify potential sources of input. Because parameters are easily accessible by the client, they should be considered untrusted. Different types of parameters include:
-      <ul><li>URL-based parameters</li><li>Form-based parameters</li><li>Hidden fields</li><li>Cookies</li></ul></li><li><strong>Identify the use.&amp;nbsp;</strong>Parameters can be used for several purposes. If you are using parameters to send sensitive data, use the steps below to find a work-around:&amp;nbsp;</li></ol><ul><li><b>Submitting input: </b>Submitting sensitive data using parameters should always be done through an encrypted channel and always using a POST request. Use SSL to ensure encryption. Avoid using hidden fields when gathering information from the user. Allowing the user to enter all information about their account ensures that they are aware of all data that is being sent. Any information regarding the user's client environment can be gathered via the HTTP headers.</li><li><b>User tracking: </b>User tracking should always be done server-side using sessions. Avoid storing sensitive information in hidden fields and cookies. If it is necessary to store sensitive data using parameters, encrypt the data using a key that is known only by your application. If encrypted sensitive data is stored inside a cookie, avoid setting the cookie as persistent.</li></ul><ul></ul><h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Guidelines</h1><ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><li style="margin: 0px; padding: 0px;"><b><a href="52624de3-7c13-4456-974b-23c4588eef0d">Encrypt Communication Links</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="10886993-6dcd-4905-b577-2032edd530c5">Use SSL</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="8a5cb8a0-d7f9-4372-bae6-2d680bb498ad">Use SSL for All Sensitive Pages</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="5de9c87b-5678-4810-8636-65b720e023bf">Use SSL When Transmitting Credentials</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="189c97b5-78ac-4b3b-812d-587ea2a895e4">Use Valid SSL Certificates</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="0e774522-7d2e-4a14-b3cf-850d127c3895">Use Only Strong SSL Algorithms</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="f9d523ec-7328-4be5-93c6-00e671ecd068">Do Not Cache Sensitive Data</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="7718e002-fad0-4114-b51f-f46397cd3921">Do Not Place Sensitive Data in Parameters</a></b></li></ul><h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Checklists</h1><ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><li style="margin: 0px; padding: 0px;"><b><a href="d9212a71-9f66-4d55-91ad-40af4792f414">Communication Links are Encrypted</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="0c11e362-82d1-4132-ba66-8431eb02da94">SSL Is Used</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="60459daa-5678-45f7-834f-72ef487aaf2b">SSL Is Used for All Sensitive Pages</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="24771ceb-219a-41c5-8877-c040969a6933">SSL is Used When Transmitting Credentials</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="ec353b5b-901b-404b-811e-922561c1e632">Valid SSL Certificates Are Used</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="d4cad587-c5d7-4ccf-ad50-4e178154a70b">Only Strong SSL Algorithms Are Used</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="06c0bd2f-6d23-45ce-9c08-5145215ca9d8">Sensitive Data Is Not Cached</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="3b87b42e-a1cd-4b62-85e9-c26337b04bdf">Sensitive Data Is Not Placed in Parameters</a></b></li></ul><h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Testing</h1><ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><li style="margin: 0px; padding: 0px;"><b><a href="b928e4bf-8dc9-4e64-bbec-ad642f375ab4">How to Test for Network Credential Sniffing Bugs in Scala</a></b></li></ul>]]></Data>
+  <ol><li><strong>Identify the parameters.</strong>&nbsp;Parameters can be used both as entry points and storage places. Locating your application's parameters helps identify potential sources of input. Because parameters are easily accessible by the client, they should be considered untrusted. Different types of parameters include:
+      <ul><li>URL-based parameters</li><li>Form-based parameters</li><li>Hidden fields</li><li>Cookies</li></ul></li><li><strong>Identify the use.&nbsp;</strong>Parameters can be used for several purposes. If you are using parameters to send sensitive data, use the steps below to find a work-around:&nbsp;</li></ol><ul><li><b>Submitting input: </b>Submitting sensitive data using parameters should always be done through an encrypted channel and always using a POST request. Use SSL to ensure encryption. Avoid using hidden fields when gathering information from the user. Allowing the user to enter all information about their account ensures that they are aware of all data that is being sent. Any information regarding the user's client environment can be gathered via the HTTP headers.</li><li><b>User tracking: </b>User tracking should always be done server-side using sessions. Avoid storing sensitive information in hidden fields and cookies. If it is necessary to store sensitive data using parameters, encrypt the data using a key that is known only by your application. If encrypted sensitive data is stored inside a cookie, avoid setting the cookie as persistent.</li></ul><ul></ul><h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Guidelines</h1><ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><li style="margin: 0px; padding: 0px;"><b><a href="52624de3-7c13-4456-974b-23c4588eef0d">Encrypt Communication Links</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="10886993-6dcd-4905-b577-2032edd530c5">Use SSL</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="8a5cb8a0-d7f9-4372-bae6-2d680bb498ad">Use SSL for All Sensitive Pages</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="5de9c87b-5678-4810-8636-65b720e023bf">Use SSL When Transmitting Credentials</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="189c97b5-78ac-4b3b-812d-587ea2a895e4">Use Valid SSL Certificates</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="0e774522-7d2e-4a14-b3cf-850d127c3895">Use Only Strong SSL Algorithms</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="f9d523ec-7328-4be5-93c6-00e671ecd068">Do Not Cache Sensitive Data</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="7718e002-fad0-4114-b51f-f46397cd3921">Do Not Place Sensitive Data in Parameters</a></b></li></ul><h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Checklists</h1><ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><li style="margin: 0px; padding: 0px;"><b><a href="d9212a71-9f66-4d55-91ad-40af4792f414">Communication Links are Encrypted</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="0c11e362-82d1-4132-ba66-8431eb02da94">SSL Is Used</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="60459daa-5678-45f7-834f-72ef487aaf2b">SSL Is Used for All Sensitive Pages</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="24771ceb-219a-41c5-8877-c040969a6933">SSL is Used When Transmitting Credentials</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="ec353b5b-901b-404b-811e-922561c1e632">Valid SSL Certificates Are Used</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="d4cad587-c5d7-4ccf-ad50-4e178154a70b">Only Strong SSL Algorithms Are Used</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="06c0bd2f-6d23-45ce-9c08-5145215ca9d8">Sensitive Data Is Not Cached</a></b></li><li style="margin: 0px; padding: 0px;"><b><a href="3b87b42e-a1cd-4b62-85e9-c26337b04bdf">Sensitive Data Is Not Placed in Parameters</a></b></li></ul><h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Testing</h1><ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><li style="margin: 0px; padding: 0px;"><b><a href="b928e4bf-8dc9-4e64-bbec-ad642f375ab4">How to Test for Network Credential Sniffing Bugs in Scala</a></b></li></ul>]]></Data>
   </Content>
 </TeamMentor_Article>

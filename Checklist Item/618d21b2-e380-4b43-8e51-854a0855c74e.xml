@@ -38,9 +38,9 @@
             <p>
               <strong>Permanent</strong>: If your application needs to permanently impersonate users, verify that the <strong>impersonate</strong> attribute inside the &lt;identity&gt; element is set to <strong>true</strong>:</p>
             <pre>&lt;identity impersonate="true" /&gt;</pre>
-            <p>For example, if your application uses Windows authentication, the following&amp;nbsp;will allow ASP.NET to impersonate the IIS user when executing your application's code:</p>
+            <p>For example, if your application uses Windows authentication, the following&nbsp;will allow ASP.NET to impersonate the IIS user when executing your application's code:</p>
             <pre>&lt;authentication mode="Windows" /&gt;<br />&lt;identity impersonate="true" /&gt;</pre>
-            <p>The &lt;identity&gt; element can also&amp;nbsp;allow your application to impersonate a specific user. Example:</p>
+            <p>The &lt;identity&gt; element can also&nbsp;allow your application to impersonate a specific user. Example:</p>
             <pre>&lt;identity impersonate="true"<br /> userName="registry:HKLM\Software\MyApp\Identity\ASPNET_SETREG,userName"<br /> password="registry:HKLM\Software\MyApp\Identity\ASPNET_SETREG,password" /&gt;</pre>
             <li>
               <p>
@@ -57,11 +57,11 @@
                   <li>
                     <p>
                       <strong>Kerberos</strong>: If your application uses an Active Directory, your code can create a WindowsIdentity object based on a valid UPN. Example:</p>
-                    <pre>WindowsIdentity winIdentity = new WindowsIdentity("username&amp;#64;domainName");</pre>
+                    <pre>WindowsIdentity winIdentity = new WindowsIdentity("username&#64;domainName");</pre>
                     <li>
                       <p>
                         <strong>LogonUser</strong>: If your application asks its users for their credentials, your code can create a WindowsIdentity object based on the security token that LogonUser returns. Ensure that this method is used if and only if your application asks the users for their credentials. Example:</p>
-                      <pre>IntPtr token;bool result;<br />result = LogonUser("user", "domain", "pass",<br /> LogonTypes.Batch, LogonProviders.Default, out token);<br />if (result)<br />&amp;#123;<br />    WindowsIdentity winIdentity = new WindowsIdentity(token);<br />    CloseHandle(token);<br />    ...<br />&amp;#125;</pre>
+                      <pre>IntPtr token;bool result;<br />result = LogonUser("user", "domain", "pass",<br /> LogonTypes.Batch, LogonProviders.Default, out token);<br />if (result)<br />&#123;<br />    WindowsIdentity winIdentity = new WindowsIdentity(token);<br />    CloseHandle(token);<br />    ...<br />&#125;</pre>
                     </li>
                   </li>
                 </li>
@@ -77,8 +77,8 @@
             <li>
               <p>Ensure that your application impersonates users as close as possible to the code that requires impersonation.</p>
               <li>
-                <p>Ensure that your application impersonates its users for as&amp;nbsp;little code&amp;nbsp;as possible and verify that each impersonation instance has a finally block associated with it to ensure that impersonation is always terminated:</p>
-                <pre>WindowsIdentity winIdentity = new WindowsIdentity(<a href="mailto:username&amp;#64;domainName">username&amp;#64;domainName</a>);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />try<br />&amp;#123;<br />  // Do work<br />&amp;#125;<br />catch(Exception ex)<br />&amp;#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&amp;#125;<br />finally<br />&amp;#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&amp;#125;</pre>
+                <p>Ensure that your application impersonates its users for as&nbsp;little code&nbsp;as possible and verify that each impersonation instance has a finally block associated with it to ensure that impersonation is always terminated:</p>
+                <pre>WindowsIdentity winIdentity = new WindowsIdentity(<a href="mailto:username&#64;domainName">username&#64;domainName</a>);<br />WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />try<br />&#123;<br />  // Do work<br />&#125;<br />catch(Exception ex)<br />&#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&#125;<br />finally<br />&#123;<br />  // Stop impersonating<br />  ctx.Undo();<br />&#125;</pre>
                 <li>
                   <p>Using the <a href="/article/f28f80e5-814a-4e3b-9475-9cbb1da901b4">Exceptions are Not Propagated while Impersonating</a> checklist, verify that exceptions do not get propagated while your application is impersonating a user.</p>
                 </li>
@@ -91,14 +91,14 @@
   </ol>
   <h1>Problem Example</h1>
   <p>MyApp is the HR application at MyCorp. Although MyCorp's IT network is operated using an Active Directory, MyApp performs a certificate-based single sign-on. MyApp operates under the ASP.NET local system account. However, certain actions, such as file uploads, are performed using the users' Windows accounts. To do this, the application stores the users' credentials into its own credential repository and uses LogonUser to impersonate its users. An attacker compromises MyApp credential repository and valid users in MyCorp's Active Directory.</p>
-  <pre>HttpClientCertificate cert = HttpContext.Current.Request.ClientCertificate;<br />if (cert.IsPresent)<br />&amp;#123;<br />    IntPtr token;<br />    bool result;<br />    string cn = cert.Get("SUBJECT CN");<br />    string username = MyApp.GetUsername(cn);<br />    string password = MyApp.GetPassword(username);<br />    string domain = "NTDOMAIN";<br />    result = LogonUser(username, domain, password, LogonTypes.Batch, LogonProviders.Default, out token);<br />    if (result)<br />    &amp;#123;<br />        WindowsIdentity winIdentity = new WindowsIdentity(token);<br />        CloseHandle(token);<br />        WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />        // Store the uploaded file<br />    &amp;#125;<br />&amp;#125;</pre>
+  <pre>HttpClientCertificate cert = HttpContext.Current.Request.ClientCertificate;<br />if (cert.IsPresent)<br />&#123;<br />    IntPtr token;<br />    bool result;<br />    string cn = cert.Get("SUBJECT CN");<br />    string username = MyApp.GetUsername(cn);<br />    string password = MyApp.GetPassword(username);<br />    string domain = "NTDOMAIN";<br />    result = LogonUser(username, domain, password, LogonTypes.Batch, LogonProviders.Default, out token);<br />    if (result)<br />    &#123;<br />        WindowsIdentity winIdentity = new WindowsIdentity(token);<br />        CloseHandle(token);<br />        WindowsImpersonationContext ctx = winIdentity.Impersonate();<br />        // Store the uploaded file<br />    &#125;<br />&#125;</pre>
   <h1>Related Guideline</h1>
   <ul>
     <li>
-      <a href="/article/97dfd32f-deb6-4016-b3ff-24147a959521">Guideline: Do Not Use the LogonUser API&amp;nbsp;</a>
+      <a href="/article/97dfd32f-deb6-4016-b3ff-24147a959521">Guideline: Do Not Use the LogonUser API&nbsp;</a>
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

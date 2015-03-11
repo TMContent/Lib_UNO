@@ -25,8 +25,8 @@
     </ul>
   </p>
   <h1>Summary</h1>
-  <p>The Domain Name System is implemented heavily across the Internet to resolve domain names (such as <i>www.example.com</i>) to their respective IP address. Internet clients such as web browsers query a collection of DNS servers to resolve domain names, e.g. <i>www.example.com</i>, into an IP addresses, e.g. <i>201.77.100.88</i>.&amp;nbsp; </p>
-  <p>During a DNS Poisoning attack an adversary attacks a vulnerable DNS server to replace a valid domain name (e.g. <i>www.example.com</i> with IP <i>201.77.100.88</i>) with the adversary's malicious IP (<i>w.x.y.z</i>). An adversary can also achieve this by executing a Man in the Middle (MitM) style attack between a DNS client and DNS server, and attempt to respond to the client faster than the authentic server. The adversary can then replace the contents of the affected domain name with potentially malicious content of their choosing.&amp;nbsp;</p>
+  <p>The Domain Name System is implemented heavily across the Internet to resolve domain names (such as <i>www.example.com</i>) to their respective IP address. Internet clients such as web browsers query a collection of DNS servers to resolve domain names, e.g. <i>www.example.com</i>, into an IP addresses, e.g. <i>201.77.100.88</i>.&nbsp; </p>
+  <p>During a DNS Poisoning attack an adversary attacks a vulnerable DNS server to replace a valid domain name (e.g. <i>www.example.com</i> with IP <i>201.77.100.88</i>) with the adversary's malicious IP (<i>w.x.y.z</i>). An adversary can also achieve this by executing a Man in the Middle (MitM) style attack between a DNS client and DNS server, and attempt to respond to the client faster than the authentic server. The adversary can then replace the contents of the affected domain name with potentially malicious content of their choosing.&nbsp;</p>
   <p>Follow these steps to test for DNS Poisoning bugs:</p>
   <ul>
     <li>Step 1: Understand Attack Scenarios.</li>
@@ -41,7 +41,7 @@
     <li>DNS poisoning by DNS server forgery.</li>
   </ul>
   <h2>DNS poisoning by DNS cache poisoning </h2>
-  <p>During a DNS cache poisoning attack, an adversary tampers with a DNS server cache so that the server responds with malicious data to its clients. The adversary's goal is to replace the cache so that certain domain names resolve to an adversary-controlled IP address (<i>w.x.y.z</i>).&amp;nbsp; If the attack is successful, when a client queries the DNS server for a safe domain (say <i>www.example.com</i>), the DNS server directs the client to the adversary's IP address (<i>w.x.y.z</i>).&amp;nbsp; </p>
+  <p>During a DNS cache poisoning attack, an adversary tampers with a DNS server cache so that the server responds with malicious data to its clients. The adversary's goal is to replace the cache so that certain domain names resolve to an adversary-controlled IP address (<i>w.x.y.z</i>).&nbsp; If the attack is successful, when a client queries the DNS server for a safe domain (say <i>www.example.com</i>), the DNS server directs the client to the adversary's IP address (<i>w.x.y.z</i>).&nbsp; </p>
   <p>In detail:</p>
   <ol>
     <li>The attacker discovers a vulnerable DNS server.</li>
@@ -63,11 +63,11 @@
   <h2>DNS Poisoning Root Cause</h2>
   <p>The principal cause for DNS Poisoning bugs is that DNS servers are too trustful of DNS responses. This allows malicious DNS nodes (such as spoofed DNS servers) to replace valid DNS nodes. When these malicious nodes are recognized as valid, they can send malicious responses to DNS servers or attempt to reply faster to DNS clients.</p>
   <h2>DNS Poisoning Mitigations</h2>
-  <p>The principal mitigation for this bug is for both DNS servers and clients to be less trusting of DNS responses.&amp;nbsp;<a style="mso-comment-reference: A_2; mso-comment-date: 20080402T1025"></a><a style="mso-comment-reference: IG_1; mso-comment-date: 20080401T2106">A possible way to achieve this is to add a additional layer of security, such as randomly selecting a source port</a>, to the existing 16-bit nonce to decrease the chances of race attacks such as the birthday attack.</p>
+  <p>The principal mitigation for this bug is for both DNS servers and clients to be less trusting of DNS responses.&nbsp;<a style="mso-comment-reference: A_2; mso-comment-date: 20080402T1025"></a><a style="mso-comment-reference: IG_1; mso-comment-date: 20080401T2106">A possible way to achieve this is to add a additional layer of security, such as randomly selecting a source port</a>, to the existing 16-bit nonce to decrease the chances of race attacks such as the birthday attack.</p>
   <p>Another mitigation consists of using digital signatures to authenticate DNS nodes. A possible implementation is via digital certificates that are used during authentication of DNS data to ensure that this data comes from a trusted source. Therefore, an application can check for verify the authenticity of DNS messages using signatures over a reputable and secure method such as Secure Sockets Layer (SSL) or Transport Layer Security (TLS).</p>
-  <p>A secure version of DNS named DNSSEC also uses cryptographic certificates to validate DNS packets.&amp;nbsp;&amp;nbsp; Although this mitigation against DNS poisoning attacks is ideal; recent survey results indicate that DNSSEC is far from being widely deployed.</p>
+  <p>A secure version of DNS named DNSSEC also uses cryptographic certificates to validate DNS packets.&nbsp;&nbsp; Although this mitigation against DNS poisoning attacks is ideal; recent survey results indicate that DNSSEC is far from being widely deployed.</p>
   <p>However, there are interim solutions until DNSSEC is widely used on the Internet, such as running the latest BIND version along with anti-DNS forgery firewall rules or running OpenDNS, which randomizes the ports to add an additional layer of security to prevent against forgery attacks.</p>
-  <p>If you have access to the DNS application's source code or design specifications, at the end of this step you should be able to determine if your application is vulnerable by design or if it implements any of the DNS forgery mitigation techniques mentioned above.&amp;nbsp;</p>
+  <p>If you have access to the DNS application's source code or design specifications, at the end of this step you should be able to determine if your application is vulnerable by design or if it implements any of the DNS forgery mitigation techniques mentioned above.&nbsp;</p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you know what DNS poisoning attacks look like and how to protect against them, you must test for both secure and insecure implementations.</p>
   <h2>Testing a DNS server against DNS cache poisoning</h2>
@@ -76,9 +76,9 @@
     <li>Set up a web client (browser) to uses the target DNS server.</li>
     <li>Set up an adverse/attacker controlled DNS server (it will send specially crafted responses - see step 6).</li>
     <li>Set up an adverse/attacker controlled web server. </li>
-    <li>Set up a trigger that starts a DNS lookup query from within the target DNS server to the adverse DNS sever.&amp;nbsp; </li>
-    <li>Use the adverse DNS server to reply to the query with extra information in the DNS packets. Set the Answers, Authoritative nameservers, and Additional records fields of the DNS packets to direct all futures requests to a .com&amp;nbsp;domain to resolve to the IP address of the adversary web server (from step 4).&amp;nbsp; </li>
-    <li>Open the web browser from step 2 and navigate to any .com domain.&amp;nbsp;</li>
+    <li>Set up a trigger that starts a DNS lookup query from within the target DNS server to the adverse DNS sever.&nbsp; </li>
+    <li>Use the adverse DNS server to reply to the query with extra information in the DNS packets. Set the Answers, Authoritative nameservers, and Additional records fields of the DNS packets to direct all futures requests to a .com&nbsp;domain to resolve to the IP address of the adversary web server (from step 4).&nbsp; </li>
+    <li>Open the web browser from step 2 and navigate to any .com domain.&nbsp;</li>
   </ol>
   <p>Expected Result: If the test fails, the web browser displays the content from the adversary's web server for any .com domain entered in the web browser. If the intended website loads, rather than the adversary's content, then this test has passed.</p>
   <h2>Testing a DNS server against DNS Forgery</h2>
@@ -92,12 +92,12 @@
     <li>Send a response to the client with a valid request ID but mapping all .com domains to the IP address of the adverse web server (from step 4).</li>
     <li>Open the web browser from step 2 and navigate to any .com domain.</li>
   </ol>
-  <p>Expected Result: If the test fails, the web browser displays the content from the adversary's web server for any .com domain entered in the web browser. If the intended website loads, rather than the adversary's content, then this test has passed.&amp;nbsp;&amp;nbsp;</p>
+  <p>Expected Result: If the test fails, the web browser displays the content from the adversary's web server for any .com domain entered in the web browser. If the intended website loads, rather than the adversary's content, then this test has passed.&nbsp;&nbsp;</p>
   <h1>Step 4: Tune Test Cases</h1>
   <p>Now that you're done with the basic DNS poisoning tests, let's look at some example attacker controlled DNS responses. </p>
   <p>The following response redirects the victim domain name server (<i>ns.example.com</i>) to the attacker's IP (<i>w.x.y.z</i>):</p>
   <p>
-    <font face="'Courier New'">Answer:<br />(no response)<br />Authority section:<br />example.com. 3600 IN NS ns.bankingsite.com.<br />Additional section:<br />ns.teammentorexample.com. IN A w.x.y.z&amp;nbsp;</font>
+    <font face="'Courier New'">Answer:<br />(no response)<br />Authority section:<br />example.com. 3600 IN NS ns.bankingsite.com.<br />Additional section:<br />ns.teammentorexample.com. IN A w.x.y.z&nbsp;</font>
   </p>
   <p>The following response redirects the Name Server records for the victim site (<i>banking.com</i>) to another target domain (<i>ns.example.com</i>):</p>
   <p>
@@ -109,11 +109,11 @@
   </p>
   <p>These are only a select few variations of DNS cache poisoning attacks. There are different kinds of DNS attack techniques surfacing the Internet on a regular basis. Make sure to keep up to date with the latest testing and prevention methods.</p>
   <h1>Conclusions</h1>
-  <p>DNS Poisoning is a serious issue that can have a devastating effect. If you are in charge of deploying and administering DNS servers, then you must make sure that they are not vulnerable to this class of attack. This article describes the two most common DNS poisoning scenarios, what causes them, and how to prevent them. The last two steps guide you in testing for DNS poisoning vulnerabilities present in your current implementation.&amp;nbsp;</p>
+  <p>DNS Poisoning is a serious issue that can have a devastating effect. If you are in charge of deploying and administering DNS servers, then you must make sure that they are not vulnerable to this class of attack. This article describes the two most common DNS poisoning scenarios, what causes them, and how to prevent them. The last two steps guide you in testing for DNS poisoning vulnerabilities present in your current implementation.&nbsp;</p>
   <h1>Additional Resources</h1>
   <p>
     <ul>
-      <li>For more information about DNS Cache Poisoning vulnerabilities, see&amp;nbsp;<a href="http://en.wikipedia.org/wiki/DNS_cache_poisoning">http://en.wikipedia.org/wiki/DNS_cache_poisoning</a></li>
+      <li>For more information about DNS Cache Poisoning vulnerabilities, see&nbsp;<a href="http://en.wikipedia.org/wiki/DNS_cache_poisoning">http://en.wikipedia.org/wiki/DNS_cache_poisoning</a></li>
     </ul>
   </p>
   <div>

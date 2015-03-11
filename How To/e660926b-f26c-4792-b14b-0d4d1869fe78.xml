@@ -283,7 +283,7 @@ Runtime.exec
       and avoid executing them unless the parameters have been properly validated and sanitized.     There are two possible ways to validate these parameters: using black lists or using white lists.     
   </p>
   <p>
-     Black lists check for malicious patterns before allowing execution.    In case of command injection, a black list might contain command delimiters such as a semicolon (;)vertical dash (|), double dash (||), double amp (&amp;&amp;) as well as dangerous commands such as  
+     Black lists check for malicious patterns before allowing execution.    In case of command injection, a black list might contain command delimiters such as a semicolon (;)vertical dash (|), double dash (||), double amp (&&) as well as dangerous commands such as  
      rm, cp, cat, ls, at, net, netstat, del, copy 
      , etc.    However, a major drawback impedes this countermeasure from being effective; unless the black list covers absolutely all dangerous possibilities, the adversary can find a variation outside of the black list to carry an attack.         
   </p>
@@ -306,8 +306,8 @@ Runtime.exec
   <p>
      First, you need to find all the places where your application invokes a system command to perform and operation.    Then on each of these places, start exploring how the application handles the basic characters needed for command injection.      The following two strings are good to try as they contain both commands and command injection characters:  
   </p>
-  <pre>Windows: abc;dir C:|xyz&amp;netstat
-Unix: abc;ls|cp&amp;rm</pre>
+  <pre>Windows: abc;dir C:|xyz&netstat
+Unix: abc;ls|cp&rm</pre>
   <p>
      If the application doesn’t give an error message because of the special characters then there is a chance that it suffers from a command injection bug. 
   </p>

@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that all input passed to the database is validated.</p>
   <h1>Why</h1>
-  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&amp;nbsp;that would allow an attacker to gain unauthorized access to sensitive data.</p>
+  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&nbsp;that would allow an attacker to gain unauthorized access to sensitive data.</p>
   <h1>How to Check</h1>
   <p>Use the following steps to check if all input passed to database is validated:</p>
   <ol>
@@ -33,13 +33,13 @@
       </ul>
       <li>
         <p>
-          <strong>Trace data from source to sink. </strong>Trace each source of input from the immediate source, through your application and&amp;nbsp;to the backend database.</p>
+          <strong>Trace data from source to sink. </strong>Trace each source of input from the immediate source, through your application and&nbsp;to the backend database.</p>
         <li>
           <p>
             <strong>Identify validation routines. </strong>Each input source should have a validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If any input source does not have a validation routine associated with it, flag it for fixing.</p>
           <li>
             <p>
-              <strong>Ensure quality of validators. </strong>Validation routines should check for length, range, format and type.&amp;nbsp;The validator&amp;nbsp;should first check for good data&amp;nbsp;via whitelisting and then for known malicious data&amp;nbsp;via blacklisting. Do not rely on client-side validation alone as it can be bypassed easily.</p>
+              <strong>Ensure quality of validators. </strong>Validation routines should check for length, range, format and type.&nbsp;The validator&nbsp;should first check for good data&nbsp;via whitelisting and then for known malicious data&nbsp;via blacklisting. Do not rely on client-side validation alone as it can be bypassed easily.</p>
             <li>
               <p>
                 <strong>Ensure that parameterized queries are used. </strong>Verify that all database transactions are handled using <em>PreparedStatement</em> objects.</p>
@@ -57,10 +57,10 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input; therefore, an attacker can access the backend database on behalf of the application through the use of SQL injection. </p>
-  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&amp;#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application fails to validate the user-supplied<br />     // query before submitting it to the database server<br />     retData = queryDB(query);<br /><br />     ...<br /><br />     out.flush();<br />     out.close();<br />&amp;#125;</pre>
+  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application fails to validate the user-supplied<br />     // query before submitting it to the database server<br />     retData = queryDB(query);<br /><br />     ...<br /><br />     out.flush();<br />     out.close();<br />&#125;</pre>
   <h1>Solution Example</h1>
   <p>The following code allows the user to query a database. Because the application validates the user's input, it is much more difficult for an attacker to access the backend database through a SQL injection attack.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&amp;#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application validates the user-supplied query<br />     // before submitting it to the database server<br />     if (validateQuery(query))<br />     &amp;#123;<br />          retData = queryDB(query);<br /><br />          ...<br /><br />     &amp;#125;<br /><br />     out.flush();<br />     out.close();<br />&amp;#125;<br /><br /><br />public boolean validateQuery(String input)&amp;#123;<br /><br />      // The input can be only of numeric characters<br />      String goodPattern = "&amp;#91;0-9&amp;#93;&amp;#43;&amp;#43;";<br /><br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br /><br />      if(&amp;#33;m.matches())<br />      &amp;#123;<br />            return false;<br />      &amp;#125;<br /><br />      return true;<br />&amp;#125;</pre>
+  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application validates the user-supplied query<br />     // before submitting it to the database server<br />     if (validateQuery(query))<br />     &#123;<br />          retData = queryDB(query);<br /><br />          ...<br /><br />     &#125;<br /><br />     out.flush();<br />     out.close();<br />&#125;<br /><br /><br />public boolean validateQuery(String input)&#123;<br /><br />      // The input can be only of numeric characters<br />      String goodPattern = "&#91;0-9&#93;&#43;&#43;";<br /><br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br /><br />      if(&#33;m.matches())<br />      &#123;<br />            return false;<br />      &#125;<br /><br />      return true;<br />&#125;</pre>
   <h1>Additional Resources</h1>
   <ul>
     <li>A tutorial on regular expressions is available at: <a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>. <li>For more information on using regular expression in Java, see: <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Class Pattern</a> in Java SDK. </li></li>

@@ -19,7 +19,7 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
-  <p>C&amp;#43;&amp;#43;</p>
+  <p>C&#43;&#43;</p>
   <h1>What to Check For</h1>
   <p>Verify that debug assertions are not used for error handling.</p>
   <h1>Why</h1>
@@ -30,10 +30,10 @@
   <p>Identify code that uses the "assert" operator. Rewrite code to implement functional error handling without using the debug assertion.</p>
   <h1>Problem Example</h1>
   <p>In the following example, the read API is called and then the return value is checked for errors in an assertion. </p>
-  <pre>bool ReadFromSocket(SOCKET socket, char &amp;#42;recvBuffer, int len)<br />&amp;#123;<br />&amp;nbsp; //first read from the socket<br />&amp;nbsp; int ret = read(socket, recvBuffer, len, 0);<br />&amp;nbsp; assert(ret &gt;= 0)<br />&amp;nbsp; return parseBuffer(recvBuffer, len);<br />&amp;#125;</pre>
+  <pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />&nbsp; //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br />&nbsp; assert(ret &gt;= 0)<br />&nbsp; return parseBuffer(recvBuffer, len);<br />&#125;</pre>
   <h1>Solution Example</h1>
   <p>In the following example, the read API is called and then the return value is checked for errors. </p>
-  <pre>bool ReadFromSocket(SOCKET socket, char &amp;#42;recvBuffer, int len)<br />&amp;#123;<br />&amp;nbsp; //first read from the socket<br />&amp;nbsp; int ret = read(socket, recvBuffer, len, 0);<br />&amp;nbsp; if (ret &gt;= 0)<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //now parse the buffer<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return parseBuffer(recvBuffer, len);<br />&amp;nbsp; &amp;#125;<br />&amp;nbsp; else<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //can call WSAGetLastError if we need error details<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return false;<br />&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
+  <pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />&nbsp; //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br />&nbsp; if (ret &gt;= 0)<br />&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //now parse the buffer<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return parseBuffer(recvBuffer, len);<br />&nbsp; &#125;<br />&nbsp; else<br />&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //can call WSAGetLastError if we need error details<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return false;<br />&nbsp; &#125;<br />&#125;</pre>
   <h1>Related Items</h1>
   <ul>
     <li>

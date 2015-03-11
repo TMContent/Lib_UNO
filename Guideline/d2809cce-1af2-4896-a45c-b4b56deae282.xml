@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Applications written using Servlets or JSP&amp;nbsp;that interact with a database.</li>
+    <li>Applications written using Servlets or JSP&nbsp;that interact with a database.</li>
   </ul>
   <h1>What to Do</h1>
   <p>Use Prepared Statements to execute SQL statements. Do not generate SQL statements directly from user input.</p>
@@ -42,7 +42,7 @@
   <p>Just using stored procedures isn't a complete remedy for SQL injection. The important thing to do is use parameters with stored procedures, or else your stored procedures can be susceptible to SQL injection if they use unfiltered input. Stored procedures provide several security advantages: </p>
   <ul>
     <li>By parameterizing input parameters and type-enforcing them, user input is effectively filtered. </li>
-    <li>Stored procedures are allowed by most databases&amp;nbsp;to execute under different security privileges than&amp;nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
+    <li>Stored procedures are allowed by most databases&nbsp;to execute under different security privileges than&nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
   </ul>
   <p>To use type-safe SQL parameters, follow these steps:</p>
   <ol>
@@ -61,7 +61,7 @@
     </li>
     <li>
       <p>
-        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&amp;nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
+        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
       <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("select login_attempts from myappUsers"<br />                     + " where user = ? and pass = ?;");<br />st.setString(1, user);<br />st.setString(2, new String(passDigest));<br />ResultSet rs = st.executeQuery();</pre>
     </li>
   </ol>

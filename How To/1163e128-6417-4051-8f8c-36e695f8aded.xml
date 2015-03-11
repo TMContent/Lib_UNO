@@ -57,7 +57,7 @@
   </p>
   <p>The client sends this URL to the server application:</p>
   <p>
-    <font face="'Courier New'">http://www.examplesite.com/GetProfile.php?username=JohnyC&amp;password=qwerty &amp;email=JohnyC@examplesite.com</font>
+    <font face="'Courier New'">http://www.examplesite.com/GetProfile.php?username=JohnyC&password=qwerty &email=JohnyC@examplesite.com</font>
   </p>
   <p>Once the server receives the URL it creates a user XML element node:
     
@@ -141,7 +141,7 @@ msgbox h.responseText,,"Output SOAP Message"</pre>
      A bank site exposes a simple web page to create checking accounts.    It takes data from a web form like the one above and builds a URL like this one: 
   </p>
   <p>
-    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&amp;password=qwerty&amp;email=JohnyC@examplesite.com</font>
+    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&password=qwerty&email=JohnyC@examplesite.com</font>
   </p>
   <p>
      The bank uses the data in the URL to construct the following XML in its data store: 
@@ -153,7 +153,7 @@ msgbox h.responseText,,"Output SOAP Message"</pre>
      The bank doesn’t provide a web interface to create saving accounts.   In order to open a saving account, clients need to go to the bank and provide additional information. The bank exposes a security vulnerability that allows the attacker to feed malicious data in the web form.   The attacker submits the following URL request: 
   </p>
   <p>
-    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&amp;password=qwerty&amp;email=JohnyC@examplesite.com&lt;/mail&gt;&lt;account type="savings"&gt;&lt;created&gt;03-02-2008&lt;/created&gt;&lt;number&gt;12345678&lt;/number&gt;&lt;balance&gt;1000000&lt;/balance&gt;&lt;/account&gt;</font>
+    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&password=qwerty&email=JohnyC@examplesite.com&lt;/mail&gt;&lt;account type="savings"&gt;&lt;created&gt;03-02-2008&lt;/created&gt;&lt;number&gt;12345678&lt;/number&gt;&lt;balance&gt;1000000&lt;/balance&gt;&lt;/account&gt;</font>
   </p>
   <p>When the bank receives this request it doesn't check for extra tags and builds the following element in its data store:</p>
   <p>
@@ -632,17 +632,17 @@ next</pre>
   </p>
   <p>XML uses the ampersand character to refer to another entity in its user-defined XML schema. For example, if the user passes the following string as the username, it will result in the corresponding XML:</p>
   <p>
-    <font face="'Courier New'">&amp;xyz</font>
+    <font face="'Courier New'">&xyz</font>
   </p>
   <p>
      Results in: 
   </p>
   <p>
-    <font face="'Courier New'">&lt;user&gt;<br />   &lt;username&gt;&amp;xyz&lt;/username&gt;<br />   &lt;password&gt;qwerty&lt;/password&gt; <br />   &lt;userid&gt;111&lt;userid/&gt;<br />   &lt;mail&gt;JohnyC@examplesite.com&lt;/mail&gt;<br />&lt;/user&gt;</font>
+    <font face="'Courier New'">&lt;user&gt;<br />   &lt;username&gt;&xyz&lt;/username&gt;<br />   &lt;password&gt;qwerty&lt;/password&gt; <br />   &lt;userid&gt;111&lt;userid/&gt;<br />   &lt;mail&gt;JohnyC@examplesite.com&lt;/mail&gt;<br />&lt;/user&gt;</font>
   </p>
   <p>
      This will attempt to refer to the  
-     &amp;xyz 
+     &xyz 
       entity of the XML document.   If the document doesn’t contain this entity, then the newly built tag above will result in an invalid XML document.  </p>
   <h2>
      
@@ -767,11 +767,11 @@ next</pre>
      ).   Using this encoding scheme the URL seen below will be translated from: 
   </p>
   <p>
-    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&amp;password=qwerty&amp;email=JohnyC@examplesite.com&lt;/mail&gt;&lt;account type="savings"&gt;&lt;created&gt;03-02-2008&lt;/created&gt;&lt;number&gt;12345678&lt;/number&gt;&lt;balance&gt;1000000&lt;/balance&gt;&lt;/account&gt;</font>
+    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&password=qwerty&email=JohnyC@examplesite.com&lt;/mail&gt;&lt;account type="savings"&gt;&lt;created&gt;03-02-2008&lt;/created&gt;&lt;number&gt;12345678&lt;/number&gt;&lt;balance&gt;1000000&lt;/balance&gt;&lt;/account&gt;</font>
   </p>
   <p>to: </p>
   <p>
-    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&amp;password=qwerty&amp;email=JohnyC%40examplesite.com%3c%2fmail%3e%3caccount%20type%3d%22savings%22%3e%3ccreated%3e03-02-2008%3c%2fcreated%3e%3cnumber%3e12345678%3c %2fnumber%3e%3cbalance%3e1000000%3c%2fbalance%3e%3c%2faccount%3e</font>
+    <font face="'Courier New'">http://www.examplesite.com/CreateChecking.php?username=JohnyC&password=qwerty&email=JohnyC%40examplesite.com%3c%2fmail%3e%3caccount%20type%3d%22savings%22%3e%3ccreated%3e03-02-2008%3c%2fcreated%3e%3cnumber%3e12345678%3c %2fnumber%3e%3cbalance%3e1000000%3c%2fbalance%3e%3c%2faccount%3e</font>
   </p>
   <p>
      This is because the below characters translate to their hex encoding like this:  </p>

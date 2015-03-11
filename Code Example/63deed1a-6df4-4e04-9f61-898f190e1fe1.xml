@@ -32,7 +32,7 @@
     <li>
       <p>
         <strong>Call <em>saveToken</em>().</strong> In the action class/method that handles the setup for your form display (ex. <em>EditBookAction</em>), you need to call <em>saveToken</em>().</p>
-      <pre>public ActionForward execute(ActionMapping mapping,<br />ActionForm form, HttpServletRequest request, HttpServletResponse response)<br />throws Exception &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; saveToken(request);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ....<br />&amp;#125;</pre>
+      <pre>public ActionForward execute(ActionMapping mapping,<br />ActionForm form, HttpServletRequest request, HttpServletResponse response)<br />throws Exception &#123;<br />&nbsp;&nbsp;&nbsp; saveToken(request);<br />&nbsp;&nbsp;&nbsp; ....<br />&#125;</pre>
       <li>
         <p>
           <strong>Use <em>html:form</em> to create your form on your JSP (ex. <em>editBook.jsp</em>).</strong>
@@ -41,7 +41,7 @@
         <li>
           <p>
             <strong>Check <em>isTokenValid</em>() and call <em>resetToken</em>().</strong> In the action class/method that handles the saving of your form (ex. <em>SaveBookAction</em>), you need to call <em>isTokenValid</em>(). If the token is valid, then you need to call <em>resetToken</em>().</p>
-          <pre>public ActionForward execute(ActionMapping mapping,<br />ActionForm form, HttpServletRequest request, HttpServletResponse response)<br />throws Exception &amp;#123;<br />...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if ( &amp;#33;isTokenValid(request) ) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return mapping.findForward(Constants.INVALID_TOKEN);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125; else &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;//normal business logic<br />&amp;nbsp;...<br />&amp;nbsp;resetToken(request);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />...</pre>
+          <pre>public ActionForward execute(ActionMapping mapping,<br />ActionForm form, HttpServletRequest request, HttpServletResponse response)<br />throws Exception &#123;<br />...<br />&nbsp;&nbsp;&nbsp; if ( &#33;isTokenValid(request) ) &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return mapping.findForward(Constants.INVALID_TOKEN);<br />&nbsp;&nbsp;&nbsp; &#125; else &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...<br />&nbsp;&nbsp;//normal business logic<br />&nbsp;...<br />&nbsp;resetToken(request);<br />&nbsp;&nbsp;&nbsp; &#125;<br />...</pre>
         </li>
       </li>
     </li>
