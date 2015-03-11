@@ -19,15 +19,15 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Check to ensure that the dispose methods are synchronized when&amp;nbsp;developing non-synchronized <b>Dispose</b> implementations in your application.</p>
+  <p>Check to ensure that the dispose methods are synchronized when&nbsp;developing non-synchronized <b>Dispose</b> implementations in your application.</p>
   <p />
   <h1>How to Fix</h1>
   <p>If you develop non-synchronized <b>Dispose</b> implementations, the <b>Dispose</b> code could be called more than once on separate threads. The following code shows an example of this.</p>
   <div>
-    <pre>void Dispose()&amp;#123;<br />  if (null &amp;#33;= theObject)<br />  &amp;#123;<br />    ReleaseResources(theObject);<br />    theObject = null;<br />  &amp;#125;<br />&amp;#125;</pre>
+    <pre>void Dispose()&#123;<br />  if (null &#33;= theObject)<br />  &#123;<br />    ReleaseResources(theObject);<br />    theObject = null;<br />  &#125;<br />&#125;</pre>
   </div>
   <p>In this example, it is possible for two threads to execute the code before the first thread has set <b>theObject</b> reference to <b>null</b>. Depending on the functionality provided by the <b>ReleaseResources</b> method, security vulnerabilities could occur.</p>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -20,16 +20,16 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
-    <li>Software applications and services&amp;nbsp;</li>
+    <li>Software applications and services&nbsp;</li>
   </ul>
   <h1>Summary</h1>
-  <p>A software application must protect the confidentiality and integrity of its assets and the continuity of its service. In Denial-of-service (DoS) attacks, the attacker forces an application or the application’s environment into a state in which the application stops serving legitimate users.&amp;nbsp; Although DoS attacks were first launched on networks, they have since expanded to application-level attacks. This article focuses on testing for application-level DoS vulnerabilities.</p>
+  <p>A software application must protect the confidentiality and integrity of its assets and the continuity of its service. In Denial-of-service (DoS) attacks, the attacker forces an application or the application’s environment into a state in which the application stops serving legitimate users.&nbsp; Although DoS attacks were first launched on networks, they have since expanded to application-level attacks. This article focuses on testing for application-level DoS vulnerabilities.</p>
   <p>Follow these steps to test for DoS vulnerabilities:</p>
   <ul>
     <li>Step 1: Understand attack scenarios </li>
     <li>Step 2: Analyze causes and countermeasures </li>
     <li>Step 3: Start testing and exploring </li>
-    <li>Step 4: Execute additional testing<b>&amp;nbsp;</b></li>
+    <li>Step 4: Execute additional testing<b>&nbsp;</b></li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>The first step in testing for DoS vulnerabilities is to understand the common attack scenarios:</p>
@@ -41,7 +41,7 @@
   <h2>
     Scenario 1: Crashing the Application
   </h2>
-  <p>Application crashes result in DoS situations, since the application becomes unusable for a period of time. An attacker can force a buffer overflow, integer overflow, division by zero, or other exception to see if the application properly handles the error. When an application doesn’t handle these errors, its process generates a second-chance exception (an exception that is triggered right before the program terminates). The second-chance exception is handled by the structured/default exception handler (SEH), which in turn usually kills the process, resulting in all application users being temporarily unable to use the application.&amp;nbsp;</p>
+  <p>Application crashes result in DoS situations, since the application becomes unusable for a period of time. An attacker can force a buffer overflow, integer overflow, division by zero, or other exception to see if the application properly handles the error. When an application doesn’t handle these errors, its process generates a second-chance exception (an exception that is triggered right before the program terminates). The second-chance exception is handled by the structured/default exception handler (SEH), which in turn usually kills the process, resulting in all application users being temporarily unable to use the application.&nbsp;</p>
   <h2>
     Scenario 2: Forcing the Application into an Incorrect State
   </h2>
@@ -60,15 +60,15 @@
   <h2>
     Application Crashes
   </h2>
-  <p>Application crashes occur due to unhandled second-chance exceptions caused by conditions such as buffer overflows, integer overflows, divisions by zero, referencing an invalid handle, and so on. To protect against application crashes and their exploitation by DoS attacks, developers must understand the conditions described above, properly handle user input, validate integer values, allocate memory carefully, and use structured exception handling.&amp;nbsp;</p>
+  <p>Application crashes occur due to unhandled second-chance exceptions caused by conditions such as buffer overflows, integer overflows, divisions by zero, referencing an invalid handle, and so on. To protect against application crashes and their exploitation by DoS attacks, developers must understand the conditions described above, properly handle user input, validate integer values, allocate memory carefully, and use structured exception handling.&nbsp;</p>
   <h2>
     Incorrect State
   </h2>
   <p>An infinite loop may cause an application to go into a DoS condition. This variation occurs when the attacker controls the index of a loop, creating a condition in which the execution control of the application doesn’t exit from the loop. Consider the following code posted by OWASP:</p>
   <p>
-    <font face="'Courier New'">public class MyServlet extends ActionServlet {<br />&amp;nbsp; public void doPost(HttpServletRequest request,<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;HttpServletResponse response)<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;throws ServletException, IOException {<br />&amp;nbsp; &amp;nbsp; . . .&amp;nbsp;<br />&amp;nbsp; &amp;nbsp; String [] values = request.getParameterValues("CheckboxField");<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;<br />&amp;nbsp; &amp;nbsp; // Process the data without length check for reasonable range&amp;nbsp;<br />&amp;nbsp; &amp;nbsp; for ( int i=0; i&lt; values.length; i++) {&amp;nbsp;&amp;nbsp; // wrong<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; // lots of logic to process the request<br />&amp;nbsp; &amp;nbsp; }<br />&amp;nbsp; &amp;nbsp; . . .&amp;nbsp;<br />&amp;nbsp; }<br />&amp;nbsp; . . .&amp;nbsp;<br />}&amp;nbsp;</font>
+    <font face="'Courier New'">public class MyServlet extends ActionServlet {<br />&nbsp; public void doPost(HttpServletRequest request,<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;HttpServletResponse response)<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;throws ServletException, IOException {<br />&nbsp; &nbsp; . . .&nbsp;<br />&nbsp; &nbsp; String [] values = request.getParameterValues("CheckboxField");<br />&nbsp; &nbsp; &nbsp; &nbsp;<br />&nbsp; &nbsp; // Process the data without length check for reasonable range&nbsp;<br />&nbsp; &nbsp; for ( int i=0; i&lt; values.length; i++) {&nbsp;&nbsp; // wrong<br />&nbsp; &nbsp; &nbsp; // lots of logic to process the request<br />&nbsp; &nbsp; }<br />&nbsp; &nbsp; . . .&nbsp;<br />&nbsp; }<br />&nbsp; . . .&nbsp;<br />}&nbsp;</font>
   </p>
-  <p>An attacker can pass a large number of values of the <i>CheckboxField</i> control to force the server to execute functionality with higher CPU and memory demands. This can easily result in a DoS condition on the application server. To protect against this DoS variation, developers must check any client-supplied loop counter against a reasonable range. &amp;nbsp;</p>
+  <p>An attacker can pass a large number of values of the <i>CheckboxField</i> control to force the server to execute functionality with higher CPU and memory demands. This can easily result in a DoS condition on the application server. To protect against this DoS variation, developers must check any client-supplied loop counter against a reasonable range. &nbsp;</p>
   <p>Additional DoS conditions that occur through other bugs, such as SQL injection or cross-site scripting, must be defended against based on the specific vulnerability. For instance, developers can protect against SQL injection by using white lists, stored procedures, and parameterized queries; developers can protect against cross-site scripting by encoding all user-supplied script tags before sending them to an Internet client.</p>
   <h2>
     Unstable Environment
@@ -79,7 +79,7 @@
   </p>
   <p>The second instruction uses a client-controlled variable to allocate an array. An attacker who passes a large value in the <i>sz </i>parameter of the URL can force the application to allocate an extremely large memory block, putting the application in a DoS condition. To defend against unsafe memory allocations, it is necessary to allocate all arrays internally or, where arrays need to be dynamically allocated, to check if the client input is within the boundaries of a safe memory allocation. </p>
   <p>Memory leaks occur because an application allocates a resource and doesn’t release it properly when it is done using it. Leaks are common when allocating and de-allocating objects in C/C++. Developers might use functions such as <i>new, malloc, or HeapAlloc </i>to allocate a memory object, but fail to invoke <i>delete, free,</i> or <i>HeapFree</i> to release the object from memory. An attacker who finds this error can force the application into multiple allocations in order to consume memory and create an unstable system. Another example occurs in web applications using database connections. Each database connection needs memory, and if not closed properly can lead to a memory leak. Developers must make sure to close all database connections and release any other objects from memory as soon as they are done with them.</p>
-  <p>To protect against transaction floods, developers must use thresholds to limit the number of transactions originating from a specific client. To achieve this, some sort of client authentication is required. For instance, an application might use the client’s IP address to identify a unique client. However, a client can execute an IP spoofing attack to make it seem as though the transactions are coming from different clients. Applications vulnerable to transaction floods should implement thresholds with a more secure authentication scheme such as SSL/TLS or IPSec.&amp;nbsp;</p>
+  <p>To protect against transaction floods, developers must use thresholds to limit the number of transactions originating from a specific client. To achieve this, some sort of client authentication is required. For instance, an application might use the client’s IP address to identify a unique client. However, a client can execute an IP spoofing attack to make it seem as though the transactions are coming from different clients. Applications vulnerable to transaction floods should implement thresholds with a more secure authentication scheme such as SSL/TLS or IPSec.&nbsp;</p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you are familiar with the different DoS attack scenarios as well with what causes them and how to defend against them, you must continue testing for them in your application.</p>
   <h2>
@@ -93,17 +93,17 @@
   <h2>
     Test for Application Crashes: Divisions by Zero/Invalid Handles
   </h2>
-  <p>Application crashes caused by division by zero or by referencing invalid handles occur when the application receives incorrectly formatted input. To test against this kind of crash, it is important to understand the underlying format of input data. For instance, to attempt forcing division by zero, try modifying integer variables to zero or deleting elements from an array or parameter list. If the application uses files or network packets as input, understand any tags and offsets that divide the input data. Then, overwrite offsets with zero values as well as escape and special characters to try to force the application into divisions by zero and into illegal access operations. Always attach a debugger to the application to catch any second-chance exceptions.&amp;nbsp;</p>
+  <p>Application crashes caused by division by zero or by referencing invalid handles occur when the application receives incorrectly formatted input. To test against this kind of crash, it is important to understand the underlying format of input data. For instance, to attempt forcing division by zero, try modifying integer variables to zero or deleting elements from an array or parameter list. If the application uses files or network packets as input, understand any tags and offsets that divide the input data. Then, overwrite offsets with zero values as well as escape and special characters to try to force the application into divisions by zero and into illegal access operations. Always attach a debugger to the application to catch any second-chance exceptions.&nbsp;</p>
   <h2>
     Test for Incorrect State: Infinite Loops
   </h2>
   <p>To test for infinite loops, you must look for any place where the application uses a client-supplied value as a loop counter. Try inserting items into lists of parameters used by the application by looking for name/value pairs, which may indicate a parameter list. For instance, the following URL has a list of similarly named parameters that the application might parse inside a <i>while </i>loop:</p>
   <p>
-    <font face="'Courier New'">http://example.com/processData.php?input1=a&amp;input2=bc&amp;input3=xz</font>
+    <font face="'Courier New'">http://example.com/processData.php?input1=a&input2=bc&input3=xz</font>
   </p>
   <p>Try modifying the URL by injecting an exceedingly large number of name/value pairs:</p>
   <p>
-    <font face="'Courier New'">http://example.com/processData.php?input1=a&amp;input2=bc&amp;input3=xz&amp;input4=abc&amp;input5=abc&amp;input6=abc&amp;input7=abc&amp;input8=abc&amp;input9=abc&amp;input10=abc&amp;input11=abc&amp;input12=abc&amp;input15=abc&amp;input16=abc ...&amp;input9999998=abc&amp;input9999999=abc</font>
+    <font face="'Courier New'">http://example.com/processData.php?input1=a&input2=bc&input3=xz&input4=abc&input5=abc&input6=abc&input7=abc&input8=abc&input9=abc&input10=abc&input11=abc&input12=abc&input15=abc&input16=abc ...&input9999998=abc&input9999999=abc</font>
   </p>
   <p>To check if the attack has succeeded, try to use the application from a second host (different than the attacker) and measure its response time.</p>
   <h2>
@@ -150,8 +150,8 @@
   <p>
   </p>
   <ul>
-    <li>For information about testing for user input as a loop counter, see&amp;nbsp;<a href="http://www.owasp.org/index.php/DoS_Testing:_User_Input_as_a_Loop_Counter">http://www.owasp.org/index.php/DoS_Testing:_User_Input_as_a_Loop_Counter</a></li>
-    <li>For information about testing for denial of service, see&amp;nbsp;<a href="http://www.owasp.org/index.php/Testing_for_Denial_of_Service">http://www.owasp.org/index.php/Testing_for_Denial_of_Service</a></li>
+    <li>For information about testing for user input as a loop counter, see&nbsp;<a href="http://www.owasp.org/index.php/DoS_Testing:_User_Input_as_a_Loop_Counter">http://www.owasp.org/index.php/DoS_Testing:_User_Input_as_a_Loop_Counter</a></li>
+    <li>For information about testing for denial of service, see&nbsp;<a href="http://www.owasp.org/index.php/Testing_for_Denial_of_Service">http://www.owasp.org/index.php/Testing_for_Denial_of_Service</a></li>
   </ul>
   <p />
   <div>

@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Check that filenames and path input are carefully validated. Verify that whitelist techniques are used when validating input.</p>
   <h1>Why</h1>
-  <p>Filenames and paths interact directly with the underlying filesystem. Allowing malicious users to manipulate file system operations either&amp;nbsp;directly or indirectly through their input can expose important sensitive system files. Canonicalization vulnerabilities can result in an attacker gaining access to unexpected resources.</p>
+  <p>Filenames and paths interact directly with the underlying filesystem. Allowing malicious users to manipulate file system operations either&nbsp;directly or indirectly through their input can expose important sensitive system files. Canonicalization vulnerabilities can result in an attacker gaining access to unexpected resources.</p>
   <h1>How to Check</h1>
   <p>An application can take input via various ways such as a web interface, database, file system or other software running on the server. Use the following steps to establish a validation strategy:</p>
   <ol>
@@ -91,7 +91,7 @@
           <blockquote>
             <pre>d:\myapp\temp\file.dat</pre>
           </blockquote>
-          <p>Therefore, check file names by obtaining the full name of the file&amp;nbsp;by calling the <strong>java.io.File.getCanonicalPath()</strong> method. Whitelisting will allow only expected formats and encodings be used by the application, which is most likely the simplest form of the file name or path. Ensure that whitelisting is applied to the input, using a regular expression, custom validator or similar method, and that input that does not match the whitelist is discarded.</p>
+          <p>Therefore, check file names by obtaining the full name of the file&nbsp;by calling the <strong>java.io.File.getCanonicalPath()</strong> method. Whitelisting will allow only expected formats and encodings be used by the application, which is most likely the simplest form of the file name or path. Ensure that whitelisting is applied to the input, using a regular expression, custom validator or similar method, and that input that does not match the whitelist is discarded.</p>
         </li>
       </ol>
     </li>
@@ -104,7 +104,7 @@
           <p>Verify that all files are represented using a <strong>java.io.File</strong> object instead of a <strong>String</strong> object. Using the <strong>File</strong> object allows you to access the actual file and some useful and relevant information such as the file's size, parent, path, etc.</p>
         </li>
         <li>
-          <p>Check if your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems, <strong>FILE.DAT</strong> and <strong>file.dat</strong> represent&amp;nbsp;two different files. However, Windows has a case-insensitive filesystem; therefore, <strong>FILE.DAT</strong> and <strong>file.dat</strong> represent the same file. If your application's filesystem is case-insensitive, make sure that the <strong>CASE_INSENSITIVE</strong> flag is specified when using regular expressions to validate your file inputs.</p>
+          <p>Check if your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems, <strong>FILE.DAT</strong> and <strong>file.dat</strong> represent&nbsp;two different files. However, Windows has a case-insensitive filesystem; therefore, <strong>FILE.DAT</strong> and <strong>file.dat</strong> represent the same file. If your application's filesystem is case-insensitive, make sure that the <strong>CASE_INSENSITIVE</strong> flag is specified when using regular expressions to validate your file inputs.</p>
         </li>
         <li>
           <p>Verify the path delimiters that your application's filesystem uses and check if they are consistent throughout the code. For example, Windows uses '<strong>\</strong>' or '<strong>/</strong>' to distinguish directories inside a path while UNIX based systems use only '<strong>/</strong>' to accomplish the same task.</p>
@@ -155,11 +155,11 @@
         </li>
         <li>
           <p>
-            <strong>Verify the canonical path.</strong> The <em>File</em> object provides the file's path in&amp;nbsp;three different forms -- original, absolute and canonical. Always use the canonical path when using whitelisting to verify the file's path. </p>
+            <strong>Verify the canonical path.</strong> The <em>File</em> object provides the file's path in&nbsp;three different forms -- original, absolute and canonical. Always use the canonical path when using whitelisting to verify the file's path. </p>
           <p />For instance, the file <pre>d:\myapp\temp\..\temp\..\temp\file.dat</pre><p>would have the following paths:</p><pre>d:\myapp\temp\..\temp\..\temp\file.dat<br /> (Original via the <strong>File.getPath</strong> method)<br />d:\myapp\temp\..\temp\..\temp\file.dat<br /> (Absolute via the <strong>File.getAbsolutePath</strong> method)<br />D:\myapp\temp\file.dat<br /> (Canonical via the <strong>File.getCanonicalPath</strong> method)</pre></li>
         <li>
           <p>
-            <strong>Verify&amp;nbsp;that the filesystem is case-sensitive.</strong> Always be sure&amp;nbsp;that your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems, <em>FILE.DAT</em> and <em>file.dat</em> represent&amp;nbsp;two different files. However, Windows has a case-insensitive filesystem; therefore, <em>FILE.DAT</em> and <em>file.dat</em> represent the same file. If your application's filesystem is case-insensitive, make sure to specify the <em>CASE_INSENSITIVE</em> flag when using regular expressions to validate your file inputs. Example:</p>
+            <strong>Verify&nbsp;that the filesystem is case-sensitive.</strong> Always be sure&nbsp;that your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems, <em>FILE.DAT</em> and <em>file.dat</em> represent&nbsp;two different files. However, Windows has a case-insensitive filesystem; therefore, <em>FILE.DAT</em> and <em>file.dat</em> represent the same file. If your application's filesystem is case-insensitive, make sure to specify the <em>CASE_INSENSITIVE</em> flag when using regular expressions to validate your file inputs. Example:</p>
           <pre>String goodPattern = "d:(<a>\\\\|/)myapp(\\\\|/)temp(\\\\|/)(\\w|\\s|\\.|-|){1,20</a>}";<br />Pattern p = Pattern.compile(goodPattern, Pattern.CASE_INSENSITIVE);</pre>
         </li>
         <li>

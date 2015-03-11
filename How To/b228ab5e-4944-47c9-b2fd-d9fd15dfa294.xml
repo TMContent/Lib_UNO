@@ -76,7 +76,7 @@
   <h3>Step 1. Configure Forms Authentication</h3>
   <p>To configure forms authentication, set the &lt;<b>authentication</b>&gt; element's <b>mode</b> attribute to <b>"Forms" </b>and then configure your application's Web.config file as shown in the following example.</p>
   <div>
-    <pre>&lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;forms loginUrl="Login.aspx" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; protection="All" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="30" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="AppNameCookie" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; path="/FormsAuth" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="false" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; slidingExpiration="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultUrl="default.aspx"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieless="UseCookies"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enableCrossAppRedirects="false"/&gt;<br />&lt;/authentication&gt;  </pre>
+    <pre>&lt;authentication mode="Forms"&gt;<br />&nbsp;&nbsp;&nbsp; &lt;forms loginUrl="Login.aspx" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; protection="All" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout="30" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name="AppNameCookie" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path="/FormsAuth" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; requireSSL="false" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; slidingExpiration="true" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; defaultUrl="default.aspx"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cookieless="UseCookies"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enableCrossAppRedirects="false"/&gt;<br />&lt;/authentication&gt;  </pre>
   </div>
   <p>Where: </p>
   <ul>
@@ -85,14 +85,14 @@
   </ul>
   <p>Add the following &lt;<b>authorization</b>&gt; element after the &lt;<b>authentication</b>&gt; element. This permits only authenticated users to access the application. The previously established <b>loginUrl</b> attribute of the &lt;<b>authentication</b>&gt; element will redirect unauthenticated requests to the Login.aspx page.</p>
   <div>
-    <pre>&lt;authorization&gt;    &lt;deny users="?" /&gt;   &lt;allow users="&amp;#42;" /&gt;&lt;/authorization&gt;  </pre>
+    <pre>&lt;authorization&gt;    &lt;deny users="?" /&gt;   &lt;allow users="&#42;" /&gt;&lt;/authorization&gt;  </pre>
   </div>
   <h3>Step 2. Configure the ActiveDirectoryMembershipProvider</h3>
   <p>Configure the <b>ActiveDirectoryMembershipProvider</b> in your application's Web.config file as shown in the following example.</p>
   <div>
-    <pre>&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="ADConnectionString" <br />&amp;nbsp;&amp;nbsp; connectionString=<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; "<a href="ldap://domain.testing.com/CN=Users,DC=domain,DC=testing,DC=com">LDAP://domain.testing.com/CN=Users,DC=domain,DC=testing,DC=com</a>" /&gt;<br />&lt;/connectionStrings&gt;</pre>
+    <pre>&lt;connectionStrings&gt;<br />&nbsp; &lt;add name="ADConnectionString" <br />&nbsp;&nbsp; connectionString=<br />&nbsp;&nbsp;&nbsp; "<a href="ldap://domain.testing.com/CN=Users,DC=domain,DC=testing,DC=com">LDAP://domain.testing.com/CN=Users,DC=domain,DC=testing,DC=com</a>" /&gt;<br />&lt;/connectionStrings&gt;</pre>
   </div>
-  <pre>&lt;system.web&gt;<br />&amp;nbsp;...<br />&amp;nbsp;&lt;membership defaultProvider="MembershipADProvider"&gt;<br />&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="MembershipADProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.ActiveDirectoryMembershipProvider, System.Web, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="ADConnectionString" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionUsername="&lt;domainName&gt;\administrator" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionPassword="password"/&gt;<br />&amp;nbsp;&amp;nbsp; &lt;/providers&gt;<br />&amp;nbsp;&lt;/membership&gt;<br />&amp;nbsp;...<br />&lt;/system.web&gt;</pre>
+  <pre>&lt;system.web&gt;<br />&nbsp;...<br />&nbsp;&lt;membership defaultProvider="MembershipADProvider"&gt;<br />&nbsp; &lt;providers&gt;<br />&nbsp;&nbsp;&nbsp; &lt;add<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name="MembershipADProvider"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; type="System.Web.Security.ActiveDirectoryMembershipProvider, System.Web, <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionStringName="ADConnectionString" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionUsername="&lt;domainName&gt;\administrator" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionPassword="password"/&gt;<br />&nbsp;&nbsp; &lt;/providers&gt;<br />&nbsp;&lt;/membership&gt;<br />&nbsp;...<br />&lt;/system.web&gt;</pre>
   <p>The preceding code sample uses the &lt;<b>add</b>&gt; child element of the &lt;<b>providers</b>&gt; element to define a membership provider that uses the <b>ActiveDirectoryMembershipProvider</b>.</p>
   <p>The connection string to the Active Directory user store is in the following format:</p>
   <p>
@@ -105,9 +105,9 @@
   </ul>
   <p>For example, if your domain is called <b>domain.testing.com</b>, the connection string is <b>LDAP://domain.testing.com/CN=Users,DC=domain,DC=testing,DC=com</b>.</p>
   <p>Optionally, configure the credentials, using the <b>connectionUserName</b> and <b>connectionPassword</b> attributes, of an account capable of accessing Active Directory with the necessary permissions. If you do not specify account credentials, your application's process identity is used to access Active Directory, regardless of whether your application uses impersonation. Either the account specified in the Web.config file or your process account must have the appropriate permissions to access Active Directory.</p>
-  <p>Encrypt the connection strings element because it contains the network details. If you specify credentials in the <b>ActiveDirectoryMembershipProvider</b> configuration, encrypt the membership configuration element as well. You can use the Protected Configuration feature to encrypt the configuration section.&amp;nbsp; </p>
+  <p>Encrypt the connection strings element because it contains the network details. If you specify credentials in the <b>ActiveDirectoryMembershipProvider</b> configuration, encrypt the membership configuration element as well. You can use the Protected Configuration feature to encrypt the configuration section.&nbsp; </p>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Make sure to set the <b>defaultProvider</b> attribute value of the &lt;<b>membership</b>&gt; element to the name of your <b>ActiveDirectoryMembershipProvider </b>(called <b>MembershipADProvider</b> in this example). You need to do this to override the machine-level default defined in the &amp;#37;windir&amp;#37;\Microsoft.NET\Framework\&amp;#123;Version&amp;#125;\Config\machine.config.comments file. This defines the <b>defaultProvider</b> to be <b>AspNetSqlMembershipProvider</b>, which is a provider that uses the <b>SQLMembershipProvider</b> to write to a SQL Server Express database in the \app_data folder of your application.<b></b></blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;Make sure to set the <b>defaultProvider</b> attribute value of the &lt;<b>membership</b>&gt; element to the name of your <b>ActiveDirectoryMembershipProvider </b>(called <b>MembershipADProvider</b> in this example). You need to do this to override the machine-level default defined in the &#37;windir&#37;\Microsoft.NET\Framework\&#123;Version&#125;\Config\machine.config.comments file. This defines the <b>defaultProvider</b> to be <b>AspNetSqlMembershipProvider</b>, which is a provider that uses the <b>SQLMembershipProvider</b> to write to a SQL Server Express database in the \app_data folder of your application.<b></b></blockquote>
   <p>In addition to the above attributes, the <b>ActiveDirectoryMembershipProvider</b> has attributes that you can optionally overwrite. For more information, see <a href="http://msdn2.microsoft.com/en-us/library/ms998347.aspx#paght000022_activedirectorymembershipproviderconfig">ActiveDirectoryMembershipProvider Configuration Attributes</a> in this document.</p>
   <h3>Step 3. Create Users</h3>
   <p>You can create new users in the following ways: </p>
@@ -115,18 +115,18 @@
     <li>Use the Web Site Administration Tool, which provides a wizard-like interface for creating new users. To start this tool, click <b>ASP.NET Configuration</b> on the <b>Website</b> menu in the Microsoft Visual Studio development system. <li>Create an ASP.NET page that contains a <b>CreateUserWizard</b> control. This control uses the configured membership provider to encapsulate the logic of creating a new user. <li>Create an ASP.NET Web page that contains <b>TextBox</b> controls to obtain the user name and password (and, optionally, the user's e-mail address), and then use the <b>CreateUser</b> Membership API method to programmatically create the new user. </li></li></li>
   </ul>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;All of these techniques use the <b>Membership.CreateUser</b> method.<b></b></blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;All of these techniques use the <b>Membership.CreateUser</b> method.<b></b></blockquote>
   <p>The default configuration for the <b>ActiveDirectoryMembershipProvider</b> uses user principal names (UPNs) for name mapping, as shown below:</p>
   <div>
     <pre>attributeMapUsername="userPrincipalName"  </pre>
   </div>
   <p>Therefore all user names must have the following format:</p>
   <div>
-    <pre>UserName&amp;#64;DomainName  </pre>
+    <pre>UserName&#64;DomainName  </pre>
   </div>
   <p>If you call <b>Membership.CreateUser</b> programmatically, use this format:</p>
   <div>
-    <pre>Membership.CreateUser("UserName&amp;#64;DomainName", "P&amp;#64;ssw0rd", "userName&amp;#64;emailAddress");   </pre>
+    <pre>Membership.CreateUser("UserName&#64;DomainName", "P&#64;ssw0rd", "userName&#64;emailAddress");   </pre>
   </div>
   <p>You can change the user mapping type by setting the following attribute in the Membership Provider configuration in the Web.config file.</p>
   <div>
@@ -138,19 +138,19 @@
   </div>
   <p>For example:</p>
   <div>
-    <pre>Membership.CreateUser("UserName", "P&amp;#64;ssw0rd", "userName&amp;#64;emailAddress")  </pre>
+    <pre>Membership.CreateUser("UserName", "P&#64;ssw0rd", "userName&#64;emailAddress")  </pre>
   </div>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You should set the <b>requiresUniqueEmail</b> attribute to <b>"true"</b> to ensure that users supply unique e-mail addresses.<b></b></blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;You should set the <b>requiresUniqueEmail</b> attribute to <b>"true"</b> to ensure that users supply unique e-mail addresses.<b></b></blockquote>
   <h3>Step 4. Authenticate Users</h3>
   <p>To authenticate users, you must provide a login form. This could be a separate page or a special area on your application's home page.</p>
   <p>You can create the login form in the following ways:: </p>
   <ul>
-    <li>Use the ASP.NET login controls. The ASP.NET login controls encapsulate nearly all of the logic required to obtain credentials from users and to validate them against a user store. They use the configured membership provider. You do not need to write any additional code. <p>After the user is validated, the login controls automatically save information about the user; for example, by using an encrypted cookie if the user's browser accepts cookies. </p><li>Create custom login forms by using ASP.NET <b>TextBox</b> controls. If you create a custom login form with simple <b>TextBox</b> controls, you can prompt the user for a user name and password, and then call the <b>ValidateUser</b> method of the <b>Membership</b> class to perform the validation. <p>You also need to call methods of the <b>FormsAuthentication</b> class to create the cookie and write it to the user's computer, as shown in the following example. </p><div><pre>if (Membership.ValidateUser(userName.Text, password.Text))<br />&amp;#123;<br />&amp;nbsp; if (Request.QueryString&amp;#91;"ReturnUrl"&amp;#93; &amp;#33;= null)<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; FormsAuthentication.RedirectFromLoginPage(userName.Text, false);<br />&amp;nbsp; &amp;#125;<br />&amp;nbsp; else<br />&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; FormsAuthentication.SetAuthCookie(userName.Text, false);<br />&amp;nbsp; &amp;#125;<br />&amp;#125;<br />else<br />&amp;#123;<br />&amp;nbsp; Response.Write("Invalid UserID and Password");<br />&amp;#125;  </pre></div><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Both of these techniques use the<b> Membership.CreateUser </b>method.<b></b></blockquote></li></li>
+    <li>Use the ASP.NET login controls. The ASP.NET login controls encapsulate nearly all of the logic required to obtain credentials from users and to validate them against a user store. They use the configured membership provider. You do not need to write any additional code. <p>After the user is validated, the login controls automatically save information about the user; for example, by using an encrypted cookie if the user's browser accepts cookies. </p><li>Create custom login forms by using ASP.NET <b>TextBox</b> controls. If you create a custom login form with simple <b>TextBox</b> controls, you can prompt the user for a user name and password, and then call the <b>ValidateUser</b> method of the <b>Membership</b> class to perform the validation. <p>You also need to call methods of the <b>FormsAuthentication</b> class to create the cookie and write it to the user's computer, as shown in the following example. </p><div><pre>if (Membership.ValidateUser(userName.Text, password.Text))<br />&#123;<br />&nbsp; if (Request.QueryString&#91;"ReturnUrl"&#93; &#33;= null)<br />&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp; FormsAuthentication.RedirectFromLoginPage(userName.Text, false);<br />&nbsp; &#125;<br />&nbsp; else<br />&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp; FormsAuthentication.SetAuthCookie(userName.Text, false);<br />&nbsp; &#125;<br />&#125;<br />else<br />&#123;<br />&nbsp; Response.Write("Invalid UserID and Password");<br />&#125;  </pre></div><blockquote><b>Note</b>&nbsp;&nbsp;&nbsp;Both of these techniques use the<b> Membership.CreateUser </b>method.<b></b></blockquote></li></li>
   </ul>
   <p>The default <b>ActiveDirectoryMembershipProvider</b> configuration uses user principal names (UPNs) for name mapping. If you call the <b>Membership.ValidateUser</b> method, be sure to use a UPN name as shown in the following example.</p>
   <div>
-    <pre>bool isValidUser = Membership.ValidateUser("UseName&amp;#64;DomainName", "P&amp;#64;ssw0rd");   </pre>
+    <pre>bool isValidUser = Membership.ValidateUser("UseName&#64;DomainName", "P&#64;ssw0rd");   </pre>
   </div>
   <p>You can change the mapping for each user by setting the following attribute in the Membership Provider configuration section of the Web.config file.</p>
   <div>
@@ -158,7 +158,7 @@
   </div>
   <p>With this configuration, you must call <b>Membership.ValidateUser</b> as shown here in the following example.</p>
   <div>
-    <pre>bool isValidUser = Membership.ValidateUser("UserName", "P&amp;#64;ssw0rd", "userName&amp;#64;emailAddress")  </pre>
+    <pre>bool isValidUser = Membership.ValidateUser("UserName", "P&#64;ssw0rd", "userName&#64;emailAddress")  </pre>
   </div>
   <h1>Using the SQLMemberShipProvider</h1>
   <p>You use the <b>SQLMembershipProvider</b> with forms authentication if your user information is stored in SQL Server. In most cases, this occurs when you have an intranet and user information is application-specific or when the application is Internet facing and the users do not have Active Directory accounts.</p>
@@ -171,7 +171,7 @@
   <h3>Step 1. Configure Forms Authentication </h3>
   <p>Set the &lt;<b>authentication</b>&gt; element's <b>mode</b> attribute to <b>"Forms"</b> and then configure it in your application's Web.config file, as shown in the following example</p>
   <div>
-    <pre>&lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;forms loginUrl="Login.aspx" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; protection="All" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="30" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="AppNameCookie" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; path="/FormsAuth" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="false" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; slidingExpiration="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultUrl="default.aspx"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieless="UseCookies"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enableCrossAppRedirects="false" /&gt;<br />&lt;/authentication&gt;  </pre>
+    <pre>&lt;authentication mode="Forms"&gt;<br />&nbsp;&nbsp; &lt;forms loginUrl="Login.aspx" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; protection="All" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout="30" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name="AppNameCookie" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path="/FormsAuth" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; requireSSL="false" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; slidingExpiration="true" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; defaultUrl="default.aspx"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cookieless="UseCookies"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enableCrossAppRedirects="false" /&gt;<br />&lt;/authentication&gt;  </pre>
   </div>
   <p>Where: </p>
   <ul>
@@ -180,7 +180,7 @@
   </ul>
   <p>Add the following &lt;<b>authorization</b>&gt; element after the &lt;<b>authentication</b>&gt; element. This permits only authenticated users to access the application. The previously established <b>loginUrl</b> attribute of the &lt;<b>authentication</b>&gt; element redirects unauthenticated requests to the Login.aspx page.</p>
   <div>
-    <pre>&lt;authorization&gt; <br />&amp;nbsp;&amp;nbsp; &lt;deny users="?" /&gt;<br />&amp;nbsp;&amp;nbsp; &lt;allow users="&amp;#42;" /&gt;<br />&amp;nbsp;&lt;/authorization&gt;  </pre>
+    <pre>&lt;authorization&gt; <br />&nbsp;&nbsp; &lt;deny users="?" /&gt;<br />&nbsp;&nbsp; &lt;allow users="&#42;" /&gt;<br />&nbsp;&lt;/authorization&gt;  </pre>
   </div>
   <h3>Step 2. Install the Membership Database</h3>
   <p>Before you can use the <b>SqlMembershipProvider</b>, you must install the SQL Server membership database.</p>
@@ -194,15 +194,15 @@
       <b>-E</b> indicates authenticate using the Windows credentials of the currently logged on user. <li><b>-S</b> (server) indicates the name of the server where the database will be installed or is already installed. <li><b>-A m</b> indicates add membership support. This creates the tables and stored procedures required by the membership provider. </li></li></li>
   </ul>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The Aspnet_regsql tool is also used to install database elements for other ASP.NET features, such as Role Management, Profile, Web Parts Personalization, and Web Events. Other command-line arguments perform database operations for these other features. You can use Aspnet_regsql without any command line arguments by using a wizard that allows you to specify connection information for your SQL Server and install or remove the database elements for all of the supported features.<b></b></blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;The Aspnet_regsql tool is also used to install database elements for other ASP.NET features, such as Role Management, Profile, Web Parts Personalization, and Web Events. Other command-line arguments perform database operations for these other features. You can use Aspnet_regsql without any command line arguments by using a wizard that allows you to specify connection information for your SQL Server and install or remove the database elements for all of the supported features.<b></b></blockquote>
   <h3>Step 3. Configure the SqlMembershipProvider</h3>
   <p>The Machine.config file contains a default <b>SqlMembershipProvider</b> instance named <b>AspNetSqlMembershipProvider</b> that connects to the SQL Server Express instance on the local computer. You can use this instance of the provider if you are running SQL Server locally. Alternatively, you can specify provider details in your application's Web.config file, as shown here in the following example.</p>
   <div>
-    <pre>&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="MySqlConnection" connectionString="Data Source=MySqlServer;Initial Catalog=aspnetdb;Integrated Security=SSPI;" /&gt;<br />&lt;/connectionStrings&gt;<br />&lt;system.web&gt;<br />...<br />&amp;nbsp; &lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="15"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;providers&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;clear /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="SqlProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; type="System.Web.Security.SqlMembershipProvider" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionStringName="MySqlConnection"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; applicationName="MyApplication"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enablePasswordRetrieval="false"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enablePasswordReset="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requiresQuestionAndAnswer="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requiresUniqueEmail="true"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; passwordFormat="Hashed" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/providers&gt;<br />&amp;nbsp; &lt;/membership&gt;  </pre>
+    <pre>&lt;connectionStrings&gt;<br />&nbsp; &lt;add name="MySqlConnection" connectionString="Data Source=MySqlServer;Initial Catalog=aspnetdb;Integrated Security=SSPI;" /&gt;<br />&lt;/connectionStrings&gt;<br />&lt;system.web&gt;<br />...<br />&nbsp; &lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="15"&gt;<br />&nbsp;&nbsp;&nbsp; &lt;providers&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;clear /&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;add <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name="SqlProvider" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; type="System.Web.Security.SqlMembershipProvider" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionStringName="MySqlConnection"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; applicationName="MyApplication"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enablePasswordRetrieval="false"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enablePasswordReset="true"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; requiresQuestionAndAnswer="true"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; requiresUniqueEmail="true"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; passwordFormat="Hashed" /&gt;<br />&nbsp;&nbsp;&nbsp; &lt;/providers&gt;<br />&nbsp; &lt;/membership&gt;  </pre>
   </div>
   <blockquote>
-    <b>Important</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Ensure that the ASP.NET process identity (or, if using impersonation, the impersonated identity) have appropriate permissions on the SQL Server database.</blockquote>
-  <blockquote>Encrypt the connection strings element using Protected Configuration because this element contains the database connection details.&amp;nbsp; </blockquote>
+    <b>Important</b>&nbsp;&nbsp;&nbsp;Ensure that the ASP.NET process identity (or, if using impersonation, the impersonated identity) have appropriate permissions on the SQL Server database.</blockquote>
+  <blockquote>Encrypt the connection strings element using Protected Configuration because this element contains the database connection details.&nbsp; </blockquote>
   <p>Make sure to set the <b>defaultProvider</b> attribute value to point to your provider definition. The default value points to <b>AspNetSqlProvider</b>, which uses the local <b>SqlExpress</b> instance.</p>
   <p>For more information, see the section, "SqlProviderMembershipProvider Configuration Attributes," in this document.</p>
   <h3>Step 4. Create Users</h3>
@@ -212,7 +212,7 @@
   </ul>
   <p>The following code shows how to call <b>Membership CreateUser</b>.</p>
   <div>
-    <pre>Membership.CreateUser("Username", "P&amp;#64;ssw0rd", "userName&amp;#64;emailAddress");   </pre>
+    <pre>Membership.CreateUser("Username", "P&#64;ssw0rd", "userName&#64;emailAddress");   </pre>
   </div>
   <h3>Step 5. Authenticate Users</h3>
   <p>To authenticate users, you must provide a login form. This could be a separate page or a special area on your application's home page.</p>
@@ -237,21 +237,21 @@
           <td>
             <b>connectionStringName</b>
           </td>
-          <td>&amp;nbsp;</td>
+          <td>&nbsp;</td>
           <td>Points to a connection string contained in the connection strings configuration section. This attribute is required because it points to the primary LDAP bind string that is used for <b>create</b>, <b>update</b>, <b>get</b>, and <b>validate</b> operations.</td>
         </tr>
         <tr>
           <td>
             <b>connectionUserName</b>
           </td>
-          <td>&amp;nbsp;</td>
+          <td>&nbsp;</td>
           <td>Defines the user name used for authentication purposes when connecting to the directory. If this attribute is specified, the companion <b>connectionPassword</b> attribute must also be specified. This attribute is used to configure a set of credentials that can be used to connect to the directory (instead of using the process account or impersonation credentials that are in effect at the time the provider connects to the directory).</td>
         </tr>
         <tr>
           <td>
             <b>connectionPassword</b>
           </td>
-          <td>&amp;nbsp;</td>
+          <td>&nbsp;</td>
           <td>Defines the password used for authentication purposes when connecting to the directory. If this attribute is specified, the companion <b>connectionUserName</b> attribute must also be specified. This attribute is used to configure a set of credentials that can be used to connect to the directory (instead of using the process account or impersonation credentials that are in effect at the time the provider connects to the directory).</td>
         </tr>
         <tr>
@@ -279,7 +279,7 @@
           <td>
             <b>False</b>
           </td>
-          <td>Allows an administrator to set whether or not search-oriented methods can be called on the provider instance. Because methods such as <b>Find&amp;#42;</b> and <b>GetAllUsers</b> can be very expensive, the default value for this attribute is <b>false</b>.<br />The following methods throw a <b>NotSupportedException</b> if they are called when this attribute is set to <b>false</b>:<br /><b>FindUsersByName<br />FindUsersByEmail<br />GetAllUsers</b></td>
+          <td>Allows an administrator to set whether or not search-oriented methods can be called on the provider instance. Because methods such as <b>Find&#42;</b> and <b>GetAllUsers</b> can be very expensive, the default value for this attribute is <b>false</b>.<br />The following methods throw a <b>NotSupportedException</b> if they are called when this attribute is set to <b>false</b>:<br /><b>FindUsersByName<br />FindUsersByEmail<br />GetAllUsers</b></td>
         </tr>
         <tr>
           <td>
@@ -444,7 +444,7 @@
           <td>
             <b>connectionStringName</b>
           </td>
-          <td>&amp;nbsp;</td>
+          <td>&nbsp;</td>
           <td>Points to a connection string contained in the connection strings configuration section. This attribute is required because it points to the SQL connection string used for connecting to the SQL server database instance.</td>
         </tr>
         <tr>
@@ -505,7 +505,7 @@
           <td>
             <b>passwordFormat</b>
           </td>
-          <td>&amp;nbsp;</td>
+          <td>&nbsp;</td>
           <td>Specifies the password format. The SQL Server membership provider supports <b>Clear</b>, <b>Encrypted</b>, and <b>Hashed</b> password formats. Clear passwords are stored in plain text, which improves the performance of password storage and retrieval, but is less secure because passwords are easily read if your SQL Server database is compromised. Encrypted passwords are encrypted when stored and can be decrypted for password comparison or password retrieval. This requires additional processing for password storage and retrieval, but is more secure because passwords are not easily deciphered if the SQL Server database is compromised. Hashed passwords are hashed using a one-way hash algorithm and a randomly generated salt value when stored in the database. When a password is validated, it is hashed with the salt value in the database for verification. Hashed passwords cannot be retrieved.</td>
         </tr>
         <tr>
@@ -579,14 +579,14 @@
             <b>FindUsersByName</b>
           </td>
           <td>string <i>usernameToMatch</i><br />int<b></b><i>pageIndex</i><b><br /></b>int <i>pageSize</i></td>
-          <td>Returns a collection of users where the string parameter passed matches part of the username.<br />Wildcard support depends on how each data store handles characters such as "<b>&amp;#42;</b>", "<b>&amp;#37;</b>" and "<b>_</b>".</td>
+          <td>Returns a collection of users where the string parameter passed matches part of the username.<br />Wildcard support depends on how each data store handles characters such as "<b>&#42;</b>", "<b>&#37;</b>" and "<b>_</b>".</td>
         </tr>
         <tr>
           <td>
             <b>FindUsersByEmail</b>
           </td>
           <td>string <i>emailToMatch</i><br />int <i>pageIndex</i><br />int <i>pageSize</i></td>
-          <td>Returns a collection of users whose e-mail addreses matches any part of the string parameter passed.<br />Wildcard support depends on how each data store handles characters such as "<b>&amp;#42;</b>", "<b>&amp;#37;</b>" and "<b>_</b>"</td>
+          <td>Returns a collection of users whose e-mail addreses matches any part of the string parameter passed.<br />Wildcard support depends on how each data store handles characters such as "<b>&#42;</b>", "<b>&#37;</b>" and "<b>_</b>"</td>
         </tr>
         <tr>
           <td>
@@ -637,16 +637,16 @@
   </div>
   <p />
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The <b>GetAllUsers</b> method will be removed in the RTM version of .NET Framework 2.0.<b></b></blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;The <b>GetAllUsers</b> method will be removed in the RTM version of .NET Framework 2.0.<b></b></blockquote>
   <h1>Additional Considerations</h1>
   <p>Forms authentication requires the user to enter a username and password into a Web page, which is then transmitted in plaintext (by default) over the network. To prevent these credentials from being stolen, you should install a server certificate on your Web server and configure your Web site to require SSL.</p>
   <p>To ensure that forms authentication tickets may only be transmitted over SSL-secured channels, set the <b>requireSSL</b> attribute of the &lt;<b>forms</b>&gt; element to <b>true</b>. The following code sample shows how to do this, and also demonstrates how to ensure that your users access the login page by using SSL, whether or not they entered the URL of your application's main page using HTTP:// or HTTPS://. To verify that SSL is used, you can enter a full URL to the login page in the <b>loginUrl</b> attribute, but if you do this, you must configure unrestricted access to the login page by using the configuration shown inside the &lt;<b>location</b>&gt; tag.</p>
   <div>
-    <pre>&lt;configuration&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;forms loginUrl="<a href="https://myserver/mywebapp/secure/Login.aspx">https://myserver/mywebapp/secure/Login.aspx</a>" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; protection="All" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; timeout="30" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; name="AppNameCookie" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; path="/FormsAuth" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; requireSSL="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; slidingExpiration="true" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; defaultUrl="default.aspx"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cookieless="UseCookies"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; enableCrossAppRedirects="false"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authentication&gt;</pre>
+    <pre>&lt;configuration&gt;<br />&nbsp; &lt;system.web&gt;<br />&nbsp;&nbsp;&nbsp; &lt;authentication mode="Forms"&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;forms loginUrl="<a href="https://myserver/mywebapp/secure/Login.aspx">https://myserver/mywebapp/secure/Login.aspx</a>" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; protection="All" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout="30" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name="AppNameCookie" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path="/FormsAuth" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; requireSSL="true" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; slidingExpiration="true" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; defaultUrl="default.aspx"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cookieless="UseCookies"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enableCrossAppRedirects="false"/&gt;<br />&nbsp;&nbsp;&nbsp; &lt;/authentication&gt;</pre>
   </div>
-  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;&amp;#33;-- Deny access to unauthenticated users --&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="?" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow users="&amp;#42;" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&lt;/configuration&gt;</pre>
-  <pre>&lt;&amp;#33;-- Allow unrestricted access to the folder with the login page --&gt;<br />&lt;location path="secure"&gt;<br />&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow users="&amp;#42;" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
+  <pre>&nbsp;&nbsp;&nbsp; &lt;&#33;-- Deny access to unauthenticated users --&gt;<br />&nbsp;&nbsp;&nbsp; &lt;authorization&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;deny users="?" /&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;allow users="&#42;" /&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp; &lt;/authorization&gt;<br />&nbsp; &lt;/system.web&gt;<br />&lt;/configuration&gt;</pre>
+  <pre>&lt;&#33;-- Allow unrestricted access to the folder with the login page --&gt;<br />&lt;location path="secure"&gt;<br />&nbsp; &lt;system.web&gt;<br />&nbsp;&nbsp;&nbsp; &lt;authorization&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;allow users="&#42;" /&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp; &lt;/authorization&gt;<br />&nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

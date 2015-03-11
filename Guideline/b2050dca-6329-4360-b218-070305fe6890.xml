@@ -28,10 +28,10 @@
   <p>Carefully evaluate your debug assertions. Ensure they are written to cover cases that should be caught in testing or debugging but are not necessary in production. Any error handling code in assertions should probably be placed outside of the assertion so that it can be included in production code.</p>
   <h1>Problem Example</h1>
   <p>In the following example, the read API is called and then the return value is checked for errors in an assertion. </p>
-  <pre>bool ReadFromSocket(SOCKET socket, char &amp;#42;recvBuffer, int len)<br />&amp;#123;<br />  //first read from the socket<br />&amp;nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br />  assert(ret &gt;= 0)<br /><br />  return parseBuffer(recvBuffer, len);<br />&amp;#125;</pre>
+  <pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />  //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br />  assert(ret &gt;= 0)<br /><br />  return parseBuffer(recvBuffer, len);<br />&#125;</pre>
   <h1>Solution Example</h1>
   <p>In the following example, the read API is called and then the return value is checked for errors. </p>
-  <pre>bool ReadFromSocket(SOCKET socket, char &amp;#42;recvBuffer, int len)<br />&amp;#123;<br />  //first read from the socket<br />&amp;nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br /><br />  if (ret &gt;= 0)<br />  &amp;#123;<br />      //now parse the buffer<br />      return parseBuffer(recvBuffer, len);<br />  &amp;#125;<br />  else<br />  &amp;#123;<br />      //can call WSAGetLastError if we need error details<br />      return false;<br />  &amp;#125;<br />&amp;#125;</pre>
+  <pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />  //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br /><br />  if (ret &gt;= 0)<br />  &#123;<br />      //now parse the buffer<br />      return parseBuffer(recvBuffer, len);<br />  &#125;<br />  else<br />  &#123;<br />      //can call WSAGetLastError if we need error details<br />      return false;<br />  &#125;<br />&#125;</pre>
   <h1>Related Items</h1>
   <ul>
     <li>

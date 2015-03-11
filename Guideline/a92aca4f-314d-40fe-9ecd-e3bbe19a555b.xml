@@ -81,6 +81,6 @@
   <pre>void ProcessPayment(byte[] ccInfo, float amount)<br />{<br />    byte[] ccDigest = MyApp.Crypto.EncryptCCInfo(ccInfo);<br />    SqlConnection connection;<br />    SqlCommand command;<br />    SqlDataReader result; <br />    string query = "execute QueuePayment @ccDigest @amount;";<br />    connection = MyApp.DBManager.GetDBConnection();<br />    command = new SqlCommand(query, connection);<br />    command.Parameters.Add("@ccDigest", System.Data.SqlDbType.Binary);<br />    command.Parameters["@ccDigest"].Value = ccDigest;<br />    command.Parameters.Add("@amount", System.Data.SqlDbType.Float);<br />    command.Parameters["@amount"].Value = amount;<br />    ...<br />} <br />... <br />public byte[] EncryptCCInfo(byte[] ccInfo)<br />{<br />    Rijndael encMD;<br />    ICryptoTransform encCT;<br />    byte[] digest;<br />    encMD = Rijndael.Create();<br />    encMD.Key = MyApp.Crypto.GetEncryptionKey();<br />    encMD.IV = MyApp.Crypto.GetEncryptionIV();<br />    encCT = encMD.CreateEncryptor();<br />    digest = encCT.TransformFinalBlock(ccInfo, 0, ccInfo.Length);<br />    encMD.Clear();<br />    return digest;<br />}</pre>
   <p>Because data between the two components is encrypted, the transmission medium is less likely to affect the application's ability to securely transmit payment information.</p>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

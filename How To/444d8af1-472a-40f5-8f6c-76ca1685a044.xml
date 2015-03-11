@@ -49,12 +49,12 @@
   <p>During this scenario, the attacker uses an Alternate Data Stream to hide data that is useful for the attacker. This can occur when a J2EE application uses input taken from the client to create a new file, allowing the client to name the file that will be created at the server. Consider this code:</p>
   <pre>response.setContentType("text/html;charset=UTF-8");<br />PrintWriter out = response.getWriter();<br /><br />String filename = "c:\\user_files\\" +<br />      request.getParameter("filename").toString();<br />String contents = request.getParameter("contents").toString();<br /><br />File file = new File(filename);<br /><br />if(!file.exists())<br />{<br />      file.createNewFile();<br />      FileWriter fw = new FileWriter(file);<br />      BufferedWriter bw = new BufferedWriter(fw);<br />      bw.write(contents);    <br />      bw.close();<br />      fw.close();<br />}</pre>
   <p>The code above uses the URL to request a filename and data from an Internet client.It creates a new file based on the <em>filename </em>URL parameter and writes the contents specified by the <em>contents</em> URL parameter to the new file.   For example, the following URL creates a file named <em>test.txt</em> in the output directory and writes the string <i>this is a test file</i> to the new file:</p>
-  <pre>http://some_site/example/createFile?filename=<strong>test.txt</strong>&amp;contents=any
+  <pre>http://some_site/example/createFile?filename=<strong>test.txt</strong>&contents=any
 </pre>
   <p>The Windows <em>dir </em>command can be used to see what file was created:</p>
   <pre>C:\user_files&gt;dir /r<br /><br />12/02/2008  01:08 PM    &lt;DIR&gt;          .<br />12/02/2008  01:08 PM    &lt;DIR&gt;          ..<br />12/02/2008  01:08 PM                 3 test.txt </pre>
   <p>Nevertheless, an attacker can exploit the above URL to create a file with an Alternate Data Stream to store secret attack data:</p>
-  <pre>http://some_site/example/createFile?filename=<strong>test.txt:hidden.txt</strong>&amp;contents=attack_data</pre>
+  <pre>http://some_site/example/createFile?filename=<strong>test.txt:hidden.txt</strong>&contents=attack_data</pre>
   <p>The Windows <em>dir</em> command only shows a <em>test.txt.</em></p>
   <pre>C:\user_files&gt;dir /r<br /><br />12/02/2008  01:08 PM    &lt;DIR&gt;          .<br />12/02/2008  01:08 PM    &lt;DIR&gt;          ..<br />12/02/2008  01:08 PM                 3 test.txt 
   </pre>

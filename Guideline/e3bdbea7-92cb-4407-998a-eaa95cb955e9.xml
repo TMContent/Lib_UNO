@@ -32,14 +32,14 @@
         <strong>Loss of synchronization with the server. </strong>The server's data might change and become inconsistent with the cached data. This is not a security risk but could cause issues with the application's performance. </p>
       <li>
         <p>
-          <strong>Cache may reside on the client following application's lifespan. </strong>Once the application is closed, the cache may&amp;nbsp;be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may lookup the "Temporary Internet Files" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.</p>
+          <strong>Cache may reside on the client following application's lifespan. </strong>Once the application is closed, the cache may&nbsp;be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may lookup the "Temporary Internet Files" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.</p>
       </li>
     </li>
   </ol>
   <p>Applications employ caching to speed up performance and save round-trips to the server. This is especially useful in AJAX applications, which maintain a cached state on the client that mirrors that of the server. Developers traditionally try to cache as much data as possible. In these cases, there should be a distinction between the non-sensitive, i.e. cacheable data, and the sensitive data. The latter should be maintained in memory on the server only.</p>
   <h1>How</h1>
   <p>Javascript variables and hidden input fields must not be used to store sensitive data, which may be rendered invalid. The only thing that may be stored on the client side across browser requests should be the Session ID. Session IDs are most often stored in an HTTP cookie, though other solutions exist.</p>
-  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&amp;nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>".&amp;nbsp;For example:</p>
+  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>".&nbsp;For example:</p>
   <pre>&lt;input type="password" name="pass" autocomplete="off" /&gt;</pre>
   <p>Web pages containing sensitive data should be marked as such, using appropriate meta tags, to prevent caching. When generating/serving the web page, add the appropriate HTTP headers. This will serve as a guideline to proxies and browsers alike that the data must not be cached. A possibly negative impact of this is the invalidation of the browser "back" button.</p>
   <p>Examples of the appropriate <em>META</em> tags and HTTP headers are below:</p>

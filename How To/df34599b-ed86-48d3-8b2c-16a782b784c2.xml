@@ -23,21 +23,21 @@
     <li>ASP.NET 4.0</li>
   </ul>
   <h1>Summary</h1>
-  <p>Integer underflow bugs occur when an application doesn’t properly check the boundaries of an arithmetic operation involving integer variables, allowing one of the integer variables to take a value that is less than the minimum integer.&amp;nbsp;When this happens, the underflowed integer variable wraps up to a very large integer and ends up holding an unexpected value.&amp;nbsp;&amp;nbsp; </p>
-  <p>Integer underflows are similar to integer overflows with the only difference that integer underflow attacks’ goal is to generate a value that is lower than the lower boundary of an integer while overflows target at exceeding the higher boundary of the integer.&amp;nbsp;Attackers use integer underflow bugs to execute logical attacks on ASP.NET web applications.</p>
+  <p>Integer underflow bugs occur when an application doesn’t properly check the boundaries of an arithmetic operation involving integer variables, allowing one of the integer variables to take a value that is less than the minimum integer.&nbsp;When this happens, the underflowed integer variable wraps up to a very large integer and ends up holding an unexpected value.&nbsp;&nbsp; </p>
+  <p>Integer underflows are similar to integer overflows with the only difference that integer underflow attacks’ goal is to generate a value that is lower than the lower boundary of an integer while overflows target at exceeding the higher boundary of the integer.&nbsp;Attackers use integer underflow bugs to execute logical attacks on ASP.NET web applications.</p>
   <p>Follow these steps to test for integer underflows in ASP.NET:</p>
   <ul>
     <li>Step 1: Understand attack scenarios </li>
     <li>Step 2: Analyze causes and countermeasures </li>
-    <li>Step 3: Execute test cases<b>&amp;nbsp;</b></li>
+    <li>Step 3: Execute test cases<b>&nbsp;</b></li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>The first step in learning how to test for integer underflow bugs is to understand the anatomy of an integer underflow scenario. In unmanaged applications written in languages like C or C++, attackers use integer underflow conditions to create an incorrect size of buffer and trigger a stack or heap overflow to execute arbitrary code or to crash the application to create a denial-of-service attack. Although these two attacks are not possible in ASP.NET; attackers can exploit integer underflow conditions to execute attacks on the business logic of ASP.NET applications.</p>
-  <p>An integer underflow attack is possible when an application uses client-supplied input as a variable in an integer operation.&amp;nbsp;To trigger the underflow,&amp;nbsp;an attacker usually passes a small or large enough value, depending on the underlying application,&amp;nbsp;so that the result of the operation is unexpected.&amp;nbsp;Consider the following code:</p>
+  <p>An integer underflow attack is possible when an application uses client-supplied input as a variable in an integer operation.&nbsp;To trigger the underflow,&nbsp;an attacker usually passes a small or large enough value, depending on the underlying application,&nbsp;so that the result of the operation is unexpected.&nbsp;Consider the following code:</p>
   <p>
-    <font face="'Courier New'">uint fixed_monthly_deposit = 10000;<br />uint current_deposit = 0;<br />uint taxes_withheld&amp;nbsp; = Convert.ToUInt32(Request.QueryString["taxes"]);<br />current_deposit = fixed_monthly_deposit - taxes_withheld;<br />Response.Write("Current deposit is: " + current_deposit.ToString());</font>
+    <font face="'Courier New'">uint fixed_monthly_deposit = 10000;<br />uint current_deposit = 0;<br />uint taxes_withheld&nbsp; = Convert.ToUInt32(Request.QueryString["taxes"]);<br />current_deposit = fixed_monthly_deposit - taxes_withheld;<br />Response.Write("Current deposit is: " + current_deposit.ToString());</font>
   </p>
-  <p>The application uses the code above to calculate the current monthly deposit for employees.&amp;nbsp;It starts from a fixed monthly deposit set to 10,000 and subtracts taxes withheld from the URL parameter <i>taxes</i>.&amp;nbsp;The application uses unsigned integers since neither of the variables is expected to hold negative values.&amp;nbsp;If a client passes a normal amount for taxes withheld such as 1,500 the application calculates an expected current deposit:</p>
+  <p>The application uses the code above to calculate the current monthly deposit for employees.&nbsp;It starts from a fixed monthly deposit set to 10,000 and subtracts taxes withheld from the URL parameter <i>taxes</i>.&nbsp;The application uses unsigned integers since neither of the variables is expected to hold negative values.&nbsp;If a client passes a normal amount for taxes withheld such as 1,500 the application calculates an expected current deposit:</p>
   <p>
     <font face="'Courier New'">http://some_site/example.aspx?taxes=1500<br />Current deposit is: 8500</font>
   </p>
@@ -52,34 +52,34 @@
     <li>The attacker finds an input variable that takes an integer value. </li>
     <li>The attacker modifies the input variable with an unexpected value, far from the default. </li>
     <li>The attacker submits request including modified input variable. </li>
-    <li>The attacker observers how the application reacts.&amp;nbsp;</li>
+    <li>The attacker observers how the application reacts.&nbsp;</li>
   </ol>
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
-  <p>Next it is necessary to analyze what causes and how to protect against integer underflow bugs.&amp;nbsp;This knowledge will help you identify integer underflow vulnerabilities in source code an prepare to test for them in your application.</p>
-  <p>Integer underflows occur when an application uses a client-supplied value in an arithmetic operation involving integer variables without checking if the supplied value will cause one of the integer variables to exceed its minimum bondary.&amp;nbsp;For instance, in the previous scenario the application calculates the current deposit with a <i>taxes_withheld</i> unsigned integer variable that is directly provided by<i></i>client using the <i>taxes </i>URL paremeter:</p>
+  <p>Next it is necessary to analyze what causes and how to protect against integer underflow bugs.&nbsp;This knowledge will help you identify integer underflow vulnerabilities in source code an prepare to test for them in your application.</p>
+  <p>Integer underflows occur when an application uses a client-supplied value in an arithmetic operation involving integer variables without checking if the supplied value will cause one of the integer variables to exceed its minimum bondary.&nbsp;For instance, in the previous scenario the application calculates the current deposit with a <i>taxes_withheld</i> unsigned integer variable that is directly provided by<i></i>client using the <i>taxes </i>URL paremeter:</p>
   <p>
-    <font face="'Courier New'">current_deposit = fixed_monthly_deposit - taxes_withheld;&amp;nbsp;</font>
+    <font face="'Courier New'">current_deposit = fixed_monthly_deposit - taxes_withheld;&nbsp;</font>
   </p>
-  <p>To protect against an underflow situation, the application could have added a simple check such as:&amp;nbsp;</p>
+  <p>To protect against an underflow situation, the application could have added a simple check such as:&nbsp;</p>
   <p>
-    <font face="'Courier New'">uint fixed_monthly_deposit = 5000;<br />uint current_deposit = 0;<br />uint taxes_withheld&amp;nbsp; = Convert.ToUInt32(Request.QueryString["taxes"]);<br />if (taxes_withheld &lt; fixed_monthly_deposit)<br />{<br />&amp;nbsp; &amp;nbsp; &amp;nbsp;current_deposit = fixed_monthly_deposit - taxes_withheld;<br />&amp;nbsp; &amp;nbsp; &amp;nbsp;Response.Write("Current deposit is: " + current_deposit.ToString());<br />}<br />else<br />{<br />&amp;nbsp; &amp;nbsp; &amp;nbsp;Response.Write("Invalid input");<br />}</font>
+    <font face="'Courier New'">uint fixed_monthly_deposit = 5000;<br />uint current_deposit = 0;<br />uint taxes_withheld&nbsp; = Convert.ToUInt32(Request.QueryString["taxes"]);<br />if (taxes_withheld &lt; fixed_monthly_deposit)<br />{<br />&nbsp; &nbsp; &nbsp;current_deposit = fixed_monthly_deposit - taxes_withheld;<br />&nbsp; &nbsp; &nbsp;Response.Write("Current deposit is: " + current_deposit.ToString());<br />}<br />else<br />{<br />&nbsp; &nbsp; &nbsp;Response.Write("Invalid input");<br />}</font>
   </p>
   <p>Additionally, C# developers can use the <i>checked/unchecked</i> statements similar to those in C/C++ in order to check for arithmetic underflows and overflows both at run time and at compile time. <i>The checked</i> statement becomes very handy when dealing with the attack shown above:</p>
   <p>
-    <font face="'Courier New'">current_deposit = checked(fixed_monthly_deposit - taxes_withheld);&amp;nbsp;</font>
+    <font face="'Courier New'">current_deposit = checked(fixed_monthly_deposit - taxes_withheld);&nbsp;</font>
   </p>
   <h1>Step 3: Execute Test Cases</h1>
   <p>Now that you’ve reviewed the theoretical aspects of integer underflow bugs, it is necessary to execute practical test cases to check for them in your ASP .NET application.</p>
   <h2>
     Test for Integer Underflow Bugs
   </h2>
-  <p>It is recommended to test for integer underflow bugs by modifying any client-accessible integer variable such as a URL parameter as shown in the scenarios section.&amp;nbsp;Follow these steps to test for integer underflow bugs:</p>
+  <p>It is recommended to test for integer underflow bugs by modifying any client-accessible integer variable such as a URL parameter as shown in the scenarios section.&nbsp;Follow these steps to test for integer underflow bugs:</p>
   <ol>
     <li>Identify an input variable that takes an integer variable. Such as input variables are usually passed in URL parameters, web forms (using visible or hidden input tags), cookies, or Flash parameters. </li>
-    <li>Modify the input variable with an expected integer value and see how the application reacts.&amp;nbsp; </li>
-    <li>Modify the input variable with an exceeding a value that is close to the minimum and maximum integer value (see Table 1 below).&amp;nbsp;During this step, consider cases wherein the application performs an arithmetic operation on the client input such as the scenario shown in section 1.&amp;nbsp; Note that in the scenario, the attacker modifies the integer variable with 10,001, a variable that is not close to any of the integer type boundaries.&amp;nbsp;However, the application subtracts the input from 10,000 so the attacker is actually trying to modify the target (unsigned) integer&amp;nbsp;to -1, a value that is close the boundary.</li>
+    <li>Modify the input variable with an expected integer value and see how the application reacts.&nbsp; </li>
+    <li>Modify the input variable with an exceeding a value that is close to the minimum and maximum integer value (see Table 1 below).&nbsp;During this step, consider cases wherein the application performs an arithmetic operation on the client input such as the scenario shown in section 1.&nbsp; Note that in the scenario, the attacker modifies the integer variable with 10,001, a variable that is not close to any of the integer type boundaries.&nbsp;However, the application subtracts the input from 10,000 so the attacker is actually trying to modify the target (unsigned) integer&nbsp;to -1, a value that is close the boundary.</li>
   </ol>
-  <p>Expected results: a vulnerable application will most likely show a different behavior or output for step 2 and 3.&amp;nbsp;For instance, it might display an exceedingly large number for step 3 while displaying expected output for step 2.</p>
+  <p>Expected results: a vulnerable application will most likely show a different behavior or output for step 2 and 3.&nbsp;For instance, it might display an exceedingly large number for step 3 while displaying expected output for step 2.</p>
   <table>
     <tbody>
       <tr>
@@ -145,8 +145,8 @@
     </tbody>
   </table>
   <p>
-    <b>Table 1 - Minimum and maximum integer values for integer-related types in ASP.NET</b>&amp;nbsp;</p>
+    <b>Table 1 - Minimum and maximum integer values for integer-related types in ASP.NET</b>&nbsp;</p>
   <h1>Conclusions</h1>
-  <p>Integer underflow vulnerabilities occur due to implementation flaws that allow attackers to alter an integer variable that is used in an arithmetic operation by the application.&amp;nbsp;Attackers attempt to store in the target integer variable a value that is less than the minimum allowed by the variable’s type.&amp;nbsp;Integer underflows can be used by attackers to attack the business logic of an application such as calculating incorrect deposits and so on.&amp;nbsp;To test for them, it is first necessary to understand how integer underflow vulnerabilities occur and how to protect against them.&amp;nbsp;Then alter any input integer variable with a value close to the minimum or maximum boundaries for that data type.</p>]]></Data>
+  <p>Integer underflow vulnerabilities occur due to implementation flaws that allow attackers to alter an integer variable that is used in an arithmetic operation by the application.&nbsp;Attackers attempt to store in the target integer variable a value that is less than the minimum allowed by the variable’s type.&nbsp;Integer underflows can be used by attackers to attack the business logic of an application such as calculating incorrect deposits and so on.&nbsp;To test for them, it is first necessary to understand how integer underflow vulnerabilities occur and how to protect against them.&nbsp;Then alter any input integer variable with a value close to the minimum or maximum boundaries for that data type.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

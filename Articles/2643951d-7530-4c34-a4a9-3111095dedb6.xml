@@ -20,13 +20,13 @@
   <h1>What to Check For</h1>
   <p>Ensure that your application enforces strong passwords.</p>
   <h1>Why</h1>
-  <p>Enforcing strong passwords minimizes the risk of a&amp;nbsp;Credentials Dictionary Attack&amp;nbsp;or guessing another user's password.</p>
+  <p>Enforcing strong passwords minimizes the risk of a&nbsp;Credentials Dictionary Attack&nbsp;or guessing another user's password.</p>
   <h1>How to Check</h1>
   <p>To ensure that your application enforces strong passwords:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify password management routines.&amp;nbsp;</strong>Locate all routines inside your application that are responsible for managing user passwords. Potential areas to examine within your application include:</p>
+        <strong>Identify password management routines.&nbsp;</strong>Locate all routines inside your application that are responsible for managing user passwords. Potential areas to examine within your application include:</p>
       <ul>
         <li>Modifying accounts</li>
         <li>Creating new users</li>
@@ -35,21 +35,21 @@
     </li>
     <li>
       <p>
-        <strong>Review your application's password policy.&amp;nbsp;</strong>Verify that your application provides a password policy. Ensure that the password policy addresses the following considerations that define a strong password:</p>
+        <strong>Review your application's password policy.&nbsp;</strong>Verify that your application provides a password policy. Ensure that the password policy addresses the following considerations that define a strong password:</p>
       <ul>
         <li>
           <strong>Length</strong>: The policy provides length requirements for passwords. For example, require that a password must be at least 10 characters long.</li>
         <li>
-          <strong>Input Set</strong>: The policy provides requirements regarding the input set of passwords. For instance, a password must contain letters, numbers and special characters. If your organization has special restrictions for passwords,&amp;nbsp;verify that&amp;nbsp;the policy adopts these requirements. For example, require that a password must not match the user's&amp;nbsp;six previous passwords.</li>
+          <strong>Input Set</strong>: The policy provides requirements regarding the input set of passwords. For instance, a password must contain letters, numbers and special characters. If your organization has special restrictions for passwords,&nbsp;verify that&nbsp;the policy adopts these requirements. For example, require that a password must not match the user's&nbsp;six previous passwords.</li>
         <li>
-          <strong>Expiration</strong>: The policy provides requirements for a password's lifetime. For example, require that a password will expire after 45 days.&amp;nbsp;</li>
+          <strong>Expiration</strong>: The policy provides requirements for a password's lifetime. For example, require that a password will expire after 45 days.&nbsp;</li>
         <li>
-          <strong>Extra Requirements</strong>:&amp;nbsp;Enumerate&amp;nbsp;extra policy requirements for passwords, such as&amp;nbsp;a password must not be trivial and easily guessed.</li>
+          <strong>Extra Requirements</strong>:&nbsp;Enumerate&nbsp;extra policy requirements for passwords, such as&nbsp;a password must not be trivial and easily guessed.</li>
       </ul>
     </li>
     <li>
       <p>
-        <strong>Verify that the password policy is enforced.&amp;nbsp;</strong>Ensure that your application has implemented the password policy. Verify that all password management routines execute your application's implementation of the password policy before executing their own functionality. Example:</p>
+        <strong>Verify that the password policy is enforced.&nbsp;</strong>Ensure that your application has implemented the password policy. Verify that all password management routines execute your application's implementation of the password policy before executing their own functionality. Example:</p>
       <pre>def addUser(username:String,pass:String ) = Action{ implicit request =&gt;      
       // Check if user exists in the user database
       // The application verifies that the given
@@ -79,17 +79,17 @@
 
       for (int i = 0; i &lt; pass.length; i++)
       {
-            if (!alpha &amp;&amp; Character.isLetter(pass[i]))
+            if (!alpha && Character.isLetter(pass[i]))
             {
                   alpha = true;
             }
 
-            if (!num &amp;&amp; Character.isDigit(pass[i]))
+            if (!num && Character.isDigit(pass[i]))
             {
                   num = true;
             }
 
-            if (!sp &amp;&amp; (pass[i] == '!' ||
+            if (!sp && (pass[i] == '!' ||
                   pass[i] == '@' || pass[i] == '#' ||
                   pass[i] == '$' || pass[i] == '%' ||
                   pass[i] == '^'))
@@ -98,12 +98,12 @@
             }
       }
 
-      return (alpha &amp; num) &amp; sp;
+      return (alpha & num) & sp;
 }</pre>
     </li>
   </ol>
   <p>
-    <strong>Note:</strong>&amp;nbsp;PCI DSS requirements state that passwords should be at least seven characters long, have both letters and numbers and&amp;nbsp;should expire after no more than 90 days.</p>
+    <strong>Note:</strong>&nbsp;PCI DSS requirements state that passwords should be at least seven characters long, have both letters and numbers and&nbsp;should expire after no more than 90 days.</p>
   <h1>How to Fix</h1>
   <p />
   <p>What constitutes a strong password varies from organization to organization. However, there are minimum requirements for length and input character sets. Minimum requirements for a strong password are:</p>
@@ -115,13 +115,13 @@
   <ol>
     <li>
       <p>
-        <strong>Define password requirements.&amp;nbsp;</strong>Pick the schema that all passwords must follow. Check them for length and certain patterns. All passwords should be long (e.g. 10+ characters in length) and include a large input set (e.g. alpha-numeric and special character values).</p>
+        <strong>Define password requirements.&nbsp;</strong>Pick the schema that all passwords must follow. Check them for length and certain patterns. All passwords should be long (e.g. 10+ characters in length) and include a large input set (e.g. alpha-numeric and special character values).</p>
     </li>
     <li>
-      <strong>Enforce password requirements.&amp;nbsp;</strong>The password requirements should be enforced while creating and modifying accounts.</li>
+      <strong>Enforce password requirements.&nbsp;</strong>The password requirements should be enforced while creating and modifying accounts.</li>
     <li>
       <p>
-        <strong>Enforce password lifetime.&amp;nbsp;</strong>Determine a lifetime of a password. Force the users to update their passwords on a given interval. Verify that the new password is different from the old password by comparing the produced hashes. Additionally users might be asked to not use previously used passwords.&amp;nbsp;</p>
+        <strong>Enforce password lifetime.&nbsp;</strong>Determine a lifetime of a password. Force the users to update their passwords on a given interval. Verify that the new password is different from the old password by comparing the produced hashes. Additionally users might be asked to not use previously used passwords.&nbsp;</p>
     </li>
   </ol>
   <p />]]></Data>

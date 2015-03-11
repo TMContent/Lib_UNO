@@ -39,7 +39,7 @@
   <p>The steps are then:</p>
   <ol>
     <li>The attacker finds an HTTP request that invokes a file system operation at the server. </li>
-    <li>The attacker locates a variable in&amp;nbsp;that HTTP request that is used to determine the path for a file system operation. </li>
+    <li>The attacker locates a variable in&nbsp;that HTTP request that is used to determine the path for a file system operation. </li>
     <li>The attacker submits the request but modifies the path-determining variable and waits for a server response. </li>
     <li>The attacker verifies if the attack is successful by observing the server’s response. </li>
   </ol>
@@ -51,7 +51,7 @@
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
   <p>Before executing practical test cases, it is necessary to understand why these bugs exist and how to avoid them.</p>
   <p>Path manipulation bugs are caused by J2EE applications that use client-supplied input to build a file path without properly validating the input. For instance, the code below gets an input value from the user in a URL parameter named <i>filename</i>:</p>
-  <pre>PrintWriter out = response.getWriter();<br />String filename = "/public/user_files/" + request.getParameter("filename").toString();<br />File file = new File(filename);<br />FileReader fr = new FileReader(file);<br />BufferedReader br = new BufferedReader(fr);<br />String line = br.readLine();<br />while ( line != null )<br />{<br />	out.println(line);<br />&amp;nbsp;&amp;nbsp; 	line = br.readLine();<br />}<br />fr.close();<br />out.close();</pre>
+  <pre>PrintWriter out = response.getWriter();<br />String filename = "/public/user_files/" + request.getParameter("filename").toString();<br />File file = new File(filename);<br />FileReader fr = new FileReader(file);<br />BufferedReader br = new BufferedReader(fr);<br />String line = br.readLine();<br />while ( line != null )<br />{<br />	out.println(line);<br />&nbsp;&nbsp; 	line = br.readLine();<br />}<br />fr.close();<br />out.close();</pre>
   <p />
   <p>If the user provides an expected file name such as <i>file.txt</i>, the application returns an expected user file:</p>
   <pre>http://example.com.pe/example/getFile?filename=<strong>file.txt</strong></pre>
@@ -67,8 +67,8 @@
   </p>
   <p>The string above causes the application to go up two directories, navigate to the <i>private</i> folder, and display <i>secret.txt.</i> The example above is a common scenario in information disclosure due to path manipulation. Notice that the attack is possible because the code shown trusts the filename provided by the client; it starts by directly copying the input to the internal variable used to determine the filename without properly validating it.</p>
   <p>To protect against this bug, J2EE applications must properly validate user input. Specifically, they must check if the input is safe to use in determining a file path. Developers can use blacklists that contain a list of all disallowed filename constructs such as <em>../</em> and check if the user input appears in the blacklist. The problem with blacklists is that blacklists must account for 100% of attack variants to be effective. Any variant of an attack that is not accounted for will execute unnoticed.</p>
-  <p>As such, the recommended approach for defending against this bug is to use <i>whitelists. </i>Whitelists specify only safe constructs, and disallow any user input that doesn’t match any of the specified safe constructs. By doing this, they only need to specify what is good and don’t have to worry about accounting 100% of all attack variants. A common way of implementing a whitelist is by using a regular expression to specify what is safe and to disallow all input that doesn’t match the regular expression:&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</p>
-  <pre>String input = request.getParameter("filename").toString();<br />String safeConstruct = "^[a-zA-Z]{4,8}\.txt$";<br />Pattern regexPattern = Pattern.compile(safeConstruct);<br />Matcher regexMatcher = regexPattern.matcher(input);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />if (!regexMatcher.find())<br />{<br />	out.println("invalid input");<br />}<br />else&amp;nbsp; <br />{<br />	String filename = "/public/user_files/" + input; <br />&amp;nbsp;	File file = new File(filename);<br />	&amp;nbsp;<br />	/* continue reading file */<br />}</pre>
+  <p>As such, the recommended approach for defending against this bug is to use <i>whitelists. </i>Whitelists specify only safe constructs, and disallow any user input that doesn’t match any of the specified safe constructs. By doing this, they only need to specify what is good and don’t have to worry about accounting 100% of all attack variants. A common way of implementing a whitelist is by using a regular expression to specify what is safe and to disallow all input that doesn’t match the regular expression:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+  <pre>String input = request.getParameter("filename").toString();<br />String safeConstruct = "^[a-zA-Z]{4,8}\.txt$";<br />Pattern regexPattern = Pattern.compile(safeConstruct);<br />Matcher regexMatcher = regexPattern.matcher(input);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />if (!regexMatcher.find())<br />{<br />	out.println("invalid input");<br />}<br />else&nbsp; <br />{<br />	String filename = "/public/user_files/" + input; <br />&nbsp;	File file = new File(filename);<br />	&nbsp;<br />	/* continue reading file */<br />}</pre>
   <p>The input must consist of four to eight consecutive upper- or lower-case letters followed by the extension <em>.txt</em>. Any input that doesn’t match this form results in the application giving an <i>invalid input</i> error.</p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you’ve learned the common attack scenarios as well as the causes and countermeasures for path manipulation bugs, it is necessary to execute basic test cases to check if your application is vulnerable.</p>
@@ -108,7 +108,7 @@
       </tr>
     </tbody>
   </table>
-  <p>&amp;nbsp;<b>Table 1 - Path Manipulation Attack Strings</b></p>
+  <p>&nbsp;<b>Table 1 - Path Manipulation Attack Strings</b></p>
   <h2>
     <em>Look for error messages that indicate file operations</em>
   </h2>
@@ -119,8 +119,8 @@
     <em>Cover double encoding scenarios</em>
   </h1>
   <p>Since this attack requires passing malicious input to a Web application, it is necessary for proper coverage to add double encoding test cases. Double encoding consists of re-encoding the percent sign (<em>%</em>) in percent-encoded values with its percent-encoded equivalent (<em>%25</em>). For instance, translating the first URL into the second one:</p>
-  <pre>../../&amp;nbsp; (no encoding)
-..%2f..%2f&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; (single encoding)
+  <pre>../../&nbsp; (no encoding)
+..%2f..%2f&nbsp;&nbsp;&nbsp;&nbsp; (single encoding)
 ..%252f..%252f (double encoding)</pre>
   <p>Make sure to add a double-encoded test case for every attack string that you use.<em></em></p>
   <h2>
@@ -128,7 +128,7 @@
   </h2>
   <p>Even though path manipulation attacks commonly happen through the URL or Web forms, it is important to look at additional application input points. Web applications can also take input from client cookies, Web methods, extended frameworks (such as Flash/Flex), and third-party APIs (such as Facebook) parameters. Make sure to test for path manipulation in every place where input is taken.</p>
   <h1>Conclusions</h1>
-  <p>Path manipulation bugs allow attackers to access a server-side file to execute attacks such as information disclosure and denial of service. They&amp;nbsp;can be&amp;nbsp;successful when applications don’t properly validate user input against a whitelist and allow path manipulating characters such as dots and slashes to be processed by the application. To test for this vulnerability, you must identify the file path determining variable, commonly sent in the URL or in a Web form, and replace it with an attack string while looking for an error message that indicates that the attack string is being used. Finally, to achieve proper test coverage of this bug, be sure to cover double encoding scenarios and test through all of the application’s input points.</p>
+  <p>Path manipulation bugs allow attackers to access a server-side file to execute attacks such as information disclosure and denial of service. They&nbsp;can be&nbsp;successful when applications don’t properly validate user input against a whitelist and allow path manipulating characters such as dots and slashes to be processed by the application. To test for this vulnerability, you must identify the file path determining variable, commonly sent in the URL or in a Web form, and replace it with an attack string while looking for an error message that indicates that the attack string is being used. Finally, to achieve proper test coverage of this bug, be sure to cover double encoding scenarios and test through all of the application’s input points.</p>
   <br />]]></Data>
   </Content>
 </TeamMentor_Article>

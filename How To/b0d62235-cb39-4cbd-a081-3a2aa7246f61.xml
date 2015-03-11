@@ -29,7 +29,7 @@
     <li>Step 1: Understand attack scenarios </li>
     <li>Step 2: Analyze causes and countermeasures </li>
     <li>Step 3: Start testing and exploring </li>
-    <li>Step 4: Execute additional testing&amp;nbsp;</li>
+    <li>Step 4: Execute additional testing&nbsp;</li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>During the first step, we will review three common ASP.NET exception information disclosure attack scenarios:</p>
@@ -49,25 +49,25 @@
   </p>
   <p>The SQL exception tells the attacker that the back-end storage consists of a SQL Server database and that the table contains a column named <i>password</i>. It is also a clear indicator that SQL injection is possible, because it shows that the dangerous string the attacker submitted has altered the syntax of a SQL statement and caused the query to fail. With this acquired knowledge, the attacker then modifies the attack string with the appropriate comment characters:</p>
   <p>
-    <font face="'Courier New'">a' OR 1=1--&amp;nbsp;</font>
+    <font face="'Courier New'">a' OR 1=1--&nbsp;</font>
   </p>
   <p>Moreover, knowing that the target database is SQL helps the attacker to build a more dangerous injection that involves meta-tables and system stored procedures such as <i>xp_cmdshell</i>, and tells the attacker that batch commands are possible:</p>
   <p>
-    <font face="'Courier New'">'; exec master..xp_cmdshell 'net user /add Attacker'—<br />'; update Accounts set balance = 1000000 when username = 'Attacker'—&amp;nbsp;</font>
+    <font face="'Courier New'">'; exec master..xp_cmdshell 'net user /add Attacker'—<br />'; update Accounts set balance = 1000000 when username = 'Attacker'—&nbsp;</font>
   </p>
   <p>A generic error message such as “<em>Login failed</em>” could have discouraged the attacker. Not protecting the exception information from the application’s end users leads to further exploration and to a higher risk of attack, including SQL injection.</p>
   <h2>
     Disclosing Source Code 
   </h2>
-  <p>An attacker can leverage exception information disclosure in an attempt to steal the application’s source code.&amp;nbsp;Now that the attacker knows what to look for, another attack such as command injection can be used to grab the file:</p>
+  <p>An attacker can leverage exception information disclosure in an attempt to steal the application’s source code.&nbsp;Now that the attacker knows what to look for, another attack such as command injection can be used to grab the file:</p>
   <p>
-    <font face="'Courier New'">filename.txt'|type c:\inetpub\wwwroot\example\login.aspx.cs&amp;nbsp;</font>
+    <font face="'Courier New'">filename.txt'|type c:\inetpub\wwwroot\example\login.aspx.cs&nbsp;</font>
   </p>
   <p>This assumes that the application is vulnerable to command injection. Nonetheless, if the application didn’t divulge the location of the source file for the ASP.NET page <em>login.aspx</em>, the attack would not have been feasible.</p>
   <h2>
     Discovering an Application’s Inner Workings
   </h2>
-  <p>In the last scenario, the attacker focused on discovering how the application works by interpreting the meaning of error messages. For instance, an application responds to a file query a with a “<em>file not found</em>” error for some file queries, but with “<em>access denied</em>” for others. With this information, the attacker discovers the presence of some protected files and can start inferring how the application works.&amp;nbsp;<b>&amp;nbsp;</b></p>
+  <p>In the last scenario, the attacker focused on discovering how the application works by interpreting the meaning of error messages. For instance, an application responds to a file query a with a “<em>file not found</em>” error for some file queries, but with “<em>access denied</em>” for others. With this information, the attacker discovers the presence of some protected files and can start inferring how the application works.&nbsp;<b>&nbsp;</b></p>
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
   <p>The following step in testing for ASP.NET exception information disclosure is to determine what causes it and how to defend against it. </p>
   <h2>
@@ -75,42 +75,42 @@
   </h2>
   <p>The first cause of exception information disclosure in ASP.NET is the lack of exception handling. For instance, if the database becomes unavailable or the text box parameters have an incorrect syntax, the following code will trigger an unhandled exception that will result in IIS showing the stack trace for the problem.</p>
   <p>
-    <font face="'Courier New'">SqlConnection m_conn = new SqlConnection("Data Source=SQLServer1;Initial Catalog=example;Integrated Security=True");<br />m_conn.Open();<br />SqlCommand m_command = m_conn.CreateCommand();<br />m_command.CommandText = "select * from Accounts where username = '" +<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; txbUserName.Text + "' and password = '" +<br />&amp;nbsp; &amp;nbsp; &amp;nbsp; txbPassword.Text + "'";<br />SqlDataReader m_reader = m_command.ExecuteReader();<br />m_conn.Close();&amp;nbsp;</font>
+    <font face="'Courier New'">SqlConnection m_conn = new SqlConnection("Data Source=SQLServer1;Initial Catalog=example;Integrated Security=True");<br />m_conn.Open();<br />SqlCommand m_command = m_conn.CreateCommand();<br />m_command.CommandText = "select * from Accounts where username = '" +<br />&nbsp; &nbsp; &nbsp; txbUserName.Text + "' and password = '" +<br />&nbsp; &nbsp; &nbsp; txbPassword.Text + "'";<br />SqlDataReader m_reader = m_command.ExecuteReader();<br />m_conn.Close();&nbsp;</font>
   </p>
   <p>Adding structured exception handling with try, catch, and finally blocks that print generic error messages would prevent the disclosure of exception information.</p>
   <p>
-    <font face="'Courier New'">try<br />{<br />&amp;nbsp;SqlConnection m_conn = new SqlConnection("Data Source=SQLServer1;Initial Catalog=example;Integrated Security=True");<br />&amp;nbsp;m_conn.Open();<br />&amp;nbsp;SqlCommand m_command = m_conn.CreateCommand();<br />&amp;nbsp;m_command.CommandText = "select * from Accounts where username = '" + txbUserName.Text + "' and password = '" + txbPassword.Text + "'";<br />&amp;nbsp;SqlDataReader m_reader = m_command.ExecuteReader();<br />&amp;nbsp;m_conn.Close();<br />}<br />catch {<br />&amp;nbsp;Response.Write("Application Error - Try again later");<br />}</font>
+    <font face="'Courier New'">try<br />{<br />&nbsp;SqlConnection m_conn = new SqlConnection("Data Source=SQLServer1;Initial Catalog=example;Integrated Security=True");<br />&nbsp;m_conn.Open();<br />&nbsp;SqlCommand m_command = m_conn.CreateCommand();<br />&nbsp;m_command.CommandText = "select * from Accounts where username = '" + txbUserName.Text + "' and password = '" + txbPassword.Text + "'";<br />&nbsp;SqlDataReader m_reader = m_command.ExecuteReader();<br />&nbsp;m_conn.Close();<br />}<br />catch {<br />&nbsp;Response.Write("Application Error - Try again later");<br />}</font>
   </p>
   <p>Note that the above example is given as a proof-of-concept to show that the try/catch block stops the application from crashing. However, generic try/catch blocks are not good programming practice for exception handling.</p>
   <p>Another way to handle exceptions at the application level in ASP.NET is by adding the Global class to the project (<em>Global.asax</em>). When adding this item in Visual Studio, the <em>Application_Error</em> routine is automatically created. In production sites, this function must be filled with a generic error message that doesn’t divulge exception information:</p>
   <p>
-    <font face="'Courier New'">void Application_Error(object sender, EventArgs e)&amp;nbsp;<br />{&amp;nbsp;<br />&amp;nbsp; // Code that runs when an unhandled error occurs<br />&amp;nbsp; Response.Write("Application Error");<br />}&amp;nbsp;</font>
+    <font face="'Courier New'">void Application_Error(object sender, EventArgs e)&nbsp;<br />{&nbsp;<br />&nbsp; // Code that runs when an unhandled error occurs<br />&nbsp; Response.Write("Application Error");<br />}&nbsp;</font>
   </p>
   <h2>
     Handling Exceptions at the Page Level
   </h2>
   <p>The ASP.NET default configuration shows too much exception information when an application fails. This happens because the <em>Web.config</em> file of an ASP.NET application site doesn’t fill the <i>customErrors</i> tag by default. The developer must set the <i>customErrors</i> tag to protect against this vulnerability. However, you can use the same redirect for all status code in order to reveal as little as possible:</p>
   <p>
-    <font face="'Courier New'">&lt;customErrors mode="On" defaultRedirect="GenericErrorPage.htm"&gt;<br />&amp;nbsp; &lt;error statusCode="403" redirect="GenericErrorPage.htm" /&gt;<br />&amp;nbsp; &lt;error statusCode="404" redirect="GenericErrorPage.htm" /&gt;<br />&amp;nbsp; &lt;error statusCode="500" redirect="GenericErrorPage.htm" /&gt;<br />&lt;/customErrors&gt;&amp;nbsp;&amp;nbsp;</font>
+    <font face="'Courier New'">&lt;customErrors mode="On" defaultRedirect="GenericErrorPage.htm"&gt;<br />&nbsp; &lt;error statusCode="403" redirect="GenericErrorPage.htm" /&gt;<br />&nbsp; &lt;error statusCode="404" redirect="GenericErrorPage.htm" /&gt;<br />&nbsp; &lt;error statusCode="500" redirect="GenericErrorPage.htm" /&gt;<br />&lt;/customErrors&gt;&nbsp;&nbsp;</font>
   </p>
   <p>An alternative is setting the <i>customErrors</i> mode to <i>RemoteOnly</i> so that internal application developers get detailed error messages while end users get a generic error. The <em>GenericErrorPage.htm</em> would be a simple HTML page with a generic error message:</p>
   <p>
-    <font face="'Courier New'">&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;<br />&lt;head&gt;<br />&amp;nbsp; &lt;title&gt;Application Error&lt;/title&gt;<br />&lt;/head&gt;<br />&lt;body&gt;<br />&lt;h2&gt;Application Error&lt;/h2&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;&amp;nbsp;</font>
+    <font face="'Courier New'">&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;<br />&lt;head&gt;<br />&nbsp; &lt;title&gt;Application Error&lt;/title&gt;<br />&lt;/head&gt;<br />&lt;body&gt;<br />&lt;h2&gt;Application Error&lt;/h2&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;&nbsp;</font>
   </p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you understand the attack scenarios, what causes them, and how to protect against exception information disclosure, you must continue by submitting different test cases in order to discover and correct this vulnerability.</p>
   <h2>
     Submit malicious input
   </h2>
-  <p>The primary goal when testing for information disclosure bugs is to make the application fail in unexpected ways. Start by submitting unexpected input consisting of malicious attack strings such as OWASP Fuzz Vectors, FuzzDB attack strings,&amp;nbsp;strings containing special characters, and exceedingly long strings.</p>
+  <p>The primary goal when testing for information disclosure bugs is to make the application fail in unexpected ways. Start by submitting unexpected input consisting of malicious attack strings such as OWASP Fuzz Vectors, FuzzDB attack strings,&nbsp;strings containing special characters, and exceedingly long strings.</p>
   <h2>Change data types</h2>
   <p>Applications may also fail due to incorrect handling of types. For instance, an application uses the id parameter of the URL below to identify a user and get the user’s profile:</p>
   <p>
-    <font face="'Courier New'">http://www.example.com/getProfile.aspx?id=112&amp;username=testuser</font>
+    <font face="'Courier New'">http://www.example.com/getProfile.aspx?id=112&username=testuser</font>
   </p>
   <p>Changing the type of the id to a string might generate and invalid type exception:</p>
   <p>
-    <font face="'Courier New'">http://www.example.com/getProfile.aspx?id=abc&amp;username=testuser</font>
+    <font face="'Courier New'">http://www.example.com/getProfile.aspx?id=abc&username=testuser</font>
   </p>
   <h2>
     Remove parameters
@@ -119,7 +119,7 @@
   <h2>
     Observe how the application responds
   </h2>
-  <p>It is extremely important that as you execute the test cases above, you pay close attention to how the application reacts to the given input. Sometimes the application won’t give explicit exception information, but instead provide error messages with subtle differences. In order to infer how the error messaging scheme works and to attack the application, you must be able to catch any subtle differences between error messages.<b>&amp;nbsp;</b></p>
+  <p>It is extremely important that as you execute the test cases above, you pay close attention to how the application reacts to the given input. Sometimes the application won’t give explicit exception information, but instead provide error messages with subtle differences. In order to infer how the error messaging scheme works and to attack the application, you must be able to catch any subtle differences between error messages.<b>&nbsp;</b></p>
   <h1>Step 4: Execute Additional Testing</h1>
   <p>Now that you’ve executed the first round of test cases, you need to tune test case data and automate the process.</p>
   <h2>
@@ -127,13 +127,13 @@
   </h2>
   <p>ASP.NET web applications might choose to use different encoding methods, depending on the underlying platform. For instance, the following two URLs are actually identical:</p>
   <p>
-    <font face="'Courier New'">http://www.example.com/getProfile?id=a'+OR+1%3D1%23&amp;username=testuser<br />http://www.example.com/getProfile?id=a'%20OR%021=1#&amp;username=testuser</font>
+    <font face="'Courier New'">http://www.example.com/getProfile?id=a'+OR+1%3D1%23&username=testuser<br />http://www.example.com/getProfile?id=a'%20OR%021=1#&username=testuser</font>
   </p>
   <p>Escape and special characters can have different interpretations. It is important that you try different encodings to cause the application to fail.<b></b></p>
   <h2>
     <em>Automate Test Cases</em>
   </h2>
-  <p>Finally, submitting numerous test cases by hand is tedious. Instead, automate the test case submission and verification process. There are many automated malicious string testing tools (<i>fuzzers</i>) online to help you in this process, such as OWASP’s <i>WebScarab</i>. Learn to use at least one fuzzing tool in order to help you execute more test cases in less time.<b>&amp;nbsp;</b></p>
+  <p>Finally, submitting numerous test cases by hand is tedious. Instead, automate the test case submission and verification process. There are many automated malicious string testing tools (<i>fuzzers</i>) online to help you in this process, such as OWASP’s <i>WebScarab</i>. Learn to use at least one fuzzing tool in order to help you execute more test cases in less time.<b>&nbsp;</b></p>
   <h1>Conclusions</h1>
   <p>Addressing exception information disclosure bugs is required during the security testing phase of application development, and should become a development policy of any security-conscious team. This paper presented three of the most common attack scenarios to help you understand the impact of this vulnerability, as well as what causes this bug and the methods to protect against it in ASP.NET web applications. The testing sections describe the multiple test methodologies required to properly hunt down information disclosure bugs. Be alert while executing tests on the application with different input strings in order to catch any error messages that may reveal more than they should.<br /></p>]]></Data>
   </Content>

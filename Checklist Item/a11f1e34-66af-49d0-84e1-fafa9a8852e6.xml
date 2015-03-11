@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that sensitive data, such as encryption keys or private information, is maintained in memory for the bare minimum amount of time required. Check that as soon as the data is no longer used, it is purged from memory and all traces of it are eradicated, so it does not end up leaking to the swap file.</p>
   <h1>Why</h1>
-  <p>Sensitive data residing in memory for&amp;nbsp;longer than is strictly necessary is at high risk to be swapped out to disk. This could leave fragments of data available well after the application has terminated. Such data may be gathered by inspecting the contents of the disk, temporary files or the swap file.</p>
+  <p>Sensitive data residing in memory for&nbsp;longer than is strictly necessary is at high risk to be swapped out to disk. This could leave fragments of data available well after the application has terminated. Such data may be gathered by inspecting the contents of the disk, temporary files or the swap file.</p>
   <h1>How to Check</h1>
   <p>If the application handles sensitive data of any kind, use the following steps to ensure that your application properly handles sensitive data in memory: </p>
   <ol>
@@ -35,22 +35,22 @@
         <p>
           <strong>Identify all code that handles sensitive data. </strong>Examine your application's code base. Identify all functionality that handles sensitive data. Common places include:</p>
         <ul>
-          <li>Authentication mechanisms <li>User management <li>All user transactions of a&amp;nbsp;sensitive nature</li></li></li>
+          <li>Authentication mechanisms <li>User management <li>All user transactions of a&nbsp;sensitive nature</li></li></li>
         </ul>
         <li>
           <p>
-            <strong>Verify that sensitive data is stored in mutable objects. </strong>Each piece of data identified as sensitive&amp;nbsp;should be stored in a mutable object, such as a character array. This allows the sensitive data to be overwritten in memory and not rely on the garbage collector. </p>
+            <strong>Verify that sensitive data is stored in mutable objects. </strong>Each piece of data identified as sensitive&nbsp;should be stored in a mutable object, such as a character array. This allows the sensitive data to be overwritten in memory and not rely on the garbage collector. </p>
           <ul>
-            <li>Verify that sensitive data is not stored in immutable objects, such as Java strings, that do not allow their memory space to be modified after being allocated. <li>Ensure that the memory containing the sensitive data is overwritten as quickly after use as possible. <li>Ensure that sensitive data is not passed between function, class or object boundaries except when absolutely necessary.<br /><br />Note in the examples below the difference between <strong>B</strong>yte and <strong>b</strong>yte. Java cannot guarantee that it will overwrite the same memory location in the heap that is already occupied by a <strong>Byte</strong>. However, if you overwrite a <strong>byte</strong> variable or an element inside a <strong>byte&amp;#91;&amp;#93;</strong>, then you have overwritten the same memory location that contains the actual data.<br /><br />Examples of mutable objects: <ul><li>char <li>char&amp;#91;&amp;#93; <li>byte <li>byte&amp;#91;&amp;#93;</li></li></li></li></ul><p>Examples of immutable objects:</p><ul><li>String <li>Byte <li>Byte&amp;#91;&amp;#93; <li>Character</li></li></li></li></ul></li></li></li>
+            <li>Verify that sensitive data is not stored in immutable objects, such as Java strings, that do not allow their memory space to be modified after being allocated. <li>Ensure that the memory containing the sensitive data is overwritten as quickly after use as possible. <li>Ensure that sensitive data is not passed between function, class or object boundaries except when absolutely necessary.<br /><br />Note in the examples below the difference between <strong>B</strong>yte and <strong>b</strong>yte. Java cannot guarantee that it will overwrite the same memory location in the heap that is already occupied by a <strong>Byte</strong>. However, if you overwrite a <strong>byte</strong> variable or an element inside a <strong>byte&#91;&#93;</strong>, then you have overwritten the same memory location that contains the actual data.<br /><br />Examples of mutable objects: <ul><li>char <li>char&#91;&#93; <li>byte <li>byte&#91;&#93;</li></li></li></li></ul><p>Examples of immutable objects:</p><ul><li>String <li>Byte <li>Byte&#91;&#93; <li>Character</li></li></li></li></ul></li></li></li>
           </ul>
           <strong>
           </strong>
           <li>
             <p>
               <strong>Verify that all instances of sensitive data are cleared. </strong>Ensure that all the memory locations where sensitive data has been stored are cleared or overwritten after their use. Setting a pointer to NULL does not clear or overwrite the memory - a new value must be assigned to it. For a character array, setting each char to a new value, such as a space or a zero, will overwrite the value stored in memory. Example of improper removal of sensitive data:</p>
-            <pre>char&amp;#91;&amp;#93; ssn = getSocialSecurity();<br />...<br />//insufficient for removing sensitive data from memory<br />ssn = null;</pre>
+            <pre>char&#91;&#93; ssn = getSocialSecurity();<br />...<br />//insufficient for removing sensitive data from memory<br />ssn = null;</pre>
             <p>Example of proper removal of sensitive data:</p>
-            <pre>char&amp;#91;&amp;#93; ssn = getSocialSecurity();<br />...<br />//proper clearing of character array to remove sensitive data from memory<br />for(int i=0; i<_ssn.length3b_></_ssn.length3b_><br />&amp;#123;<br />      ssn&amp;#91;i&amp;#93; = ' ';<br />&amp;#125;<br />ssn = null;</pre>
+            <pre>char&#91;&#93; ssn = getSocialSecurity();<br />...<br />//proper clearing of character array to remove sensitive data from memory<br />for(int i=0; i<_ssn.length3b_></_ssn.length3b_><br />&#123;<br />      ssn&#91;i&#93; = ' ';<br />&#125;<br />ssn = null;</pre>
           </li>
         </li>
       </li>
@@ -68,17 +68,17 @@
       </ul>
       <li>
         <p>
-          <strong>Identify all sensitive data use. </strong>Locate all code segments, both functions and data members, that handle sensitive data. These functions and data structures can be scattered throughout your application. If&amp;nbsp;the sensitive data in your code base is difficult to locate, centralize all code that handles sensitive data to make it easy to manage.</p>
+          <strong>Identify all sensitive data use. </strong>Locate all code segments, both functions and data members, that handle sensitive data. These functions and data structures can be scattered throughout your application. If&nbsp;the sensitive data in your code base is difficult to locate, centralize all code that handles sensitive data to make it easy to manage.</p>
         <li>
           <p>
-            <strong>Store sensitive data in mutable objects. </strong>Mutable objects allow the data in them to be overwritten. This is especially useful in Java as objects are required to be deallocated through the garbage collector. Therefore, there is no certainty when the sensitive data will be deallocated from the current process space. Examples of mutable objects include character arrays (i.e. <strong>char&amp;#91;&amp;#93;</strong>). Java strings, however, are not mutable objects; therefore, once allocated, their current memory space cannot be modified. When storing sensitive data into an array, make sure that you use arrays of primitive data types such as:</p>
+            <strong>Store sensitive data in mutable objects. </strong>Mutable objects allow the data in them to be overwritten. This is especially useful in Java as objects are required to be deallocated through the garbage collector. Therefore, there is no certainty when the sensitive data will be deallocated from the current process space. Examples of mutable objects include character arrays (i.e. <strong>char&#91;&#93;</strong>). Java strings, however, are not mutable objects; therefore, once allocated, their current memory space cannot be modified. When storing sensitive data into an array, make sure that you use arrays of primitive data types such as:</p>
           <ul>
             <li>
-              <em>byte&amp;#91;&amp;#93; </em>
+              <em>byte&#91;&#93; </em>
               <li>
-                <em>char &amp;#91;&amp;#93;</em>
+                <em>char &#91;&#93;</em>
                 <li>
-                  <em>int&amp;#91;&amp;#93;<br /></em>
+                  <em>int&#91;&#93;<br /></em>
                   <br />Do not use arrays of the wrapper classes that Java provides for primitive types such as: <p /><li><em>Byte </em><li><em>Character </em><li><em>Integer</em></li></li></li></li>
               </li>
             </li>
@@ -96,7 +96,7 @@
   <pre>String pass = getPassword();<br />...<br />pass = null;<br />System.gc();</pre>
   <h1>Solution Example</h1>
   <p>The following code makes use of a password. After the password is used, the memory is explicitly cleared. Since strings are immutable object, the code uses character arrays to store passwords. This makes it possible to overwrite the data after its use. </p>
-  <pre>char&amp;#91;&amp;#93; pass = getPassword();<br />...<br />clearPassword(pass);<br />pass = null;<br />...<br />void clearPassword(char&amp;#91;&amp;#93; pass)&amp;#123;<br />      for(int i=0; i<_pass.length3b_></_pass.length3b_><br />      &amp;#123;<br />            pass&amp;#91;i&amp;#93; = ' ';<br />      &amp;#125;<br />&amp;#125;</pre>
+  <pre>char&#91;&#93; pass = getPassword();<br />...<br />clearPassword(pass);<br />pass = null;<br />...<br />void clearPassword(char&#91;&#93; pass)&#123;<br />      for(int i=0; i<_pass.length3b_></_pass.length3b_><br />      &#123;<br />            pass&#91;i&#93; = ' ';<br />      &#125;<br />&#125;</pre>
   <h1>Additional Resources</h1>
   <ul>
     <li>For more information about cleaning-up data in Java, see: <a href="http://java.sun.com/developer/TechTips/2000/tt0124.html">Using Finalize vs Explicit clean-up</a>. <li>To learn more about primitive data types in Java, visit: <a href="http://java.sun.com/docs/books/tutorial/java/nutsandbolts/datatypes.html">Primitive Data Types</a>. </li></li>

@@ -21,13 +21,13 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure your application is running with the minimum set of local system privileges.</p>
   <h1>Why</h1>
-  <p>Applying the principle of least privilege to the application's server account reduces the damage potential if the application&amp;nbsp;is compromised by an attacker.</p>
+  <p>Applying the principle of least privilege to the application's server account reduces the damage potential if the application&nbsp;is compromised by an attacker.</p>
   <h1>How to Check</h1>
   <p>Follow these steps to ensure your application is running as a least-privileged account:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify the accounts&amp;nbsp;that your application is using. </strong>Examine <em>/etc/passwd</em> in Unix or <em>Control Panel/Administrative Tools/Computer Management</em> in Windows to identify the accounts that are used by your application. Ensure they are members of a dedicated to your application group. Verify that your application's accounts are not members of any of the following:</p>
+        <strong>Identify the accounts&nbsp;that your application is using. </strong>Examine <em>/etc/passwd</em> in Unix or <em>Control Panel/Administrative Tools/Computer Management</em> in Windows to identify the accounts that are used by your application. Ensure they are members of a dedicated to your application group. Verify that your application's accounts are not members of any of the following:</p>
       <ul>
         <li>Any root or administrative groups <li>Any groups dedicated to privileged users <li>The normal users group <li>Any group that is dedicated to a system service, network service, etc.</li></li></li></li>
       </ul>
@@ -63,10 +63,10 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The following snippet shows the access rights associated with MyApp's local account as noted in the <em>/etc/passwd</em> file. Unfortunately, the local account is part of the root group; therefore, if an attacker compromises the application, he gains root privileges on the hosting server.</p>
-  <pre>myapp:&amp;#33;:503:0:MyApp's account:/home/myapp:/bin/bash</pre>
+  <pre>myapp:&#33;:503:0:MyApp's account:/home/myapp:/bin/bash</pre>
   <h1>Solution Example</h1>
   <p>The following snippet shows the access rights associated with MyApp's local account as noted in the <em>/etc/passwd</em> file. Because the local account is in a dedicated group, compromising the application does not compromise the hosting server.</p>
-  <pre>myapp:&amp;#33;:503:503:MyApp's account:/home/myapp:/bin/bash</pre>
+  <pre>myapp:&#33;:503:503:MyApp's account:/home/myapp:/bin/bash</pre>
   <h1>Java Deployment Guidelines</h1>
   <ul>
     <li>

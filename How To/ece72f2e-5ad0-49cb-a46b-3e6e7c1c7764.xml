@@ -63,7 +63,7 @@ The customer account will be charged -2147483646            (output)</pre>
   <pre>int balance = itemPrice * numberOfItems; </pre>
   <p>The application checks the input against a negative value, but doesn’t check it against an upper boundary. As a result, the attacker can pass an exceedingly large number such as <em>42949673</em>. Visual Basic checks for integer overflows by default and, unless developers remove this check for performance reasons, it is not vulnerable to this bug. C#, on the contrary, doesn’t check for arithmetic overflows by default, so it is necessary for developers to take the appropriate preventive measures.</p>
   <p>The first method of preventing C# integer overflows is to check input integer values against a reasonable maximum. For instance, the code above could be corrected like this:</p>
-  <pre>if ((numberOfItems &gt; 0)  &amp;&amp; (numberOfItems &lt; 5000)
+  <pre>if ((numberOfItems &gt; 0)  && (numberOfItems &lt; 5000)
 {
 int balance = itemPrice * numberOfItems;
 }</pre>

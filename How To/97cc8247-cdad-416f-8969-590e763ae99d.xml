@@ -20,13 +20,13 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Description</h1>
   <p>If you need to make an entire assembly transparent to indicate that the assembly does not contain any critical code and does not elevate the privileges of the call stack in any way, you can explicitly add transparency to an assembly with the following attribute: </p>
-  <pre> &amp;#91;assembly: SecurityTransparent&amp;#93;  </pre>
+  <pre> &#91;assembly: SecurityTransparent&#93;  </pre>
   <p>If you need to mix critical and transparent code in the same assembly, start by marking the assembly with the <b>System.Security.SecurityCriticalAttribute</b> attribute to indicate that the assembly <i>can</i> contain critical code, as shown here. </p>
-  <pre> &amp;#91;assembly: SecurityCritical&amp;#93;  </pre>
+  <pre> &#91;assembly: SecurityCritical&#93;  </pre>
   <p>If you want to perform security-critical actions, you must explicitly mark the code that will perform the critical action with another <b>SecurityCritical</b> attribute, as shown in the following code example. </p>
-  <pre> &amp;#91;assembly: SecurityCritical&amp;#93;public&amp;nbsp;class A<br />&amp;#123;<br />    &amp;#91;SecurityCritical&amp;#93;    public void Critical()<br />    &amp;#123;<br />        // critical<br />    &amp;#125;<br />    public int SomeProp<br />    &amp;#123;<br />        get &amp;#123;/&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />        set &amp;#123;/&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />    &amp;#125;<br />&amp;#125;<br />public class B&amp;#123;<br />        internal string SomeOtherProp<br />    &amp;#123;<br />        get &amp;#123; /&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />        set &amp;#123; /&amp;#42; transparent &amp;#42;/&amp;nbsp;&amp;#125;<br />    &amp;#125;<br />&amp;#125;  </pre>
+  <pre> &#91;assembly: SecurityCritical&#93;public&nbsp;class A<br />&#123;<br />    &#91;SecurityCritical&#93;    public void Critical()<br />    &#123;<br />        // critical<br />    &#125;<br />    public int SomeProp<br />    &#123;<br />        get &#123;/&#42; transparent &#42;/&nbsp;&#125;<br />        set &#123;/&#42; transparent &#42;/&nbsp;&#125;<br />    &#125;<br />&#125;<br />public class B&#123;<br />        internal string SomeOtherProp<br />    &#123;<br />        get &#123; /&#42; transparent &#42;/&nbsp;&#125;<br />        set &#123; /&#42; transparent &#42;/&nbsp;&#125;<br />    &#125;<br />&#125;  </pre>
   <p>The above code is transparent (this is the default setting, even with the assembly-level <b>SecurityCritical</b> attribute) except for the <b>Critical</b> method, which is explicitly marked as critical. </p>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -28,34 +28,34 @@
   <p>Check to ensure that Protected resources are mapped to HttpForbiddenHandler.</p>
   <p />
   <h1>How to Fix</h1>
-  <p>HTTP handlers are located in the Machine.config file beneath the <b>&lt;httpHandlers&gt; </b>element. HTTP handlers are responsible for processing Web requests for specific file&amp;nbsp;extensions. Remoting should not be enabled on front-end Web servers; enable remoting only on middle-tier application servers that are isolated from the Internet.</p>
+  <p>HTTP handlers are located in the Machine.config file beneath the <b>&lt;httpHandlers&gt; </b>element. HTTP handlers are responsible for processing Web requests for specific file&nbsp;extensions. Remoting should not be enabled on front-end Web servers; enable remoting only on middle-tier application servers that are isolated from the Internet.</p>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;If you are running .NET 2.0, the &lt; httpHandlers&gt; setting is located in the machine-level Web.config file, located in the same directory as the Machine.config file.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;If you are running .NET 2.0, the &lt; httpHandlers&gt; setting is located in the machine-level Web.config file, located in the same directory as the Machine.config file.</blockquote>
   <p>The following file extensions are mapped in the Machine.config file to HTTP<b></b>handlers: </p>
   <ul>
     <li>.aspx is used for ASP.NET pages 
 <li>.rem and .soap are used for Remoting. 
 <li>.asmx is used for Web Services. 
-<li>.asax, .ascx, .config, .cs, .csproj, .vb, .vbproj, .webinfo, .asp, .licx, .resx,&amp;nbsp;and&amp;nbsp;.resources are protected resources and are mapped to <b>System.Web.HttpForbiddenHandler</b>. </li></li></li></li>
+<li>.asax, .ascx, .config, .cs, .csproj, .vb, .vbproj, .webinfo, .asp, .licx, .resx,&nbsp;and&nbsp;.resources are protected resources and are mapped to <b>System.Web.HttpForbiddenHandler</b>. </li></li></li></li>
   </ul>
-  <p>For .NET&amp;nbsp;Framework resources, if you do not use a file extension, then map the extension to <b>System.Web.HttpForbiddenHandler</b> in the Machine.config file, as shown in the following example:</p>
+  <p>For .NET&nbsp;Framework resources, if you do not use a file extension, then map the extension to <b>System.Web.HttpForbiddenHandler</b> in the Machine.config file, as shown in the following example:</p>
   <div>
     <pre>&lt;add verb="*" path="*.vbproj" type="System.Web.HttpForbiddenHandler" /&gt;</pre>
   </div>
   <p>In this case, the .vbproj file extension is mapped to <b>System.Web.HttpForbiddenHandler</b>. If a client requests a path that ends with .vbproj, then ASP.NET returns a message that states "This type of page is not served." </p>
   <ul>
-    <li>The following guidelines apply to handling .NET&amp;nbsp;Framework file extensions: 
+    <li>The following guidelines apply to handling .NET&nbsp;Framework file extensions: 
 <li><b>Map extensions you do not use to HttpForbiddenHandler</b>. If you do not serve ASP.NET pages, then map .aspx to <b>HttpForbiddenHandler</b>. If you do not use Web Services, then map .asmx to <b>HttpForbiddenHandler</b>. 
 <li><b>Disable Remoting on Internet-facing Web servers</b>. Map remoting extensions (.soap and .rem) on Internet-facing Web servers to <b>HttpForbiddenHandler</b>. </li></li></li>
   </ul>
-  <h3>Disable .NET&amp;nbsp;Remoting</h3>
-  <p>To disable .NET&amp;nbsp;Remoting disable requests for .rem and .soap extensions, use the following elements beneath<b> &lt;httpHandlers&gt;</b>:</p>
+  <h3>Disable .NET&nbsp;Remoting</h3>
+  <p>To disable .NET&nbsp;Remoting disable requests for .rem and .soap extensions, use the following elements beneath<b> &lt;httpHandlers&gt;</b>:</p>
   <div>
     <pre>&lt;add verb="*" path="*.rem" type="System.Web.HttpForbiddenHandler"/&gt;<br />&lt;add verb="*" path="*.soap" type="System.Web.HttpForbiddenHandler"/&gt;</pre>
   </div>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;This does not prevent a Web application on the Web server from connecting to a downstream object by using the Remoting infrastructure. However, it prevents clients from connecting to objects on the Web server.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;This does not prevent a Web application on the Web server from connecting to a downstream object by using the Remoting infrastructure. However, it prevents clients from connecting to objects on the Web server.</blockquote>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

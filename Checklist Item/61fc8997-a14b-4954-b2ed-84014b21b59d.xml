@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>C&amp;#43;&amp;#43;</li>
+    <li>C&#43;&#43;</li>
   </ul>
   <h1>What to Check For</h1>
   <p>Double-check pointer arithmetic when pointers are treated as integers.</p>
@@ -31,16 +31,16 @@
   <h1>How to Fix</h1>
   <p>Pointer arithmetic means using a pointer as an integer and adding some number to it to address another location in memory. This is most commonly used with a pointer to an array, where the pointer is incremented to address the sequential elements in the array. The only mathematical operator available for pointer arithmetic is addition. The challenge here is that incrementing a pointer by one actually increments its value by the size of the type of the variable it points to. For example, if a pointer points to an array of four-byte wide objects, incrementing the pointer by one programmatically actually increases its value by four. This is important, because a common mistake is to increment pointers by multiples of the size of the object programmatically, which results in miscalculations and buffer overflows.</p>
   <h1>Problem Example</h1>
-  <pre>int buffer&amp;#91;10&amp;#93;;<br />int &amp;#42;pointer = buffer;</pre>
-  <pre>&amp;#42;pointer &amp;#43;= 9&amp;#42;sizeof(buffer);<br />&amp;#42;buffer = 0;</pre>
+  <pre>int buffer&#91;10&#93;;<br />int &#42;pointer = buffer;</pre>
+  <pre>&#42;pointer &#43;= 9&#42;sizeof(buffer);<br />&#42;buffer = 0;</pre>
   <p>Here, the pointer is incremented by 9 times the size of an integer programmatically. This is wrong, because the compiler will automatically multiple that value by the size of an integer, resulting in a miscalculation and a 0 being written to some unexpected memory address.</p>
   <h1>Solution Example</h1>
-  <pre>int buffer&amp;#91;10&amp;#93;;<br />int &amp;#42;pointer = buffer;</pre>
-  <pre>&amp;#42;pointer &amp;#43;= 9;<br />&amp;#42;buffer = 0;</pre>
+  <pre>int buffer&#91;10&#93;;<br />int &#42;pointer = buffer;</pre>
+  <pre>&#42;pointer &#43;= 9;<br />&#42;buffer = 0;</pre>
   <p>Here, the pointer is incremented by 9 programmatically. This is correct, because the compiler will automatically multiply 9 by the size of an integer and the program will write 0 to an array element during run-time.</p>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information about using pointer arithmetic correctly, please see <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/EXP08-CPP.&amp;#43;Ensure&amp;#43;pointer&amp;#43;arithmetic&amp;#43;is&amp;#43;used&amp;#43;correctly">https://www.securecoding.cert.org/confluence/display/cplusplus/EXP08-CPP.&amp;#43;Ensure&amp;#43;pointer&amp;#43;arithmetic&amp;#43;is&amp;#43;used&amp;#43;correctly</a></li>
+    <li>For more information about using pointer arithmetic correctly, please see <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/EXP08-CPP.&#43;Ensure&#43;pointer&#43;arithmetic&#43;is&#43;used&#43;correctly">https://www.securecoding.cert.org/confluence/display/cplusplus/EXP08-CPP.&#43;Ensure&#43;pointer&#43;arithmetic&#43;is&#43;used&#43;correctly</a></li>
   </ul>
   <h1>Related Items</h1>
   <ul>

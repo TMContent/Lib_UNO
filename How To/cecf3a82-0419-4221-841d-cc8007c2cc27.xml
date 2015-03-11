@@ -39,13 +39,13 @@
     </li>
   </ul>
   <p>
-    &amp;nbsp;
+    &nbsp;
   </p>
   <h1>
     Summary
   </h1>
   <p>
-    Software applications represent file names and directories in different ways, and a given file can often be referred to in a number of ways.&amp;nbsp; Using Microsoft Windows as an example, let’s look at a folder named “private” in the C: drive. The most common way to refer to it is:
+    Software applications represent file names and directories in different ways, and a given file can often be referred to in a number of ways.&nbsp; Using Microsoft Windows as an example, let’s look at a folder named “private” in the C: drive. The most common way to refer to it is:
   </p>
   <pre>C:\private</pre>
   <p>
@@ -57,7 +57,7 @@
   </p>
   <pre>".\private" </pre>
   <p>
-    If an application wants to stop an attacker from writing files to that directory, they can take a number of approaches, including building lists of what’s not allowed (blacklisting), building lists of what is allowed (white listing), relying on file system ACLs, and disallowing direct file system access entirely.&amp;nbsp; The problems start, however, with making sure that a user-provided file name and path actually point where you think they do.&amp;nbsp; Similar issues apply in many classes of vulnerabilities, including cross-site scripting, SQL injection, and command injection; but we’ll be looking at file access and directory traversal issues here.
+    If an application wants to stop an attacker from writing files to that directory, they can take a number of approaches, including building lists of what’s not allowed (blacklisting), building lists of what is allowed (white listing), relying on file system ACLs, and disallowing direct file system access entirely.&nbsp; The problems start, however, with making sure that a user-provided file name and path actually point where you think they do.&nbsp; Similar issues apply in many classes of vulnerabilities, including cross-site scripting, SQL injection, and command injection; but we’ll be looking at file access and directory traversal issues here.
   </p>
   <p>
     These are the steps to test for canonicalization bugs:
@@ -67,35 +67,35 @@
       <b>
         Step 1
       </b>
-      :&amp;nbsp; Understand canonicalization attack scenarios.
+      :&nbsp; Understand canonicalization attack scenarios.
     </li>
     <li>
       <b>
         Step 2
       </b>
-      :&amp;nbsp; List high risk components and entry points.
+      :&nbsp; List high risk components and entry points.
     </li>
     <li>
       <b>
         Step 3
       </b>
-      :&amp;nbsp; Start testing and exploring.
+      :&nbsp; Start testing and exploring.
     </li>
     <li>
       <b>
         Step 4
       </b>
-      :&amp;nbsp; Tune test case data.
+      :&nbsp; Tune test case data.
     </li>
   </ul>
   <p>
-    &amp;nbsp;
+    &nbsp;
   </p>
   <h1>
     Step 1: Understand Canonicalization Attack Scenarios
   </h1>
   <p>
-    The goal of an attacker performing a canonicalization attack is to convince whatever software is doing the filtering that they’ve submitted a good string, when they’ve actually submitted a dangerous one.&amp;nbsp; When dealing with file names, the file system provides one level of obscurity that the attacker can exploit.&amp;nbsp; In web based systems, the different character encodings used on the web provide a second layer of obscurity.&amp;nbsp; These two levels represent the most common canonicalization attacks today, so we’ll concentrate on them.&amp;nbsp; Here are two sample attacks, one involving each layer:
+    The goal of an attacker performing a canonicalization attack is to convince whatever software is doing the filtering that they’ve submitted a good string, when they’ve actually submitted a dangerous one.&nbsp; When dealing with file names, the file system provides one level of obscurity that the attacker can exploit.&nbsp; In web based systems, the different character encodings used on the web provide a second layer of obscurity.&nbsp; These two levels represent the most common canonicalization attacks today, so we’ll concentrate on them.&nbsp; Here are two sample attacks, one involving each layer:
   </p>
   <p>
     <b>
@@ -105,11 +105,11 @@
     </b>
   </p>
   <p>
-    A Windows server-side application asks its users for a file path and displays the file contents.&amp;nbsp; It uses a critical directory named “
+    A Windows server-side application asks its users for a file path and displays the file contents.&nbsp; It uses a critical directory named “
     private
     ” on the root of the file system (
     C:\private
-    ).&amp;nbsp; The server protects this directory by checking if submitted paths contain the substring 
+    ).&nbsp; The server protects this directory by checking if submitted paths contain the substring 
     private
     . 
   </p>
@@ -134,7 +134,7 @@ c:/private
   <p>
     Since the string above doesn’t contain “
     private
-    ” it is not part of the application blacklist.&amp;nbsp; Thus, the application allows the attacker access to the protected folder.
+    ” it is not part of the application blacklist.&nbsp; Thus, the application allows the attacker access to the protected folder.
   </p>
   <p>
     <b>
@@ -144,21 +144,21 @@ c:/private
     </b>
   </p>
   <p>
-    All data on the web is fundamentally strings of text.&amp;nbsp; Different contexts, such as HTML, JavaScript, or URLs, have different characters which they use as delimiters or which otherwise have special meaning.&amp;nbsp; In order for applications to understand where strings start and end, strings which contain those delimiter characters must be encoded.&amp;nbsp; This encoding provides an opportunity for an attacker to fool the system.
+    All data on the web is fundamentally strings of text.&nbsp; Different contexts, such as HTML, JavaScript, or URLs, have different characters which they use as delimiters or which otherwise have special meaning.&nbsp; In order for applications to understand where strings start and end, strings which contain those delimiter characters must be encoded.&nbsp; This encoding provides an opportunity for an attacker to fool the system.
   </p>
   <p>
-    Data is encoded and decoded at different times, depending on what’s going on.&amp;nbsp; A web application needs to perform HTML encoding during page generation - failure to do this correctly is a key source of cross-site scripting problems, for example. When a browser submits a URL to a web server, it URL encodes the string before sending it.
+    Data is encoded and decoded at different times, depending on what’s going on.&nbsp; A web application needs to perform HTML encoding during page generation - failure to do this correctly is a key source of cross-site scripting problems, for example. When a browser submits a URL to a web server, it URL encodes the string before sending it.
   </p>
   <p>
-    Suppose we have a web site where a user wants to represent themselves with a name that includes the special characters “&amp;” and “/”:
+    Suppose we have a web site where a user wants to represent themselves with a name that includes the special characters “&” and “/”:
   </p>
-  <pre>www.example.com/name=&amp;foo/bar</pre>
+  <pre>www.example.com/name=&foo/bar</pre>
   <p>
-    The user chooses the name <b>&amp;foo/bar</b> which uses the ampersand and the forward slash, both of which have special meaning in URLs.&amp;nbsp; If the data was sent exactly as above, the web server would interpret the name as something entirely different, and would not take the intended action.&amp;nbsp; Instead, the string is sent in the URL encoded form as follows:
+    The user chooses the name <b>&foo/bar</b> which uses the ampersand and the forward slash, both of which have special meaning in URLs.&nbsp; If the data was sent exactly as above, the web server would interpret the name as something entirely different, and would not take the intended action.&nbsp; Instead, the string is sent in the URL encoded form as follows:
   </p>
   <pre>www.example.com/name=%26foo%2Fbar</pre>
   <p>
-    In URL encoding, the ‘%’ character is used to encode an otherwise unrepresentable character.&amp;nbsp; The string after the percent references a specific character as a hexadecimal number.&amp;nbsp; The web server on the other end automatically decodes the string to recover the original version, and this is where the problem lies.
+    In URL encoding, the ‘%’ character is used to encode an otherwise unrepresentable character.&nbsp; The string after the percent references a specific character as a hexadecimal number.&nbsp; The web server on the other end automatically decodes the string to recover the original version, and this is where the problem lies.
     <b><i></i></b></p>
   <p>
     <b>
@@ -168,26 +168,26 @@ c:/private
     </b>
   </p>
   <p>
-    Most of the time, a URL is mapped to the file system by a web server.&amp;nbsp; This has the effect of making the list of alternate versions of a file name listed in the previous attack much longer.&amp;nbsp; For example, let’s say that the application in the previous example also has a web front end, hosted out of the directory C:\inetpub\wwwroot\app\.&amp;nbsp; An attacker could submit the following URL to try to gain access to the protected C:\private directory:
+    Most of the time, a URL is mapped to the file system by a web server.&nbsp; This has the effect of making the list of alternate versions of a file name listed in the previous attack much longer.&nbsp; For example, let’s say that the application in the previous example also has a web front end, hosted out of the directory C:\inetpub\wwwroot\app\.&nbsp; An attacker could submit the following URL to try to gain access to the protected C:\private directory:
   </p>
   <pre>http://www.example.com/app/../../../private</pre>
   <p>
-    There are a number of different ways to attempt to filter out URLs like this.&amp;nbsp; For example, the server could filter out the slashes after the dots.&amp;nbsp; However, if they perform this action on the raw URL and then decode it, the attacker can use an alternate representation of the slashes, via URL encoding:
+    There are a number of different ways to attempt to filter out URLs like this.&nbsp; For example, the server could filter out the slashes after the dots.&nbsp; However, if they perform this action on the raw URL and then decode it, the attacker can use an alternate representation of the slashes, via URL encoding:
   </p>
   <pre>http://www.example/com/app/..%2f..%2f../private</pre>
   <p>
-    One obvious way to fix this would be to just extend the blacklist above to cover the encoded versions of the characters as well.&amp;nbsp; However, this can lead to issues at multiple levels.&amp;nbsp; First, when one adds Unicode representations of strings into the mix, the number of ways that one can encode a string becomes much larger.&amp;nbsp; Second, even if one could generate a list, there are problems with different layers of the system interpreting the same string in different ways - a number of high profile security issues (including at least one for Microsoft’s IIS versions 4 and 5) have been caused by systems misinterpreting malformed Unicode representations of characters.&amp;nbsp; On one of those systems, the following string would have worked:
+    One obvious way to fix this would be to just extend the blacklist above to cover the encoded versions of the characters as well.&nbsp; However, this can lead to issues at multiple levels.&nbsp; First, when one adds Unicode representations of strings into the mix, the number of ways that one can encode a string becomes much larger.&nbsp; Second, even if one could generate a list, there are problems with different layers of the system interpreting the same string in different ways - a number of high profile security issues (including at least one for Microsoft’s IIS versions 4 and 5) have been caused by systems misinterpreting malformed Unicode representations of characters.&nbsp; On one of those systems, the following string would have worked:
   </p>
   <pre>http://www.example/com/app/..%C0%AF..%C0%AF../private</pre>
   <p>
-    As the systems in question only checked the encoded string and didn’t do any checks after decoding, this issue allowed an attacker to completely compromise a machine - a URL like the following could&amp;nbsp; execute arbitrary commands (in this case, to perform a director listing, but more dangerous payloads are trivial):
+    As the systems in question only checked the encoded string and didn’t do any checks after decoding, this issue allowed an attacker to completely compromise a machine - a URL like the following could&nbsp; execute arbitrary commands (in this case, to perform a director listing, but more dangerous payloads are trivial):
   </p>
   <pre>http://www.example.com/app/..%c0%af..%c0%af..winnt/system32/cmd.exe?/c+dir</pre>
   <h1>
-    Step 2: &amp;nbsp;List high risk components and entry points
+    Step 2: &nbsp;List high risk components and entry points
   </h1>
   <p>
-    Now that you understand the attacks at a high level, you must look at the specific server side flaws which contribute to this problem.&amp;nbsp; After understanding the problems in detail, you can look through your application and determine high risk components and entry points, and then begin testing.
+    Now that you understand the attacks at a high level, you must look at the specific server side flaws which contribute to this problem.&nbsp; After understanding the problems in detail, you can look through your application and determine high risk components and entry points, and then begin testing.
   </p>
   <h2>
     Identifying problems and mitigations
@@ -201,12 +201,12 @@ c:/private
     </b>
     <b>
       <i>
-        &amp;nbsp;
+        &nbsp;
       </i>
     </b>
   </p>
   <p>
-    The most common cause of canonicalization errors is checking a string too soon based on a non-canonical interpretation.&amp;nbsp; Strings need to be in their canonical form (after all decoding or other processing has completed,) before they are used in access checks.&amp;nbsp; For example, the code below checks for access too soon:
+    The most common cause of canonicalization errors is checking a string too soon based on a non-canonical interpretation.&nbsp; Strings need to be in their canonical form (after all decoding or other processing has completed,) before they are used in access checks.&nbsp; For example, the code below checks for access too soon:
   </p>
   <p>
   </p>
@@ -227,19 +227,19 @@ return true;
   <p>
     This code incorrectly uses 
     CheckAccessToFile(input)
-     against the raw version of the input&amp;nbsp; (1).&amp;nbsp; You need to check for access just before the call to access or other policy decision:
+     against the raw version of the input&nbsp; (1).&nbsp; You need to check for access just before the call to access or other policy decision:
   </p>
   <pre>CheckAccessToFile(m_canonical_path);</pre>
   <p>
-    Note: &amp;nbsp;The code uses a pseudo-code function named 
+    Note: &nbsp;The code uses a pseudo-code function named 
     ConvertToCanonicalForm() 
-    to convert the input string to its canonical form.&amp;nbsp; This function must be replaced with the appropiate function call depending on the platform in use.&amp;nbsp; For instance, &amp;nbsp;depending on the technology in use, you might use Java’s 
+    to convert the input string to its canonical form.&nbsp; This function must be replaced with the appropiate function call depending on the platform in use.&nbsp; For instance, &nbsp;depending on the technology in use, you might use Java’s 
     getCanonicalPath()
     or Visual Basic’s 
     GetAbsolutePathName()
-    .&amp;nbsp; 
+    .&nbsp; 
     Make sure to check the platform in use for the relevant canonical conversion function.
-    &amp;nbsp;
+    &nbsp;
   </p>
   <p>
     <b>
@@ -259,7 +259,7 @@ return true;
     </b>
   </p>
   <p>
-    Even when assuming that a system checks the right form of a string at the correct time, problems may exist if the check is performed improperly.&amp;nbsp; Blacklists are frequently used for checks of this type, but they can easily result in a dangerous string being overlooked.&amp;nbsp; &amp;nbsp;Because they can be bypassed with unknown representations of an invalid resource, blacklists are almost always insufficient and they are a poor defense against this vulnerability. &amp;nbsp;The example pseudo-code below illustrates this:
+    Even when assuming that a system checks the right form of a string at the correct time, problems may exist if the check is performed improperly.&nbsp; Blacklists are frequently used for checks of this type, but they can easily result in a dangerous string being overlooked.&nbsp; &nbsp;Because they can be bypassed with unknown representations of an invalid resource, blacklists are almost always insufficient and they are a poor defense against this vulnerability. &nbsp;The example pseudo-code below illustrates this:
   </p>
   <pre>int grabFile(char* input) {
 char * m_canonical_path;
@@ -273,7 +273,7 @@ else return false;
 return true;
 }</pre>
   <p>
-    This code correctly checks the canonical form (CheckAccessToFile(m_canonical_path)), but fails to detect any dangerous pattern outside of the blacklist.&amp;nbsp; For example, the attacker might use an unlisted variation like the following one: :
+    This code correctly checks the canonical form (CheckAccessToFile(m_canonical_path)), but fails to detect any dangerous pattern outside of the blacklist.&nbsp; For example, the attacker might use an unlisted variation like the following one: :
   </p>
   <pre>C:\privat~1</pre>
   <p>
@@ -290,8 +290,8 @@ return true;
   <p>
   </p>
   <p>
-    Utilizing a white-list is a much better approach to protect against canonicalization attacks.&amp;nbsp; A white list is a list of all valid representations for a file.&amp;nbsp; The server checks the input against the white list and disallows any input strings outside of the white list.&amp;nbsp; This solves the problem of black lists where the attacker finds a variation of a file path that the server is unaware of.
-    &amp;nbsp;
+    Utilizing a white-list is a much better approach to protect against canonicalization attacks.&nbsp; A white list is a list of all valid representations for a file.&nbsp; The server checks the input against the white list and disallows any input strings outside of the white list.&nbsp; This solves the problem of black lists where the attacker finds a variation of a file path that the server is unaware of.
+    &nbsp;
   </p>
   <p>
     White lists can be implemented as a list of strings or as regular expressions (even though regular expressions are not a physical list, they represent a logical list with all possible matches.)
@@ -327,11 +327,11 @@ return true;
   <p>
   </p>
   <p>
-    All the code seen so far decides to access a file or folder based on string comparisons.&amp;nbsp; A backup solution consists in using operating system control mechanisms such as Access Controls Lists (ACL’s.)&amp;nbsp; These access-checking methods don’t rely on user supplied strings; they depend on the user privileges set by the server’s administrator.&amp;nbsp;&amp;nbsp;
-    &amp;nbsp;
+    All the code seen so far decides to access a file or folder based on string comparisons.&nbsp; A backup solution consists in using operating system control mechanisms such as Access Controls Lists (ACL’s.)&nbsp; These access-checking methods don’t rely on user supplied strings; they depend on the user privileges set by the server’s administrator.&nbsp;&nbsp;
+    &nbsp;
   </p>
   <p>
-    First you have to restrict the folder privileges using ACL’s.&amp;nbsp; Let’s say you use ACL’s to allow only administrators to read, write, and read that folder.&amp;nbsp; Nobody else can read the folder or browse to it.&amp;nbsp; The server runs with admin privileges so you need to create code that lowers the effective privileges on the server:
+    First you have to restrict the folder privileges using ACL’s.&nbsp; Let’s say you use ACL’s to allow only administrators to read, write, and read that folder.&nbsp; Nobody else can read the folder or browse to it.&nbsp; The server runs with admin privileges so you need to create code that lowers the effective privileges on the server:
   </p>
   <pre>bool ShowFile(char * input){
 /* start by changing to lower privileges */
@@ -350,20 +350,20 @@ RevertToSelf();
 return true;
 }</pre>
   <p>
-    Code like this mitigates canonicalization attacks using access control.&amp;nbsp; There are no <i>syntactic</i> decisions, no pattern matching of user supplied paths and bad patterns. Regardless of the path the attacker chooses,&amp;nbsp; if they are unprivileged then the system denies access to that resource.
+    Code like this mitigates canonicalization attacks using access control.&nbsp; There are no <i>syntactic</i> decisions, no pattern matching of user supplied paths and bad patterns. Regardless of the path the attacker chooses,&nbsp; if they are unprivileged then the system denies access to that resource.
   </p>
   <h2>
     Look for all entry points
   </h2>
   <p>
-    Now that you’ve seen examples of both what causes canonicalization bugs and how to fix them, you need to find the possible entry points for problems like this in your application.&amp;nbsp; Depending on what the application does, there may be only one or two pieces of functionality subject to these issues, or there may be many.&amp;nbsp; Start by making a list of these pieces of functionality and then work backwards to all of the entry points that can influence that functionality.&amp;nbsp; Your list of entry points might look like the following:
+    Now that you’ve seen examples of both what causes canonicalization bugs and how to fix them, you need to find the possible entry points for problems like this in your application.&nbsp; Depending on what the application does, there may be only one or two pieces of functionality subject to these issues, or there may be many.&nbsp; Start by making a list of these pieces of functionality and then work backwards to all of the entry points that can influence that functionality.&nbsp; Your list of entry points might look like the following:
   </p>
   <ul>
     <li>
       Request.QueryString[path]
     </li>
     <li>
-      &amp;_GET[path]
+      &_GET[path]
     </li>
     <li>
       HTTP variables, via form submission
@@ -414,7 +414,7 @@ return true;
     Once you’ve compiled the lists above, putting them into a table like the following will allow you to walk through the high risk components systematically during testing:
   </p>
   <p>
-    &amp;nbsp;
+    &nbsp;
   </p>
   <table>
     <tbody>
@@ -479,7 +479,7 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -493,21 +493,21 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -515,7 +515,7 @@ return true;
       <tr>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
@@ -531,7 +531,7 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -545,21 +545,21 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -567,7 +567,7 @@ return true;
       <tr>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
@@ -583,7 +583,7 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -597,21 +597,21 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -642,28 +642,28 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -671,7 +671,7 @@ return true;
       <tr>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
@@ -694,28 +694,28 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -739,14 +739,14 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -760,7 +760,7 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -775,7 +775,7 @@ return true;
       <tr>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
@@ -791,14 +791,14 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -812,7 +812,7 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -843,14 +843,14 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -873,7 +873,7 @@ return true;
         <td>
           <p>
             <b>
-              &amp;nbsp;
+              &nbsp;
             </b>
           </p>
         </td>
@@ -881,7 +881,7 @@ return true;
       <tr>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
@@ -896,17 +896,17 @@ return true;
         </td>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
         <td>
@@ -918,7 +918,7 @@ return true;
         </td>
         <td>
           <p>
-            &amp;nbsp;
+            &nbsp;
           </p>
         </td>
       </tr>
@@ -928,7 +928,7 @@ return true;
     Step 3: Start testing and exploring
   </h1>
   <p>
-    The next step is to start testing the implementation of the system using a simple fuzz string and observing how the system responds.&amp;nbsp; &amp;nbsp;&amp;nbsp;
+    The next step is to start testing the implementation of the system using a simple fuzz string and observing how the system responds.&nbsp; &nbsp;&nbsp;
   </p>
   <p>
   </p>
@@ -940,31 +940,31 @@ return true;
   </p>
   <pre> ..\..\..\..\xyz</pre>
   <p>
-    Then examine the results looking for any error message.&amp;nbsp; Error messages reveal useful information about what goes on with the web application (or a local application.)&amp;nbsp; For example, a web server might return the following error:
+    Then examine the results looking for any error message.&nbsp; Error messages reveal useful information about what goes on with the web application (or a local application.)&nbsp; For example, a web server might return the following error:
   </p>
   <pre>Your request contains invalid characters</pre>
   <p>
-    This indicates that the server has detected potentially dangerous characters in the string.&amp;nbsp; You could try replacing those characters with their URL encoded form, like so: 
+    This indicates that the server has detected potentially dangerous characters in the string.&nbsp; You could try replacing those characters with their URL encoded form, like so: 
   </p>
   <pre>..%5c..%5c..%5c..%5cxyz</pre>
   <p>
-    Now the server returns a file not found error.&amp;nbsp; This is good because you are now able to navigate to certain directories on the server that you couldn’t navigate to before.&amp;nbsp; However, since you are trying a fuzz string the server didn’t find a valid folder.&amp;nbsp; Nonetheless, the server is allowing navigation within the directory hierarchy.&amp;nbsp; The next step is to replace the fuzz string to get access to the target folder:
+    Now the server returns a file not found error.&nbsp; This is good because you are now able to navigate to certain directories on the server that you couldn’t navigate to before.&nbsp; However, since you are trying a fuzz string the server didn’t find a valid folder.&nbsp; Nonetheless, the server is allowing navigation within the directory hierarchy.&nbsp; The next step is to replace the fuzz string to get access to the target folder:
   </p>
   <pre>..%5c..%5c..%5cprivateFiles</pre>
   <p>
-    After only a few tries we reached this test string and found our target.&amp;nbsp; As you can see, if canonicalization allows for it, you may use such techniques for directory traversal attacks which the application believes it is protecting against.
+    After only a few tries we reached this test string and found our target.&nbsp; As you can see, if canonicalization allows for it, you may use such techniques for directory traversal attacks which the application believes it is protecting against.
   </p>
   <h1>
     Step 4: Tune test case data
   </h1>
   <p>
-    During this step you need to enhance your test cases with different variations to access a resource such as a file or folder.&amp;nbsp; Then you must tune your test case data depending on the entry point under test.&amp;nbsp; Finally, execute double encoding test cases.
+    During this step you need to enhance your test cases with different variations to access a resource such as a file or folder.&nbsp; Then you must tune your test case data depending on the entry point under test.&nbsp; Finally, execute double encoding test cases.
   </p>
   <h2>
     Try different ways of accessing the same resource
   </h2>
   <p>
-    There are different ways to open a file.&amp;nbsp; For example, you can try to navigate up and down the directory tree while accessing the file.&amp;nbsp; The following string opens the C:\privateFiles folder in Windows:
+    There are different ways to open a file.&nbsp; For example, you can try to navigate up and down the directory tree while accessing the file.&nbsp; The following string opens the C:\privateFiles folder in Windows:
   </p>
   <pre>C:\windows\..\privateFiles</pre>
   <p>
@@ -980,7 +980,7 @@ return true;
   </p>
   <p>
     Double encoding issues occur when the encoding and decoding functions are incorrectly coded and end up building dangerous strings.
-    &amp;nbsp;
+    &nbsp;
   </p>
   <p>
     For instance, the following application does the following:
@@ -995,7 +995,7 @@ return true;
     </li>
     <li>
       
-        (2)&amp;nbsp;&amp;nbsp;&amp;nbsp; 
+        (2)&nbsp;&nbsp;&nbsp; 
       
       Decodes the 
       $inputPath
@@ -1003,7 +1003,7 @@ return true;
     </li>
     <li>
       
-        (3)&amp;nbsp;&amp;nbsp;&amp;nbsp; 
+        (3)&nbsp;&nbsp;&nbsp; 
       
       Decodes 
       $inputPath
@@ -1011,7 +1011,7 @@ return true;
     </li>
     <li>
       
-        (4)&amp;nbsp;&amp;nbsp;&amp;nbsp; 
+        (4)&nbsp;&nbsp;&nbsp; 
       
       Opens a file based on the last form of 
       $inputPath
@@ -1022,7 +1022,7 @@ return true;
   <pre>&lt;?php
 $m_encoded_path;
 inputPath = $_GET['name'];
-//(1) check if the URL contains %2f.&amp;nbsp; Reject if found
+//(1) check if the URL contains %2f.&nbsp; Reject if found
 
 //(2)
 $inputPath = urldecode($inputPath);
@@ -1036,7 +1036,7 @@ OpenFile($inputPath);
   <p>
     An attacker can pass the following string to attempt accessing a file named “
     ../../private/SecretFile.doc
-    ” located an upper folder.&amp;nbsp; Here the attacker uses a double encoded string:
+    ” located an upper folder.&nbsp; Here the attacker uses a double encoded string:
   </p>
   <p>
   </p>
@@ -1051,7 +1051,7 @@ OpenFile($inputPath);
       Server checks for %2f and doesn’t find one, so it doesn’t reject the URL (1).
     </li>
     <li>
-      The first decoding function (2) translates the original string to:&amp;nbsp; 
+      The first decoding function (2) translates the original string to:&nbsp; 
       <b>
         http://www.anywebsite/app/name=..%2f..%..2f../private/SecretFile.doc 
       </b></li>
@@ -1082,7 +1082,7 @@ OpenFile($inputPath);
     </li>
   </ul>
   <p>
-    Look at the complete list of entry points made during step 2 and use your intuition during the testing phase to include any additional entry points.&amp;nbsp; Each entry point has a different format that you must take into account during testing.
+    Look at the complete list of entry points made during step 2 and use your intuition during the testing phase to include any additional entry points.&nbsp; Each entry point has a different format that you must take into account during testing.
   </p>
   <p>
   </p>
@@ -1090,7 +1090,7 @@ OpenFile($inputPath);
     Conclusions
   </h1>
   <p>
-    Canonicalization bugs are relatively easy to tackle.&amp;nbsp; First you need to understand why these bugs occur through their common attack scenarios.&amp;nbsp; Then learn why these bugs happen and how to mitigate them by using white lists and/or ACL’s instead of black lists, and check the input paths at the correct time.&amp;nbsp; After listing the high risk components and entry points, start testing with a simple fuzz string to see how the application reacts to it.&amp;nbsp; Finish by tuning your test cases with different attack variations based on the format of each entry point. Ensure that you understand any different encodings in use and tune your data according to specific rules needed based on context.
+    Canonicalization bugs are relatively easy to tackle.&nbsp; First you need to understand why these bugs occur through their common attack scenarios.&nbsp; Then learn why these bugs happen and how to mitigate them by using white lists and/or ACL’s instead of black lists, and check the input paths at the correct time.&nbsp; After listing the high risk components and entry points, start testing with a simple fuzz string to see how the application reacts to it.&nbsp; Finish by tuning your test cases with different attack variations based on the format of each entry point. Ensure that you understand any different encodings in use and tune your data according to specific rules needed based on context.
   </p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -20,18 +20,18 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+    <li>Microsoft&#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&#174; 2008</li></li>
   </ul>
   <h1>What to Do</h1>
   <p>Know the available impersonation methods.</p>
   <h1>How</h1>
-  <p>Impersonation is used to restrict or authorize original caller&amp;#8217;s access to a WCF service&amp;#8217;s local resources, like files etc. There are three options for impersonation:</p>
+  <p>Impersonation is used to restrict or authorize original caller&#8217;s access to a WCF service&#8217;s local resources, like files etc. There are three options for impersonation:</p>
   <ul>
     <li>Impersonating the original caller declaratively on specific operations. <li>Impersonating the original caller declaratively on the entire service. <li>Impersonating the original caller programmatically within an operation.<br /></li></li></li>
   </ul>
   <p>
     <strong>Impersonating the original caller declaratively on specific operations<br /></strong>Use this option when you want to impersonate the original caller for entire duration of specific operation. Impersonation is a costly operation and is usually used for higher privileged original callers, hence using impersonation selectively only on the operations which need it reduces the potential attack surface. You can impersonate declaratively by applying the OperationBehaviorAttribute attribute on any operation that requires client impersonation, as shown in the following code example.</p>
-  <pre>&amp;#91;OperationBehavior(Impersonation = ImpersonationOption.Required)&amp;#93;<br />public string GetData(int value)<br />&amp;#123;<br />   return &amp;#8220;test&amp;#8221;;<br />&amp;#125;</pre>
+  <pre>&#91;OperationBehavior(Impersonation = ImpersonationOption.Required)&#93;<br />public string GetData(int value)<br />&#123;<br />   return &#8220;test&#8221;;<br />&#125;</pre>
   <p>
     <strong>Impersonating the original caller declaratively on the entire service<br /></strong>Use this option when you want to impersonate the original caller for entire duration of all the operations. Impersonation is a costly operation and is usually used for higher privileged original callers. You need to be careful when opting for this as it potentially increases the attack surface. For impersonating the entire service set the impersonateCallerForAllOperations attribute to "true" in the WCF configuration file, as shown in the following example.</p>
   <pre>...<br />&lt;behaviors&gt;<br />  &lt;serviceBehaviors&gt;<br />    &lt;behavior name="ServiceBehavior"&gt;<br />      &lt;serviceMetadata httpGetEnabled="true" /&gt;<br />      &lt;serviceDebug includeExceptionDetailInFaults="false" /&gt;<br />      &lt;serviceAuthorization impersonateCallerForAllOperations="true" /&gt;<br />    &lt;/behavior&gt;<br />  &lt;/serviceBehaviors&gt;<br />&lt;/behaviors&gt;<br />...</pre>
@@ -41,14 +41,14 @@
   <p>
     <strong>Impersonating the original caller programmatically within an operation</strong>
     <br />Use this option when you want to impersonate the original caller for a small duration in a service operation. Impersonation is costly operation and is usually used for higher privileged original callers, hence using impersonation only when its needed reduces the potential attack surface. Perform programmatic impersonation as shown in the following example.</p>
-  <pre>public string GetData(int value)<br />&amp;#123; <br /> using (ServiceSecurityContext.Current.WindowsIdentity.Impersonate())<br /> &amp;#123;<br />     // return the impersonated user (original users identity)<br />     return string.Format("Hi, &amp;#123;0&amp;#125;, you have entered: &amp;#123;1&amp;#125;",<br />          WindowsIdentity.GetCurrent().Name, value);<br /> &amp;#125;   <br />&amp;#125;</pre>
+  <pre>public string GetData(int value)<br />&#123; <br /> using (ServiceSecurityContext.Current.WindowsIdentity.Impersonate())<br /> &#123;<br />     // return the impersonated user (original users identity)<br />     return string.Format("Hi, &#123;0&#125;, you have entered: &#123;1&#125;",<br />          WindowsIdentity.GetCurrent().Name, value);<br /> &#125;   <br />&#125;</pre>
   <p>
     <strong>Note</strong>: It is important to revert to impersonation. Failure to do so can form the basis for denial of service and elevation of privilege attacks. In the example above the using statement ensures that the impersonation is reverted after execution of the using block.</p>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information, see &amp;#8220;Delegation and Impersonation with WCF&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms730088.aspx">http://msdn2.microsoft.com/en-us/library/ms730088.aspx</a><li>For impersonation and delegation Q&amp;A, see the Impersonation/Delegation section of &amp;#8220;WCF 3.5 Questions and Answers&amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a><a href="http://www.codeplex.com/WCFSecurity/Wiki/View.aspx?title=Questions&amp;#37;20and&amp;#37;20Answers&amp;referringTitle=Home"></a></li></li>
+    <li>For more information, see &#8220;Delegation and Impersonation with WCF&#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms730088.aspx">http://msdn2.microsoft.com/en-us/library/ms730088.aspx</a><li>For impersonation and delegation Q&A, see the Impersonation/Delegation section of &#8220;WCF 3.5 Questions and Answers&#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Questions&#37;20and&#37;20Answers&#37;20&#37;28Q&#37;26A&#37;29&referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Questions&#37;20and&#37;20Answers&#37;20&#37;28Q&#37;26A&#37;29&referringTitle=Home</a><a href="http://www.codeplex.com/WCFSecurity/Wiki/View.aspx?title=Questions&#37;20and&#37;20Answers&referringTitle=Home"></a></li></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

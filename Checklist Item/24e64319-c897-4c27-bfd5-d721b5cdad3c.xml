@@ -27,7 +27,7 @@
   <ol>
     <li>
       <p>
-        <strong>Review your application's design and requirements. </strong>Thoroughly examine your application's design and requirements and identify all functionality that is necessary for your application to perform its tasks. Research whether each component can be implemented using Java. If the Java SDK cannot provide a viable solution for a component,&amp;nbsp;ensure that the component is using JNI. Common tasks that may require the use of JNI include:</p>
+        <strong>Review your application's design and requirements. </strong>Thoroughly examine your application's design and requirements and identify all functionality that is necessary for your application to perform its tasks. Research whether each component can be implemented using Java. If the Java SDK cannot provide a viable solution for a component,&nbsp;ensure that the component is using JNI. Common tasks that may require the use of JNI include:</p>
       <ul>
         <li>Interaction with the underlying operating system <li>Low-level network operations <li>Interaction with legacy software <li>Interaction with external libraries that are written in native code <li>Interaction with hardware devices</li></li></li></li></li>
       </ul>
@@ -38,7 +38,7 @@
           <strong>Ensure that your application is optimized. </strong>Ensure that your application's native components are optimized such that transitions between native and Java code are minimized. Use the following list of items to verify that your application's native code is optimized:</p>
         <ul>
           <li>
-            <strong>Language Transitions</strong>: Ensure that the JNI component can accomplish its tasks with as few calls to your application's Java components as possible. <li><strong>Wrapper Method</strong>: Verify that your application invokes multiple native calls from a single C/C&amp;#43;&amp;#43; method and not through its Java code. <li><strong>DLL/Library Optimization</strong>: Ensure that your application's JNI code is not scattered throughout multiple libraries.</li></li></li>
+            <strong>Language Transitions</strong>: Ensure that the JNI component can accomplish its tasks with as few calls to your application's Java components as possible. <li><strong>Wrapper Method</strong>: Verify that your application invokes multiple native calls from a single C/C&#43;&#43; method and not through its Java code. <li><strong>DLL/Library Optimization</strong>: Ensure that your application's JNI code is not scattered throughout multiple libraries.</li></li></li>
         </ul>
       </li>
     </li>
@@ -51,7 +51,7 @@
         <strong>Understand the functionality. </strong>Make sure there is a clear understanding of the required functionality. Label each component as low or high level:</p>
       <ul>
         <li>
-          <strong>Low level:</strong> Low-level components are closely tied to the hardware and operating system. Although low-level components are commonly written in native code, Java provides support for the most basic operations such as filesystem access, sockets, etc. <li><strong>High level:</strong> High-level components hold the business logic within an application. Their loose coupling with hardware and operating systems allows them to be implemented 100&amp;#37; using Java. </li></li>
+          <strong>Low level:</strong> Low-level components are closely tied to the hardware and operating system. Although low-level components are commonly written in native code, Java provides support for the most basic operations such as filesystem access, sockets, etc. <li><strong>High level:</strong> High-level components hold the business logic within an application. Their loose coupling with hardware and operating systems allows them to be implemented 100&#37; using Java. </li></li>
       </ul>
       <li>
         <p>
@@ -61,11 +61,11 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The following segment shows JNI code that utilizes a COM object. Because the code uses Java to verify the GUID's length, the application does unnecessary crossing of language boundaries by invoking Java functionality from native code, thereby disrupting the JVM's security optimization routines. </p>
-  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &amp;#42; env, jobject jobj, jstring jguid)&amp;#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries twice:<br />      // get the string and get the string's length<br />      char&amp;#42; temp_guid = (&amp;#42;env)-&gt;GetStringUTFChars(env, jguid, &amp;iscopy);<br />      int guid_size = (int)(&amp;#42;env)-&gt;GetStringLength(env, jguid);<br /><br />      ...<br /> &amp;#125;</pre>
+  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &#42; env, jobject jobj, jstring jguid)&#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries twice:<br />      // get the string and get the string's length<br />      char&#42; temp_guid = (&#42;env)-&gt;GetStringUTFChars(env, jguid, &iscopy);<br />      int guid_size = (int)(&#42;env)-&gt;GetStringLength(env, jguid);<br /><br />      ...<br /> &#125;</pre>
   <h1>Solution Example</h1>
   <p>The following segment shows JNI code that utilizes a COM object. Because the code uses C to verify the GUID's length, there is no extra crossing of language boundaries; therefore, the JVM's security optimization routines are not disrupted. </p>
   <p />
-  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &amp;#42; env, jobject jobj, jstring jguid)&amp;#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries once:<br />      // get the string<br />      char&amp;#42; temp_guid = (&amp;#42;env)-&gt;GetStringUTFChars(env, jguid, &amp;iscopy);<br />      int guid_size = (int)strlen(temp_guid);<br /><br />      ...<br /> &amp;#125;</pre>
+  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &#42; env, jobject jobj, jstring jguid)&#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries once:<br />      // get the string<br />      char&#42; temp_guid = (&#42;env)-&gt;GetStringUTFChars(env, jguid, &iscopy);<br />      int guid_size = (int)strlen(temp_guid);<br /><br />      ...<br /> &#125;</pre>
   <h1>Additional Resources</h1>
   <ul>
     <li>For more information about the security issues that JNI introduces, see: <a href="http://www.owasp.org/index.php/Unsafe_JNI">Unsafe JNI</a> from OWASP. </li>

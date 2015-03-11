@@ -40,23 +40,23 @@
     <pre>
       <p>HttpServletRequest request = ...;</p>
       <p>HttpServletResponse response = ...;</p>
-      <p>String location = request.getParameter("loc") &amp;#43; "/other/url";</p>
+      <p>String location = request.getParameter("loc") &#43; "/other/url";</p>
       <p>response.sendRedirect(location);</p>
     </pre>
     <p>A more secure example using ESAPI is shown below:</p>
     <pre>
       <p>HttpServletRequest request = ...;</p>
       <p>HttpServletResponse response = ...;</p>
-      <p>String location = request.getParameter("loc") &amp;#43; "/other/url";</p>
-      <p>try &amp;#123;</p>
-      <p>&amp;#9;ESAPI.httpUtilities().sendRedirect(response,location);</p>
-      <p>&amp;#125; catch (AccessControlException ace) &amp;#123;</p>
-      <p>&amp;#9;//a bad location was attempted ... handle exception here</p>
-      <p>&amp;#125;</p>
+      <p>String location = request.getParameter("loc") &#43; "/other/url";</p>
+      <p>try &#123;</p>
+      <p>&#9;ESAPI.httpUtilities().sendRedirect(response,location);</p>
+      <p>&#125; catch (AccessControlException ace) &#123;</p>
+      <p>&#9;//a bad location was attempted ... handle exception here</p>
+      <p>&#125;</p>
     </pre>
     <p>(Note that additional protections should be added, such as whitelist validation, but the example above is for simplicity.)</p>
     <p>In addition to using this function, you'll need to update the <em>ESAPI.properties</em> file for your application to inform ESAPI what your application name is so it knows the expected relative path. An example of the snippet you need to update is below:</p>
-    <pre>Validator.Redirect=&amp;#94;\\/myapp.&amp;#42;&amp;#36;</pre>
+    <pre>Validator.Redirect=&#94;\\/myapp.&#42;&#36;</pre>
   </span>
   <h1>See Also</h1>
   <span>

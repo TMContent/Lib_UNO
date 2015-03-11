@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
-    <li>All software applications&amp;nbsp;</li>
+    <li>All software applications&nbsp;</li>
   </ul>
   <h1>Summary</h1>
   <p>Software applications that consist of multiple components running with different privileges are susceptible to luring attacks. This attack consists on tricking the application into executing privileged actions on behalf of an attacker. The attacker commonly uses a less privileged component to lure a higher privileged component into executing the malicious instructions. Thus, this attack is a case of escalation of privileges.</p>
@@ -28,25 +28,25 @@
   <ul>
     <li>Step 1: Understand attack scenarios</li>
     <li>Step 2: Analyze causes and countermeasures</li>
-    <li>Step 3: Start testing and exploring&amp;nbsp;</li>
+    <li>Step 3: Start testing and exploring&nbsp;</li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>The first step in learning how to test for luring bugs is to understand the different types of luring attack scenarios:</p>
   <ul>
     <li>Exploiting delegation of scheduled tasks</li>
-    <li>Exploiting impersonation<b><i>&amp;nbsp;</i></b></li>
+    <li>Exploiting impersonation<b><i>&nbsp;</i></b></li>
   </ul>
   <h2>
     Scenario 1: Exploiting delegation of scheduled tasks
   </h2>
-  <p>Many software applications allow for the creation of tasks that are scheduled to execute at a later time by a separate component of the application. In some cases, the separate component executes these tasks with higher privileges, which opens a window for luring attacks. In this scenario, an attacker uses the scheduled tasks functionality with the goal of having the application run tasks with higher privileges than what the attacker would normally have.&amp;nbsp; </p>
+  <p>Many software applications allow for the creation of tasks that are scheduled to execute at a later time by a separate component of the application. In some cases, the separate component executes these tasks with higher privileges, which opens a window for luring attacks. In this scenario, an attacker uses the scheduled tasks functionality with the goal of having the application run tasks with higher privileges than what the attacker would normally have.&nbsp; </p>
   <p>A good example of this luring scenario affecting Microsoft SQL Server was discovered by David Litchfield in 2002. Under some configurations, SQL Server executes two separate processes: one for the actual database server and one for the SQL Server Agent. The issue was due to the fact that remote users had access to an extended procedure named <i>xp_runwebtask</i> that could be used to insert tasks to be executed by the SQL Server Agent. Attackers were able to execute this stored procedure with low privileges, set up a malicious task that required higher privileges to execute, and then waited for the agent to pick up and execute the task. A similar bug, affecting the Symantec LiveUpdate client, was discovered in late 2004. The bug allowed low privileged clients to use the LiveUpdate GUI to set up a scheduled task. The maliciously set up tasks were later run by the LiveUpdate agent at higher privileges, resulting in a luring attack.</p>
   <h2>
-    Scenario 2:&amp;nbsp; Exploiting impersonation
+    Scenario 2:&nbsp; Exploiting impersonation
   </h2>
-  <p>To reduce their privileged attack surface, software applications run with low privileges and impersonate higher privileged accounts only to perform certain tasks, and then revert to their lower privileges. In this scenario, the attacker tricks the application into creating certain tasks that will execute while the application is impersonating the higher privileged account.&amp;nbsp;</p>
+  <p>To reduce their privileged attack surface, software applications run with low privileges and impersonate higher privileged accounts only to perform certain tasks, and then revert to their lower privileges. In this scenario, the attacker tricks the application into creating certain tasks that will execute while the application is impersonating the higher privileged account.&nbsp;</p>
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
-  <p>Next, before executing test cases, it is necessary to understand what causes luring bugs and how to protect against them.&amp;nbsp; </p>
+  <p>Next, before executing test cases, it is necessary to understand what causes luring bugs and how to protect against them.&nbsp; </p>
   <h2>
     Scheduled tasks 
   </h2>
@@ -59,7 +59,7 @@
     Microsoft .NET applications
   </h2>
   <p>Microsoft .NET applications work by integrating different assemblies into a single process, each assembly having its own privilege levels and permissions. For instance, some assemblies may run with minimum privileges such as a “partially trusted assembly” and have restricted access to system resources, while others may have more privileges such as a “fully trusted assembly” and have unlimited access to system resources. The .NET framework protects against luring attacks from untrusted assemblies using implicit <i>LinkDemands</i> that walk the stack before executing privileged commands across assemblies, checking that all assemblies in the stack have the appropriate permissions. Therefore, when an attacker uses a malicious, non-trusted assembly hosted on a remote site to call a fully trusted assembly installed in a target client’s local machine to perform a privileged action, the runtime checks the stack, determines that the caller is non-trusted, and throws a security exception to protect the target.</p>
-  <p>Nevertheless, even though APTCA mitigates the deployment problem, it reintroduces luring attacks to the .NET environment if improperly used. A developer that uses APTCA in an assembly without changing the assembly’s code is increasing its attack surface and the chances of a luring attack. To protect against this scenario, developers who use APTCA must take additional security measures by using explicit <i>Demands</i> before any high privileged instruction. By doing this, developers are able to mark trusted assemblies as APTCA while preventing non-trusted assemblies from executing luring attacks.&amp;nbsp;</p>
+  <p>Nevertheless, even though APTCA mitigates the deployment problem, it reintroduces luring attacks to the .NET environment if improperly used. A developer that uses APTCA in an assembly without changing the assembly’s code is increasing its attack surface and the chances of a luring attack. To protect against this scenario, developers who use APTCA must take additional security measures by using explicit <i>Demands</i> before any high privileged instruction. By doing this, developers are able to mark trusted assemblies as APTCA while preventing non-trusted assemblies from executing luring attacks.&nbsp;</p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you’ve learned all the theoretical aspects of luring attacks, it is necessary to execute test cases to test for them in your application.</p>
   <h2>
@@ -74,7 +74,7 @@
     <li>Create a scheduled task by directly modifying the store (file, registry, database table, etc.).</li>
     <li>Wait for the application to pick up and execute task.</li>
   </ol>
-  <p>Expected results: The application is vulnerable if it executes the task created in step 5.<b><i>&amp;nbsp;</i></b></p>
+  <p>Expected results: The application is vulnerable if it executes the task created in step 5.<b><i>&nbsp;</i></b></p>
   <h2>
     Test for luring by using application’s functionality to schedule a task (local test)
   </h2>
@@ -82,10 +82,10 @@
   <ol>
     <li>Log in to the system as a low privileged user.</li>
     <li>Monitor the application to determine how and when the application stores any scheduled tasks. For this step you can use a file system/registry monitoring tool such Process Monitor from <a href="http://www.sysinternals.com/">www.sysinternals.com</a>. The goal here is to find an application functionality that allows low privileged users to create a task (similar to the SQL server agent and LiveUpdate scenarios mentioned previously).</li>
-    <li>Create a task using the application’s functionality. Continue with step 4 if you were able to create a scheduled task. &amp;nbsp;If you could not create a scheduled task, end test case.</li>
+    <li>Create a task using the application’s functionality. Continue with step 4 if you were able to create a scheduled task. &nbsp;If you could not create a scheduled task, end test case.</li>
     <li>Wait for application to pick up and execute the task with higher privileges that the ones used during step 1.</li>
   </ol>
-  <p>Expected results: The application is vulnerable if it executes the task created in step 3 with higher privileges.<b><i>&amp;nbsp;</i></b></p>
+  <p>Expected results: The application is vulnerable if it executes the task created in step 3 with higher privileges.<b><i>&nbsp;</i></b></p>
   <h2>
     Test for luring through impersonation (local test)
   </h2>
@@ -97,7 +97,7 @@
     <li>Check if there are any commands that execute while impersonating a higher privileged account. Continue with step 5 if these commands exist. If no such commands exist, end the test case.</li>
     <li>Modify a command found in step 4 to see if it gets executed with higher privileges.</li>
   </ol>
-  <p>Expected results: The application is vulnerable if it executes the privileged commands modified in step 5.<b><i>&amp;nbsp;</i></b></p>
+  <p>Expected results: The application is vulnerable if it executes the privileged commands modified in step 5.<b><i>&nbsp;</i></b></p>
   <h2>
     Test for luring from a remote assembly (Microsoft .NET test)
   </h2>
@@ -107,11 +107,11 @@
     <li>Create an ASP .NET page/assembly that invokes the local assembly and calls into a function that executes a high privileged action.</li>
     <li>Create a malicious site to host the page developed in step 2.</li>
     <li>Log in to target machine.</li>
-    <li>Open a browser and navigate to the page created in step 3. &amp;nbsp;</li>
+    <li>Open a browser and navigate to the page created in step 3. &nbsp;</li>
   </ol>
-  <p>Expected results: The application is vulnerable if it executes the privileged actions invoked in step 2.&amp;nbsp;</p>
+  <p>Expected results: The application is vulnerable if it executes the privileged actions invoked in step 2.&nbsp;</p>
   <h1>Conclusions</h1>
-  <p>Luring attacks consist of using a low privileged account to lure a vulnerable application into executing actions with high privileges. The two most noticeable scenarios consist of exploiting delegation of scheduled tasks and remotely invoking high privileged .NET classes/assemblies.&amp;nbsp; These bugs occur primarily due to insecure design decisions such as storing tasks in insecure stores or allowing low privileged users to create tasks that will be delegated to higher privileged components. In .NET, these bugs exist due to an incorrect marking of assemblies, which allows partially trusted code to call them without taking the appropriate security measures.&amp;nbsp; </p>
+  <p>Luring attacks consist of using a low privileged account to lure a vulnerable application into executing actions with high privileges. The two most noticeable scenarios consist of exploiting delegation of scheduled tasks and remotely invoking high privileged .NET classes/assemblies.&nbsp; These bugs occur primarily due to insecure design decisions such as storing tasks in insecure stores or allowing low privileged users to create tasks that will be delegated to higher privileged components. In .NET, these bugs exist due to an incorrect marking of assemblies, which allows partially trusted code to call them without taking the appropriate security measures.&nbsp; </p>
   <p>Testing for luring bugs requires:</p>
   <p>
   </p>

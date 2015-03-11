@@ -40,7 +40,7 @@
     <li>
       <p>
         <strong>Enforce the password change policy.</strong> Embed the change of password mechanism into the authentication routine. If your application uses ASP.NET membership providers, use the ASP.NET RoleManager to identify the appropriate password change interval and prompt the user to change their password if necessary. It is recommended to place such functionality immediately after the authentication procedure. Example:</p>
-      <pre>bool changePass = false;<br />string username = HttpContext.Current.User.Identity.Name;<br />MembershipProvider membershipProvider = Membership.Provider;<br />MembershipUser user = membershipProvider.GetUser(username, true); <br />TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;<br />if (Roles.IsUserInRole("Admin") &amp;&amp; diff.Days &gt;= 30)<br />{    <br />  changePass = true;<br />} <br />if (Roles.IsUserInRole("Users") &amp;&amp; diff.Days &gt;= 90)<br />{    <br />  changePass = true;<br />} <br />if (changePass)<br />{    <br />  HttpContext.Current.Response.Redirect("ChangePass.aspx", true);<br />}</pre>
+      <pre>bool changePass = false;<br />string username = HttpContext.Current.User.Identity.Name;<br />MembershipProvider membershipProvider = Membership.Provider;<br />MembershipUser user = membershipProvider.GetUser(username, true); <br />TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;<br />if (Roles.IsUserInRole("Admin") && diff.Days &gt;= 30)<br />{    <br />  changePass = true;<br />} <br />if (Roles.IsUserInRole("Users") && diff.Days &gt;= 90)<br />{    <br />  changePass = true;<br />} <br />if (changePass)<br />{    <br />  HttpContext.Current.Response.Redirect("ChangePass.aspx", true);<br />}</pre>
     </li>
   </ol>
   <h1>Problem Example</h1>
@@ -52,9 +52,9 @@
   <p>The following code is part of the application's authentication routine. Because the application forces its users to renew their passwords, there is limited time for an attacker to guess the user's password.</p>
   <blockquote>
     <pre>&lt;!-- The application's login control --&gt;<br />&lt;asp:Login ID="Login1" runat="server" DestinationPageUrl="~/Protected.aspx" /&gt; <br />// The Page_Load method of Protected.aspxprotected <br />void Page_Load(object sender, EventArgs e)<br />{    <br />  CheckPasswordMaturity();<br />} </pre>
-    <pre>void CheckPasswordMaturity()<br />{    <br />  bool changePass = false;    <br />  string username = HttpContext.Current.User.Identity.Name;    <br />  MembershipProvider membershipProvider = Membership.Provider;    <br />  MembershipUser user = membershipProvider.GetUser(username, true);     <br />  TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;    <br />  if (Roles.IsUserInRole("Admin") &amp;&amp; diff.Days &gt;= 30)    <br />  {        <br />    changePass = true;    <br />  }     <br />  if (Roles.IsUserInRole("Users") &amp;&amp; diff.Days &gt;= 90)    <br />  {        <br />    changePass = true;    <br />  }     <br />  if (changePass)    <br />  {        <br />    HttpContext.Current.Response.Redirect("ChangePass.aspx", true);    <br />  }<br />}</pre>
+    <pre>void CheckPasswordMaturity()<br />{    <br />  bool changePass = false;    <br />  string username = HttpContext.Current.User.Identity.Name;    <br />  MembershipProvider membershipProvider = Membership.Provider;    <br />  MembershipUser user = membershipProvider.GetUser(username, true);     <br />  TimeSpan diff = DateTime.Now - user.LastPasswordChangedDate;    <br />  if (Roles.IsUserInRole("Admin") && diff.Days &gt;= 30)    <br />  {        <br />    changePass = true;    <br />  }     <br />  if (Roles.IsUserInRole("Users") && diff.Days &gt;= 90)    <br />  {        <br />    changePass = true;    <br />  }     <br />  if (changePass)    <br />  {        <br />    HttpContext.Current.Response.Redirect("ChangePass.aspx", true);    <br />  }<br />}</pre>
   </blockquote>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

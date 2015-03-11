@@ -18,7 +18,7 @@
     <Data><![CDATA[<h1>Applies to</h1>
   <p>Scala and Play Framework 2.1.0+</p>
   <h1>What to Check For</h1>
-  <p>Ensure that encryption is used to avoid sensitive data from being stored as&amp;nbsp;plaintext in application configuration files or elsewhere.</p>
+  <p>Ensure that encryption is used to avoid sensitive data from being stored as&nbsp;plaintext in application configuration files or elsewhere.</p>
   <h1>Why</h1>
   <p>Sensitive application data can be compromised if stored in plaintext. Unauthorized access by users or attackers can lead to information disclosure.</p>
   <h1>How to Check</h1>
@@ -26,7 +26,7 @@
   <ol>
     <li>
       <p>
-        <strong>Identify sensitive information.&amp;nbsp;</strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to:</p>
+        <strong>Identify sensitive information.&nbsp;</strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to:</p>
       <ul>
         <li>names of customers</li>
         <li>government issued ID numbers</li>
@@ -43,32 +43,32 @@
     </li>
     <li>
       <p>
-        <strong>Verify that sensitive data is stored securely.&amp;nbsp;</strong>Ensure that your application stores sensitive data using either hashing or encryption:</p>
+        <strong>Verify that sensitive data is stored securely.&nbsp;</strong>Ensure that your application stores sensitive data using either hashing or encryption:</p>
       <ul>
         <li>
           <p>
-            <strong>Hashing:&amp;nbsp;</strong>Hashing is a one-way mechanism for storing sensitive data in a non-retrievable way. If your application uses hashing as means for storing sensitive data, verify that the following pieces are in place:</p>
+            <strong>Hashing:&nbsp;</strong>Hashing is a one-way mechanism for storing sensitive data in a non-retrievable way. If your application uses hashing as means for storing sensitive data, verify that the following pieces are in place:</p>
           <ul>
             <li>
               <strong>Salt</strong>: Your application generates its salt using the SecureRandom class.</li>
             <li>
               <strong>Function</strong>: Your application uses SHA-256, SHA-384, or SHA-512 as its hash function.</li>
             <li>
-              <strong>Invocation</strong>: Your application invokes the&amp;nbsp;<em>MessageDigest.digest</em>&amp;nbsp;method to perform the hashing procedure.</li>
+              <strong>Invocation</strong>: Your application invokes the&nbsp;<em>MessageDigest.digest</em>&nbsp;method to perform the hashing procedure.</li>
             <li>
               <strong>Clean-up</strong>: Your application securely cleans-up all instances of the sensitive data after the hashing procedure has been completed.</li>
           </ul>
         </li>
         <li>
           <p>
-            <strong>Encryption:</strong>&amp;nbsp;Encryption is a mechanism for storing sensitive data in a retrievable way. If your application uses encryption as means for storing sensitive data, verify that the following pieces are in place:</p>
+            <strong>Encryption:</strong>&nbsp;Encryption is a mechanism for storing sensitive data in a retrievable way. If your application uses encryption as means for storing sensitive data, verify that the following pieces are in place:</p>
           <ul>
             <li>
-              <strong>Encryption Key</strong>: Verify that your application's encryption keys are securely stored inside your application's key store.&amp;nbsp;</li>
+              <strong>Encryption Key</strong>: Verify that your application's encryption keys are securely stored inside your application's key store.&nbsp;</li>
             <li>
               <strong>Function</strong>: Check if your application uses AES, 3DES, or any other strong symmetric encryption function.</li>
             <li>
-              <strong>Invocation</strong>: Check if your application invokes the&amp;nbsp;<em>Cipher.init</em>&amp;nbsp;and&amp;nbsp;<em>Cipher.doFinal</em>&amp;nbsp;methods to perform the encryption procedure.</li>
+              <strong>Invocation</strong>: Check if your application invokes the&nbsp;<em>Cipher.init</em>&nbsp;and&nbsp;<em>Cipher.doFinal</em>&nbsp;methods to perform the encryption procedure.</li>
             <li>
               <strong>Clean-up</strong>: Check if your application securely cleans-up all instances of the sensitive data and their encryption keys after the encryption procedure has been completed.</li>
           </ul>
@@ -82,7 +82,7 @@
   <ol>
     <li>
       <p>
-        <strong>Identify sensitive information.&amp;nbsp;</strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, customer names, government-issued ID numbers, credit card and other financial information, passwords, and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements as they apply to your application to identify sensitive data. Sensitive data can be defined as follows:</p>
+        <strong>Identify sensitive information.&nbsp;</strong>Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, customer names, government-issued ID numbers, credit card and other financial information, passwords, and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements as they apply to your application to identify sensitive data. Sensitive data can be defined as follows:</p>
       <ul>
         <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others.</li>
         <li>Information that a user provides that they would not want shared with other users of the application.</li>
@@ -91,11 +91,11 @@
     </li>
     <li>
       <p>
-        <strong>Choose an appropriate protection mechanism.&amp;nbsp;</strong>Choosing the appropriate protection mechanism depends on the purpose and use of the sensitive data.</p>
+        <strong>Choose an appropriate protection mechanism.&nbsp;</strong>Choosing the appropriate protection mechanism depends on the purpose and use of the sensitive data.</p>
       <ul>
         <li>
           <p>
-            <strong>Hashing the application data:</strong>&amp;nbsp;Use hashing if the application data will be used only for comparison purposes. If hashing is used, choose a longer salt: 16 or more bits.&amp;nbsp;In the event&amp;nbsp;that the produced hash is compromised, longer salts make it more difficult for an attacker to gain access to the sensitive data. If your application uses randomly generated salt, make sure that your application encrypts the random salt and stores it into a configuration file. Always use&amp;nbsp;<em>SecureRandom</em>&amp;nbsp;and not&amp;nbsp;<em>Random</em>&amp;nbsp;to generate the salt. Example of using&amp;nbsp;<em>SecureRandom</em>&amp;nbsp;to generate a random salt:</p>
+            <strong>Hashing the application data:</strong>&nbsp;Use hashing if the application data will be used only for comparison purposes. If hashing is used, choose a longer salt: 16 or more bits.&nbsp;In the event&nbsp;that the produced hash is compromised, longer salts make it more difficult for an attacker to gain access to the sensitive data. If your application uses randomly generated salt, make sure that your application encrypts the random salt and stores it into a configuration file. Always use&nbsp;<em>SecureRandom</em>&nbsp;and not&nbsp;<em>Random</em>&nbsp;to generate the salt. Example of using&nbsp;<em>SecureRandom</em>&nbsp;to generate a random salt:</p>
           <pre>// Random generator
 val random = new scala.util.Random(new java.security.SecureRandom())
  
@@ -117,14 +117,14 @@ def randomAlphanumericString(n: Int) =
         </li>
         <li>
           <p>
-            <strong>Encrypting the application data.&amp;nbsp;</strong>Use encryption if the application data will be retrieved at a later stage.<br /><br />Use symmetric encryption if and only if your application is the only entity that will access the encrypted data. Use a key size of 265-bit or higher and AES for symmetric encryption.<br /><br />Use public/private key encryption if the data will be accessed by two or more parties. Use a key size of 2048-bit or higher and RSA for public/private key encryption. Public/private key encryption allows your application to share sensitive data with multiple entities without disclosing its own encryption key.</p>
+            <strong>Encrypting the application data.&nbsp;</strong>Use encryption if the application data will be retrieved at a later stage.<br /><br />Use symmetric encryption if and only if your application is the only entity that will access the encrypted data. Use a key size of 265-bit or higher and AES for symmetric encryption.<br /><br />Use public/private key encryption if the data will be accessed by two or more parties. Use a key size of 2048-bit or higher and RSA for public/private key encryption. Public/private key encryption allows your application to share sensitive data with multiple entities without disclosing its own encryption key.</p>
           <pre>// Because the following code generates a new encryption key,<br />// make sure to store it into the application's keystore.<br />KeyGenerator kgen = KeyGenerator.getInstance("AES");<br />kgen.init(256);<br />SecretKey skey = kgen.generateKey();<br /><br />// Set up cipherCipher cipher = Cipher.getInstance("AES");<br />cipher.init(Cipher.ENCRYPT_MODE, skey);<br />// Note that sensitiveData is of type byte[] and contains<br />// data that is sensitive in nature<br />byte[] encrypted = cipher.doFinal(sensitiveData);</pre>
         </li>
       </ul>
     </li>
     <li>
       <p>
-        <strong>Apply the appropriate protection mechanism.&amp;nbsp;</strong>Evaluate the code and determine the places where sensitive data is stored. Apply the established protection mechanism at each location.</p>
+        <strong>Apply the appropriate protection mechanism.&nbsp;</strong>Evaluate the code and determine the places where sensitive data is stored. Apply the established protection mechanism at each location.</p>
     </li>
   </ol>
   <br />]]></Data>

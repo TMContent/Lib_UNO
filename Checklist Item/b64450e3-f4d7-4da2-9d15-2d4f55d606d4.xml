@@ -21,18 +21,18 @@
     <Data><![CDATA[<br />
   <br />
   <h1>What to Check For</h1>
-  <p>Check to ensure that your application avoids using&amp;nbsp;<strong>LogonUser</strong> API to create impersonation tokens because this forces to store user names and passwords on your Web server.</p>
+  <p>Check to ensure that your application avoids using&nbsp;<strong>LogonUser</strong> API to create impersonation tokens because this forces to store user names and passwords on your Web server.</p>
   <p />
   <h1>How to Fix</h1>
   <p>Avoid writing code that calls the <b>LogonUser</b> API to create impersonation tokens because this forces you to store user names and passwords on your Web server. </p>
   <p>Instead, use a unique application pool with a specific process identity if you need a specific identity to access downstream resources. If you need multiple identities to access a range of downstream resources and services, use Windows Server protocol transition and the <b>WindowsIdentity</b> constructor; this allows you to create a Windows token that is given only an account's user principal name (UPN). To access a network resource, you need to delegate-level token. To get this token type, your server needs to be configured as trusted for delegation in Active Directory.</p>
   <p>The following code shows how to use this constructor to obtain a Windows token for a given user.</p>
   <div>
-    <pre>using System;<br />using System.Security.Principal;<br />public void ConstructToken(string upn, out WindowsPrincipal p)&amp;#123;<br />  WindowsIdentity id = new WindowsIdentity(upn);<br />  p = new WindowsPrincipal(id);<br />&amp;#125;  </pre>
+    <pre>using System;<br />using System.Security.Principal;<br />public void ConstructToken(string upn, out WindowsPrincipal p)&#123;<br />  WindowsIdentity id = new WindowsIdentity(upn);<br />  p = new WindowsPrincipal(id);<br />&#125;  </pre>
   </div>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;An account's UPN is guaranteed to be unique within a forest. Frequently, the UPN is the user's e-mail address, but it does not have to be. A user always has a UPN and by default, it is <i>userlogonname</i>&amp;#64;<i>fullyqualifieddomainname</i>. If you are logged into a domain, you can find your UPN name by running <b>whoami /upn</b> from a command window.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;An account's UPN is guaranteed to be unique within a forest. Frequently, the UPN is the user's e-mail address, but it does not have to be. A user always has a UPN and by default, it is <i>userlogonname</i>&#64;<i>fullyqualifieddomainname</i>. If you are logged into a domain, you can find your UPN name by running <b>whoami /upn</b> from a command window.</blockquote>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

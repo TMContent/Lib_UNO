@@ -28,19 +28,19 @@
   <ul>
     <li>Step 1: Understand attack scenarios </li>
     <li>Step 2: Analyze causes and countermeasures </li>
-    <li>Step 3: Execute test cases&amp;nbsp;</li>
+    <li>Step 3: Execute test cases&nbsp;</li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
-  <p>First, it is necessary to understand the anatomy of a reflection attack scenario by reviewing a common challenge-response mutual authentication process.&amp;nbsp;During a challenge-response authentication sequence the client connects to the server. The server sends a server challenge <i>sc</i> to the client.&amp;nbsp;The client must then respond to the challenge successfully by sending a client response <i>cr </i>along with its own client challenge <i>cc</i> to the application.&amp;nbsp;The application authenticates the client by verifying the client’s response <i>cr</i> and responds to the client’s challenge <i>cc </i>with a server response <i>sr.</i>&amp;nbsp;The client then validates the server response<i> sr</i> and completes mutual authentication.</p>
+  <p>First, it is necessary to understand the anatomy of a reflection attack scenario by reviewing a common challenge-response mutual authentication process.&nbsp;During a challenge-response authentication sequence the client connects to the server. The server sends a server challenge <i>sc</i> to the client.&nbsp;The client must then respond to the challenge successfully by sending a client response <i>cr </i>along with its own client challenge <i>cc</i> to the application.&nbsp;The application authenticates the client by verifying the client’s response <i>cr</i> and responds to the client’s challenge <i>cc </i>with a server response <i>sr.</i>&nbsp;The client then validates the server response<i> sr</i> and completes mutual authentication.</p>
   <p>In detail:</p>
   <ol>
     <li>The client connects to the server. </li>
     <li>The server sends a server challenge <i>sc.</i></li>
     <li>The client creates its own challenge <i>cc </i>sends it along with the client’s response <i>cr </i>to the server’s challenge. </li>
-    <li>The server validates the client’s response <i>cr.&amp;nbsp;</i>The server sends its own response <i>sr</i> to the client’s challenge. </li>
+    <li>The server validates the client’s response <i>cr.&nbsp;</i>The server sends its own response <i>sr</i> to the client’s challenge. </li>
     <li>The client validates the server’s response <i>sr.</i></li>
   </ol>
-  <p>To exploit a reflection bug an attacker connects to the target application, which in turns sends a target challenge <i>tc</i> to the attacker.&amp;nbsp;As the attacker doesn’t know how to respond to the target’s challenge to complete authentication (the attacker doesn’t know the shared secret) it opens a second connection with the target application and sends the target challenge <i>tc </i>as its own challenge to the application.&amp;nbsp;The attacker waits till the target application responds to the challenge sending a target response <i>tr </i>through the second connection and then uses this response as its own response to complete authentication though the first connection.</p>
+  <p>To exploit a reflection bug an attacker connects to the target application, which in turns sends a target challenge <i>tc</i> to the attacker.&nbsp;As the attacker doesn’t know how to respond to the target’s challenge to complete authentication (the attacker doesn’t know the shared secret) it opens a second connection with the target application and sends the target challenge <i>tc </i>as its own challenge to the application.&nbsp;The attacker waits till the target application responds to the challenge sending a target response <i>tr </i>through the second connection and then uses this response as its own response to complete authentication though the first connection.</p>
   <p>In detail:</p>
   <ol>
     <li>The attacker connects to the target application. </li>
@@ -48,15 +48,15 @@
     <li>The attacker opens a second connection to the target and sends the target challenge as the attacker’s own challenge (<i>ac = tc)</i> through the second connection. </li>
     <li>Through the second connection, the target responds to the attacker’s challenge with a target response <i>tr.</i></li>
     <li>Through the original connection, the attacker uses the target response as its own response (<i>ar = tr</i>). </li>
-    <li>Through the original connection, the target validates the attacker response <i>ar </i>and authenticates the attacker.&amp;nbsp;</li>
+    <li>Through the original connection, the target validates the attacker response <i>ar </i>and authenticates the attacker.&nbsp;</li>
   </ol>
   <h1>Step 2: Analyze Causes and Countermeasures</h1>
-  <p>Now it is necessary to understand what causes and how to protect against reflection bugs.&amp;nbsp;&amp;nbsp; </p>
+  <p>Now it is necessary to understand what causes and how to protect against reflection bugs.&nbsp;&nbsp; </p>
   <h2>
     Insecure protocol design
   </h2>
-  <p>Reflection attacks are possible because of poor implementation of mutual authentication protocols.&amp;nbsp;For instance, in the previous scenario the attacker is able to initiate authentication and the application accepts its own response as an answer to its own challenge.&amp;nbsp;Applications can protect against reflection attacks by using a <i>nonce</i> (number used once).&amp;nbsp;When a client connects to it, the application will start by sending the client a nonce for that specific connection as the server challenge <i>sc. </i>The client must then send his identifier along with the nonce encrypted with the shared key <i>K.&amp;nbsp;</i>The application then decrypts the message sent the client.&amp;nbsp;The application makes sure the response doesn’t correspond to a different challenge by checking if the nonce sent back by the original nonce for the connection.&amp;nbsp;To avoid reflection attacks, the application detects and disallows a nonce being used in the past or used across more than one connection.</p>
-  <p>Insecure protocol design occurs in ASP.NET applications that poorly implement an authentication scheme.&amp;nbsp;In most cases, ASP.NET application use authentication for login in their clients to the application.&amp;nbsp;If this is the case, developers are encouraged to use ASP.NET’s Forms Authentication<i></i>which provides a simple environment for client sessions and login forms which is abstracted from the developers. &amp;nbsp;<b>&amp;nbsp;</b></p>
+  <p>Reflection attacks are possible because of poor implementation of mutual authentication protocols.&nbsp;For instance, in the previous scenario the attacker is able to initiate authentication and the application accepts its own response as an answer to its own challenge.&nbsp;Applications can protect against reflection attacks by using a <i>nonce</i> (number used once).&nbsp;When a client connects to it, the application will start by sending the client a nonce for that specific connection as the server challenge <i>sc. </i>The client must then send his identifier along with the nonce encrypted with the shared key <i>K.&nbsp;</i>The application then decrypts the message sent the client.&nbsp;The application makes sure the response doesn’t correspond to a different challenge by checking if the nonce sent back by the original nonce for the connection.&nbsp;To avoid reflection attacks, the application detects and disallows a nonce being used in the past or used across more than one connection.</p>
+  <p>Insecure protocol design occurs in ASP.NET applications that poorly implement an authentication scheme.&nbsp;In most cases, ASP.NET application use authentication for login in their clients to the application.&nbsp;If this is the case, developers are encouraged to use ASP.NET’s Forms Authentication<i></i>which provides a simple environment for client sessions and login forms which is abstracted from the developers. &nbsp;<b>&nbsp;</b></p>
   <h1>Step 3: Execute Test Cases</h1>
   <p>Now that you’ve reviewed the background in reflection attacks it is necessary to execute practical test cases to check if your application is vulnerable.</p>
   <h2>
@@ -68,8 +68,8 @@
     <li>Open a second connection to the target and send the target challenge from the previous step through this connection. Wait for the target application to send a response for the challenge. </li>
     <li>Send the response sent by the application in the previous step through the original connection.</li>
   </ol>
-  <p>Expected results:&amp;nbsp;The application is vulnerable to reflection attacks if you are able to successfully authenticate in step 3.&amp;nbsp;</p>
+  <p>Expected results:&nbsp;The application is vulnerable to reflection attacks if you are able to successfully authenticate in step 3.&nbsp;</p>
   <h1>Conclusions</h1>
-  <p>Reflection attacks focus on exploiting logical flaws on applications using a mutual-authentication protocol and responding to an application challenge using an application’s own response.&amp;nbsp;To test for this bug it is suggested you start by understanding its attack scenario as well as what causes it and how to protect against it.&amp;nbsp;Then execute a trivial test case to check if your ASP.NET application is vulnerable.</p>]]></Data>
+  <p>Reflection attacks focus on exploiting logical flaws on applications using a mutual-authentication protocol and responding to an application challenge using an application’s own response.&nbsp;To test for this bug it is suggested you start by understanding its attack scenario as well as what causes it and how to protect against it.&nbsp;Then execute a trivial test case to check if your ASP.NET application is vulnerable.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

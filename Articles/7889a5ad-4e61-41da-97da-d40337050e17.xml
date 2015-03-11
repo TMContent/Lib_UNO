@@ -29,32 +29,32 @@
   <ol>
     <li>
       <p>
-        <strong>Identify security decision points.&amp;nbsp;</strong>Carefully examine the points in the code that are related to your application's security model. It is critical that no decision points are placed in the client. Because this is a design issue, it is recommended to use threat modeling to determine and evaluate the security decision points.</p>
+        <strong>Identify security decision points.&nbsp;</strong>Carefully examine the points in the code that are related to your application's security model. It is critical that no decision points are placed in the client. Because this is a design issue, it is recommended to use threat modeling to determine and evaluate the security decision points.</p>
       <p />
     </li>
     <li>
       <p>
-        <strong>Trace data that influences security decisions.&amp;nbsp;</strong>Tracing the data that influences security decisions helps&amp;nbsp;determine if the data is vulnerable to any client-based attacks. Make sure that the client cannot modify or influence this data.</p>
+        <strong>Trace data that influences security decisions.&nbsp;</strong>Tracing the data that influences security decisions helps&nbsp;determine if the data is vulnerable to any client-based attacks. Make sure that the client cannot modify or influence this data.</p>
       <p />
     </li>
     <li>
       <p>
-        <strong>Prove that security-related data cannot be tampered with by the client.&amp;nbsp;</strong>Use cryptography or your application's design to ensure that security related data cannot be tampered with by the client.</p>
+        <strong>Prove that security-related data cannot be tampered with by the client.&nbsp;</strong>Use cryptography or your application's design to ensure that security related data cannot be tampered with by the client.</p>
     </li>
     <li>
       <p>
-        <strong>Mark all exceptions to this guideline.&amp;nbsp;</strong>Note all exceptions made to this guideline. Thoroughly examine the code associated with such instances. Verify that all instances are provided in the business logic and are intended.</p>
+        <strong>Mark all exceptions to this guideline.&nbsp;</strong>Note all exceptions made to this guideline. Thoroughly examine the code associated with such instances. Verify that all instances are provided in the business logic and are intended.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <p>The following code illustrates a servlet that accepts user-supplied input. Unfortunately, the application obtains the user's ID from the client which allows&amp;nbsp;an attacker to tamper with data that influences security decisions.</p>
+  <p>The following code illustrates a servlet that accepts user-supplied input. Unfortunately, the application obtains the user's ID from the client which allows&nbsp;an attacker to tamper with data that influences security decisions.</p>
   <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException{<br />      String userID = request.getParameter("userid");<br />       ...<br /> }</pre>
   <h1>Solution Example</h1>
   <p>The following code illustrates a servlet that accepts user-supplied input. Because the application obtains the user's ID from the user's session, it is not possible for an attacker to tamper with such data.</p>
   <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException{<br />      Session sess = request.getSession();<br />      String userID = (String)sess.getAttribute("userid");<br /><br />      ...<br /><br />}</pre>
   <h1>Additional Resources</h1>
   <ul>
-    <li>To learn more about parameter manipulation and ways to prevent it, see:&amp;nbsp;<a href="http://www.cgisecurity.com/owasp/html/ch11s04.html">Parameter Manipulation</a>.</li>
+    <li>To learn more about parameter manipulation and ways to prevent it, see:&nbsp;<a href="http://www.cgisecurity.com/owasp/html/ch11s04.html">Parameter Manipulation</a>.</li>
   </ul>
   <div>
     <br />

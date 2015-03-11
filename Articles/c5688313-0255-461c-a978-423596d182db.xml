@@ -26,7 +26,7 @@
   <ol>
     <li>
       <p>
-        <strong>Identify all sources of input.&amp;nbsp;</strong>An application can take input via various ways such as a web interface, database, file system or other software running on the server. During design, identify all potential sources of input to your application. Scour the source code to discover sources of input that may have been missed in the design. The most common sources are:</p>
+        <strong>Identify all sources of input.&nbsp;</strong>An application can take input via various ways such as a web interface, database, file system or other software running on the server. During design, identify all potential sources of input to your application. Scour the source code to discover sources of input that may have been missed in the design. The most common sources are:</p>
       <ul>
         <li>URL based parameters</li>
         <li>Form based parameters</li>
@@ -44,39 +44,39 @@
     </li>
     <li>
       <p>
-        <strong>Identify validation routines.&amp;nbsp;</strong>Each input source should have a server-side validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base and may be located in a single component.</p>
+        <strong>Identify validation routines.&nbsp;</strong>Each input source should have a server-side validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base and may be located in a single component.</p>
       <p>Validation may be identified by any of the following:</p>
       <ul>
         <li>Custom Scala Validator class</li>
         <li>Regular expression use (<em>scala.util.matching.regex</em>)</li>
-        <li>Method names that contain&amp;nbsp;<em>validate</em>&amp;nbsp;or&amp;nbsp;<em>validator</em></li>
+        <li>Method names that contain&nbsp;<em>validate</em>&nbsp;or&nbsp;<em>validator</em></li>
         <li>Client-side validation is often linked to events:<ul><li>onSubmit</li><li>onChange</li><li>onFocus</li><li>onBlur</li><li>onKeyDown/Press/Up</li></ul></li>
       </ul>
     </li>
     <li>
       <p>
-        <strong>Ensure validators run on the server.&amp;nbsp;</strong>Validation routines should run on the server. Server-side validation guarantees that malformed input will be caught and discarded regardless of the state that the client is in. As an optional feature, validation can also be implemented client side in order to improve application performance and user experience.<br /><br />Server-side validation is done within the application code. Ideally, validation occurs immediately after canonicalization, and canonicalization should be done&amp;nbsp;as soon as the input reaches your application. In web applications, look for application-supplied validators, such as a Custom Validator, to validate and constrain input after it is received from an input source, such as a Form&amp;nbsp;parameter. Check for the use of regular expressions and&amp;nbsp;<em>scala.util.matching.regex</em>, or the use of a validator that checks numeric ranges.</p>
+        <strong>Ensure validators run on the server.&nbsp;</strong>Validation routines should run on the server. Server-side validation guarantees that malformed input will be caught and discarded regardless of the state that the client is in. As an optional feature, validation can also be implemented client side in order to improve application performance and user experience.<br /><br />Server-side validation is done within the application code. Ideally, validation occurs immediately after canonicalization, and canonicalization should be done&nbsp;as soon as the input reaches your application. In web applications, look for application-supplied validators, such as a Custom Validator, to validate and constrain input after it is received from an input source, such as a Form&nbsp;parameter. Check for the use of regular expressions and&nbsp;<em>scala.util.matching.regex</em>, or the use of a validator that checks numeric ranges.</p>
     </li>
   </ol>
   <h1>How to Fix</h1>
-  <p>Client-side validation should only be used to improve user experience,&amp;nbsp;<b>never for security purposes</b>. Client-side validation can improve application performance by catching malformed input on the client<strike></strike>, thus saving a roundtrip to the server. However, client-side validation can be easily bypassed, and places trust in the browser, an entity that should never be trusted.<strike></strike>&amp;nbsp;Always use server-side validation to protect your application from malicious attacks.</p>
+  <p>Client-side validation should only be used to improve user experience,&nbsp;<b>never for security purposes</b>. Client-side validation can improve application performance by catching malformed input on the client<strike></strike>, thus saving a roundtrip to the server. However, client-side validation can be easily bypassed, and places trust in the browser, an entity that should never be trusted.<strike></strike>&nbsp;Always use server-side validation to protect your application from malicious attacks.</p>
   <p>Use the following steps when developing validation for client-side input:</p>
   <ol>
     <li>
       <p>
-        <strong>Never trust the browser.</strong>&amp;nbsp;Because the browser is running on the user's machine, it can be fully controlled by the user. Therefore, any client-side validation code can be controlled and bypassed by an attacker.</p>
+        <strong>Never trust the browser.</strong>&nbsp;Because the browser is running on the user's machine, it can be fully controlled by the user. Therefore, any client-side validation code can be controlled and bypassed by an attacker.</p>
     </li>
     <li>
       <p>
-        <strong>Use JavaScript only to enhance your pages, but never for security.</strong>&amp;nbsp;JavaScript is useful for enhancing your application's presentation. However, it has no mechanism to protect the integrity of its code. Do not rely on JavaScript to enforce security decisions.</p>
+        <strong>Use JavaScript only to enhance your pages, but never for security.</strong>&nbsp;JavaScript is useful for enhancing your application's presentation. However, it has no mechanism to protect the integrity of its code. Do not rely on JavaScript to enforce security decisions.</p>
     </li>
     <li>
       <p>
-        <strong>Place a server-side validator for all input.&amp;nbsp;</strong>Execute validation on the server side. Use the following steps to properly set the validation routines:</p>
+        <strong>Place a server-side validator for all input.&nbsp;</strong>Execute validation on the server side. Use the following steps to properly set the validation routines:</p>
       <ul>
         <li>
           <p>
-            <strong>Identify input.</strong>&amp;nbsp;Determine the data that is to be passed from the client to your application. Input can take the following forms on the client-side:&amp;nbsp;<br /></p>
+            <strong>Identify input.</strong>&nbsp;Determine the data that is to be passed from the client to your application. Input can take the following forms on the client-side:&nbsp;<br /></p>
           <ul>
             <li>URL-based parameters</li>
             <li>Form-based parameters</li>
@@ -86,11 +86,11 @@
         </li>
         <li>
           <p>
-            <strong>Understand the input.</strong>&amp;nbsp;Understand the use and constraints associated with each input. Be clear how each input is used. Define the format and type of each input. Build a server-side validator for each format and type of expected input.</p>
+            <strong>Understand the input.</strong>&nbsp;Understand the use and constraints associated with each input. Be clear how each input is used. Define the format and type of each input. Build a server-side validator for each format and type of expected input.</p>
         </li>
         <li>
           <p>
-            <strong>Create a set of validators.</strong>&amp;nbsp;Build a validator for each type of input. Place the set of validators on the server-side of your application. If there are validators on the client-side, make sure the same validators are implemented on the server-side as well. <br /></p>
+            <strong>Create a set of validators.</strong>&nbsp;Build a validator for each type of input. Place the set of validators on the server-side of your application. If there are validators on the client-side, make sure the same validators are implemented on the server-side as well. <br /></p>
         </li>
       </ul>
       <p>Once developed, it is important to place the validation routines at your application's trust boundary. Because your application's trust boundary extends only to your application's process space, do not consider <font color="#ff0000"></font>the user's browser to be within your application's trust boundary.</p>

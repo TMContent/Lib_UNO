@@ -31,14 +31,14 @@
   <ol>
     <li>
       <p>Update your interceptor stack to include the <em>tokenSessionInterceptor</em>, either including or excluding all methods (all are included here).</p>
-      <pre>&lt;interceptor-stack name="myStack"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;interceptor-ref name="defaultStack" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;interceptor-ref name="tokenSession"&gt;<br />&amp;nbsp;&lt;param name="includeMethods"&gt;&amp;#42;&lt;/param&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/interceptor-ref&gt;<br />&lt;/interceptor-stack&gt;</pre>
+      <pre>&lt;interceptor-stack name="myStack"&gt;<br />&nbsp;&nbsp;&nbsp; &lt;interceptor-ref name="defaultStack" /&gt;<br />&nbsp;&nbsp;&nbsp; &lt;interceptor-ref name="tokenSession"&gt;<br />&nbsp;&lt;param name="includeMethods"&gt;&#42;&lt;/param&gt;<br />&nbsp;&nbsp;&nbsp; &lt;/interceptor-ref&gt;<br />&lt;/interceptor-stack&gt;</pre>
       <pre>&lt;default-interceptor-ref name="myStack" /&gt;</pre>
       <li>
         <p>Update your action configuration to include or exclude any methods that need or do not need CSRF protection.</p>
-        <pre>&lt;action ...&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;interceptor-ref name="tokenSession"&gt;<br />&amp;nbsp;&lt;param name="excludeMethods"&gt;searchBooks,getBook&lt;/param&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/interceptor-ref&gt;<br />&lt;/action&gt;</pre>
+        <pre>&lt;action ...&gt;<br />&nbsp;&nbsp;&nbsp; ...<br />&nbsp;&nbsp;&nbsp; &lt;interceptor-ref name="tokenSession"&gt;<br />&nbsp;&lt;param name="excludeMethods"&gt;searchBooks,getBook&lt;/param&gt;<br />&nbsp;&nbsp;&nbsp; &lt;/interceptor-ref&gt;<br />&lt;/action&gt;</pre>
         <li>
           <p>Use <em>s:token</em> in your JSP form that requests the action.</p>
-          <pre>&lt;s:form action="..."&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;s:token /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&lt;/s:form&gt;</pre>
+          <pre>&lt;s:form action="..."&gt;<br />&nbsp;&nbsp;&nbsp; ...<br />&nbsp;&nbsp;&nbsp; &lt;s:token /&gt;<br />&nbsp;&nbsp;&nbsp; ...<br />&lt;/s:form&gt;</pre>
         </li>
       </li>
     </li>

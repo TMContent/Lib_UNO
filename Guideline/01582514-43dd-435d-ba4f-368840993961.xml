@@ -20,27 +20,27 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
+    <li>Microsoft&#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&#174; 2008</li></li>
   </ul>
   <h1>What to Do</h1>
   <p>If you store role information in SQL Server, configure your application to use the SqlRoleProvider for authorization. </p>
   <h1>Why</h1>
   <p>The role provider allows you to load the roles for users without writing and maintaining custom code.</p>
   <h1>When</h1>
-  <p>Consider using this guideline when&amp;nbsp;you store role information in SQL Server.</p>
+  <p>Consider using this guideline when&nbsp;you store role information in SQL Server.</p>
   <h1>How</h1>
   <p>The following steps show how to use SQL Server Role to provide role based authorization.</p>
   <ol>
-    <li>Enable the Role provider as shown below and configure the connection string pointing to the role store in SQL server <ol><li><pre>&amp;#8230;<br />&lt;configuration&gt;<br />&amp;#8230;<br />&lt;connectionStrings&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MyLocalSQLServer"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Initial Catalog=aspnetdb;data source=Sqlserver;Integrated Security=SSPI;"</pre><li><pre>&lt;system.web&gt;<br />&lt;roleManager enabled="true" defaultProvider="MySqlRoleProvider" &gt;<br />      &lt;providers&gt;<br />        &lt;add name="MySqlRoleProvider"<br />             connectionStringName="MyLocalSQLServer"<br />             applicationName="MyAppName"<br />             type="System.Web.Security.SqlRoleProvider" /&gt;<br />      &lt;/providers&gt;<br />    &lt;/roleManager&gt;<br />&amp;#8230;<br />&lt;system.web&gt;</pre></li></li></ol><li>Configure the Service Behavior. Set the principalPermissionMode attribute as UseAspNetRoles and the roleProviderName attribute to MySqlRoleProvider.</li></li>
+    <li>Enable the Role provider as shown below and configure the connection string pointing to the role store in SQL server <ol><li><pre>&#8230;<br />&lt;configuration&gt;<br />&#8230;<br />&lt;connectionStrings&gt;<br />&nbsp;&nbsp;&nbsp; &lt;add name="MyLocalSQLServer"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionString="Initial Catalog=aspnetdb;data source=Sqlserver;Integrated Security=SSPI;"</pre><li><pre>&lt;system.web&gt;<br />&lt;roleManager enabled="true" defaultProvider="MySqlRoleProvider" &gt;<br />      &lt;providers&gt;<br />        &lt;add name="MySqlRoleProvider"<br />             connectionStringName="MyLocalSQLServer"<br />             applicationName="MyAppName"<br />             type="System.Web.Security.SqlRoleProvider" /&gt;<br />      &lt;/providers&gt;<br />    &lt;/roleManager&gt;<br />&#8230;<br />&lt;system.web&gt;</pre></li></li></ol><li>Configure the Service Behavior. Set the principalPermissionMode attribute as UseAspNetRoles and the roleProviderName attribute to MySqlRoleProvider.</li></li>
   </ol>
   <blockquote>
-    <pre>&amp;#8230;<br />&lt;system.serviceModel&gt;<br />    &lt;behaviors&gt;<br />      &lt;serviceBehaviors&gt;<br />        &lt;behavior name="BehaviorConfiguration"&gt;<br />          &lt;serviceAuthorization principalPermissionMode="UseAspNetRoles"<br />            roleProviderName="MySqlRoleProvider" /&gt;          <br />         &lt;/behavior&gt;<br />      &lt;/serviceBehaviors&gt;<br />    &lt;/behaviors&gt;<br />&lt;services&gt;<br />    &lt;service behaviorConfiguration=" BehaviorConfiguration " name="MyService"&gt;<br />      &lt;endpoint binding="wsHttpBinding" bindingConfiguration=""<br />        name="httpsendpoint" contract="IMyService2" /&gt;<br />     &lt;/service&gt;<br />  &lt;/services&gt;<br />  &lt;/system.serviceModel&gt;<br />&amp;#8230;</pre>
+    <pre>&#8230;<br />&lt;system.serviceModel&gt;<br />    &lt;behaviors&gt;<br />      &lt;serviceBehaviors&gt;<br />        &lt;behavior name="BehaviorConfiguration"&gt;<br />          &lt;serviceAuthorization principalPermissionMode="UseAspNetRoles"<br />            roleProviderName="MySqlRoleProvider" /&gt;          <br />         &lt;/behavior&gt;<br />      &lt;/serviceBehaviors&gt;<br />    &lt;/behaviors&gt;<br />&lt;services&gt;<br />    &lt;service behaviorConfiguration=" BehaviorConfiguration " name="MyService"&gt;<br />      &lt;endpoint binding="wsHttpBinding" bindingConfiguration=""<br />        name="httpsendpoint" contract="IMyService2" /&gt;<br />     &lt;/service&gt;<br />  &lt;/services&gt;<br />  &lt;/system.serviceModel&gt;<br />&#8230;</pre>
   </blockquote>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information on authorization, see &amp;#8220;Authorization&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733071.aspx">http://msdn2.microsoft.com/en-us/library/ms733071.aspx</a><li>For authorization Q&amp;A, see the Authorization section of &amp;#8220;WCF 3.5 Questions and Answers &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Questions&amp;#37;20and&amp;#37;20Answers&amp;#37;20&amp;#37;28Q&amp;#37;26A&amp;#37;29&amp;referringTitle=Home</a></li></li>
+    <li>For more information on authorization, see &#8220;Authorization&#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733071.aspx">http://msdn2.microsoft.com/en-us/library/ms733071.aspx</a><li>For authorization Q&A, see the Authorization section of &#8220;WCF 3.5 Questions and Answers &#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Questions&#37;20and&#37;20Answers&#37;20&#37;28Q&#37;26A&#37;29&referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Questions&#37;20and&#37;20Answers&#37;20&#37;28Q&#37;26A&#37;29&referringTitle=Home</a></li></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

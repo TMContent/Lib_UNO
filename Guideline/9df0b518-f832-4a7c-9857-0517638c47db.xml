@@ -38,7 +38,7 @@
       <p />
       <li>
         <p>
-          <strong>Trace data that influences security decisions. </strong>Tracing the data that influences security decisions helps&amp;nbsp;determine if the data is vulnerable to any client-based attacks. Make sure that the client cannot modify or influence this data. </p>
+          <strong>Trace data that influences security decisions. </strong>Tracing the data that influences security decisions helps&nbsp;determine if the data is vulnerable to any client-based attacks. Make sure that the client cannot modify or influence this data. </p>
         <p />
         <li>
           <p>
@@ -52,11 +52,11 @@
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <p>The following code illustrates a servlet that accepts user-supplied input. Unfortunately, the application obtains the user's ID from the client which allows&amp;nbsp;an attacker to tamper withj&amp;nbsp;data that influences security decisions.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException&amp;#123;<br />      String userID = request.getParameter("userid");<br />       ...<br /> &amp;#125;</pre>
+  <p>The following code illustrates a servlet that accepts user-supplied input. Unfortunately, the application obtains the user's ID from the client which allows&nbsp;an attacker to tamper withj&nbsp;data that influences security decisions.</p>
+  <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException&#123;<br />      String userID = request.getParameter("userid");<br />       ...<br /> &#125;</pre>
   <h1>Solution Example</h1>
   <p>The following code illustrates a servlet that accepts user-supplied input. Because the application obtains the user's ID from the user's session, it is not possible for an attacker to tamper with such data.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException&amp;#123;<br />      Session sess = request.getSession();<br />      String userID = (String)sess.getAttribute("userid");<br /><br />      ...<br /><br />&amp;#125;</pre>
+  <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException&#123;<br />      Session sess = request.getSession();<br />      String userID = (String)sess.getAttribute("userid");<br /><br />      ...<br /><br />&#125;</pre>
   <h1>Additional Resources</h1>
   <ul>
     <li>To learn more about parameter manipulation and ways to prevent it, see: <a href="http://www.cgisecurity.com/owasp/html/ch11s04.html">Parameter Manipulation</a>.</li>

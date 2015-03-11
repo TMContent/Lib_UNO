@@ -49,7 +49,7 @@
   <p>Just using stored procedures isn't a complete remedy for SQL injection. The important thing to do is use parameters with stored procedures, or else your stored procedures can be susceptible to SQL injection if they use unfiltered input. Stored procedures provide several security advantages: </p>
   <ul>
     <li>By parameterizing input parameters and type-enforcing them, user input is effectively filtered. </li>
-    <li>Stored procedures are allowed by most databases&amp;nbsp;to execute under different security privileges than&amp;nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
+    <li>Stored procedures are allowed by most databases&nbsp;to execute under different security privileges than&nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
   </ul>
   <p>To use type-safe SQL parameters, follow these steps:</p>
   <ol>
@@ -68,7 +68,7 @@
     </li>
     <li>
       <p>
-        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&amp;nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
+        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
       <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("select login_attempts from myappUsers"<br />                     + " where user = ? and pass = ?;");<br />st.setString(1, user);<br />st.setString(2, new String(passDigest));<br />ResultSet rs = st.executeQuery();</pre>
       <p>For more information, consult the documentation for <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/PreparedStatement.html">Class PreparedStatement</a> in the Java SDK.</p>
     </li>
@@ -82,7 +82,7 @@
   <h1>Additional Resources</h1>
   <ul>
     <li>To learn more about using parameterized queries in Java, see: <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/PreparedStatement.html">PreparedStatement</a>. </li>
-    <li>For more information about preventing SQL injection attacks, visit: <a href="http://www.owasp.org/index.php/Reviewing_Code_for_SQL_Injection">Reviewing Code for SQL Injection</a>&amp;nbsp;from OWASP. </li>
+    <li>For more information about preventing SQL injection attacks, visit: <a href="http://www.owasp.org/index.php/Reviewing_Code_for_SQL_Injection">Reviewing Code for SQL Injection</a>&nbsp;from OWASP. </li>
   </ul>
   <br />]]></Data>
   </Content>

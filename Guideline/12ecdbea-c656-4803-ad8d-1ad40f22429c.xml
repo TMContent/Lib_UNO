@@ -26,7 +26,7 @@
   <p>This How To describes an approach for creating a threat model for a Web application. The threat modeling activity helps you to model your security design so that you can expose potential security design flaws and vulnerabilities before you invest significant time or resources in a flawed design and/or problems become difficult to reverse. This How To provides prioritized vulnerability categories and a threat list to make the threat modeling activity easier. </p>
   <h1>Contents</h1>
   <ul>
-    <li>Objectives <li>Overview <li>Before You Begin <li>Input <li>Output <li>Summary of Steps <li>Step 1: Identify Security Objectives <li>Step 2: Create an Application Overview <li>Step 3: Decompose Your Application <li>Step 4: Identify Threats <li>Step 5: Identify Vulnerabilities <li>What to Do Next&amp;nbsp; <li>Agile Considerations <li>MSF Agile Considerations <li>Additional Resources</li></li></li></li></li></li></li></li></li></li></li></li></li></li></li>
+    <li>Objectives <li>Overview <li>Before You Begin <li>Input <li>Output <li>Summary of Steps <li>Step 1: Identify Security Objectives <li>Step 2: Create an Application Overview <li>Step 3: Decompose Your Application <li>Step 4: Identify Threats <li>Step 5: Identify Vulnerabilities <li>What to Do Next&nbsp; <li>Agile Considerations <li>MSF Agile Considerations <li>Additional Resources</li></li></li></li></li></li></li></li></li></li></li></li></li></li></li>
   </ul>
   <h1>
     <br />Objectives</h1>
@@ -88,7 +88,7 @@
   <h1>Step 2: Create an Application Overview</h1>
   <p>In this step, you outline what your Web application does. Your goal is to identify your application's key functionality, characteristics, and clients. This will help you to identify relevant threats during step 4.</p>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Remember that threat modeling is an iterative process. Do not let this step block your progress. Identify as much detail as you can and then add more detail as your design evolves. For example, if you are in the middle of your design and have not tackled physical deployment, you can still perform this step, although with less data. Itemize what you can as soon as you can.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;Remember that threat modeling is an iterative process. Do not let this step block your progress. Identify as much detail as you can and then add more detail as your design evolves. For example, if you are in the middle of your design and have not tackled physical deployment, you can still perform this step, although with less data. Itemize what you can as soon as you can.</blockquote>
   <p>To create an application overview: </p>
   <ul>
     <li>
@@ -113,7 +113,7 @@
       <b>End-to-end deployment topology. </b>Show the layout of the servers and indicate intranet, extranet, or Internet access. Start with logical network topologies, and then refine this to show physical topologies when you have those details. You can add or remove threats depending on your choice of specific physical topologies. <li><b>Logical layers.</b> Show where the presentation layer, business layer, and data access layers reside. Refine this to include physical server boundaries when you know them. <li><b>Key components. </b>Show the important components within each logical layer. Refine this to include actual process and component boundaries when you know them. <li><b>Key services.</b> Identify any important services. Show these as processes when you know them. <li><b>Communication ports and protocols. </b>Show which servers, components, and services communicate with each other and how they do it. Show the specifics of inbound and outbound information packages when you know them. <li><b>Identities.</b> Show the main identities used for the application and any relevant service accounts if you have this information. <li><b>External dependencies.</b> Show the dependencies that your application has on external systems. Later in the modeling process, this will help you identify vulnerabilities that can arise if any assumptions you make about the external systems are false or if the external systems change in any way. </li></li></li></li></li></li></li>
   </ul>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;As your design evolves, you should regularly revisit the threat model to add more detail. For example, you might not know all of the components initially. Subdivide your application as necessary to get enough detail to find your threats.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;As your design evolves, you should regularly revisit the threat model to add more detail. For example, you might not know all of the components initially. Subdivide your application as necessary to get enough detail to find your threats.</blockquote>
   <h2>Identify Roles</h2>
   <p>Identify your application's roles: that is, identify who can do what within your application. What can your users do? What higher-privileged groups of users do you have? For example, who can read data, who can update data, who can delete data? </p>
   <p>Use role identification to determine both what is supposed to happen and what is not supposed to happen.</p>
@@ -164,7 +164,7 @@
   </ul>
   <p>Some example trust boundaries are: </p>
   <ul>
-    <li>A perimeter firewall. The firewall is likely to be the first trust boundary. It moves qualified information from the untrusted Internet to your trusted data center. <li>The boundary between the Web server and database server. Your database may or may not be included in your application's trust boundary. Often the Web servers act as a second firewall to the databases. This significantly limits network access to the databases and thereby reduces the attack surface. Describe the network topology within your data center. Do any other applications write to the database? If they do, do you trust those applications? If you trust the applications that write to the database, you may still not want to trust the database&amp;#8212;is it protected? <li>The entry point into a business component that exposes privileged data (data that should be available to only particular users). In this case, you need an access check to ensure that only the appropriate callers are allowed access. This is a trust boundary. <li>The boundary between your application and a third-party service. Do you trust the service's identity? Can you trust the data returned from the service? </li></li></li></li>
+    <li>A perimeter firewall. The firewall is likely to be the first trust boundary. It moves qualified information from the untrusted Internet to your trusted data center. <li>The boundary between the Web server and database server. Your database may or may not be included in your application's trust boundary. Often the Web servers act as a second firewall to the databases. This significantly limits network access to the databases and thereby reduces the attack surface. Describe the network topology within your data center. Do any other applications write to the database? If they do, do you trust those applications? If you trust the applications that write to the database, you may still not want to trust the database&#8212;is it protected? <li>The entry point into a business component that exposes privileged data (data that should be available to only particular users). In this case, you need an access check to ensure that only the appropriate callers are allowed access. This is a trust boundary. <li>The boundary between your application and a third-party service. Do you trust the service's identity? Can you trust the data returned from the service? </li></li></li></li>
   </ul>
   <h2>Identify Data Flows</h2>
   <p>Trace your application's data input through the application from entry to exit. You do this to understand how your application interacts with external systems and clients and how internal components interact. Pay particular attention to data flow across trust boundaries and how that data is validated at the trust boundary entry point. Also pay close attention to sensitive data items and how these flow through your system, where they are passed over a network, and where they are persisted.</p>
@@ -261,7 +261,7 @@
     <li>How does data flow from the front end to the back end of your application? <li>Which components call which components? <li>What does valid data look like? <li>Where is validation performed? <li>How is the data constrained? <li>How is data validated against expected length, range, format, and type? <li>What sensitive data is passed between components and across networks, and how is that data secured while in transit? </li></li></li></li></li></li></li>
   </ul>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Use existing documentation if you have it. For example, data flow diagrams (DFDs) and Unified Modeling Language (UML) sequence diagrams can help you to analyze your application and identify data flows.</blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;Use existing documentation if you have it. For example, data flow diagrams (DFDs) and Unified Modeling Language (UML) sequence diagrams can help you to analyze your application and identify data flows.</blockquote>
   <h2>Explore Additional Threats by Using Threat/Attack Trees</h2>
   <p>The previous activities have helped you to identify the more obvious and pervasive security issues. You can now explore additional threats and attacks. (It is helpful to set a time limit so that you do not become blocked by this activity.)</p>
   <p>Attack trees and attack patterns are the primary tools that many security professionals use. They allow you to analyze threats in greater depth, going beyond what you already know to identify other threat possibilities.</p>
@@ -283,7 +283,7 @@
     <pre>1.  Goal One    1.1 Sub-goal one    1.2 Sub-goal two2.  Goal Two    2.1 Sub-goal one    2.2 Sub-goal two  </pre>
   </div>
   <blockquote>
-    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;In addition to goals and sub-goals, attack trees include methodologies and required conditions. </blockquote>
+    <b>Note</b>&nbsp;&nbsp;&nbsp;In addition to goals and sub-goals, attack trees include methodologies and required conditions. </blockquote>
   <p>The following is a more complete example of the outline approach.</p>
   <div>
     <pre>Threat #1 Attacker obtains authentication credentials by monitoring the network  1.1 Clear text credentials sent over the network AND  1.2 Attacker uses network-monitoring tools      1.2.1 Attacker recognizes credential data  </pre>
@@ -391,7 +391,7 @@
     <li>Early in the project, reduce risk by creating a candidate architecture that supports architecturally significant end-to-end scenarios that exercise all layers of the architecture. <li>Create your first threat model for this candidate architecture. This will change, but it is a good starting point. <li>Using your threat model to guide you, make changes to your architecture, design, and code to meet your security objectives. <li>Create a threat model based on what you know at the time and define a list of questions that need to be addressed in subsequent stories and iterations. <li>After you make enough significant changes to the architecture and design, consider creating a story that reflects these changes. Batch together the small changes in the architecture and design and address them together. <li>If you need to work with outside security groups, you need to schedule a time to complete the threat model to provide to the external group. These groups tend to provide better input when they understand the entire application. </li></li></li></li></li></li>
   </ul>
   <h1>
-    <a name="tmwahowto_msfagileconsiderations">&lt;&amp;#33;----&gt;</a>MSF Agile Considerations</h1>
+    <a name="tmwahowto_msfagileconsiderations">&lt;&#33;----&gt;</a>MSF Agile Considerations</h1>
   <p>The Microsoft Solutions Framework (MSF) Agile Software Development processes use the architecture diagrams found in the Microsoft Visual Studio Team System. These processes use scenarios instead of use cases. Therefore, when applying the threat modeling activity to MSF for Agile Software Development or MSF for CMMI Process Improvement, use scenarios and system and logical data center diagrams as input. </p>
   <p>For more information about building threat models using the system and logical data center diagrams, see the MSF process guidance or the MSF Web site. </p>
   <h2>
@@ -419,6 +419,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>
