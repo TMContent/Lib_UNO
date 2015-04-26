@@ -3,7 +3,7 @@
   <Metadata>
     <Id>08d9e9ed-bb8a-496a-b564-72344812d445</Id>
     <Id_History>08d9e9ed-bb8a-496a-b564-72344812d445,ce3c71fc-0e7e-4719-b961-e563d0346563,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Account Administration Is Separated from the Main Application Interface</Title>
     <Category>Authorization</Category>
     <Phase>Design</Phase>
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure your application separates the account administration from the main application interface.</p>
   <h1>Why</h1>
@@ -46,10 +46,11 @@
                   <strong>Account is modified in sections</strong>: Check that account information is split into separate sections such as credentials, personal data, contact information, and additional information, and is modified on a per-section basis to reduce the risk of information leakage when the user is updating his or her account.</p>
                 <li>
                   <p>
-                    <strong>Connection is secure</strong>: Verify that your application uses SSL when privileged users are performing transactions of sensitive nature.</p>
+                    <strong>Connection is secure</strong>: Verify that your application uses TLS when privileged users are performing transactions of sensitive nature.</p>
                   <li>
                     <p />
-                    <strong>Server Configuration</strong>: Verify that your application's environment has enabled HTTPS so that transactions of a&nbsp;sensitive nature are transmitted only over HTTPS connections. Check if the <strong>&lt;forms&gt;</strong> element in your application's web.config file has the <strong>requireSSL</strong> attribute set to <strong>true</strong> when performing forms-based authentication:<br /><pre>&lt;authentication mode="Forms"&gt;<br />&nbsp; &lt;forms loginUrl="login.aspx"<br />&nbsp;&nbsp;&nbsp;&nbsp; protection="All"<br />&nbsp;&nbsp;&nbsp;&nbsp; timeout="20"<br />&nbsp;&nbsp;&nbsp;&nbsp; requireSSL="true"&gt;<br />&nbsp; &lt;/forms&gt;<br />&lt;/authentication&gt;</pre><p /></li>
+                    <strong>Server Configuration</strong>: Verify that your application's environment has enabled HTTPS so that transactions of a sensitive nature are transmitted only over HTTPS connections. Check if the <strong><forms></forms></strong> element in your application's web.config file has the <strong>requireSSL</strong> attribute set to <strong>true</strong> when performing forms-based authentication
+                </li>
                 </li>
               </li>
             </li>
@@ -60,10 +61,10 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The following snippet shows the HTTP requests that an administrator makes when accessing the main and administrative interfaces of the application. Because the administrative interface is not separated from the application, an administrator can use a single session to use and to administer the application. Therefore, a vulnerability such as cross-site scripting in the main application interface will expose the administrative interface as well.</p>
-  <pre>GET /myapp/ HTTP/1.1<br />Accept: &#42;/&#42;Accept-Encoding: gzip, deflate<br />User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)<br />Host: <a href="http://www.example.com/">www.example.com</a><br />Connection: Keep-Alive<br />Cookie: <strong>ASP.NET_SessionId=b25tnpbv1wwzp355rddxodv0<br /></strong>GET /myapp/admin.aspx HTTP/1.1<br />Accept: &#42;/&#42;<br />Accept-Encoding: gzip, deflate<br />User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; .NET CLR 1.1.4322)<br />Host: <a href="http://www.example.com/">www.example.com</a><br />Connection: Keep-Alive<br />Cookie: <strong>ASP.NET_SessionId=b25tnpbv1wwzp355rddxodv0</strong></pre>
+  <pre>GET /myapp/ HTTP/1.1<br />Accept: */*Accept-Encoding: gzip, deflate<br />User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)<br />Host: <a href="http://www.example.com/">www.example.com</a><br />Connection: Keep-Alive<br />Cookie: <strong>ASP.NET_SessionId=b25tnpbv1wwzp355rddxodv0<br /></strong>GET /myapp/admin.aspx HTTP/1.1<br />Accept: */*<br />Accept-Encoding: gzip, deflate<br />User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; .NET CLR 1.1.4322)<br />Host: <a href="http://www.example.com/">www.example.com</a><br />Connection: Keep-Alive<br />Cookie: <strong>ASP.NET_SessionId=b25tnpbv1wwzp355rddxodv0</strong></pre>
   <h1>Additional Resources</h1>
   <ul>
-    <li>To learn more about securing forms authentication, see <a href="http://support.microsoft.com/kb/813829">Help Secure Forms Authentication by Using Secure Sockets Layer (SSL)&nbsp;</a>.</li>
+    <li>To learn more about securing forms authentication, see <a href="http://support.microsoft.com/kb/813829">Help Secure Forms Authentication by Using Secure Sockets Layer (SSL) </a>.</li>
   </ul>
   <h1>Related Guideline</h1>
   <ul>
@@ -72,6 +73,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

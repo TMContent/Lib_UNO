@@ -3,7 +3,7 @@
   <Metadata>
     <Id>edcb9c8f-7ab4-4b24-aa2e-f186f3903332</Id>
     <Id_History>edcb9c8f-7ab4-4b24-aa2e-f186f3903332,96813779-aba7-41bf-90f2-705f2592db8f,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>All Sensitive Communications Are Encrypted</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
@@ -17,12 +17,8 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Check For</h1>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>What to Check For</h1>
   <p>Make sure that all sensitive communications are encrypted.</p>
   <h1>Why</h1>
   <p>Encrypting the communication links allows the application to preserve confidentiality and integrity of the transmitted data.</p>
@@ -35,15 +31,15 @@
     </li>
     <li>
       <p>
-        <strong>Identify the pages that handle sensitive information.</strong> Find all pages that handle sensitive information and make sure that they use SSL or another strong cryptographic security mechanism.</p>
+        <strong>Identify the pages that handle sensitive information.</strong> Find all pages that handle sensitive information and make sure that they use TLS or another strong cryptographic security mechanism.</p>
     </li>
     <li>
       <p>
-        <strong>Identify all code that handles sensitive information.</strong> Find all code that handles sensitive information and make sure that it uses SSL or another strong cryptographic security mechanism to transmit the sensitive data.</p>
+        <strong>Identify all code that handles sensitive information.</strong> Find all code that handles sensitive information and make sure that it uses TLS or another strong cryptographic security mechanism to transmit the sensitive data.</p>
     </li>
     <li>
       <p>
-        <strong>Verify that the protection mechanisms are adequate.</strong> If possible, use the platform-provided SSL controls. If some other cryptographic mechanisms are implemented, review them to make sure they are implemented correctly, or switch to platform-provided SSL if possible.</p>
+        <strong>Verify that the protection mechanisms are adequate.</strong> If possible, use the platform-provided TLS controls. If some other cryptographic mechanisms are implemented, review them to make sure they are implemented correctly, or switch to platform-provided TLS if possible.</p>
     </li>
   </ol>
   <h1>How To Fix</h1>
@@ -55,7 +51,7 @@
     </li>
     <li>
       <p>
-        <strong>Choose the appropriate encryption mechanism.</strong> Depending on the infrastructure, you may consider using IPSec or TLS/SSL.</p>
+        <strong>Choose the appropriate encryption mechanism.</strong> Depending on the infrastructure, you may consider using IPSec or TLS.</p>
       <ul>
         <li>
           <p>
@@ -95,19 +91,19 @@
         </li>
         <li>
           <p>
-            <strong>TLS/SSL.</strong> TLS/SSL provides granular protection. This allows the traffic containing sensitive data only to be encrypted. Because TLS/SSL has a certificate based design, it allows the protection of data between mobile hosts. Use TLS/SSL to secure the communication channel between your application and its users. While .NET provides APIs for handling SSL encrypted traffic, it is recommended to follow the manuals associated with any third party software that is being used. If your application uses SSL, ensure that you use SSL 3.0 and disable the cryptographically weak SSL 2.0 protocols.</p>
-          <p>Use the following steps to configure IIS for using SSL:</p>
+            <strong>TLS.</strong> TLS provides granular protection. This allows the traffic containing sensitive data only to be encrypted. Because TLS has a certificate based design, it allows the protection of data between mobile hosts. Use TLS to secure the communication channel between your application and its users. While .NET provides APIs for handling TLS encrypted traffic, it is recommended to follow the manuals associated with any third party software that is being used. If your application uses TLS, ensure that only strong cypher suites are used.</p>
+          <p>Use the following steps to configure IIS for using TLS:</p>
           <ol>
             <li>
               <p>
-                <strong>Create a certificate request. </strong>Using the IIS management console, generate an SSL certificate request. This request is then sent to a Certification Authority to be signed. Follow these steps to generate the certificate request. </p>
+                <strong>Create a certificate request. </strong>Using the IIS management console, generate an TLS certificate request. This request is then sent to a Certification Authority to be signed. Follow these steps to generate the certificate request. </p>
               <ol>
                 <li>Start the <strong>IIS management console</strong>. To do this, click on <strong>Control Panel</strong> -&gt; <strong>Administrative Tools</strong> -&gt; <strong>Internet Information Services</strong>. </li>
                 <li>Right click on your application's virtual host and select <strong>Properties</strong>. </li>
                 <li>Click on <strong>Server Certificate</strong> under the <strong>Directory Security</strong> tab. </li>
                 <li>Select <strong>Create a new certificate</strong> and click <strong>Next</strong>. </li>
                 <li>Select <strong>Prepare the request now, but send it later</strong> and click <strong>Next</strong>. </li>
-                <li>Provide <strong>your application's FQDN</strong> and the desired bit length for your SSL certificate's encryption key, and then click <strong>Next</strong>. </li>
+                <li>Provide <strong>your application's FQDN</strong> and the desired bit length for your TLS certificate's encryption key, and then click <strong>Next</strong>. </li>
                 <li>Provide <strong>your organization's details</strong> and click <strong>Next</strong>. </li>
                 <li>Provide <strong>your application's FQDN</strong> and click <strong>Next</strong>. </li>
                 <li>Provide <strong>your organization's location details</strong> and click <strong>Next</strong>. </li>
@@ -117,17 +113,17 @@
             </li>
             <li>
               <p>
-                <strong>Present the request to a Certification Authority (CA).</strong> If all conditions for obtaining an SSL certificate are met, the CA will produce a new SSL certificate based on the certificate request. Because the requirements for obtaining an SSL certificate depend on the Certification Authority, consult with the Certification Authority in regards to the administrative steps necessary for obtaining such certificate.</p>
+                <strong>Present the request to a Certification Authority (CA).</strong> If all conditions for obtaining an TLS certificate are met, the CA will produce a new TLS certificate based on the certificate request. Because the requirements for obtaining an TLS certificate depend on the Certification Authority, consult with the Certification Authority in regards to the administrative steps necessary for obtaining such certificate.</p>
             </li>
             <li>
               <p>
-                <strong>Install the certificate.</strong> Follow these steps to properly install your application's SSL certificate.</p>
+                <strong>Install the certificate.</strong> Follow these steps to properly install your application's TLS certificate.</p>
               <ol>
                 <li>Start the <strong>IIS management console</strong>. To do this, click on <strong>Control Panel</strong> -&gt; <strong>Administrative Tools</strong> -&gt; <strong>Internet Information Services</strong>. </li>
                 <li>Right click on your application's virtual host and select <strong>Properties</strong>. </li>
                 <li>Click on <strong>Server Certificate</strong> under the <strong>Directory Security</strong> tab. </li>
                 <li>Select <strong>Process the pending request and install the certificate</strong> and click <strong>Next</strong>. </li>
-                <li>Specify the location of your application's SSL certificate and click <strong>Next</strong>. </li>
+                <li>Specify the location of your application's TLS certificate and click <strong>Next</strong>. </li>
                 <li>Click <strong>Finish</strong> to complete the process. </li>
               </ol>
             </li>
@@ -147,10 +143,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>
-  <h1>
-  </h1>
-  <h1>
-  </h1>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
