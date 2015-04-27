@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1924633633" Content_Hash="-509240320">
+  <Metadata>
+    <Id>1e44b11b-3139-4ff1-b5af-c7244de2d403</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-250: Execution with Unnecessary Privileges</Title>
+    <Category>Authorization</Category>
+    <Phase>Design</Phase>
+    <Technology>Any</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-250: Execution with Unnecessary Privileges</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>The software performs an operation at a privilege level that is higher than the minimum level required, which creates new weaknesses or amplifies the consequences of other weaknesses.</p>
+  <p>New weaknesses can be exposed because running with extra privileges, such as root or Administrator, can disable the normal security checks being performed by the operating system or surrounding environment. Other pre-existing weaknesses can turn into security
+ vulnerabilities if they occur while operating at raised privileges.</p>
+  <p>Privilege management functions can behave in some less-than-obvious ways, and they have different quirks on different platforms. These inconsistencies are particularly pronounced if you are transitioning from one non-root user to another. Signal handlers
+ and spawned processes run with the privilege of the owning process, so if a process is running as root when a signal fires or a sub-process is executed, the signal handler or sub-process will operate with root privileges.</p>
+  <h2>Discussion</h2>
+  <p>Spider Man, the well-known comic superhero, lives by the motto "With great power comes great responsibility." Your software may need special privileges to perform certain operations, but wielding those privileges longer than necessary can be extremely risky.
+ When running with extra privileges, your application has access to resources that the application's user can't directly reach. For example, you might intentionally launch a separate program, and that program allows its user to specify a file to open; this
+ feature is frequently present in help utilities or editors. The user can access unauthorized files through the launched program, thanks to those extra privileges. Command execution can happen in a similar fashion. Even if you don't launch other programs, additional
+ vulnerabilities in your software could have more serious consequences than if it were running at a lower privilege level.</p>
+  <h2>Detection</h2>
+  <p>The detection methods for execution with unnecessary privileges vulnerabilities are:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Manual Analysis.</strong> This weakness can be detected using tools and techniques that require manual (human) analysis, such as penetration testing, threat modeling, and interactive tools that allow the tester to record and modify an active session.
+ These may be more effective than strictly automated techniques. This is especially the case with weaknesses that are related to design and business rules.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Black Box.</strong> Use monitoring tools that examine the software's process as it interacts with the operating system and the network. This technique is useful in cases when source code is unavailable, if the software was not developed by you, or
+ if you want to verify that the build phase did not introduce any new weaknesses. Examples include debuggers that directly attach to the running process; system-call tracing utilities such as
+<em>truss</em> (Solaris) and <em>strace</em> (Linux); system activity monitors such as
+<em>FileMon, RegMon, Process Monitor</em>, and other Sysinternals utilities (Windows); and sniffers and protocol analyzers that monitor network traffic. Attach the monitor to the process and perform a login. Look for library functions and system calls that
+ indicate when privileges are being raised or dropped. Look for accesses of resources that are restricted to normal users. Note that this technique is only useful for privilege issues related to system resources. It is not likely to detect application-level
+ business rules that are related to privileges, such as if a blog system allows a user to delete a blog entry without first checking that the user has administrator privileges.</p>
+    </li>
+  </ol>
+  <h2>Mitigation</h2>
+  <p>The following mitigation methods for execution with unnecessary privileges are available:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Run your code using the lowest privileges that are required to accomplish the necessary tasks.</strong> If possible, create isolated accounts with limited privileges that are only used for a single task. That way, a successful attack will not immediately
+ give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Isolate the privileged code.</strong> Identify the functionality that requires additional privileges, such as access to privileged operating system resources. Wrap and centralize this functionality if possible, and isolate the privileged code as
+ much as possible from other code. Raise your privileges as late as possible, and drop them as soon as possible to avoid CWE-271. Avoid weaknesses such as CWE-288 and CWE-420 by protecting all possible communication channels that could interact with your privileged
+ code, such as a secondary socket that you only intend to be accessed by administrators.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Validate all input.</strong> Perform extensive input validation for any privileged code that must be exposed to the user and reject anything that does not fit your strict requirements.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Double-check that privileges have been dropped successfully.</strong> When you drop privileges, ensure that you have dropped them successfully to avoid CWE-273. As protection mechanisms in the environment get stronger, privilege-dropping calls may
+ fail even if it seems like they have succeeded. </p>
+    </li>
+    <li>
+      <p>
+        <strong>If circumstances force you to run with extra privileges, then determine the minimum access level necessary.</strong> First identify the different permissions that the software and its users will need to perform their actions, such as file read and
+ write permissions, network socket permissions, and so forth. Then explicitly allow those actions while denying all else. Perform extensive input validation and canonicalization to minimize the chances of introducing a separate vulnerability. It is more effective
+ to just drop the privileges.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that the application works correctly in a hardened environment.</strong> Ensure that your software runs properly under the
+<em>Federal Desktop Core Configuration (FDCC)</em> or an equivalent hardening configuration guide, which many organizations use to limit the attack surface and potential risk of deployed software.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about execution with unnecessary privileges vulnerabilities, please see
+<a href="http://cwe.mitre.org/top25/index.html#CWE-250">http://cwe.mitre.org/top25/index.html#CWE-250</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

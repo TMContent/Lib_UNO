@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-760981514" Content_Hash="509841890">
+  <Metadata>
+    <Id>2eb343e1-e3e5-46f3-9e6e-0c9a4a64827f</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Use a Sandbox</Title>
+    <Category>Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Any</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use a Sandbox</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>Run your code in a "jail" or similar sandbox environment that enforces strict boundaries between the process and the operating system.
+</p>
+  <h2>Why</h2>
+  <p>This may effectively restrict which files can be accessed in a particular directory or which commands can be executed by your software.</p>
+  <h2>How</h2>
+  <p>OS-level examples include the Unix <em>chroot</em> jail, <em>AppArmor</em>, and
+<em>SELinux</em>. In general, managed code may provide some protection. For example,<em> java.io.FilePermission</em> in the Java
+<em>SecurityManager</em> allows you to specify restrictions on file operations.</p>
+  <p>This may not be a feasible solution, and it only limits the impact to the operating system; the rest of your application may still be subject to compromise.</p>
+  <p>Be careful to avoid CWE-243 and other weaknesses related to jails.</p>
+  <p>
+    <strong>Note:</strong> The effectiveness of this mitigation depends on the prevention capabilities of the specific sandbox or jail being used and might only help to reduce the scope of an attack, such as restricting the attacker to certain system calls or
+ limiting the portion of the file system that can be accessed.</p>
+  <h2>Additional Resources</h2>
+  <ul>
+    <li>For more information about "CWE-243: Creation of chroot Jail Without Changing Working Directory", please see
+<a href="http://cwe.mitre.org/data/definitions/243.html">http://cwe.mitre.org/data/definitions/243.html</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>
