@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>Web services and applications</li>
@@ -26,13 +26,13 @@
   <p>During HTTP replay attacks, an adversary records and then replays an HTTP data transmission (sequence of HTTP packets). The most common purpose of this attack is to bypass authentication in order for the adversary to masquerade themselves as a legitimate user.</p>
   <p>The following steps are recommended in order to test for HTTP replay attacks:</p>
   <ul>
-    <li>Step 1:&nbsp; Understand Attack Scenarios. 
+    <li>Step 1:  Understand Attack Scenarios. 
 </li>
-    <li>Step 2:&nbsp; Analyze Root Causes and Mitigations. 
+    <li>Step 2:  Analyze Root Causes and Mitigations. 
 </li>
-    <li>Step 3:&nbsp; Start Testing and Exploring. 
+    <li>Step 3:  Start Testing and Exploring. 
 </li>
-    <li>Step 4:&nbsp; Tune Test Cases.</li>
+    <li>Step 4:  Tune Test Cases.</li>
   </ul>
   <h1>Step 1: Understand Attack Scenarios</h1>
   <p>First, you need to understand the fundamental details of an HTTP replay attack. The following scenario illustrates two common purposes for replay attacks:</p>
@@ -79,13 +79,13 @@
     <li>The attacker replays the saved packets or sends new packets with particular information crafted from the sniffed data to carry out the fraudulent transaction on the victim's behalf.</li>
   </ol>
   <h1>Step 2: Analyze Root Cause and Mitigations</h1>
-  <p>Once you understand replay attack scenarios, the next step is to analyze what causes them. In doing so, you will also learn how applications protect against this attack. Knowing the root cause of security vulnerabilities helps you to identify them in both design and implementation (source code). In addition, understanding mitigations in detail tells you if the bug exists when you have the source code available. When lacking source code access, knowing the mitigation techniques helps to guide security testing for this bug; any poorly implemented mitigation will lead to an HTTP replay vulnerability.<b><i>&nbsp;</i></b></p>
+  <p>Once you understand replay attack scenarios, the next step is to analyze what causes them. In doing so, you will also learn how applications protect against this attack. Knowing the root cause of security vulnerabilities helps you to identify them in both design and implementation (source code). In addition, understanding mitigations in detail tells you if the bug exists when you have the source code available. When lacking source code access, knowing the mitigation techniques helps to guide security testing for this bug; any poorly implemented mitigation will lead to an HTTP replay vulnerability.<b><i></i></b></p>
   <h2>Root Cause</h2>
   <p>The cause for this bug is that HTTP systems perform legitimate new actions based on reused data. For instance, as seen in the first scenario above, a server performs a legitimate new action (authenticate the attacker as the victim) based on reused data (captured victim auth packets).</p>
   <h2>Mitigations</h2>
   <p>A web service can choose to protect against replay bugs by using session tokens. Before the client sends his email and password to the service, the client and server exchange a session token. The password is hashed with the new session token before sending it to the server. Since the server knows the password and the session token, it computes the hash separately and compares it against the hash value sent by the client. The attacker receives a new session token when they connect to the server to execute the attack. The attacker sends the previously captured password hash to the server but the server denies authentication because the attacker's sessions token is not valid. A server can also prevent replay attacks using a nonce (number used once) along with Message Authentication Code (MAC). The MAC is a hash of the nonce and the password along with a secret key for the transaction. The server computes its own MAC since it knows the nonce, password, and transaction key and validates the client using its internal value.</p>
   <p>Another common mitigation is by using timestamps. If the attacker attempts to replay a transaction, the server realizes that the timestamp is from the past and rejects the replay attack. </p>
-  <p>Applications can also use SSL to protect against replay attacks. During SSL authentication the client and server use random data to generate the key for a specific connection. Each message contains a MAC with the message's sequence number and the connection key. An attacker will not be able to compute a valid MAC without knowing the connection key. </p>
+  <p>Applications can also use TLS to protect against replay attacks. During TLS authentication the client and server use random data to generate the key for a specific connection. Each message contains a MAC with the message's sequence number and the connection key. An attacker will not be able to compute a valid MAC without knowing the connection key. </p>
   <h1>Step 3: Start Testing and Exploring</h1>
   <p>Now that you've learned how HTTP replay attacks work and the reasons they exist, you must test for both secure and insecure implementations.</p>
   <h2>Basic HTTP replay test</h2>
@@ -114,16 +114,16 @@
 </li>
     <li>Save the capture of the log in process. 
 </li>
-    <li>Analyze network packets and look for some indicator of a timestamp, a session token, or a nonce.&nbsp; </li>
+    <li>Analyze network packets and look for some indicator of a timestamp, a session token, or a nonce.  </li>
   </ol>
-  <p>Expected result: The application server uses a timestamp, a session token, or nonce during authentication.&nbsp;Although this is a clear indicator that your application should prevent replay attacks, you should still replay this packet as in the previous test to see if this prevention actually works.</p>
+  <p>Expected result: The application server uses a timestamp, a session token, or nonce during authentication. Although this is a clear indicator that your application should prevent replay attacks, you should still replay this packet as in the previous test to see if this prevention actually works.</p>
   <p>
     <b>
       <i>
       </i>
     </b>
   </p>
-  <h2>Test to check if the site uses SSL</h2>
+  <h2>Test to check if the site uses TLS</h2>
   <ol>
     <li>Start capturing network traffic using <i>Wireshark </i>or a similar tool. 
 </li>
@@ -131,9 +131,9 @@
 </li>
     <li>Save the capture of the log in process in <i>Wireshark</i>. 
 </li>
-    <li>Use <i>Wireshark </i>(or a similar tool) to set a capture filter to show only "<i>ssl</i>" packets.</li>
+    <li>Use <i>Wireshark </i>(or a similar tool) to set a capture filter to show only TLS packets.</li>
   </ol>
-  <p>Expected result: The server uses SSL for authentication and you can see an SSL handshake.&nbsp;</p>
+  <p>Expected result: The server uses TLS for authentication and you can see an TLS handshake. </p>
   <h1>Step 4: Tune Test Cases</h1>
   <p>During this step you must test for additional payloads of this attack. For example, record a specific transaction such as a purchase of an item or of specific services. Then try to replay the transaction from outside a valid user session (without legitimate authentication). There are multiple replay attacks that you can try depending on what you have in mind. Make sure to cover the following attacks (these are examples; specific scenarios relevant to your application should be tested):</p>
   <ul>

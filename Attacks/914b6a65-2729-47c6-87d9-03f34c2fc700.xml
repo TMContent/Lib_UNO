@@ -3,7 +3,7 @@
   <Metadata>
     <Id>914b6a65-2729-47c6-87d9-03f34c2fc700</Id>
     <Id_History>af091894-b7e2-4d6f-a047-4f36336850c7,914b6a65-2729-47c6-87d9-03f34c2fc700,3837cc25-aa12-48b0-a53d-506ae73bf218,</Id_History>
-    <Library_Id>be5273b1-d682-4361-99d9-6204f2d47eb7</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Request Smuggling Attack</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
@@ -74,7 +74,7 @@ In summary we have the following:
 
 At this point the web server responds to the {{{GET}}} in line 8 by sending the content of {{{/poison.html}}} to the proxy. The proxy, expecting a response to the GET request in line 11, mistakenly matches the reply from the webserver with contents from {{{/poison.html}}} to the page {{{/index.html}}}. Therefore, the contents of {{{/poison.html}}} are cached under the name {{{/index.html}}} on the proxy. Now any user who requests {{{http://somewhere.com/index.html}}} through the proxy will receive the contents of {{{http://somewhere.com/poison.html}}} instead.
 
-There are several options available to mitigate this attack but all of them have their downside. If possible, use a well tested web server such as Apache or IIS. Otherwise, you can turn off server-side page caching, but this can lead to significant performance problems such as increased server load and latency. A final option is to use SSL communication for everything (HTTPS instead of HTTP), but this too has an associated performance overhead.
+There are several options available to mitigate this attack but all of them have their downside. If possible, use a well tested web server such as Apache or IIS. Otherwise, you can turn off server-side page caching, but this can lead to significant performance problems such as increased server load and latency. A final option is to use TLS communication for everything (HTTPS instead of HTTP), but this too has an associated performance overhead.
 
 =Additional Resources
 

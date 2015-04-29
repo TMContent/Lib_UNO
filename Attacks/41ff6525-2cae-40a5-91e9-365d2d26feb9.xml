@@ -3,7 +3,7 @@
   <Metadata>
     <Id>41ff6525-2cae-40a5-91e9-365d2d26feb9</Id>
     <Id_History>a048eed9-ad5a-4dac-a8d3-68f42da69dbd,41ff6525-2cae-40a5-91e9-365d2d26feb9,25564870-77bd-43d8-9ccd-e6fc476feb24,</Id_History>
-    <Library_Id>be5273b1-d682-4361-99d9-6204f2d47eb7</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Man in the Middle Attack</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
@@ -24,7 +24,7 @@ Any two applications which communicate over any networked channel, such as the i
 
 =Description
 
-A man in the middle (MiTM) attack occurs when an attacker intercepts messages sent between two parties without their knowledge. The attacker is usually capable of reading, inserting and modifying the messages it intercepts. MiTM attacks can be carried out on various protocols and against various technologies to intercept and modify data being exchanged between two parties. This is done in such a way that the attacker compromises the confidentiality, integrity and/or availability of protected information. Any network request involving client-server communication -- including web requests, distributed component object model (DCOM) requests, and calls to remote components and Web services -- is subject to MiTM attacks. MiTM attacks can be used to attack unencrypted channels as well as encrypted channels (such as SSL) under certain circumstances.
+A man in the middle (MiTM) attack occurs when an attacker intercepts messages sent between two parties without their knowledge. The attacker is usually capable of reading, inserting and modifying the messages it intercepts. MiTM attacks can be carried out on various protocols and against various technologies to intercept and modify data being exchanged between two parties. This is done in such a way that the attacker compromises the confidentiality, integrity and/or availability of protected information. Any network request involving client-server communication -- including web requests, distributed component object model (DCOM) requests, and calls to remote components and Web services -- is subject to MiTM attacks. MiTM attacks can be used to attack unencrypted channels as well as encrypted channels (such as TLS) under certain circumstances.
 
 =Impact
 
@@ -49,7 +49,7 @@ A man in the middle (MiTM) attack occurs when an attacker intercepts messages se
 
 *Since the network weaknesses described above cannot be controlled for all potential users, it is recommended that cryptographic suites be used. Below are some examples at different layers:
 **At the network layer: IPSec
-**At the application layer: SSLv3, TLS, PGP
+**At the application layer: TLS, PGP
 
 *Use of these suites requires careful consideration of the key length and key store. Correct ways of doing so are provided in the Related Items section of this article.
 
@@ -59,7 +59,7 @@ A few examples are described below to demonstrate the various types of problems 
 
     *Code or command injection: Malicious code could be inserted into web-pages or email, which would be executed on the client application.
     *Key exchange: Public keys exchanged by the server and the client could be modified and replaced with the attacker's public key. The attacker would then be able to read and modify traffic to and from both entities.
-    *Parameter substitution: Parameters to applications running on the client or the server could be modified by the attacker to alter the behavior of an application. A common attack here is to substitute the SSL version supported by the server. By forcing the client and server to negotiate on a weaker version of SSL, an attacker can easily compromise the confidentiality of the data.
+    *Parameter substitution: Parameters to applications running on the client or the server could be modified by the attacker to alter the behavior of an application. A common attack here is to substitute the TLS version supported by the server. By forcing the client and server to negotiate on a weaker version of TLS, an attacker can easily compromise the confidentiality of the data.
     *IPSec Failure: By blocking the key material exchange on UDP port 500, the end point will think that the other cannot start an IPSec connection. Worse, if the client is configured in rollback mode, there is a good chance that the user will not notice that the connection is in clear text.
 
 =Additional Resources
