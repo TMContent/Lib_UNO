@@ -3,11 +3,11 @@
   <Metadata>
     <Id>0def44d6-fea1-45a9-951c-79b54d549e5c</Id>
     <Id_History>0def44d6-fea1-45a9-951c-79b54d549e5c,708c5b85-9222-4138-90b0-ec8a98ac5c49,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Restrict Access to Audit And Log Files</Title>
     <Category>Auditing and Logging</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET 3.5</Technology>
+    <Technology>.NET</Technology>
     <Type>Guideline</Type>
     <DirectLink>Restrict Access to Audit And Log Files</DirectLink>
     <Tag />
@@ -19,28 +19,28 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Do</h1>
-  <p>Restrict access to audit and log files.&nbsp; Application accounts should have write-only access and operators and support personnel should have read-only access as needed.&nbsp; Administrators accounts are the only accounts which should have full access, and in some cases even this should be restricted or avoided. </p>
+  <p>Restrict access to audit and log files.&amp;nbsp; Application accounts should have write-only access and operators and support personnel should have read-only access as needed.&amp;nbsp; Administrators accounts are the only accounts which should have full access, and in some cases even this should be restricted or avoided. </p>
   <h1>Why</h1>
-  <p>Restricting access to log files makes it harder for attackers to tamper with log files to cover their tracks.&nbsp; Furthermore, it reduces opportunities for the repudiation or forging of actions. </p>
+  <p>Restricting access to log files makes it harder for attackers to tamper with log files to cover their tracks.&amp;nbsp; Furthermore, it reduces opportunities for the repudiation or forging of actions. </p>
   <h1>When</h1>
-  <p>Access to log files should always be restricted, regardless of logging method or system architecture.&nbsp; The degree of protection possible and desirable depends on the details of system architecture and the security requirements of the application, but some level of protection is always appropriate. </p>
+  <p>Access to log files should always be restricted, regardless of logging method or system architecture.&amp;nbsp; The degree of protection possible and desirable depends on the details of system architecture and the security requirements of the application, but some level of protection is always appropriate. </p>
   <h1>How</h1>
-  <p>Logging normally comes in two flavors, either logging to a file or logging to SQL server.&nbsp; Here's a look at how you can secure access to each of these:</p>
+  <p>Logging normally comes in two flavors, either logging to a file or logging to SQL server.&amp;nbsp; Here's a look at how you can secure access to each of these:</p>
   <ul>
     <li>
       <p>
-        <strong>Logging to a file. </strong>Protect audit and log files using Windows ACLs and restrict access to the log files. Assign appropriate permissions to the log files. Logs should be written by a process with write permission only. Logs should be read only for operators and support personnel who need access. Only administrators should have full access. Minimize the number of individuals who can manipulate the log files.&nbsp; Authorize access only to highly trusted accounts such as administrators. </p>
+        <strong>Logging to a file. </strong>Protect audit and log files using Windows ACLs and restrict access to the log files. Assign appropriate permissions to the log files. Logs should be written by a process with write permission only. Logs should be read only for operators and support personnel who need access. Only administrators should have full access. Minimize the number of individuals who can manipulate the log files.&amp;nbsp; Authorize access only to highly trusted accounts such as administrators. </p>
       <li>
         <p>
-          <strong>Logging to SQL Server.</strong> If you log events to SQL Server or to some custom event sink, use appropriate access controls to limit access to the event data. Grant write access to the account or accounts used by your application. Grant full control to administrators. Grant read-only access to operators. Minimize the number of individuals who can manipulate the log files.&nbsp; Authorize access only to highly trusted accounts such as administrators.</p>
+          <strong>Logging to SQL Server.</strong> If you log events to SQL Server or to some custom event sink, use appropriate access controls to limit access to the event data. Grant write access to the account or accounts used by your application. Grant full control to administrators. Grant read-only access to operators. Minimize the number of individuals who can manipulate the log files.&amp;nbsp; Authorize access only to highly trusted accounts such as administrators.</p>
       </li>
     </li>
   </ul>
   <h1>Problem Example</h1>
-  <p>An online bank keeps all of their transaction logs in a database, and all of their web logs in flat files.&nbsp; Permissions on the flat files allow write access to all users, and permissions in the database give full edit control to all support personnel.&nbsp; An attacker compromises the web server, but is constrained by the relatively low-privilege application account.&nbsp; However, they're still able to remove all traces of their attack from the web logs, remaining on the server undetected.&nbsp; When they manage to crack the password of a support account, they're able to remove the records of transactions they force through from the web front end, resulting in significant losses for the bank.</p>
+  <p>An online bank keeps all of their transaction logs in a database, and all of their web logs in flat files.&amp;nbsp; Permissions on the flat files allow write access to all users, and permissions in the database give full edit control to all support personnel.&amp;nbsp; An attacker compromises the web server, but is constrained by the relatively low-privilege application account.&amp;nbsp; However, they're still able to remove all traces of their attack from the web logs, remaining on the server undetected.&amp;nbsp; When they manage to crack the password of a support account, they're able to remove the records of transactions they force through from the web front end, resulting in significant losses for the bank.</p>
   <h1>Solution Example</h1>
-  <p>An online bank keeps all of their transaction logs in a database, and all of their web logs in flat files.&nbsp; Permissions on the flat files grant write-only access to the application account, read-only access to support staff, and full control only to administrators.&nbsp; Permissions in the database allow inserts only to the application account, and selects only to&nbsp;support staff.&nbsp; When an attacker compromises the web server, they are unable to hide their tracks by erasing the evidence of the attack in web logs.&nbsp; Despite this, they crack the password of a support account and attempt to push transactions through the system.&nbsp; As they can't alter the transaction logs, they're caught immediately, before the transaction succeeds.</p>
+  <p>An online bank keeps all of their transaction logs in a database, and all of their web logs in flat files.&amp;nbsp; Permissions on the flat files grant write-only access to the application account, read-only access to support staff, and full control only to administrators.&amp;nbsp; Permissions in the database allow inserts only to the application account, and selects only to&amp;nbsp;support staff.&amp;nbsp; When an attacker compromises the web server, they are unable to hide their tracks by erasing the evidence of the attack in web logs.&amp;nbsp; Despite this, they crack the password of a support account and attempt to push transactions through the system.&amp;nbsp; As they can't alter the transaction logs, they're caught immediately, before the transaction succeeds.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
