@@ -4,7 +4,7 @@
     <Id>4acdbf17-08dc-4226-a2ec-485c7893594f</Id>
     <Id_History>4acdbf17-08dc-4226-a2ec-485c7893594f,cef4259e-3cd6-4a09-a5df-777ed1cf35a4,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Windows Authentication When Connecting to SQL Server</Title>
+    <Title>[SINK] Use Windows Authentication When Connecting to SQL Server</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -19,18 +19,18 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Do</h1>
-  <p>Use&nbsp;Windows authentication when connecting to SQL Server&nbsp;to gain security advantages over other authentication&nbsp;methods such as mirrored local accounts&nbsp;or impersonation/delegation. </p>
+  <p>Use&amp;nbsp;Windows authentication when connecting to SQL Server&amp;nbsp;to gain security advantages over other authentication&amp;nbsp;methods such as mirrored local accounts&amp;nbsp;or impersonation/delegation. </p>
   <h1>Why</h1>
   <p>Domain accounts offer several advantages over mirrored local accounts or impersonation/delegation:</p>
   <ul>
     <li>You can enforce Active Directory password policies. <li>Active Directory provides a single identity store with a single set of management tools. You do not have to maintain a separate set of SQL accounts. <li>No credentials are passed over the network during authentication and you do not need to embed user names and passwords in the database connection string. This means that malicious users or attackers cannot obtain the credentials either by monitoring the network or by viewing connection strings inside your configuration files. <li>You benefit from centralized account management. User accounts are subject to normal account management security policies such as password expiration periods, minimum lengths, and account lockout after multiple invalid logon requests. </li></li></li></li>
   </ul>
   <h1>When</h1>
-  <p>Use Windows authentication whenever possible.&nbsp; However, you might not be able to use Windows authentication if: </p>
+  <p>Use Windows authentication whenever possible.&amp;nbsp; However, you might not be able to use Windows authentication if: </p>
   <ul>
     <li>Your database client and database server are separated by a firewall which prevents Kerberos or NTLM authentication. <li>Your application server and database server are in separate domains with no trust. </li></li>
   </ul>
-  <p>In these situations, you can use either mirrored local accounts or Impersonation/Delegation.&nbsp; Mirrored local accounts&nbsp;are a better choice under most circumstances.&nbsp;</p>
+  <p>In these situations, you can use either mirrored local accounts or Impersonation/Delegation.&amp;nbsp; Mirrored local accounts&amp;nbsp;are a better choice under most circumstances.&amp;nbsp;</p>
   <h1>How</h1>
   <p>To connect to SQL Server using Windows authentication, perform the following steps:</p>
   <ol>
@@ -38,13 +38,13 @@
       <p>
         <strong>Configure a connection string.</strong> For ASP.NET applications, you should store connection strings in the &lt;connectionStrings&gt; section of your application's Web.config file. The connection string used with Windows authentication must include either the Trusted_Connection=Yes attribute, or the equivalent attribute Integrated Security=SSPI:</p>
       <blockquote>
-        <pre>&nbsp;&lt;connectionStrings&gt;<br />&nbsp; &lt;add name="MyLocalSQLServer" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionString="Initial Catalog=pubs;User Id=sa;Password=asdasd;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data source=localhost;Integrated Security=SSPI;"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
+        <pre>&amp;nbsp;&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Initial Catalog=pubs;User Id=sa;Password=asdasd;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; data source=localhost;Integrated Security=SSPI;"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
       </blockquote>
       <li>
         <p>
           <strong>Encrypt the connection string.</strong> Even though database connection strings for Windows authentication do not contain usernames and passwords, you should still encrypt them in Web.config to reduce the possibility of disclosing server names and database names. </p>
         <blockquote>
-          <p>To encrypt the connectionStrings section&nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
+          <p>To encrypt the connectionStrings section&amp;nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
           <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
         </blockquote>
         <li>
@@ -52,7 +52,7 @@
             <strong>Configure SQL Server security.</strong> You need to create a SQL Server login for your application's service account, and grant restricted permissions to access your database. You should restrict access to specific database objects, such as stored procedures. </p>
           <li>
             <p>
-              <strong>Test security access.</strong> Test database access that appropriate database permissions are available. Just as important, test that permissions unneccessary to the application's operation are denied.&nbsp;</p>
+              <strong>Test security access.</strong> Test database access that appropriate database permissions are available. Just as important, test that permissions unneccessary to the application's operation are denied.&amp;nbsp;</p>
           </li>
         </li>
       </li>
@@ -71,6 +71,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

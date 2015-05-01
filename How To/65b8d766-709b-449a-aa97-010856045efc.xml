@@ -3,8 +3,8 @@
   <Metadata>
     <Id>65b8d766-709b-449a-aa97-010856045efc</Id>
     <Id_History>65b8d766-709b-449a-aa97-010856045efc,1752a85c-c767-4d9f-84cd-db3bb20baafd,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
-    <Title>How to Create a Service Account for an ASP.NET Application</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[SINK] How to Create a Service Account for an ASP.NET Application</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Internet Information Services (IIS) version 6.0 or later&nbsp;<li>Microsoft Windows Server 2003 or later&nbsp;operating system </li></li>
+    <li>Internet Information Services (IIS) version 6.0 or later&amp;nbsp;<li>Microsoft Windows Server 2003 or later&amp;nbsp;operating system </li></li>
   </ul>
   <h1>Summary</h1>
   <p>This How to shows you how to create and configure a custom least-privileged service account to run an ASP.NET Web application. By default, an ASP.NET application on Microsoft Windows Server 2003 pr later and IIS runs using the built-in Network Service account. In production environments, you usually run your application using a custom service account. By using a custom service account, you can audit and authorize your application separately from others, and your application is protected from any changes made to the privileges or permissions associated with the Network Service account. To use a custom service account, you must configure the account by running the Aspnet_regiis.exe utility with the <b>-ga</b> switch, and then configure your application to run in a custom application pool that uses the custom account's identity.</p>
@@ -71,7 +71,7 @@
     <li>Create a least privileged custom account. <li>Assign the necessary privileges and permissions to the custom account. <li>Configure an application to run using a custom service account. <li>Confirm the identity that your application uses to run. </li></li></li></li>
   </ul>
   <h1>Overview</h1>
-  <p>By default, an ASP.NET application on Windows Server 2003 or later and IIS runs in the ASP.NET&nbsp;application pool. This application pool uses the built-in Network Service account. This account is least privileged, although it does have network credentials which means that you can use it to authenticate against network servers.</p>
+  <p>By default, an ASP.NET application on Windows Server 2003 or later and IIS runs in the ASP.NET&amp;nbsp;application pool. This application pool uses the built-in Network Service account. This account is least privileged, although it does have network credentials which means that you can use it to authenticate against network servers.</p>
   <p>The following scenarios may prevent you from using a network service account or a custom domain-level service account: </p>
   <ul>
     <li>Your Web server is not in a domain. <li>Your Web server and downstream remote server are in separate domains with no trust relationship. <li>Your Web server and downstream remote server are separated by a firewall and you cannot open the ports required for NTLM or Kerberos authentication. </li></li></li>
@@ -87,7 +87,7 @@
     <li>Adhere to the principle of least privilege, and grant the account the minimum set of privileges and permissions required. <li>Avoid running ASP.NET using the SYSTEM account. <li>Avoid granting your application's account the <b>Act</b><b>as part of the operating system</b> user right. </li></li></li>
   </ul>
   <blockquote>
-    <b>Note</b>&nbsp;&nbsp;&nbsp;An<b></b>ASP.NET application does not impersonate by default. Therefore, access controls on resources must be configured for your application's identity, and not for end user accounts or user groups.</blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;An<b></b>ASP.NET application does not impersonate by default. Therefore, access controls on resources must be configured for your application's identity, and not for end user accounts or user groups.</blockquote>
   <h1>Summary of Steps</h1>
   <p>Follow these steps to create and test a dedicated application pool that uses a custom service account identity: </p>
   <ul>
@@ -99,7 +99,7 @@
     <b>To create a new account</b>
   </p>
   <ol>
-    <li>Create a new local or domain user account. Create a local account by using the Computer Management tool in the Control Panel. Create a domain account by using the Active Directory Users and Computers tool in the Control Panel. <li>Give the account an appropriate name, for example, CustomASP<b>.</b> Clear the <b>User must change password at next logon</b> and select <b>Password never expires</b>. <blockquote><b>Note</b>&nbsp;&nbsp;&nbsp;Make sure you use a strong password for the account. Strong passwords should include at least seven characters and should bee a mixture of uppercase and lowercase letters, numbers, and other characters such as &#42;, ?, or &#36;.</blockquote></li></li>
+    <li>Create a new local or domain user account. Create a local account by using the Computer Management tool in the Control Panel. Create a domain account by using the Active Directory Users and Computers tool in the Control Panel. <li>Give the account an appropriate name, for example, CustomASP<b>.</b> Clear the <b>User must change password at next logon</b> and select <b>Password never expires</b>. <blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Make sure you use a strong password for the account. Strong passwords should include at least seven characters and should bee a mixture of uppercase and lowercase letters, numbers, and other characters such as &amp;#42;, ?, or &amp;#36;.</blockquote></li></li>
   </ol>
   <h1>Step 2. Assign ASP.NET Permissions to the New Account</h1>
   <p>When you use a custom service account, the account needs appropriate permissions to access the IIS metabase and the file system folders that are used by ASP.NET. ASP.NET provides the Aspnet_regiis.exe utility, which allows you to grant appropriate permissions.</p>
@@ -111,7 +111,7 @@
   </ol>
   <blockquote>Where <i>MachineName</i> is the name of your server or the domain name if you are using a domain account, and <i>AccountName</i> is the name of your custom account.</blockquote>
   <ol>
-    <li>Review the permissions required by your custom account. When you run Aspnet_regiis.exe with the <b>-ga</b> switch, the command grants the following rights to the account: <ul><li>Access to the IIS Metabase <li>Permission to write to the &#37;Windir&#37;\Microsoft.NET\Framework\<i>version</i>\Temporary ASP.NET Files folder </li></li></ul><p>The account is also a member of the local <b>Users</b> group; therefore, it has read access to the \Inetpub directory tree (these directories have an ACL that grants read access to the <b>Users</b> group). </p><blockquote><b>Note</b>&nbsp;&nbsp;&nbsp;The <b>-ga</b> switch makes a number of global changes. If you want to restrict access to specific folders, you need to manually adjust the ACLs on those folders.</blockquote></li>
+    <li>Review the permissions required by your custom account. When you run Aspnet_regiis.exe with the <b>-ga</b> switch, the command grants the following rights to the account: <ul><li>Access to the IIS Metabase <li>Permission to write to the &amp;#37;Windir&amp;#37;\Microsoft.NET\Framework\<i>version</i>\Temporary ASP.NET Files folder </li></li></ul><p>The account is also a member of the local <b>Users</b> group; therefore, it has read access to the \Inetpub directory tree (these directories have an ACL that grants read access to the <b>Users</b> group). </p><blockquote><b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;The <b>-ga</b> switch makes a number of global changes. If you want to restrict access to specific folders, you need to manually adjust the ACLs on those folders.</blockquote></li>
   </ol>
   <h1>Step 3. Create a Test ASP.NET Application</h1>
   <p>In this step, you create a test ASP.NET application with a single page that displays the Windows identity used to run the application.</p>
@@ -119,7 +119,7 @@
     <b>To create the test application</b>
   </p>
   <ol>
-    <li>Create a new Web application in Visual Studio .NET called <b>TestCustomPool</b>. <li>Add the following code in the Default.aspx page load event handler. <div><pre>using System.Security.Principal;<br />...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />WindowsIdentity id = WindowsIdentity.GetCurrent();<br />Response.Write("&lt;b&gt;Windows Identity Check&lt;/b&gt;&lt;br&gt;");<br />Response.Write("Name: " &#43; id.Name &#43; "&lt;br&gt;");  </pre></div><li>Compile the test application and run it. Note the output, which shows that the application currently runs under the default Network Service account. <p>The browser should display the following text: </p><div><div></div><div><pre>&nbsp;Windows Identity Check<br />Name: NT AUTHORITY\NETWORK SERVICE<br />&nbsp; </pre></div></div></li></li></li>
+    <li>Create a new Web application in Visual Studio .NET called <b>TestCustomPool</b>. <li>Add the following code in the Default.aspx page load event handler. <div><pre>using System.Security.Principal;<br />...&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />WindowsIdentity id = WindowsIdentity.GetCurrent();<br />Response.Write("&lt;b&gt;Windows Identity Check&lt;/b&gt;&lt;br&gt;");<br />Response.Write("Name: " &amp;#43; id.Name &amp;#43; "&lt;br&gt;");  </pre></div><li>Compile the test application and run it. Note the output, which shows that the application currently runs under the default Network Service account. <p>The browser should display the following text: </p><div><div></div><div><pre>&amp;nbsp;Windows Identity Check<br />Name: NT AUTHORITY\NETWORK SERVICE<br />&amp;nbsp; </pre></div></div></li></li></li>
   </ol>
   <h1>Step 4. Create an Application Pool with a Custom Identity</h1>
   <p>In this step, you create a new application pool to run your ASP.NET application, and you configure it to use the custom service that you created earlier.</p>
@@ -177,7 +177,7 @@
     </li>
   </ul>
   <h2>Creating Service Principal Names (SPNs) for Domain Accounts</h2>
-  <p>When you switch from using a machine account, such as Network Service, to a domain account and if your application uses Kerberos authentication to authenticate its clients, Kerberos authentication will stop working unless you have a service principal name for the domain account registered in Microsoft&#174; Active Directory&#174; directory service.</p>
+  <p>When you switch from using a machine account, such as Network Service, to a domain account and if your application uses Kerberos authentication to authenticate its clients, Kerberos authentication will stop working unless you have a service principal name for the domain account registered in Microsoft&amp;#174; Active Directory&amp;#174; directory service.</p>
   <p>
     <b>To create an SPN for a domain account</b>
   </p>
@@ -186,11 +186,11 @@
   </ol>
   <p>The tool creates an SPN for the custom domain account (domain\customAccountName) and associates the account with the HTTP service on the specified Web server. By running the command twice as shown above you can associate the account with the NetBIOS server name and the fully qualified domain name of the server. This ensures that the SPN is established correctly even if your environment does not consistently use fully qualified domain names.</p>
   <blockquote>
-    <b>Note</b>&nbsp;&nbsp;&nbsp;You cannot have multiple Web applications with the same host name if you want them to have multiple identities. This is an HTTP limitation, not a Kerberos limitation. The workaround is to have multiple DNS names for the same host, and start the URLs for each Web application with a different DNS name. For example, you would use http://app1 and http://app2 rather than http://site/app1 and http://site/app2.</blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;You cannot have multiple Web applications with the same host name if you want them to have multiple identities. This is an HTTP limitation, not a Kerberos limitation. The workaround is to have multiple DNS names for the same host, and start the URLs for each Web application with a different DNS name. For example, you would use http://app1 and http://app2 rather than http://site/app1 and http://site/app2.</blockquote>
   <h2>Using IIS 5.0 Isolation Mode</h2>
   <p>If you configure your IIS server to run in IIS 5.0 isolation mode, then ASP.NET applications run using account credentials defined on the &lt;<b>processModel</b>&gt; element<b></b>in the Machine.config file. With this configuration, ASP.NET applications run in a shared worker process called Aspnet_wp.exe, and they do not use IIS application pools. If you change the account credentials on the &lt;<b>processModel</b>&gt;<b></b>element, you cause all ASP.NET applications on the server to run under the specified account.</p>
   <p>For more information about how to modify the account credentials using the &lt;<b>processModel</b>&gt; element, see How to: Create a Custom Account to Run ASP.NET.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -7,7 +7,7 @@
     <Title>Debug Data Is Not Included in Output</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET 3.5</Technology>
+    <Technology>.NET</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Debug Data Is Not Included in Output</DirectLink>
     <Tag />
@@ -29,29 +29,35 @@
       <p>
         <strong>Ensure debugging is disabled. </strong>Verify that the debug flag in your application's web.config is set to false:</p>
       <pre>&lt;configuration&gt;&lt;system.Web&gt;&lt;compilation debug="false"&gt;</pre>
-      <li>
-        <p>
-          <strong>Verify that debug information is not disclosed in error messages. </strong>See the <a href="/article/98fb697a-6278-4f73-8937-291b2b83cdb4">Valuable Information is Not Disclosed in Error Messages</a> checklist for detailed steps on how to check for debuging information in error messages.</p>
-        <li>
-          <p>
-            <strong>Ensure that exception details are not disclosed to the client. </strong>Identify all <strong>catch</strong> and <strong>finally</strong> clauses, and ensure that debug messages are not sent to the client. Consult the <a href="/article/edb7f620-21a6-4599-aebd-2966c47ec2e3">Exception Details are Not Disclosed to the Client</a> checklist for details on the following important steps:</p>
-          <ol>
-            <li>Verify that all expected exceptions are caught. <li>Verify that a global exception handler is used. <li>Verify dynamically generated error messages are sufficiently generic. <li>Verify error pages are sufficiently generic.</li></li></li></li>
-          </ol>
-          <li>
-            <p>
-              <strong>Use a logging mechanism to collect debug information when appropriate. </strong>If it is necessary to collect debug information for later analysis, use a logging mechanism to reduce the risk of an attacker gaining access to the information. </p>
-            <ol>
-              <li>Consult the <a href="/article/a053c4e4-2aad-41b9-b60b-e0fdeffd39f4">Log Important Security Operations</a> guideline to identify what debug information is appropriate for logging. <li>Consult your application's designs to determine the appropriate framework for logging debug messages. <li>Verify that the identified information is collected via your application's logging framework. <li>Check that only neccesary users have access to the log files with the <a href="/article/a19926c9-3e4f-4d5c-8dc1-1baa3748bcda">Log Files are Protected</a> checklist.</li></li></li></li>
-            </ol>
-            <li>
-              <p>
-                <strong>Ensure access to trace facilities is restricted. </strong>If your application uses ASP.NET tracing, ensure that the <strong>trace</strong> element inside your application's <strong>web.config</strong> has the <strong>localOnly</strong> attribute set to <strong>true</strong>:</p>
-              <pre>&lt;trace enabled="true" pageOutput="false" traceMode="SortByTime" <strong>localOnly="true"</strong>/&gt;</pre>
-            </li>
-          </li>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that debug information is not disclosed in error messages. </strong>See the Valuable Information is Not Disclosed in Error Messages checklist for detailed steps on how to check for debuging information in error messages.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that exception details are not disclosed to the client. </strong>Identify all <strong>catch</strong> and <strong>finally</strong> clauses, and ensure that debug messages are not sent to the client. Consult the Exception Details are Not Disclosed to the Client checklist for details on the following important steps:</p>
+      <ol>
+        <li>Verify that all expected exceptions are caught. </li>
+        <li>Verify that a global exception handler is used. </li>
+        <li>Verify dynamically generated error messages are sufficiently generic. </li>
+        <li>Verify error pages are sufficiently generic.</li>
+      </ol>
+    </li>
+    <li>
+      <p>
+        <strong>Use a logging mechanism to collect debug information when appropriate. </strong>If it is necessary to collect debug information for later analysis, use a logging mechanism to reduce the risk of an attacker gaining access to the information. </p>
+      <ol>
+        <li>Consult the Log Important Security Operations guideline to identify what debug information is appropriate for logging. </li>
+        <li>Consult your application's designs to determine the appropriate framework for logging debug messages. </li>
+        <li>Verify that the identified information is collected via your application's logging framework. </li>
+        <li>Check that only neccesary users have access to the log files with the Log Files are Protected checklist.</li>
+      </ol>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure access to trace facilities is restricted. </strong>If your application uses ASP.NET tracing, ensure that the <strong>trace</strong> element inside your application's <strong>web.config</strong> has the <strong>localOnly</strong> attribute set to <strong>true</strong>:</p>
+      <pre>&lt;trace enabled="true" pageOutput="false" traceMode="SortByTime" <strong>localOnly="true"</strong>/&gt;</pre>
     </li>
   </ol>
   <h1>Problem Example</h1>
@@ -61,13 +67,7 @@
   <ul>
     <li>To learn more about setting secure attributes in your application's web.config file, see: <a href="http://www.devx.com/dotnet/Article/32493/0/page/1">Top 10 Security Vulnerabilities in .NET Configuration Files</a>. </li>
   </ul>
-  <h1>Related Guideline</h1>
-  <ul>
-    <li>
-      <a href="/article/e706145e-6465-4261-96af-a66d6a19a637">Guideline: Do Not Include Debug Data in Output </a>
-    </li>
-  </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
