@@ -3,7 +3,7 @@
   <Metadata>
     <Id>0d1b6821-8652-43a9-922e-07e38dc07421</Id>
     <Id_History>0d1b6821-8652-43a9-922e-07e38dc07421,b7a9de0d-921c-497d-9e14-a7c4533cf73a,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Sensitive Data Is Protected Over the Network</Title>
     <Category>Communication Security</Category>
     <Phase>Implementation</Phase>
@@ -19,15 +19,15 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Ensure that encryption is used to protect all&nbsp;sensitive data transmitted over the network.</p>
+  <p>Ensure that encryption is used to protect all&amp;nbsp;sensitive data transmitted over the network.</p>
   <h1>Why</h1>
   <p>Because network traffic can be easily eavesdropped or modified by attackers, passing sensitive data over the network is prone to a host of attacks, including data theft and data manipulation.</p>
   <h1>How to Check</h1>
-  <p>When an application transmits sensitive data over the network, it is necessary to ensure that it is encrypted to protect the data from being&nbsp;read or modified in transit. To ensure this, follow the steps outlined below:</p>
+  <p>When an application transmits sensitive data over the network, it is necessary to ensure that it is encrypted to protect the data from being&amp;nbsp;read or modified in transit. To ensure this, follow the steps outlined below:</p>
   <ol>
     <li>
       <p>
-        <strong>Search for hyperlinks leading to non-SSL resources.</strong>&nbsp;Review application code and look for hyperlinks starting with "http://" - such hyperlinks lead to resources, which are not secured by SSL. Make sure that non-SSL hyperlinks&nbsp;are not used to navigate between&nbsp;pages that handle sensitive data.</p>
+        <strong>Search for hyperlinks leading to non-TLS resources.</strong>&amp;nbsp;Review application code and look for hyperlinks starting with "http://" - such hyperlinks lead to resources, which are not secured by TLS. Make sure that non-TLS hyperlinks&amp;nbsp;are not used to navigate between&amp;nbsp;pages that handle sensitive data.</p>
     </li>
     <li>
       <p>
@@ -42,7 +42,7 @@
     </li>
     <li>
       <p>
-        <strong>Verify that sensitive data is securely transmitted. </strong>Ensure that your application transmits sensitive data in a secured fashion.&nbsp;Verify that&nbsp;your application&nbsp;encrypts the data using&nbsp;encryption or hashing and encrypts the communication link:</p>
+        <strong>Verify that sensitive data is securely transmitted. </strong>Ensure that your application transmits sensitive data in a secured fashion.&amp;nbsp;Verify that&amp;nbsp;your application&amp;nbsp;encrypts the data using&amp;nbsp;encryption or hashing and encrypts the communication link:</p>
       <ul>
         <li>
           <p>
@@ -67,7 +67,7 @@
                 <strong>Encryption:</strong> Encryption is a mechanism for protecting sensitive data in a retrievable way. If your application uses encryption as means for protecting sensitive data, verify that the following pieces are in place:</p>
               <ul>
                 <li>
-                  <strong>Encryption Key</strong>: Your application's encryption keys are securely stored inside your application's key store.&nbsp; </li>
+                  <strong>Encryption Key</strong>: Your application's encryption keys are securely stored inside your application's key store.&amp;nbsp; </li>
                 <li>
                   <strong>Function</strong>: Your application uses AES, 3DES, or any other strong symmetric encryption function. </li>
                 <li>
@@ -108,7 +108,7 @@
         <li>
           <p>
             <strong>Encrypt the application data</strong>: If your application's communication channels cannot be encrypted, encrypt the application data. Hashing or encryption should be used when protecting the application data. Use hashing if the application data will be used only for comparison purposes. Use encryption if the application data will be retrieved at a later stage.</p>
-          <p>If hashing is used, choose a longer salt, 16 or more bits.&nbsp;In the case&nbsp;that the produced hash is compromised, longer salts make it more difficult for an attacker to gain access to the sensitive data. If your application uses randomly generated salt, make sure that your application encrypts the random salt and stores it into a configuration file. Always use <strong>SecureRandom</strong> and not <strong>Random</strong> to generate the salt. Example of using <strong>SecureRandom</strong> to generate a random salt:</p>
+          <p>If hashing is used, choose a longer salt, 16 or more bits.&amp;nbsp;In the case&amp;nbsp;that the produced hash is compromised, longer salts make it more difficult for an attacker to gain access to the sensitive data. If your application uses randomly generated salt, make sure that your application encrypts the random salt and stores it into a configuration file. Always use <strong>SecureRandom</strong> and not <strong>Random</strong> to generate the salt. Example of using <strong>SecureRandom</strong> to generate a random salt:</p>
           <blockquote>
             <pre>public static byte[] generateSalt() throws NoSuchAlgorithmException<br />{<br />      // Note that salt is declared as private static byte[] and is<br />      // initialized to null.<br />      if (salt == null)<br />      {<br />            SecureRandom srand = SecureRandom.getInstance("SHA1PRNG");<br />                          salt = new byte[4];<br />            srand.nextBytes(salt);<br />      }<br />       return salt;<br />}</pre>
           </blockquote>
@@ -137,75 +137,9 @@
     <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      // Query the credential store with the provided credentials<br />      ...<br />}</pre>
   </blockquote>
   <h1>Solution Example</h1>
-  <p>The following code validates the user based on&nbsp;a given username and password. It uses the user's valid email address and a random salt to encrypt the user's password before comparing&nbsp;the username and the produced digest against the data stored in the backend database. Therefore, the password is encrypted before being transmitted over the network and is protected from being compromised.</p>
+  <p>The following code validates the user based on&amp;nbsp;a given username and password. It uses the user's valid email address and a random salt to encrypt the user's password before comparing&amp;nbsp;the username and the produced digest against the data stored in the backend database. Therefore, the password is encrypted before being transmitted over the network and is protected from being compromised.</p>
   <blockquote>
     <pre>public boolean validateUser(String user, char[] pass)<br />{<br />       ...<br />       // Encrypt the credentials<br />      try<br />      {<br />            userEmail = MyApp.getEmailForUser(user);<br />            passDigest = encryptCredentials(userEmail, pass, salt);<br />      }<br />      catch (GeneralSecurityException gse)<br />      {<br />            // Add the appropriate logging and exception handling mechanisms<br />            return false;<br />      }<br />     catch (IOException ioe)<br />      {<br />            // Add the appropriate logging and exception handling mechanisms<br />            return false;<br />      }<br />       // Query the credential store and execute the rest of the authentication steps<br />      ...<br />}<br />public static byte[] encryptCredentials(String email, char[] pass, byte[] salt)<br />      throws GeneralSecurityException, IOException<br />{<br />      MessageDigest md; <br />      byte[] tempPass;<br />      byte[] rawKey;<br />      // Generate encryption key<br />      md = MessageDigest.getInstance("SHA-512");<br />      md.update(email.getBytes("UTF-8"));<br />      md.update(salt);<br />      rawKey = md.digest();<br />      md.reset();<br />      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");<br />      // Set up cipher<br />      Cipher cipher = Cipher.getInstance("AES");<br />      cipher.init(Cipher.ENCRYPT_MODE, skeySpec);<br />      // Convert char[] to byte[]<br />      tempPass = new byte[pass.length];<br />      for (int i = 0; i &lt; pass.length; i++)<br />      {<br />            tempPass[i] = (byte)pass[i];<br />      }<br />      // Encrypt password<br />      byte[] encrypted = cipher.doFinal(tempPass);<br />            //Clean tempPass<br />      for (int i = 0; i &lt; tempPass.length; i++)<br />      {<br />            tempPass[i] = 0;<br />      }<br />      return encrypted;<br />}</pre>
-  </blockquote>
-  <h1>Java Communication Security Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/172c224e-c3e5-4a5f-bf7a-26fe2db406a4">Encrypt Communication Links</a>
-    </li>
-    <li>
-      <a href="/article/32fb66b7-7055-4fa0-a9e3-168cfc829aa2">Protect Sensitive Data Over the Network</a>
-    </li>
-    <li>
-      <a href="/article/c317a2fc-cf4b-4b21-8523-4c911afca161">Use SSL</a>
-    </li>
-    <li>
-      <a href="/article/7cf7a8ea-d06a-4442-a2e1-3f01a86b8e8b">Use SSL for All Sensitive Pages</a>
-    </li>
-    <li>
-      <a href="/article/076f39f5-6055-4309-a459-6072adc6d36d">Use SSL When Transmitting Credentials</a>
-    </li>
-    <li>
-      <a href="/article/8684d833-6d1c-4b61-958f-2c6e120c5355">Use Valid SSL Certificates</a>
-    </li>
-    <li>
-      <a href="/article/6db5af3a-1346-4cea-931f-d0400f3f87ef">Use Only Strong SSL Algorithms</a>
-    </li>
-    <li>
-      <a href="/article/e3bdbea7-92cb-4407-998a-eaa95cb955e9">Do Not Cache Sensitive Data</a>
-    </li>
-    <li>
-      <a href="/article/19a025b8-9242-4ef5-896b-932828f5f654">Do Not Place Sensitive Data in Parameters</a>
-    </li>
-  </ul>
-  <h1>Java Communication Security Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/abd1c0b2-5557-4114-b381-f47f00a70f76">Communication Links are Encrypted</a>
-    </li>
-    <li>
-      <a href="/article/0d1b6821-8652-43a9-922e-07e38dc07421">Sensitive Data Is Protected Over the Network</a>
-    </li>
-    <li>
-      <a href="/article/b473157f-aa07-4822-8d35-53ec73da44f4">SSL Is Used</a>
-    </li>
-    <li>
-      <a href="/article/2fa26367-e627-456d-8931-ac0e86a8e237">SSL Is Used for All Sensitive Pages</a>
-    </li>
-    <li>
-      <a href="/article/a2000630-b077-45b2-9c05-5b9e2fe7dc13">SSL is Used When Transmitting Credentials</a>
-    </li>
-    <li>
-      <a href="/article/bcc3bb74-7cdf-4704-99fd-e396c11ce3e1">Valid SSL Certificates Are Used</a>
-    </li>
-    <li>
-      <a href="/article/c4219e9d-09b1-404c-8390-15f6b0fd3929">Only Strong SSL Algorithms Are Used</a>
-    </li>
-    <li>
-      <a href="/article/0b672255-10f6-4eb9-a886-e8ee50a927bc">Sensitive Data Is Not Cached</a>
-    </li>
-    <li>
-      <a href="/article/6adf267f-db7d-4770-86c6-292f9b126874">Sensitive Data Is Not Placed in Parameters</a>
-    </li>
-  </ul>
-  <h1>Java Communication Security Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/1d2ac8cc-b706-4f4f-84b4-773a525a6c8d">How to Test for Network Credential Sniffing Bugs in Java</a>
-    </li>
-  </ul>]]></Data>
+  </blockquote>]]></Data>
   </Content>
 </TeamMentor_Article>

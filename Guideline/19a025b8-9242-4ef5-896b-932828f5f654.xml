@@ -3,7 +3,7 @@
   <Metadata>
     <Id>19a025b8-9242-4ef5-896b-932828f5f654</Id>
     <Id_History>19a025b8-9242-4ef5-896b-932828f5f654,9ab3bda9-67d1-4fcf-ae91-92205adacdfd,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Do Not Place Sensitive Data in Parameters</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
@@ -25,7 +25,7 @@
   <h1>What to Do</h1>
   <p>Do not place sensitive data in unprotected parameters. Sensitive data should be either stored in sessions or encrypted before being sent to the server in parameters.</p>
   <h1>Why</h1>
-  <p>Sensitive data stored in unprotected parameters is sent on the network in plain-text and can be easily stolen and read&nbsp;by an attacker with a network sniffer.</p>
+  <p>Sensitive data stored in unprotected parameters is sent on the network in plain-text and can be easily stolen and read&amp;nbsp;by an attacker with a network sniffer.</p>
   <h1>When</h1>
   <p>If your application accepts sensitive data as input or uses it to track session information, avoid placing that data in unprotected parameters. </p>
   <h1>How</h1>
@@ -35,99 +35,37 @@
       <p>
         <strong>Identify the parameters.</strong> Parameters can be used as both entry points and storage places. Locating your application's parameters helps identify potential sources of input. Because parameters are easily accessible by the client, they should be considered untrusted. Different types of parameters include:</p>
       <ul>
-        <li>URL-based parameters <li>Form-based parameters <li>Hidden fields <li>Cookies</li></li></li></li>
+        <li>URL-based parameters </li>
+        <li>Form-based parameters </li>
+        <li>Hidden fields </li>
+        <li>Cookies</li>
       </ul>
-      <li>
-        <p>
-          <strong>Identify the use. </strong>Parameters can be used for several purposes. If you are using parameters to send sensitive data, use the steps below to find a work around:</p>
-        <ul>
-          <li>
-            <p>
-              <strong>Submitting input</strong>: Submitting sensitive data using parameters should always be done through an encrypted channel and always using a POST request. Use SSL to ensure encryption. Avoid using hidden fields when gathering information from the user. Allowing the user to enter all information about their account ensures that they are aware of all data that is being sent. Any information regarding the user's client environment can be gathered via the HTTP headers.</p>
-            <li>
-              <p>
-                <strong>User tracking</strong>: User tracking should always be done server-side using sessions. Avoid storing sensitive information in hidden fields and cookies. If it is necessary to store sensitive data using parameters, encrypt the data using a key that is known only by your application. If encrypted sensitive data is stored inside a cookie, avoid setting the cookie as persistent.</p>
-            </li>
-          </li>
-        </ul>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the use. </strong>Parameters can be used for several purposes. If you are using parameters to send sensitive data, use the steps below to find a work around:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Submitting input</strong>: Submitting sensitive data using parameters should always be done through an encrypted channel and always using a POST request. Use TLS to ensure encryption. Avoid using hidden fields when gathering information from the user. Allowing the user to enter all information about their account ensures that they are aware of all data that is being sent. Any information regarding the user's client environment can be gathered via the HTTP headers.</p>
+        </li>
+        <li>
+          <p>
+            <strong>User tracking</strong>: User tracking should always be done server-side using sessions. Avoid storing sensitive information in hidden fields and cookies. If it is necessary to store sensitive data using parameters, encrypt the data using a key that is known only by your application. If encrypted sensitive data is stored inside a cookie, avoid setting the cookie as persistent.</p>
+        </li>
+      </ul>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>In the following page, the credentials are sent using a GET request. When the page is submitted, the credentials will be available in the URL. Therefore, it is possible for a malicious user to obtain the credentials via the server's access logs or by sniffing the HTTP referrer header.</p>
   <pre>&lt;html&gt;<br />  &lt;head&gt;<br />    &lt;title&gt;login form&lt;/title&gt;<br />  &lt;/head&gt;<br />  &lt;body&gt;<br />    &lt;form method="GET" action="https://login.example.com/myapp/login"&gt;<br />    &lt;input type="text" name="user" size=25&gt;&lt;br&gt;<br />    &lt;input type="password" name="pass" size=25&gt;&lt;br&gt;<br />    &lt;input type="submit" name="submit" value="log in"&gt;<br />    &lt;/form&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
   <h1>Solution Example</h1>
-  <p>In the following page, the credentials are sent using a POST request over SSL. When the page is submitted, the credentials will not be shown in the URL.</p>
+  <p>In the following page, the credentials are sent using a POST request over TLS. When the page is submitted, the credentials will not be shown in the URL.</p>
   <pre>&lt;html&gt;<br />  &lt;head&gt;<br />    &lt;title&gt;login form&lt;/title&gt;<br />  &lt;/head&gt;<br />  &lt;body&gt;<br />    &lt;form method="POST" action="https://login.example.com/myapp/login"&gt;<br />    &lt;input type="text" name="user" size=25&gt;&lt;br&gt;<br />    &lt;input type="password" name="pass" size=25&gt;&lt;br&gt;<br />    &lt;input type="submit" name="submit" value="log in"&gt;<br />    &lt;/form&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
   <h1>Additional Resources</h1>
   <ul>
-    <li>To learn more about parameter manipulation and ways to prevent it, see: <a href="http://www.cgisecurity.com/owasp/html/ch11s04.html">Parameter Manipulation</a>. <li>To learn more about session management, see: <a href="http://www.securityfocus.com/infocus/1774">Basic Web Session Impersonation</a>.</li></li>
-  </ul>
-  <h1>Java Communication Security Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/172c224e-c3e5-4a5f-bf7a-26fe2db406a4">Encrypt Communication Links</a>
-      <li>
-        <a href="/article/32fb66b7-7055-4fa0-a9e3-168cfc829aa2">Protect Sensitive Data Over the Network</a>
-        <li>
-          <a href="/article/c317a2fc-cf4b-4b21-8523-4c911afca161">Use SSL</a>
-          <li>
-            <a href="/article/7cf7a8ea-d06a-4442-a2e1-3f01a86b8e8b">Use SSL for All Sensitive Pages</a>
-            <li>
-              <a href="/article/076f39f5-6055-4309-a459-6072adc6d36d">Use SSL When Transmitting Credentials</a>
-              <li>
-                <a href="/article/8684d833-6d1c-4b61-958f-2c6e120c5355">Use Valid SSL Certificates</a>
-                <li>
-                  <a href="/article/6db5af3a-1346-4cea-931f-d0400f3f87ef">Use Only Strong SSL Algorithms</a>
-                </li>
-                <li>
-                  <a href="/article/e3bdbea7-92cb-4407-998a-eaa95cb955e9">Do Not Cache Sensitive Data</a>
-                  <li>
-                    <a href="/article/19a025b8-9242-4ef5-896b-932828f5f654">Do Not Place Sensitive Data in Parameters</a>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Communication Security Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/abd1c0b2-5557-4114-b381-f47f00a70f76">Communication Links are Encrypted</a>
-      <li>
-        <a href="/article/0d1b6821-8652-43a9-922e-07e38dc07421">Sensitive Data Is Protected Over the Network</a>
-        <li>
-          <a href="/article/b473157f-aa07-4822-8d35-53ec73da44f4">SSL Is Used</a>
-          <li>
-            <a href="/article/2fa26367-e627-456d-8931-ac0e86a8e237">SSL Is Used for All Sensitive Pages</a>
-            <li>
-              <a href="/article/a2000630-b077-45b2-9c05-5b9e2fe7dc13">SSL is Used When Transmitting Credentials</a>
-              <li>
-                <a href="/article/bcc3bb74-7cdf-4704-99fd-e396c11ce3e1">Valid SSL Certificates Are Used</a>
-                <li>
-                  <a href="/article/c4219e9d-09b1-404c-8390-15f6b0fd3929">Only Strong SSL Algorithms Are Used</a>
-                  <li>
-                    <a href="/article/0b672255-10f6-4eb9-a886-e8ee50a927bc">Sensitive Data Is Not Cached</a>
-                    <li>
-                      <a href="/article/6adf267f-db7d-4770-86c6-292f9b126874">Sensitive Data Is Not Placed in Parameters</a>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Communication Security Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/1d2ac8cc-b706-4f4f-84b4-773a525a6c8d">How to Test for Network Credential Sniffing Bugs in Java</a>
-    </li>
+    <li>To learn more about parameter manipulation and ways to prevent it, see: <a href="http://www.cgisecurity.com/owasp/html/ch11s04.html">Parameter Manipulation</a>. </li>
+    <li>To learn more about session management, see: <a href="http://www.securityfocus.com/infocus/1774">Basic Web Session Impersonation</a>.</li>
   </ul>]]></Data>
   </Content>
 </TeamMentor_Article>
