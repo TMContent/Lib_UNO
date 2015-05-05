@@ -7,7 +7,7 @@
     <Title>Filter All User-supplied Filename And Path Input</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET 3.5</Technology>
+    <Technology>.NET</Technology>
     <Type>Guideline</Type>
     <DirectLink>Filter All User-supplied Filename And Path Input</DirectLink>
     <Tag />
@@ -51,11 +51,11 @@
   <h1>Solution Example</h1>
   <p>The server side code of this application is now updated to use the GetFullPath method:</p>
   <blockquote>
-    <pre> &lt;script runat="server"&gt;<br />   void submitBtn_Click(object sender, EventArgs e)<br />   {<br />       String fileName = "c:\\configfiles\\" + inputPath.Text;<br />       fileName = System.IO.Path.GetFullPath(fileName).ToLower();<br />       if (fileName.StartsWith("c:\\configfiles") &&<br />            System.IO.File.Exists (fileName))<br />       {<br />            System.IO.FileStream fs = System.IO.File.Open(fileName, System.IO.FileMode.Open);<br />       }<br />   }<br /> &lt;/script&gt;</pre>
+    <pre> &lt;script runat="server"&gt;<br />   void submitBtn_Click(object sender, EventArgs e)<br />   {<br />       String fileName = "c:\\configfiles\\" + inputPath.Text;<br />       fileName = System.IO.Path.GetFullPath(fileName).ToLower();<br />       if (fileName.StartsWith("c:\\configfiles") &amp;&amp;<br />            System.IO.File.Exists (fileName))<br />       {<br />            System.IO.FileStream fs = System.IO.File.Open(fileName, System.IO.FileMode.Open);<br />       }<br />   }<br /> &lt;/script&gt;</pre>
   </blockquote>
   <p>Now, the website calls GetFullPath and then verifies that the file name is indeed pointing to somewhere within the C:\ConfigFiles\ folder.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

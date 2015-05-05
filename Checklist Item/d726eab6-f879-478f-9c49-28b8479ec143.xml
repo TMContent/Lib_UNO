@@ -4,7 +4,7 @@
     <Id>d726eab6-f879-478f-9c49-28b8479ec143</Id>
     <Id_History>d726eab6-f879-478f-9c49-28b8479ec143,2411e6ea-ae38-43b8-a04d-b33f002d6bc9,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Query Strings Do Not Contain Server Secrets</Title>
+    <Title>[SINK] Query Strings Do Not Contain Server Secrets</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -21,7 +21,7 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that sensitive information is not being transmitted between client and server through a query string.</p>
   <h1>Why</h1>
-  <p>Sensitive data in the query string may be logged by web proxies, and will also appear in the user's browser history and in your own web server logs.&nbsp; Additionally, if sensitive content is being sent through the user, the query string does not offer an easy way of protecting the content from user reading or tampering. </p>
+  <p>Sensitive data in the query string may be logged by web proxies, and will also appear in the user's browser history and in your own web server logs.&amp;nbsp; Additionally, if sensitive content is being sent through the user, the query string does not offer an easy way of protecting the content from user reading or tampering. </p>
   <h1>How to Check</h1>
   <p>Use the following steps to check for this problem:</p>
   <ol>
@@ -44,12 +44,11 @@
     <p>
       <strong>Session State</strong>
     </p>
-    <p>Session State is an acceptable mechanism for maintaining sensitive information on the server during a user session.&nbsp;If your application is using session state you'll see code similar to: </p>
-    <pre>Session&#91;"SessionVarName"&#93; = SensitiveObject.SensitiveData;</pre>
+    <p>Session State is an acceptable mechanism for maintaining sensitive information on the server during a user session.&amp;nbsp;If your application is using session state you'll see code similar to: </p>
+    <pre>Session&amp;#91;"SessionVarName"&amp;#93; = SensitiveObject.SensitiveData;</pre>
     <p>
       <strong>HTTP POST</strong>
     </p>
-    <p>Sending sensitive information in&nbsp;an HTTP POST form submit is an acceptable mechanism for transmitting the data to the server.&nbsp;Verify that&nbsp;the form submit is over SSL to ensure the information is protected on the wire. </p>
     <p>
       <strong>ViewState</strong>
     </p>
@@ -57,8 +56,6 @@
     <p>
       <strong>HTTP GET in the query string</strong>
     </p>
-    <p>Avoid using HTTP GET in the query string.&nbsp; If your application uses this technique for transferring sensitive data to the&nbsp;server, you'll see a URL such as the following in your address bar as well as in your browser history:</p>
-    <pre>http://www.teammentorexample.com/results.asp?queryParam=SensitiveData&queryParam2=MoreSensitiveData</pre>
   </blockquote>
   <p />
   <h1>How to Fix</h1>
@@ -70,7 +67,6 @@
       <li>
         <p>Store sensitive data server-side instead of repeatedly passing it as a query string parameter. The best way to keep sensitive information safe is to leave it somewhere inaccessible. </p>
         <li>
-          <p>If sensitive data must be sent through the user&#8212;during a server transition, for instance&#8212;send it via an encrypted ViewState instead of a query string parameter. ViewStates are designed to support integrity and confidentiality, as needed, and are the best way of ensuring that sensitive data is not tampered with or disclosed when it is sent past the user. </p>
         </li>
       </li>
     </li>
@@ -78,7 +74,6 @@
   <h1>Problem Example</h1>
   <p>An ASP.NET application requests the user's social security number to gain access to financial information. Instead of using a form submit to post this information to the server, the application uses an HTTP GET and places the social security number in the query string:</p>
   <pre>http://www.teammentorexample.com/results.asp?SocialSecurityNum=123001234</pre>
-  <p>The problem with this implementation is that the sensitive information (social security number) is persisted in&nbsp; the&nbsp;browser history, in the cache, and is not being sent over SSL so it is not protected on the wire.</p>
   <h1>Solution Example</h1>
   <p>An ASP.NET application requests the user's social security number to gain access to financial information. The application uses a form post over SSL to send the information to the server:</p>
   <pre>POST results.asp?SocialSecurityNum=123001234</pre>
@@ -94,6 +89,5 @@
   </ul>
   <p />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

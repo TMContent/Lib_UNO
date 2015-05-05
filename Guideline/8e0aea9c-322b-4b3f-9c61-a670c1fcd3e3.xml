@@ -4,7 +4,7 @@
     <Id>8e0aea9c-322b-4b3f-9c61-a670c1fcd3e3</Id>
     <Id_History>8e0aea9c-322b-4b3f-9c61-a670c1fcd3e3,8376e392-34ba-4214-a94c-5c512526063d,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Page.ViewStateUserKey to Counter Cross Site Request Forgery Attacks</Title>
+    <Title>[SINK] Use Page.ViewStateUserKey to Counter Cross Site Request Forgery Attacks</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -36,9 +36,9 @@
   <p>A web application does not set the <strong>ViewStateUserKey</strong> property in the Page_Init event handler. If this application allows a user to change the state of the application in a single request, it is susceptible to a Cross Site Request Forgery Attack. </p>
   <p>For example, consider a web application that allows a logged in administrator to create a new user sending a single GET request.</p>
   <p>This GET request looks like this:</p>
-  <pre>GET http://teammentorexample.com/adduser.aspx?username=joe&password=1234&usertype=user HTTP/1.1</pre>
+  <pre>GET http://teammentorexample.com/adduser.aspx?username=joe&amp;password=1234&amp;usertype=user HTTP/1.1</pre>
   <p>The attacker discovers that this request will create a new user and creates his own request which he embeds an e-mail with the following image tag:</p>
-  <pre>&lt;img src=” http://teammentorexample.com/adduser.aspx?username=HACKER&password=TEST&usertype=admin” /&gt;</pre>
+  <pre>&lt;img src=” http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin” /&gt;</pre>
   <p>When the victim’s (the administrator in this case) e-mail client attempts to download the image located at the above source the request is made without the knowledge of the victim. </p>
   <p>The Web page contains a hidden form field named __VIEWSTATE that is already filled with ViewState data. The ViewState can be re-used from a valid request that the attacker had previously made to the application. The ViewState content is not checked on the server or is only checked against tampering.The attacker lures the unsuspecting user into opening the email containing the malicious URL, causing the request to be sent to the server where the ViewState is valid. The server has no way of knowing that the ViewState originated from the attacker. ViewState validation does not counter this attack because the ViewState is valid and the page is executed under the security context of the victim user.</p>
   <h1>Solution Example</h1>
@@ -46,10 +46,10 @@
   <pre>void Page_Init (object sender, EventArgs e){   ViewStateUserKey = m_username;}</pre>
   <p>Now, when an attacker creates a Web page that contains a hidden form field named __VIEWSTATE that is already filled with ViewState data and lures an unsuspecting user into browsing to the page, the server knows that the ViewState does not belong to the victim, but that it originated from the attacker, and the attack is not successful. </p>
   <p>For example, when the attacker sends an email containing the image tag</p>
-  <pre>&lt;img src=”http://teammentorexample.com/adduser.aspx?username=HACKER&password=TEST&usertype=admin” /&gt;</pre>
+  <pre>&lt;img src=”http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin” /&gt;</pre>
   <p>to the victim (the administrator), and the "add user" request is made without the knowledge of the victim, the server denies the request because it detects that the request does not belong to the logged-in user it seems to be coming from.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -4,7 +4,7 @@
     <Id>c5d592eb-9826-42aa-8c02-934c6c707118</Id>
     <Id_History>c5d592eb-9826-42aa-8c02-934c6c707118,b459e295-22a9-4cfa-b5ee-a45d5ccd6bb6,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>The ViewStateUserKey Is Used to Counter Cross-site Request Forgery Attacks</Title>
+    <Title>[SINK] The ViewStateUserKey Is Used to Counter Cross-site Request Forgery Attacks</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -39,16 +39,16 @@
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <p>Suppose that a&nbsp;web application does not set the <strong>ViewStateUserKey</strong> property in the Page_Init event handler, and this application allows a user to change the state of the application in a single request. This combination means the&nbsp;application is susceptible to a Cross Site Request Forgery Attack. </p>
+  <p>Suppose that a&amp;nbsp;web application does not set the <strong>ViewStateUserKey</strong> property in the Page_Init event handler, and this application allows a user to change the state of the application in a single request. This combination means the&amp;nbsp;application is susceptible to a Cross Site Request Forgery Attack. </p>
   <p>For example, consider a web application that allows a logged-in administrator to create a new user sending a single GET request.</p>
   <p>This GET request looks like this:</p>
-  <pre>GET http://teammentorexample.com/adduser.aspx?username=joe&password=1234&usertype=user HTTP/1.1</pre>
+  <pre>GET http://teammentorexample.com/adduser.aspx?username=joe&amp;password=1234&amp;usertype=user HTTP/1.1</pre>
   <p>The attacker discovers that this request will create a new user and creates his own request which he embeds in an e-mail with the following image tag:</p>
-  <pre>&lt;img src=”http://teammentorexample.com/adduser.aspx?username=HACKER&password=TEST&usertype=admin” /&gt;</pre>
+  <pre>&lt;img src=”http://teammentorexample.com/adduser.aspx?username=HACKER&amp;password=TEST&amp;usertype=admin” /&gt;</pre>
   <p>When the victim’s (the administrator in this case) e-mail client attempts to download the image located at the above source, the request is made without the knowledge of the victim. </p>
   <p>The Web page contains a hidden form field named __VIEWSTATE that is already filled with ViewState data. The ViewState can be re-used from a valid request that the attacker had previously made to the application. The ViewState content is not checked on the server or is only checked against tampering. The attacker lures the unsuspecting user into opening the email containing the malicious URL, causing the request to be sent to the server where the ViewState is valid. The server has no way of knowing that the ViewState originated from the attacker. ViewState validation does not counter this attack because the ViewState is valid and the page is executed under the security context of the victim user.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

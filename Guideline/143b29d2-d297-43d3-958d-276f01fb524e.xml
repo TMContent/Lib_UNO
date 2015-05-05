@@ -3,8 +3,8 @@
   <Metadata>
     <Id>143b29d2-d297-43d3-958d-276f01fb524e</Id>
     <Id_History>143b29d2-d297-43d3-958d-276f01fb524e,13282f54-05d8-4f1a-b186-571d82a26193,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
-    <Title>Restrict Access to Session State Data</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[SINK] Restrict Access to Session State Data</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -21,15 +21,15 @@
     <Data><![CDATA[<h1>What to Do</h1>
   <p>Restrict access to session data so unauthorized users will not be able to read or tamper with it. </p>
   <h1>Why</h1>
-  <p>Session state data frequently contains sensitive information or information critical to the proper operation of the application.&nbsp; Authentication and authorization related data is often included in session state.&nbsp; Failing to restrict access to this information will at the very least allow attackers to learn more about how your application works internally, and may allow them to impersonate another legitimate user or otherwise elevate their privilege within the system.&nbsp; If an attacker can write to session state variables, the integrity of both the application and the business process it is intended to perform is probably destroyed. </p>
+  <p>Session state data frequently contains sensitive information or information critical to the proper operation of the application.&amp;nbsp; Authentication and authorization related data is often included in session state.&amp;nbsp; Failing to restrict access to this information will at the very least allow attackers to learn more about how your application works internally, and may allow them to impersonate another legitimate user or otherwise elevate their privilege within the system.&amp;nbsp; If an attacker can write to session state variables, the integrity of both the application and the business process it is intended to perform is probably destroyed. </p>
   <h1>When</h1>
   <p>All applications which use session state data should ensure that it is protected. </p>
   <h1>How</h1>
-  <p>There are three primary ways of keeping sessions state, in-process, out-of-process, and in SQL Server.&nbsp; Each of them is discussed in turn below. </p>
+  <p>There are three primary ways of keeping sessions state, in-process, out-of-process, and in SQL Server.&amp;nbsp; Each of them is discussed in turn below. </p>
   <ol>
     <li>
       <p>
-        <strong>Protect Your In-Process Session State.</strong> In-process session state is normally fairly secure be default, as other applications should not be able to read a process's memory.&nbsp; That said, there are still steps you can and should take: </p>
+        <strong>Protect Your In-Process Session State.</strong> In-process session state is normally fairly secure be default, as other applications should not be able to read a process's memory.&amp;nbsp; That said, there are still steps you can and should take: </p>
       <ol>
         <li>
           <p>If the state is particularly sensitive, you should use the <strong>cryptProtectMemory</strong> function to ensure that the process's memory does not get written to disk via virtual memory without encryption. </p>
@@ -44,23 +44,23 @@
         <ol>
           <li>
             <p>
-              <b>Use a least-privileged account to run the state service.</b>&nbsp; By default, the state service runs using the Network Service local, least-privileged account.&nbsp; You should not need to change this configuration. </p>
+              <b>Use a least-privileged account to run the state service.</b>&amp;nbsp; By default, the state service runs using the Network Service local, least-privileged account.&amp;nbsp; You should not need to change this configuration. </p>
             <li>
               <p>
-                <b>Protect the channel.</b>&nbsp; If the state service is located on a remote server and you are concerned about the network eavesdropping threat, protect the channel to the remote state store by using IPSec to ensure the user state remains private and unaltered. </p>
+                <b>Protect the channel.</b>&amp;nbsp; If the state service is located on a remote server and you are concerned about the network eavesdropping threat, protect the channel to the remote state store by using IPSec to ensure the user state remains private and unaltered. </p>
               <li>
                 <p>
-                  <b>Consider changing the default port.</b>&nbsp; The ASP.NET state service listens on port 42424.&nbsp; To avoid using this default, well-known port, you can change the port by editing the following registry key: </p>
+                  <b>Consider changing the default port.</b>&amp;nbsp; The ASP.NET state service listens on port 42424.&amp;nbsp; To avoid using this default, well-known port, you can change the port by editing the following registry key: </p>
                 <p />
                 <pre>HKLM\SYSTEM\CurrentControlSet\Services\aspnet_state\Parameters</pre>
                 <p />
-                <p>The port number is defined by the Port named value.&nbsp; If you change the port number in the registry, for example, to 45678, you must also change the connection string on the <b>&lt;sessionState&gt;</b> element, as follows: </p>
+                <p>The port number is defined by the Port named value.&amp;nbsp; If you change the port number in the registry, for example, to 45678, you must also change the connection string on the <b>&lt;sessionState&gt;</b> element, as follows: </p>
                 <p />
                 <pre>stateConnectionString="tcpip=127.0.0.1:45678"</pre>
                 <p />
                 <li>
                   <p>
-                    <b>Encrypt the state connection string.</b>&nbsp; Because this element contains service connection details, you should encrypt it by using one of the protected configuration providers.&nbsp; </p>
+                    <b>Encrypt the state connection string.</b>&amp;nbsp; Because this element contains service connection details, you should encrypt it by using one of the protected configuration providers.&amp;nbsp; </p>
                 </li>
               </li>
             </li>
@@ -72,16 +72,16 @@
           <ol>
             <li>
               <p>
-                <b>Use Windows authentication to the database.</b>&nbsp; This means that passwords are not sent over the network to the database.&nbsp; It also means you do not have to store user names and passwords in the database connection string. </p>
+                <b>Use Windows authentication to the database.</b>&amp;nbsp; This means that passwords are not sent over the network to the database.&amp;nbsp; It also means you do not have to store user names and passwords in the database connection string. </p>
               <li>
                 <p>
-                  <b>Encrypt the &lt;sessionState&gt; section.</b>&nbsp; Because this element contains database connection details, you should encrypt it by using one of the protected configuration providers.&nbsp; </p>
+                  <b>Encrypt the &lt;sessionState&gt; section.</b>&amp;nbsp; Because this element contains database connection details, you should encrypt it by using one of the protected configuration providers.&amp;nbsp; </p>
                 <li>
                   <p>
-                    <b>Limit the application's login in the database.</b>&nbsp; Restrict the login in the database so that it can only be used to access the necessary state tables and the stored procedures used by ASP.NET to query the database.&nbsp; To do this, create a SQL Server login for your ASP.NET process account, and then map the login to a database user in the state store database.&nbsp; Assign the database user to a database role and grant execute permissions for the stored procedures that are provided with the ASPState database. </p>
+                    <b>Limit the application's login in the database.</b>&amp;nbsp; Restrict the login in the database so that it can only be used to access the necessary state tables and the stored procedures used by ASP.NET to query the database.&amp;nbsp; To do this, create a SQL Server login for your ASP.NET process account, and then map the login to a database user in the state store database.&amp;nbsp; Assign the database user to a database role and grant execute permissions for the stored procedures that are provided with the ASPState database. </p>
                   <li>
                     <p>
-                      <b>Protect the channel.</b>&nbsp; To protect sensitive session state over the network between the Web server and remote state store, protect the channel to the two servers using IPSec or SSL.&nbsp; This provides privacy and integrity for the session state data across the network.&nbsp; If you use SSL, you must install a server certificate on the database server. </p>
+                      <b>Protect the channel.</b>&amp;nbsp; To protect sensitive session state over the network between the Web server and remote state store, protect the channel to the two servers using IPSec or SSL.&amp;nbsp; This provides privacy and integrity for the session state data across the network.&amp;nbsp; If you use SSL, you must install a server certificate on the database server. </p>
                   </li>
                 </li>
               </li>
@@ -92,11 +92,11 @@
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <p>A bank web site is using SQL server session state.&nbsp; Their session state carries a lot of very sensitive information, including social security numbers, credit card information, bank account information, etc.&nbsp; They use the same server for&nbsp;account configuration information and sessions state, although the real financial data is elsewhere.&nbsp; The account they connect to the database server with has fairly broad permissions across the entire database server.&nbsp; When an attacker finds a SQL injection in a trivial piece of customization code, they're able to both read and write session state data, stealing sensitive information and altering transactions.</p>
+  <p>A bank web site is using SQL server session state.&amp;nbsp; Their session state carries a lot of very sensitive information, including social security numbers, credit card information, bank account information, etc.&amp;nbsp; They use the same server for&amp;nbsp;account configuration information and sessions state, although the real financial data is elsewhere.&amp;nbsp; The account they connect to the database server with has fairly broad permissions across the entire database server.&amp;nbsp; When an attacker finds a SQL injection in a trivial piece of customization code, they're able to both read and write session state data, stealing sensitive information and altering transactions.</p>
   <h1>Solution Example</h1>
-  <p>A bank web site is using SQL server session state.&nbsp; Their session state carries a lot of very sensitive information, including social security numbers, credit card information, bank account information, etc.&nbsp; They use two discrete database servers, one which handles only session state and one which deals with other, lower value information.&nbsp; The account which talks to the session state DB server is heavily locked down and able to call only the specific set of stored procedures required for the system to work correctly.&nbsp; When an attacker finds a SQL injection in a trivial piece of customization code, they can't touch the session state database at all, and are effectively contained.&nbsp;</p>
+  <p>A bank web site is using SQL server session state.&amp;nbsp; Their session state carries a lot of very sensitive information, including social security numbers, credit card information, bank account information, etc.&amp;nbsp; They use two discrete database servers, one which handles only session state and one which deals with other, lower value information.&amp;nbsp; The account which talks to the session state DB server is heavily locked down and able to call only the specific set of stored procedures required for the system to work correctly.&amp;nbsp; When an attacker finds a SQL injection in a trivial piece of customization code, they can't touch the session state database at all, and are effectively contained.&amp;nbsp;</p>
   <p />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

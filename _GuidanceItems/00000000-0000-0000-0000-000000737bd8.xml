@@ -3,8 +3,8 @@
   <Metadata>
     <Id>00000000-0000-0000-0000-000000737bd8</Id>
     <Id_History>00000000-0000-0000-0000-000000737bd8,d69d9cc8-f719-42ea-bfaf-3738e5b00062,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
-    <Title>Send Session Cookies Only Using SSL/TLS</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Send Session Cookies Only Using TLS</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
@@ -15,27 +15,23 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==Applies To==
+    <Data><![CDATA[==What to Do==
 
-* ASP.NET
-
-==What to Do==
-
-Configure IIS to use SSL/TLS and set the Secure flag on session cookies.
+Configure IIS to use TLS and set the Secure flag on session cookies.
 
 ==Why==
 
-If session identifiers are transmitted in plain-text, an attacker can intercept them using a man-in-the-middle attack. After intercepting a session identifier, the attacker can hijack the corresponding session. Hijacking a session allows the attacker to carry out any action that is available to the authenticated user. To prevent session identifiers from being sent in plain-text, session cookies should be sent only using SSL/TLS.
+If session identifiers are transmitted in plain-text, an attacker can intercept them using a man-in-the-middle attack. After intercepting a session identifier, the attacker can hijack the corresponding session. Hijacking a session allows the attacker to carry out any action that is available to the authenticated user. To prevent session identifiers from being sent in plain-text, session cookies should be sent only using TLS.
 
 ==How==
 
-To send session cookies only using SSL/TLS:
+To send session cookies only using TLS:
 
-# **Configure IIS to use SSL/TLS.** Get a valid certificate. Hosting service providers often sell valid SSL certificates. Install the certificate. Create an HTTPS binding for the site. A link in the "Additional Resources" section describes how to do this in detail.
+# **Configure IIS to use TLS.** Get a valid certificate. Hosting service providers often sell valid TLS certificates. Install the certificate. Create an HTTPS binding for the site. A link in the "Additional Resources" section describes how to do this in detail.
 # **Set the //Secure// flag on cookies.** Set the //requireSSL// property to //true// for the //httpCookies// element in the web.config file, like this: <httpcookies requiressl="true"></httpcookies> If you use Forms Authentication, you will also need to set //requireSSL// to //true// for the //forms// element.  
 
 ==Additional Resources==
 
-* For information about setting up SSL on IIS, see http://www.iis.net/learn/manage/configuring-security/how-to-set-up-ssl-on-iis]]></Data>
+* For information about setting up TLS on IIS, see http://www.iis.net/learn/manage/configuring-security/how-to-set-up-ssl-on-iis]]></Data>
   </Content>
 </TeamMentor_Article>

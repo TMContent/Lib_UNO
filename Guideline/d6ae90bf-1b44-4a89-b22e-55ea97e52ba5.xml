@@ -4,7 +4,7 @@
     <Id>d6ae90bf-1b44-4a89-b22e-55ea97e52ba5</Id>
     <Id_History>d6ae90bf-1b44-4a89-b22e-55ea97e52ba5,d9e86e45-8f9e-4f94-b2b3-567c00c94468,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Encode All Output Data</Title>
+    <Title>[SINK] Encode All Output Data</Title>
     <Category>Encoding</Category>
     <Phase>Design</Phase>
     <Technology>.NET 3.5</Technology>
@@ -33,7 +33,7 @@
     <li>Session and application variables</li>
   </ul>
   <h1>How</h1>
-  <p>If you write output that includes user input or data from a shared database or a local file that you do not trust, encode it. Echoing input directly back to the user makes your application vulnerable to cross-site scripting attacks, among other problems. Encoding the data ensures that it is treated as literal text and not as script. In ASP.NET the <strong>Server.HtmlEncode</strong> function is often used to protect against cross-site scripting attacks. However, this function only encodes &lt;&gt;"& characters, which is not sufficient to protect against all possible attacks. For instance, the following ASP.NET code would be vulnerable.</p>
+  <p>If you write output that includes user input or data from a shared database or a local file that you do not trust, encode it. Echoing input directly back to the user makes your application vulnerable to cross-site scripting attacks, among other problems. Encoding the data ensures that it is treated as literal text and not as script. In ASP.NET the <strong>Server.HtmlEncode</strong> function is often used to protect against cross-site scripting attacks. However, this function only encodes &lt;&gt;"&amp; characters, which is not sufficient to protect against all possible attacks. For instance, the following ASP.NET code would be vulnerable.</p>
   <pre>&lt;img id='img&lt;%=Server.HtmlEncode(Request.QueryString["userId"]) %&gt;' src='/image.gif' /&gt;</pre>
   <p>An attacker could inject client-side script here by setting userId to:</p>
   <pre>' onload=alert('xss') alt='</pre>
@@ -128,6 +128,6 @@
   <p>Now, when an attacker submits malicious input, it will be encoded when the result is reflected back to the client and XSS attacks will be prevented.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

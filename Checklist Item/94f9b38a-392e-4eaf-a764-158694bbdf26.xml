@@ -3,11 +3,11 @@
   <Metadata>
     <Id>94f9b38a-392e-4eaf-a764-158694bbdf26</Id>
     <Id_History>94f9b38a-392e-4eaf-a764-158694bbdf26,a285c8d2-54ac-475d-8e38-fc44be7cd80f,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>All Database Input Is Validated</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET 3.5</Technology>
+    <Technology>.NET</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>All Database Input Is Validated</DirectLink>
     <Tag />
@@ -21,44 +21,45 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure all input is validated before it is passed to the database.</p>
   <h1>Why</h1>
-  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&nbsp;that could allow an attacker to gain unauthorized access to sensitive data.</p>
+  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&amp;nbsp;that could allow an attacker to gain unauthorized access to sensitive data.</p>
   <h1>How to Check</h1>
   <p>Follow these steps to ensure that all input passed to database is validated:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify all sources of input to the database. </strong>An application can have various sources of input. Each of these sources is an entry point to your application and can potentially be used to break your application's security model. Determine all sources of input&nbsp;that&nbsp;are eventually pushed to the database.</p>
+        <strong>Identify all sources of input to the database. </strong>An application can have various sources of input. Each of these sources is an entry point to your application and can potentially be used to break your application's security model. Determine all sources of input&amp;nbsp;that&amp;nbsp;are eventually pushed to the database.</p>
       <p>Potential sources of input in a web application typically include:</p>
       <ul>
-        <li>URL based parameters <li>Form based parameters <li>Hidden fields <li>Cookies <li>HTTP headers <li>Data stored on the local filesystem <li>Database <li>Other related services</li></li></li></li></li></li></li></li>
+        <li>URL based parameters </li>
+        <li>Form based parameters </li>
+        <li>Hidden fields </li>
+        <li>Cookies </li>
+        <li>HTTP headers </li>
+        <li>Data stored on the local filesystem </li>
+        <li>Database </li>
+        <li>Other related services</li>
       </ul>
-      <li>
-        <p>
-          <strong>Verify that validators have been used to check the input. </strong>Check that a content-specific validator has been placed at each entry point.<br />Each database input source should have a data validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many spread throughout your code base, so check for consolidation of routines to aid testing. If a database input source does not have a validation routine associated with it, flag it for fixing.</p>
-      </li>
-      <li>
-        <p>
-          <strong>Ensure that type-safe parameters and stored procedures are used. </strong>Check that stored procedures and parametrized queries have been implemented instead of using the input values directly in constructing dynamic SQL queries as the latter is prone to SQL injection. </p>
-        <li>
-          <p>
-            <strong>Ensure that database entry paths have been audited. </strong>Get a 3rd party reviewer to verify that all the database input paths have been identified and that validators have been correctly implemented for all entry points.</p>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that validators have been used to check the input. </strong>Check that a content-specific validator has been placed at each entry point.<br />Each database input source should have a data validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many spread throughout your code base, so check for consolidation of routines to aid testing. If a database input source does not have a validation routine associated with it, flag it for fixing.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that type-safe parameters and stored procedures are used. </strong>Check that stored procedures and parametrized queries have been implemented instead of using the input values directly in constructing dynamic SQL queries as the latter is prone to SQL injection. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Ensure that database entry paths have been audited. </strong>Get a 3rd party reviewer to verify that all the database input paths have been identified and that validators have been correctly implemented for all entry points.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>The following code validates the user based on a given username and password. It hashes the password with a random salt. Then it compares the username and the produced hash against the data stored in the backend database.</p>
   <p>Unfortunately, the SQL query is dynamically crafted by using the user's input. If there is no proper input validation, an attacker can access the application's database server through the use of SQL injection.</p>
   <p />
-  <pre>public boolean validateUser(String user, char&#91;&#93; pass)<br />&#123;<br />      byte&#91;&#93; salt = MyApp.generateSalt();<br />      String passHash;<br />      SqlConnection cn;<br />      SqlCommand sqlCommand;<br />      String query;<br />      passHash = hashCredentials(pass, salt);<br />      // The application crafts the SQL query based on user's input<br />      cn = MyApp.getDBConnection();<br />      sqlCommand = new SqlCommand("select user from myappUsers where user = \"" &#43; user &#43; "\"<br />                                     &#43; and pass = \"" &#43; passHash &#43; "\" and login_attempts &lt; 3;", cn);<br />      SqlDataReader reader = sqlCommand.ExecuteReader();<br />      updateLastLoginAttempt(user);<br />      ...<br />&#125;</pre>
-  <p>If a user submits a login request with a username of 'foo\" or 1 = 1; drop table &#42;; --', the system will happily first authenticate the user and then drop all the tables in the database.</p>
-  <h1>Related Guideline</h1>
-  <ul>
-    <li>
-      <a href="/article/b431b7df-36d8-461b-a437-675a20e9548b">Guideline: Validate All Input Passed to Database (ASP.NET)</a>
-    </li>
-  </ul>
+  <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      byte[] salt = MyApp.generateSalt();<br />      String passHash;<br />      SqlConnection cn;<br />      SqlCommand sqlCommand;<br />      String query;<br />      passHash = hashCredentials(pass, salt);<br />      // The application crafts the SQL query based on user's input<br />      cn = MyApp.getDBConnection();<br />      sqlCommand = new SqlCommand("select user from myappUsers where user = \"" + user + "\"<br />                                     + and pass = \"" + passHash + "\" and login_attempts &lt; 3;", cn);<br />      SqlDataReader reader = sqlCommand.ExecuteReader();<br />      updateLastLoginAttempt(user);<br />      ...<br />}</pre>
+  <p>If a user submits a login request with a username of 'foo\" or 1 = 1; drop table *; --', the system will happily first authenticate the user and then drop all the tables in the database.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

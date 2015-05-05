@@ -4,7 +4,7 @@
     <Id>74be8616-ad22-4d1d-a7fc-8ff3d145fc61</Id>
     <Id_History>74be8616-ad22-4d1d-a7fc-8ff3d145fc61,81065d2b-37a5-4081-ae72-73711445993b,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Do Not Disclose Exception Details to the Client</Title>
+    <Title>[SINK] Do Not Disclose Exception Details to the Client</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -37,7 +37,7 @@
   </p>
   <p>Error pages provide an effective way of telling the user that something went wrong. Since error messages are pre-designed and reveal little detailed information, error pages are used when your application needs a global exception handler or it is expected that failures may happen. Use the <strong>customErrors</strong> element in your application's <strong>web.config</strong> to configure custom HTTP error pages. Set the <strong>mode</strong> attribute to On or RemoteOnly. Example:</p>
   <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;<br />    &lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;<br />    &lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;<br />    &lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt; </pre>
-  <p>Additionally, it is a good practice to use a global exception handler to prevent unhandled exceptions from surfacing to the client.&nbsp;</p>
+  <p>Additionally, it is a good practice to use a global exception handler to prevent unhandled exceptions from surfacing to the client.&amp;nbsp;</p>
   <h1>Problem Example</h1>
   <p>The developers of an ASP.NET application change the <strong>mode</strong> attribute of the &lt;<strong>CustomErrors</strong>&gt; element to <strong>Off </strong>in order to display detailed error messages on both the local machine and remote clients for debugging purposes. When the application goes into production this setting remains and detailed error messages are displayed to all users. An attacker investigating the site sees the error messages and finds sufficient information to exploit the application.</p>
   <p>
@@ -66,7 +66,7 @@
     <tbody>
       <tr>
         <td>
-          <pre>[UnauthorizedAccessException: Access to the path 'c:\myapp\docs\resource.txt' is denied.]<br />   System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath) +2014403<br />   System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share,<br />                              Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy) +998<br />   System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share) +114<br />   System.IO.File.Open(String path, FileMode mode) +42<br />   Crypto.TestDPAPI(FileInfo reportFile, Literal& textField) +310<br />   _Default.Page_Load(Object sender, EventArgs e) +201<br />   System.Web.Util.CalliHelper.EventArgFunctionCaller(IntPtr fp, Object o, Object t, EventArgs e) +15<br />   System.Web.Util.CalliEventHandlerDelegateProxy.Callback(Object sender, EventArgs e) +34<br />   System.Web.UI.Control.OnLoad(EventArgs e) +99   System.Web.UI.Control.LoadRecursive() +47<br />   System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint) +1061</pre>
+          <pre>[UnauthorizedAccessException: Access to the path 'c:\myapp\docs\resource.txt' is denied.]<br />   System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath) +2014403<br />   System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share,<br />                              Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy) +998<br />   System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share) +114<br />   System.IO.File.Open(String path, FileMode mode) +42<br />   Crypto.TestDPAPI(FileInfo reportFile, Literal&amp; textField) +310<br />   _Default.Page_Load(Object sender, EventArgs e) +201<br />   System.Web.Util.CalliHelper.EventArgFunctionCaller(IntPtr fp, Object o, Object t, EventArgs e) +15<br />   System.Web.Util.CalliEventHandlerDelegateProxy.Callback(Object sender, EventArgs e) +34<br />   System.Web.UI.Control.OnLoad(EventArgs e) +99   System.Web.UI.Control.LoadRecursive() +47<br />   System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint) +1061</pre>
         </td>
       </tr>
     </tbody>
@@ -76,6 +76,6 @@
   <pre>&lt;customErrors mode="On" defaultRedirect="error.html"&gt;<br />    &lt;error statusCode="500" redirect="error.html"/&gt;<br />&lt;/customErrors&gt;<br />&lt;!-- error.html --&gt;<br />&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"<br /> "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />&lt;html xmlns="http://www.w3.org/1999/xhtml" &gt;<br />&lt;head&gt;<br />    &lt;title&gt;Unexpected Error&lt;/title&gt;&lt;/head&gt;<br />&lt;body&gt;<br />    &lt;span style="font-size: 10pt; font-family: Verdana"&gt;We are sorry, but we cannot complete<br />        your request. Please try again later!&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</pre>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

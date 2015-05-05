@@ -3,8 +3,8 @@
   <Metadata>
     <Id>00000000-0000-0000-0000-0000005f2e4a</Id>
     <Id_History>00000000-0000-0000-0000-0000005f2e4a,257eff37-396a-4eb8-896e-94ef051ea5ba,</Id_History>
-    <Library_Id>7d2d0571-e542-45cd-9335-d7a0556c2bea</Library_Id>
-    <Title>Use TLS/SSL to Encrypt WebSocket Connections</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use TLS to Encrypt WebSocket Connections</Title>
     <Category>WebSockets</Category>
     <Phase>Implementation</Phase>
     <Technology>HTML5</Technology>
@@ -21,11 +21,11 @@
 
 ==What to Do==
 
-When using WebSockets, connect with Transport Layer Security (TLS)/Secure Sockets Layer (SSL).
+When using WebSockets, connect with Transport Layer Security (TLS).
 
 ==Why==
 
-Just as TLS/SSL protects and encrypts the communication tunnel in HTTP, it can encrypt a WebSockets tunnel to protect against eavesdropping and man-in-the-middle attacks. (By default, the communication tunnel with the WebSocket protocol is not encrypted.) 
+Just as TLS protects and encrypts the communication tunnel in HTTP, it can encrypt a WebSockets tunnel to protect against eavesdropping and man-in-the-middle attacks. (By default, the communication tunnel with the WebSocket protocol is not encrypted.) 
 
 ==When==
 
@@ -36,7 +36,7 @@ Use this guideline for applications that employ the WebSocket protocol and need 
 The WebSockets protocol specification is built on HTTP. With that in mind:
 
 # **Enable security certificates and keys.** Consult your web server documentation to ensure that your web site produces a valid certificate with HTTPS connections.
-# **Enable TLS/SSL on the WebSocket server.** The configuration may vary depending upon the Websocket server implementation in use. 
+# **Enable TLS on the WebSocket server.** The configuration may vary depending upon the Websocket server implementation in use. 
 # **Connect the client to the WebSocket server and ensure connections to the WebSocket are secure.** When connecting to HTML5 web applications, ensure that client browsers connect with HTTPS. Note that the code accessing the WebSocket server should use the wss protocol, which is basically ws over TLS. As such, use {{{wss://<url>}}} instead of the typical {{{ws://<url>}}} in the HTML5 application code. 
 
 
@@ -67,7 +67,7 @@ ws.onopen = function(evt) { alert(“Non encrypted connection has opened”) };
 \\
 ==Solution Example==
 
-Below is a client-side code connection to a WebSocket server using wss, which takes advantage of TLS/SSL over HTTP port 443. This change makes it much more difficult for an intruder to intercept the communication tunnel.
+Below is a client-side code connection to a WebSocket server using wss, which takes advantage of TLS over HTTP port 443. This change makes it much more difficult for an intruder to intercept the communication tunnel.
 
 Client Connection:
 
@@ -81,9 +81,9 @@ var port = ‘8887’;
 var uri = ‘very_private’;
 
 ws = new WebSocket("wss://” + host + “:” + port + “/” + uri );
-ws.onmessage = function(evt) {alert("TLS/SSL message has been received”)};
-ws.onclose = function(evt) { alert("TLS/SSL connection is closed"); };
-ws.onopen = function(evt) { alert(“TLS/SSL connection has opened”) };
+ws.onmessage = function(evt) {alert("TLS message has been received”)};
+ws.onclose = function(evt) { alert("TLS connection is closed"); };
+ws.onopen = function(evt) { alert(“TLS connection has opened”) };
 });
 
 }}}
@@ -132,7 +132,7 @@ Key Exchange: RsaKeyX 2048bits
 
 * [[00000000-0000-0000-0000-000000869806|Validate Data Coming from WebSockets]]
 * [[00000000-0000-0000-0000-00000093dea4|Check the Origin Header in the WebSocket Handshake]]
-* [[00000000-0000-0000-0000-0000005f2e4a|Use TLS/SSL to Encrypt WebSocket Connections]]
+* [[00000000-0000-0000-0000-0000005f2e4a|Use TLS to Encrypt WebSocket Connections]]
 * [[00000000-0000-0000-0000-000000736a21|Check the Origin Attribute of WebSocket Messages]]
 * [[00000000-0000-0000-0000-0000005326a8|Use the Latest WebSocket RFC 6455 Standard]]
 * [[00000000-0000-0000-0000-00000085bc2f|Do Not Tunnel TCP via WebSockets]]
@@ -141,7 +141,7 @@ Key Exchange: RsaKeyX 2048bits
 
 * [[00000000-0000-0000-0000-00000086537e|Data Coming from WebSockets Is Validated]]
 * [[00000000-0000-0000-0000-00000077e316|The Origin Header in WebSocket Handshake is Checked]]
-* [[bd870268-f104-4f6f-ba0d-6628dc34eb2a|TLS/SSL is Used to Encrypt WebSocket Connections]]
+* [[bd870268-f104-4f6f-ba0d-6628dc34eb2a|TLS is Used to Encrypt WebSocket Connections]]
 * [[00000000-0000-0000-0000-0000002f39d7|The Origin Attribute of WebSocket Messages Is Checked]]
 * [[18d5564d-00a4-4afe-a853-707269df2566|Latest RFC 6455 Standard is Used]]
 * [[00000000-0000-0000-0000-00000091ce5a|TCP Is Not Tunneled via WebSockets]]
