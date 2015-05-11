@@ -4,7 +4,7 @@
     <Id>7821fd38-643c-4ae7-bb94-2c1e1d58ba1a</Id>
     <Id_History>7821fd38-643c-4ae7-bb94-2c1e1d58ba1a,3bf3f7b6-e2ac-4bba-b8b7-880491a89765,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Prevent SQL Injection</Title>
+    <Title>[SINK] Prevent SQL Injection</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -21,25 +21,25 @@
     <Data><![CDATA[<h1>What to Do</h1>
   <p>To help prevent SQL injection, you should validate input and use parameterized stored procedures for data access. </p>
   <h1>Why</h1>
-  <p>If you use the Parameters collection, SQL treats the input is&nbsp;as a literal value rather then as&nbsp;executable code. The Parameters collection can be used to enforce type and length constraints on input data. Values outside of the range trigger an exception. If&nbsp;type-safe SQL parameters are not used, attackers might be able to execute&nbsp;injection attacks&nbsp;that are embedded in the&nbsp;unfiltered input.</p>
+  <p>If you use the Parameters collection, SQL treats the input is&amp;nbsp;as a literal value rather then as&amp;nbsp;executable code. The Parameters collection can be used to enforce type and length constraints on input data. Values outside of the range trigger an exception. If&amp;nbsp;type-safe SQL parameters are not used, attackers might be able to execute&amp;nbsp;injection attacks&amp;nbsp;that are embedded in the&amp;nbsp;unfiltered input.</p>
   <h1>When</h1>
-  <p>This guideline is applicable whenever there is an SQL statement that is built dynamically. It&nbsp;is also appropriate&nbsp;whenever stored procedures are utilized.</p>
+  <p>This guideline is applicable whenever there is an SQL statement that is built dynamically. It&amp;nbsp;is also appropriate&amp;nbsp;whenever stored procedures are utilized.</p>
   <h1>How</h1>
-  <p>To use&nbsp;type-safe SQL parameters, follow these steps:</p>
+  <p>To use&amp;nbsp;type-safe SQL parameters, follow these steps:</p>
   <p>
     <strong>1. Determine the parameters in the SQL query or stored procedure being constructed.</strong> All parameters that result from user input or another untrusted source should be escaped, by specifying variable names in the query:</p>
   <blockquote>
-    <p>SELECT &#42; from&nbsp;books WHERE&nbsp;ISBN = '&#64;isbn'</p>
+    <p>SELECT &amp;#42; from&amp;nbsp;books WHERE&amp;nbsp;ISBN = '&amp;#64;isbn'</p>
   </blockquote>
   <p>
     <strong>2. Declare the explicit data types for each parameter in the SQL statement.</strong> aWhen executing the SQL statement, specify the data type and length for each parameter in the query:</p>
   <blockquote>
-    <pre>myCommand.SelectCommand.Parameters.Add("&#64;isbn", SqlDbType.VarChar, 10);<br /></pre>
+    <pre>myCommand.SelectCommand.Parameters.Add("&amp;#64;isbn", SqlDbType.VarChar, 10);<br /></pre>
   </blockquote>
   <p>
     <strong>3. Specify the value for each parameter.</strong> The untrusted input is then specified, so that it can be properly handled when the SQL statement executes:</p>
   <blockquote>
-    <pre>myCommand.SelectCommand.Parameters&#91;"&#64;isbn"&#93;.Value = '0494483923';</pre>
+    <pre>myCommand.SelectCommand.Parameters&amp;#91;"&amp;#64;isbn"&amp;#93;.Value = '0494483923';</pre>
   </blockquote>
   <p>Additionally, use structured exception handling to catch errors that occur during database access, and prevent them from being returned to the client. A detailed error message may reveal valuable information such as the connection string, SQL server name, or table and database naming conventions. Attackers can use this information to construct more precise attacks. </p>
   <p>As an additional precaution, use a least privileged account to access the database, so that even if your application is compromised, the impact will be reduced.</p>
@@ -48,6 +48,6 @@
     <li>SQL Injection at <a href="http://msdn.microsoft.com/en-us/library/ms161953.aspx">http://msdn.microsoft.com/en-us/library/ms161953.aspx</a></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

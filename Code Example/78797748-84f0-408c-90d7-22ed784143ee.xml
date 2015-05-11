@@ -4,7 +4,7 @@
     <Id>78797748-84f0-408c-90d7-22ed784143ee</Id>
     <Id_History>78797748-84f0-408c-90d7-22ed784143ee,d34ae30d-fde7-4e3d-85d2-9012d5b71b5c,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Using Parameterized Queries for Secure Database Access</Title>
+    <Title>[SINK] Using Parameterized Queries for Secure Database Access</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -33,10 +33,10 @@
     <li>Application needs to make use of user input of any form in database queries <li>Application needs to make use of output from other database or code operations in database queries</li></li>
   </ul>
   <h1>Solution Example</h1>
-  <pre>static void ParameterizedDBQuery(string sParam)&#123;<br />    // Create a new database connection using Integrated Security<br />    string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;<br />&#9;&#9;&#9;Integrated Security=SSPI;";<br />    SqlConnection cn = new SqlConnection(connectionString);<br />    // Create a new SQL Command object with our query<br />    // Note the syntax for our parameter field, "first"<br />    SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people WHERE first = &#64;first", cn);<br />    // Create a new SqlParameter object, which will contain the argument value that we wish to query<br />    // When creating the parameter we specify the parameter name, type of column in the database<br />    // and length of the argument we are passing to the query.<br />    sqlCommand.Parameters.Add("&#64;first", SqlDbType.VarChar, sParam.Length).Value = sParam;<br />    // Open connection to the server and execute query, returning a data reader<br />    cn.Open();<br />    SqlDataReader reader = sqlCommand.ExecuteReader();<br />    while (reader.Read())<br />                Console.WriteLine("Result: " &#43; reader.GetString(0) &#43; " " &#43; reader.GetString(1));<br />    // Close Reader and Connection.<br />    reader.Close();<br />    cn.Close();<br />&#125;</pre>
+  <pre>static void ParameterizedDBQuery(string sParam)&amp;#123;<br />    // Create a new database connection using Integrated Security<br />    string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;<br />&amp;#9;&amp;#9;&amp;#9;Integrated Security=SSPI;";<br />    SqlConnection cn = new SqlConnection(connectionString);<br />    // Create a new SQL Command object with our query<br />    // Note the syntax for our parameter field, "first"<br />    SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people WHERE first = &amp;#64;first", cn);<br />    // Create a new SqlParameter object, which will contain the argument value that we wish to query<br />    // When creating the parameter we specify the parameter name, type of column in the database<br />    // and length of the argument we are passing to the query.<br />    sqlCommand.Parameters.Add("&amp;#64;first", SqlDbType.VarChar, sParam.Length).Value = sParam;<br />    // Open connection to the server and execute query, returning a data reader<br />    cn.Open();<br />    SqlDataReader reader = sqlCommand.ExecuteReader();<br />    while (reader.Read())<br />                Console.WriteLine("Result: " &amp;#43; reader.GetString(0) &amp;#43; " " &amp;#43; reader.GetString(1));<br />    // Close Reader and Connection.<br />    reader.Close();<br />    cn.Close();<br />&amp;#125;</pre>
   <h1>Problem Example</h1>
   <p>The following example demonstrates the use of string concatenation to dynamically create a database query. </p>
-  <pre>string sParam = Request&#91;"first_name"&#93;;<br />// Create a new database connection using Integrated Security<br />string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003<br />        \\sqlexpress;Integrated Security=SSPI;";<br />SqlConnection cn = new SqlConnection(connectionString);<br />// Create a new SQL Command object with our query<br />// Dynamically generate SQL query using passed parameter<br />SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people<br />&#9;&#9; WHERE first = '" &#43; sParam &#43; "'", cn);<br />// Open connection to the server and execute query, returning a data readercn.Open();<br />SqlDataReader reader = sqlCommand.ExecuteReader();<br />while (reader.Read())<br />            Console.WriteLine("Result: " &#43; reader.GetString(0) &#43; " " &#43; reader.GetString(1));<br />// Close Reader and Connection.reader.Close();<br />cn.Close();</pre>
+  <pre>string sParam = Request&amp;#91;"first_name"&amp;#93;;<br />// Create a new database connection using Integrated Security<br />string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003<br />        \\sqlexpress;Integrated Security=SSPI;";<br />SqlConnection cn = new SqlConnection(connectionString);<br />// Create a new SQL Command object with our query<br />// Dynamically generate SQL query using passed parameter<br />SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people<br />&amp;#9;&amp;#9; WHERE first = '" &amp;#43; sParam &amp;#43; "'", cn);<br />// Open connection to the server and execute query, returning a data readercn.Open();<br />SqlDataReader reader = sqlCommand.ExecuteReader();<br />while (reader.Read())<br />            Console.WriteLine("Result: " &amp;#43; reader.GetString(0) &amp;#43; " " &amp;#43; reader.GetString(1));<br />// Close Reader and Connection.reader.Close();<br />cn.Close();</pre>
   <ul>
     <li>Code does not first validate the "first_name" CGI data before incorporation into the database query <li>SqlCommand object makes use of a dynamically-generated string containing user input, which makes this operations vulnerable to SQL injection. For instance, the following sParam value could result </li></li>
   </ul>
@@ -51,10 +51,10 @@
   <ol>
     <li>
       <p>Run the following CREATE table command to add the "people" table used in this query to your SQL server.</p>
-      <pre>CREATE TABLE &#91;dbo&#93;.&#91;People&#93;(&#91;first&#93; &#91;varchar&#93;(50) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,&#91;last&#93; &#91;varchar&#93;(50) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,&#91;email&#93; &#91;varchar&#93;(max) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,&#91;phone&#93; &#91;nchar&#93;(15) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL)</pre>
+      <pre>CREATE TABLE &amp;#91;dbo&amp;#93;.&amp;#91;People&amp;#93;(&amp;#91;first&amp;#93; &amp;#91;varchar&amp;#93;(50) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,&amp;#91;last&amp;#93; &amp;#91;varchar&amp;#93;(50) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,&amp;#91;email&amp;#93; &amp;#91;varchar&amp;#93;(max) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL,&amp;#91;phone&amp;#93; &amp;#91;nchar&amp;#93;(15) <br />COLLATE SQL_Latin1_General_CP1_CI_AS NULL)</pre>
       <li>
         <p>Execute the following test case code. </p>
-        <pre>static void Main(string&#91;&#93; args)&#123;<br />     ParameterizedDBQuery("Elvin");<br />&#125;</pre>
+        <pre>static void Main(string&amp;#91;&amp;#93; args)&amp;#123;<br />     ParameterizedDBQuery("Elvin");<br />&amp;#125;</pre>
       </li>
     </li>
   </ol>
@@ -65,6 +65,6 @@
     <li>User input should always be considered "tainted" and validated against a set of known and expected values or characters before acceptance by an application for processing in any type of operation, including database queries. </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

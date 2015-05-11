@@ -4,7 +4,7 @@
     <Id>fc3ab91b-f1dd-4a6e-8161-5288f9fd5796</Id>
     <Id_History>fc3ab91b-f1dd-4a6e-8161-5288f9fd5796,3b8bc6da-0248-484c-b53f-7e3973e4cf7c,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Encoding Output Within a DataTable</Title>
+    <Title>[SINK] Encoding Output Within a DataTable</Title>
     <Category>Encoding</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -25,7 +25,7 @@
     <li>SQL Server </li>
   </ul>
   <h1>Summary</h1>
-  <p>This code demonstrates how to implement security output encoding when using the .NET DataTable object to display application data. Output encoding mitigates against client-side script vulnerabilities by representing output data using escape character equivalents for values that might otherwise be interpreted by the browser, such as those characters used in the formatting of HTML pages (&lt;,&gt;,&,",').</p>
+  <p>This code demonstrates how to implement security output encoding when using the .NET DataTable object to display application data. Output encoding mitigates against client-side script vulnerabilities by representing output data using escape character equivalents for values that might otherwise be interpreted by the browser, such as those characters used in the formatting of HTML pages (&lt;,&gt;,&amp;,",').</p>
   <h1>Objectives</h1>
   <ul>
     <li>Protect application users from client-side scripting attacks </li>
@@ -42,28 +42,28 @@
   </p>
   <p>The following code illustrates the use of output encoding accomplished by looping through the DataRow object and calling HtmlEncode for each output value we wish to encode. </p>
   <pre>
-    <br />public void LoadEncodedPeopleTableEvent(SqlDataAdapter adapter)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp; // Build a Data Grid to house our data and add to the set of page controls<br />&nbsp;&nbsp;&nbsp;&nbsp; DataGrid dataGrid = new DataGrid();<br />&nbsp;&nbsp;&nbsp;&nbsp; this.Controls.Add(dataGrid);</pre>
+    <br />public void LoadEncodedPeopleTableEvent(SqlDataAdapter adapter)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Build a Data Grid to house our data and add to the set of page controls<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; DataGrid dataGrid = new DataGrid();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; this.Controls.Add(dataGrid);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp; // Create a new data table and fill our that table with names from the adapter <br />&nbsp;&nbsp;&nbsp;&nbsp; DataTable names = new DataTable();<br />&nbsp;&nbsp;&nbsp;&nbsp; adapter.Fill(names);</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new data table and fill our that table with names from the adapter <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; DataTable names = new DataTable();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; adapter.Fill(names);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp; // add an event handler to our DataGrid to encode the data<br />&nbsp;&nbsp;&nbsp;&nbsp; dataGrid.ItemDataBound += new DataGridItemEventHandler(dataGrid_EncodeItem);</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // add an event handler to our DataGrid to encode the data<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; dataGrid.ItemDataBound += new DataGridItemEventHandler(dataGrid_EncodeItem);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp; // Present the data to the user in the previously created Data Grid<br />&nbsp;&nbsp;&nbsp;&nbsp; dataGrid.DataSource = names;<br />&nbsp;&nbsp;&nbsp;&nbsp; dataGrid.DataBind();<br />}</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Present the data to the user in the previously created Data Grid<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; dataGrid.DataSource = names;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; dataGrid.DataBind();<br />}</pre>
   <pre>
-    <br />public void dataGrid_EncodeItem(object sender, DataGridItemEventArgs e)<br />{<br />&nbsp;&nbsp;&nbsp; // Encode each actual data row presented within the Data Grid<br />&nbsp;&nbsp;&nbsp; if (e.Item.ItemType.Equals(ListItemType.Item) || <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e.Item.ItemType.Equals(ListItemType.AlternatingItem))<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e.Item.Cells[0].Text = Server.HtmlEncode(e.Item.Cells[0].Text);<br />&nbsp;&nbsp;&nbsp; }<br />}</pre>
+    <br />public void dataGrid_EncodeItem(object sender, DataGridItemEventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Encode each actual data row presented within the Data Grid<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if (e.Item.ItemType.Equals(ListItemType.Item) || <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; e.Item.ItemType.Equals(ListItemType.AlternatingItem))<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; e.Item.Cells[0].Text = Server.HtmlEncode(e.Item.Cells[0].Text);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
   <p>This approach is flexible and can be used in a variety of different data presentation settings. For the example data above, the row containing malicious Javascript will be encoded and presented as escaped HTML output. </p>
   <p>
     <strong>Solution Example #2: Using the DataGrid ItemDataBound event</strong>
   </p>
   <p>The following code illustrates the use of output encoding accomplished by associating a custom encoding handler within the ItemDataBound event support by the DataGrid in use for rendering the application output. </p>
   <pre>public void LoadEncodedPeopleTableLoop(SqlDataAdapter adapter)<br />{</pre>
-  <pre>&nbsp;&nbsp;&nbsp; // Build a Data Grid to house our data and add to the set of page controls<br />&nbsp;&nbsp;&nbsp; DataGrid dataGrid = new DataGrid();<br />&nbsp;&nbsp;&nbsp; this.Controls.Add(dataGrid);</pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp; // Build a Data Grid to house our data and add to the set of page controls<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; DataGrid dataGrid = new DataGrid();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; this.Controls.Add(dataGrid);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp; // Create a new data table and fill our that table with names from the adapter <br />&nbsp;&nbsp;&nbsp; DataTable names = new DataTable();<br />&nbsp;&nbsp;&nbsp; adapter.Fill(names);</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new data table and fill our that table with names from the adapter <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; DataTable names = new DataTable();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; adapter.Fill(names);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp; foreach (DataRow row in names.Rows)<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; row["Name"] = Server.HtmlEncode((string)row["Name"]);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; row.EndEdit();<br />&nbsp;&nbsp;&nbsp; }</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (DataRow row in names.Rows)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; row["Name"] = Server.HtmlEncode((string)row["Name"]);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; row.EndEdit();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp; // Present the data to the user in the previously created Data Grid<br />&nbsp;&nbsp;&nbsp; dataGrid.DataSource = names;<br />&nbsp;&nbsp;&nbsp; dataGrid.DataBind();</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // Present the data to the user in the previously created Data Grid<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; dataGrid.DataSource = names;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; dataGrid.DataBind();</pre>
   <pre>}</pre>
   <p>This solution takes advantage of the event-driven architecture of .NET and eliminates the requirement to loop through the DataTable in order to access individual data items. Where presentation of data makes use of an object such as a DataGrid that supports data binding events, we recommend this approach for reasons of performance and architectural consistency. </p>
   <h1>Problem Example</h1>
@@ -86,15 +86,15 @@
   <p>The following classes must be included in any project making use of the sample code provided above:</p>
   <pre>using System.Data;<br />using System.Data.SqlClient;<br />using System.Web;</pre>
   <p>Create a new C# ASP.NET application and use the following Page_Load method to test the provided example methods (adjust database code for your example):</p>
-  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp; if (!Page.IsPostBack)<br />&nbsp;&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Create a new database connection using Integrated Security and open that connection<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlConnection cn = new SqlConnection(connectionString);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cn.Open();</pre>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (!Page.IsPostBack)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new database connection using Integrated Security and open that connection<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlConnection cn = new SqlConnection(connectionString);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cn.Open();</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Create a new SQL Command object with a query to execute the stored procedure<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlCommand cmd = new SqlCommand("exec spFullNames", cn);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlDataAdapter adapter = new SqlDataAdapter(cmd);</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new SQL Command object with a query to execute the stored procedure<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlCommand cmd = new SqlCommand("exec spFullNames", cn);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlDataAdapter adapter = new SqlDataAdapter(cmd);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LoadEncodedPeopleTableEvent(adapter);<br />&nbsp;&nbsp;&nbsp;&nbsp; }<br />}</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; LoadEncodedPeopleTableEvent(adapter);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
   <h1>Expected Result</h1>
   <pre>&lt;table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;"&gt;</pre>
-  <pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Name&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Elvin Jones&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Gene Krupa&lt;/td&gt;&lt;/tr&gt;</pre>
-  <pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Tony Williams&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;&lt;script&gt;alert('XSS!');&lt;/script&gt; XSS&lt;/td&gt;&lt;/tr&gt;</pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Name&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Elvin Jones&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Gene Krupa&lt;/td&gt;&lt;/tr&gt;</pre>
+  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Tony Williams&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;&lt;script&gt;alert('XSS!');&lt;/script&gt; XSS&lt;/td&gt;&lt;/tr&gt;</pre>
   <pre>&lt;/table&gt;</pre>
   <h1>More Information</h1>
   <ul>
@@ -102,6 +102,6 @@
   </ul>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

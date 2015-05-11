@@ -7,7 +7,7 @@
     <Title>User-Supplied Filenames And Paths Are Validated</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET 3.5</Technology>
+    <Technology>.NET</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>User-Supplied Filenames And Paths Are Validated</DirectLink>
     <Tag />
@@ -19,11 +19,11 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Ensure&nbsp;that user supplied filename and path input is carefully validated and that the input is checked for format and validity of location within the context of the application.</p>
+  <p>Ensure&amp;nbsp;that user supplied filename and path input is carefully validated and that the input is checked for format and validity of location within the context of the application.</p>
   <h1>Why</h1>
-  <p>Filtering paths and filenames helps to avoid a Canonicalization Attack where your application&nbsp;can be&nbsp;made to read or write to arbitrary files on the server.</p>
+  <p>Filtering paths and filenames helps to avoid a Canonicalization Attack where your application&amp;nbsp;can be&amp;nbsp;made to read or write to arbitrary files on the server.</p>
   <h1>How to Check</h1>
-  <p>Make these checks&nbsp;to ensure that user-supplied filename and path input have been validated:</p>
+  <p>Make these checks&amp;nbsp;to ensure that user-supplied filename and path input have been validated:</p>
   <ol>
     <li>
       <p>
@@ -31,7 +31,7 @@
     </li>
     <li>
       <p>
-        <strong>Ensure that MapPath has been used to prevent cross application mapping. </strong>In order to constrain file access to the application's virtual directory hierarchy, check that the overloaded <strong>Request.MapPath</strong> method,&nbsp;which accepts a <strong>bool</strong> parameter, has been used. This method prevents cross-application mapping by throwing an exception when an attempt is made to traverse outside the virtual directory when its last parameter is set to 'false'. </p>
+        <strong>Ensure that MapPath has been used to prevent cross application mapping. </strong>In order to constrain file access to the application's virtual directory hierarchy, check that the overloaded <strong>Request.MapPath</strong> method,&amp;nbsp;which accepts a <strong>bool</strong> parameter, has been used. This method prevents cross-application mapping by throwing an exception when an attempt is made to traverse outside the virtual directory when its last parameter is set to 'false'. </p>
       <pre>try<br />{<br />    string mappedPath = Request.MapPath( inputPath.Text,<br />     Request.ApplicationPath, false);<br />}<br />catch (HttpException)<br />{<br />    // Cross-application mapping attempted<br />}</pre>
     </li>
     <li>
@@ -46,6 +46,6 @@
   <p>Here one can clearly notice that the intention of the developer is to limit access to the <strong>C:\ConfigFiles</strong> folder. However, if a user supplied the input "..\windows\system32\critical.ini" then the application will join the user-supplied input with the hardcoded path and give the attacker access to critical system files.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

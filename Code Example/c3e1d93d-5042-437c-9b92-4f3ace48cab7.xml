@@ -3,7 +3,7 @@
   <Metadata>
     <Id>c3e1d93d-5042-437c-9b92-4f3ace48cab7</Id>
     <Id_History>c3e1d93d-5042-437c-9b92-4f3ace48cab7,67ba3b54-c3d3-4a0a-9203-bb3566c95ac1,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Encrypt And Sign a Cookie</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
@@ -18,11 +18,7 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>Summary</h1>
+    <Data><![CDATA[<h1>Summary</h1>
   <p>The purpose of this code snippet is to illustrate how to securely distribute session data to an external trusted web application when there exists no common server-side session state. It includes topics such as generating an HMAC, inclusion of timestamp and the encryption of session data.</p>
   <h1>Objectives</h1>
   <ul>
@@ -48,7 +44,7 @@
   <h1>Problem Example</h1>
   <p>The following example demonstrates a poorly designed cookie sharing mechanism between two web applications where encryption and key signing are not used:</p>
   <p>Set the cookie value:</p>
-  <pre>cookieval = user + "|" + uid + "|" + adminRole.ToString();<br />HttpCookie chocolateChip = new HttpCookie("CookieJar", cookieval);<br /><br />// Ensure that proper secure cookie modes are set:<br />//<br />// Make cookies unavailable to client side scripts<br />chocolateChip.HttpOnly = true;<br /><br />// Set the cookie transport mechanism to SSL only<br />chocolateChip.Secure = true;<br /><br />// Ideally choose a more restrictive domain under which cookies are set<br />chocolateChip.Domain = ".ourapp.microsoft.com";<br /><br />// Place some restrictions on which web paths can access our cookies<br />chocolateChip.Path = "/CookieExample/";<br /><br />// Finally set the cookie<br />Response.Cookies.Add(chocolateChip);</pre>
+  <pre>cookieval = user + "|" + uid + "|" + adminRole.ToString();<br />HttpCookie chocolateChip = new HttpCookie("CookieJar", cookieval);<br /><br />// Ensure that proper secure cookie modes are set:<br />//<br />// Make cookies unavailable to client side scripts<br />chocolateChip.HttpOnly = true;<br /><br />// Set the cookie transport mechanism to TLS only<br />chocolateChip.Secure = true;<br /><br />// Ideally choose a more restrictive domain under which cookies are set<br />chocolateChip.Domain = ".ourapp.microsoft.com";<br /><br />// Place some restrictions on which web paths can access our cookies<br />chocolateChip.Path = "/CookieExample/";<br /><br />// Finally set the cookie<br />Response.Cookies.Add(chocolateChip);</pre>
   <p>Issues found in this example:</p>
   <ul>
     <li>Sensitive information is exposed within the cookie, potentially containing data which should never be exposed to a user.</li>
@@ -86,7 +82,7 @@
     <li>HMAC class: <a href="http://msdn2.microsoft.com/en-US/library/system.security.cryptography.hmac.aspx">http://msdn2.microsoft.com/en-US/library/system.security.cryptography.hmac.aspx</a></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>
   <h1>
   </h1>]]></Data>
   </Content>

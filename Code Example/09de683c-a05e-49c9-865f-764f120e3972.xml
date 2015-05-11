@@ -4,7 +4,7 @@
     <Id>09de683c-a05e-49c9-865f-764f120e3972</Id>
     <Id_History>09de683c-a05e-49c9-865f-764f120e3972,1e2ff96b-427c-4636-8b87-57d1f1ea7f66,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Using Stored Procedures for Secure Database Access</Title>
+    <Title>[SINK] Using Stored Procedures for Secure Database Access</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -33,20 +33,20 @@
     <li>Application database operations can be defined and implemented at compile/deployment time <li>Application needs to make use of user input of any form in database queries <li>Application needs to make use of output from other database or code operations in database queries</li></li></li>
   </ul>
   <h1>Solution Example</h1>
-  <pre>static void StoredProcedureDBQuery()<br />&#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Create a new database connection using Integrated Security<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="file://sqlexpress;Integrated/">\\sqlexpress;Integrated</a> Security=SSPI;";<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlConnection cn = new SqlConnection(connectionString);</pre>
+  <pre>static void StoredProcedureDBQuery()<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new database connection using Integrated Security<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <a href="file://sqlexpress;Integrated/">\\sqlexpress;Integrated</a> Security=SSPI;";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlConnection cn = new SqlConnection(connectionString);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Create a new SQL Command object with a query to execute the stored procedure<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlCommand sqlCommand = new SqlCommand("exec spFullNames", cn);</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new SQL Command object with a query to execute the stored procedure<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlCommand sqlCommand = new SqlCommand("exec spFullNames", cn);</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Open connection to the server and execute query, returning a data reader<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cn.Open();</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Open connection to the server and execute query, returning a data reader<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cn.Open();</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlDataReader reader = sqlCommand.ExecuteReader();<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (reader.Read())<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Console.WriteLine("Result: " &#43; reader.GetString(0));</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlDataReader reader = sqlCommand.ExecuteReader();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; while (reader.Read())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Console.WriteLine("Result: " &amp;#43; reader.GetString(0));</pre>
   <pre>
-    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Close Reader and Connection.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; reader.Close();<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cn.Close();</pre>
+    <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Close Reader and Connection.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; reader.Close();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cn.Close();</pre>
   <pre>
-    <br />&#125;</pre>
+    <br />&amp;#125;</pre>
   <h1>Problem Example</h1>
   <p>The following example demonstrates the use of string concatenation to dynamically create a database query. </p>
-  <pre>string sParam = Request&#91;"first_name"&#93;;<br /><br />// Create a new database connection using Integrated Security<br />string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003<br />&#9;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="file://sqlexpress;Integrated/">\\sqlexpress;Integrated</a> Security=SSPI;";<br />SqlConnection cn = new SqlConnection(connectionString);<br /><br />// Create a new SQL Command object with our query<br />// Dynamically generate SQL query using passed parameter<br />SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people WHERE first = '" &#43; sParam &#43; "'", cn);<br /><br />// Open connection to the server and execute query, returning a data reader<br />cn.Open();<br />SqlDataReader reader = sqlCommand.ExecuteReader();<br /><br />while (reader.Read())<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Console.WriteLine("Result: " &#43; reader.GetString(0) &#43; " " &#43; reader.GetString(1));<br /><br />// Close Reader and Connection.<br />reader.Close();<br />cn.Close();</pre>
+  <pre>string sParam = Request&amp;#91;"first_name"&amp;#93;;<br /><br />// Create a new database connection using Integrated Security<br />string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003<br />&amp;#9;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <a href="file://sqlexpress;Integrated/">\\sqlexpress;Integrated</a> Security=SSPI;";<br />SqlConnection cn = new SqlConnection(connectionString);<br /><br />// Create a new SQL Command object with our query<br />// Dynamically generate SQL query using passed parameter<br />SqlCommand sqlCommand = new SqlCommand("SELECT first, last FROM people WHERE first = '" &amp;#43; sParam &amp;#43; "'", cn);<br /><br />// Open connection to the server and execute query, returning a data reader<br />cn.Open();<br />SqlDataReader reader = sqlCommand.ExecuteReader();<br /><br />while (reader.Read())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Console.WriteLine("Result: " &amp;#43; reader.GetString(0) &amp;#43; " " &amp;#43; reader.GetString(1));<br /><br />// Close Reader and Connection.<br />reader.Close();<br />cn.Close();</pre>
   <ul>
     <li>Code does not first validate the "first_name" CGI data before incorporation into the database query <li>SqlCommand object makes use of a dynamically-generated string containing user input, which makes this operations vulnerable to SQL injection. For instance, the following sParam value could result in the deletion of the entire application database from the environment:</li></li>
   </ul>
@@ -61,13 +61,13 @@
   <ol>
     <li>
       <p>Run the following CREATE table command to add the "people" table used in this query to your SQL server.</p>
-      <pre>CREATE TABLE &#91;dbo&#93;.&#91;People&#93;(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#91;first&#93; &#91;varchar&#93;(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#91;last&#93; &#91;varchar&#93;(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#91;email&#93; &#91;varchar&#93;(max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#91;phone&#93; &#91;nchar&#93;(15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL<br /></pre>
+      <pre>CREATE TABLE &amp;#91;dbo&amp;#93;.&amp;#91;People&amp;#93;(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#91;first&amp;#93; &amp;#91;varchar&amp;#93;(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#91;last&amp;#93; &amp;#91;varchar&amp;#93;(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#91;email&amp;#93; &amp;#91;varchar&amp;#93;(max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#91;phone&amp;#93; &amp;#91;nchar&amp;#93;(15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL<br /></pre>
       <li>
         <p>Create the stored procedure used in this example to query names from the people table.</p>
-        <pre>CREATE PROCEDURE spFullNames AS<br />BEGIN<br />        SELECT first &#43; ' ' &#43; last FROM people ORDER BY last<br />END<br />GO</pre>
+        <pre>CREATE PROCEDURE spFullNames AS<br />BEGIN<br />        SELECT first &amp;#43; ' ' &amp;#43; last FROM people ORDER BY last<br />END<br />GO</pre>
         <li>
           <p>Execute the following test case code. </p>
-          <pre>static void Main(string&#91;&#93; args)&#123;<br />        StoredProcedureDBQuery();<br />&#125;</pre>
+          <pre>static void Main(string&amp;#91;&amp;#93; args)&amp;#123;<br />        StoredProcedureDBQuery();<br />&amp;#125;</pre>
         </li>
       </li>
     </li>
@@ -83,6 +83,6 @@
     <li>Security Guidelines (ASP.NET Data Access): <a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0001.asp?frame=true#pagguidelines0001_dataaccess">http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0001.asp?frame=true#pagguidelines0001_dataaccess</a><li>Security Guidelines (ADO.NET SQL Injection): <a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0002.asp?frame=true#pagguidelines0002_sqlinjection">http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0002.asp?frame=true#pagguidelines0002_sqlinjection</a><li>Security Guidelines (.NET Data Access): <a href="http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0003.asp?frame=true#pagguidelines0003_dataaccess">http://msdn.microsoft.com/library/en-us/dnpag2/html/PAGGuidelines0003.asp?frame=true#pagguidelines0003_dataaccess</a></li></li></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

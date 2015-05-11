@@ -3,7 +3,7 @@
   <Metadata>
     <Id>fc09f570-5d26-4b90-8645-fca659381b26</Id>
     <Id_History>fc09f570-5d26-4b90-8645-fca659381b26,dd8b154d-7810-47fb-bba9-566761b52149,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>ViewStates That Contain Sensitive Data Are Encrypted</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
@@ -18,16 +18,12 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Check For</h1>
+    <Data><![CDATA[<h1>What to Check For</h1>
   <p>If sensitive information must be stored in ViewState, verify that it is encrypted.</p>
   <h1>Why</h1>
-  <p>ViewState is protected against tampering by default with an HMAC integrity check, and SSL can be used to protect ViewState on the network. However, unless ViewState encryption is used, any sensitive data stored in ViewState is vulnerable on the local machine.</p>
+  <p>ViewState is protected against tampering by default with an HMAC integrity check, and TLS can be used to protect ViewState on the network. However, unless ViewState encryption is used, any sensitive data stored in ViewState is vulnerable on the local machine.</p>
   <h1>How To Check</h1>
-  <p>The easiest way to check if ViewState encryption is turned on is to review the HTML source returned by your application on the client-side and scan for the __<em>VIEWSTATE</em> and __<em>VIEWSTATEENCRYPTED</em>&nbsp;hidden fields:</p>
+  <p>The easiest way to check if ViewState encryption is turned on is to review the HTML source returned by your application on the client-side and scan for the __<em>VIEWSTATE</em> and __<em>VIEWSTATEENCRYPTED</em>&amp;nbsp;hidden fields:</p>
   <pre>&lt;form name="testForm" method="post" action="viewstate.aspx" id="testForm"&gt;<br />&lt;input type="hidden" name="__VIEWSTATE"<br />...<br />&lt;input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" /&gt;</pre>
   <h1>How To Fix</h1>
   <p>The default ASP.NET settings ensure that ViewState is tamper proof. This ensures that any modification of the ViewState either on the client's computer or over the network is detected when the server processes the data. If you need to use round trips for potentially sensitive data, you can force encryption of ViewState for a specific page by following these steps:</p>
@@ -60,7 +56,7 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>
   <h1>
   </h1>
   <h1>
