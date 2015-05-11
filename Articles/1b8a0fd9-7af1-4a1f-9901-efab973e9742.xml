@@ -3,7 +3,7 @@
   <Metadata>
     <Id>1b8a0fd9-7af1-4a1f-9901-efab973e9742</Id>
     <Id_History>1b8a0fd9-7af1-4a1f-9901-efab973e9742,efc67359-c6eb-4f1f-8eb7-306c4601a4e4,</Id_History>
-    <Library_Id>51eb81c3-1d23-4146-ba83-8a6bb9233c11</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Authentication Credentials Are Sent Over Encrypted Tunnels</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
@@ -25,7 +25,7 @@ Verify that authentication credentials are sent over encrypted tunnels.
 
 ==Why==
 
-Using encrypted communication tunnels prevents the credentials from being sniffed or tampered with as they are transmitted over the network. TLS/SSL libraries are available for most mature development platforms and are ideal for protecting the authentication credentials in transit.
+Using encrypted communication tunnels prevents the credentials from being sniffed or tampered with as they are transmitted over the network. TLS libraries are available for most mature development platforms and are ideal for protecting the authentication credentials in transit.
 
 ==When==
 
@@ -35,19 +35,19 @@ Use this checklist item when your application sends authentication credentials o
 
 To verify that authentication credentials are sent over encrypted tunnels:
 
-# **Identify authentication security requirements.** Make sure that your application actually does send authentication credentials over the network. For example, if the application authenticates against a local credential store, then there is no need for network tunnels. If credentials are sent over the network, then they need to be protected in transit and, for most scenarios, TLS/SSL will be suitable. When using TLS/SSL, some thought will have to be given to what certificates to use. It is highly recommended to use valid certificates, however it is possible to encrypt network traffic with self-signed certificates. 
+# **Identify authentication security requirements.** Make sure that your application actually does send authentication credentials over the network. For example, if the application authenticates against a local credential store, then there is no need for network tunnels. If credentials are sent over the network, then they need to be protected in transit and, for most scenarios, TLS will be suitable. When using TLS, some thought will have to be given to what certificates to use. It is highly recommended to use valid certificates, however it is possible to encrypt network traffic with self-signed certificates. 
 # **Identify the network authentication mechanism.** Find the code that sends authentication credentials over the network.
-# **Verify that authentication credentials are encrypted in transit.** Examine the code that sends authentication credentials over the network to make sure that TLS/SSL sockets are used instead of regular sockets for connections that are used to transmit credentials.
+# **Verify that authentication credentials are encrypted in transit.** Examine the code that sends authentication credentials over the network to make sure that TLS sockets are used instead of regular sockets for connections that are used to transmit credentials.
 
 
 ==How to Fix==
 
 To protect authentication credentials in transit:
 
-# **Identify authentication security requirements.** Make sure that your application actually does send authentication credentials over the network. For example, if the application authenticates against a local credential store, then there is no need for network tunnels. If credentials are sent over the network, then they need to be protected in transit and for most scenarios TLS/SSL will be suitable. When using TLS/SSL, some thought will have to be given to what certificates to use. It is highly recommended to use valid certificates, however it is possible to encrypt network traffic with self-signed certificates. 
-# **Identify available communication security APIs.** Determine what libraries and APIs that implement TLS/SSL are available for your development platform. Because there are many different platforms and development environments that use C++, there are a lot of options. The platform-provided APIs should be the first choice but if these are not available, OpenSSL is a good alternative. 
+# **Identify authentication security requirements.** Make sure that your application actually does send authentication credentials over the network. For example, if the application authenticates against a local credential store, then there is no need for network tunnels. If credentials are sent over the network, then they need to be protected in transit and for most scenarios TLS will be suitable. When using TLS, some thought will have to be given to what certificates to use. It is highly recommended to use valid certificates, however it is possible to encrypt network traffic with self-signed certificates. 
+# **Identify available communication security APIs.** Determine what libraries and APIs that implement TLS are available for your development platform. Because there are many different platforms and development environments that use C++, there are a lot of options. The platform-provided APIs should be the first choice but if these are not available, OpenSSL is a good alternative. 
 # **Identify the network authentication mechanism.** Find the code that sends authentication credentials (usually hashes or keys) over the network.
-# **Encrypt authentication credentials in transit.** Use the chosen TLS/SSL APIs to encrypt the hashes or keys as they are transmitted over the network. Modify all the code that sends the credentials over the network to always use TLS/SSL for the task. When doing so, it is recommended to use valid certificates and check them with a certificate authority to help prevent man-in-the-middle attacks.
+# **Encrypt authentication credentials in transit.** Use the chosen TLS APIs to encrypt the hashes or keys as they are transmitted over the network. Modify all the code that sends the credentials over the network to always use TLS for the task. When doing so, it is recommended to use valid certificates and check them with a certificate authority to help prevent man-in-the-middle attacks.
 ]]></Data>
   </Content>
 </TeamMentor_Article>

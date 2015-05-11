@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-860935879" Content_Hash="-664917676">
+  <Metadata>
+    <Id>0f6dab44-668e-4388-ab1a-979273947ecf</Id>
+    <Library_Id>47a10a30-15ad-4cfd-bf82-00e9bb2037f6</Library_Id>
+    <Title>Database Access Is Authenticated</Title>
+    <Category>Authentication</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink>Database Access Is Authenticated</DirectLink>
+    <Tag />
+    <Security_Demand />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 8.5.16 </li>
+  </ul>
+  <h1>What to Check For</h1>
+  <p>Check that all access to any database containing cardholder data&amp;nbsp;is authenticated. Verify that&amp;nbsp;database access IDs used by applications&amp;nbsp;are not usable by individual users or other applications.</p>
+  <h1>Why</h1>
+  <p>Preventing the database access accounts used by applications from being used interactively or by other processes ensures that if these accounts are compromised, an attacker cannot use them.</p>
+  <h1>How to Check</h1>
+  <p>Use the following steps to check if database access is authenticated:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Confirm user authentication.</strong> Review the settings of each database that stores cardholder data and any corresponding applications to make sure that users are authenticated before access.&amp;nbsp;</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify&amp;nbsp;that only database administrators may issue database queries or have direct access.
+</strong>Get information about connecting to the database from the database administrator. Attempt to log into the database administration interface with valid non-administrator user credentials. Access should be denied to all users except the administrators.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that application access credentials cannot be abused.</strong> Make sure that any authentication credentials used by applications to access any database that stores cardholder data can only be used by the corresponding application(s) and not
+ by users or other processes. Get information about connecting to the database from the database administrator. Attempt to log into the database administration interface with valid credentials used by applications. Access should be denied to interactive logons.</p>
+    </li>
+  </ol>
+  <h1>How to Fix</h1>
+  <p>Perform the following actions to assure that database access is authenticated:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Implement functionality to authenticate data access.</strong> Program the database application to present the user with a login screen, where the user has to be authenticated before being granted access to the information in the database. Use the
+ authentication credentials from the login throughout the database application for access control.
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Secure the database administration interface. </strong>Allow only the database administrators to access to the database administration interface(s). Usually a database server allows either a terminal session or a visual administration application
+ to connect to a port and issue SQL queries directly. Authentication credentials usually secure this functionality. Do not make access credentials available for any other users besides the database administrator(s).
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Secure the database files. </strong>To prevent direct access to the database files, use the access control system implemented by the host Operating System to allow access to database administrator(s) only. If possible, block any computer, besides
+ the administrator's workstation, from accessing the database server administration interface by using a white list. A white list is a list of hosts that are exclusively allowed to access some functionality. On UNIX-style systems, white lists are usually configured
+ by editing the /etc/hosts.allow and /etc/hosts.deny files. </p>
+    </li>
+    <li>
+      <p>
+        <strong>Log access to cardholder data.</strong> Instrument the application to log access to the cardholder data. Send the logs to the centralized log server.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Protect the database access credentials used by applications.</strong> Allow the access credentials used by the database application to be used by that application only. Do not allow these credentials to be used by users or other processes. This
+ is best accomplished by web applications. If you use a web application, you can configure the database server to use a white list. A white list is a list of hosts that are exclusively allowed to access some functionality while rejecting all access that does
+ not originate form the web application server. On UNIX-style systems, white lists are usually configured by editing the /etc/hosts.allow and /etc/hosts.deny files. If you don’t use a web application and the client application connects directly to the database
+ server, control the interface used by the application to connect to the database. If a database application does not comply with these requirements, the database application will have to be rewritten and possibly redesigned. Considering the costs of redesigning,
+ rewriting and redeploying database applications, it is recommended to consult an expert as early in the design stages as possible to make sure that the resulting application is PCI DSS compliant.
+<em>Security Innovation offers professional application development consulting services.</em></p>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

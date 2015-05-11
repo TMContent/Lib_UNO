@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-923948513" Content_Hash="-1891613355">
+  <Metadata>
+    <Id>5db99327-e15c-474d-80e5-6817f2a969d6</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Sanitize Input Used for Dynamic SQL Queries</Title>
+    <Category>Data Sanitization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Sanitize Input Used for Dynamic SQL Queries</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>Avoid using dynamically-generated query strings. If they must be used, sanitize input to remove any special characters that may be used for SQL injection attacks.</p>
+  <h1>Why</h1>
+  <p>Using dynamically-generated query strings increases the risk of SQL injection vulnerabilities. This risk may be partially mitigated by removing any special SQL characters from input used to build dynamic queries.</p>
+  <h1>How</h1>
+  <p>If you need to use dynamically-generated query strings or commands in spite of the risk, properly quote arguments and escape any special characters within those arguments. The most conservative approach is to escape or filter all characters that do not pass
+ an extremely strict whitelist (such as everything that is not alphanumeric or white space). If some special characters are still needed, such as white space, wrap each argument in quotes after the escaping/filtering step. Be careful of argument injection (CWE-88).
+ Instead of building your own implementation, such features may be available in the database or programming language. For example, the Oracle
+<em>DBMS_ASSERT</em> package can check or enforce that parameters have certain properties that make them less vulnerable to SQL injection. For MySQL, the
+<em>mysql_real_escape_string()</em> API function is available in both C and PHP.</p>
+  <h2>Additional Resources</h2>
+  <ul>
+    <li>For more information about SQL injection, please see <a href="http://cwe.mitre.org/top25/index.html#CWE-89">
+http://cwe.mitre.org/top25/index.html#CWE-89</a></li>
+    <li>For more information about "CWE-88: Argument Injection or Modification", please see
+<a href="http://cwe.mitre.org/data/definitions/88.html">http://cwe.mitre.org/data/definitions/88.html</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

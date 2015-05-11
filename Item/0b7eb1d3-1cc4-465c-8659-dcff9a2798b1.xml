@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1194028607" Content_Hash="-703220900">
+  <Metadata>
+    <Id>0b7eb1d3-1cc4-465c-8659-dcff9a2798b1</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-434: Unrestricted Upload of File with Dangerous Type</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-434: Unrestricted Upload of File with Dangerous Type</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>The software allows the attacker to upload or transfer files of dangerous types that can be automatically processed within the product's environment.</p>
+  <p>The "unrestricted file upload" term is used in vulnerability databases and elsewhere, but it is insufficiently precise. The phrase could be interpreted as the lack of restrictions on the size or number of uploaded files, which is a resource consumption issue.</p>
+  <h2>Discussion</h2>
+  <p>You may think you're allowing uploads of innocent images (rather, images that won't damage your system - the Interweb's not so innocent in some places). But the name of the uploaded file could contain a dangerous extension such as .php instead of .gif, or
+ other information (such as content type) may cause your server to treat the image like a big honkin' program. So, instead of seeing the latest paparazzi shot of your favorite Hollywood celebrity in a compromising position, you'll be the one whose server gets
+ compromised.</p>
+  <h2>Mitigation</h2>
+  <p>The mitigation methods for dangerous file upload vulnerabilities are:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Don't let the user specify the file names of the uploaded files.</strong> Generate your own filename for an uploaded file instead of the user-supplied filename, so that no external input is used at all.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use reference maps.</strong> When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Store uploaded files outside of the web root.</strong> Consider storing the uploaded files outside of the web document root entirely. Then, use other mechanisms to deliver the files dynamically.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Assume all input is malicious.</strong> Use an "accept known good" input validation strategy, i.e., use a whitelist of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or
+ transform it into something that does. Do not rely exclusively on looking for malicious or malformed inputs (i.e., do not rely on a blacklist). However, blacklists can be useful for detecting potential attacks or determining which inputs are so malformed that
+ they should be rejected outright. When performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and
+ conformance to business rules. As an example of business rule logic, "boat" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if you are expecting colors such as "red" or "blue." For example, limiting filenames
+ to alphanumeric characters can help to restrict the introduction of unintended file extensions.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use white-list input validation.</strong> Define a very limited set of allowable extensions and only generate filenames that end in these extensions. Consider the possibility of XSS (CWE-79) before you allow .html or .htm file types. Ensure that
+ only one extension is used in the filename. Some web servers, including some versions of Apache, may process files based on inner extensions so that "<em>filename.php.gif</em>" is fed to the PHP interpreter. When running on a web server that supports case-insensitive
+ filenames, ensure that you perform case-insensitive evaluations of the extensions that are provided.
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use server-side security controls.</strong> For any security checks that are performed on the client side, ensure that these checks are duplicated on the server side, in order to avoid CWE-602. Attackers can bypass the client-side checks by modifying
+ values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the principle of least privilege.</strong> Run your code using the lowest privileges that are required to accomplish the necessary tasks. If possible, create isolated accounts with limited privileges that are only used for a single task. That
+ way, a successful attack will not immediately give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a sandbox.</strong> Run your code in a "jail" or similar sandbox environment that enforces strict boundaries between the process and the operating system. This may effectively restrict which files can be accessed in a particular directory or
+ which commands can be executed by your software. OS-level examples include the Unix
+<em>chroot</em> jail, <em>AppArmor</em>, and <em>SELinux</em>. In general, managed code may provide some protection. For example,
+<em>java.io.FilePermission</em> in the <em>Java SecurityManager</em> allows you to specify restrictions on file operations. This may not be a feasible solution, and it only limits the impact to the operating system; the rest of your application may still be
+ subject to compromise. Be careful to avoid CWE-243 and other weaknesses related to jails.
+<br /><strong>Note:</strong> The effectiveness of this mitigation depends on the prevention capabilities of the specific sandbox or jail being used and might only help to reduce the scope of an attack, such as restricting the attacker to certain system calls or limiting
+ the portion of the file system that can be accessed.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about unrestricted dangerous file upload vulnerabilities, please see
+<a href="http://cwe.mitre.org/top25/index.html#CWE-434">http://cwe.mitre.org/top25/index.html#CWE-434</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1842460433" Content_Hash="-1462615706">
+  <Metadata>
+    <Id>a2ce7826-30c0-4003-890b-cf3aefc0a6d0</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-352: Cross-Site Request Forgery (CSRF)</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-352: Cross-Site Request Forgery (CSRF)</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>The web application does not, or can not, sufficiently verify whether a well-formed, valid, consistent request was intentionally provided by the user who submitted the request.</p>
+  <p>When a web server is designed to receive a request from a client without any mechanism for verifying that it was intentionally sent, then it might be possible for an attacker to trick a client into making an unintentional request to the web server which
+ will be treated as an authentic request. This can be done via a URL, image load, XMLHttpRequest, etc. and can result in exposure of data or unintended code execution.</p>
+  <h2>Discussion</h2>
+  <p>You know better than to accept a package from a stranger at the airport. It could contain dangerous contents. Plus, if anything goes wrong, then it's going to look as if you did it, because you're the one with the package when you board the plane. Cross-site
+ request forgery is like that strange package, except the attacker tricks a user into activating a request that goes to your site. Thanks to scripting and the way the web works in general, the user might not even be aware that the request is being sent. But
+ once the request gets to your server, it looks as if it came from the user, not the attacker. This might not seem like a big deal, but the attacker has essentially masqueraded as a legitimate user and gained all the potential access that the user has. This
+ is especially handy when the user has administrator privileges, resulting in a complete compromise of your application's functionality. When combined with XSS, the result can be extensive and devastating. If you've heard about XSS worms that stampede through
+ very large web sites in a matter of minutes (like Facebook), there's usually CSRF feeding them.</p>
+  <h2>Detection</h2>
+  <p>The following methods for detecting Cross-Site Request Forgery vulnerabilities are available:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Manual Analysis.</strong> This weakness can be detected using tools and techniques that require manual (human) analysis, such as penetration testing, threat modeling, and interactive tools that allow the tester to record and modify an active session.
+ Specifically, manual analysis can be useful for finding this weakness, and for minimizing false positives assuming an understanding of business logic. However, it might not achieve desired code coverage within limited time constraints. For black-box analysis,
+ if credentials are not known for privileged accounts, then the most security-critical portions of the application may not receive sufficient attention. Consider using OWASP
+<em>CSRFTester </em>to identify potential issues and aid in manual analysis. These may be more effective than strictly automated techniques. This is especially the case with weaknesses that are related to design and business rules.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Automated Static Analysis.</strong> CSRF is currently difficult to detect reliably using automated techniques. This is because each application has its own implicit security policy that dictates which requests can be influenced by an outsider and
+ automatically performed on behalf of a user, versus which requests require strong confidence that the user intends to make the request. For example, a keyword search of the public portion of a web site is typically expected to be encoded within a link that
+ can be launched automatically when the user clicks on the link.</p>
+    </li>
+  </ol>
+  <h2>Mitigation</h2>
+  <p>The following mitigation methods for Cross-Site Request Forgery vulnerabilities are available:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Use a secure framework.</strong> Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. For example, use anti-CSRF packages such as the OWASP
+<em>CSRFGuard</em>. Another example is the<em> ESAPI Session Management</em> control, which includes a component for CSRF.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Resolve Cross-Site Scripting issues.</strong> Ensure that your application is free of cross-site scripting issues (CWE-79), because most CSRF defenses can be bypassed using attacker-controlled script.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a unique token in requests.</strong> Generate a unique nonce for each form, place the nonce into the form, and verify the nonce upon receipt of the form. Be sure that the nonce is not predictable (CWE-330).
+<br /><strong>Note:</strong> Note that this can be bypassed using XSS (CWE-79).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify especially dangerous operations. </strong>When the user performs a dangerous operation, send a separate confirmation request to ensure that the user intended to perform that operation.
+<br /><strong>Note:</strong> Note that this can be bypassed using XSS (CWE-79).</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Optional) Use the "double-submitted cookie" method as described by Felten and Zeller.</strong> This technique requires Javascript, so it may not work for browsers that have Javascript disabled.
+<br /><strong>Note:</strong> Note that this can probably be bypassed using XSS (CWE-79).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Do not use the GET method for any request that triggers a state change.</strong>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Check the HTTP Referer header.</strong> Check the HTTP Referer header to see if the request originated from an expected page. This could break legitimate functionality, because users or proxies may have disabled sending the Referer for privacy reasons.
+<br /><strong>Note:</strong> Note that this can be bypassed using XSS (CWE-79). An attacker could use XSS to generate a spoofed Referer, or to generate a malicious request from a page whose Referer would be allowed.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about Cross-Site Request Forgery vulnerabilities, please see
+<a href="http://cwe.mitre.org/top25/index.html#CWE-352">http://cwe.mitre.org/top25/index.html#CWE-352</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

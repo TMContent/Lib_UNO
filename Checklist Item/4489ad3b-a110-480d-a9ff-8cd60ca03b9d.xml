@@ -3,7 +3,7 @@
   <Metadata>
     <Id>4489ad3b-a110-480d-a9ff-8cd60ca03b9d</Id>
     <Id_History>4489ad3b-a110-480d-a9ff-8cd60ca03b9d,fbdc1677-7bf6-43a6-83f5-14d348fa9150,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Absolute URLs Are Used for Navigating Secure Pages</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
@@ -18,11 +18,7 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Check For</h1>
+    <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that absolute URLs are used for navigation where the site is partitioned with secure and non-secure folders.</p>
   <h1>Why</h1>
   <p>Navigating between the public and restricted areas of your site (that is, between HTTP and HTTPS pages) is an issue because a redirect always uses the protocol (HTTPS or HTTP) of the current page, not the target page.</p>
@@ -39,15 +35,15 @@
     </li>
   </ol>
   <h1>How To Fix</h1>
-  <p>Use the following guidelines when&nbsp;implementing navigation&nbsp;on a site that uses SSL:</p>
+  <p>Use the following guidelines when implementing navigation on a site that uses TLS:</p>
   <ol>
     <li>
       <p>
-        <strong>Use absolute URLs when navigating from secure pages. </strong>After a user logs on and browses pages in a directory that is secured with SSL, relative links such as "<em>..\publicpage.aspx</em>" or redirects to HTTP pages result in the pages being served using the HTTPS protocol, which incurs an unnecessary performance overhead. To avoid this, use absolute links such as "<em>http://servername/appname/publicpage.aspx</em>" when redirecting from an HTTPS page to an HTTP page.</p>
+        <strong>Use absolute URLs when navigating from secure pages. </strong>After a user logs on and browses pages in a directory that is secured with TLS, relative links such as "<em>..\publicpage.aspx</em>" or redirects to HTTP pages result in the pages being served using the HTTPS protocol, which incurs an unnecessary performance overhead. To avoid this, use absolute links such as "<em>http://servername/appname/publicpage.aspx</em>" when redirecting from an HTTPS page to an HTTP page.</p>
       <li>
         <p>
-          <strong>Use absolute URLs when redirecting to secure pages.</strong>&nbsp;Similarly, when you redirect to a secure page (for example, the logon page) from a public area of your site, you must use an absolute HTTPS path, such as "<em>https://servername/appname/secure/login.aspx</em>" instead of a relative path, such as "<em>restricted/login.aspx</em>". For example, if your Web page provides a logon button, use the following code to redirect to the secure login page.</p>
-        <pre>private void btnLogon_Click( object sender, System.EventArgs e )<br />&#123;<br />  // Form an absolute path using the server name and virtual directory name  <br />  string serverName =<br />   HttpUtility.UrlEncode(Request.ServerVariables&#91;"SERVER_NAME"&#93;);  <br />   string vdirName = Request.ApplicationPath;<br />   Response.Redirect("https://" &#43;<br />    serverName &#43; vdirName &#43; "/Restricted/Login.aspx");<br />&#125;</pre>
+          <strong>Use absolute URLs when redirecting to secure pages.</strong> Similarly, when you redirect to a secure page (for example, the logon page) from a public area of your site, you must use an absolute HTTPS path, such as "<em>https://servername/appname/secure/login.aspx</em>" instead of a relative path, such as "<em>restricted/login.aspx</em>". For example, if your Web page provides a logon button, use the following code to redirect to the secure login page.</p>
+        <pre>private void btnLogon_Click( object sender, System.EventArgs e )<br />{<br />  // Form an absolute path using the server name and virtual directory name  <br />  string serverName =<br />   HttpUtility.UrlEncode(Request.ServerVariables["SERVER_NAME"]);  <br />   string vdirName = Request.ApplicationPath;<br />   Response.Redirect("https://" +<br />    serverName + vdirName + "/Restricted/Login.aspx");<br />}</pre>
       </li>
     </li>
   </ol>
@@ -58,6 +54,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

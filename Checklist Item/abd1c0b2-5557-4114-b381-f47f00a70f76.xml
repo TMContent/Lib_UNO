@@ -3,7 +3,7 @@
   <Metadata>
     <Id>abd1c0b2-5557-4114-b381-f47f00a70f76</Id>
     <Id_History>abd1c0b2-5557-4114-b381-f47f00a70f76,e4d83b51-b266-4ba1-9417-d6f97fc7aa8c,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Communication Links Are Encrypted</Title>
     <Category>Communication Security</Category>
     <Phase>Implementation</Phase>
@@ -27,44 +27,17 @@
   <ol>
     <li>
       <p>
-        <strong>Identify the connections used for transmitting sensitive data. </strong>Identify the sensitive data that is sent over the network and enumerate&nbsp;the respective connections that are used for such communication.</p>
-      <li>
-        <p>
-          <strong>Verify that connections are secured. </strong>Using a network sniffer, verify that your application utilizes either IPSec or TLS/SSL then check the following:</p>
-        <ul>
-          <li>
-            <p>
-              <strong>IPSec</strong>:&nbsp;If your application uses IPSec, verify that&nbsp;all packets from your sniffed traffic between the specified hosts contain an Authentication Header (AH) and Encapsulating Security Payload (ESP) fields after the IP headers.</p>
-            <li>
-              <p>
-                <strong>TLS/SSL</strong>:&nbsp;If your application uses TLS/SSL, verify that&nbsp;your sniffed traffic between the specified hosts contains an SSL handshake. Keep in mind the following considerations when verifying your application's use of SSL:</p>
-              <ul>
-                <li>
-                  <p>
-                    <strong>Certificate Validity</strong>: Verify that your application's SSL certificate has not reached its expiration date. </p>
-                  <li>
-                    <p>
-                      <strong>Certificate Version</strong>: Verify that your application uses SSL version 3.0 certificate.</p>
-                    <li>
-                      <p>
-                        <strong>Domain Name</strong>: Verify that the domain name for your application's administrative interface is the same as the domain name listed in the SSL certificate.</p>
-                      <li>
-                        <p>
-                          <strong>Chain of Trust</strong>: Verify that your application's users can verify your application's SSL certificate based on the root certificates that are stored in their browsers. If your application uses self-signed SSL certificates, ensure that your organization's root certificate is securely imported into the users' browsers.</p>
-                        <li>
-                          <p>
-                            <strong>Server Configuration</strong>: Verify that your application's environment has enabled HTTPS. Verify that transactions of sensitive nature are transmitted only over HTTPS connections. Check if your application's deployment descriptor (e.g. web.xml) has the <em>transport-guarantee</em> element set to <em>CONFIDENTIAL</em>:</p>
-                          <pre>&lt;security-constraint&gt;<br />  &lt;web-resource-collection&gt;<br />    &lt;web-resource-name&gt;AcctManager&lt;/web-resource-name&gt;<br />    &lt;url-pattern&gt;/acctmanager/&#42;&lt;/url-pattern&gt;<br />  &lt;/web-resource-collection&gt;<br />  &lt;user-data-constraint&gt;<br />    &lt;transport-guarantee&gt;<strong>CONFIDENTIAL</strong>&lt;/transport-guarantee&gt;<br />  &lt;/user-data-constraint&gt;<br />  &lt;auth-constraint&gt;<br />    &lt;role-name&gt;manager&lt;/role-name&gt;<br />  &lt;/auth-constraint&gt;<br />&lt;/security-constraint&gt;</pre>
-                        </li>
-                      </li>
-                    </li>
-                  </li>
-                </li>
-              </ul>
-            </li>
-          </li>
-        </ul>
-      </li>
+        <strong>Identify the connections used for transmitting sensitive data. </strong>Identify the sensitive data that is sent over the network and enumerate&amp;nbsp;the respective connections that are used for such communication.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Verify that connections are secured. </strong>Using a network sniffer, verify that your application utilizes either IPSec or TLS then check the following:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>IPSec</strong>:&amp;nbsp;If your application uses IPSec, verify that&amp;nbsp;all packets from your sniffed traffic between the specified hosts contain an Authentication Header (AH) and Encapsulating Security Payload (ESP) fields after the IP headers.</p>
+        </li>
+      </ul>
     </li>
   </ol>
   <h1>How to Fix</h1>
@@ -73,91 +46,27 @@
     <li>
       <p>
         <strong>Identify the connections used for transmitting sensitive data. </strong>Enumerate all connections between the different servers with other servers or with the application. Identify the sensitive data that is sent over the network and the respective connections that are used for such communication.</p>
-      <li>
-        <p>
-          <strong>Choose the appropriate encryption mechanism. </strong>Depending on the infrastructure, you may consider using IPSec or TLS/SSL.</p>
-        <ul>
-          <li>
-            <strong>IPSec:</strong> IPSec is used when the encryption needs to be applied across all involved parties. Since IPSec is designed to secure connections between static hosts that are "always on," use IPSec to secure the network connections between your application's servers. Due to its nature, IPSec requires low level support; therefore, your application would need support from the operating system or a JNI component to manage it. <li><strong>TLS/SSL:</strong> TLS/SSL provides a granular protection which&nbsp;allows only&nbsp;the traffic containing sensitive data to be encrypted. Because TLS/SSL has a certificate based design, it allows the protection of data between mobile hosts. Use TLS/SSL to secure the communication channel between your application and its users.<br /><br />While Java provides APIs for handling SSL encrypted traffic, it is recommended to follow the manuals associated with the&nbsp;third party software that&nbsp;is being used. For example, if your application connects to a database server, follow the database server's manual on setting up the encryption; if your application is web-oriented, follow the web server's documentation on setting up the SSL certificate. If your application uses SSL, ensure that you use SSL 3.0 and disable the cryptographically weak SSL 2.0 protocols.</li></li>
-        </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Choose the appropriate encryption mechanism. </strong>Depending on the infrastructure, you may consider using IPSec or TLS.</p>
+      <ul>
         <li>
-          <p>
-            <strong>Apply the appropriate encryption mechanism. </strong>Apply the encryption mechanism of choice at the appropriate locations in the code. Such locations include all functionality that establishes a connection between your application and another entity.</p>
-        </li>
-      </li>
+          <strong>IPSec:</strong> IPSec is used when the encryption needs to be applied across all involved parties. Since IPSec is designed to secure connections between static hosts that are "always on," use IPSec to secure the network connections between your application's servers. Due to its nature, IPSec requires low level support; therefore, your application would need support from the operating system or a JNI component to manage it. </li>
+        <li>
+          <strong>TLS:</strong> TLS provides a granular protection which&amp;nbsp;allows only&amp;nbsp;the traffic containing sensitive data to be encrypted. Because TLS has a certificate based design, it allows the protection of data between mobile hosts. Use TLS to secure the communication channel between your application and its users.<br /><br />While Java provides APIs for handling TLS encrypted traffic, it is recommended to follow the manuals associated with the&amp;nbsp;third party software that&amp;nbsp;is being used. For example, if your application connects to a database server, follow the database server's manual on setting up the encryption; if your application is web-oriented, follow the web server's documentation on setting up the TLS certificate. </li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Apply the appropriate encryption mechanism. </strong>Apply the encryption mechanism of choice at the appropriate locations in the code. Such locations include all functionality that establishes a connection between your application and another entity.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <p>The following code establishes a connection between&nbsp;two servers. Unfortunately, the communication is not encrypted; therefore, it is possible for an attacker to eavesdrop on the connection.</p>
+  <p>The following code establishes a connection between&amp;nbsp;two servers. Unfortunately, the communication is not encrypted; therefore, it is possible for an attacker to eavesdrop on the connection.</p>
   <pre>String remoteHost = "server02.example.com";<br />int remotePort = "1337";<br /><br />Socket sock = new Socket(remoteHost, remotePort);<br />InputStreamReader isr = new InputStreamReader(sock.getInputStream());<br />BufferedReader input = new BufferedReader(isr);<br />PrintWriter output = new PrintWriter(sock.getOutputStream(), true);</pre>
   <h1>Solution Example</h1>
-  <p>The following code establishes a connection between&nbsp;two servers. Because the communication is encrypted, the confidentiality of the data in transit is preserved; therefore, it is impossible for an attacker to eavesdrop on the connection.</p>
-  <pre>String remoteHost = "server02.example.com";<br />int remotePort = "1337";<br /><br />SSLSocketFactory sslSF = (SSLSocketFactory) SSLSocketFactory.getDefault();<br />SSLSocket sslSock = (SSLSocket) sslSF.createSocket(remoteHost, remotePort);<br /><br />InputStreamReader isr = new InputStreamReader(sslSock.getInputStream());<br />BufferedReader input = new BufferedReader(isr);<br />PrintWriter output = new PrintWriter(sslSocket.getOutputStream(), true);</pre>
-  <h1>Java Communication Security Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/172c224e-c3e5-4a5f-bf7a-26fe2db406a4">Encrypt Communication Links</a>
-      <li>
-        <a href="/article/32fb66b7-7055-4fa0-a9e3-168cfc829aa2">Protect Sensitive Data Over the Network</a>
-        <li>
-          <a href="/article/c317a2fc-cf4b-4b21-8523-4c911afca161">Use SSL</a>
-          <li>
-            <a href="/article/7cf7a8ea-d06a-4442-a2e1-3f01a86b8e8b">Use SSL for All Sensitive Pages</a>
-            <li>
-              <a href="/article/076f39f5-6055-4309-a459-6072adc6d36d">Use SSL When Transmitting Credentials</a>
-              <li>
-                <a href="/article/8684d833-6d1c-4b61-958f-2c6e120c5355">Use Valid SSL Certificates</a>
-                <li>
-                  <a href="/article/6db5af3a-1346-4cea-931f-d0400f3f87ef">Use Only Strong SSL Algorithms</a>
-                  <li>
-                    <a href="/article/e3bdbea7-92cb-4407-998a-eaa95cb955e9">Do Not Cache Sensitive Data</a>
-                    <li>
-                      <a href="/article/19a025b8-9242-4ef5-896b-932828f5f654">Do Not Place Sensitive Data in Parameters</a>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Communication Security Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/abd1c0b2-5557-4114-b381-f47f00a70f76">Communication Links are Encrypted</a>
-      <li>
-        <a href="/article/0d1b6821-8652-43a9-922e-07e38dc07421">Sensitive Data Is Protected Over the Network</a>
-        <li>
-          <a href="/article/b473157f-aa07-4822-8d35-53ec73da44f4">SSL Is Used</a>
-          <li>
-            <a href="/article/2fa26367-e627-456d-8931-ac0e86a8e237">SSL Is Used for All Sensitive Pages</a>
-            <li>
-              <a href="/article/a2000630-b077-45b2-9c05-5b9e2fe7dc13">SSL is Used When Transmitting Credentials</a>
-              <li>
-                <a href="/article/bcc3bb74-7cdf-4704-99fd-e396c11ce3e1">Valid SSL Certificates Are Used</a>
-                <li>
-                  <a href="/article/c4219e9d-09b1-404c-8390-15f6b0fd3929">Only Strong SSL Algorithms Are Used</a>
-                  <li>
-                    <a href="/article/0b672255-10f6-4eb9-a886-e8ee50a927bc">Sensitive Data Is Not Cached</a>
-                    <li>
-                      <a href="/article/6adf267f-db7d-4770-86c6-292f9b126874">Sensitive Data Is Not Placed in Parameters</a>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Communication Security Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/1d2ac8cc-b706-4f4f-84b4-773a525a6c8d">How to Test for Network Credential Sniffing Bugs in Java</a>
-    </li>
-  </ul>]]></Data>
+  <p>The following code establishes a connection between&amp;nbsp;two servers. Because the communication is encrypted, the confidentiality of the data in transit is preserved; therefore, it is impossible for an attacker to eavesdrop on the connection.</p>
+  <pre>String remoteHost = "server02.example.com";<br />int remotePort = "1337";<br /><br />SSLSocketFactory sslSF = (SSLSocketFactory) SSLSocketFactory.getDefault();<br />SSLSocket sslSock = (SSLSocket) sslSF.createSocket(remoteHost, remotePort);<br /><br />InputStreamReader isr = new InputStreamReader(sslSock.getInputStream());<br />BufferedReader input = new BufferedReader(isr);<br />PrintWriter output = new PrintWriter(sslSocket.getOutputStream(), true);</pre>]]></Data>
   </Content>
 </TeamMentor_Article>

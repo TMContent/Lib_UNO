@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>
     <span>Applies To</span>
   </h1>
@@ -30,39 +30,41 @@
     <span>Summary</span>
   </h1>
   <p>
-    <span>ARP (Address Resolution Protocol) enables any computer to query the MAC address of an IP so that packets can reach their final physical destination.&nbsp;When a node wants to communicate with certain IP it checks it has the MAC address for that IP in its APR cache.<span>&nbsp;</span>If the node doesn’t have the MAC it broadcasts an ARP request.<span>&nbsp;</span>When the destination IP receives the ARP request it sends and ARP reply back to the node containing its MAC address.<span>&nbsp;</span>After receiving the ARP reply, the node updates its ARP cache and associates the MAC address with the destination IP.</span>
+    <span>ARP (Address Resolution Protocol) enables any computer to query the MAC address of an IP so that packets can reach their final physical destination. When a node wants to communicate with certain IP it checks it has the MAC address for that IP in its APR cache.<span></span>If the node doesn’t have the MAC it broadcasts an ARP request.<span></span>When the destination IP receives the ARP request it sends and ARP reply back to the node containing its MAC address.<span></span>After receiving the ARP reply, the node updates its ARP cache and associates the MAC address with the destination IP.</span>
   </p>
   <p>
-    <span>During ARP poisoning, also known as ARP spoofing or ARP cache poisoning, the attacker sends ARP replies to a victim node to poison the victim’s ARP cache.&nbsp;Since the ARP protocol is stateless, the attacker can trivially modify the ARP cache and replace a legitimate MAC address with the attacker MAC address for any target IP in the victim’s cache.<span>&nbsp;</span>A successful ARP poisoning attack leads to a Man-in-the Middle conditions since any network traffic form the victim node to the target IP will go through the attacker first.</span>
+    <span>During ARP poisoning, also known as ARP spoofing or ARP cache poisoning, the attacker sends ARP replies to a victim node to poison the victim’s ARP cache. Since the ARP protocol is stateless, the attacker can trivially modify the ARP cache and replace a legitimate MAC address with the attacker MAC address for any target IP in the victim’s cache.<span></span>A successful ARP poisoning attack leads to a Man-in-the Middle conditions since any network traffic form the victim node to the target IP will go through the attacker first.</span>
   </p>
   <p>
     <span>Follow the next steps to test for ARP poisoning bugs:</span>
   </p>
   <ul>
     <li>
-      <span>Step 1:&nbsp;Understand Attack Scenarios</span>
+      <span>Step 1: Understand Attack Scenarios</span>
     </li>
     <li>
-      <span>Step 2:<span>&nbsp;</span>Analyze Causes and Countermeasures</span>
+      <span>Step 2:<span></span>Analyze Causes and Countermeasures</span>
     </li>
     <li>
-      <span>Step 3:<span>&nbsp;</span>Start Testing and Exploring</span>
+      <span>Step 3:<span></span>Start Testing and Exploring</span>
     </li>
     <li>
-      <span>Step 4:<span>&nbsp;</span>Perform Additional Testing</span>&nbsp;</li>
+      <span>Step 4:<span></span>Perform Additional Testing</span>
+    </li>
   </ul>
   <h1>
-    <span>Step 1:<span>&nbsp;</span>Understand Attack Scenarios</span>
+    <span>Step 1:<span></span>Understand Attack Scenarios</span>
   </h1>
   <p>
-    <span>The first step in testing ARP poisoning attacks is to understand the basic attack scenarios.<span>&nbsp;</span>The following are common ARP poisoning scenarios:</span>
+    <span>The first step in testing ARP poisoning attacks is to understand the basic attack scenarios.<span></span>The following are common ARP poisoning scenarios:</span>
   </p>
   <ul>
     <li>
       <span>ARP poisoning to sniff network traffic</span>
     </li>
     <li>
-      <span>ARP poisoning to execute phishing attack</span>&nbsp;</li>
+      <span>ARP poisoning to execute phishing attack</span>
+    </li>
   </ul>
   <h2>
     <span>
@@ -70,14 +72,14 @@
     </span>
   </h2>
   <p>
-    <span>The most common ARP poisoning scenario targets disclosing information by means of sniffing a network communication.<span>&nbsp;</span>An attacker selects two victims (A and B) to execute the eavesdropping attack.<span>&nbsp;</span>It then sends ARP replies to victim A indicating that the MAC for B’s IP is the attacker’s MAC and ARP replies to victim B indicating that the MAC for A’s IP is the attacker’s MAC.&nbsp;The attacker then sets IP forwarding so that packets are forward from A to B.&nbsp;Finally, the attacker uses a network monitoring tool to view the contents of the packets being exchanged from A to B.</span>
+    <span>The most common ARP poisoning scenario targets disclosing information by means of sniffing a network communication.<span></span>An attacker selects two victims (A and B) to execute the eavesdropping attack.<span></span>It then sends ARP replies to victim A indicating that the MAC for B’s IP is the attacker’s MAC and ARP replies to victim B indicating that the MAC for A’s IP is the attacker’s MAC. The attacker then sets IP forwarding so that packets are forward from A to B. Finally, the attacker uses a network monitoring tool to view the contents of the packets being exchanged from A to B.</span>
   </p>
   <p>
     <span>In detail:</span>
   </p>
   <ol>
     <li>
-      <span>Attacker selects victim nodes.&nbsp;In many cases the attacker selects the gateway as one of the victims to sniff all traffic between the other victim and the Internet.</span>
+      <span>Attacker selects victim nodes. In many cases the attacker selects the gateway as one of the victims to sniff all traffic between the other victim and the Internet.</span>
     </li>
     <li>
       <span>Attacker sends ARP replies to victim to poison its cache.</span>
@@ -86,7 +88,8 @@
       <span>Attacker sets IP packet forwarding in his box.</span>
     </li>
     <li>
-      <span>Attacker waits until ARP caches are poison and starts monitoring the traffic using a network monitoring tool.</span>&nbsp;</li>
+      <span>Attacker waits until ARP caches are poison and starts monitoring the traffic using a network monitoring tool.</span>
+    </li>
   </ol>
   <h2>
     <span>
@@ -94,14 +97,14 @@
     </span>
   </h2>
   <p>
-    <span>Another dangerous application of ARP poisoning consists of executing a phishing attack on a network node.<span>&nbsp;</span>For example, the attacker poisons a victim’s ARP cache so that when the victim visits its online banking site it receives a phished version of the banking site entirely controlled by the attacker instead of the original site.<span>&nbsp;</span>In a switched network this is done by tunneling all DNS responses from the gateway to the victim through the attacker.<span>&nbsp;</span>Upon receiving the DNS responses for the bank, the gateway will forward them to the attacker who can modify them at his own will and change the original bank’s IP with an IP corresponding to a phishing site.</span>
+    <span>Another dangerous application of ARP poisoning consists of executing a phishing attack on a network node.<span></span>For example, the attacker poisons a victim’s ARP cache so that when the victim visits its online banking site it receives a phished version of the banking site entirely controlled by the attacker instead of the original site.<span></span>In a switched network this is done by tunneling all DNS responses from the gateway to the victim through the attacker.<span></span>Upon receiving the DNS responses for the bank, the gateway will forward them to the attacker who can modify them at his own will and change the original bank’s IP with an IP corresponding to a phishing site.</span>
   </p>
   <p>
     <span>In detail:</span>
   </p>
   <ol>
     <li>
-      <span>Attacker selects victim.<span>&nbsp; </span></span>
+      <span>Attacker selects victim.<span></span></span>
     </li>
     <li>
       <span>Attacker sends ARP replies to the victim and the gateway to tell the victim that the MAC of the gateway is the attacker’s MAC, and to tell the gateway that the MAC of the victim is the attacker’s MAC.</span>
@@ -119,19 +122,20 @@
       <span>Gateway forwards the DNS request and receives a response from the DNS server to resolve the target IP.</span>
     </li>
     <li>
-      <span>Gateway forwards the DNS response to the attacker’s MAC.<span>&nbsp; </span></span>
+      <span>Gateway forwards the DNS response to the attacker’s MAC.<span></span></span>
     </li>
     <li>
       <span>Attacker modifies the DNS response by changing the original target IP with a phishing IP.</span>
     </li>
     <li>
-      <span>Attack forwards modified DNS response to the victim.</span>&nbsp;</li>
+      <span>Attack forwards modified DNS response to the victim.</span>
+    </li>
   </ol>
   <h1>
-    <span>Step 2:<span>&nbsp;</span>Analyze Causes and Countermeasures</span>
+    <span>Step 2:<span></span>Analyze Causes and Countermeasures</span>
   </h1>
   <p>
-    <span>The next step in testing ARP poisoning bugs is to understand what causes them and how to defend against them.<span>&nbsp;</span>This will tell you what networks are susceptible to this attack and what measures to take to protect against them.</span>
+    <span>The next step in testing ARP poisoning bugs is to understand what causes them and how to defend against them.<span></span>This will tell you what networks are susceptible to this attack and what measures to take to protect against them.</span>
   </p>
   <h2>
     <span>
@@ -139,7 +143,7 @@
     </span>
   </h2>
   <p>
-    <span>Switched Local Area Networks (LANs) are networks that utilize switches instead of hubs.<span>&nbsp;</span>Switches are more secure than hubs because they deliver packets to specific nodes rather than acting as broadcasters.&nbsp;As opposed to hub networks, a network node sniffing packets in promiscuous mode will not be able to monitor the traffic between another two nodes in a switched network.&nbsp;ARP Poisoning attacks are specific to switched networks and exist by default.&nbsp;Switched networks work by sending ARP requests and receiving ARP replies.<span>&nbsp;</span>The problem and root cause of this bug is that this protocol is stateless.&nbsp;A network node doesn’t check that an ARP reply actually comes as a reply from a legitimate ARP request.&nbsp;It just assumes that all ARP requests are legitimate giving room to ARP poisoning attacks.<span>&nbsp;&nbsp;</span></span>
+    <span>Switched Local Area Networks (LANs) are networks that utilize switches instead of hubs.<span></span>Switches are more secure than hubs because they deliver packets to specific nodes rather than acting as broadcasters. As opposed to hub networks, a network node sniffing packets in promiscuous mode will not be able to monitor the traffic between another two nodes in a switched network. ARP Poisoning attacks are specific to switched networks and exist by default. Switched networks work by sending ARP requests and receiving ARP replies.<span></span>The problem and root cause of this bug is that this protocol is stateless. A network node doesn’t check that an ARP reply actually comes as a reply from a legitimate ARP request. It just assumes that all ARP requests are legitimate giving room to ARP poisoning attacks.<span></span></span>
   </p>
   <h2>
     <span>
@@ -147,13 +151,13 @@
     </span>
   </h2>
   <p>
-    <span>ARP poisoning can’t be totally prevented but can be mitigated.<span>&nbsp;</span>A way of doing this is to have static ARP tables so that any changes in the ARP tables are disallowed.<span>&nbsp;&nbsp; </span>However, this is impractical in large or rapidly changing networks.<span>&nbsp;</span>A more reliable countermeasure consists of proactively denying ARP packets in a switched network.&nbsp;This method known as DHCP Snooping’s ARP Security, or Dynamic ARP Inspection, enforces a network policy that disallows any ARP packets to be forwarded if the source IP (Source Protocol Address field) is not genuine.</span>
+    <span>ARP poisoning can’t be totally prevented but can be mitigated.<span></span>A way of doing this is to have static ARP tables so that any changes in the ARP tables are disallowed.<span></span>However, this is impractical in large or rapidly changing networks.<span></span>A more reliable countermeasure consists of proactively denying ARP packets in a switched network. This method known as DHCP Snooping’s ARP Security, or Dynamic ARP Inspection, enforces a network policy that disallows any ARP packets to be forwarded if the source IP (Source Protocol Address field) is not genuine.</span>
   </p>
   <p>
-    Additional ARP poisoning detection and prevention tools are available in the Internet.<span>&nbsp;</span>For instance, Unix-based <i>Arpwatch </i>sends an email notification as soon as an ARP cache entry changes or Windows-based <i>XArp </i>also offers configuration options to intercept any malicious ARP packets.&nbsp;Finally, it is also possible to configure Network Intrusion Detection Systems (NIDS) to add rules to protect against ARP spoofing attacks.
+    Additional ARP poisoning detection and prevention tools are available in the Internet.<span></span>For instance, Unix-based <i>Arpwatch </i>sends an email notification as soon as an ARP cache entry changes or Windows-based <i>XArp </i>also offers configuration options to intercept any malicious ARP packets. Finally, it is also possible to configure Network Intrusion Detection Systems (NIDS) to add rules to protect against ARP spoofing attacks.
   </p>
   <h1>
-    <span>Step 3:<span>&nbsp;</span>Start Testing and Exploring</span>
+    <span>Step 3:<span></span>Start Testing and Exploring</span>
   </h1>
   <p>
     <span>Now that you’ve learned ARP Poisoning attack scenarios, why are they caused, and how to defend against them, this guides on how to execute ARP poisoning basic test cases.</span>
@@ -164,7 +168,7 @@
     </span>
   </h2>
   <p>
-    <span>To test for ARP poisoning for network sniffing you will need two boxes (a victim and an attacker) in the same network and a gateway box.<span>&nbsp; </span>Follow these steps:</span>
+    <span>To test for ARP poisoning for network sniffing you will need two boxes (a victim and an attacker) in the same network and a gateway box.<span></span>Follow these steps:</span>
   </p>
   <ol>
     <li>
@@ -183,7 +187,7 @@
       <span>Start the sniffer and click the plus (+) sign.</span>
     </li>
     <li>
-      <span>Select a range of IPs to scan their MAC (include the target box in the range) and click OK.<span>&nbsp;</span>Both the gateway and victim IPs (and their MACs) should appear in the hosts list.</span>
+      <span>Select a range of IPs to scan their MAC (include the target box in the range) and click OK.<span></span>Both the gateway and victim IPs (and their MACs) should appear in the hosts list.</span>
     </li>
     <li>
       Click the <i>ARP poisoning </i>sub tab.
@@ -192,22 +196,22 @@
       <span>Click on the plus sign and add an ARP route from the victim to the gateway.</span>
     </li>
     <li>
-      Start ARP poisoning by pressing the <i>ARP </i>button.<span>&nbsp;</span>As soon as the victim becomes active its status changes from “<i>idle</i>” to “<i>poisoning</i>”.<span>&nbsp;</span>The lower pane starts showing the packets being intercepted.
+      Start ARP poisoning by pressing the <i>ARP </i>button.<span></span>As soon as the victim becomes active its status changes from “<i>idle</i>” to “<i>poisoning</i>”.<span></span>The lower pane starts showing the packets being intercepted.
     </li>
     <li>
       Start <i>Wireshark </i>and start capturing network traffic in the same interface selected in <i>Cain</i>.
     </li>
   </ol>
   <p>
-    <span>Expected results:&nbsp;</span>The first check you can to see if the ARP attack was successful do is running the <i>arp -a</i> command in the victim box (or its Unix equivalent).&nbsp;After executing the attack the entry for the gateway must be different.&nbsp;For instance, in windows running <i>arp -a </i>before the attack gives this:</p>
+    <span>Expected results: </span>The first check you can to see if the ARP attack was successful do is running the <i>arp -a</i> command in the victim box (or its Unix equivalent). After executing the attack the entry for the gateway must be different. For instance, in windows running <i>arp -a </i>before the attack gives this:</p>
   <p>
-    <font face="'Courier New'">C:\&gt;arp -a<br />Interface: 192.168.1.33 --- 0x8<br />Internet Address &nbsp; &nbsp; &nbsp;IP Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Type<br />192.168.1.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 00-13-49-5c-e3-de&nbsp;&nbsp;&nbsp;&nbsp; dynamic<br />192.168.1.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ff-ff-ff-ff-ff-ff&nbsp;&nbsp;&nbsp;&nbsp; static<br />224.0.0.22&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 01-00-5e-00-00-16&nbsp;&nbsp;&nbsp;&nbsp; static</font>
+    <font face="'Courier New'">C:\&gt;arp -a<br />Interface: 192.168.1.33 --- 0x8<br />Internet Address      IP Address            Type<br />192.168.1.1           00-13-49-5c-e3-de     dynamic<br />192.168.1.255         ff-ff-ff-ff-ff-ff     static<br />224.0.0.22            01-00-5e-00-00-16     static</font>
   </p>
   <p>After the attack the gateway entry in the victim’s ARP cache must be different (it is now equal to the attacker’s MAC):</p>
   <p>
-    <font face="'Courier New'">C:\&gt;arp -a<br />Interface: 192.168.1.33 --- 0x8<br />Internet Address &nbsp; &nbsp; &nbsp;IP Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Type<br />192.168.1.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 00-1b-77-b2-73-f2&nbsp;&nbsp;&nbsp;&nbsp; dynamic<br />192.168.1.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ff-ff-ff-ff-ff-ff&nbsp;&nbsp;&nbsp;&nbsp; static<br />224.0.0.22&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 01-00-5e-00-00-16&nbsp;&nbsp;&nbsp;&nbsp; static</font>
+    <font face="'Courier New'">C:\&gt;arp -a<br />Interface: 192.168.1.33 --- 0x8<br />Internet Address      IP Address            Type<br />192.168.1.1           00-1b-77-b2-73-f2     dynamic<br />192.168.1.255         ff-ff-ff-ff-ff-ff     static<br />224.0.0.22            01-00-5e-00-00-16     static</font>
   </p>
-  <p>A successful ARP poisoning attack will be visible both in <i>Cain </i>and <i>Wireshark</i>.&nbsp;In <i>Cain</i>, the lower pain of the <i>Sniffer-&gt;ARP</i> tab shows the packets being sniffed.&nbsp;You can use <i>Wireshark </i>to see the actual contents of the packets.</p>
+  <p>A successful ARP poisoning attack will be visible both in <i>Cain </i>and <i>Wireshark</i>. In <i>Cain</i>, the lower pain of the <i>Sniffer-&gt;ARP</i> tab shows the packets being sniffed. You can use <i>Wireshark </i>to see the actual contents of the packets.</p>
   <p>
     <b>
       <i>
@@ -221,7 +225,7 @@
       Test for ARP Poisoning to Execute Phishing Attack<span>s</span></span>
   </h2>
   <p>
-    To test for phishing of a network node we will use <i>Cain</i>’s ARP-DNS feature.&nbsp;The ARP-DNS feature does more than just sniffing network packets.<span>&nbsp;</span>It modifies the contents of any DNS reply to the victim and replaces the IP of the target DNS domain with the attacker’s IP.<span>&nbsp;</span>Follow these steps to execute the test case:
+    To test for phishing of a network node we will use <i>Cain</i>’s ARP-DNS feature. The ARP-DNS feature does more than just sniffing network packets.<span></span>It modifies the contents of any DNS reply to the victim and replaces the IP of the target DNS domain with the attacker’s IP.<span></span>Follow these steps to execute the test case:
   </p>
   <ol>
     <li>
@@ -233,19 +237,19 @@
     <li>Add an entry that redirects <i>www.facebook.com</i> to<i> ha.ckers.org</i>. 
 </li>
     <li>
-      Start ARP poisoning by pressing the <i>ARP </i>button.<span>&nbsp;</span>As soon as the victim becomes active its status changes from “<i>idle</i>” to “<i>poisoning</i>”.<span>&nbsp;</span>The lower pane starts showing the packets being intercepted.
+      Start ARP poisoning by pressing the <i>ARP </i>button.<span></span>As soon as the victim becomes active its status changes from “<i>idle</i>” to “<i>poisoning</i>”.<span></span>The lower pane starts showing the packets being intercepted.
     </li>
     <li>
       In the victim’s box, open a browser and browse to <i>www.facebook.com</i>.
     </li>
   </ol>
   <p>
-    <span>Expected results:&nbsp;</span>You can verify if the ARP poisoning was successful by running the arp command as in the previous example.&nbsp;To verify the redirection/defacement check if step 5 takes you to <i>ha.ckers.org</i>.</p>
+    <span>Expected results: </span>You can verify if the ARP poisoning was successful by running the arp command as in the previous example. To verify the redirection/defacement check if step 5 takes you to <i>ha.ckers.org</i>.</p>
   <h1>
-    <span>Step 4:<span>&nbsp; </span>Perform Additional Testing</span>
+    <span>Step 4:<span></span>Perform Additional Testing</span>
   </h1>
   <p>
-    Now that you’ve executed the basic ARP poisoning test cases, you must consider additional attacks.<span>&nbsp;</span>This step consists of executing test cases such as sniffing an SSL connection and recovering a password by means of an ARP poisoning attack.<span>&nbsp;</span>Use tools such as <i>Ettercap </i>or <i>Cain </i>to execute the multiple attack variations of ARP poisoning including:
+    Now that you’ve executed the basic ARP poisoning test cases, you must consider additional attacks.<span></span>This step consists of executing test cases such as sniffing an TLS connection and recovering a password by means of an ARP poisoning attack.<span></span>Use tools such as <i>Ettercap </i>or <i>Cain </i>to execute the multiple attack variations of ARP poisoning including:
   </p>
   <ul>
     <li>
@@ -265,7 +269,7 @@
     <span>Conclusions</span>
   </h1>
   <p>
-    <span>The problem with ARP poisoning attacks is that, while trivial to execute, they carry a high impact.<span>&nbsp;</span>In addition, operating systems like Windows don’t defend against them by default.<span>&nbsp;</span>It is necessary that you understand the attack scenarios related to ARP poisoning so that you realize the danger of these attacks.&nbsp;Then go over the causes and the countermeasures available.<span>&nbsp;</span>Finally, execute the basic test cases and any additional ones depending on the ARP poisoning attack variations you want.</span>
+    <span>The problem with ARP poisoning attacks is that, while trivial to execute, they carry a high impact.<span></span>In addition, operating systems like Windows don’t defend against them by default.<span></span>It is necessary that you understand the attack scenarios related to ARP poisoning so that you realize the danger of these attacks. Then go over the causes and the countermeasures available.<span></span>Finally, execute the basic test cases and any additional ones depending on the ARP poisoning attack variations you want.</span>
   </p>]]></Data>
   </Content>
 </TeamMentor_Article>

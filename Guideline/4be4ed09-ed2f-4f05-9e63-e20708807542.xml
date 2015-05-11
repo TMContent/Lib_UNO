@@ -4,7 +4,7 @@
     <Id>4be4ed09-ed2f-4f05-9e63-e20708807542</Id>
     <Id_History>4be4ed09-ed2f-4f05-9e63-e20708807542,6641957f-cfeb-4cbe-809b-bc599fe2c8ce,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Type Safe SQL Parameters When Constructing SQL Queries</Title>
+    <Title>[SINK] Use Type Safe SQL Parameters When Constructing SQL Queries</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -65,11 +65,11 @@
   <p>Consider an ASP.NET application that handles employee payroll functionality for a small company. One of the pages requires retrieving an employee record from a table based on a username and password supplied via a login dialog. The developer of the application uses the following SQL query to take advantage of type safe parameters with the SqlParameterCollection when constructing the query dynamically:</p>
   <pre>
     <pre>using System.Data;<br />using System.Data.SqlClient;   </pre>
-    <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&nbsp; DataSet userDataset = new DataSet();<br />&nbsp; SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "SELECT * from users WHERE username = '@uname' AND password = '@pwd'", connection);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />&nbsp; myCommand.SelectCommand.Parameters.Add("@uname", SqlDbType.VarChar, 24);<br />&nbsp; myCommand.SelectCommand.Parameters.Add("@pwd", SqlDbType.VarChar, 16);<br />  myCommand.SelectCommand.Parameters["@uname"].Value = un.Text;<br />  myCommand.SelectCommand.Parameters["@pwd"].Value = pass.Text;<br />&nbsp; myDataAdapter.Fill(userDataset);<br />}  </pre>
+    <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&amp;nbsp; DataSet userDataset = new DataSet();<br />&amp;nbsp; SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "SELECT * from users WHERE username = '@uname' AND password = '@pwd'", connection);&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp; myCommand.SelectCommand.Parameters.Add("@uname", SqlDbType.VarChar, 24);<br />&amp;nbsp; myCommand.SelectCommand.Parameters.Add("@pwd", SqlDbType.VarChar, 16);<br />  myCommand.SelectCommand.Parameters["@uname"].Value = un.Text;<br />  myCommand.SelectCommand.Parameters["@pwd"].Value = pass.Text;<br />&amp;nbsp; myDataAdapter.Fill(userDataset);<br />}  </pre>
   </pre>
   <p>In the preceding code example, the input values are constrained for length and escaped. If the data does not conform to the type or length defined by the parameter, the SqlParameter class throws an exception.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

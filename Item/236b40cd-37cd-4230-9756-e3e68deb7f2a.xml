@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="1013885292" Content_Hash="-281079115">
+  <Metadata>
+    <Id>236b40cd-37cd-4230-9756-e3e68deb7f2a</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Use Static Format Strings</Title>
+    <Category>APIs</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Static Format Strings</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>Ensure that all format string functions are passed a static string which cannot be controlled by the user and that the proper number of arguments are always sent to that function as well. If at all possible, use functions that do not support the %n operator
+ in format strings.</p>
+  <h1>Why</h1>
+  <p>An attacker that can control the contents of a format string may be able to execute arbitrary code.</p>
+  <h1>When</h1>
+  <p>Avoid using user input in format strings when using formatted input-output functions.</p>
+  <h1>How</h1>
+  <p>Perform the following actions to assure that user input is not used in format strings:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify code that uses formatted input-output functions.</strong> The following is a list of formatted input-output functions:</p>
+      <ul>
+        <li>sprintf </li>
+        <li>_snprintf </li>
+        <li>printf </li>
+        <li>fprintf </li>
+        <li>scanf </li>
+        <li>fscanf </li>
+        <li>sscanf </li>
+        <li>swprintf </li>
+        <li>wsprintfA </li>
+        <li>wsprintfW </li>
+        <li>vsprintf </li>
+        <li>vswprintf </li>
+        <li>_snwprintf </li>
+        <li>_vsnprintf </li>
+        <li>_vsnwprintf </li>
+        <li>vprintf </li>
+        <li>vwprintf </li>
+        <li>vfprintf </li>
+        <li>vwfprintf </li>
+        <li>fwscanf </li>
+        <li>wscanf </li>
+        <li>swscanf</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid using formatted functions.</strong> Consider replacing formatted input-output functions with iostream C&amp;#43;&amp;#43; functions, which are not prone to format string vulnerabilities.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(Re-)Write code to exclude user input from format strings.</strong> Place user input in separate variables and pass it as variadic arguments to the formatted input-output functions, instead of placing it in a format strings.</p>
+    </li>
+  </ol>
+  <h1>Additional Resources</h1>
+  <ul>
+    <li>For more information about excluding user input from format strings, please see
+<a href="https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.&amp;#43;Exclude&amp;#43;user&amp;#43;input&amp;#43;from&amp;#43;format&amp;#43;strings">
+https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.&amp;#43;Exclude&amp;#43;user&amp;#43;input&amp;#43;from&amp;#43;format&amp;#43;strings</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

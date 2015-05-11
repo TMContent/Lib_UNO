@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-719503951" Content_Hash="540706265">
+  <Metadata>
+    <Id>16899649-7200-4411-b92e-d04befe037e2</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Check the Range of Numeric Input</Title>
+    <Category>Input Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Check the Range of Numeric Input</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>Perform input validation on any numeric input by ensuring that it is within the expected range. Ensure that the input meets both the minimum and maximum requirements for the expected range. Use unsigned integers where possible. This makes it easier to perform
+ sanity checks for integer overflows. If you must use signed integers, make sure that your range check includes minimum values as well as maximum values.</p>
+  <h1>Why</h1>
+  <p>Integer-type variables have minimum and maximum limits on data that they can store. Placing too much data in an integer-type variable results in an integer overflow. Different platforms fail differently as a result of integer overflows, but there is a possibility
+ of an arbitrary code execution resulting from an integer overflow bug. When values that are too high or too low are assigned to unsigned integers, integer-wrapping results, which usually means that unexpected values are produced. Conversions between signed
+ and unsigned integers, and other data types, may result in truncation or losing sign information. All of these bugs may result in very dangerous vulnerabilities. All of these bugs may be prevented by validating values of integer operations before assigning
+ them to variables.</p>
+  <h1>How</h1>
+  <p>To validate the range of numeric input:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify code.</strong> Identify all code that assigns values to integer-type variables. For existing code, it may be a good idea to prioritize components, so that the most critical elements are checked first. Some development environments and compilers
+ may be able to detect these types of errors, but automatic detection should not be relied on for critical software components.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Add range checks.</strong> Use platform-defined constants to check that values being assigned to integer-type variables are valid.</p>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -3,7 +3,7 @@
   <Metadata>
     <Id>82b37aec-65f1-49d7-a0eb-548107cdd1b0</Id>
     <Id_History>82b37aec-65f1-49d7-a0eb-548107cdd1b0,d368c671-106a-4d71-884b-066b9c4fcc00,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Separate Account Administration from the Main Application Interface</Title>
     <Category>Administration</Category>
     <Phase>Design</Phase>
@@ -18,11 +18,7 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Do</h1>
+    <Data><![CDATA[<h1>What to Do</h1>
   <p>Separate the account administration from the main application interface.</p>
   <h1>Why</h1>
   <p>Account administration requires higher privileges than the main application interface. Separating the two interfaces decreases the risk of a normal user being able to escalate privileges to that of an administrator.</p>
@@ -44,11 +40,11 @@
         <li>
           <strong>Track the user ID on the server-side</strong>: The user should always be tracked on the server-side. Store the user ID inside a session. The only data the client needs to know is the session identifier. This reduces the risk of an attacker modifying another user's account information. </li>
         <li>
-          <strong>Force re-authentication</strong>: Enforce re-authentication when modifying the user's password. This helps verify that the user is aware of the password change and is not a victim of a session hijacking.&nbsp; </li>
+          <strong>Force re-authentication</strong>: Enforce re-authentication when modifying the user's password. This helps verify that the user is aware of the password change and is not a victim of a session hijacking.&amp;nbsp; </li>
         <li>
           <strong>Modify account in sections</strong>: Do not modify all account information at once. Split the account modification procedure in sections. For example, group the account information into credentials, personal data, contact information, and additional information. Modifying the account information in groups reduces the risk of information leakage when the user is updating his or her account. </li>
         <li>
-          <strong>Use SSL when modifying account</strong>: The use of SSL provides encryption when transmitting sensitive data over the network and verifies the authenticity of the application to the user. </li>
+          <strong>Use TLS when modifying account</strong>: The use of TLS provides encryption when transmitting sensitive data over the network and verifies the authenticity of the application to the user. </li>
       </ul>
     </li>
   </ol>
@@ -57,6 +53,6 @@
   <h1>Solution Example</h1>
   <p>The following snippet shows the HTTP requests that an administrator makes when accessing the main and administrative interfaces of the application. Because the administrative interface is separated from the application via server directory and server port, an administrator would need to use two distinct sessions to use and administer the application. Therefore a vulnerability such as cross-site scripting in the main application interface will not expose the administrative interface.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

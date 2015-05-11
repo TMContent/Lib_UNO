@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-998206308" Content_Hash="-1420188138">
+  <Metadata>
+    <Id>ae16b17d-07a0-4139-ae54-328d9f1dc06c</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-131: Incorrect Calculation of Buffer Size</Title>
+    <Category>Memory Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-131: Incorrect Calculation of Buffer Size</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>The software does not correctly calculate the size to be used when allocating a buffer, which could lead to a buffer overflow.</p>
+  <h2>Discussion</h2>
+  <p>In languages such as C, where memory management is the programmer's responsibility, there are many opportunities for error. If the programmer does not properly calculate the size of a buffer, then the buffer may be too small to contain the data that the
+ programmer plans to write - even if the input was properly validated. Any number of problems could produce the incorrect calculation, but when all is said and done, you're going to run head-first into the dreaded buffer overflow.</p>
+  <h2>Detection</h2>
+  <p>The following methods are available for detecting incorrect calculation of buffer size vulnerabilities.</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Automated Static Analysis.</strong> This weakness can often be detected using automated static analysis tools. Many modern tools use data flow analysis or constraint-based techniques to minimize the number of false positives. Automated static analysis
+ generally does not account for environmental considerations when reporting potential errors in buffer calculations. This can make it difficult for users to determine which warnings should be investigated first. For example, an analysis tool might report buffer
+ overflows that originate from command line arguments in a program that is not expected to run with setuid or other special privileges. Detection techniques for buffer-related errors are more mature than for most other weakness types.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Automated Dynamic Analysis.</strong> This weakness can be detected using dynamic tools and techniques that interact with the software using large test suites with many diverse inputs, such as fuzz testing (fuzzing), robustness testing, and fault
+ injection. The software's operation may slow down, but it should not become unstable, crash, or generate incorrect results. Without visibility into the code, black box methods may not be able to sufficiently distinguish this weakness from others, requiring
+ follow-up manual methods to diagnose the underlying problem.</p>
+    </li>
+    <li>
+      <strong>Manual Analysis.</strong> This weakness can be detected using tools and techniques that require manual (human) analysis, such as penetration testing, threat modeling, and interactive tools that allow the tester to record and modify an active session.
+ Specifically, manual static analysis is useful for evaluating the correctness of allocation calculations. This can be useful for detecting overflow conditions (CWE-190) or similar weaknesses that might have serious security impacts on the program. These may
+ be more effective than strictly automated techniques. This is especially the case with weaknesses that are related to design and business rules.</li>
+  </ol>
+  <h2>Mitigation</h2>
+  <p>The following mitigation methods for incorrect calculation of buffer size vulnerabilities are available:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Allocate sufficient memory.</strong> If you allocate a buffer for the purpose of transforming, converting, or encoding an input, make sure that you allocate enough memory to handle the largest possible encoding. For example, in a routine that converts
+ "<em>&amp;</em>" characters to "<em>&amp;</em>" for HTML entity encoding, you will need an output buffer that is at least 5 times as large as the input buffer. When processing structured incoming data containing a size field followed by raw data, ensure that you
+ identify and resolve any inconsistencies between the size field and the actual size of the data (CWE-130). When allocating memory that uses sentinels to mark the end of a data structure - such as NUL bytes in strings - make sure you also include the sentinel
+ in your calculation of the total amount of memory that must be allocated. Use <em>
+sizeof()</em> on the appropriate data type to avoid CWE-467.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Understand your programming language's underlying representation and how it interacts with numeric calculation (CWE-681).</strong> Pay close attention to byte size discrepancies, precision, signed/unsigned distinctions, truncation, conversion and
+ casting between types, "not-a-number" calculations, and how your language handles numbers that are too large or too small for its underlying representation. Also be careful to account for 32-bit, 64-bit, and other potential differences that may affect the
+ numeric representation.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Perform input validation on any numeric input by ensuring that it is within the expected range.</strong> Enforce that the input meets both the minimum and maximum requirements for the expected range.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use server-side security controls.</strong> For any security checks that are performed on the client side, ensure that these checks are duplicated on the server side, in order to avoid CWE-602. Attackers can bypass the client-side checks by modifying
+ values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid dangerous APIs.</strong> Replace unbounded copy functions with analogous functions that support length arguments, such as strcpy with strncpy. Create these if they are not available. Notes: This approach is still susceptible to calculation
+ errors, including issues such as off-by-one errors (CWE-193) and incorrectly calculating buffer lengths (CWE-131). Additionally, this only addresses potential overflow issues. Resource consumption / exhaustion issues are still possible.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the correct variable type. </strong>Use the appropriate type for the desired action. For example, in C/C&amp;#43;&amp;#43;, only use unsigned types for values that could never be negative, such as height, width, or other numbers related to quantity. This will
+ simplify your sanity checks and will reduce surprises related to unexpected casting.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a secure framework.</strong> Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. Use libraries or frameworks that make it easier to handle numbers without
+ unexpected consequences, or buffer allocation routines that automatically track buffer size. Examples include safe integer handling packages such as
+<em>SafeInt</em> (C&amp;#43;&amp;#43;) or <em>IntegerLib</em> (C or C&amp;#43;&amp;#43;).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use compiler features.</strong> Run or compile your software using features or extensions that automatically provide a protection mechanism that mitigates or eliminates buffer overflows. For example, certain compilers and extensions provide automatic
+ buffer overflow detection mechanisms that are built into the compiled code. Examples include the Microsoft Visual Studio
+<em>/GS</em> flag, Fedora/Red Hat <em>FORTIFY_SOURCE</em> GCC flag, <em>StackGuard</em>, and
+<em>ProPolice</em>. <br /><strong>Note:</strong> This is not necessarily a complete solution, since these mechanisms can only detect certain types of overflows. In addition, an attack could still cause a denial of service, since the typical response is to exit the application. Examine
+ compiler warnings closely and eliminate problems with potential security implications, such as signed / unsigned mismatch in memory operations, or use of uninitialized variables. Even if the weakness is rarely exploitable, a single failure may lead to the
+ compromise of the entire system.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use OS buffer overflow protection.</strong> Use a feature like Address Space Layout Randomization (ASLR). Use a CPU and operating system that offers Data Execution Protection (NX) or its equivalent.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use the least privilege principle.</strong> Run your code using the lowest privileges that are required to accomplish the necessary tasks. If possible, create isolated accounts with limited privileges that are only used for a single task. That way,
+ a successful attack will not immediately give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a sandbox.</strong> Run your code in a "jail" or similar sandbox environment that enforces strict boundaries between the process and the operating system. This may effectively restrict which files can be accessed in a particular directory or
+ which commands can be executed by your software. OS-level examples include the Unix
+<em>chroot</em> jail, <em>AppArmor</em>, and <em>SELinux</em>. In general, managed code may provide some protection. For example,
+<em>java.io.FilePermission</em> in the <em>Java SecurityManager</em> allows you to specify restrictions on file operations. This may not be a feasible solution, and it only limits the impact to the operating system; the rest of your application may still be
+ subject to compromise. Be careful to avoid CWE-243 and other weaknesses related to jails.
+<br /><strong>Note: </strong>The effectiveness of this mitigation depends on the prevention capabilities of the specific sandbox or jail being used and might only help to reduce the scope of an attack, such as restricting the attacker to certain system calls or limiting
+ the portion of the file system that can be accessed.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about incorrect calculation of buffer size vulnerabilities, please see
+<a href="http://cwe.mitre.org/top25/index.html#CWE-131">http://cwe.mitre.org/top25/index.html#CWE-131</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

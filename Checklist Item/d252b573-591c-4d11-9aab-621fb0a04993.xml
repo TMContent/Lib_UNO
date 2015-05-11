@@ -4,7 +4,7 @@
     <Id>d252b573-591c-4d11-9aab-621fb0a04993</Id>
     <Id_History>d252b573-591c-4d11-9aab-621fb0a04993,a3430c41-937c-4ac2-baea-d27e7773ebaf,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Page ViewStateUserKey Is Used to Counter One-click Attacks</Title>
+    <Title>[SINK] Page ViewStateUserKey Is Used to Counter One-click Attacks</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -21,15 +21,15 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Check to ensure that all forms that require authentication or can be used to trigger important functionality are protected with ViewStateUserKey.</p>
   <h1>Why</h1>
-  <p>A one-click attack consists of posting a malicious HTTP form to a known, vulnerable Web site. It is called "one-click" because it usually begins with an unaware victim clicking on an alluring link received through e-mail or found when navigating a crowded forum.&nbsp; By following the link, the user inadvertently triggers a remote process that ends up submitting the malicious form to a site.&nbsp; This allows an attacker to perform any action caused by the vulnerable form with the credentials of the victim.</p>
+  <p>A one-click attack consists of posting a malicious HTTP form to a known, vulnerable Web site. It is called "one-click" because it usually begins with an unaware victim clicking on an alluring link received through e-mail or found when navigating a crowded forum.&amp;nbsp; By following the link, the user inadvertently triggers a remote process that ends up submitting the malicious form to a site.&amp;nbsp; This allows an attacker to perform any action caused by the vulnerable form with the credentials of the victim.</p>
   <p>
-    <strong>ViewStateUserKey</strong> makes it much harder for hackers to use the content of the client-side view state to prepare malicious posts against the site.&nbsp; Each time a form is invoked, a unique key is generated.&nbsp; The key contains encrypted time and session information, and the form submission is rejected if it is used in another session or after the session timeout has expired. </p>
+    <strong>ViewStateUserKey</strong> makes it much harder for hackers to use the content of the client-side view state to prepare malicious posts against the site.&amp;nbsp; Each time a form is invoked, a unique key is generated.&amp;nbsp; The key contains encrypted time and session information, and the form submission is rejected if it is used in another session or after the session timeout has expired. </p>
   <h1>How to Check</h1>
   <p>Use the following steps to check whether ViewStateUserKey is used properly:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify pages that should be protected. </strong>Review your application and make a list of all the forms that should be protected with ViewStateUserKey.&nbsp; Forms that meet either of the following criteria should be protected:</p>
+        <strong>Identify pages that should be protected. </strong>Review your application and make a list of all the forms that should be protected with ViewStateUserKey.&amp;nbsp; Forms that meet either of the following criteria should be protected:</p>
       <ul>
         <li>The form requires authentication </li>
         <li>The form triggers important application behavior or a write operation to a persistent store (eg. SQL database)</li>
@@ -37,25 +37,25 @@
     </li>
     <li>
       <p>
-        <strong>Check to see if the pages are protected. </strong>ViewStateUserKey can be set per page or in the <strong>OnInit</strong> virtual method of the page-derived class.&nbsp; </p>
+        <strong>Check to see if the pages are protected. </strong>ViewStateUserKey can be set per page or in the <strong>OnInit</strong> virtual method of the page-derived class.&amp;nbsp; </p>
       <ol>
-        <li>First check <strong>OnInit</strong>, if you find protection there, then all of your pages are covered.<br /><br /><pre>protected override OnInit(EventArgs e) {<br />&nbsp;&nbsp; base.OnInit(e); <br />&nbsp;&nbsp; ViewStateUserKey = Session.SessionID;<br />}</pre></li>
-        <li>Next check the individual pages, for instance:<br /><br /><pre>void Page_Init (object sender, EventArgs e) {<br />&nbsp;&nbsp; ViewStateUserKey = Session.SessionID;<br />}</pre></li>
+        <li>First check <strong>OnInit</strong>, if you find protection there, then all of your pages are covered.<br /><br /><pre>protected override OnInit(EventArgs e) {<br />&amp;nbsp;&amp;nbsp; base.OnInit(e); <br />&amp;nbsp;&amp;nbsp; ViewStateUserKey = Session.SessionID;<br />}</pre></li>
+        <li>Next check the individual pages, for instance:<br /><br /><pre>void Page_Init (object sender, EventArgs e) {<br />&amp;nbsp;&amp;nbsp; ViewStateUserKey = Session.SessionID;<br />}</pre></li>
       </ol>
     </li>
     <li>
       <p>
-        <strong>Ensure ViewStateUserKey is set properly. </strong>Setting <strong>ViewStateUserKey</strong> to a constant string—the same for all users—is like leaving it blank.&nbsp; It must be set to something that varies for each user—such as user ID or, better yet, session ID.&nbsp; For a number of technical and social reasons, session ID is a much better fit because a session ID is unpredictable, times out, and varies on a per-user basis. </p>
+        <strong>Ensure ViewStateUserKey is set properly. </strong>Setting <strong>ViewStateUserKey</strong> to a constant string—the same for all users—is like leaving it blank.&amp;nbsp; It must be set to something that varies for each user—such as user ID or, better yet, session ID.&amp;nbsp; For a number of technical and social reasons, session ID is a much better fit because a session ID is unpredictable, times out, and varies on a per-user basis. </p>
     </li>
   </ol>
   <h1>How to Fix</h1>
-  <p>The&nbsp;following code added to each&nbsp;of your pages will set the key based on SessionID.</p>
+  <p>The&amp;nbsp;following code added to each&amp;nbsp;of your pages will set the key based on SessionID.</p>
   <pre>void Page_Init (object sender, EventArgs e) {<br />   ViewStateUserKey = Session.SessionID;<br />}</pre>
-  <p>Alternatively, you can add this code to the <b>OnInit</b> virtual method of the <b>Page</b>-derived class.&nbsp; (Note that you must set this property in the <b>Page.Init</b> event).&nbsp; This will allow you to write the code once rather than per page.</p>
+  <p>Alternatively, you can add this code to the <b>OnInit</b> virtual method of the <b>Page</b>-derived class.&amp;nbsp; (Note that you must set this property in the <b>Page.Init</b> event).&amp;nbsp; This will allow you to write the code once rather than per page.</p>
   <pre>protected override OnInit(EventArgs e) {<br />   base.OnInit(e); <br />   ViewStateUserKey = Session.SessionID;<br />}</pre>
   <ul>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

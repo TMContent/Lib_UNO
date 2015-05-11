@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1876717525" Content_Hash="-1096676932">
+  <Metadata>
+    <Id>012a20cd-7b04-4cec-80f1-61b959078d0f</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Encrypt Sensitive Data</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Encrypt Sensitive Data</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>For outbound authentication: store passwords, keys, and other credentials outside of the code in a strongly-protected, encrypted configuration file or database that is protected from access by all outsiders, including other local users on the same system.
+ Properly protect the key (CWE-320). If you cannot use encryption to protect the file, then make sure that the permissions are as restrictive as possible.<br />
+In Windows environments, the Encrypted File System (EFS) may provide some protection.</p>
+  <h1>Why</h1>
+  <p>Sensitive user data can be compromised if stored in plaintext. Unauthorized access by users or attackers can lead to information disclosure.</p>
+  <h1>When</h1>
+  <p>All sensitive data should be encrypted.</p>
+  <h1>How</h1>
+  <p>To encrypt all sensitive data:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify sensitive information.</strong> Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued
+ ID numbers, credit card and other financial information, passwords, and private keys. Sensitive data can be defined as follows:
+</p>
+      <ul>
+        <li>Information that either contains personally identifiable information or that can be used to derive personally identifiable information that should not be shared with others.
+</li>
+        <li>Information that a user provides that they would not want shared with other users of the application.
+</li>
+        <li>Information that comes from an external trusted source that is not designed to be shared with users.
+</li>
+        <li>Some industries, such as health care and banking, have regulatory standards that define sensitive information. If any regulatory requirements apply to your application that define sensitive data, use those definitions.</li>
+      </ul>
+    </li>
+    <li>
+      <p>
+        <strong>Determine if storage is required.</strong> The safest thing to do with sensitive information is not store it at all. Examine how much information is stored in each case and how long that information is stored for. Determine whether the information
+ needs to be stored. If it does not need to be stored, it should be purged and the application should be rewritten to discontinue storage of the unnecessary information. When sensitive information must be stored, establish policies about purging it from both
+ primary and backup storage, and ensure that they are followed. Be careful when using caches.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Store sensitive data securely.</strong> Choose the appropriate cryptographic mechanism for securing sensitive data and implement it.</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Hashing.</strong> Hashing is appropriate for storing passwords. If your application stores passwords, hash and salt them for storage. It is recommended to use platform specific authentication controls for handling password storage. If custom authentication
+ controls are required, passwords should be hashed and salted for storage. Hashing is not very useful for securing information other than passwords.</p>
+        </li>
+        <li>
+          <p>
+            <strong>Encryption.</strong> Encryption is useful for storing all types of information other than passwords. AES-256 should be used to secure sensitive data that needs to be stored.</p>
+        </li>
+      </ul>
+    </li>
+  </ol>]]></Data>
+  </Content>
+</TeamMentor_Article>

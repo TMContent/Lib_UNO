@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="297676187" Content_Hash="452684705">
+  <Metadata>
+    <Id>d32ce0ba-b7d9-43cd-94fd-657a3e2556e6</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>Use Parameterized APIs for Data Access</Title>
+    <Category>Input Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Use Parameterized APIs for Data Access</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>What to Do</h2>
+  <p>Process SQL queries using prepared statements, parameterized queries, or stored procedures. These features should accept parameters or variables and support strong typing. Do not dynamically construct and execute query strings within these features using
+ "<em>exec</em>" or similar functionality, since you may re-introduce the possibility of SQL injection.</p>
+  <h1>Why</h1>
+  <p>Prepared statements mitigate the number one risk for database-facing Web applications: SQL injection. This powerful attack is language independent, as it depends on the algorithm used to generate SQL strings passed to the database and affects the database
+ engine, not the actual application. It exploits the creation of the SQL string, in which user input is embedded manually with escape sequences (such as the single quote (') or double quote (") characters). Using this method, an attacker inserts valid SQL statement
+ fragments as part of user input so they, in turn, are embedded within the SQL query that is submitted to the database engine for execution. Successful exploitation allows an attacker to potentially compromise the entire database and often the underlying operating
+ system. </p>
+  <p>Prepared statements offer a simple yet efficient mitigation since they automatically contain user-input in a non-escaped form, passing user input to the application as parameters, much like a function call. By parameterizing input parameters and type-enforcing
+ them, user input is effectively filtered.</p>
+  <h1>When</h1>
+  <p>Type-safe SQL parameters should be used whenever SQL statements need to be executed by the database.</p>
+  <h1>How</h1>
+  <p>To use prepared statements to prevent SQL injection, follow these steps:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify SQL queries. </strong>Locate all SQL queries throughout your application.
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Identify the parameters in each SQL query.</strong> After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use prepared statements for SQL queries.</strong> Using prepared statements is different for different programming languages. Please, refer to your platform's documentation for detailed information about using prepared statements.</p>
+    </li>
+  </ol>
+  <h2>Additional Resources</h2>
+  <ul>
+    <li>For more information about SQL injection, please see <a href="http://cwe.mitre.org/top25/index.html#CWE-89">
+http://cwe.mitre.org/top25/index.html#CWE-89</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

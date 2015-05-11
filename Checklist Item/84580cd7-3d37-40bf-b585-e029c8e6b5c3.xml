@@ -3,8 +3,8 @@
   <Metadata>
     <Id>84580cd7-3d37-40bf-b585-e029c8e6b5c3</Id>
     <Id_History>84580cd7-3d37-40bf-b585-e029c8e6b5c3,3eb31df5-6010-4bd2-87c0-c511ec90ca4c,</Id_History>
-    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
-    <Title>Only Strong SSL Algorithms Are Used</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Only Strong TLS Algorithms Are Used</Title>
     <Category>Communication Security</Category>
     <Phase>Implementation</Phase>
     <Technology>PHP</Technology>
@@ -20,56 +20,57 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>PHP <li>Apache</li></li>
+    <li>PHP </li>
+    <li>Apache</li>
   </ul>
   <h1>What to Check For</h1>
-  <p>Verify that Apache is configured to use only strong SSL ciphers.</p>
+  <p>Verify that Apache is configured to use only strong TLS ciphers.</p>
   <h1>Why</h1>
-  <p>Using strong encryption algorithms with SSL helps reduce the risk of successful eavesdropping attacks and helps with regulatory compliance.</p>
+  <p>Using strong encryption algorithms with TLS helps reduce the risk of successful eavesdropping attacks and helps with regulatory compliance.</p>
   <h1>How to Check</h1>
-  <p>To verify that Apache is configured to use only strong SSL ciphers, view the <em>httpd.conf</em> files and check the following settings: "<em>SSLProtocol</em>" and "<em>SSLCipherSuite</em>". The recommended settings are:</p>
-  <pre>SSLProtocol -all &#43;TLSv1<br />SSLCipherSuite HIGH:&#33;aNULL:&#33;SSLv2:&#33;MD5:&#64;STRENGTH<br />SSLHonorCipherOrder on</pre>
+  <p>To verify that Apache is configured to use only strong TLS ciphers, view the <em>httpd.conf</em> files and check the following settings: "<em>SSLProtocol</em>" and "<em>SSLCipherSuite</em>". The recommended settings are:</p>
+  <pre>SSLProtocol -all +TLSv1<br />SSLCipherSuite HIGH:!aNULL:!SSLv2:!MD5:@STRENGTH<br />SSLHonorCipherOrder on</pre>
   <p>These settings enable only the TLS protocol and only the strong encryption cipher suites.</p>
   <p>It may also be a good idea to check for the following line in case of old versions of <em>apache/mod_ssl</em>:</p>
   <pre>SSLInsecureRenegotiation off</pre>
   <h1>How to Fix</h1>
-  <p>To use only strong SSL algorithms, edit the <em>httpd.conf</em> file to include the following settings:</p>
-  <pre>SSLProtocol -all &#43;TLSv1<br />SSLCipherSuite HIGH:&#33;aNULL:&#33;SSLv2:&#33;MD5:&#64;STRENGTH<br />SSLHonorCipherOrder on</pre>
+  <p>To use only strong TLS algorithms, edit the <em>httpd.conf</em> file to include the following settings:</p>
+  <pre>SSLProtocol -all +TLSv1<br />SSLCipherSuite HIGH:!aNULL:!SSLv2:!MD5:@STRENGTH<br />SSLHonorCipherOrder on</pre>
   <p>These settings enable only the TLS protocol and only the strong encryption cipher suites.</p>
   <p>It may also be a good idea to include the following line in case of old versions of <em>apache/mod_ssl</em>:</p>
   <pre>SSLInsecureRenegotiation off</pre>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information about configuring SSL in Apache, please see <a href="http://httpd.apache.org/docs/2.0/ssl/ssl_howto.html">http://httpd.apache.org/docs/2.0/ssl/ssl_howto.html</a></li>
+    <li>For more information about configuring TLS in Apache, please see <a href="http://httpd.apache.org/docs/2.0/ssl/ssl_howto.html">http://httpd.apache.org/docs/2.0/ssl/ssl_howto.html</a></li>
   </ul>
   <h1>Transport Layer Protection Guidelines</h1>
   <ul>
     <li>
-      <a href="/article/34c8d5b4-430d-4112-802b-f8c5fb786cfe">Use SSL</a>
+      <a href="/article/34c8d5b4-430d-4112-802b-f8c5fb786cfe">Use TLS</a>
     </li>
     <li>
-      <a href="/article/84b2da4a-0f64-4d64-80dc-0e91a3506ef4">Use SSL for All Sensitive Pages</a>
+      <a href="/article/84b2da4a-0f64-4d64-80dc-0e91a3506ef4">Use TLS for All Sensitive Pages</a>
     </li>
     <li>
-      <a href="/article/a6be174a-c52a-4513-8caa-2983fd6555a2">Use Only Strong SSL Algorithms</a>
+      <a href="/article/a6be174a-c52a-4513-8caa-2983fd6555a2">Use Only Strong TLS Algorithms</a>
     </li>
     <li>
-      <a href="/article/12098efa-6926-4603-968c-76c9416f6fa4">Use Valid SSL Certificates</a>
+      <a href="/article/12098efa-6926-4603-968c-76c9416f6fa4">Use Valid TLS Certificates</a>
     </li>
   </ul>
   <h1>Transport Layer Protection Checklists</h1>
   <ul>
     <li>
-      <a href="/article/3b1eb7f0-76cd-4e4f-8653-8a6a6a32d1c9">SSL Is Enabled</a>
+      <a href="/article/3b1eb7f0-76cd-4e4f-8653-8a6a6a32d1c9">TLS Is Enabled</a>
     </li>
     <li>
-      <a href="/article/7eea0be2-6c3b-4d4c-a6f1-4e3fbb3f4295">SSL Is Used for All Sensitive Pages</a>
+      <a href="/article/7eea0be2-6c3b-4d4c-a6f1-4e3fbb3f4295">TLS Is Used for All Sensitive Pages</a>
     </li>
     <li>
-      <a href="/article/84580cd7-3d37-40bf-b585-e029c8e6b5c3">Only Strong SSL Algorithms Are Used</a>
+      <a href="/article/84580cd7-3d37-40bf-b585-e029c8e6b5c3">Only Strong TLS Algorithms Are Used</a>
     </li>
     <li>
-      <a href="/article/8d2d20fc-a21a-4a1c-bb31-8a876e57abaf">Valid SSL Certificates Are Used</a>
+      <a href="/article/8d2d20fc-a21a-4a1c-bb31-8a876e57abaf">Valid TLS Certificates Are Used</a>
     </li>
   </ul>]]></Data>
   </Content>

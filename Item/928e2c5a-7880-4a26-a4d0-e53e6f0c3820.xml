@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="369452757" Content_Hash="-1875181359">
+  <Metadata>
+    <Id>928e2c5a-7880-4a26-a4d0-e53e6f0c3820</Id>
+    <Library_Id>e7d92b5b-e1d8-4039-b019-8b02594ea93a</Library_Id>
+    <Title>CWE-807: Reliance on Untrusted Inputs in a Security Decision</Title>
+    <Category>Authorization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Vulnerability</Type>
+    <DirectLink>CWE-807: Reliance on Untrusted Inputs in a Security Decision</DirectLink>
+    <Tag />
+    <Security_Demand />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h2>Description</h2>
+  <p>The application uses a protection mechanism that relies on the existence or values of an input, but the input can be modified by an untrusted actor in a way that bypasses the protection mechanism.</p>
+  <p>Developers may assume that inputs such as cookies, environment variables, and hidden form fields cannot be modified. However, an attacker could change these inputs using customized clients or other attacks. This change might not be detected. When security
+ decisions such as authentication and authorization are made based on the values of these inputs, attackers can bypass the security of the software.</p>
+  <h2>Discussion</h2>
+  <p>In countries where there is a minimum age for purchasing alcohol, the bartender is typically expected to verify the purchaser's age by checking a driver's license or other legally acceptable proof of age. But if somebody looks old enough to drink, then the
+ bartender may skip checking the license altogether. This is a good thing for underage customers who happen to look older. Driver's licenses may require close scrutiny to identify fake licenses, or to determine if a person is using someone else's license. Software
+ developers often rely on untrusted inputs in the same way, and when these inputs are used to decide whether to grant access to restricted resources, trouble is just around the corner.</p>
+  <h2>Detection</h2>
+  <p>Since this weakness does not typically appear frequently within a single software package, manual white box techniques may be able to provide sufficient code coverage and reduction of false positives if all potentially-vulnerable operations can be assessed
+ within limited time constraints. The effectiveness and speed of manual analysis will be reduced if the there is not a centralized security mechanism, and the security logic is widely distributed throughout the software.</p>
+  <h2>Mitigation</h2>
+  <p>The mitigation methods for reliance on untrusted inputs in security decisions are:
+</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Identify all sources of input.</strong> Understand all the potential areas where untrusted inputs can enter your software: parameters or arguments, cookies, anything read from the network, environment variables, reverse DNS lookups, query results,
+ request headers, URL components, e-mail, files, filenames, databases, and any external systems that provide data to the application. Remember that such inputs may be obtained indirectly through API calls. Identify all inputs that are used for security decisions
+ and determine if you can modify the design so that you do not have to rely on submitted inputs at all. For example, you may be able to keep critical information about the user's session on the server side instead of recording it within external data.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Keep state information on the server.</strong> Store state information and sensitive data on the server side only. Ensure that the system definitively and unambiguously keeps track of its own state and user state and has rules defined for legitimate
+ state transitions. Do not allow any application user to affect state directly in any way other than through legitimate actions leading to state transitions.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use integrity checking.</strong> If information must be stored on the client, do not do so without encryption and integrity checking, or otherwise having a mechanism on the server side to catch tampering. Use a
+<em>message authentication code (MAC)</em> algorithm, such as <em>Hash Message Authentication Code (HMAC)</em>. Apply this against the state or sensitive data that you have to expose, which can guarantee the integrity of the data - i.e., that the data has not
+ been modified. Ensure that you use an algorithm with a strong hash function (CWE-328).</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use a secure framework.</strong> Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. With a stateless protocol such as HTTP, use a framework that maintains the
+ state for you. Examples include ASP.NET <em>View State</em> and the OWASP <em>ESAPI Session Management
+</em>feature. Be careful of language features that provide state support, since these might be provided as a convenience to the programmer and may not be considering security.</p>
+    </li>
+    <li>
+      <p>
+        <strong>User server-side security controls.</strong> For any security checks that are performed on the client side, ensure that these checks are duplicated on the server side, in order to avoid CWE-602. Attackers can bypass the client-side checks by modifying
+ values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server.</p>
+    </li>
+    <li>
+      <p>
+        <strong>(PHP only) Do not use register_globals.</strong> If you are using PHP, configure your application so that it does not use
+<em>register_globals</em>. During implementation, develop your application so that it does not rely on this feature, but be wary of implementing a
+<em>register_globals</em> emulation that is subject to weaknesses such as CWE-95, CWE-621, and similar issues.</p>
+    </li>
+  </ol>
+  <h2>Additional Information</h2>
+  <ul>
+    <li>For more information about reliance on untrusted inputs in security decisions vulnerabilities, please see
+<a href="http://cwe.mitre.org/top25/index.html#CWE-807">http://cwe.mitre.org/top25/index.html#CWE-807</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="-1950530197" Content_Hash="-1091827614">
+  <Metadata>
+    <Id>6b2b4e47-bd4e-4f94-88a4-bf5e0afa96ee</Id>
+    <Library_Id>47a10a30-15ad-4cfd-bf82-00e9bb2037f6</Library_Id>
+    <Title>Configure the Routers for PCI DSS Compliance</Title>
+    <Category>Networking</Category>
+    <Phase>Deployment</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink>Configure the Routers for PCI DSS Compliance</DirectLink>
+    <Tag />
+    <Security_Demand />
+  </Metadata>
+  <Content Sanitized="true" DataType="Html">
+    <Data><![CDATA[<h1>Applies to</h1>
+  <ul>
+    <li>PCI DSS Requirement 1.3 </li>
+    <li>PCI DSS Requirement 1.3.1 </li>
+    <li>PCI DSS Requirement 1.3.2 </li>
+    <li>PCI DSS Requirement 1.3.3 </li>
+    <li>PCI DSS Requirement 1.3.4 </li>
+    <li>PCI DSS Requirement 1.3.5</li>
+    <li>PCI DSS Requirement 1.3.7</li>
+    <li>PCI DSS Requirement 1.3.8</li>
+    <li>PCI DSS Requirement 1.3.8.a</li>
+    <li>PCI DSS Requirement 1.3.8.b</li>
+  </ul>
+  <h1>What to Do</h1>
+  <p>Limit inbound IP traffic to the DMZ. Remove direct routes between the Internet and the cardholder data environment. Place the database server(s)&amp;nbsp;on the internal network separate from the DMZ. Use NAT to hide internal IPs from the Internet.</p>
+  <h1>Why</h1>
+  <p>Allowing direct Internet access to the cardholder data environment allows attacks on the cardholder data environment and makes it easy to retrieve sensitive information if the systems are compromised.</p>
+  <h1>When</h1>
+  <p>Set up a DMZ to mediate Internet access for the cardholder data environment when designing the network infrastructure to handle cardholder data.</p>
+  <h1>How</h1>
+  <p>To secure the cardholder data environment from potential attacks coming from the Internet, perform the following actions:</p>
+  <ol>
+    <li>
+      <p>
+        <strong>Setup a DMZ. </strong>To achieve PCI DSS compliance, a network must implement a DMZ. DMZ stands for "demilitarized zone" and is a term that is used to describe an internal network segment that has access to the Internet and is considered unsafe because
+ it is susceptible to being attacked from the Internet. That is why the cardholder data servers have to be separated from the DMZ. The purpose of the DMZ is to mediate the network access between the secure internal environment and the dangerous Internet. The
+ DMZ is a classic example of the defense-in-depth principle because it provides an extra layer of security between the potential attackers and the sensitive data.
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Limit inbound IP traffic to the DMZ. </strong>The inbound Internet traffic should be limited to the DMZ. This means that the router should not use NAT to translate the ports on external IP(s) to the internal IP(s) that are not in the DMZ. To satisfy
+ this requirement, place all network devices that handle incoming Internet connections in the DMZ.
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Only allow explicitly authorized traffic from the cardholder data environment to the Internet.</strong> Version 2.0 of PCI DSS has relaxed Requirement 1.3.5 to allow authorized network traffic from the cardholder data environment.&amp;nbsp;Include information
+ in network&amp;nbsp;documentation about what traffic is explicitly authorized. Configure routers&amp;nbsp;and firewalls to allow only explicitly authorized network traffic to pass from the cardholder data environment to the Internet. Most of configuration for this should rely
+ on the firewall, however the routers may be configured to only allow some authorized machines to access the Internet from the cardholder data environment, and not others.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Place database server on an internal network separate from the DMZ. </strong>
+The database server that stores cardholder information is an integral part of the cardholder data environment and therefore must be separate from the DMZ. This means that the database server that stores cardholder data may not have Internet access.
+</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use NAT to hide internal IPs from the Internet. </strong>The network devices in the PCI DSS scope should only use RFC 1918 IP addresses.&amp;nbsp;RFC 1918 IP addresses are not routable from the Internet; therefore, the Internet router has to use Network Address
+ Translation (NAT) to facilitate Internet access for the internal network. Since the network devices in the cardholder data environment are not supposed to have Internet access, this requirement applies specifically to the DMZ.RFC 1918 IP addresses are addresses
+ in the IP ranges:</p>
+      <ul>
+        <li>10.0.0.0 - 10.255.255.255 </li>
+        <li>172.16.0.0 - 172.31.255.255 </li>
+        <li>192.168.0.0 - 192.168.255.255 </li>
+      </ul>
+    </li>
+  </ol>
+  <h1>Related Items</h1>
+  <ul>
+    <li>For information about PCI DSS 1.3.6, please see <a href="/article/b01167a3-95a9-4172-b366-d905ac2ac21e">
+Configure the Firewalls for PCI DSS Compliance</a></li>
+    <li>For information about PCI DSS 1.2.2, please see <a href="/article/a6fd7041-0d43-4574-b67e-dc5105d07c02">
+Current router configuration matches the start-up settings</a></li>
+  </ul>]]></Data>
+  </Content>
+</TeamMentor_Article>
