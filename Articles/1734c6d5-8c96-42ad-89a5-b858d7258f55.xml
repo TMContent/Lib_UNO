@@ -7,7 +7,7 @@
     <Title>Use Strong Cryptographic Algorithms</Title>
     <Category>Cryptography</Category>
     <Phase>Implementation</Phase>
-    <Technology>Web Application</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Guideline</Type>
     <DirectLink>Use Strong Cryptographic Algorithms</DirectLink>
     <Author />
@@ -15,11 +15,7 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==Applies To==
-
-* Web Applications
-
-==What to Do==
+    <Data><![CDATA[==What to Do==
 
 Select a well-vetted algorithm that is currently considered to be strong by experts in the field, and select well-tested implementations. As with all cryptographic mechanisms, the source code should be available for analysis. For example, US government systems require FIPS 140-2 certification. When you use industry-approved techniques, you need to use them correctly. Don't cut corners by skipping resource-intensive steps (CWE-325). These steps are often essential for preventing common attacks.
 
@@ -38,10 +34,10 @@ Use this guideline whenever your application handles sensitive data.
 Perform the following actions to encrypt sensitive data:
 
 # **Identify sensitive data.** Review your application design to determine what kinds of sensitive data your application handles.
-# **Choose cryptographic algorithms.** Strong symmetric algorithms are AES and, to a lesser extent, 3-DES. Strong asymmetric encryption algorithms are RSA, Elliptic Curve, and NTRU. When storing passwords use PBKDF2. The recommended key strengths are: 256-bit or more for AES, 3-DES key length is fixed at 168-bit, 2048-bit or more for RSA, 384-bit for Elliptic Curve cryptography, and 80-bit for NTRU.
+# **Choose cryptographic algorithms.** The recommended symmetric algorithm is AES. Strong asymmetric encryption algorithms are RSA, Elliptic Curve, and NTRU. When storing passwords use PBKDF2. The recommended key strengths are: 256-bit for AES, 2048-bit or more for RSA, 384-bit for Elliptic Curve cryptography, and 80-bit for NTRU.
 # **Choose libraries and APIs.** Find libraries that implement your chosen cryptographic algorithms. In some cases, they may be implemented by the platform. Find out the APIs for using these algorithms.
 # **Implement encryption.** Add functions to your applications that uses your chosen cryptographic APIs to encrypt and decrypt all the types of sensitive data that your application handles.
-# **Use encryption.** Find code that handles sensitive data. Add code that calls your new encryption functions to encrypt and decrypt sensitive data as appropriate.
+# **Encrypt sensitive data.** Find code that handles sensitive data. Add code that calls your new cryptographic functions to encrypt and decrypt sensitive data as appropriate.
 
 ]]></Data>
   </Content>
