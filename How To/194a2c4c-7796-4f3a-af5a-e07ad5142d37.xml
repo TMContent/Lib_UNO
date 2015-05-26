@@ -50,18 +50,18 @@
   <p>Next, it is necessary to understand what causes buffer underflow vulnerabilities and how to protect against them. </p>
   <p>Buffer underflows are always caused by the same reason: an indexing variable takes an unexpected value which is lower than the address of the start of the buffer; this is why this bug is known as an underflow or underrun. </p>
   <p>The following function (compiled in Windows Vista using Visual C++ 2008) takes an input buffer and an index variable that indicates quantity of padding characters (asterisks). The function uses an internal display buffer to which it starts copying the asterisks characters indicated by the index variable. Then the function gets a pointer to the location next to where the last padding character was copied and concatenates the rest of the string to the buffer. Finally the function prints the padded buffer.</p>
-  <pre>int padAndPrintBuffer(char* str, int index)<br />{ <br />char* pointer = NULL;<br />char buffer[1000] = "";      <br />for (int i = 0; i &lt; index; i++)<br />buffer[i] = '*'; <br /><strong>pointer = &buffer[index];</strong><br />lstrcpyA(pointer , str); <br />printf("%s\n", buffer); <br />return 1;<br />}<br /></pre>
+  <pre>int padAndPrintBuffer(char* str, int index)<br />{ <br />char* pointer = NULL;<br />char buffer[1000] = "";      <br />for (int i = 0; i &lt; index; i++)<br />buffer[i] = '*'; <br /><strong>pointer = &amp;buffer[index];</strong><br />lstrcpyA(pointer , str); <br />printf("%s\n", buffer); <br />return 1;<br />}<br /></pre>
   <p>The function assumes that the <i>index</i> variable will always within the boundaries of the buffer internal (between 0 and 999). Therefore, the following call returns the output below:</p>
   <pre>input: padAndPrintBuffer("AAAA", 10);<br />output: *********AAAA    </pre>
   <p>However, if the <i>index</i> variable is negative then the <i>pointer</i> variable takes an address outside of the buffer. It actually takes an address in the lower part of the stack, where the return address for the <i>lstrcpyA</i> function will be stored. For this example, calling the vulnerable function with the following parameters causes the instruction pointer EIP to be filled with an address controlled by the attacker’s choice:</p>
   <pre>input: padAndPrintBuffer("AAAA", -92);</pre>
   <p>The output result is that the program crashes and EIP points to 0x41414141. </p>
   <p>However, in order to use this vulnerable code for a buffer underflow attack, an attacker must control the input to the padAndPrintBuffer function. A common scenario where this happens is when an application performs padding or internal manipulation of strings. The following code was used by D. Litchfield as a proof-of-concept on defeating Execution Protection Mechanisms (XPMs) in Windows [i]. It takes an input string and pads it with zero characters before displaying it. However, the function expects an input string of 32 characters or less. If an attacker passes a string longer than 32 characters the padding variable takes a negative value and the overrun occurs:</p>
-  <pre>int foo(char *str)<br />{<br />int padding = 0;<br />int i=0;<br />char *p=NULL;<br />char buffer[33]="";<br /><br />// Ooops!<br /><strong>padding = 32 - strlen(str);</strong><br />for( i = 0; i &lt; padding; ++i )<br />buffer[i] = '0';<br /><br />// Ooops, again!<br /><strong>p = &buffer[ padding ];</strong><br />lstrcpyA( p , str );<br />printf("%s\n",buffer);<br />return 0;<br />}<br /></pre>
+  <pre>int foo(char *str)<br />{<br />int padding = 0;<br />int i=0;<br />char *p=NULL;<br />char buffer[33]="";<br /><br />// Ooops!<br /><strong>padding = 32 - strlen(str);</strong><br />for( i = 0; i &lt; padding; ++i )<br />buffer[i] = '0';<br /><br />// Ooops, again!<br /><strong>p = &amp;buffer[ padding ];</strong><br />lstrcpyA( p , str );<br />printf("%s\n",buffer);<br />return 0;<br />}<br /></pre>
   <p>To protect against this vulnerability developers must add code that checks the values of indexing variables to detect an index that is outside of the buffer. In the case above, a simple check to verify if the index is within a valid range (0 to 999) would have been enough to mitigate the attack.</p>
   <p />
   <pre>
-    <pre>int padAndPrintBuffer(char* str, int index)<br />{<br /><strong>if ((index &lt; 0) ||(index &gt; 999))</strong><br /><strong>return 0</strong>;<br />char* pointer = NULL;<br />char buffer[1000] = "";<br />for (int i = 0; i &lt; index; i++)<br />buffer[i] = '*';<br />pointer = &buffer[index];<br />lstrcpyA(pointer , str );<br />printf("%s\n", buffer);<br />return 1;<br />}</pre>
+    <pre>int padAndPrintBuffer(char* str, int index)<br />{<br /><strong>if ((index &lt; 0) ||(index &gt; 999))</strong><br /><strong>return 0</strong>;<br />char* pointer = NULL;<br />char buffer[1000] = "";<br />for (int i = 0; i &lt; index; i++)<br />buffer[i] = '*';<br />pointer = &amp;buffer[index];<br />lstrcpyA(pointer , str );<br />printf("%s\n", buffer);<br />return 1;<br />}</pre>
   </pre>
   <h1>Step 3: Execute Test Cases</h1>
   <p>Now that you’ve revised the theory pertaining to buffer underflow bugs, it is necessary to execute test cases to test for this vulnerability in your application.</p>
@@ -113,13 +113,13 @@
   </table>
   <p>
     <strong>
-    </strong>&nbsp;</p>
+    </strong>&amp;nbsp;</p>
   <p>
     <strong>
     </strong>
   </p>
   <h1>Step 4: Execute Additional Testing</h1>
-  <p>Finally, it is recommended to extend any test automation to include testing for buffer underflow bugs. Automated testing is able to execute a number of test cases in a short time amount of time that would be otherwise be&nbsp;impossible to execute by hand. The automated testing methods to use for buffer underflow bugs are similar to the ones used in buffer overflow testing such as using random fuzz data, replacing escape or special characters, and performing bit-wise operations.</p>
+  <p>Finally, it is recommended to extend any test automation to include testing for buffer underflow bugs. Automated testing is able to execute a number of test cases in a short time amount of time that would be otherwise be&amp;nbsp;impossible to execute by hand. The automated testing methods to use for buffer underflow bugs are similar to the ones used in buffer overflow testing such as using random fuzz data, replacing escape or special characters, and performing bit-wise operations.</p>
   <p>
     <i>
     </i>
@@ -129,6 +129,6 @@
   <p />
   <br />
   <hr />
-  <p>[i] <b>Buffer Underruns, DEP, ASLR and improving the Exploitation Prevention Mechanisms (XPMs) on the Windows platform</b>. David Litchfield. <a href="http://www.ngssoftware.com/papers/xpms.pdf">www.ngssoftware.com/papers/xpms.pdf</a></p>]]></Data>
+  <p>[i] <b>Buffer Underruns, DEP, ASLR and improving the Exploitation Prevention Mechanisms (XPMs) on the Windows platform</b>. David Litchfield. <a href="http://www.davidlitchfield.com/xpms.pdf">http://www.davidlitchfield.com/xpms.pdf</a></p>]]></Data>
   </Content>
 </TeamMentor_Article>
