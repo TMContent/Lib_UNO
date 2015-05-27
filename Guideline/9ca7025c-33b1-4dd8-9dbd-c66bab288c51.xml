@@ -4,7 +4,7 @@
     <Id>9ca7025c-33b1-4dd8-9dbd-c66bab288c51</Id>
     <Id_History>9ca7025c-33b1-4dd8-9dbd-c66bab288c51,ed7df58c-ab35-4cee-a29c-43eb5987a114,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>[SINK] Use SSL to Protect Session Authentication Cookies</Title>
+    <Title>Use TLS to Protect Session Authentication Cookies</Title>
     <Category>Session Management</Category>
     <Phase>Design</Phase>
     <Technology>Web Application</Technology>
@@ -23,11 +23,11 @@
     <li>Web Application&amp;nbsp;</li>
   </ul>
   <h1>What to Do</h1>
-  <p>You must protect the authentication cookie&amp;nbsp;with SSL. </p>
+  <p>You must protect the authentication cookie&amp;nbsp;with TLS. </p>
   <h1>Why</h1>
-  <p>To prevent session hijacking and cookie replay attacks, secure the cookie by making sure that it is only passed over SSL connections using the HTTPS protocol. For additional risk mitigation, encrypt the cookie before sending it to the client and limit the period for which the cookie is valid. </p>
+  <p>To prevent session hijacking and cookie replay attacks, secure the cookie by making sure that it is only passed over TLS connections using the HTTPS protocol. For additional risk mitigation, encrypt the cookie before sending it to the client and limit the period for which the cookie is valid. </p>
   <h1>When</h1>
-  <p>When&amp;nbsp;you use Forms authentication, make sure your application encrypts the authentication cookies using the <b>protection="All"</b> attribute on the <b>&lt;forms&gt; </b>element. This practice is recommended in addition to SSL to mitigate the risk of an XSS attack that manages to steal the authentication cookie of a user.&amp;nbsp; </p>
+  <p>When&amp;nbsp;you use Forms authentication, make sure your application encrypts the authentication cookies using the <b>protection="All"</b> attribute on the <b>&lt;forms&gt; </b>element. This practice is recommended in addition to TLS to mitigate the risk of an XSS attack that manages to steal the authentication cookie of a user.&amp;nbsp; </p>
   <h1>How</h1>
   <p>Do not pass authentication cookies over HTTP connections. Set the secure cookie property within authentication cookies, which instructs browsers to send cookies back to the server only over HTTPS connections. For more information, see Chapter&amp;nbsp;10, "Building Secure ASP.NET Web Pages and Controls."</p>
   <p>If you are using .NET Framework version 1.1, set the secure property by using <b>requireSSL="true"</b> on the <b>&lt;forms&gt;</b> element as follows:</p>
