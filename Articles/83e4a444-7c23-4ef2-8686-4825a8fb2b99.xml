@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>83e4a444-7c23-4ef2-8686-4825a8fb2b99</Id>
+    <Library_Id>de693015-55c9-4328-bbc8-42db82ae8b7a</Library_Id>
+    <Title>PHP Security</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[These are the most effective PHP security guidelines. Some vulnerability types threaten not just the application but even the server that the application is running on. PHP Applications suffer the most from SQL Injection, Command Injection, Code Injection, Cross-Site Scripting, Cross-Site Request Forgery, and Shell Upload vulnerabilities. Just as some vulnerabilities are more serious than others, some guidelines are more important to follow than others. These guidelines should prevent the most dangerous vulnerabilities from reaching production code.
+
+  * [[c0a4f56c-1e8c-4d3a-97e2-fc9e969d5d52|Use Positive Input Validation]] - Properly implemented input validation is effective at preventing SQL Injection and Cross-Site Scripting vulnerabilities.
+  * [[0f4cb1a2-b00a-4d71-9e26-627e6d425798|Use Prepared Statements for Data Access]] - Prepared statements mitigate the number one risk for database-facing Web applications: SQL injection.
+  * [[0e6f879e-32e5-4cf0-a5e2-14df0d54cfda|Store Uploaded Files Outside of Web Root]] - Storing uploaded files in a location that is not web accessible prevents shell upload vulnerabilities. Even if an attacker manages to upload a malicious script, they won't be able to execute it if the malicious script is stored in a location that is not accessible from the web.
+  * [[00000000-0000-0000-0000-000000240176|Include Files Safely]] - PHP evaluates included files as PHP code. If the attacker is able to manipulate which files are included, he is able to execute arbitrary code in the context of the PHP application. This usually gives full control of the application to the attacker.
+  * [[b42309de-b99e-4a32-a36e-6c4cdf9e3a6e|Use PHP Session Management]] - The framework works on a lower level than the application and is therefore better suited to provide session management. PHP offers mature and simple-to-use session management functionality.
+  * [[00000000-0000-0000-0000-0000000960a4|Encode Input Included in Output]] - Encoding untrusted data before displaying it prevents Cross-Site Scripting vulnerabilities.
+  * [[00000000-0000-0000-0000-0000006adfa3|Store Passwords Securely]] - Storing hashes instead of plain-text passwords assures that an attacker cannot easily recover the passwords if he gains access to the password files. Adding salt to hashed files makes hashes much harder to break with dictionary attacks. Hashing should be applied multiple times to make hashing take longer and thus increase the computational resources required to attack the hashes. Iterative hashing applies a hashing function multiple times to a password and a salt, drastically increasing the time required to perform dictionary attacks.
+  * [[fe289976-08f4-46b3-a6ec-b80828d090b6|Disable Dangerous Functions]] - Disabling dangerous functions helps make sure they are not used by the application and prevents attackers from using them.
+  * [[90c1c015-6bee-4368-80e2-5e87d630c606|Avoid Using External Commands]] - Using external commands for application functionality creates the potential for command injection vulnerabilities. If it's possible to satisfy design requirements using PHP code, do that instead of using external commands.
+  * [[4b8969b1-057e-484d-ad24-7d030cd47e02|Use Parameterized APIs to Execute External Commands]] - Use pcntl_exec to execute operating system commands. This function passes arguments to the operating system command being executed separately from the name of the command to execute. Keeping the name of the executed command separate from the arguments helps prevent command injection vulnerabilities.
+  * [[326aa52e-5a89-43a7-84a4-cfece655fb55|Use Role-based Authorization]] - Application roles allow administrators to group users into categories that need the same level of privileges. The mechanism provides an easy and clear way to discover and manage the least privileges necessary for the execution of a given task. It provides a more robust and flexible way of managing the application's users.
+  * [[4236cf87-7f64-4f77-91b3-04dc1507c366|Include Unique Tokens in HTTP Requests]] - Cross-Site Request Forgery (CSRF) might be possible when an attacker can form a URL that performs an action on the behalf of an authenticated user. Forming such URLs becomes much more difficult if unique tokens are included in HTTP requests. Including difficult to predict tokens in HTTP requests is an effective defense against CSRF attacks.]]
+  * [[34c8d5b4-430d-4112-802b-f8c5fb786cfe|Use SSL/TLS]] - SSL/TLS should be used to protect all pages that handle sensitive data to protect from Man-in-the-Middle attacks.
+
+
+[[b9c18634-7d10-4edf-b7ef-20d72f7c1650|Back to the Programming Best Practices Area]]]]></Data>
+  </Content>
+</TeamMentor_Article>

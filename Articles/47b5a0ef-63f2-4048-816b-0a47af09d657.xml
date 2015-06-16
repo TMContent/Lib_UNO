@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>47b5a0ef-63f2-4048-816b-0a47af09d657</Id>
+    <Library_Id>de693015-55c9-4328-bbc8-42db82ae8b7a</Library_Id>
+    <Title>ASP.NET Security</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[These are the most effective security guidelines for ASP.NET coding. Following these guidelines will help programmers prevent well known vulnerabilities from reaching a production environment. While new exploits are discovered frequently, avoiding mistakes that are well known and easy to exploit should be most pressing when creating software. ASP.NET suffers the most from SQL Injection, Command Injection, LDAP Injection, Cross-Site Scripting, Cross-Site Request Forgery, and File Upload vulnerabilities. Review the best programming guidelines below and use them as reference when programming in ASP.NET.
+
+  * [[3de41277-0cc1-4ebc-8dd7-e96d161aa0ef|Validate All Input]] - Input that is not validated can lead to cross-site scripting, SQL injection, directory traversals, and other vulnerabilities that would allow an attacker to gain unauthorized access to sensitive data or otherwise compromise an application.
+  * [[92e7b9b6-b0fb-4ec0-b529-0c6156430198|Use Parameterized APIs for Database Access]] - Database queries constructed dynamically from user input are susceptible to SQL injection. A successful SQL injection attack enables a malicious user to execute commands on the application's database instance by using the privileges granted to the application's login. Using stored procedures with parameterized SQL is recommended because SQL parameters are type safe and treated as literal values by the database, not as executable code. Parameters are also checked for type and length.
+  * [[00000000-0000-0000-0000-000000187386|Avoid Using External Commands]] - Applications often use external commands to carry out some functionality. This helps programmers save time by having to write less code. Calling external commands is dangerous, as it creates the risk of introducing command injection vulnerabilities in your application. Command injection vulnerabilities allow attackers to execute external commands other than the ones intended by application. Most APIs used to execute external commands do not inherently provide protection against command injection. As a result, the likelihood of introducing such vulnerabilities when calling external commands is high. It is recommended to avoid using external commands.
+  * [[00000000-0000-0000-0000-00000077e119|Use Parameterized APIs to Launch External Processes]] - Using parameterized APIs helps prevent injection attacks.
+  * [[34fdc769-2284-4ceb-83c8-69b276c3ae16|Store Uploaded Files Outside of Web Root]] - Storing uploaded files in a location that is not web accessible prevents shell upload vulnerabilities. Even if an attacker manages to upload a malicious script, they won't be able to execute it if the malicious script is stored in a location that is not accessible from the web.
+  * [[1e240c0b-5d16-4191-b842-579809433eff|Encode Echoed Input]] - Encode user input that is displayed on web pages to prevent Cross-Site Scripting attacks.
+  * [[ae289022-d611-4fe4-b177-45066a398da8|Force Reauthentication When Executing Critical Functionality]] - Forcing the user to re-authenticate verifies the user's decision to execute the given functionality and preserves the application's integrity in the event that a user's account has been compromised via session hijacking.
+  * [[8f39bcc9-619b-479e-94b7-af822c7cc5fe|Use Page ViewState User Key to Prevent CSRF]] - A CSRF attack consists of posting a malicious HTTP form to a known, vulnerable Web site. This allows an attacker to perform any action caused by the vulnerable form with the credentials of the victim. ViewStateUserKey makes it much harder for hackers to use the content of the client-side view state to prepare malicious posts against the site. Each time a form is invoked, a unique key is generated. The key contains encrypted time and session information, and the form submission is rejected if it is used in another session or after the session timeout has expired. 
+  * [[3ed12a86-3f05-4abd-b848-70b17fee1ca0|Use Parameterized APIs to Build XML Documents]] - APIs that are designed for building XML documents will encode data properly to prevent attackers from manipulating XML data used by your application. A dangerous approach is to write your own set of functions to build XML documents by concatenating strings, or to modify an existing XML document by performing string operations. This means you have to take care of proper encoding yourself. Use APIs because they are simpler and safer. 
+  * [[00000000-0000-0000-0000-0000006adfa3|Store Passwords Securely]] - Storing hashes instead of plain-text passwords assures that an attacker cannot easily recover the passwords if he gains access to the password files. Adding salt to hashed files makes hashes much harder to break with dictionary attacks. Hashing should be applied multiple times to make hashing take longer and thus increase the computational resources required to attack the hashes. Iterative hashing applies a hashing function multiple times to a password and a salt, drastically increasing the time required to perform dictionary attacks.
+  * [[b0a206b5-61c4-4d9f-8c06-057783ebf249|Use Role-based Authorization]] - Application roles allow administrators to group users into categories that need the same level of privileges. The mechanism provides an easy and clear way to discover and manage the least privileges necessary for the execution of a given task. It provides a more robust and flexible way of managing the application's users.
+  * [[4795c643-0002-4213-a138-99c540427a22|Deny All Access by Default]] - Denying all access by default assures that only explicitly authorized access is possible.
+
+
+[[b9c18634-7d10-4edf-b7ef-20d72f7c1650|Back to the Programming Best Practices Area]]]]></Data>
+  </Content>
+</TeamMentor_Article>

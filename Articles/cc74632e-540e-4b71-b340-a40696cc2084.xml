@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>cc74632e-540e-4b71-b340-a40696cc2084</Id>
+    <Library_Id>de693015-55c9-4328-bbc8-42db82ae8b7a</Library_Id>
+    <Title>C/C++ Security</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[C/C++ allows developers relatively low level access to system functions compared to other languages, and security is crucial when developing any public facing deployment. Because of the timeframe in which C/C++ has been used, a large number of known exploits has been documented, as well as the corresponding measures for avoiding their inclusion in code. View the topics below to better understand some of the most well know tactics for coding securely in C/C++
+
+  * [[a8eb9762-08f6-4e61-afa7-23386cbca281|Validate All Input]] - An attacker may attempt to exploit or discover vulnerabilities by passing invalid input.
+  * [[06d93236-acce-4f57-a96e-842deb196fdf|Validate File Format Before Use]] - Many vulnerabilities are exploited via malformed documents supplied to the application. Making sure the file format is valid before loading files into the application makes it harder to embed exploit code into documents.
+  * [[95230d84-8661-48ba-93cd-d4ac45be0fe3|Validate the Length of XML Data]] - Validate the length of XML data to prevent multiple types of XML denial-of-service attacks. Most types of XML denial-of-service attacks can either be prevented or mitigated by limiting the size of XML data that is passed to the parser.
+  * [[004526a6-5b2f-4094-94fa-a80d818c0a41|Canonicalize All Input Used to Identify Resources]] - There are often many ways to address the same resource by name. An attacker may try to bypass validation routines to perform unauthorized access by supplying obfuscated input. Canonicalization defeats obfuscation and helps validate data access attempts.
+  * [[3f725650-1e28-4ee0-810c-133cd5912c91|Do Not Use Dangerous APIs]] - The use of dangerous APIs may result in buffer overflows and other serious security vulnerabilities. 
+  * [[956740f5-aa8c-42db-acad-066b94727426|Don't Use Functions with Format String Parameters]] - C and C++ use string functions, like printf(), that allow users to pass a format for the input string. Attackers can manipulate the input parameters passed to these functions to make the function work differently. Attackers can use format string bugs to overwrite parts of the stack, corrupt memory, and crash the system. They can use this vulnerability to execute different kind of attacks such as elevation of privileges, authentication bypass, information disclosure, and denial of services.
+  * [[e7fd382a-c074-42e5-b02c-4d773627d23b|Don't Use User Input in Format Strings]] - An attacker that can control the contents of a format string may be able to execute arbitrary code.
+  * [[c62fb9d2-95f1-4e36-b10f-cdf9451d15ce|Allocate Enough Buffer Space for Copying Data]] - Copying more data than an array or string can fit results in a buffer overflow.
+  * [[155aadfd-39f0-454e-8d45-53553eb612d1|Check Array Indexes Before Use]] - Array indexing errors such as buffer overruns can lead to memory being overwritten at arbitrary locations. This can lead to application instability or, with a carefully constructed attack, can lead to code injection.
+  * [[54ee5a30-738f-4ca6-a1eb-ab6e58152f7b|Get the Size of an Array Correctly]] - Calculating the amount of memory used by an array or a string is very important when copying data to make sure that a sufficiently large buffer is allocated. Allocating a large enough buffer to fit data being copied is vital for preventing buffer overflows.
+  * [[af870d44-29d3-4700-a91d-65c04838edd0|Check for Errors During Memory Allocation]] - If memory allocation fails and the error is not handled, the result may be unpredictable and dangerous behavior of the program.
+  * [[b8e66d3c-a6a8-415a-abaa-142bb4467c6b|Check Return Values for Errors]] - Many important functions will work in most cases but will occasionally cause an error under exceptional circumstances such as low system resources or a corrupt file system. In order to build a system that is both more reliable and more secure, check error codes for any API call that may return an error code.
+  * [[3839edb9-a877-4e4a-8826-f683566ad67a|Validate Pointers Before Use]] - Invalid pointers may cause the program to crash or allow an attacker to execute artbitrary code.
+  * [[692215af-bca6-46b8-b237-7a7480ee65dd|Use Pointer Arithmetic Correctly]] - Miscalculations in pointer arithmetic may result in buffer overflows, which may allow an attack to execute arbitrary code.
+  * [[c9531639-70a5-49e6-8347-22924d76a42b|Set Pointers to Null After Deallocation to Prevent Dangling Pointers]] - Deallocating or deleting objects without setting the values of corresponding objects to null may result in dangling pointer vulnerabilities, if those pointers are later used again.
+  * [[bc36816b-a414-4c4a-90d1-68c34df9856a|Check for Null Before Dereferencing an In-Parameter Pointer]] - Dereferencing a null pointer can lead to an application crash or other instability issues.
+  * [[73c9c4be-a26e-4d66-8067-cea0862f086b|Free Dynamically Allocated Memory Once]] - Freeing memory multiple times may corrupt heap data structures and result in vulnerabilities that allow arbitrary code execution.
+  * [[b8b0d075-5aa2-4095-a441-210f38fc3b3e|Don't Access Unallocated Memory]] - Accessing memory that has been deallocated may result in an exploitable vulnerability. This type of vulnerability is called a "dangling pointer vulnerability". The unallocated memory is accessed via a pointer that has been used to free the memory earlier - this pointer is the "dangling pointer".
+  * [[eeb8a6d5-2181-48fa-8b2a-3e44a532a50a|Validate Ranges of All Integer Values]] - Integer-type variables have minimum and maximum limits on data that they can store. Placing too much data in an integer-type variable results in an integer overflow. Different platforms fail differently as a result of integer overflows, but there is a possibility of an arbitrary code execution resulting from an integer overflow bug. When values that are too high or too low are assigned to unsigned integers, integer-wrapping results, which usually means that unexpected values are produced. Conversions between signed and unsigned integers, and other data types, may result in truncation or losing sign information. All of these bugs may result in very dangerous vulnerabilities. All of these bugs may be prevented by validating values of integer operations before assigning them to variables.
+  * [[e9748936-6e22-4c56-94e9-7f8522e4f06d|Convert Integers Correctly]] - If data is lost during conversion, an unpredictable/unintended value may be stored in a variable. If this variable is used for program flow control, memory operations, or array indexing, an arbitrary code execution vulnerability may result.
+  * [[2f6f114a-7be0-4f92-8a45-23a6029dbcf1|Prevent Unsigned Integers from Wrapping]] - When the result of an unsigned integer operation exceeds the maximum or the minimum values allowed for that integer type, the stored value of that operation will be different than expected. If this value is used to control program flow, for array indexing, or memory operations, an arbitrary code execution vulnerability may result.
+  * [[2eaec1a2-2a85-40dd-b295-e9f865002bc1|Release All System Resources after Using Them]] - Release system resources after using them to prevent resource exhaustion. If the program does not diligently release resources after using them, the attacker might be able to manipulate the application to use up a large amount of system resources, potentially causing the application or even the system it is running on to become slow or unusable. 
+  * [[a412fbe6-87cb-4830-a909-7d568df4a228|Send Authentication Credentials over Encrypted Tunnels]] - Using encrypted communication tunnels prevents the credentials from being sniffed or tampered with as they are transmitted over the network. TLS/SSL libraries are available for most mature development platforms and are ideal for protecting the authentication credentials in transit. 
+  * [[00000000-0000-0000-0000-0000006adfa3|Store Passwords Securely]] - Storing hashes instead of plain-text passwords assures that an attacker cannot easily recover the passwords if he gains access to the password files. Adding salt to hashed files makes hashes much harder to break with dictionary attacks. Hashing should be applied multiple times to make hashing take longer and thus increase the computational resources required to attack the hashes. Iterative hashing applies a hashing function multiple times to a password and a salt, drastically increasing the time required to perform dictionary attacks. 
+
+[[b9c18634-7d10-4edf-b7ef-20d72f7c1650|Back to the Programming Best Practices Area]]]]></Data>
+  </Content>
+</TeamMentor_Article>
