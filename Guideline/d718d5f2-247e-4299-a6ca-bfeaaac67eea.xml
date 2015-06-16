@@ -51,20 +51,21 @@
   <h1>Problem Example</h1>
   <p>Consider an on-line banking application that has an insecure redirect:</p>
   <p>
-    <a href="http://www.onlinebank.com/redirect.asp?url=&#91;destination">http://www.onlinebank.com/redirect.asp?url=&#91;destination</a>&#93;</p>
+    <pre>http://www.onlinebank.com/redirect.asp?url=&#91;destination&#93;</pre>
+  </p>
   <p>A phisher may create the following hyperlink to point to his site and send it in spam messages to millions of people:</p>
   <p>
-    <a href="http://www.onlinebank.com/redirect.asp?url=www.phisher.com">http://www.onlinebank.com/redirect.asp?url=www.phisher.com</a>
+    <pre>http://www.onlinebank.com/redirect.asp?url=www.phisher.com</pre>
   </p>
   <p>When a user sees a link that appears to point to his bank at onlinebank.com in an e-mail message, he clicks that link and sees a web site that looks exactly like the bank's, but is actually a phishing web site used to steal authentication credentials. The user enters his account number and PIN into the web page, receives an error message telling him to try again, and is redirected to the bank's real site. After entering his credentials again, the user successfully views his account. However, the phisher now has the user's online banking information.</p>
   <h1>Solution Example</h1>
   <p>The simplest solution is to get rid of the redirect altogether, but if it is necessary for application design, then mapping values may be used to mitigate this vulnerability. For example, if redirect.asp is used by the application to redirect to balance.asp, a mapping value called "balance" may be created to signify balance.asp. The page redirect.asp should then be rewritten to accept mapping values as input, instead of URLs. The following URL should then redirect to balance.asp:</p>
   <p>
-    <a href="http://www.onlinebank.com/redirect.asp?map=balance">http://www.onlinebank.com/redirect.asp?map=balance</a>
+    <pre>http://www.onlinebank.com/redirect.asp?map=balance</pre>
   </p>
   <p>However, the following malicious hyperlink will no longer work, because supplied input will not match any mapping value defined in the application:</p>
   <p>
-    <a href="http://www.onlinebank.com/redirect.asp?url=www.phisher.com">http://www.onlinebank.com/redirect.asp?url=www.phisher.com</a>
+    <pre>http://www.onlinebank.com/redirect.asp?url=www.phisher.com</pre>
     <br />
   </p>
   <h1>Additional Resources</h1>
