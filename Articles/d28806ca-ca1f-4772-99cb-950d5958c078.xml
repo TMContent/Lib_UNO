@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d28806ca-ca1f-4772-99cb-950d5958c078</Id>
+    <Library_Id>de693015-55c9-4328-bbc8-42db82ae8b7a</Library_Id>
+    <Title>Authentication</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[Authentication is often the first line of defense, ensuring that users are only able to access the content intended for them. Strong authentication policies protect both the application itself and the users who access it. View this room to learn more about how authentication should be managed and the policies put in place to best keep accounts secure.
+
+##Centralize Authentication## 
+Authentication handled from one centralized location  simplifies access control and authentication management. This ensures that all authentication is done through one hardened process and multiple authentication systems are not required. Ensure that the access controls are easy to manage and implemented across the board. APIs should be made easy to use and allow developers to integrate authentication processes in their code
+
+* [Any](f463b12c-5c5f-42ad-8ed7-4eb3e074973c)
+* [.NET](ef0b2802-9b56-4b45-a6f8-77d54a2e8f0b)
+* [Java](989e27ec-ffdf-4006-88bd-1c09fc991a28)
+* [Scala](693edecc-703d-4bf7-911e-12acce8391b1)
+* [PHP](ab2ee2de-f811-433e-a1ec-f5f8e4704f9d)
+
+##Require Authentication for All Sensitive Operations##
+Any page or operation that displays and processes sensitive information should require authentication. A role system should be implemented that prevents authenticated users from accessing secure content if the page requires higher privileges than those on their account. 
+
+* [.NET](ae289022-d611-4fe4-b177-45066a398da8)
+* [Java](84fd606b-e2f2-4c48-9c6e-6b5e780c6163)
+* [Scala](479b9ff4-f0fb-4870-8929-8b63b2b7d0b3)
+* [PHP](8eba2142-4a6e-4f2c-9648-3ba1cadf9621)
+
+##Recover from Authentication Errors##
+Handle authentication errors in a way that doesn’t give too much information to the end user. Error messages should be sanitized to prevent displaying a direct MySQL error that may give an attacker much needed information. “Invalid credentials” is stronger than “Incorrect password”, because knowing a that a username is valid may assist nefarious users.
+
+* [Any](a4b157c1-738e-4d47-8626-d39c00739c57)
+* [Java](38d12903-9c3b-46bd-9f5e-f223c3272624)
+* [Scala](f2f4b099-d01d-4d93-96a2-93ba6e5d085a)
+* [PHP](150e943f-6d59-42d6-bb0a-2cecf151dba1)
+
+##Mask Authentication Credential Input##
+Make sure to mask passwords in any credential fields. This ensures passwords are not gained via shoulder surfing. It also stresses the importance of password security to users.
+
+* [Any](c7825052-f281-4ac8-a786-41b776219af6)
+* [Scala](15e9d2b8-445b-4163-88f8-a705e14a5804)
+* [PHP](cc038844-f2c1-444c-b6cf-7cb5b423059f)
+
+##Verify Application Authenticity to the User##
+Take measures to verify communication or site authenticity to protect users from phishing attacks. Ensuring that websites have a valid SSL certificate present prevents spoofed domains and pages from appearing as a completely valid site. Including personalized content on emails or webpages can help users verify the content is legitimate. Address the user by name in communication material and display a personalized image or phrase before asking for any sensitive information. By including information only the user would know, it makes phishing attacks more complex than cloning a site.
+
+* [.NET](c6378135-de72-4fe7-8193-f86bb2104825)
+* [Java](c4d9269f-9157-4919-952c-f0d14ccd7f60)
+* [Scala](3b306aa2-2aaa-4b58-9f0a-08beb5a3cafa)
+
+##Validate Credentials Before Authentication##
+User supplied credentials should be validated to ensure they are not malicious. Since credentials interact with high value data stores, validation is critical before they are processed. Properly validating credentials can mitigate the chance of both the username or password entry being used for SQL injection, cross site scripting or other attacks that would compromise system integrity.
+
+* [.NET](1d26fc4a-1aba-40bd-91ed-1a7f1cbf5a8a)
+* [Java](c566cabe-2463-4d24-8763-22e8468d167e)
+* [Scala](ba64e4ba-9d14-4054-a99e-b6594f9698d6)
+
+##Change First-use Passwords##
+If using a know password when provisioning accounts, after first accessing the service a user should be forced to change their password. This ensures that the password first sent to the user is no longer valid and is changed to something only the user knows.
+
+* [Any](c3a74c33-7d0e-4a15-9b66-c7a0ab797e87)
+
+##Enforce Strong Passwords##
+Passwords are often the first line of defense against preventing unauthorized access to both user accounts and higher levels of an application. Having a strong password policy in place can help prevent attacks via brute forcing or dictionary attacks. Without an application enforcing certain password requirements users will often pick easy to remember passwords that attacker can circumvent with less effort. A strong password policy should have requirements for length, complexity and the characters used to create them. While the complexity may vary depending on the application and account, every account created should enforce basic password complexity rules.
+
+* [Any](c3a74c33-7d0e-4a15-9b66-c7a0ab797e87)
+
+##Verify User Identity Before Sending Recovery Tokens##
+Before a password recovery link or token is generated, the authenticity of a user should be verified. This can be done via a form of second factor authentication or other factor only the individual user would know or have.
+
+* [Any](b426664b-e894-4aae-89ec-578348b096f9)
+* [.NET](90a76c84-4875-47e4-b041-3ab39224f729)
+* [Java](f5254af2-dcfb-4cdb-a35a-adf085645c1d)
+* [Android](00000000-0000-0000-0000-0000002eb5bd)
+* [iOS](00000000-0000-0000-0000-0000006598ea)
+
+##Send Password Reset Tokens over a Side Channel##
+After a successful password reset, the token or replacement password should be sent via an email, SMS message or other side channel. If an attacker has bypassed the verification in place such as security questions, adding an additional second step that relies on multi-factor authentication further increases security through defense in depth. 
+
+* [.NET](35edca5f-38f0-4933-8d00-2ea11a302c3c)
+* [Java](8ec27c62-0e6a-4015-9889-ef5b8e42e017)
+* [PHP](ea3ab295-f67d-4d05-ae47-1e59c0b87b12)
+
+##Automatically Lock Inactive Accounts##
+When an account has not been accessed after a given period of time, the account should be locked to minimize the attack surface for attackers. Inactive users are less likely to notice if an attacker is attempting to access their account or any suspicious activity that may have taken place.
+
+* [Any](9205a02e-d583-4a11-9d4a-9f2b2f090772)
+* [Java](4f3147c2-7ca1-487c-9144-56630e5a6f80)
+* [Scala](4a62104f-8abf-4d1f-8959-04b59b6db3b4)
+
+##Force Reauthentication for Sensitive Operations##
+For actions that access or modify critical information, users should be required to reauthenticate. This ensures the user is legitimate and can help prevent cases where an attacker takes over a target’s computer or session. Evaluate processes that have a large impact on the application’s security or business model and ensure that reauthentication is required before processing the action.
+
+* [.NET](ae289022-d611-4fe4-b177-45066a398da8)
+* [Java](84fd606b-e2f2-4c48-9c6e-6b5e780c6163)
+* [Scala](479b9ff4-f0fb-4870-8929-8b63b2b7d0b3)
+* [PHP](8eba2142-4a6e-4f2c-9648-3ba1cadf9621)
+
+##Use Server-side Authentication##
+Authentication should always be handled server side as the security of client side validation cannot be ensured. Credentials should be transferred to the server via a secure channel and validation performed on any information supplied by the user. While client side authentication can be used to enforce certain input requirements, it should never be used as a form of guaranteed security.
+
+* [.NET](8774a92a-2008-488d-8bcf-20b365b8a752)
+* [Java](d3a69ef7-2c63-41bc-81e4-803b0ea199d8)
+* [Scala](ceb2d5c2-fa01-4fc3-bb5a-3cd14c4cf604)
+* [PHP](fdc4fd11-1675-4733-a041-e3d1eecbc201)
+* [iOS](00000000-0000-0000-0000-0000005d4d08)
+* [Android](00000000-0000-0000-0000-00000081c795)
+
+##Do Not Send Passwords over the Wire in Plaintext##
+User credentials should be stored securely with a proper form of encryption. In the case a data breach does happen, having credentials salted and hashed can allow for much needed time to recover from the attack. Passwords should be hashed using a random salt, which significantly increases the difficulty of using either dictionary or pre-computed attacks on a known hash value. Care should be taken to limit access to the credential store and access restricted to trusted accounts.
+
+* [.NET](00000000-0000-0000-0000-000000960e37)
+* [PHP](bdc25bf3-44cc-4bd5-a47a-9f5080144fb6)
+* [C++](a412fbe6-87cb-4830-a909-7d568df4a228)
+* [iOS](00000000-0000-0000-0000-00000067c695)
+* [Android](00000000-0000-0000-0000-000000589e46)
+
+##Force Password Renewal##
+Passwords often get less secure with age and a password expiration policy should be considered when creating an authentication system. After a set period of time require users to change their password and prevent them from selecting one used previously. This ensures that the password is never static and diminishes the change of a brute force attack being successful due to the cycling passwords.
+
+* [Any](a3f48e53-b118-4180-8aa1-e945f1afadda)
+* [.NET](d1495e0c-ca22-4104-ba8d-5194944e1e16)
+* [Java](ea25af24-8eca-45ad-9f41-94bad8880247)
+* [Scala](9d80865a-ddc8-49bd-be15-0f17a0e34383)
+
+[Back to the Programming Best Practices Area](bcbbe5c7-95c3-468d-9371-6eb42f9b93e6)]]></Data>
+  </Content>
+</TeamMentor_Article>

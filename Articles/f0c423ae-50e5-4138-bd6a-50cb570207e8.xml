@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f0c423ae-50e5-4138-bd6a-50cb570207e8</Id>
+    <Library_Id>de693015-55c9-4328-bbc8-42db82ae8b7a</Library_Id>
+    <Title>Memory Management</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[When creating software in a language that has low-level access to memory, memory management is crucial step to securing it from potential attacks. Buffer overflows are one of the most prevalent exploits that can be taken advantage of if memory is not allocated and managed correctly. If an attacker is able to successfully conduct a buffer overflow, they are frequently able to take control of the application. View this room to better understand the best practices that should be adhered to when creating code in a language that has low level access to memory.
+
+==Check for Memory Allocation Errors==
+
+If memory allocation fails and the error is not handled, the result may be unpredictable and dangerous behavior of the program.
+
+* [[af870d44-29d3-4700-a91d-65c04838edd0|C++]]
+
+==Release System Resources After Use==
+
+Release system resources after using them to prevent resource exhaustion. If the program does not diligently release resources after using them, the attacker might be able to manipulate the application to use up a large amount of system resources, potentially causing the application or even the system it is running on to become slow or unusable.
+
+* [[2eaec1a2-2a85-40dd-b295-e9f865002bc1|C++]]
+
+==Check Array Indexes Before Use==
+
+Array indexing errors, such as buffer overruns can lead to memory being overwritten at arbitrary locations. This can lead to application instability or, with a carefully constructed attack, can lead to code injection.
+
+* [[155aadfd-39f0-454e-8d45-53553eb612d1|C++]]
+
+==Check Buffer Size Before Copying==
+
+Copying more data than an array or string can fit results in a buffer overflow.
+
+* [[c62fb9d2-95f1-4e36-b10f-cdf9451d15ce|C++]]
+
+==Get the Size of an Array Correctly==
+
+Calculating the amount of memory used by an array or a string is very important when copying data to make sure that a sufficiently large buffer is allocated. Allocating a large enough buffer to fit data being copied is vital for preventing buffer overflows.
+
+* [[54ee5a30-738f-4ca6-a1eb-ab6e58152f7b|C++]]
+
+==Free Only Dynamically Allocated Memory==
+
+Deleting objects that were not allocated dynamically may result in an arbitrary code execution vulnerability if that memory is later reused by calling the new operator.
+
+* [[75ce06d3-d694-4271-9824-4df3947bb21e|C++]]
+
+==Free Dynamically Allocated Memory Only Once==
+
+Freeing the same memory twice corrupts the memory management structures of the program and may result in a buffer overflow, leading to an arbitrary code execution vulnerability.
+
+* [[73c9c4be-a26e-4d66-8067-cea0862f086b|C++]]
+
+==Initialize All Variables Before Use==
+
+Unitialized variables may have garbage values in them that can cause your program to run unpredictably. Worse yet, variables which default initialize to 0 in a debugger may default to a garbage value in production causing your application to behave differently in a production environment than it does on your development machine.
+
+* [[377919e5-9cd3-40f1-9658-1d4cdabf2b3a|C++]]
+
+==Use New and Delete Operators==
+
+The object-oriented approach to memory allocation manifested by new and delete operators has multiple advantages over raw memory operations. The new and delete operators call class constructors and destructors automatically, thus asssuring that memory is allocated and variables are initialized. The new operator also throws an exception if it fails to allocate memory, which causes the program to abort if there is no error handling code, thus preventing unintended behavior.
+
+* [[eb00762e-1c8a-4c03-ae23-b0656b697524|C++]]
+
+==Validate Pointers Before Use==
+
+Invalid pointers may cause the program to crash or allow an attacker to execute artbitrary code.
+
+* [[3839edb9-a877-4e4a-8826-f683566ad67a|C++]]
+* [[92f27c14-6962-4366-875f-101e6ab68230|Java]]
+
+==Calculate Sizes of Objects Correctly==
+
+Different platforms may represent the same data structures differently in memory. Using hardcoded values for object memory sizes may result in errors when performing memory management operations.
+
+* [[baa5a0b3-8b7d-4c91-a6f5-ac287c62e8db|C++]]
+
+==Set Pointers to Null After Deallocation==
+
+Deallocating or deleting objects without setting the values of corresponding objects to null may result in dangling pointer vulnerabilities, if those pointers are later used again.
+
+* [[c9531639-70a5-49e6-8347-22924d76a42b|C++]]
+
+==Avoid Doing Memory Management==
+
+Using native code increases the risk of memory management vulnerabilities, such as buffer overflows and format string vulnerabilities. 
+
+* [[351b69c8-b40b-4c13-899e-a8399b85a0ea|Java]]
+* [[00000000-0000-0000-0000-0000008dc5ce|Android]]
+
+[[bcbbe5c7-95c3-468d-9371-6eb42f9b93e6|Back to the Programming Best Practices Area]]]]></Data>
+  </Content>
+</TeamMentor_Article>
