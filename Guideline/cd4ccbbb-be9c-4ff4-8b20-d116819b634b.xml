@@ -84,6 +84,6 @@
   <p>The following code shows an application that securely stores its encryption keys. Because the keys are stored into the Windows Registry and are protected with the ASP.NET's DPAPI encryption keys, it is impossible for an attacker to steal the actual key without compromising the password associated with the ASP.NET local system account.</p>
   <pre>byte[] salt = MyApp.Crypto.GenerateSalt(); <br />RegistryKey regKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\MyApp\\KeyStore", true);<br />byte[] rawKey = (byte[])regKey.GetValue("encKey", null);<br />rawKey = ProtectedData.Unprotect(rawKey, salt, DataProtectionScope.CurrentUser); <br />Rijndael encMD = Rijndael.Create();<br />encMD.Key = rawKey;encMD.IV = salt;<br />ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

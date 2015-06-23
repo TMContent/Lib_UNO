@@ -19,17 +19,17 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Check to ensure your application is instrumented for all user management events, including authentication successes and failures, password resets, password&amp;nbsp;changes, and account lockouts.</p>
+  <p>Check to ensure your application is instrumented for all user management events, including authentication successes and failures, password resets, password&nbsp;changes, and account lockouts.</p>
   <h1>Why</h1>
-  <p>Instrumenting for user management events&amp;nbsp;helps you to detect and react to potentially suspicious behavior. It also enables you to gather operations data such as&amp;nbsp;tracking who&amp;nbsp;accesses your application and when user account passwords need to be reset. </p>
+  <p>Instrumenting for user management events&nbsp;helps you to detect and react to potentially suspicious behavior. It also enables you to gather operations data such as&nbsp;tracking who&nbsp;accesses your application and when user account passwords need to be reset. </p>
   <h1>How to Check</h1>
-  <p>ASP.NET health monitoring will log many user management events by default.&amp;nbsp;Use the following steps to ensure user management events are being logged for your application:</p>
+  <p>ASP.NET health monitoring will log many user management events by default.&nbsp;Use the following steps to ensure user management events are being logged for your application:</p>
   <ol>
     <li>
       <p>
         <strong>Check to ensure that ASP.NET health monitoring is being used by your application. </strong>Health Monitoring is turned on by default in the machine level Web.Config file: </p>
       <pre>&lt;healthMonitoring heartbeatInterval="0" enabled="true"&gt;<br />  &lt;bufferModes/&gt;<br />  &lt;providers/&gt;<br />  &lt;profiles/&gt;<br />  &lt;rules/&gt;<br />  &lt;eventMappings/&gt;<br />&lt;/healthMonitoring&gt;</pre>
-      <p>If the <strong>Enabled</strong> attribute is set to <strong>false</strong> in your machine or application level config file, then health monitoring has been turned off.&amp;nbsp; </p>
+      <p>If the <strong>Enabled</strong> attribute is set to <strong>false</strong> in your machine or application level config file, then health monitoring has been turned off.&nbsp; </p>
     </li>
     <li>
       <strong>Check to ensure health monitoring rules are enabled. </strong>By default the rules element is configured so that all errors and failure audits are logged: <pre>&lt;rules&gt;<br /> &lt;add name="All Errors Default" eventName="All Errors" provider="EventLogProvider"<br />      profile="Default" minInstances="1" maxLimit="Infinite"<br />      minInterval="00:01:00" custom="" /&gt;<br /> &lt;add name="Failure Audits Default" eventName="Failure Audits"<br />      provider="EventLogProvider" profile="Default" minInstances="1"<br />      maxLimit="Infinite" minInterval="00:01:00" custom="" /&gt;<br />&lt;/rules&gt;</pre><p>If there are no rules in the rules element, then health monitoring will not log any events.</p></li>
@@ -42,9 +42,9 @@
       <p>For additional forms authentication information, log the following events: </p>
       <ul>
         <li>
-          <b>AuditFormsAuthenticationSuccess</b> (code 4001): This is used to maintain an&amp;nbsp;audit trail of successful forms authentication, which can then be retraced if the system is compromised when using forms authentication classes. </li>
+          <b>AuditFormsAuthenticationSuccess</b> (code 4001): This is used to maintain an&nbsp;audit trail of successful forms authentication, which can then be retraced if the system is compromised when using forms authentication classes. </li>
         <li>
-          <b>AuditMembershipAuthenticationSuccess</b> (code 4002): This is used to maintain an&amp;nbsp;audit trail of successful authentications in the ASP.NET membership system, which can then be retraced if the system is compromised when using the membership feature. </li>
+          <b>AuditMembershipAuthenticationSuccess</b> (code 4002): This is used to maintain an&nbsp;audit trail of successful authentications in the ASP.NET membership system, which can then be retraced if the system is compromised when using the membership feature. </li>
       </ul>
     </li>
   </ol>
@@ -61,12 +61,12 @@
   <h1>Problem Example</h1>
   <p>An ASP.NET application has turned off Health Monitoring and is not logging user management events:</p>
   <pre>&lt;healthMonitoring heartbeatInterval="0" enabled="false"&gt;</pre>
-  <p>An malicous attacker is trying to brute force their way into the application through use of a dictionary attack on forms authentication. Since forms authentication failures are not logged, the attack is not detected until it is&amp;nbsp;too late and the exploit has succeeded.</p>
+  <p>An malicous attacker is trying to brute force their way into the application through use of a dictionary attack on forms authentication. Since forms authentication failures are not logged, the attack is not detected until it is&nbsp;too late and the exploit has succeeded.</p>
   <h1>Solution Example</h1>
   <p>An ASP.NET application has left Health Monitoring on:</p>
   <pre>&lt;healthMonitoring heartbeatInterval="0" enabled="false"&gt;</pre>
   <p>And has left default event logging on:</p>
-  <pre>&lt;rules&gt;<br />&lt;add name="All Errors Default" eventName="All Errors" provider="EventLogProvider"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; profile="Default" minInstances="1" maxLimit="Infinite" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; minInterval="00:01:00" custom="" /&gt;<br />&lt;add name="Failure Audits Default" eventName="Failure Audits"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; provider="EventLogProvider" profile="Default" minInstances="1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; maxLimit="Infinite" minInterval="00:01:00" custom="" /&gt;<br />&lt;/rules&gt;</pre>
+  <pre>&lt;rules&gt;<br />&lt;add name="All Errors Default" eventName="All Errors" provider="EventLogProvider"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; profile="Default" minInstances="1" maxLimit="Infinite" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; minInterval="00:01:00" custom="" /&gt;<br />&lt;add name="Failure Audits Default" eventName="Failure Audits"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; provider="EventLogProvider" profile="Default" minInstances="1"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; maxLimit="Infinite" minInterval="00:01:00" custom="" /&gt;<br />&lt;/rules&gt;</pre>
   <p>An malicous attacker is trying to brute force their way into the application through use of a dictionary attack on forms authentication. Since forms authentication failures are logged, the attack is detected and prevented before the attacker is able to break in.</p>
   <h1>Related Items</h1>
   <ul>
@@ -75,6 +75,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
