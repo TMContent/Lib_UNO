@@ -50,7 +50,7 @@
       </p>
       <ul>
         <li>
-          <p>Ensure that keys are not hard coded into the source code. When tracing back from an encryption or signing operation, if you see private key material included literally in the body of an application's source code, you have&amp;nbsp;found a hard-coded key&amp;nbsp;that needs to be moved to a protected keystore.</p>
+          <p>Ensure that keys are not hard coded into the source code. When tracing back from an encryption or signing operation, if you see private key material included literally in the body of an application's source code, you have&nbsp;found a hard-coded key&nbsp;that needs to be moved to a protected keystore.</p>
         </li>
         <li>
           <p>Ensure that keys are not placed into unprotected configuration files. If a private key is read from a configuration file and the aspnet_regiis utility (or manual inspection) show that it is not encrypted, the key needs to be moved to a protected key store.</p>
@@ -62,7 +62,7 @@
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <p>The following code shows a hard-coded encryption key inside the application. A determined attacker will be able to compromise the key&amp;nbsp;after gaining&amp;nbsp;access to the source code:</p>
+  <p>The following code shows a hard-coded encryption key inside the application. A determined attacker will be able to compromise the key&nbsp;after gaining&nbsp;access to the source code:</p>
   <pre>byte[] salt = MyApp.Crypto.GenerateSalt();<br />string secretString = "application's encryption key";<br />HMACSHA512 md = new HMACSHA512(salt);md.Initialize();<br />byte[] rawKey = md.ComputeHash(Encoding.ASCII.GetBytes(secretString));<br />md.Clear();<br /> Rijndael encMD = Rijndael.Create();<br />encMD.Key = rawKey;encMD.IV = salt;<br />ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
   <h1>Related Guideline</h1>
   <ul>
@@ -71,6 +71,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
