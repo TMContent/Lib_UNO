@@ -21,13 +21,13 @@
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure all input is validated before it is passed to the database.</p>
   <h1>Why</h1>
-  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&amp;nbsp;that could allow an attacker to gain unauthorized access to sensitive data.</p>
+  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&nbsp;that could allow an attacker to gain unauthorized access to sensitive data.</p>
   <h1>How to Check</h1>
   <p>Follow these steps to ensure that all input passed to database is validated:</p>
   <ol>
     <li>
       <p>
-        <strong>Identify all sources of input to the database. </strong>An application can have various sources of input. Each of these sources is an entry point to your application and can potentially be used to break your application's security model. Determine all sources of input&amp;nbsp;that&amp;nbsp;are eventually pushed to the database.</p>
+        <strong>Identify all sources of input to the database. </strong>An application can have various sources of input. Each of these sources is an entry point to your application and can potentially be used to break your application's security model. Determine all sources of input&nbsp;that&nbsp;are eventually pushed to the database.</p>
       <p>Potential sources of input in a web application typically include:</p>
       <ul>
         <li>URL based parameters </li>
@@ -60,6 +60,6 @@
   <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      byte[] salt = MyApp.generateSalt();<br />      String passHash;<br />      SqlConnection cn;<br />      SqlCommand sqlCommand;<br />      String query;<br />      passHash = hashCredentials(pass, salt);<br />      // The application crafts the SQL query based on user's input<br />      cn = MyApp.getDBConnection();<br />      sqlCommand = new SqlCommand("select user from myappUsers where user = \"" + user + "\"<br />                                     + and pass = \"" + passHash + "\" and login_attempts &lt; 3;", cn);<br />      SqlDataReader reader = sqlCommand.ExecuteReader();<br />      updateLastLoginAttempt(user);<br />      ...<br />}</pre>
   <p>If a user submits a login request with a username of 'foo\" or 1 = 1; drop table *; --', the system will happily first authenticate the user and then drop all the tables in the database.</p>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

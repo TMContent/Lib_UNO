@@ -27,7 +27,7 @@
   <ol>
     <li>
       <p>
-        <strong>Check if your application uses TLS to identify itself to the user. </strong>Verify that when your application's users are performing transactions of a sensitive nature, your application uses TLS&amp;nbsp;with the following&amp;nbsp;considerations in place: </p>
+        <strong>Check if your application uses TLS to identify itself to the user. </strong>Verify that when your application's users are performing transactions of a sensitive nature, your application uses TLS&nbsp;with the following&nbsp;considerations in place: </p>
       <ul>
         <li>
           <p>
@@ -43,7 +43,7 @@
         </li>
         <li>
           <p>
-            <strong>Server Configuration</strong>: Your application's environment has enabled HTTPS and transactions of a&amp;nbsp;sensitive nature are transmitted only over HTTPS connections.<br />Check if your application's deployment descriptor (e.g. web.xml) has the <em>transport-guarantee</em> element set to <em>CONFIDENTIAL</em>:</p>
+            <strong>Server Configuration</strong>: Your application's environment has enabled HTTPS and transactions of a&nbsp;sensitive nature are transmitted only over HTTPS connections.<br />Check if your application's deployment descriptor (e.g. web.xml) has the <em>transport-guarantee</em> element set to <em>CONFIDENTIAL</em>:</p>
           <pre>&lt;security-constraint&gt;<br />  &lt;web-resource-collection&gt;<br />    &lt;web-resource-name&gt;AcctManager&lt;/web-resource-name&gt;<br />    &lt;url-pattern&gt;/acctmanager/*&lt;/url-pattern&gt;<br />  &lt;/web-resource-collection&gt;<br />  &lt;user-data-constraint&gt;<br />    &lt;transport-guarantee&gt;<strong>CONFIDENTIAL</strong>&lt;/transport-guarantee&gt;<br />  &lt;/user-data-constraint&gt;<br />  &lt;auth-constraint&gt;<br />    &lt;role-name&gt;manager&lt;/role-name&gt;<br />  &lt;/auth-constraint&gt;<br />&lt;/security-constraint&gt;</pre>
         </li>
       </ul>
@@ -71,13 +71,13 @@
     </li>
     <li>
       <p>
-        <strong>Display personalized and identifiable content. </strong>Do not ask the user for credentials in one step. Instead,&amp;nbsp;after the user&amp;nbsp;enters a valid username, display personal and identifiable content to which the user can relate,&amp;nbsp;for&amp;nbsp;example:&amp;nbsp;a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password. </p>
+        <strong>Display personalized and identifiable content. </strong>Do not ask the user for credentials in one step. Instead,&nbsp;after the user&nbsp;enters a valid username, display personal and identifiable content to which the user can relate,&nbsp;for&nbsp;example:&nbsp;a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password. </p>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>MyApp is a financial application with a public web interface. Because the application does not use TLS to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of identifying the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface, they may be fooled into providing their credentials to the attacker.</p>
   <h1>Solution Example</h1>
-  <p>MyApp is a financial application with a public web interface. Because the application uses TLS to certify its identity in front of the user, the user's browser uses the TLS chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and&amp;nbsp;the user will be warned that they are not accessing the real MyApp interface.</p>
+  <p>MyApp is a financial application with a public web interface. Because the application uses TLS to certify its identity in front of the user, the user's browser uses the TLS chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and&nbsp;the user will be warned that they are not accessing the real MyApp interface.</p>
   <br />]]></Data>
   </Content>
 </TeamMentor_Article>

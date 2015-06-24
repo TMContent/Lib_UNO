@@ -27,21 +27,21 @@
   <p>The following code shows how to create a registry key protected with an ACL and how to use DPAPI with the machine store to store encrypted data in the restricted key.</p>
   <pre>
     <div>
-      <pre>using System.Security.Cryptography;<br />using System.Security.AccessControl;<br />using System.Text;<br />using Microsoft.Win32;<br />...<br />// Get the original data in a byte arraybyte&amp;#91;&amp;#93;<br /> toEncrypt = UnicodeEncoding.ASCII.GetBytes(<br />                   "The secret data to be encrypted");<br />// Encrypt the data by using the ProtectedData <br />class.byte&amp;#91;&amp;#93; encryptedData = ProtectedData.Protect(toEncrypt, null,<br />                       DataProtectionScope.LocalMachine);<br />// Create a new key in the registry with a restricted ACL <br />// and write stream of bytes to the registry <br />keystring user = Environment.UserDomainName &amp;#43; "\\" &amp;#43; Environment.UserName;<br />RegistrySecurity security = new RegistrySecurity();<br />RegistryAccessRule rule = new RegistryAccessRule(user,<br />                RegistryRights.FullControl,<br />                InheritanceFlags.ContainerInherit,<br />                PropagationFlags.None,<br />                AccessControlType.Allow);<br />security.AddAccessRule(rule);<br />Registry.CurrentUser.CreateSubKey("TestEncryptedData",<br />                RegistryKeyPermissionCheck.ReadWriteSubTree,<br />                security);Registry.SetValue(&amp;#64;"HKEY_CURRENT_USER\TestEncryptedData", "Encrypted",<br />                 encryptedData);</pre>
+      <pre>using System.Security.Cryptography;<br />using System.Security.AccessControl;<br />using System.Text;<br />using Microsoft.Win32;<br />...<br />// Get the original data in a byte arraybyte&#91;&#93;<br /> toEncrypt = UnicodeEncoding.ASCII.GetBytes(<br />                   "The secret data to be encrypted");<br />// Encrypt the data by using the ProtectedData <br />class.byte&#91;&#93; encryptedData = ProtectedData.Protect(toEncrypt, null,<br />                       DataProtectionScope.LocalMachine);<br />// Create a new key in the registry with a restricted ACL <br />// and write stream of bytes to the registry <br />keystring user = Environment.UserDomainName &#43; "\\" &#43; Environment.UserName;<br />RegistrySecurity security = new RegistrySecurity();<br />RegistryAccessRule rule = new RegistryAccessRule(user,<br />                RegistryRights.FullControl,<br />                InheritanceFlags.ContainerInherit,<br />                PropagationFlags.None,<br />                AccessControlType.Allow);<br />security.AddAccessRule(rule);<br />Registry.CurrentUser.CreateSubKey("TestEncryptedData",<br />                RegistryKeyPermissionCheck.ReadWriteSubTree,<br />                security);Registry.SetValue(&#64;"HKEY_CURRENT_USER\TestEncryptedData", "Encrypted",<br />                 encryptedData);</pre>
     </div>
   </pre>
   <p>Use the following code to decrypt the data stored in the registry.</p>
   <pre>
     <div>
-      <pre>// Read the encrypted data from registry and decrypt the contents <br />byte&amp;#91;&amp;#93; dataFromRegistry = Registry.GetValue(&amp;#64;"HKEY_CURRENT_USER\TestEncryptedData",<br />                 "Encrypted", null) as byte&amp;#91;&amp;#93;;<br />byte&amp;#91;&amp;#93; decryptedData = ProtectedData.Unprotect(dataFromRegistry, null,<br />                 DataProtectionScope.LocalMachine);</pre>
+      <pre>// Read the encrypted data from registry and decrypt the contents <br />byte&#91;&#93; dataFromRegistry = Registry.GetValue(&#64;"HKEY_CURRENT_USER\TestEncryptedData",<br />                 "Encrypted", null) as byte&#91;&#93;;<br />byte&#91;&#93; decryptedData = ProtectedData.Unprotect(dataFromRegistry, null,<br />                 DataProtectionScope.LocalMachine);</pre>
     </div>
   </pre>
   <pre>
     <div>
-      <pre>&amp;nbsp;</pre>
+      <pre>&nbsp;</pre>
     </div>
   </pre>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>
