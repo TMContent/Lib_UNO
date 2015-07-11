@@ -4,7 +4,7 @@
     <Id>5bff1c23-47fc-46ad-84bd-130b822d9611</Id>
     <Id_History>5bff1c23-47fc-46ad-84bd-130b822d9611,79cebdd8-cad0-4b89-8369-9d38123d5214,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Encrypt Communication Links</Title>
+    <Title>[SINK] Encrypt Communication Links</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
     <Technology>.NET</Technology>
@@ -80,7 +80,7 @@
               <p>
                 <strong>Create a certificate request. </strong>Using the IIS management console, generate an TLS certificate request. This request is then sent to a Certification Authority to be signed. Follow these steps to generate the certificate request. </p>
               <ol>
-                <li>Start the <strong>IIS management console</strong>.&nbsp; </li>
+                <li>Start the <strong>IIS management console</strong>.&amp;nbsp; </li>
                 <li>Right click on your application's virtual host and select <strong>Properties</strong>. </li>
                 <li>Click on <strong>Server Certificate</strong> under the <strong>Directory Security</strong> tab. </li>
                 <li>Select <strong>Create a new certificate</strong> and click <strong>Next</strong>. </li>
@@ -101,7 +101,7 @@
               <p>
                 <strong>Install the certificate.</strong> Follow these steps to properly install your application's TLS certificate.</p>
               <ol>
-                <li>Start the <strong>IIS management console</strong>.&nbsp; </li>
+                <li>Start the <strong>IIS management console</strong>.&amp;nbsp; </li>
                 <li>Right click on your application's virtual host and select <strong>Properties</strong>. </li>
                 <li>Click on <strong>Server Certificate</strong> under the <strong>Directory Security</strong> tab. </li>
                 <li>Select <strong>Process the pending request and install the certificate</strong> and click <strong>Next</strong>. </li>
@@ -125,6 +125,6 @@
   <p>The following code establishes a connection between two servers. Because the communication is encrypted the confidentiality of the data in transit is preserved and it is very difficult for an attacker to eavesdrop on the connection.</p>
   <pre>public Stream Connect(string remoteHost, int remotePort)<br />{<br />    TcpClient client = new TcpClient(remoteHost, remotePort);<br />    TLSStream netStream = new TLSStream(client.GetStream(), false,<br />               new RemoteCertificateValidationCallback(this.ValidateTLSCertificate));<br />    try<br />    {<br />        netStream.AuthenticateAsClient(remoteHost);<br />    }<br />    catch (AuthenticationException ae)<br />    {<br />        client.Close();<br />        throw ae;<br />    }<br />    return netStream;<br />}</pre>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
