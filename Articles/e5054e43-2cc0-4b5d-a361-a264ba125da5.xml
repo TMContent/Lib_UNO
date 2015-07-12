@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e5054e43-2cc0-4b5d-a361-a264ba125da5</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Protect Cryptographic Keys</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Protect your cryptographic keys by storing them away from data, in a secured key vault. Ensure there is a gap between threat vectors that have access to application or data, and attack vectors that have potential access to crypto keys.
+
+
+##Why##
+
+Keys should remain in the key vault at all times. If the cryptographic keys are unavailable, any compromised data is unusable by a thief. PCI DSS Requirement 3.5 requires that you:
+> Document and implement procedures to protect keys used to secure stored cardholder data against disclosure and misuse.
+
+
+##When##
+
+Any crypto key used must be protected from unauthorized access. Define a key lifecycle so that it is rekeyed, and then removed from use on a prescribed schedule. The lifecycle you define for security of crypto keys will tell you when to remove the key from use.
+
+When your application uses multiple keys, their makeup must be independent, and not related. All keys must be stored away from the data, so that a compromise will not result in the theft of the key and data.
+
+
+##How##
+
+AWS encourages the use of a hardware security module (HSM). Such an appliance provides secure key storage and cryptographic operations in the cloud. This is an overview of steps you will take to get started with the HSM. For more information about these steps, see http://docs.aws.amazon.com/cloudhsm/latest/userguide/.
+
+1. **Set up the HSM environment.** Setup your account in the administrators group and generate your access key. Create an IAM policy to use CloudHSM and attach it to users. Setup private and public subnets, IAM role, EC2 instance, and security group in your VPC environment. Now generate SSH key pair and setup the CLI tools.
+
+2. **Provision the HSM.** Use the CLI to create an HSM from your control instance with the `create-hsm` command. You will need to supply `subnet_id`, `public_key_file`, `iam_role_arn`, and `syslog_ip_address` from the previous step.
+
+3. **Configure the HSM.** With the CLI, use `list-hsms` and `describe-hsm` to get the HSM ENI Identifier and IP Address. Apply the security group through the EC2 console. In the CLI use `initialize-hsm` and required parameters.
+
+4. **Connect the HSM.** Connect the on-premises HSM appliances to your HSM VPC.
+
+5. **Configure the HSM client.** Download and install a Linux or Windows client with required options for the appliance.
+
+6. **Configure HA.** For information about high availability and load balancing options and setup, see http://docs.aws.amazon.com/cloudhsm/latest/userguide/.
+
+7. **Integrate CloudHSM with the application.** For information about using transparent data encryption with third-party software applications, see http://docs.aws.amazon.com/cloudhsm/latest/userguide/. A complete sample application is provided at the link.
+
+
+##Additional Resources##
+
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [AWS CloudHSM User Guide](http://docs.aws.amazon.com/cloudhsm/latest/userguide/ "AWS CloudHSM User Guide")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) - Requirements and Security Assessment Procedures](https://www.pcisecuritystandards.org/security_standards/index.php "PCI DSS Requirements and Security Assessment Procedures")
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
