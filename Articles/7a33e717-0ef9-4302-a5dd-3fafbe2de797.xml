@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7a33e717-0ef9-4302-a5dd-3fafbe2de797</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Backup Virtual Images</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Use the AWS Management Console or the Command Line Interface (CLI) to backup virtual images and data with the create snapshot command.
+
+
+##Why##
+
+Backups are an important part of your information management plan. AWS provides physical safeguard of your media, while you must maintain the integrity of cloud configuration and make backups (also known as snapshots) so that:
+ - An original machine image can be rapidly restored.
+ - Different versions of configuration files can be securely controlled.
+ - Recovery from a system breach can be rapid.
+ - Alternate configurations can be tested and deployed.
+
+Backup methods and data integrity are required by certification authorities such as PCI-DSS (Payment Card Industry Data Security Standard (Requirements 9.5 and 12.10) to secure your media and respond to security incidents.
+
+
+##When##
+
+Backup requirements and intervals are specified in your information management plan. Best practices recommend that you make backups according to your lifecycle needs, during:
+
+1. **Design and Testing.** Original machine images can be stored with configuration information. Use the snapshot commands to quickly duplicate and modify configurations during design.
+
+2. **Deployment.** Before deployment an exact backup can be made. The snapshot can be stored in different locations to meet your management requirements.
+
+3. **Periodically.** Your management plan specifies minimum intervals for backups. Snapshots can be done through the management console or CLI very quickly.
+
+4. **Incident Response.** As part of your incident response, make snapshots before attempting repair methods. If you determine the repair is not working, you can go back in time through snapshots and choose the best course for restoring operations to your cloud.
+
+
+##How##
+
+1. **Unmount Volume.** If the Elastic Block Store (EBS) volume serves as a root device, stop the instance before taking a snapshot. In Linux, issue the command `umount -d device_name` and replace device_name with `/dev/sdh`, for example. The volume is unmounted.
+
+2. **Open Console.** Open your EC2 console snapshots in the navigation pane and create a snapshot. Select the volume to be backed up, and create a snapshot. In the CLI this can be done by issuing commands:
+ - `create-snapshot` (in AWS CLI)
+ - `ec2-create-snapshot` (in Amazon EC2 CLI)
+ - `New-EC2Snapshot` (in AWS Tools for Windows PowerShell).
+
+    Refer to the section "Accessing Amazon EC2" in the [Amazon Elastic Compute Cloud User Guide for Linux](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ "Amazon Elastic Compute Cloud User Guide for Linux") for further help.
+
+3. **Encryption.** When you take a shapshot of an encrypted volume, the content is automatically encrypted. Note the option to encrypt snapshots Snapshots that are taken of encrypted volumes are automatically encrypted. Other instance type may support encryption as discussed in the "Amazon EBS Encryption" topic in the [Amazon Elastic Compute Cloud User Guide for Linux](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ "Amazon Elastic Compute Cloud User Guide for Linux").
+
+4. **Copy Snapshot.**  To copy a snapshot using the EC2 console, open the EC2 console and select the snapshot to copy. Be sure to update the destination region and description. The description is very important to help you identify your snapshots from the original. Progress of the copying process can be viewed at the snapshots page in the region specified. In-progress snapshots appear at the top of your list for a particular region. To make snapshots with a CLI:
+ - `copy-snapshot` (AWS CLI)
+ - `ec2-copy-snapshot` (Amazon EC2 CLI)
+ - `Copy-EC2Snapshot` (in AWS Tools for Windows PowerShell).
+
+    Refer to the section "Accessing Amazon EC2" in the [Amazon Elastic Compute Cloud User Guide for Linux](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ "Amazon Elastic Compute Cloud User Guide for Linux") for further help with command switches and options.
+
+5. **View Snapshot Information.** Open snapshots from the navigation pane in the EC2 console and select a snapshot. A filter list is available to reduce the length of the list if necessary. Select the snapshot of interest, and the information associated with it is displayed. Information can also be displayed by issuing CLI commands:o view snapshot information using the command line:
+ - `describe-snapshots` (AWS CLI)
+ - `ec2-describe-snapshots` (Amazon EC2 CLI)
+ - `Get-EC2Snapshot` (AWS Tools for Windows PowerShell)
+
+    For more information about command switches and options, read the "Accessing Amazon EC2" topic in the [Amazon Elastic Compute Cloud User Guide for Linux](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ "Amazon Elastic Compute Cloud User Guide for Linux").
+
+##Additional Resources##
+
+- [Amazon Elastic Compute Cloud User Guide for Linux](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ "Amazon Elastic Compute Cloud User Guide for Linux")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [Backup and Recovery Approaches Using Amazon Web Services](http://aws.amazon.com/whitepapers/backup-and-recovery-using-aws/ "Backup and Recovery Approaches Using Amazon Web Services")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) -  Requirements and Security Assessment Procedures](http://link.to "PCI DSS Requirements and Security Assessment Procedures")
+]]></Data>
+  </Content>
+</TeamMentor_Article>
