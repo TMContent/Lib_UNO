@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>a82f7434-8525-4b1e-91d0-2c9a67e0b9b4</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Monitor Cloud Logs</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Enable CloudTrail so that requests for AWS resources within your account can be monitored. This includes API calls and logins. Setup CloudTrail as an aggregator of your logs from multiple regions. These logs are stored in an S3 bucket, and can be downloaded to your management and analysis solution for security evaluation, or can be opened with your browser and JavaScript Object Notation (JSON) viewer add-in. For compliance requirements, archive the logs to Glacier for audit reporting.
+
+
+##Why##
+
+Cloud logs must be monitored to identify security problems in real-time, so that effective counter-measures can be implemented. By reviewing archived and current logs, you can also identify resources which may have been accessed improperly, the date and times of access, and IP source.
+
+Logging and monitoring is a requirement of ISO/IEC 27001:2013. If logs are not reviewed, security events such as exceptions and faults may go unrecognized, with increasing loss of data and business.
+
+
+##When##
+
+Cloud logs should be turned on in CloudTrail at the earliest possible time. The service itself does not add additional cost. Use Amazon Simple Notification Service (SNS) notifications when you need to respond quickly to log deliveries, such as for analysis and reporting. The logs are delivered to S3 buckets you specify, and you may minimize storage costs for S3 by archiving the logs to your own external storage media. The specific interval for log delivery, archiving to Glacier, or removal to offline storage should be defined in your security management plan.
+
+
+##How##
+
+The following steps summarize the implementation of CloudTrail monitoring logs. For more information about CloudTrail, see http://docs.aws.amazon.com/awscloudtrail/latest/userguide/.
+
+1. **Create a Bucket Policy.**  It is necessary to attach a policy to the S3 bucket that allows CloudTrail access. In the next step, When you use the console or CLI to create the S3 bucket, a policy is automatically created and attached to the bucket. Information is pre-filled, such as allowed SIDs, folder name, owner ID, and prefix, and these can be edited if necessary. If you choose to manually create a policy first, do it now. For more information about Amazon S3 Bucket Policy, see http://docs.aws.amazon.com/awscloudtrail/latest/userguide/.
+
+2. **Create and Update a Trail.** Trails are created with the AWS CloudTrail console or through the command line interface (CLI). It is necessary to turn on CloudTrail first, and then create an S3 bucket (or use an existing one) for log delivery. When you create a new S3 bucket with CloudTrail, a policy is automatically created as described in step 1. If using an existing S3 bucket, you will manually attach a policy as mentioned in step 1. Creating an SNS topic for log delivery notification is optional. Turn on the trail, and after 15 minutes API calls will appear in the published log files.
+
+3. **Create a Trail with CLI.** CloudTrail features can be created with the CLI:
+ - `aws create-subscription` (create a trail)
+ - `aws update-subscription` (set new options for the trail)
+ - `aws cloudtrail describe-trails` (retrieve settings)
+ - `aws cloudtrail get-trail-status` (retrieve status)
+
+4. **View Events.** Go to the API Activity History in the CloudTrail console to filter and view events. Display the details for an event to access the resource name, and links (if they exist). Optionally, you can view the event in JSON format.
+
+5. **View Events with CLI.** At the CLI, you can view events for the last seven days with the `aws cloudtrail lookup-events` command, which has options to filter events. For more information about Viewing CloudTrail Events with the AWS CLI, see http://docs.aws.amazon.com/awscloudtrail/latest/userguide/.
+
+6. **Control User Access.** Create an IAM group with appropriate permissions and add individual IAM users as necessary. Create a group for users who need full access to actions. Create a separate group for users who only require viewing information. Two default policies can be used for these purposes: `AWSCloudTrailFullAccess` and `AWSCloudTrailReadOnlyAccess`. Now add users to the groups, and assign passwords.
+
+7. **Retrieve and View Log Files.** Log files are published to the specified S3 bucket in a gzip archive (.gz). Once located, they can be retrieved with S3 console, CLI, or S3 API. Since the files are written in JSON format, they can be viewed directly if your browser has a JSON viewer add-on. For more information about Reading Your Log Files, see http://docs.aws.amazon.com/awscloudtrail/latest/userguide/.
+
+8. **Configure Amazon SNS Notifications.** When you set up a trail, an option can be used to configure a new Amazon SNS topic with notifications. Create the trail with the console or the `aws cloudtrail create-subscription` CLI command. This attaches a policy to allow publishing of the topic to you. For more information about Configuring CloudTrail to Send Notifications, see http://docs.aws.amazon.com/awscloudtrail/latest/userguide/.
+
+
+##Additional Resources##
+
+- [AWS CloudTrail User Guide](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/)
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [ISO/IEC 27001:2013 - Information technology - Security techniques - Information security management systems - Requirements](http://www.iso.org/iso/catalogue_detail?csnumber=54534 "ISO/IEC 27001:2013 - Information Management Security Systems Requirements")
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
