@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>faf010ab-2cbc-4757-9c82-3ea58c69866c</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Remove Unused SQL Database Access Accounts</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+ - MySQL 5.6
+ - Oracle 12c
+ - Microsoft SQL Server 2008 R2 and 2012
+ - PostgreSQL 9.4.1
+
+
+##What to Do##
+
+Unused SQL database access accounts should be removed with a native database utility or command line interface (CLI).
+
+
+##Why##
+
+Each SQL access account increases the attack surface of your application. Unused accounts can be exploited by an attacker as a means of entry. Remove unused and unnecessary DB accounts and users to simplify security management. 
+
+Unused accounts are susceptible to brute force attacks, and the DB can be compromised. The AWS security model defines customer responsibilities for database access *within* your cloud service. Removing unused accounts is a basic security principle, and required by AWS compliance and certification authorities such as PCI DSS and ISO 27001.
+
+
+##When##
+
+Always enumerate SQL DB accounts and their use for design and deployment, so that their status can be audited at intervals specified in your security management plan.
+
+Remove unused SQL accounts at these milestones:
+
+1. **DB Created.** During installation of the DB instance, demo or sample database access accounts may be included. If not necessary, the accounts should be deleted. 
+
+2. **DB Deployed.** Test accounts should be removed before deployment of the application.
+
+3. **Periodic Security Checks.** Remove unused SQL accounts when found during periodic security audits specified in your security management plan.
+
+Exercise caution when removing SQL access accounts. If an account is currently using resources, or has an open session, the delete operation may produce an error. Be sure to confirm the use and status of any SQL account before removal. Do not remove system accounts.
+
+
+##How##
+
+To remove unused SQL database access accounts, follow the instructions under the specific AWS database used.
+
+
+###MySQL 5.6###
+
+1. **Login with Privileges.** Open a terminal or command shell and log in as a database superuser. Enter the following command, and type in your password.
+
+        mysql -u <superuser_name> -p
+
+2. **Verify Account Exists.** Review the user listing, and confirm the database access account to be removed.
+
+        mysql> select host, user from mysql.user
+
+3. **Drop User.** Issue the command to drop the target user account. The syntax for *user* is `'user_name'@'localhost'`.
+
+        mysql> drop user <user_name>
+
+4. **Account Removed.** The account and privileges are removed after issuing the command. If there is an open user session, the account is dropped when the session is closed. Any future attempt to login with the account will fail. Note that databases and other objects created by the account are not deleted. Security errors may result if attempts are made to open these objects in *definer security context*. Refer to the MySQL Reference Manual for more information on reassigning object permissions.
+
+
+###Oracle 12c###
+
+1. **Login with Privileges.** Open the command line tool SQL*Plus, and log in with an account that has the DROP USER system privilege. Enter the following commands.
+
+        sqlplus /nolog
+
+        connect / as sysdba
+
+2. **Verify Account Exists.** Review a user listing, and confirm the database access account to be removed. Note in the example that user names are case-sensitive.
+
+        SELECT * FROM ALL_USERS;
+
+        USERNAME
+        ********
+        TEST01
+        Test01
+        Test02
+        Test03
+
+3. **Drop User.** Issue the command to drop the target user account.
+
+        DROP  USER  <user_name>  CASCADE;
+
+4. **Account Removed.** The user account and associated schema are removed from the data dictionary. All schema objects in the user schema are also removed. Do not drop the SYS or SYSTEM user. This will corrupt the database.
+
+
+###Microsoft SQL Server 2008 R2 and 2012###
+
+1. **Login with Privileges.** Login to a management computer as a user with membership in Account Operators, Domain Admins, Enterprise Admins, or equivalent group. Open **SQL Server Management Studio**.
+
+2. **Verify Account Exists.** Review the database user list, and confirm the database access account to be removed.
+ - Expand folders in the left pane until you see the folder for **Users** (SQL Server > Databases > Your_DB > Security > Users).
+ - Select the **Users** folder to view the list of database users in the right pane.
+ - Scroll the list of users until the DB user to be removed is found.
+
+3. **Delete User.** Right-click the user object and choose **Delete**.
+
+	**Note**: If a schema is owned by this user, there will be an error message: **The database principal owns a schema in the database, and cannot be dropped (Microsoft SQL Server, Error: 15138)**.
+
+	Look in the left pane and locate the **Schema** folder (SQL Server > Databases > Your_DB > Security > Schema). Scroll through the list and identify any schema owned by the database user you are trying to delete. When found, right-click on the schema name and change the owner to another user (Properties -> General -> Schema Owner).
+
+4. **Account Removed.** The database user is removed. If present, schema ownership was re-assigned.
+
+	**Note**: The steps above remove the database user, but do not address management of a Windows or SQL Server login, if one has been mapped to this user. Refer to the Microsoft SQL Server Product Documentation for more information on login accounts.
+
+
+###PostgreSQL 9.4.1###
+
+1. **Login with Privileges.** Open a terminal or command shell and log in as a database superuser. The default superuser in the example is *postgres*. Enter the following command, and type in your password.
+
+        $ psql -U <superuser_name> <db_name>
+
+2. **Verify Account Exists.** Review the user listing, and confirm the database access account to be removed.
+
+        db_name=# select * from pg_shadow;
+
+3. **Drop User.** Issue the command to drop the target user account. In the example, on the second line, `DROP USER` is confirmation that the command has succeeded.
+
+        db_name=# DROP USER <user_name>;
+        DROP USER
+
+4. **Account Removed.** The account is removed after issuing the command. If there is an open user session, the account is dropped when the session is closed. Any future attempt to login with the account will fail. Note that databases and other objects created by the account are not deleted. If **ERROR: role "user_name" cannot be dropped because some objects depend on it** appears, the objects should be reassigned or dropped. Refer to the PostgreSQL Documentation for more information on dropping or reassigning objects.
+
+
+##Additional Resources##
+
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [Amazon Web Services: Risk and Compliance](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Risk and Compliance")
+- [AWS Security Best Practices](http://aws.amazon.com/compliance/aws-whitepapers/ "AWS Security Best Practices")
+- [MySQL 5.6 Reference Manual](http://dev.mysql.com/doc/refman/5.6/en/ "MySQL 5.6 Reference Manual")
+- [Microsoft SQL Server 2008 R2 Product Documentation](https://technet.microsoft.com/library/bb500434.aspx "Microsoft SQL Server 2008 R2 Product Documentation")
+- [Microsoft SQL Server 2012 Product Documentation](https://msdn.microsoft.com/en-us/library/dd692930%28v=sql.10%29.aspx "Microsoft SQL Server 2012 Product Documentation")
+- [Oracle® Database Administrator's Guide 12.1](https://docs.oracle.com/database/121/ADMIN/toc.htm "Oracle® Database Administrator's Guide")
+- [PostgreSQL 9.4.0 Documentation](http://www.postgresql.org/docs/9.4/static/index.html "PostgreSQL 9.4.0 Documentation")
+]]></Data>
+  </Content>
+</TeamMentor_Article>
