@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>2c6b51cb-f105-423c-91d2-a218089decf7</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Access to Cloud Resources Is Encrypted</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##What to Check For##
+
+Verify that access to cloud resources is encrypted.
+
+##Why##
+
+Protect connections using TLS to prevent man-in-the-middle attacks. In the AWS shared security model you are responsible for redirection to third party merchants, especially with regard to compliance with PCI-DSS.
+
+Implemented properly, TLS used with web applications secures HTTP communication over TLS, or HTTPS between the client and cloud services. The result is protection for online accounts, authentication credentials, and cookies.
+
+
+##When##
+
+Encrypted connections with TLS or VPN must always be used with web applications in order to protect sensitive information as it is transmitted over the network and is susceptible to theft and abuse.
+
+
+##How to Check##
+
+To verify that access to cloud resources is encrypted:
+
+1. **Define communication security requirements.** Define which network communications need to be encrypted. All transmissions that include sensitive data, including authentication credentials and session tokens must be encrypted. In some cases, it might be practical to encrypt all network connections.
+
+2. **Identify communications performed by the application.** Review the application design to confirm all network communications performed by the application comply with security requirements.
+
+3. **Find all code that connects to the cloud.** Identify code that needs to send encrypted data over the network.
+
+4. **Verify that TLS is used to protect connections.** Examine code that sends data over the network to make sure that sockets are protected using TLS.
+
+5. **Verify that valid certificates are used.** Examine the certificates used by TLS to make sure that they are valid.
+
+
+##How to Fix##
+
+To use TLS to protect network connections follow these general steps:
+
+1. **Get valid certificates.** Purchase valid certificates for the application.
+
+2. **Use valid certificates.** Configure the server in the cloud to accept TLS connections. Do not permit unencrypted connections to the server. 
+
+3. **Define communication security requirements.** Define which network communications need to be encrypted. All transmissions that include sensitive data, including authentication credentials and session tokens must be encrypted. In some cases, it might be practical to encrypt all network connections.
+
+4. **Identify communications performed by the application.** Review the application design to confirm all network communications performed by the application comply with security requirements.
+
+5. **Find all code that connects to the cloud.** Identify code that needs to send encrypted data over the network.
+
+6. **Add code that uses TLS.** There are multiple methods for using TLS, depending on application requirements. Use the method  that is most appropriate for your application.
+
+
+##Additional Resources##
+
+- [Amazon Web Services: Risk and Compliance](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Risk and Compliance")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [On the Effective Prevention of TLS Man-In-The-Middle Attacks in Web Applications](https://www.usenix.org/system/files/conference/usenixsecurity14/sec14-paper-karapanos.pdf "Prevention of TLS Man-In-The-Middle Attacks in Web Applications")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) - Requirements and Security Assessment Procedures](http://link.to "PCI DSS Requirements and Security Assessment Procedures")
+
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
