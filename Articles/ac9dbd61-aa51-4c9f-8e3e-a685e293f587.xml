@@ -22,8 +22,6 @@ Verify that applications in the cloud are monitored for compromise.
 
 Instrumenting for suspicious activity allows you to detect and react to potential problems from a single console, as early as possible.
 
-The use of automated systems to regularly review and analyze records for unusual activity is a security control of NIST SP 800-53 (AU-06).
-
 Without automatic mechanisms alerting you of activity which has security implications, unauthorized users can gain quick access to all of your AWS resources. The result could be catastrophic loss of business for the AWS account holder.
 
 
@@ -39,6 +37,7 @@ What qualifies as unusual activity is system dependent. Specific security proper
 To verify that applications in the cloud are monitored for compromise:
 
 1. **Identify responsible personnel.** Find and interview the employees responsible for monitoring cloud applications for compromise.
+
 2. **Examine logs.** Examine logs that are used to monitor cloud applications and make sure these logs are current and provide sufficient information to determine the state of the application.
 
 ##How to Fix##
@@ -51,25 +50,18 @@ The following is a walk-through of the general steps required to monitor cloud a
      - Large or rapid transactions
      - Transactions that occur outside of normal time periods
      - Application errors, especially those not easily caused by user error, or occurring in deeper tiers.
+
 2. **Ensure sufficient data is logged.** After you have defined unusual or suspicious activity for the application, ensure that the information is logged properly. Appropriate logging depends upon the specifics of the logged data. Some suspicious activity logging will be best accomplished by parsing existing log files and looking for anomalous activity, rapid transactions from a single host or user, unusually large orders, etc.
+
 3. **Ensure logs are monitored.** The logs must be automatically processed to identify information that should be acted upon. Logging will serve no purpose if the results receive no response. Cloud services provide the tools for monitoring. Your operations team must develop the framework for monitoring and responding to log events. For your approach, consider these items:
-     - Most applications will need 24x7 coverage. However, some may be fine with coverage from 8:00 AM to 5:00 PM.
+     - Most applications will need 24x7 coverage. 
      - Log monitoring requires the attention of your system administrator. Smaller web apps may be secured with a  limited number of alarms and alerts. A large ecommerce site may require the attention of a dedicated team.
      - Define your response time needs. When compromises increase in volume and there's a serious problem with the site, have personnel in place that can quickly react and use procedures to regain normal operation.
      - Use groups, roles, and policy to effectively control access to your logs and information derived from them. Some of this information is sensitive.
      - Establish complete response capabilities to lock compromised accounts, and mitigate damage by patching system images and/or taking applications and services offline until a complete security response can be executed.
+
 4. **Avoid logging pitfalls.** Logging too much information can end up being a problem of its own. Once you have an idea of the load impact of application log events, it may be worthwhile to implement some form of log throttling to reduce the flow of information to a rate at which you can act upon. Good log throttling should only eliminate redundant information, and still provide a way to surface the most important information first. Automatically taking action based on detection of anomalies is best avoided. While it may be reasonable to throttle the speed at which an event like a login attempt may occur, preventing an action from occurring may result in an easy-to-launch denial of service attack against your application.
 
-
-##Additional Resources##
-
-
-- [AWS CloudTrail User Guide](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/)
-- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
-- [Amazon CloudWatch Developer Guide](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/ "Amazon CloudWatch Developer Guide")
-- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
-- [Getting Started with AWS Analyzing Big Data](http://docs.aws.amazon.com/gettingstarted/latest/emr/getting-started-emr-tutorial.html "Analyzing Big Data")
-- [NIST SP 800-53 Security and Privacy Controls for Federal Information Systems and Organizations](http://csrc.nist.gov/publications/PubsSPs.html "NIST SP 800-53 Security and Privacy Controls for Federal Information Systems and Organizations")
 
 ]]></Data>
   </Content>
