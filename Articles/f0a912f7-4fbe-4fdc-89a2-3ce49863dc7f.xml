@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f0a912f7-4fbe-4fdc-89a2-3ce49863dc7f</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Protect Cloud Log Files</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Protect cloud log files by limiting read access, requiring HTTPS of clients when moving log data, and using conditions to restrict client IP addresses to specific CIDR blocks.
+
+
+##Why##
+
+Log files contain sensitive information about client access to resources in your cloud. This data includes the request type, the requested resource, the requestor’s IP, and the time and date of the request. When bucket logging is enabled, the records are aggregated into log files and delivered to a specified bucket.
+
+If log files can be accessed, then you are not complying with basic standards that require protection of client or cardholder data (PCI DSS).
+
+
+##When##
+
+When Amazon S3 creates a bucket or object at your request, and you set up logging, you specify a logfile name and prefix. These files are saved to a bucket you specify. By default you are the grantee and full owner. When needed, permissions on this bucket must be changed to allow other users access to any log files stored there.
+
+
+##How##
+
+To protect log files, a best practice is to create and use a policy on the log bucket. This method is more efficient than configuring ACLs, permissions and access groups for the bucket.
+
+This is a summary of steps needed to create and use a policy. The specific policy elements to protect your log files would be prepared similarly.
+
+1. **Locate Your AWS Account ID.** Sign in to AWS Management Console and access Support Center. In the title bar you can find the 12-digit account ID.
+
+2. **Create the Policy.** Open the IAM console and navigate to Policies > Create Policy. Enter policy name. Paste your prepared policy in the document field. Be sure to use your 12-digit AWS account ID in the policy. See the Overview of Policies section in the AWS IAM documentation for examples and formatting requirements.
+
+3. **Validate Policy** Make sure that no errors are displayed when validating the policy. Note there is a Use auto formatting option. When there are no errors, you can create the policy.
+
+4. **Attach Policy** The policy needs attachment to IAM users. Navigate to Policies and locate your custom policy. Scroll to the Attached Entities and **Attach**. Use the filter menu to find all user types, and select the users to attach the custom policy to.
+
+Refer to the "Permissions and Policies" section of the [AWS Identity and Access Management: Using IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html "AWS IAM: Using IAM") guide for examples and step by step details.
+
+
+##Additional Resources##
+
+- Blog article [Tracking Federated User Access to Amazon S3 and Best Practices for Protecting Log Data](http://blogs.aws.amazon.com/security/post/Tx1WBOHRU9GCIUG/Tracking-Federated-User-Access-to-Amazon-S3-and-Best-Practices-for-Protecting-Lo "AWS IAM: Using IAM")
+- "Editing Bucket Permissions" and "Editing Object Permissions" sections of [Amazon Simple Storage Service Console User Guide](http://docs.aws.amazon.com/AmazonS3/latest/UG/ "Amazon Simple Storage Service Console User Guide")
+- "Overview of IAM Policies" section of [AWS Identity and Access Management: Using IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html "AWS IAM: Using IAM")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) -  Requirements and Security Assessment Procedures](http://link.to "PCI DSS Requirements and Security Assessment Procedures")
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

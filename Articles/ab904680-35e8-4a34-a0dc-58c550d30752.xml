@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>ab904680-35e8-4a34-a0dc-58c550d30752</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use RDS Security Groups to Protect Databases</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Use the AWS Management Console to specify and implement security groups in order to restrict inbound traffic to your database instances created with Amazon Relational Database Service (RDS).
+
+
+##Why##
+
+RDS Security Groups are one of the measures that protect your databases from unwanted intrusion. For example, security groups can be used to reduce the impact of port scans by limiting inbound traffic to as few ports as necessary. 
+
+By default, all ports are closed. Without the use of security groups, your database is only accessible to the owner. With proper engineering and design, the DB is accessible to the IP ranges or Extended Computing Cloud (EC2) you specify. Your data is less vulnerable to security threats with the added layer of security.
+
+Developing and maintaining secure systems and applications is required by certification authorities such as PCI-DSS (Payment Card Industry Data Security Standard (Requirement 6).
+
+
+##When##
+
+Inbound traffic is restricted according to the needs of required changes throughout the database lifecycle:
+
+1. **Design and Testing.** RDS Security Groups are first established during database development, and enable developers to run queries. Testing also requires the creation of security groups which mimic the actions of database users.
+
+2. **Deployment** Test groups and rules are replaced and/or modified to reflect the need for additional security in the face of current security posture.
+
+3. **Periodic Security Checks.** When periodic security audits identify unwanted inbound traffic, you may need to modify existing security groups to mitigate intrusions.
+
+DB security groups cannot be applied when the DB instance is in a Virtual Private Cloud (VPC). For that application use a VPC security group.
+
+
+##How##
+
+1. **Open Console.** Go to your account's AWS Management Console and login. Then access the RDS Console. You may also go directly to the [RDS Console](https://console.aws.amazon.com/rds/ "RDS Console").
+Locate security groups under the RDS Dashboard. **Note**: If you receive an error such as: "Your account does not support the EC2-Classic Platform in this region" then you must setup a VPC security group as summarized in the ***Restrict Inbound Traffic Using Security Groups*** guideline. Detailed information is found in the topic Security Groups for Your VPC in the [Amazon Virtual Private Cloud User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/ "Amazon VPC Cloud User Guide").
+
+2. **DB Security Group.** Create a DB security group, and type in a name and description for the group. By default there is no access granted to this DB security group. Now you must specify IP addresses or an Amazon EC2 security group in the next step.
+
+3. **Configure Ingress Rule.**  To access a DB instance you configure the security group to permit access. In AWS this is called ingress, and applies to any DB instances associated with your security group. Select the security group details through the details icon to the left of the security group name. As an example, select CIDR/IP from the connection type drop-down list, and enter a CIDR range for this ingress rule. Authorize the rule. As the rule is being applied, you will notice the status change from *authorizing* to *authorized*.
+
+4. **Delete Ingress Rules.** Rules are removed from DB security groups and associated instances when you save the changes. Select the security group in the console, and edit. Remove the rule, and authorize the change.
+
+5. **EC2 Instance.**  If the DB instance and EC2 instance are not in the same VPC, you will add an ingress to your DB security group for the EC2 security group. Select the security group details through the details icon to the left of the security group name. Select EC2 Security Group from the connection type drop-down list. Then you are able to select the EC2 security group for this ingress rule. Authorize the rule. As the rule is being applied, you will notice the status change from *authorizing* to *authorized*.
+
+The DB security group and ingress rules operations can also be performed with a command line tool or the API:
+
+- AWS CLI:
+ - `rds-create-db-security-group` to create DB security group
+- API call:
+ - `CreateDBSecurityGroup` to create DB security group
+
+For other commands and parameters, refer to the Working with DB Security Groups topic in the [Amazon Relational Database Service User Guide](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/ "Amazon RDS User Guide").
+
+##Additional Resources##
+
+- [Amazon Elastic Compute Cloud User Guide for Linux](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ "Amazon Elastic Compute Cloud User Guide for Linux")
+- [Amazon Relational Database Service User Guide](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/ "Amazon RDS User Guide")
+- [Amazon Virtual Private Cloud User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/ "Amazon VPC Cloud User Guide")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) -  Requirements and Security Assessment Procedures](http://link.to "PCI DSS Requirements and Security Assessment Procedures")
+]]></Data>
+  </Content>
+</TeamMentor_Article>

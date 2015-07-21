@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>e72ae3ef-a310-477c-911e-e8fdc9624d8b</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Accounts of Terminated Employees Are Removed</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##What to Check For##
+
+Verify that the accounts of the terminated employees are removed.
+
+##Why##
+
+Removing a terminated employee's accounts eliminates the possibility that the accounts could be used to access sensitive data or protected information. If the accounts are not deleted, they could be used by the employee or other attackers. If the passwords are hacked or broken, intruders would gain entry to company networks, increasing the chance of theft and malicious behavior.
+
+Your security management plan should specify the revocation of access for all terminated employees. This is required in order to be in compliance with security standards such as PCI DSS (Requirement 8.3.3).
+
+
+##When##
+
+To prevent unauthorized access, user accounts and credentials should be revoked as soon as possible after the employee's departure. Other authentication such as tokens or fobs that are used in combination with the account must also be secured.
+
+##How to Check##
+
+To verify that the accounts of the terminated employees are removed:
+
+1. **Identify responsible personnel.** Find and interview employees responsible for handling user accounts.
+
+2. **Identify employee user account repositories.** Identify all the types of user accounts that employees might have. Find where the user accounts of each type are managed.
+
+3. **Examine employee user accounts.** Review the repositories of each type of employee user account and make sure that no user accounts for employees that have been terminated are present.
+
+##How to Fix##
+
+IAM user accounts may be deleted with the AWS Management Console or the AWS Command Line Interface (CLI).
+
+1. **Delete User Account with Console.** Sign in to your management console, and open the IAM console. Users are accessed through the link in the navigation panel. Locate the user account and select it. Take care not select multiple users. Choose the action to delete the user, and then confirm the deletion. The following user information is deleted along with the account:
+ - User removed from membership in IAM groups
+ - Password
+ - Access keys belonging to user
+ - Inline policies embedded in user. **Note.** Policies applied through group permissions are not affected. **Note.** Managed policies attached to are not deleted, but they are detached.
+ - Multi-Factor Authentication (MFA) device associated with user.
+
+2. **Delete User Account with AWS CLI.** Use the AWS CLI to delete a user with the following commands. 
+ - Delete keys and certifications so that the user cannot access your AWS account. Use `aws iam delete-access-key` and `aws iam delete-signing-certificate` commands.
+ - Delete password: `aws iam delete-login-profile`.
+ - Deactivate user's MFA device: `aws iam deactivate-mfa-device`
+ - Detach policies attached to user. List policies with `aws iam list-attached-user-policies` and detach policies with `aws iam detach-user-policy`.
+ - List groups the user was in: `aws iam list-groups-for-user`.
+ - Remove user from groups: `aws iam remove-user-from-group`.
+ - Delete the user: `aws iam delete-user`.
+
+For the use of options and more detailed instructions, refer to the Deleting an IAM User (AWS CLI) topic in the IAM User Guide.
+
+
+##Additional Resources##
+
+ - [AWS CLI Reference](http://docs.aws.amazon.com/cli/latest/reference/ "AWS CLI Reference")
+- [AWS Identity and Access Management - Using IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/iam-ug.pdf "AWS Identity and Access Management - Using IAM")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) -  Requirements and Security Assessment Procedures](http://link.to "PCI DSS Requirements and Security Assessment Procedures")
+
+
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

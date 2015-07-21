@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8a50519d-c6e7-4568-9289-f53dfc35fe12</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>An IDS Is Deployed Inside the VPC</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##What to Check For##
+
+Verify that an Intrusion Detection System (IDS) is deployed inside the Virtual Private Cloud (VPC).
+
+
+##Why##
+
+An IDS monitors your cloud environment and alerts you about detected intrusions. The IDS logs give you important information about API access such as:
+
+- Who made the API call
+- When was the call made
+- What was the API call
+- What resources were accessed
+- Where was the call made from?
+
+With this information you can update IDS settings and policies. The IDS is also important for monitoring and managing changes, and detecting AWS-specific environment changes.
+
+
+
+##How to Check##
+
+To verify that an IDS is deployed inside the VPC:
+
+1. **Examine all the systems within the VPC.** Identify all the EC2 instances running in the VPC.
+
+2. **Determine whether an IDS is present.** Determine the purpose of each EC2 instance and make sure that at least one of them is an IDS.
+
+3. **Determine if an internal IDS is handling the VPC.** If there is no IDS running as an EC2 instance, there might still be an IDS connected to the VPC using a VPN. Determine if the VPC is connected to another network using a VPN. If so, check the IDS on the network that the VPC is connected to using VPN to determine whether this internal IDS is used to monitor the VPC. If there is no IDS running inside the VPC itself or monitoring it via VPN, then this checklist item is not passed.
+
+##How to Fix##
+
+1. **Install IDS.** Choose an IDS with the required features. Traditional rack-based and virtual IDS's are available. For more information on AWS recommended systems, see https://aws.amazon.com/marketplace/. Deploy the IDS in your VPC using documentation supplied with the system. For more information about adding an appliance to your VPC, see http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/.
+
+2. **Create Security Audit Role.** Create a named security audit role (such as *secaudit*) with IAM. Make this a role with cross-account access. Enter the ID of the AWS account. Set the access permissions to Read Only for policies and configurations that will be monitored. Credentials are not required. Your policy establishes who or what can assume this role.
+3. **Create Security Role Policy.** For more information about security role sample policies, see https://s3.amazonaws.com/reinvent2013-sec402/. For a sample policy, see https://s3.amazonaws.com/reinvent2013-sec402/secaudit.json.
+
+4. **Configure Write Once Storage.** Configure versioning on a bucket with the console or AWS SDKs. Optionally, add MFA Delete for an additional security layer by requiring MFA on the bucket. For more information about these topics, see http://docs.aws.amazon.com/AmazonS3/latest/dev/.
+
+5. **Turn On AWS CloudTrail.** When you enable CloudTrail, create a new S3 bucket. Name the bucket. If you already have a centralized write-only store, that can be used.
+
+6. **Detect Unauthorized Credentials.** Manual steps to investigate access and credentials for public, non-public, and cross-account users can be performed with the console. Go to the dashboard and select a user. View the user access keys, date and time for security. For more information about checking credentials, see https://awsmedia.s3.amazonaws.com/SEC402.pdf.
+
+
+##Additional Resources##
+
+- [Amazon Simple Storage Service Developer Guide](http://docs.aws.amazon.com/AmazonS3/latest/dev/ "Amazon Simple Storage Service: Developer Guide")
+- [Amazon Virtual Private Cloud User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/ "Amazon VPC Cloud User Guide")
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [AWS CloudTrail User Guide](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/)
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [AWS Identity and Access Management - Using IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/iam-ug.pdf "AWS Identity and Access Management - Using IAM")
+- [Intrusion Detection in the Cloud](https://awsmedia.s3.amazonaws.com/SEC402.pdf "Intrusion Detection in the Cloud")
+- [Security Audit Sample Policy](https://s3.amazonaws.com/reinvent2013-sec402/secaudit.json "Security Audit Sample Policy")
+
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

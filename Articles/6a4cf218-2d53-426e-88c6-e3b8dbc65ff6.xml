@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6a4cf218-2d53-426e-88c6-e3b8dbc65ff6</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Design an Incident Response Plan for the Cloud</Title>
+    <Category>Security Engineering</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Design an incident response plan to be used during security breaches of business-critical cloud components. Include responsibilities, communication methods, and roles. Address a process for notifying stakeholders, including cloud service provider (CSP) and payment or financial institutions. Write in a way that standardizes your response to incidents. Make provisions for business continuity by including direction for recovery issues. Bring attention to the legal reporting responsibilities of the security response team. Refer to payment partner requirements documents which will supplement your organization's incident response plan.
+
+
+##Why##
+
+An incident response plan is required to handle security breaches with well-planned steps. Incidents can be categorized for business impact, supporting the adequacy of resources to be applied during the incident. Multiple activities are usually required to analyze and recover from incidents, and boiler-plating the incident response for an organization ensures that unnecessary work is avoided, and downtime is minimized or eliminated entirely.
+
+Implementing and using an incident response plan is required by PCI DSS (Section 12.0). Designing a response plan lays the groundwork for bringing immediate attention to security incidents.
+
+
+##When##
+
+An incident response plan should be written and discussed during the design engineering phase. The approved plan must be ready when the cloud is implemented.
+
+You must also have a process to keep the incident response plan current by modifying and updating it to include any lessons learned, and to address new requirements of your industry or card bureau (PCI DSS Requirement 12.10.6).
+
+Be sure to test the incident response plan, at a minimum of once a year (PCI DSS Requirement 12.10.2).
+
+
+##How##
+
+By using the following steps, you will design an effective incident response plan. These steps are summarized from the *Official (ISC)2 Guide to the CISSP CBK*.
+
+1. **Prepare for response.** In this section of the incident response plan include objectives statements and purpose of each section of the document. List the roles and responsibilities. Include references to documents, forms, and tools you will need during the incident response. Create brief statements in this section, and refrain from over-explaining subject matter that security personnel already understand. Include and define any processes or terminology about capturing details of an incident, such as date and time, log entries, who provided the incident report, and the type of vulnerability. The forms and procedures in this section should be succinct and clear on first reading.
+
+2. **Detect incident and notify.** Triage is triggered manually or automatically by a monitored event. The severity of the incident dictates specific triage steps. When the incident has impact on critical business systems, then the highest level of attention and resources is directed to the incident. Always include a handler for false-positives. Review the incident to determine if it is a false-positive, and log the incident. This is done to conserve security resources. Most events are monitored by automatic systems, but you must also allow for human reports. Security-educated users are more aware of anomalies, and it is useful to capture their specific incident details. In any case, when an actual incident occurs, identify and classify the threat in a way the organization has specified:
+     - Date and time of occurrence
+     - Systems or components affected
+     - Threat comes from internal or external source
+     - Type of threat, such as spam, worm, etc.
+     - Controls that may have failed
+
+     The answers are used to assess risk, consider potential damages, and assign a level of criticality to the incident. At this time you have identified what stakeholders should be notified, and the communications method to use. Where specific forms are referenced, or included, be sure to explain anything that is not clear or obvious on the notification forms to be completed. Lack of a small detail can cause significant delay in response, with unnecessary increase in business damages.
+     
+3. **Investigate the incident.** The next major area to cover in your plan is the investigation. Describe the level of analysis that will be required to perform, react and recover from the incident. With card data, what appears at first to be a minor incident may in fact be a large breach, with significant loss of sensitive data. You want investigators to be thorough in their work, and perform due diligence. Since you have experience in this security area, you may have a particular model that the organization prefers to use when investigating. Given that you have an investigative model, it is important to quickly get to causes so that you can contain damage as quickly as possible. The outcome that motivates you should be reducing impact. Only apply as much investigation as required to find root cause. If practical, and you find a preventative measure that also mitigates, that is preferred. However, stopping the threat now is more important.
+
+     The incident response plan must elevate issues of policy, regulations, and evidence handling. Investigation does not preclude these. You will reference any set boundaries, while still allowing analysts access to the resources and tools they require for proper handling of the threat. If regional settings in your cloud take the investigation outside of national borders, make sure the team is educated about more stringent privacy requirements that exist in other countries or European Union (EU).
+
+     Stress in your plan that computer forensics is being conducted. There are specific rules for handling collected evidence. If evidence is mishandled, it runs the risk of becoming inadmissible. It could also occur that tampered evidence could be wrongfully used, as in the dismissal of an employee. For more information about computer forensics, see https://www.isc2.org/.
+     
+4. **Contain the damage.** In this section of the incident response plan, you apply the completed analysis in a way that quarantines the damage. Can you create a defense perimeter around the compromised resources? The objective is to provide a framework that the incident response team can use to contain the damage. There is probably not a single procedure that can be applied, even against what appears to be a simple threat. It is best to present a list of proven methods, without getting too granular. One or two examples in this section will suffice. Also include links to reference libraries your team should be using.
+
+     One containment approach is to isolate non-affected systems, to prevent the spread of damage. AWS will be involved by this point, and it will be helpful to include a list of what AWS can provide during this phase of the plan. This will include network containment by AWS in areas such as network segmentation or isolation, firewall and intrusion detection rules modification. For more information about shared security responsibilities, see http://aws.amazon.com/security/. Be aware that as you try to contain damage, an intruder may be covering their trail, or inflicting worse damage. Each situation must be addressed individually, with the outcome never a certainty. During containment efforts you should use every available resource to obtain optimum results.
+     
+5. **Examine collected information.** In your incident response plan add a section that guides the analysis of data for purpose of discovering root cause and mitigating loss. Again, there will be preferred methods used by security personnel throughout the organization. If there is a standard analysis to be used, then include a brief summary of how to use it, and point to additional references that go into more detail of the method. The skills necessary during this phase are wide-ranging. Usually, the response team will have available a specialist who can process log files efficiently, including data from routers, switches, operating systems, and AWS service logs in your cloud deployment. System knowledge is required to discover and interpret artifacts from the attack. Much of this examination is format-dependent and tool-driven. Since formats may be dynamic, and discovery tools are continuously improved, it is better to point to general sources of information in these areas.
+
+     As information is examined, it may be necessary to continue to track for further evidence. It will be necessary to continue communications with AWS during this phase, to understand what methods and tools are permissible with the infrastructure. It is doubly important to continue to work with legal authorities. Discuss rules of behavior with team members. Include statements that encourage response team members to ask for advice before deviating from the incident response plan.
+     
+6. **Recover operations and repair objects.** In this section of the plan, describe an approach that leads to recovery and repair of the affected systems and objects in the cloud deployment. By this time you may have patched or changed ingress rules to stop the incident. However, this does not give an organization 100% information assurance. It is necessary to make an appraisal of the situation which may result in a decision to recover machine images, instances and data. Since you are recovering all or part of a cloud deployment, the exact recovery procedure may not be proven. The recovery approaches may range from deleting keys for account identities to rebuilding from machine images and S3 container backups. This section is not intended to provide repair procedures, but should attempt to guide the response team to review restore (and backup) procedures in light of this incident, and consider restore implications. The recovery phase will not be simple. Possibly, many steps will be carried out in parallel. There may not be sufficient time to perform checks on all aspects of a cloud restore process. To end this phase, describe how closure of the incident is announced and distributed to stakeholders. This is required so that the organization can resume normal operating conditions and organization officials can be debriefed as described in the next section.
+
+7. **Debrief the organization.** Debriefing after incident closure is a formal process of security management. This section of the incident response plan reminds the team members of the requirement, and provides guidelines or template for a debriefing. The information gathered during the incident is voluminous, but the debrief has the purpose of bringing results to the organization so that further action can be proposed and acted upon. These are suggestions for topics to cover in the debrief:
+     - Incident description
+     - What worked
+     - What failed
+     - CSP findings
+     - Legal issues (such as sensitive data lost)
+     - Root cause
+     - Recommended changes to procedures
+     - Request for additional monitoring
+     - Manpower requirements
+
+     All of this information is useful to the organization to properly address issues of disclosure, customer confidence, legal reporting requirements, and available resources.
+
+
+##Additional Resources##
+
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [Amazon Web Services: Risk and Compliance](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Risk and Compliance")
+- [Official (ISC)2 Guide to the CISSP CBK](https://www.isc2.org/ "Official ISC2 Guide to the CISSP CBK")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) - Requirements and Security Assessment Procedures](https://www.pcisecuritystandards.org/security_standards/index.php "PCI DSS Requirements and Security Assessment Procedures")
+]]></Data>
+  </Content>
+</TeamMentor_Article>

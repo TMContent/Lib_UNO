@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7c0c3d97-e812-48cb-855f-86ebe4672b10</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Encrypt Sensitive Data in the Cloud</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Protect sensitive information stored in your cloud by using encryption methods for data at rest in these services:
+
+- Amazon S3
+- Amazon EBS
+- Amazon RDS
+- Additional services with sensitive data.
+
+
+##Why##
+
+Data at rest requires safe storage practices to address security concerns such as:
+
+- Accidental information disclosure
+- Data integrity compromise
+- Unintended deletion
+- Availability of infrastructure hardware and software.
+
+These concerns are addressed by your encryption methods which satisfy the requirement for protection of cardholder data (PCI-DSS Requirement 3).
+
+##When##
+
+When encryption is available at the file, partition, volume, or application-level, you should use it. Some data may not be confidential, but it is simpler to enable encryption for an entire bucket or volume, for example, in order to eliminate the possibility that an intruder could use any data in your cloud.
+
+Backup and replication approaches must also use encryption, or respect the encryption method already in use.
+
+
+##How##
+
+To use encryption with your AWS resources, include the following steps as part of your management of sensitive data in the cloud:
+
+1. **Identify sensitive data.** Examine your cloud architecture and services used. Look for customer data, intellectual property, and access credentials.
+
+2. **Classify sensitive data.** Review the list of sensitive data and prioritize the classification. Customer data and your business data are important, but the financial impact of losing customer data may be higher than losing a list of employees. Use such comparisons as well as threat level to rank and classify data.
+
+3. **Protect data at rest on S3.** Use permissions at the bucket or object level in combination with IAM policies. This will secure your S3 resources against unauthorized access, deletion, and disclosure.
+
+4. **Protect data at rest on EBS.** Use Elastic Block Store (EBS) encryption on non-boot volumes. For boot volumes you will use an encryption method supported by the operating system (OS). For example, in Windows this might be Encrypted File System (EFS) or BitLocker. 
+
+5. **Protect data at rest on RDS.** Relational Database Service (RDS) offers platform-level protection for MySQL, Oracle, and MS SQL. You can add more protection at the application layer by using a built-in encryption function. Your application can manage keys with PKI or other asymmetric technique.
+
+6. **Protect data at rest on Glacier.** Your data is always protected by server-side encryption. For an additional layer of security you can also encrypt your data before uploading to Glacier.
+
+7. **Protecting data at rest on DynamoDB.** You will need to implement a data encryption layer over the standard service. This can be done at the application layer. For more information about NoSQL development, see http://aws.amazon.com/dynamodb/.
+
+8. **Protecting data at rest on EMR.** Elastic MapReduce (EMR) uses Amazon Machine Images (AMI) to create instances, which by default do not encrypt data at rest. For more information about S3 server-side and client-side encryption, see http://docs.aws.amazon.com/AmazonS3/latest/dev/.
+
+
+##Additional Resources##
+
+- [Amazon Relational Database Service User Guide](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/ "Amazon RDS User Guide")
+- [Amazon Simple Storage Service Developer Guide](http://docs.aws.amazon.com/AmazonS3/latest/dev/ "Amazon Simple Storage Service: Developer Guide")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [Encrypting Data at Rest](http://aws.amazon.com/whitepapers/encrypting-data-at-rest/ "Encrypting Data at Rest")
+- [Payment Card Industry (PCI) Data Security Standard (DSS) - Requirements and Security Assessment Procedures](https://www.pcisecuritystandards.org/documents/PCI_DSS_v3.pdf "PCI DSS Requirements and Security Assessment Procedures")
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

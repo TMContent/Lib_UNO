@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>0339bffe-622f-4796-ad73-f3dfc0b04e2a</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Be Able to Recover AWS Accounts</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Secure the credentials of your AWS account to prevent compromise. Lock your account (root) credentials in a safe. Immediately contact Amazon if you cannot access your account for any reason.
+
+
+##Why##
+
+The primary AWS account has root permissions to all resources and services. If the account credentials are not handled in accordance with your security management policy, every object, including users' Identity and Management accounts are jeopardized. Sensitive information would also be at risk. If you use the AWS account rather than an IAM account for daily duties, the security risk level increases. If the root credentials are safely locked up, the risk for lost or stolen account credentials is substantially reduced, if not eliminated.
+
+ISO27001:2013 requires the protection, management, and restriction of privileged accounts (A.9.2.3 and A.9.2.4).
+
+Your security management plan and/or administration policy should include a procedure for recovering access and regaining control in the event of account compromise. If this guidance is not followed, your account may become inaccessible for an extended duration. Note that some billing details (not credit card numbers) are accessible to an intruder. Unauthorized purchases of AWS services can be billed to your credit card by anyone who has access to your AWS account.
+
+##When##
+
+Record the steps for account recovery in an administrator procedure after your AWS account is first opened.
+
+
+##How##
+
+The following preventative steps should be taken as part of your AWS security posture.
+
+1. Record the AWS account login name, password, and account number. Store this information in an encrypted password utility or other location approved by your site security plan. Also store the credentials in a physical safe.
+
+2. Open and use an Identity and Management (IAM) for yourself as an administrator with privileges you require to access resources and create other accounts.
+
+3. Do not generate access keys for your AWS account. More secure methods exist to create certificates and secret credentials you require. Attach restrictive policy to these.
+
+4. Turn on Multi-Function Authentication (MFA) for the AWS account login.
+
+5. Use CloudTrail security to capture information about logins for AWS account owner, IAM users, and federated users. It is recommended to send SNS when the root account is used.
+
+6. Use the AWS Trusted Advisor service. This provides three important security checks: specific ports unrestricted, IAM use, and MFA on root account.
+
+7. Allow your IAM admin account access to Billing & Cost Management. Use the feature to receive billing alerts. Enable ongoing billing reports of AWS charges to be sent to a specific S3 bucket. 
+
+8. Use a credit card dedicated to AWS purchases.
+
+9. Sterilize code and perform a security review to make sure access keys are protected.
+
+If your AWS account credentials are compromised, perform these steps to regain access:
+
+1. Notify AWS billing and support by filling out a support request. Choose the option to be contacted by your mobile number.
+
+2. Notify AWS technical support if you have a support plan. Use web response or mobile response. They will be able to guide you through resource recovery steps.
+
+3. Delete all access keys and re-generate when the account is secured.
+
+4. Stop all EC2 instances including spot bids. You may need to go to multiple regions to identify all instances.
+
+5. Check all AWS services for suspicious changes and shut them down.
+
+6. Report any problems with MFA. For more information about an unusable authentication device, see https://aws.amazon.com/forms/aws-mfa-support/
+
+7. Be sure to complete any additional steps recommended by billing and/or technical support.
+
+##Additional Resources##
+
+- [Amazon AWS Account Hacking and How to Avoid it](http://zacharybears.com/amazon-aws-account-hacking-and-how-to-avoid-it/ "Amazon AWS Account Hacking and How to Avoid it")
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [AWS Identity and Access Management - Using IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/iam-ug.pdf "AWS Identity and Access Management - Using IAM")
+- [AWS Security Best Practices](http://aws.amazon.com/security/ "AWS Security Best Practices")
+- [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
+- [ISO/IEC 27001:2013 - Information technology - Security techniques - Information security management systems - Requirements](http://www.iso.org/iso/catalogue_detail?csnumber=54534 "ISO/IEC 27001:2013 - Information Management Security Systems Requirements")
+- [Unusable Authentication Device Form](https://aws.amazon.com/forms/aws-mfa-support/)]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>5ed10f15-308f-408c-ae8a-f1d6d78eaad7</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Scramble Excessive Sensitive Data in the Cloud</Title>
+    <Category>Cryptography</Category>
+    <Phase>Implementation</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Truncate and/or hash excessive sensitive data.
+
+
+##Why##
+
+Stored sensitive data might be compromised if some other part of the application is compromised, so it is best to store as little sensitive data as possible. If a portion of sensitive data is sufficient to satisfy application requirements, then only a portion of the sensitive data should be used. For example, it is often sufficient to store the last four digits of the Social Security Number to verify user identity, so in such cases only the last four digits should be stored.
+
+
+##When##
+
+When working with sensitive account information such as a PAN or Social Security Number (SSN), you must programmatically scramble excessive data.
+
+
+
+##How##
+
+1. **Identify all sensitive data.** Review the application for sensitive data that will be used by the application. For example:
+     - incoming transaction data
+     - all logs, such as transactions, history, debugging, and error
+     - history files
+     - trace files
+     - database schemas
+     - database contents.
+
+2. **Identify excessive sensitive data.** Determine from the list of sensitive data which types of data can be truncated while still being able to fulfill application requirements.
+
+3. **Analyze hashing requirement.** Determine whether hashing a portion of the sensitive data is appropriate. Hashing should only be used if data is going to be used for validation, but never recovered from the store.
+
+4. **Add code to truncate.** Add code to truncate any excessive sensitive.
+
+5. **Hash stored sensitive data.** If sensitive data is only used for validation, add code to hash the partial stored sensitive data stored.
+
+
+##Additional Resources##
+
+- [Payment Card Industry (PCI) Data Security Standard (DSS) - Requirements and Security Assessment Procedures](https://www.pcisecuritystandards.org/security_standards/index.php "PCI DSS Requirements and Security Assessment Procedures")
+- [ISO/IEC 27001:2013 - Information technology - Security techniques - Information security management systems - Requirements](http://www.iso.org/iso/catalogue_detail?csnumber=54534 "ISO/IEC 27001:2013 - Information Management Security Systems Requirements")
+]]></Data>
+  </Content>
+</TeamMentor_Article>
