@@ -3,7 +3,7 @@
   <Metadata>
     <Id>8f5ac742-ecc6-4909-9aaa-2501572b5d2f</Id>
     <Id_History>8f5ac742-ecc6-4909-9aaa-2501572b5d2f,3540c4f0-0623-42bb-ba02-80767d751131,</Id_History>
-    <Library_Id>c037d0d2-0617-44f3-b846-21dc3d02c4f8</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Use a Global Exception Handler for Unhandled Exceptions</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
@@ -32,17 +32,23 @@
     <li>
       <p>
         <strong>Define a global exception handler. </strong>Write a function that will handle all uncaught exceptions. Place this function in the error handling subsystem. The global exception handler should accept the exception object as a parameter.</p>
-      <li>
-        <p>
-          <strong>Log detailed exception information.</strong> Add code to the global exception handler to get as much information as possible from the exception object that is passed as the parameter. Log the </p>
-        <li>
-          <p>
-            <strong>Show a simple error message.</strong> Be careful not to give away too much information to attackers. Write a simple message that lets the user know that the application has crashed, but the situation is under control. Add code that displays the error message to the global exception handler.</p>
-          <li>
-            <p />
-            <strong>Clean up and exit gracefully.</strong> Add code to the global exception handler to do the following as necessary: <ul><li>Close any open file handles. <li>Remove any temporary files used by the application. <li>Check file system permissions and reset them if necessary. <li>Close any open connections, including database connections. <li>Free any external resources in use.</li></li></li></li></li></ul><li><p><strong>Set the global exception handler.</strong> Use the <em>set_exception_handler</em> function to set the global exception handler somewhere early on in the application flow. Add the call to the <em>set_exception_handler</em> early on in every script just to be sure.</p><p><strong>Note:</strong> certain types of errors cannot be handled with user-defined error handlers in scripts that have a global exception handler. Error handling is different from exception handling. Exception handling is a newer and more logical approach than error handling. It is recommended to use exception handling instead of error handling.</p></li></li>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Log detailed exception information.</strong> Add code to the global exception handler to get as much information as possible from the exception object that is passed as the parameter. Log the detailed exception information.<br /></p>
+    </li>
+    <li>
+      <p>
+        <strong>Show a simple error message.</strong> Be careful not to give away too much information to attackers. Write a simple message that lets the user know that the application has crashed, but the situation is under control. Add code that displays the error message to the global exception handler.</p>
+    </li>
+    <li>
+      <p />
+      <strong>Clean up and exit gracefully.</strong> Add code to the global exception handler to do the following as necessary: <ul><li>Close any open file handles. </li><li>Remove any temporary files used by the application. </li><li>Check file system permissions and reset them if necessary. </li><li>Close any open connections, including database connections. </li><li>Free any external resources in use.</li></ul></li>
+    <li>
+      <p>
+        <strong>Set the global exception handler.</strong> Use the <em>set_exception_handler</em> function to set the global exception handler somewhere early on in the application flow. Add the call to the <em>set_exception_handler</em> early on in every script just to be sure.</p>
+      <p>
+        <strong>Note:</strong> certain types of errors cannot be handled with user-defined error handlers in scripts that have a global exception handler. Error handling is different from exception handling. Exception handling is a newer and more logical approach than error handling. It is recommended to use exception handling instead of error handling.</p>
     </li>
   </ol>
   <h1>Additional Resources</h1>
