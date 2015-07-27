@@ -24,10 +24,10 @@
   <h1>How to Fix</h1>
   <p>If your multithreaded code caches the results of a security check, perhaps in a static variable, the code is potentially vulnerable, as shown in the following example.</p>
   <div>
-    <pre>public void AccessSecureResource()&amp;#123;<br />  callerOK = PerformSecurityDemand();<br />  OpenAndWorkWithResource();<br />  callerOK = false;<br />&amp;#125;<br />private void OpenAndWorkWithResource()&amp;#123;<br />  if (callerOK)<br />    PerformTrustedOperation();<br />  else<br />  &amp;#123;<br />    PerformSecurityDemand();<br />    PerformTrustedOperation();<br />  &amp;#125;<br />&amp;#125;</pre>
+    <pre>public void AccessSecureResource()&#123;<br />  callerOK = PerformSecurityDemand();<br />  OpenAndWorkWithResource();<br />  callerOK = false;<br />&#125;<br />private void OpenAndWorkWithResource()&#123;<br />  if (callerOK)<br />    PerformTrustedOperation();<br />  else<br />  &#123;<br />    PerformSecurityDemand();<br />    PerformTrustedOperation();<br />  &#125;<br />&#125;</pre>
   </div>
   <p>If your code has other paths to <b>OpenAndWorkWithResource</b>, and a separate thread calls the method on the same object, it is possible for the second thread to omit the security demand because it encounters <b>callerOK=true</b>, set by another thread.</p>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

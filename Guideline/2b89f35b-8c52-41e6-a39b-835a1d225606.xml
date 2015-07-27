@@ -19,43 +19,43 @@
   </Metadata>
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>What to Do</h1>
-  <p>Choose appropriately strong encryption when&amp;nbsp;protecting connection strings. Use available pre-existing&amp;nbsp;mechanisms for encrypting and decrypting data in production systems. Never attempt to write your own encryption routines for any&amp;nbsp;purpose&amp;nbsp;beyond academic excercise. </p>
+  <p>Choose appropriately strong encryption when&nbsp;protecting connection strings. Use available pre-existing&nbsp;mechanisms for encrypting and decrypting data in production systems. Never attempt to write your own encryption routines for any&nbsp;purpose&nbsp;beyond academic excercise. </p>
   <h1>Why</h1>
-  <p>Web Applications need the strongest level of encryption practically available. There are several existing encryption libraries that are available which have been audited by security professionals.&amp;nbsp;Besides saving time by re-using code,&amp;nbsp;robust encryption libraries handle many of the unforeseen pitfalls associated with transforming an encryption algorithm into a "safe" implementation. Commercial implementations of established algorithms have been vetted through extensive certification, such as the Federal Information Processing Standards issued by the National Institute of Standards and Technology (NIST). Using a weak &amp;nbsp;or&amp;nbsp;non-rigorously&amp;nbsp;tested encryption library is essentially the same as not using encryption at all, since there is a high likelihood that hackers will be able to decrypt connection strings&amp;nbsp;using brute force, or by&amp;nbsp;taking advantage of&amp;nbsp;flaws in the algorithm's implementation. </p>
+  <p>Web Applications need the strongest level of encryption practically available. There are several existing encryption libraries that are available which have been audited by security professionals.&nbsp;Besides saving time by re-using code,&nbsp;robust encryption libraries handle many of the unforeseen pitfalls associated with transforming an encryption algorithm into a "safe" implementation. Commercial implementations of established algorithms have been vetted through extensive certification, such as the Federal Information Processing Standards issued by the National Institute of Standards and Technology (NIST). Using a weak &nbsp;or&nbsp;non-rigorously&nbsp;tested encryption library is essentially the same as not using encryption at all, since there is a high likelihood that hackers will be able to decrypt connection strings&nbsp;using brute force, or by&nbsp;taking advantage of&nbsp;flaws in the algorithm's implementation. </p>
   <h1>When</h1>
-  <p>Unfortunately, continual improvements in hardware and software algorithms&amp;nbsp;that are available to the general public means that no encryption solution is a permanent choice. Encryption strength needs to be evaluated in all phases of the Software Development Lifecyle and wherever connection strings are utilized. There is a&amp;nbsp;balance between&amp;nbsp; knowing the&amp;nbsp;value of data, and the difficulty of comprising said data. &amp;nbsp;Using the strongest practical encryption available is chosen by knowing the value of the data you are trying to&amp;nbsp;protect and then elevate the difficulty of compromising it beyond that value.<br /></p>
+  <p>Unfortunately, continual improvements in hardware and software algorithms&nbsp;that are available to the general public means that no encryption solution is a permanent choice. Encryption strength needs to be evaluated in all phases of the Software Development Lifecyle and wherever connection strings are utilized. There is a&nbsp;balance between&nbsp; knowing the&nbsp;value of data, and the difficulty of comprising said data. &nbsp;Using the strongest practical encryption available is chosen by knowing the value of the data you are trying to&nbsp;protect and then elevate the difficulty of compromising it beyond that value.<br /></p>
   <h1>How</h1>
-  <p>In ASP.NET&amp;nbsp; applications, there are two libraries that provide encryption facilities for connection strings, namely DPAPI and RSA. Both implementations are robust and safe, having passed certification by professional cryptologists. Both DPAPI and RSA are considered strong encryption by present standards. Follow these steps to encrypt your connection strings:</p>
+  <p>In ASP.NET&nbsp; applications, there are two libraries that provide encryption facilities for connection strings, namely DPAPI and RSA. Both implementations are robust and safe, having passed certification by professional cryptologists. Both DPAPI and RSA are considered strong encryption by present standards. Follow these steps to encrypt your connection strings:</p>
   <p>
     <strong>1. Choose the appropriate configuration provider.</strong> Under most circumstances DPAPI will suffice, although the RSA protected configuration is the logical choice in web farms where multiple servers are employed. </p>
   <p>
     <strong>2.</strong>
-    <strong>Identify the configuration sections to be encrypted.</strong> Encrypting and decrypting data incurs performance overhead. To keep this overhead to a minimum, encrypt only the sections of the configuration file that store sensitive data.&amp;nbsp; Encrypt the &lt;connectionStrings&gt; element of the Web.config file to protect the database connection string. </p>
+    <strong>Identify the configuration sections to be encrypted.</strong> Encrypting and decrypting data incurs performance overhead. To keep this overhead to a minimum, encrypt only the sections of the configuration file that store sensitive data.&nbsp; Encrypt the &lt;connectionStrings&gt; element of the Web.config file to protect the database connection string. </p>
   <p>
-    <strong>3. Choose the machine or user store.</strong> The DataProtectionConfigurationProvider supports machine-level and user-level stores for key storage. The choice of store depends largely on whether or not&amp;nbsp;the application shares a server with other applications and whether or not sensitive data must be kept private for each application.</p>
+    <strong>3. Choose the machine or user store.</strong> The DataProtectionConfigurationProvider supports machine-level and user-level stores for key storage. The choice of store depends largely on whether or not&nbsp;the application shares a server with other applications and whether or not sensitive data must be kept private for each application.</p>
   <p>
     <strong>Machine Store</strong>
   </p>
   <p>By default, the DataProtectionConfigurationProvider is configured to use DPAPI with the machine store. Use machine-level key storage in the following situations:</p>
   <ul>
     <li>The application runs on its own dedicated server with no other applications. </li>
-    <li>Multiple applications run on the same server&amp;nbsp;and&amp;nbsp;those applications need to be able to share sensitive information.</li>
+    <li>Multiple applications run on the same server&nbsp;and&nbsp;those applications need to be able to share sensitive information.</li>
   </ul>
-  <p>To encrypt the connectionStrings section&amp;nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
+  <p>To encrypt the connectionStrings section&nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
   <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
   <p>
     <strong>User Store</strong>
   </p>
-  <p>Use user-level key storage if the application runs in a shared hosting environment and the&amp;nbsp;application's sensitive data should&amp;nbsp;not be accessible to other applications on the server. In this situation, each application should run under a separate identity, and the resources for the application—such as files and databases—should be restricted to that identity.</p>
-  <p>To encrypt the connectionStrings section&amp;nbsp;with the&amp;nbsp;User Store, run the following command from a .NET command prompt:</p>
+  <p>Use user-level key storage if the application runs in a shared hosting environment and the&nbsp;application's sensitive data should&nbsp;not be accessible to other applications on the server. In this situation, each application should run under a separate identity, and the resources for the application—such as files and databases—should be restricted to that identity.</p>
+  <p>To encrypt the connectionStrings section&nbsp;with the&nbsp;User Store, run the following command from a .NET command prompt:</p>
   <pre>   aspnet_regiis -pe "connectionStrings" -app "/UserDPAPI" -prov "MyUserDataProtectionConfigurationProvider"</pre>
   <p>
     <strong>4.</strong>
-    <strong>Encrypt&amp;nbsp;the configuration file data.</strong>&amp;nbsp;To encrypt the connectionStrings section in Web.config using DPAPI with the Machine Store, run the following command from a .NET command prompt:</p>
+    <strong>Encrypt&nbsp;the configuration file data.</strong>&nbsp;To encrypt the connectionStrings section in Web.config using DPAPI with the Machine Store, run the following command from a .NET command prompt:</p>
   <pre>   aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
-  <p>The above command with the -app switch assumes that there is an IIS virtual directory called MachineDPAPI. If the Visual Studio .NET Web server is being utilized instead of IIS, use the -pef switch, which&amp;nbsp;specifies the physical directory location of&amp;nbsp;the configuration file.</p>
-  <pre>   aspnet_regiis.exe -pef "connectionStrings" C:\Projects\MachineDPAPI -prov "DataProtectionConfigurationProvider"&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br /></pre>
+  <p>The above command with the -app switch assumes that there is an IIS virtual directory called MachineDPAPI. If the Visual Studio .NET Web server is being utilized instead of IIS, use the -pef switch, which&nbsp;specifies the physical directory location of&nbsp;the configuration file.</p>
+  <pre>   aspnet_regiis.exe -pef "connectionStrings" C:\Projects\MachineDPAPI -prov "DataProtectionConfigurationProvider"&nbsp;&nbsp;&nbsp;&nbsp; <br /></pre>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

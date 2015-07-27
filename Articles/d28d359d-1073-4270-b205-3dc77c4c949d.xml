@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d28d359d-1073-4270-b205-3dc77c4c949d</Id>
+    <Library_Id>de693015-55c9-4328-bbc8-42db82ae8b7a</Library_Id>
+    <Title>Session Management</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="wikitext">
+    <Data><![CDATA[Session management is a crucial process and can impact both the end user experience and security of an application if done incorrectly. When implementing a session management process, it is important to factor in the security and protocol used to transmit information to and from the user. Improper security precautions can allow for a man in the middle to intercept credentials or account information and steal session data. View this room to learn how to transmit session information securely and the features that should be implemented to protect a user’s session.
+
+==Use Unique Tokens for Sensitive Requests to Prevent CSRF==
+
+CSRF may occur when an attacker can form a URL which performs an action on behalf of an authenticated user. Forming such URLs becomes much more difficult if unique tokens are included in HTTP requests. Including difficult-to-predict tokens in HTTP requests is an effective defense against CSRF attacks.
+
+* [[8f39bcc9-619b-479e-94b7-af822c7cc5fe|.NET]]
+* [[61b8ebc8-3ba5-4e75-aea8-94d6d3b3177e|Java]]
+* [[19f2779c-14ec-43fb-8e8d-4505cb0801c9|Scala]]
+* [[4236cf87-7f64-4f77-91b3-04dc1507c366|PHP]]
+
+==Lock Idle Sessions==
+
+Locking inactive terminal sessions ensures that a passerby cannot use the credentials of the user who is currently logged in.
+
+* [[930f62d1-cce9-4277-b726-551ca551a275|Any]]
+
+==Allow the User to Logout==
+
+Placing a logout link on every page that requires authentication helps the user end the session when he is done with the site. Ending the session helps prevent hijacking.
+
+* [[98e47f4f-928d-4520-b449-fe4d779e53f6|Any]]
+
+==Assign a New Session ID on Reauthentication==
+
+Assigning a new session ID on reauthentication makes it more difficult to attack the authentication system.
+
+* [[505f5d11-7d0a-446d-8b00-4c36d2eda790|.NET]]
+
+==Protect Session IDs==
+
+Session IDs are used by an application to identify the session associated with a particular user. Protecting session IDs can help prevent an attacker from hijacking the session and posing as a legitimate user.
+
+* [[00000000-0000-0000-0000-000000894eab|.NET]]
+* [[6012e717-6ba6-4380-8ca8-2f0b7c69d717|Java]]
+* [[13ad7fa3-199e-4957-9e4f-39bd931c9f1d|Scala]]
+* [[c940ef8d-5bca-4351-b94a-f4db44043028|PHP]]
+
+==Do Not Place Sensitive Data in Persistent Cookies==
+
+Allow sensitive cookies to expire when the user closes the browser to prevent attackers from stealing these cookies from the user's system. An attacker would have to gain unauthorized access to the user's system to be able to recover persistent cookies. This does happen in practice, for example, as a result of malware infection. Botnet operators often steal cookies stored on users' computers to hijack those users' accounts on sites that store session information in persistent cookies. If sensitive cookies are not persistent, then they will not be stored on the system and it will be more difficult for an attacker to recover them. 
+
+* [[00000000-0000-0000-0000-0000007cad1c|.NET]]
+* [[93d20f88-9a16-45b9-9dfd-9bdd25630bcf|Java]]
+* [[00000000-0000-0000-0000-0000004e3194|PHP]]
+
+==Do Not Place Sensitive Data in Exposed Parameters==
+
+The HTTP-GET protocol because the protocol uses query strings to pass data. As query strings are clearly visible in the client's browser address bar, a malicious user can change the sensitive data that is clearly visible in the URL query string. 
+
+* [[a96eaddb-5fb2-458e-b5ca-fde05a9a3a06|.NET]]
+* [[19a025b8-9242-4ef5-896b-932828f5f654|Java]]
+* [[00000000-0000-0000-0000-0000004f4246|PHP]]
+
+==Use Platform Session Management==
+
+The framework works on a lower level than the application and is therefore better suited to provide session management. Most mature web application frameworks offer secure session management functionality.
+
+* [[96059535-1543-458e-afb7-e40360b9dcd2|.NET]]
+* [[42276b64-f51d-4b89-8c33-0ffd9b098890|Java]]
+* [[b42309de-b99e-4a32-a36e-6c4cdf9e3a6e|PHP]]
+
+==Do Not Make Security Decisions Based on Exposed Parameters==
+
+Client input comes in many forms, from direct input like form variables and query string parameters to less direct input like cookies and connection information.  None of it can be trusted and any information coming from the client can be completely controlled by an attacker, even with thick clients.
+
+* [[22937597-b259-432f-a471-ca9734f2412c|.NET]]
+* [[9df0b518-f832-4a7c-9857-0517638c47db|Java]]
+* [[7889a5ad-4e61-41da-97da-d40337050e17|Scala]]
+
+==Change Session IDs During Authentication==
+
+Assigning a new session ID on login makes it harder for an attacker to hijack a user's session.
+
+* [[70f18bf9-23cd-42c2-a324-65fb045372b4|Any]]
+* [[505f5d11-7d0a-446d-8b00-4c36d2eda790|.NET]]
+* [[6c470029-5c62-4394-99a9-8990bc48b0a8|Java]]
+* [[b8e65bce-05bb-40b0-bc5b-ea6fe1e3ce96|Scala]]
+* [[96aa6669-a0c8-432b-9876-dd8da36ce179|PHP]]
+
+==Destroy Sessions when Users Logout==
+
+Reset the session ID of the user upon logout to prevent people using the same computer from being able to retrieve the session ID after the user has logged out.
+
+* [[7d873b52-217e-43e8-8fe9-a5dcf52bf030|Any]]
+* [[72573c06-f26f-4079-8199-61c6dcb6859c|.NET]]
+* [[a223c2d8-ab42-47fb-81a2-86ad677a5632|Java]]
+* [[05a2cfa6-d015-446b-8c25-3cb13f10d396|Scala]]
+* [[7d873b52-217e-43e8-8fe9-a5dcf52bf030|PHP]]
+
+==Limit Session Lifetime==
+
+Make sessions expire after a period of inactivity to make it harder for an attacker to hijack a session.
+
+* [[2efe27a3-65bb-41e3-aea4-a026dd788356|Any]]
+* [[304f1b19-66fa-44e3-a6ec-742f5e0ffcd1|.NET]]
+* [[acfe1a16-3f00-4383-ada4-bebafc98a836|Java]]
+* [[6ac43864-2644-4f33-bfb2-1366c5c3cb58|Scala]]
+* [[775c2307-9cd9-4dce-a419-6fe406fb1f20|PHP]]
+
+==Use Strong Session IDs==
+
+Using strong session identifiers prevents attackers from easily guessing session ids and taking over users' sessions. If an attacker hijacks the session he/she can perform the same functions as the logged in user. This will lead to a compromise of user account and in case the user is an administrator, the whole application. 
+
+* [[00000000-0000-0000-0000-000000345bc8|.NET]]
+* [[00000000-0000-0000-0000-00000057bb79|Java]]
+* [[e00c3d06-d939-494d-a42c-88878f26f2fc|PHP]]
+
+[[bcbbe5c7-95c3-468d-9371-6eb42f9b93e6|Back to the Programming Best Practices Area]]]]></Data>
+  </Content>
+</TeamMentor_Article>

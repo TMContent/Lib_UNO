@@ -3,7 +3,7 @@
   <Metadata>
     <Id>46b10949-5b96-4c5b-b99d-45c6feadf9b0</Id>
     <Id_History>46b10949-5b96-4c5b-b99d-45c6feadf9b0,7c2b1f96-1a77-4696-8e4c-52abb74c9bd0,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>How to Authenticate Users with Certificates</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
@@ -20,19 +20,24 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Microsoft&#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&#174; 2008</li></li>
+    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 </li>
+    <li>Microsoft Visual Studio® 2008</li>
   </ul>
   <h1>Description</h1>
   <p>Client certificates can authenticate a client service account or multiple users to a WCF service. If you use a client certificate for each user, you can map each certificate to a Windows account. </p>
   <p>Use the following steps to authenticate users using a client-side certificate:</p>
   <ol>
-    <li>Install the service certificate on the WCF service machine.<ul><li>If you are using message security, configure service credentials to set the name and location of the service certificate. <li>If you are using transport security with wsHttpBinding, install the service certificate on IIS and configure the virtual directory to require SSL and client certificate.</li></li></ul><li>Configure the service to use certificates for client credentials type as show in the following example:<ol><pre>      &lt;wsHttpBinding&gt;<br />        &lt;binding name="WSHttpBinding_ICalculator"&gt;<br />          &lt;security mode="Message"&gt;<br />            &lt;message clientCredentialType="Certificate" /&gt;<br />          &lt;/security&gt;<br />        &lt;/binding&gt;<br />      &lt;/wsHttpBinding&gt;</pre></ol><li>Install the service certificate on the client machine.<li>Configure the endpoint behavior to set the name and location of the client certificate.</li></li></li></li>
+    <li>Install the service certificate on the WCF service machine.<ul><li>If you are using message security, configure service credentials to set the name and location of the service certificate. </li><li>If you are using transport security with wsHttpBinding, install the service certificate on IIS and configure the virtual directory to require TLS and client certificate.</li></ul></li>
+    <li>Configure the service to use certificates for client credentials type as show in the following example:<ol><pre>      &lt;wsHttpBinding&gt;<br />        &lt;binding name="WSHttpBinding_ICalculator"&gt;<br />          &lt;security mode="Message"&gt;<br />            &lt;message clientCredentialType="Certificate" /&gt;<br />          &lt;/security&gt;<br />        &lt;/binding&gt;<br />      &lt;/wsHttpBinding&gt;</pre></ol></li>
+    <li>Install the service certificate on the client machine.</li>
+    <li>Configure the endpoint behavior to set the name and location of the client certificate.</li>
   </ol>
   <p>
     <strong>Note</strong>: Make sure the root CA certificate is in the Trusted Root Certification Authorities location on both the server and client machines. <br /></p>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information on working with WCF and certificates, see &#8220;Working with Certificates&#8220; at <a href="http://msdn.microsoft.com/en-us/library/ms731899.aspx">http://msdn.microsoft.com/en-us/library/ms731899.aspx</a><li>For more information on certificates with WCF, see &#8220;How to Use Certificate Authentication and Message Security in WCF calling from Windows Forms&#8221; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=How&#37;20To&#37;20-&#37;20Use&#37;20Certificate&#37;20Authentication&#37;20and&#37;20Message&#37;20Security&#37;20in&#37;20WCF&#37;20calling&#37;20from&#37;20Windows&#37;20Forms&referringTitle=How&#37;20Tos">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=How&#37;20To&#37;20-&#37;20Use&#37;20Certificate&#37;20Authentication&#37;20and&#37;20Message&#37;20Security&#37;20in&#37;20WCF&#37;20calling&#37;20from&#37;20Windows&#37;20Forms&referringTitle=How&#37;20Tos</a>&nbsp;<br /></li></li>
+    <li>For more information on working with WCF and certificates, see “Working with Certificates“ at <a href="http://msdn.microsoft.com/en-us/library/ms731899.aspx">http://msdn.microsoft.com/en-us/library/ms731899.aspx</a></li>
+    <li>For more information on certificates with WCF, see “How to Use Certificate Authentication and Message Security in WCF calling from Windows Forms” at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=How%20To%20-%20Use%20Certificate%20Authentication%20and%20Message%20Security%20in%20WCF%20calling%20from%20Windows%20Forms&referringTitle=How%20Tos">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=How%20To%20-%20Use%20Certificate%20Authentication%20and%20Message%20Security%20in%20WCF%20calling%20from%20Windows%20Forms&referringTitle=How%20Tos</a>&nbsp;<br /></li>
   </ul>
   <hr />
   <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>

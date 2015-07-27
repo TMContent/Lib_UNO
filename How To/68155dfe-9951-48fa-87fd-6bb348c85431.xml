@@ -3,7 +3,7 @@
   <Metadata>
     <Id>68155dfe-9951-48fa-87fd-6bb348c85431</Id>
     <Id_History>68155dfe-9951-48fa-87fd-6bb348c85431,49c3d5c6-3835-4c2d-aac9-e2b76146096b,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>How to Create a Temporary X.509 Certificate for Transport Security</Title>
     <Category>Communication Security</Category>
     <Phase>Implementation</Phase>
@@ -21,15 +21,19 @@
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
     <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
-<li>Microsoft Visual Studio® 2008</li></li>
+</li>
+    <li>Microsoft Visual Studio® 2008</li>
   </ul>
   <h1>Description</h1>
   <p>Use the following steps to create a temporary X.509 certificate for transport security:</p>
   <ol>
     <li>Create a certificate to act as your Root Certificate Authority
-<ol><pre>makecert -n "CN=RootCATest" -r -sv RootCATest.pvk RootCATest.cer</pre></ol><li>Install your Root Certificate Authority on the server and client machines. Use MMC to install the RootCATes.cer on client and server machines in the Trusted Root Certification Authorities store
-<li>Create and install your temporary service certificate
-<ol><pre>makecert -sk keyName -iv RootCATest.pvk -n "CN=MachineName.domain.com" -ic RootCATest.cer -sr localmachine -ss my -sky exchange -pe </pre></ol><li>Use Inetmgr to configure the web site and virtual directory to use the certificate and to require SSL to secure communication </li></li></li></li>
+<ol><pre>makecert -n "CN=RootCATest" -r -sv RootCATest.pvk RootCATest.cer</pre></ol></li>
+    <li>Install your Root Certificate Authority on the server and client machines. Use MMC to install the RootCATes.cer on client and server machines in the Trusted Root Certification Authorities store
+</li>
+    <li>Create and install your temporary service certificate
+<ol><pre>makecert -sk keyName -iv RootCATest.pvk -n "CN=MachineName.domain.com" -ic RootCATest.cer -sr localmachine -ss my -sky exchange -pe </pre></ol></li>
+    <li>Use Inetmgr to configure the web site and virtual directory to use the certificate and to require TLS to secure communication </li>
   </ol>
   <h1>Additional Resources</h1>
   <ul>

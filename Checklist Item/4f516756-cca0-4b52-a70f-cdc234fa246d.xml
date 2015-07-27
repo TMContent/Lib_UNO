@@ -31,13 +31,13 @@
   <ol>
     <li>
       <p>
-        <strong>Review your code for promiscuous logging. </strong>Your application should be instrumented well enough that you can determine if unusual activity is occurring.&amp;nbsp; However, do not instrument in such a way that an attacker can easily drive a large number of events to be logged.&amp;nbsp; For instance, if you log an event every time you recieve an unexpected parameter value an attacker could sent a large number of requests and quickly generate a large number of log entries.</p>
+        <strong>Review your code for promiscuous logging. </strong>Your application should be instrumented well enough that you can determine if unusual activity is occurring.&nbsp; However, do not instrument in such a way that an attacker can easily drive a large number of events to be logged.&nbsp; For instance, if you log an event every time you recieve an unexpected parameter value an attacker could sent a large number of requests and quickly generate a large number of log entries.</p>
     </li>
     <li>
       <p>
         <strong>Review log buffering in your configuration files. </strong>By default ASP.NET sets the following buffer settings for Health Monitoring:</p>
       <pre>&lt;bufferModes&gt;     <br />&lt;add name="Critical Notification" maxBufferSize="100" maxFlushSize="20"           <br />	urgentFlushThreshold="1" regularFlushInterval="Infinite" urgentFlushInterval="00:01:00"<br />           maxBufferThreads="1" /&gt;     <br />&lt;add name="Notification" maxBufferSize="300" maxFlushSize="20"          <br />	urgentFlushThreshold="1" regularFlushInterval="Infinite" urgentFlushInterval="00:01:00" <br />          maxBufferThreads="1" /&gt;     <br />&lt;add name="Analysis" maxBufferSize="1000" maxFlushSize="100" urgentFlushThreshold="100"           <br />	regularFlushInterval="00:05:00" urgentFlushInterval="00:01:00" maxBufferThreads="1" /&gt;     <br />&lt;add name="Logging" maxBufferSize="1000" maxFlushSize="200" urgentFlushThreshold="800"           <br />	regularFlushInterval="00:30:00" urgentFlushInterval="00:05:00" maxBufferThreads="1" /&gt;<br />&lt;/bufferModes&gt;</pre>
-      <p>These default settings provide a reasonable balance between performance and buffer size that is appropriate for most applications.&amp;nbsp; However, pay special attention to the maxBufferSize and urgentFlushInterval attribute values.&amp;nbsp; If an attacker can drive the maxBufferSize to be attained before the urgentFlushInterval time limit, logs will be dropped from the buffer before they are sent to be recorded in the event log.</p>
+      <p>These default settings provide a reasonable balance between performance and buffer size that is appropriate for most applications.&nbsp; However, pay special attention to the maxBufferSize and urgentFlushInterval attribute values.&nbsp; If an attacker can drive the maxBufferSize to be attained before the urgentFlushInterval time limit, logs will be dropped from the buffer before they are sent to be recorded in the event log.</p>
       <p>Also pay particular attention if the settings have been changed from default, or new rules have been added for additional event providers.</p>
     </li>
   </ol>
@@ -53,12 +53,12 @@
     </li>
     <li>
       <p>
-        <strong>Log to a seperate server. </strong>Logging to a seperate server not only reduces the load on your application server, it also makes it more difficult for an attacker to steal or alter your log entries.&amp;nbsp;</p>
-      <p>To log to a seperate server&amp;nbsp;set up SQL server on the logging host and designate it as the <b>SqlWebEventProvider</b>.&amp;nbsp; The logging machine shouldn't have any other services or roles assigned to it, to ensure that its attack surface is as small as possible.&amp;nbsp; Make sure that you connect to the SQL server securely, preferably by using integrated authentication.&amp;nbsp; Also, ensure that the account connecting to the database has permissions only to the stored procedures it needs and nothing else, including direct table access.&amp;nbsp;</p>
+        <strong>Log to a seperate server. </strong>Logging to a seperate server not only reduces the load on your application server, it also makes it more difficult for an attacker to steal or alter your log entries.&nbsp;</p>
+      <p>To log to a seperate server&nbsp;set up SQL server on the logging host and designate it as the <b>SqlWebEventProvider</b>.&nbsp; The logging machine shouldn't have any other services or roles assigned to it, to ensure that its attack surface is as small as possible.&nbsp; Make sure that you connect to the SQL server securely, preferably by using integrated authentication.&nbsp; Also, ensure that the account connecting to the database has permissions only to the stored procedures it needs and nothing else, including direct table access.&nbsp;</p>
     </li>
     <li>
       <p>
-        <strong>Modify your code's use of custom events. </strong>If you have defined and are using custom events, modify your code so that an attacker cannot control the frequency of the event being raised.&amp;nbsp; For instance, if you raise a custom event every time your application recieves a malformed parameter, you can modify this code to only log the number of malformed parameters recieved in the last 60 seconds.</p>
+        <strong>Modify your code's use of custom events. </strong>If you have defined and are using custom events, modify your code so that an attacker cannot control the frequency of the event being raised.&nbsp; For instance, if you raise a custom event every time your application recieves a malformed parameter, you can modify this code to only log the number of malformed parameters recieved in the last 60 seconds.</p>
     </li>
     <li>
       <p>
@@ -76,6 +76,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

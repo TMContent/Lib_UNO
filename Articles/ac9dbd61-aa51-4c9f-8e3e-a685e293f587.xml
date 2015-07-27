@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>ac9dbd61-aa51-4c9f-8e3e-a685e293f587</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Applications in the Cloud Are Monitored for Compromise</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##What to Check For##
+
+Verify that applications in the cloud are monitored for compromise.
+
+##Why##
+
+Instrumenting for suspicious activity allows you to detect and react to potential problems from a single console, as early as possible.
+
+Without automatic mechanisms alerting you of activity which has security implications, unauthorized users can gain quick access to all of your AWS resources. The result could be catastrophic loss of business for the AWS account holder.
+
+
+##When##
+
+Monitor all cloud applications for unusual activity by logging access to AWS objects and resources. Take care to record and store logs for examination, but only to the extent required by the security footing of the application.
+
+What qualifies as unusual activity is system dependent. Specific security properties of authentication protocols or other system details will dictate some specific categories. Additional categories of unusual activity will be related to business processes.
+
+
+##How to Check##
+
+To verify that applications in the cloud are monitored for compromise:
+
+1. **Identify responsible personnel.** Find and interview the employees responsible for monitoring cloud applications for compromise.
+
+2. **Examine logs.** Examine logs that are used to monitor cloud applications and make sure these logs are current and provide sufficient information to determine the state of the application.
+
+##How to Fix##
+
+The following is a walk-through of the general steps required to monitor cloud applications for compromise.
+
+1. **Define unusual application activity.**  Because the business focus of each application is unique, many of the specifics must be figured out for each application. However, some activities are suspicious across a wide variety of application types:
+     - Repeated unsuccessful authentication attempts
+     - Attempts to use stale session-related information or authentication tickets
+     - Large or rapid transactions
+     - Transactions that occur outside of normal time periods
+     - Application errors, especially those not easily caused by user error, or occurring in deeper tiers.
+
+2. **Ensure sufficient data is logged.** After you have defined unusual or suspicious activity for the application, ensure that the information is logged properly. Appropriate logging depends upon the specifics of the logged data. Some suspicious activity logging will be best accomplished by parsing existing log files and looking for anomalous activity, rapid transactions from a single host or user, unusually large orders, etc.
+
+3. **Ensure logs are monitored.** The logs must be automatically processed to identify information that should be acted upon. Logging will serve no purpose if the results receive no response. Cloud services provide the tools for monitoring. Your operations team must develop the framework for monitoring and responding to log events. For your approach, consider these items:
+     - Most applications will need 24x7 coverage. 
+     - Log monitoring requires the attention of your system administrator. Smaller web apps may be secured with a  limited number of alarms and alerts. A large ecommerce site may require the attention of a dedicated team.
+     - Define your response time needs. When compromises increase in volume and there's a serious problem with the site, have personnel in place that can quickly react and use procedures to regain normal operation.
+     - Use groups, roles, and policy to effectively control access to your logs and information derived from them. Some of this information is sensitive.
+     - Establish complete response capabilities to lock compromised accounts, and mitigate damage by patching system images and/or taking applications and services offline until a complete security response can be executed.
+
+4. **Avoid logging pitfalls.** Logging too much information can end up being a problem of its own. Once you have an idea of the load impact of application log events, it may be worthwhile to implement some form of log throttling to reduce the flow of information to a rate at which you can act upon. Good log throttling should only eliminate redundant information, and still provide a way to surface the most important information first. Automatically taking action based on detection of anomalies is best avoided. While it may be reasonable to throttle the speed at which an event like a login attempt may occur, preventing an action from occurring may result in an easy-to-launch denial of service attack against your application.
+
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
