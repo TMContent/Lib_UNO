@@ -3,16 +3,16 @@
   <Metadata>
     <Id>a6fd7041-0d43-4574-b67e-dc5105d07c02</Id>
     <Library_Id>47a10a30-15ad-4cfd-bf82-00e9bb2037f6</Library_Id>
-    <Title>Current Router Configuration Matches the Start-up Settings</Title>
+    <Title>Router Configuration Are Secured and Match the Start-up Settings</Title>
     <Category>Networking</Category>
     <Phase>Deployment</Phase>
     <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
-    <DirectLink>Current Router Configuration Matches the Start-up Settings</DirectLink>
+    <DirectLink>Router Configuration Are Secured and Match the Start-up Settings</DirectLink>
     <Tag />
     <Security_Demand />
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
     <li>PCI DSS Requirement 1.2.2</li>
@@ -22,12 +22,13 @@
   <h1>Why</h1>
   <p>If changes were made to the router configuration but were not saved in the router configuration files, then these changes will be lost after the router is powered off or reset. If the changes to the router configuration are lost, then the router may revert
  to an earlier, insecure state.</p>
+  <p>Router settings should be protected by access controls to prevent unauthorized access.</p>
   <h1>How to Check</h1>
-  <p>Compare the current configuration to the start-up settings for each router to make sure they are the same. On Cisco IOS, the command to show the running configuration is "sh run"; the command to show the start-up configuration is "sh start."</p>
+  <p>Verify that authentication is required to access router configuration settings. Compare the current configuration to the start-up settings for each router to make sure they are the same. On Cisco IOS, the command to show the running configuration is "sh run"; the command to show the start-up configuration is "sh start."</p>
   <h1>How to Fix</h1>
   <p>Refer to the vendor's documentation or tech support for detailed instructions on how to sync the current configuration with the start-up settings on your hardware. This should be very simple. Most routers configured with a web interface feature a button
  that saves the current settings as the start-up configuration, and some do it automatically when new settings are applied. This rule is really for routers configured using terminal commands, which may require a special command to save the current settings.
- Cisco IOS command for this is "copy running-configuration startup-configuration" or "copy run start." Most routers that use web administration interfaces save the configuration as the start-up settings automatically.</p>
+ Cisco IOS command for this is "copy running-configuration startup-configuration" or "copy run start." Most routers that use web administration interfaces save the configuration as the start-up settings automatically. Configure each router's access control settings to prevent unauthorized access to configuration settings - this is usually done by setting the administrator password.</p>
   <h1>Related Items</h1>
   <ul>
     <li>

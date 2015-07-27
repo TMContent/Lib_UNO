@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7e9106e1-ab4a-4aa7-bbc8-ad4a269aa15a</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Load Balancing Carefully</Title>
+    <Category>System Hardening</Category>
+    <Phase>Deployment</Phase>
+    <Technology>AWS</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Applies To##
+
+- Amazon Web Services (AWS)
+
+
+##What to Do##
+
+Implement load balancing for your cloud computing applications by reviewing currently-available products and techniques. Choose a solution that satisfies business case. Use performance metrics to gauge the effectiveness of load balancing.
+
+
+##Why##
+
+Load balancing is used to distribute requests to multiple instances of EC2. This reduces the risk of overloading a single EC2 instance during expected increases in requests. During a Distributed Denial of Service Attack (DDoS), EC2 will become unavailable as unexpected requests grow in frequency. The effect can be mitigated with the use of load balancing.
+
+If solutions are not in place to balance expected and unexpected requests, the site may become unavailable for its intended business use. The AWS network provides protection against DDoS attacks, and additional layers of protection can be added by using Amazon Exit 53 and Elastic Load Balancing (ELB). However, measure performance to compare the solution to other load balancing products such as NGINX Plus.
+
+
+##When##
+
+Load balancing is used with web applications when it is necessary to mitigate deterioration of performance (ingesting a large load of data) and/or a sudden break in availability (DDoS). When maintaining quality of service (QoS) at network speeds with zero data loss is required, automatic methods of load balancing should be in place. Load balancing also protects data in transit and security of back-end processing.
+
+
+##How##
+
+Begin with these steps for a secure load-balancing implementation.
+
+1. **Review available load-balancing options.** Make a list of load-balancing products, and determine what features are provided, such as: request routing, URL rewriting and redirecting, health checks, and auto scaling.
+
+2. **Choose load-balancing solution.** One solution may not provide the necessary features for your application. For example, URL rewriting and redirecting may be built-in, but auto scaling is missing. You may need to integrate different products in order to implement 100% of your security design features.
+
+3. **Configure load-balancing solution.** For Amazon ELB configuration, prepare your virtual private cloud (VPC) and back-end instances, and use the management console or command line interface (CLI) to create *load balancers*. Other load-balancing products may require additional development resources to implement with AWS.
+
+4. **Test load balancing solution.** Before going live, test the load balancer. For Amazon ELB, look at the metrics in CloudWatch associated with your load balancer. These include statistics such as `HealthyHostCount`, `RequestCount`, and `Latency`.
+
+5. **Make adjustments to configuration.** After evaluating the performance of the load balancer, configuration changes may be required. An ELB example is that you may need to adjust the idle timeout with the `elb modify-load-balancer-attributes` command.
+
+6. **Monitor performance.** Monitor on-going performance of the load balancer by using a combination of CloudWatch metrics, access logs, and AWS CloudTrail. CloudWatch can be configured to monitor health state and take additional action to supplement the effectiveness of load balancing. 
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

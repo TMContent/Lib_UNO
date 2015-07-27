@@ -65,6 +65,6 @@
   <pre>public boolean validateUser(String user, char[] pass)<br />{<br />   byte[] salt = MyApp.generateSalt();<br />   String passHash; <br />   SqlConnection cn;<br />   SqlCommand sqlCommand;<br />   String query;     <br />   passHash = hashCredentials(pass, salt);<br />   // The application crafts the SQL query based on user's input<br />   cn = MyApp.getDBConnection();<br />   sqlCommand = new SqlCommand("select user from myappUsers where user = @user and <br />                    + pass = @passHash and login_attempts &lt; 3;", cn);<br />   sqlCommand.Parameters.Add("@user", SqlDbType.VarChar, user.Length).Value = user;<br />   sqlCommand.Parameters.Add("@passHash ", SqlDbType.VarChar, passHash.Length).Value = passHash;<br />   SqlDataReader reader = sqlCommand.ExecuteReader(); <br />   updateLastLoginAttempt(user);  <br />   ...<br />}</pre>
   <p>Even if the user passes in an arbitrary string for a username or a password, they will not be able to alter the query or otherwise effect the database. An even better solution would involve using a stored procedure instead of a parameterized command, because that would permit the database to be locked down further.</p>
   <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
