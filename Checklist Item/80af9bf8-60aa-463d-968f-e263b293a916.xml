@@ -4,7 +4,7 @@
     <Id>80af9bf8-60aa-463d-968f-e263b293a916</Id>
     <Id_History>80af9bf8-60aa-463d-968f-e263b293a916,ef97b7c3-8453-4b6e-9547-1ef4cb71c875,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Session IDs Are Not Disclosed</Title>
+    <Title>[DUPE] Session IDs Are Not Disclosed</Title>
     <Category>Session Management</Category>
     <Phase>Design</Phase>
     <Technology>.NET</Technology>
@@ -40,7 +40,7 @@
     <li>
       <p>
         <strong>Verify that session cookies are marked as secure.</strong> Find code that handles session cookies. Make sure that form authentication and session ID cookies are marked as secure. Code similar to that below can be used to mark cookies as secure:</p>
-      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&nbsp;&nbsp;&nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (cookie == FormsAuthentication.FormsCookieName)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Response.Cookies[cookie].Secure = true;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (cookie == “ASP.NET_SessionId”){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Response.Cookies[cookie].Secure = true;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp; }<br />}</pre>
+      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == FormsAuthentication.FormsCookieName)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; else if (cookie == “ASP.NET_SessionId”){<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
     </li>
   </ol>
   <h1>How To Fix</h1>
@@ -65,16 +65,16 @@
     <li>
       <p>
         <strong>Mark session cookies as secure.</strong> Marking session cookies as secure assures that they are only sent over HTTPS connections.</p>
-      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&nbsp;&nbsp;&nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (cookie == FormsAuthentication.FormsCookieName)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Response.Cookies[cookie].Secure = true;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (cookie == “ASP.NET_SessionId”){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Response.Cookies[cookie].Secure = true;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp; }<br />}</pre>
+      <pre>if (Response.Cookies.Count &gt; 0)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; foreach (string cookie in Response.Cookies.AllKeys)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (cookie == FormsAuthentication.FormsCookieName)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; else if (cookie == “ASP.NET_SessionId”){<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Response.Cookies[cookie].Secure = true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
     </li>
   </ol>
   <h1>Additional Resources</h1>
   <ul>
     <li>
-      <p>For more information about the SessionID property, please see "HttpSessionState.SessionID Property" at&nbsp;<a href="http://msdn.microsoft.com/en-us/library/system.web.sessionstate.httpsessionstate.sessionid.aspx">http://msdn.microsoft.com/en-us/library/system.web.sessionstate.httpsessionstate.sessionid.aspx</a></p>
+      <p>For more information about the SessionID property, please see "HttpSessionState.SessionID Property" at&amp;nbsp;<a href="http://msdn.microsoft.com/en-us/library/system.web.sessionstate.httpsessionstate.sessionid.aspx">http://msdn.microsoft.com/en-us/library/system.web.sessionstate.httpsessionstate.sessionid.aspx</a></p>
     </li>
     <li>
-      <p>For more information about session management, please see "Session Management - OWASP" at&nbsp;<a href="http://www.owasp.org/index.php/Session_Management#Protect_Session_Identifiers">http://www.owasp.org/index.php/Session_Management#Protect_Session_Identifiers</a></p>
+      <p>For more information about session management, please see "Session Management - OWASP" at&amp;nbsp;<a href="http://www.owasp.org/index.php/Session_Management#Protect_Session_Identifiers">http://www.owasp.org/index.php/Session_Management#Protect_Session_Identifiers</a></p>
     </li>
   </ul>]]></Data>
   </Content>

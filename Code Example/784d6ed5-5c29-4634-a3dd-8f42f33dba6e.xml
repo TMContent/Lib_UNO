@@ -4,7 +4,7 @@
     <Id>784d6ed5-5c29-4634-a3dd-8f42f33dba6e</Id>
     <Id_History>784d6ed5-5c29-4634-a3dd-8f42f33dba6e,8ab7bd1d-f1d4-4206-8b30-4402a105d460,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Securely Execute a New Process</Title>
+    <Title>[INCORRECT] Securely Execute a New Process</Title>
     <Category>Dangerous APIs</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
@@ -39,7 +39,7 @@
   <pre>// Execute a process under another user account, making<br />// use of credentials stored in the DPAPI<br />static public void ExecuteProcess(string fullProcessPath) {<br />    // Retrieve the user and password from the registry and decrypt<br />    byte[] encryptedUser = Registry.GetValue(@"HKEY_CURRENT_USER\ProcessExecCreds", "User", null) as byte[];<br />    byte[] encryptedPass = Registry.GetValue(@"HKEY_CURRENT_USER\ProcessExecCreds", "Pass", null) as byte[];<br />    string user = Encoding.ASCII.GetString(ProtectedData.Unprotect(encryptedUser, null, DataProtectionScope.CurrentUser));<br />    string pass = Encoding.ASCII.GetString(ProtectedData.Unprotect(encryptedPass, null, DataProtectionScope.CurrentUser));<br />    SecureString securepass = new SecureString();<br />    foreach(char b in pass.ToCharArray()) {<br />                securepass.AppendChar(b);<br />    }<br /><br />    // Execute a process as our stored user account<br />    // This process will run a simple batch file that outputs the runtime account name<br />    Process process = new Process();<br />    process.StartInfo.UseShellExecute = false;<br />    process.StartInfo.RedirectStandardOutput = true;<br />    process.StartInfo.RedirectStandardError = true;<br />    process.StartInfo.CreateNoWindow = true;<br /><br />    // Set the working directory to a value the user will be able to access<br />    process.StartInfo.FileName = fullProcessPath;<br />    process.StartInfo.WorkingDirectory = @"C:\";<br />    process.StartInfo.UserName = user;<br />    process.StartInfo.Password = securepass;<br />    process.Start();<br />    string output = process.StandardOutput.ReadToEnd();<br />    Console.WriteLine(output);<br />}</pre>
   <h1>Problem Example</h1>
   <p>The following example executes simple execution of a process within the user context defined by the running executable. An example </p>
-  <pre>// Start my process with a given argumentProcess.Start("MyProc.exe", @"MyArg");</pre>
+  <pre>// Start my process with a given argument<br />Process.Start("MyProc.exe", @"MyArg");</pre>
   <ul>
     <li>The parent application must run with the same level of privileges as the executed process.</li>
     <li>The process path is not fully specified, rendering the Process.Start call more vulnerable to trojan execution.</li>
@@ -57,6 +57,6 @@
   <p>The code makes use of the <em>CurrentUser</em> scope instead of the <em>MachineKey</em> scope so that other, potentially malicious applications cannot access this key in the registry and decrypt. This provides additional security but sacrifices interoperability with other applications. Consider using the <em>MachineKey</em> scope if you have a need to share credential data between applications.</p>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

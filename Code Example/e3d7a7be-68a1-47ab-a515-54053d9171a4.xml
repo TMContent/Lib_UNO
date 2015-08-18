@@ -4,7 +4,7 @@
     <Id>e3d7a7be-68a1-47ab-a515-54053d9171a4</Id>
     <Id_History>e3d7a7be-68a1-47ab-a515-54053d9171a4,cbe44004-fea6-446c-bacd-1e17a625db79,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Named Queries with Hibernate</Title>
+    <Title>[VERIFYME] Use Named Queries with Hibernate</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -33,51 +33,51 @@
   <ol>
     <li>
       <p>
-        <strong>Define the entity class and the named queries.</strong> Define your entity class and use the &#64;NamedQuery (or &#64;NamedQueries with multiple &#64;NamedQuery's) annotation to define each named query. The examples below are straightforward.</p>
+        <strong>Define the entity class and the named queries.</strong> Define your entity class and use the &amp;#64;NamedQuery (or &amp;#64;NamedQueries with multiple &amp;#64;NamedQuery's) annotation to define each named query. The examples below are straightforward.</p>
       <pre>
-        <p>&#64;Entity</p>
-        <p>&#64;NamedQuery(</p>
-        <p>&#9;name="Product.findAllProductsByProductName",</p>
-        <p>&#9;queryString="from Product pro WHERE pro.name = :productName"</p>
+        <p>&amp;#64;Entity</p>
+        <p>&amp;#64;NamedQuery(</p>
+        <p>&amp;#9;name="Product.findAllProductsByProductName",</p>
+        <p>&amp;#9;queryString="from Product pro WHERE pro.name = :productName"</p>
         <p>)</p>
-        <p>&nbsp;</p>
-        <p>public class Product &#123;</p>
-        <p>&#9;...</p>
-        <p>&#125;</p>
-        <p>&nbsp;</p>
-        <p>&#64;Entity</p>
-        <p>&#64;NamedQueries(&#123;</p>
-        <p>&#9;&#64;NamedQuery(name="Product.findAllProducts", queryString="from Product pro"),</p>
-        <p>&#9;&#64;NamedQuery(name="Product.findAllProductsByProductId", queryString="from Product pro where pro.id = :productId"),</p>
-        <p>&#9;&#64;NamedQuery(name="Product.findAllProductsByProductName", queryString="from Product pro where pro.name = :productName"),</p>
-        <p>&#9;&#64;NamedQuery(name="Product.findAllProductsByProductPrice", queryString="from Product pro where pro.price between :minPrice and :maxPrice")</p>
-        <p>&#125;)</p>
-        <p>&nbsp;</p>
-        <p>public class Product &#123;</p>
-        <p>&#9;...</p>
-        <p>&#125;</p>
+        <p>&amp;nbsp;</p>
+        <p>public class Product &amp;#123;</p>
+        <p>&amp;#9;...</p>
+        <p>&amp;#125;</p>
+        <p>&amp;nbsp;</p>
+        <p>&amp;#64;Entity</p>
+        <p>&amp;#64;NamedQueries(&amp;#123;</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProducts", queryString="from Product pro"),</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProductsByProductId", queryString="from Product pro where pro.id = :productId"),</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProductsByProductName", queryString="from Product pro where pro.name = :productName"),</p>
+        <p>&amp;#9;&amp;#64;NamedQuery(name="Product.findAllProductsByProductPrice", queryString="from Product pro where pro.price between :minPrice and :maxPrice")</p>
+        <p>&amp;#125;)</p>
+        <p>&amp;nbsp;</p>
+        <p>public class Product &amp;#123;</p>
+        <p>&amp;#9;...</p>
+        <p>&amp;#125;</p>
       </pre>
       <li>
         <p>
           <strong>Consider defining named queries in XML configuration files.</strong> An alternative to using the Entity and NamedQuery annotations is to define the named queries in the hibernate XML configuration mapping files. An example is below.</p>
         <pre>
-          <p>&lt;&#33;-- product.hbm.xml --&gt;</p>
+          <p>&lt;&amp;#33;-- product.hbm.xml --&gt;</p>
           <p>&lt;hibernate-mapping&gt;</p>
-          <p>&#9;&lt;class name="com.myapp.domain.Product" table="Product"&gt;</p>
-          <p>&#9;&#9;&lt;id ...&gt;</p>
-          <p>&#9;&#9;&lt;property ...&gt;</p>
-          <p>&#9;&#9;&lt;property ...&gt;</p>
-          <p>&#9;&#9;&lt;property ...&gt;</p>
-          <p>&#9;&#9;...</p>
-          <p>&#9;&lt;/class&gt;</p>
+          <p>&amp;#9;&lt;class name="com.myapp.domain.Product" table="Product"&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;id ...&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;property ...&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;property ...&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;property ...&gt;</p>
+          <p>&amp;#9;&amp;#9;...</p>
+          <p>&amp;#9;&lt;/class&gt;</p>
           <p />
-          <p>&#9;&lt;query name="Product.findAllProductsByProductName"&gt;</p>
-          <p>&#9;&#9;&lt;&#33;&#91;CDATA&#91;from Product pro where pro.name = :productName&#93;&#93;&gt;</p>
-          <p>&#9;&lt;/query&gt;</p>
-          <p>&#9;&lt;query name="Product.findAllProductsByProductPrice"&gt;</p>
-          <p>&#9;&#9;&lt;&#33;&#91;CDATA&#91;from Product pro where pro.price between :minPrice and :maxPrice&#93;&#93;&gt;</p>
-          <p>&#9;&lt;/query&gt;</p>
-          <p>&#9;....</p>
+          <p>&amp;#9;&lt;query name="Product.findAllProductsByProductName"&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;&amp;#33;&amp;#91;CDATA&amp;#91;from Product pro where pro.name = :productName&amp;#93;&amp;#93;&gt;</p>
+          <p>&amp;#9;&lt;/query&gt;</p>
+          <p>&amp;#9;&lt;query name="Product.findAllProductsByProductPrice"&gt;</p>
+          <p>&amp;#9;&amp;#9;&lt;&amp;#33;&amp;#91;CDATA&amp;#91;from Product pro where pro.price between :minPrice and :maxPrice&amp;#93;&amp;#93;&gt;</p>
+          <p>&amp;#9;&lt;/query&gt;</p>
+          <p>&amp;#9;....</p>
           <p>&lt;/hibernate-mapping&gt;</p>
         </pre>
         <li>
