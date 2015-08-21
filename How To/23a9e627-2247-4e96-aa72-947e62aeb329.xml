@@ -3,8 +3,8 @@
   <Metadata>
     <Id>23a9e627-2247-4e96-aa72-947e62aeb329</Id>
     <Id_History>23a9e627-2247-4e96-aa72-947e62aeb329,525b5fc3-cd1b-4ead-88e2-deb152642e9b,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
-    <Title>How to Authorize Users Against ADAM Using the Authorization Manager Role Provider</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[VERIFYME][EXPANDME] How to Authorize Users Against ADAM Using the Authorization Manager Role Provider</Title>
     <Category>Authorization</Category>
     <Phase>Implementation</Phase>
     <Technology>WCF</Technology>
@@ -20,19 +20,19 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Microsoft&#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&#174; 2008</li></li>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
   </ul>
   <h1>Description</h1>
   <p>If your application stores role information in an Authorization Manager (AzMan) policy store in ADAM, use the Authorization Manager Role Provider. Authorization Manager provides a Microsoft Management Console (MMC) snap-in, to create and manage roles, and to manage role membership for users.</p>
   <p>Use the following steps to authenticate a directory service with ADAM:</p>
   <ol>
-    <li>Use the Authorization Manager (AzMan) to store roles in an ADAM policy store. You can only currently create an ADAM store only within Windows 2003.<ul><li>Run Azman.msc from the Start-&gt;Run menu item.<li>Within Azman, right-click on &#8220;Authorization Manager&#8221;, choose &#8220;New Authorization Store&#8221;. Select an &#8220;Active Directory&#8221; and enter a name to create the ADAM store.<li>Right-click on the <strong>Groups</strong> folder of the Active Directory store you just created, select &#8220;New Application Group&#8230;&#8221; Enter a name for the group you want to create. Repeat this step to create as many groups as needed.<li>Add Windows users to the AzMan groups(s) you have created. Double-click on each group you created and use the members tab to add the users.</li></li></li></li></ul><li>Configure the web.config or app.config file to use the ADAM store. <li>Authenticate the users declaratively by adding the <strong>PrincipalPermission</strong> attribute above each service method that requires authorization. Specify the Windows user group required to access the method in the Role field.<ol><pre>&#91;PrincipalPermission(SecurityAction.Demand, Role = "accounting")&#93;<br />public double Add(double a, double b)<br />&#123;<br />return a &#43; b;<br />&#125;</pre></ol><li>The username/password combination supplied by the client will be mapped by the WCF service to a Windows user account. If the user is successfully authorized, the system will next check to see if the user belongs to the group declared with the <strong>PrinciplePermission</strong> role. Method access will be granted if the user belongs to the role.</li></li></li></li>
+    <li>Use the Authorization Manager (AzMan) to store roles in an ADAM policy store. You can only currently create an ADAM store only within Windows 2003.<ul><li>Run Azman.msc from the Start-&gt;Run menu item.<li>Within Azman, right-click on &amp;#8220;Authorization Manager&amp;#8221;, choose &amp;#8220;New Authorization Store&amp;#8221;. Select an &amp;#8220;Active Directory&amp;#8221; and enter a name to create the ADAM store.<li>Right-click on the <strong>Groups</strong> folder of the Active Directory store you just created, select &amp;#8220;New Application Group&amp;#8230;&amp;#8221; Enter a name for the group you want to create. Repeat this step to create as many groups as needed.<li>Add Windows users to the AzMan groups(s) you have created. Double-click on each group you created and use the members tab to add the users.</li></li></li></li></ul><li>Configure the web.config or app.config file to use the ADAM store. <li>Authenticate the users declaratively by adding the <strong>PrincipalPermission</strong> attribute above each service method that requires authorization. Specify the Windows user group required to access the method in the Role field.<ol><pre>&amp;#91;PrincipalPermission(SecurityAction.Demand, Role = "accounting")&amp;#93;<br />public double Add(double a, double b)<br />&amp;#123;<br />return a &amp;#43; b;<br />&amp;#125;</pre></ol><li>The username/password combination supplied by the client will be mapped by the WCF service to a Windows user account. If the user is successfully authorized, the system will next check to see if the user belongs to the group declared with the <strong>PrinciplePermission</strong> role. Method access will be granted if the user belongs to the role.</li></li></li></li>
   </ol>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information on the Authorization Manager, see &#8220;How to: Use Authorization Manager (AzMan) with ASP.NET 2.0&#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998336.aspx">http://msdn2.microsoft.com/en-us/library/ms998336.aspx</a><li>For more information on authorization, see &#8220;Authorization&#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733071.aspx">http://msdn2.microsoft.com/en-us/library/ms733071.aspx</a><li>For authorization Q&A, see the Authorization section of &#8220;WCF 3.5 Questions and Answers &#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Security&#37;20Guidelines&referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Security&#37;20Guidelines&referringTitle=Home</a></li></li></li>
+    <li>For more information on the Authorization Manager, see &amp;#8220;How to: Use Authorization Manager (AzMan) with ASP.NET 2.0&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms998336.aspx">http://msdn2.microsoft.com/en-us/library/ms998336.aspx</a><li>For more information on authorization, see &amp;#8220;Authorization&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733071.aspx">http://msdn2.microsoft.com/en-us/library/ms733071.aspx</a><li>For authorization Q&amp;A, see the Authorization section of &amp;#8220;WCF 3.5 Questions and Answers &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home</a></li></li></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>
