@@ -3,8 +3,8 @@
   <Metadata>
     <Id>f9d523ec-7328-4be5-93c6-00e671ecd068</Id>
     <Id_History>f9d523ec-7328-4be5-93c6-00e671ecd068,8376d58f-5144-49bc-b779-9e572511e546,</Id_History>
-    <Library_Id>d9c2b53f-5b05-4152-be72-e79d72854707</Library_Id>
-    <Title>Do Not Cache Sensitive Data</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[EDITME] Do Not Cache Sensitive Data</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
     <Technology>Scala Play</Technology>
@@ -33,18 +33,18 @@ in memory on the server only.</p>
   <ol>
     <li>
       <p>
-        <strong>Loss of synchronization with the server.&nbsp;</strong>The server's data might change and become inconsistent with the cached data. This is not a security risk but could cause issues with the application's performance.</p>
+        <strong>Loss of synchronization with the server.&amp;nbsp;</strong>The server's data might change and become inconsistent with the cached data. This is not a security risk but could cause issues with the application's performance.</p>
     </li>
     <li>
       <p>
-        <strong>The cache may reside on the client following the application's lifespan.&nbsp;</strong>Once the application is closed, the cache may&nbsp;be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may look up the "Temporary Internet Files" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.</p>
+        <strong>The cache may reside on the client following the application's lifespan.&amp;nbsp;</strong>Once the application is closed, the cache may&amp;nbsp;be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may look up the "Temporary Internet Files" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.</p>
     </li>
   </ol>
   <h1>When</h1>
   <p>Never cache sensitive data on the client.<br /></p>
   <h1>How</h1>
   <p>Javascript variables and hidden input fields must not be used to store sensitive data, which may be rendered invalid. The only thing that may be stored on the client side across browser requests should be the Session ID. Session IDs are most often stored in an HTTP cookie, though other solutions exist.</p>
-  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>". For example:</p>
+  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&amp;nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>". For example:</p>
   <blockquote>
     <pre style="font-family: Arial, Verdana; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; line-height: normal;">
       <span style="font-size: 10pt;">
@@ -54,16 +54,16 @@ in memory on the server only.</p>
     </pre>
   </blockquote>
   <p>Web pages containing sensitive data should be marked as such, using appropriate meta tags, to prevent caching. When generating/serving the web page, add the appropriate HTTP headers. This will serve as a guideline to proxies and browsers alike that the data must not be cached. A possibly negative impact of this is the invalidation of the browser "back" button.</p>
-  <p>Examples of the appropriate&nbsp;<em>META</em>&nbsp;tags and HTTP headers are below:</p>
+  <p>Examples of the appropriate&amp;nbsp;<em>META</em>&amp;nbsp;tags and HTTP headers are below:</p>
   <ul>
-    <li>Caching&nbsp;<em>META</em>&nbsp;tags<pre><pre><html><br /><head><br /><meta http-equiv="CACHE-CONTROL" content="NO-CACHE" /><br /><meta http-equiv="PRAGMA" content="NO-CACHE" /><br /><meta http-equiv="EXPIRES" content="-1" /><br />    ...<br /></head><br /><body><br />    ...<br /></body><br /></html></pre></pre></li>
+    <li>Caching&amp;nbsp;<em>META</em>&amp;nbsp;tags<pre><pre><html><br /><head><br /><meta http-equiv="CACHE-CONTROL" content="NO-CACHE" /><br /><meta http-equiv="PRAGMA" content="NO-CACHE" /><br /><meta http-equiv="EXPIRES" content="-1" /><br />    ...<br /></head><br /><body><br />    ...<br /></body><br /></html></pre></pre></li>
     <li>Caching HTTP Headers: Your Global.scala class should look something like below: <br /><pre><p>import play.api._<br />import play.api.mvc._<br />import play.api.http.HeaderNames._<br /><br />/**<br /> * Global application settings.<br /> */<br />object Global extends GlobalSettings {<br /><br />  /**<br />   * Global action composition.<br />   */<br />  override def doFilter(action: EssentialAction): EssentialAction = EssentialAction { request =&gt;<br />    action.apply(request).map(_.withHeaders(<br />      PRAGMA -&gt; "no-cache"<br />      Cache-Control -&gt; "no-cache"<br />      Expires -&gt; "-1"<br />    ))<br />  }<br />}</p></pre></li>
   </ul>
   <h1>Additional Resources</h1>
   <ul>
-    <li>To learn more about the HTTP protocol, visit:&nbsp;<a href="http://www.faqs.org/rfcs/rfc2616.html">RFC 2616 - Hypertext Transfer Protocol</a>.</li>
-    <li>To learn more about caching, see:&nbsp;<a href="http://www.mnot.net/cache_docs/">Caching Tutorial</a>.</li>
-    <li>To learn how to prevent caching in Internet Explorer, see:&nbsp;<a href="http://support.microsoft.com/default.aspx?scid=kb;EN-US;Q234067">How to prevent caching in Internet Explorer</a>.</li>
+    <li>To learn more about the HTTP protocol, visit:&amp;nbsp;<a href="http://www.faqs.org/rfcs/rfc2616.html">RFC 2616 - Hypertext Transfer Protocol</a>.</li>
+    <li>To learn more about caching, see:&amp;nbsp;<a href="http://www.mnot.net/cache_docs/">Caching Tutorial</a>.</li>
+    <li>To learn how to prevent caching in Internet Explorer, see:&amp;nbsp;<a href="http://support.microsoft.com/default.aspx?scid=kb;EN-US;Q234067">How to prevent caching in Internet Explorer</a>.</li>
   </ul>
   <div>
     <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Guidelines</h1>
