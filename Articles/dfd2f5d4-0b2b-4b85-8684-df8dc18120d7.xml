@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>dfd2f5d4-0b2b-4b85-8684-df8dc18120d7</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Centralize Input Validation</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Write a class or library dedicated to input validation.
+
+
+## Why ##
+
+Centralizing input validation helps ensure that data is validated in a consistent way throughout the application and provides a single point of maintenance.
+
+
+## How ##
+
+Perform the following steps to assure that all input is validated:
+
+1. **Centralize validation.** When you develop an input- and data-validation architecture for your application, consider developing a library of validation routines in all but the smallest applications. This will help ensure that data is validated in a consistent way throughout the application and provide a single point of maintenance. You need to trace data from entry point to exit point to know how it should be validated. A good library includes routines for all of the different types of validation you need to apply, and these can be used in combination if necessary.
+2. **Constrain, reject, and sanitize input.** Constrain what you allow from the beginning. It is much easier to validate data for known valid types, patterns, and ranges (using a white list) than it is to validate data by looking for known bad characters (using a black list). When you design your application, you know what your application expects. The range of valid data is generally a more finite set than the range of potentially malicious input. However, for added defense you might want to reject known bad input and then sanitize the input. Constrain input for type, length, format, and range. Use regular expressions to help constrain text input. Use strong data typing where possible.
+3. **Identify trust boundaries.** Ensure that entry points between trust boundaries validate all input data explicitly. Make no assumptions about the data. The only exception is inside a routine that you know can only be called by other routines within the same trust boundary.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
