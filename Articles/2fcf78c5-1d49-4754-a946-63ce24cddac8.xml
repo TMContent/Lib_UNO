@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>2fcf78c5-1d49-4754-a946-63ce24cddac8</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Validate Data Passed to the Database</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Validate all input before it is passed to the database.
+
+## Why ##
+
+Unvalidated input can lead to persistent cross-site scripting, SQL injection, and other vulnerabilities which would allow an attacker to gain unauthorized access to sensitive data.
+
+## When ##
+
+If your application uses a backend database server.
+
+## How ##
+
+To properly validate input passed to database:
+
+1. **Identify application inputs.** Potential sources of input include:
+ - URL based parameters
+ - Form based parameters
+ - Hidden fields
+ - Cookies
+ - Local filesystem
+ - JavaScript variables
+2. **Identify database entry points.** Find all the locations in the system where data is pushed into the database, either directly via queries, or indirectly (via log entries, etc). Trace all database entry points to find all the paths which can contain external input.
+3. **Create a set of validators.** Build a set of validators that work with the data in question and fit into the system architecture, including your general validation scheme for other data and the way the system interacts with the database. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the system, and allows for easy auditing. Place the validators along the database input paths, ideally as close to the initial data input as possible. All data should pass through the validators before being transmitted to the database servers.
+4. **Use Type-Safe parameters in SQL statements.** Stored procedures and Parameterized queries improve your application's robustness against SQL injection based attacks. 
+5. **Audit your entry paths.** Before going into production, have a reviewer who was not responsible for the development of the code in question check all the input paths to ensure that the validators are correctly implemented, that they are correctly applied, and that all input paths are checked.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
