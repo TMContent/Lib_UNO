@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>548186b9-6620-4cd9-955d-fe71d956da13</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Recover from Authentication Errors</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Make sure authentication controls fail securely.
+
+## Why ##
+
+Designing authentication to fail securely when abnormal conditions occur reduces the risk of attackers bypassing authentication by disabling it. At first glance, it might appear that it is best for authentication code not to fail at all, but actually authentication is supposed to fail unless the user authenticates successfully. Aside from entering invalid credentials, aborting the authentication process or trying to cause the authentication code to malfunction should cause the authentication code to fail, but to do so in a safe manner. In the context of this guideline, to authentication failure means a state where authentication has not been passed successfuly, not failure of code to operate correctly. Authentication code should be particularly resilient, since it is often the first line of defense.
+
+## How ##
+
+Use the following best practices to design authentication code to fail securely:
+
+1. **Use generic error messages.** Show generic error messages that supply the user with feedback denoting that some error happened. These messages should be written in a broad way and should not provide too much information.
+2. **Use a global exception handler.** Global exception handlers should catch any unforeseen exceptions that occur. These handlers are a safety net mechanism to ensure that the application does not behave in an unexpected way if an error occurs.
+3. **Catch any specific exceptions first.** Use a generic error message, which ensures that no extra information is disclosed to an attacker through the error messages provided. In this specific exception handler, you could write an error message that is more specific to the error in order to help the user.
+4. **Always catch the global exception class last.** This picks up any unforeseen errors and keeps your application from leaking potentially harmful information to an attacker or leaving your application in a vulnerable state.
+5. **Use final clauses.** It is always a best practice to include finally blocks with your try statements, which will ensure that the application reverts back to a secure state when the try block ends. This block will be executed regardless of whether an exception is thrown or not.
+6. **Handle errors properly.** Implement proper handling of the application state in error handling code by closing all connections to databases or other systems, reverting to lower privileges (if applicable), closing all sensitive files, and logging the failure on the server.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
