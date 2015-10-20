@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>cb14bdd9-ab97-4f9c-ab56-d6780578a300</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Monitor Logs</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Instrument your cloud applications to monitor events that might indicate unusual or suspicious activity. Send alerts to the console when logged activity exceeds a threshold for replays of authentication credentials or login attempts in a specific time period, for example.
+
+## Why ##
+
+Instrumenting for suspicious activity allows you to detect and react to potential problems from a single console, as early as possible.
+
+## How ##
+
+The following is a walk-through of the general steps required to monitor  applications for compromise.
+
+1. **Define unusual application activity.** Because the business focus of each application is unique, many of the specifics must be figured out for each application. However, some activities are suspicious across a wide variety of application types:
+ - Repeated unsuccessful authentication attempts
+ - Attempts to use stale session-related information or authentication tickets
+ - Large or rapid transactions
+ - Transactions that occur outside of normal time periods
+ - Application errors, especially those not easily caused by user error, or occurring in deeper tiers.
+2. **Ensure sufficient data is logged.** After you have defined unusual or suspicious activity for the application, ensure that the information is logged properly. Appropriate logging depends upon the specifics of the logged data. Some suspicious activity logging will be best accomplished by parsing existing log files and looking for anomalous activity, rapid transactions from a single host or user, unusually large orders, etc.
+3. **Ensure logs are monitored.** The logs must be automatically processed to identify information that should be acted upon. Logging will serve no purpose if the results receive no response. Your operations team must develop the framework for monitoring and responding to log events. For your approach, consider these items:
+ - Most applications will need 24x7 coverage. However, some may be fine with 8x5.
+ - Log monitoring requires the attention of your system administrator. Smaller web apps may be secured with a limited number of alarms and alerts. A large ecommerce site may require the attention of a dedicated team.
+ - Define your response time needs. When compromises increase in volume and there's a serious problem with the site, have personnel in place that can quickly react and use procedures to regain normal operation.
+ - Use groups, roles, and policy to effectively control access to your logs and information derived from them. Some of this information is sensitive.
+ - Establish complete response capabilities to lock compromised accounts, and mitigate damage by patching system images and/or taking applications and services offline until a complete security response can be executed.
+4. **Avoid logging pitfalls.** Logging too much information can end up being a problem of its own. Once you have an idea of the load impact of application log events, it may be worthwhile to implement some form of log throttling to reduce the flow of information to a rate at which you can act upon. Good log throttling should only eliminate redundant information, and still provide a way to surface the most important information first. Automatically taking action based on detection of anomalies is best avoided. While it may be reasonable to throttle the speed at which an event like a login attempt may occur, preventing an action from occurring may result in an easy-to-launch denial of service attack against your application.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
