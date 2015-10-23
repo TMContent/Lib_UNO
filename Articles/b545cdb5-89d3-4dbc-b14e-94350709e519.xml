@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b545cdb5-89d3-4dbc-b14e-94350709e519</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Perform Validation on the Server</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Avoid placing the validation procedures only on the client side. All input should be validated server side.
+
+## Why ##
+
+Client-side validation is executed by the client and can be easily bypassed. Client-side validation is a major design problem when it appears in web applications. It places trust in the browser, an entity that should never be trusted.
+
+## When ##
+
+If your application accepts input from the client, always validate for length, range and type on the server.
+
+## How ##
+
+Client-side validation should only be used to improve user experience, never for security purposes. A client-side input validation check can improve application performance by catching malformed input on the client and, therefore, saving a roundtrip to the server. However, client side validation can be easily bypassed and should never be used for security purposes. Always use server-side validation to protect your application from malicious attacks.
+
+Use the following steps when developing client side validation:
+
+1. **Never trust the browser.** Because the browser is running on the user's machine, it can be fully controlled by the user. Therefore, any client-side validation code can be controlled and bypassed by an attacker.
+2. **Use JavaScript only to enhance your pages.** JavaScript is useful for enhancing your application's presentation. However, it has no mechanism to protect the integrity of its code. Do not rely on JavaScript to enforce security decisions.
+3. **Place a server-side validator for all input.** Input validation should be executed on the server side. Use the following steps to properly set the validation routines:
+4. **Identify input.** Determine the data that is to be passed from the client to your application. Input can take the following forms on the client-side:
+ - URL-based parameters
+ - Form-based parameters
+ - Hidden fields
+ - Cookies
+5. **Understand the input.** Understand the use and constraints associated with each input. Be clear how each input is used. Define the format and type of each input. Build a server-side validator for each format and type of expected input.
+6. **Create a set of validators.** Build a validator for each type of input. Place the set of validators on the server-side of your application. If there are validators on the client-side, make sure the same validators are implemented on the server-side as well. Once developed, it is important to place the validation routines at your application's trust boundary. Because your application's trust boundary extends only to your application's process space, the user's browser should not be considered a part of your application's trust boundary.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
