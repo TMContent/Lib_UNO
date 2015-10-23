@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7a38b1cb-18f0-43ae-a955-741619b715f7</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Validate XML Data Using Schemas</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Ensure that all XML data is syntactically validated on the server by using an XML schema such as XSD or DTD.
+
+## Why ##
+
+An attacker passing malicious XML input can attempt XML injection attacks that aim to exploit your application by overwriting XML data, disclose information from arbitrary URIs, or cause the XML parser to crash or process slowly. Performing syntactic validation helps reduce these risks by ensuring that the input received matches the expected format. Syntactic validation on its own is not sufficient, as semantic validation is also needed to fully prevent these attacks, but it is an important step for both the security and reliability of your application.
+
+## When ##
+
+All XML data that is created or consumed by an application should follow a strict XML schema. Validate XML against the schema when any XML data is consumed or created.
+
+## How ##
+
+XML data can be validated with either an XSD or DTD. XSDs are more flexible and are generally favored over DTDs.
+
+To solve using XSD use the following steps:
+
+1. **Identify all areas where the application generates or consumes XML data.** Enumerate all areas where XML data is generated or parsed in your application.
+2. **Define an XSD which describes the XML data.** Examine the XML data and define an XSD which tightly defines the structure of the XML data. An XML Schema can consist of a single file, multiple files, or in-line with the XML. If the XML is being generated dynamically via code, it is likely that an XSD can be outputted as well. Finally, the XSD should tightly constrain the XML data by using element types; for example defining a birthday element and assigning it the xs:date type.
+3. **Validate the XML with the XSD.** XML can be validated using the XML parser provided by the platform.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
