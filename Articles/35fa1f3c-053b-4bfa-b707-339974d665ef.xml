@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>35fa1f3c-053b-4bfa-b707-339974d665ef</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Validate File Names and Paths</Title>
+    <Category />
+    <Phase />
+    <Technology>Technology Independent</Technology>
+    <Type />
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Carefully validate filename and path input. Apply whitelist techniques when validating input.
+
+## Why ##
+
+Filenames and paths interact directly with the underlying filesystem. Allowing malicious users to manipulate file system operations directly or indirectly through their input can expose important sensitive system files. Canonicalization vulnerabilities can result in an attacker gaining access to unexpected resources.
+
+## When ##
+
+If your user input is used to help construct filenames or file paths, carefully validate to ensure the input is not used to gain access to unexpected resources.
+
+## How ##
+
+Use the following steps when validating filename and path input:
+
+1. **Configure filesystem permissions.** Restricting the access rights of your application's local account can prevent access to sensitive system data. It is recommended that full access is given only within the base directory, read access is given only within the base directory's parents, and no access is given anywhere else on the filesystem. It is also recommended to execute your application with its own local account rather than as the hosting server; therefore, any restrictions applied to your application would not affect the performance of the hosting server.
+2. **Establish a base directory.** The base directory is where your application should store any user-supplied files. The location of the base directory should be carefully chosen. It should not be a subdirectory of any important directory such as /etc or C:\Windows. Write access should be allowed only to the base directory and its children, but not to its parents. Because of read access misuses, it is recommended that no sensitive information is stored inside any of the base directory's parents. Read/write access outside the base directory and its parents should be prohibited. This can be achieved via whitelist validation on the user-supplied filename and strict access control from the filesystem. Avoid setting your application's local user account as owner of any of the base directory's parents.	Note: If your application is Windows based, create your base directory in a partition different than the partition hosting all critical system services. Because Windows prohibits changing partitions through canonicalization, it is impossible for an attacker to access a resource that is located in another partition. For instance, if your Windows installation is located at C:\Windows, place your base directory at d:\myapp\temp.
+3. **Verify that the filesystem is case-sensitive.** Always be sure that your application's filesystem is case-sensitive. Because most UNIX based operating systems have case-sensitive filesystems, FILE.DAT and file.dat represent two different files. However, Windows has a case-insensitive filesystem; therefore, FILE.DAT and file.dat represent the same file. If your application's filesystem is case-insensitive, make sure to specify the CASE_INSENSITIVE flag when using regular expressions to validate your file inputs. 
+4. **Verify the filesystem's path delimiters.** Verify the path delimiters that your application's filesystem uses and keep them consistent throughout the code. For example, Windows uses '\' or '/' to distinguish directories inside a path while UNIX based systems use only '/' to accomplish the same task.
+5. **Validate using whitelisting.** The syntax for accessing filesystems is well known. Use whitelist techniques to allow good input and discard bad input. Be careful with canonicalization issues. Canonicalization problems occur when the user attempts to execute directory traversal by using special pathname sequences to direct your application into a directory it should not access. Always use the canonical path when using whitelisting to verify the file's path.]]></Data>
+  </Content>
+</TeamMentor_Article>
