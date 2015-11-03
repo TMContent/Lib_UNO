@@ -7,7 +7,7 @@
     <Title>Check Return Values for Errors</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
-    <Technology>C++</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Guideline</Type>
     <DirectLink>Check Return Values for Errors</DirectLink>
     <Tag />
@@ -17,20 +17,63 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>What to Do</h1>
-  <p>If the API you are calling can return an error, check the&nbsp;return value for an error code.&nbsp;When using Win32 APIs you may also need to call GetLastError for error details.</p>
-  <h1>Why</h1>
-  <p>Many important functions will work in most cases but will occasionally cause an error under exceptional circumstances such as low system resources or a corrupt file system. In order to build a system that is both more reliable and more secure, check error codes for any API call that may return an error code.</p>
-  <h1>When</h1>
-  <p>Check error codes whenever calling an API that may return an error. This is especially important for an API call that may cause your system serious problems, such as a crash or hang, if the API you are calling does not work as expected.</p>
-  <h1>How</h1>
-  <p>Check API return values with an if statement, handle any errors appropriate by failing to a known secure state or by returning an error to your caller. Some examples of important APIs that should always be checked for errors:</p>
-  <ul>
-    <li>Operations on mutexes and semaphores<li>Network communication<li>Memory allocation</li></li></li>
-  </ul>
-  <p>Be especially careful to check the results of memory allocations before copying into a buffer or otherwise manipulating it. Copying or appending into an unallocated memory location can crash your application or potentially lead to a buffer overflow vulnerability.</p>
-  <h1>Problem Example </h1>
-  <br />In the following example, the read API is called without checking the return value for errors.<pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />  //first read from the socket<br />&nbsp; read(socket, recvBuffer, len, 0);<br /><br /><br />  //now parse the buffer<br />  return parseBuffer(recvBuffer, len);<br />&#125;</pre><h1>Solution Example</h1><p>In the following example, the read API is called and then the return value is checked for errors. </p><pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />  //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br /><br />  if (ret &gt;= 0)<br />  &#123;<br />      //now parse the buffer<br />      return parseBuffer(recvBuffer, len);<br />  &#125;<br />  else<br />  &#123;<br />      //can call WSAGetLastError if we need error details<br />      return false;<br />  &#125;<br />&#125;</pre><h1>Related Items</h1><ul><li><a href="/article/e4a3052e-13f2-4062-9a83-49185ff14b0a">Centralize Error Handling</a></li></ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+If the API you are calling can return an error, check the return value for an error code. When using Win32 APIs you may also need to call GetLastError for error details.
+
+## Why ##
+
+Many important functions will work in most cases but will occasionally cause an error under exceptional circumstances such as low system resources or a corrupt file system. In order to build a system that is both more reliable and more secure, check error codes for any API call that may return an error code.
+
+## When ##
+
+Check error codes whenever calling an API that may return an error. This is especially important for an API call that may cause your system serious problems, such as a crash or hang, if the API you are calling does not work as expected.
+
+## How ##
+
+Check API return values with an if statement, handle any errors appropriate by failing to a known secure state or by returning an error to your caller. Some examples of important APIs that should always be checked for errors:
+
+ - Operations on mutexes and semaphores
+ - Network communication
+ - Memory allocation
+
+Be especially careful to check the results of memory allocations before copying into a buffer or otherwise manipulating it. Copying or appending into an unallocated memory location can crash your application or potentially lead to a buffer overflow vulnerability.
+
+## Problem Example ##
+
+In the following example, the read API is called without checking the return value for errors.
+
+    bool ReadFromSocket(SOCKET socket, char *recvBuffer, int len)
+    {
+      //first read from the socket
+      read(socket, recvBuffer, len, 0);
+    
+    
+      //now parse the buffer
+      return parseBuffer(recvBuffer, len);
+    }
+
+## Solution Example ## 
+
+In the following example, the read API is called and then the return value is checked for errors.
+
+    bool ReadFromSocket(SOCKET socket, char *recvBuffer, int len)
+    {
+      //first read from the socket
+      int ret = read(socket, recvBuffer, len, 0);
+    
+    
+      if (ret >= 0)
+      {
+          //now parse the buffer
+          return parseBuffer(recvBuffer, len);
+      }
+      else
+      {
+          //can call WSAGetLastError if we need error details
+          return false;
+      }
+    }]]></Data>
   </Content>
 </TeamMentor_Article>
