@@ -15,34 +15,30 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[==What to Check For==
+    <Data><![CDATA[## What to Check For ##
 
-Check to ensure structured exception handling is used to catch error conditions.
+Check to ensure structured exception handling is used to catch error conditions instead of just dropping the exceptions.
 
-==Why==
+## Why ##
 
 Using structured exception handling simplifies and de-clutters the application code, which improves robustness and avoids leaving the application in an inconsistent state. It provides the application more information regarding the encountered error and minimizes the risk of information disclosure.
 
-==How to Check==
+## How to Check ##
 
 All code in your application that may fail should either be enclosed in a try/catch/finally block or caught by a global exception handler. Catching exceptions close to the source can improve error messages both for user experience and debugging purposes. 
 
 The code that may fail should be enclosed in a try statement such as:
 
-{{{
-
-try
-{
-    //error prone code
-}
-
-}}}
+    try
+    {
+        //error prone code
+    }
 
 A catch block may follow the try block if you want to execute error handling code including resource cleanup necessary in an error condition and any work needed to fail to a secure state. Catch blocks are the right place to do exception logging and add more information to the existing exception. In most cases you should rethrow the exception so that exception handlers above your code can react appropriately. You should only consume an exception if you can handle the error completely.
 
 It is ok to use try/finally without a catch block, especially when you cannot handle the exception and just need to make sure cleanup code is run. You should then create a finally block that performs cleanup or any other operations that should occur regardless of whether the code succeeds or fails.
 
-==How to Fix==
+## How to Fix ##
 
 To handle exceptions:
 
