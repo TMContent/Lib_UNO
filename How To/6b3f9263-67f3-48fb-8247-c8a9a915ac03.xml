@@ -52,10 +52,6 @@ How to Test for Network Credential Sniffing Bugs:
 
 ## Step 2: Analyze Causes and Countermeasures ##
 
-Next, it is necessary to analyze what makes credential sniffing attacks possible and how to protect against them.  
-
-### Authentication Schemes ###
-
 There are different authentication schemes available to web applications. Applications that choose a weak authentication scheme such as basic or digest authentication are prone to network credential sniffing. The common authentication schemes available are: basic, digest, web forms, and authentication using a secure channel such as TLS or IPSec. 
 
 Basic authentication sends the password as a base-64 encoded value which can be trivially decoded by attackers. Most web applications won’t use this authentication scheme for remote clients; however, applications might choose to use basic authentication for local network users. Digest authentication is more secure since it uses an MD5 hash with a nonce (number used once) to encrypt the password before sending it over the wire; nonetheless, digest authentication is only secure if properly configured and it can fall victim to man-in-the-middle (MitM) attacks where an attacker that is intercepting authentication packages can tell the client to use Basic authentication or legacy digest authentication.    
