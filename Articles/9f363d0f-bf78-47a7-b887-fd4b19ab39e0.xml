@@ -14,7 +14,7 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Amazon Web Services (AWS)
  - MySQL 5.6
@@ -23,19 +23,19 @@
  - PostgreSQL 9.4.1
 
 
-##What to Do##
+## What to Do ##
 
 Unused SQL database access accounts should be removed with a native database utility or command line interface (CLI).
 
 
-##Why##
+## Why ##
 
 Each SQL access account increases the attack surface of your application. Unused accounts can be exploited by an attacker as a means of entry. Remove unused and unnecessary DB accounts and users to simplify security management. 
 
 Unused accounts are susceptible to brute force attacks, and the DB can be compromised. The AWS security model defines customer responsibilities for database access *within* your cloud service. Removing unused accounts is a basic security principle, and required by AWS compliance and certification authorities such as PCI DSS and ISO 27001.
 
 
-##When##
+## When ##
 
 Always enumerate SQL DB accounts and their use for design and deployment, so that their status can be audited at intervals specified in your security management plan.
 
@@ -48,12 +48,12 @@ Remove unused SQL accounts at these milestones:
 Exercise caution when removing SQL access accounts. If an account is currently using resources, or has an open session, the delete operation may produce an error. Be sure to confirm the use and status of any SQL account before removal. Do not remove system accounts.
 
 
-##How##
+## How ##
 
 To remove unused SQL database access accounts, follow the instructions under the specific AWS database used.
 
 
-###MySQL 5.6###
+### MySQL 5.6 ###
 
 1. **Login with Privileges.** Open a terminal or command shell and log in as a database superuser. Enter the following command, and type in your password.
 
@@ -70,7 +70,7 @@ To remove unused SQL database access accounts, follow the instructions under the
 4. **Account Removed.** The account and privileges are removed after issuing the command. If there is an open user session, the account is dropped when the session is closed. Any future attempt to login with the account will fail. Note that databases and other objects created by the account are not deleted. Security errors may result if attempts are made to open these objects in *definer security context*. Refer to the MySQL Reference Manual for more information on reassigning object permissions.
 
 
-###Oracle 12c###
+### Oracle 12c ###
 
 1. **Login with Privileges.** Open the command line tool SQL*Plus, and log in with an account that has the DROP USER system privilege. Enter the following commands.
 
@@ -96,7 +96,7 @@ To remove unused SQL database access accounts, follow the instructions under the
 4. **Account Removed.** The user account and associated schema are removed from the data dictionary. All schema objects in the user schema are also removed. Do not drop the SYS or SYSTEM user. This will corrupt the database.
 
 
-###Microsoft SQL Server 2008 R2 and 2012###
+### Microsoft SQL Server 2008 R2 and 2012 ###
 
 1. **Login with Privileges.** Login to a management computer as a user with membership in Account Operators, Domain Admins, Enterprise Admins, or equivalent group. Open **SQL Server Management Studio**.
 
@@ -116,7 +116,7 @@ To remove unused SQL database access accounts, follow the instructions under the
 	**Note**: The steps above remove the database user, but do not address management of a Windows or SQL Server login, if one has been mapped to this user. Refer to the Microsoft SQL Server Product Documentation for more information on login accounts.
 
 
-###PostgreSQL 9.4.1###
+### PostgreSQL 9.4.1 ###
 
 1. **Login with Privileges.** Open a terminal or command shell and log in as a database superuser. The default superuser in the example is *postgres*. Enter the following command, and type in your password.
 
@@ -134,7 +134,7 @@ To remove unused SQL database access accounts, follow the instructions under the
 4. **Account Removed.** The account is removed after issuing the command. If there is an open user session, the account is dropped when the session is closed. Any future attempt to login with the account will fail. Note that databases and other objects created by the account are not deleted. If **ERROR: role "user_name" cannot be dropped because some objects depend on it** appears, the objects should be reassigned or dropped. Refer to the PostgreSQL Documentation for more information on dropping or reassigning objects.
 
 
-##Additional Resources##
+## Additional Resources ##
 
 - [Amazon Web Services: Overview of Security Processes](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Overview of Security Processes")
 - [Amazon Web Services: Risk and Compliance](http://aws.amazon.com/compliance/aws-whitepapers/ "Amazon Web Services: Risk and Compliance")
