@@ -4,7 +4,7 @@
     <Id>f9d523ec-7328-4be5-93c6-00e671ecd068</Id>
     <Id_History>f9d523ec-7328-4be5-93c6-00e671ecd068,8376d58f-5144-49bc-b779-9e572511e546,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>0sink editme Do Not Cache Sensitive Data</Title>
+    <Title>Do Not Cache Sensitive Data</Title>
     <Category>Communication Security</Category>
     <Phase>Design</Phase>
     <Technology>Scala Play</Technology>
@@ -44,19 +44,13 @@ in memory on the server only.</p>
   <p>Never cache sensitive data on the client.<br /></p>
   <h1>How</h1>
   <p>Javascript variables and hidden input fields must not be used to store sensitive data, which may be rendered invalid. The only thing that may be stored on the client side across browser requests should be the Session ID. Session IDs are most often stored in an HTTP cookie, though other solutions exist.</p>
-  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&amp;nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>". For example:</p>
+  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&amp;nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>".&amp;nbsp;
+    </p>
   <blockquote>
-    <pre style="font-family: Arial, Verdana; font-size: 10pt; font-style: normal; font-variant: normal; font-weight: normal; line-height: normal;">
-      <span style="font-size: 10pt;">
-        <input type="password" name="pass" autocomplete="off" />
-      </span>
-      <br />
-    </pre>
   </blockquote>
   <p>Web pages containing sensitive data should be marked as such, using appropriate meta tags, to prevent caching. When generating/serving the web page, add the appropriate HTTP headers. This will serve as a guideline to proxies and browsers alike that the data must not be cached. A possibly negative impact of this is the invalidation of the browser "back" button.</p>
-  <p>Examples of the appropriate&amp;nbsp;<em>META</em>&amp;nbsp;tags and HTTP headers are below:</p>
+  <br />
   <ul>
-    <li>Caching&amp;nbsp;<em>META</em>&amp;nbsp;tags<pre><pre><html><br /><head><br /><meta http-equiv="CACHE-CONTROL" content="NO-CACHE" /><br /><meta http-equiv="PRAGMA" content="NO-CACHE" /><br /><meta http-equiv="EXPIRES" content="-1" /><br />    ...<br /></head><br /><body><br />    ...<br /></body><br /></html></pre></pre></li>
     <li>Caching HTTP Headers: Your Global.scala class should look something like below: <br /><pre><p>import play.api._<br />import play.api.mvc._<br />import play.api.http.HeaderNames._<br /><br />/**<br /> * Global application settings.<br /> */<br />object Global extends GlobalSettings {<br /><br />  /**<br />   * Global action composition.<br />   */<br />  override def doFilter(action: EssentialAction): EssentialAction = EssentialAction { request =&gt;<br />    action.apply(request).map(_.withHeaders(<br />      PRAGMA -&gt; "no-cache"<br />      Cache-Control -&gt; "no-cache"<br />      Expires -&gt; "-1"<br />    ))<br />  }<br />}</p></pre></li>
   </ul>
   <h1>Additional Resources</h1>
