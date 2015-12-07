@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>18e2fdff-8bad-4807-823b-3b7c06b3f473</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Disable Unused Functionality</Title>
+    <Category />
+    <Phase>Deployment</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Disable unused functionality.
+
+## Why ##
+
+Functionality that is properly disabled cannot be exploited by attackers, even if it were vulnerable. Disabling unused functionality is one of they key hardening techniques.
+
+## How ##
+
+To disable unused functionality provided by the application:
+
+1. **Identify all features that can be disabled.** Make a spreadsheet about all application features that can be turned off.
+
+2. **Identify features that are not being used.** Go through the spreadsheet and note features that are not being used.
+
+3. **Disable functionality that is not being used.** Configure the application to disable all the functionality that is not being used.
+
+To disable unused functionality provided by the system:
+
+1. **Remove unused scripts from web sites.** Removing unnecessary scripts usually applies to web servers that have scripts installed. Web scripts may have serious vulnerabilities in them that could allow an attacker to take over the server. To remove unnecessary web scripts, browse to each folder exposed by the web server and delete all scripts that are not necessary for business operations.
+
+2. **Remove unnecessary scripts on IIS web servers.** Launch the "Internet Information Services (IIS) Manager" by running "inetmgr." Go through each folder in the "IIS Manager." Remove all files and scripts that are not needed for business operations.
+
+3. **Remove unnecessary scripts on Apache web servers.** Examine the apache.conf configuration file, typically located in /etc/apache2/apache.conf. Identify all folders used by Apache to store scripts and pages. Go through each identified folder and delete all pages and scripts that are not needed for business operations.
+
+4. **Remove unnecessary drivers on Windows systems.** Right click on "My Computer" (or "Computer" in the "Start menu"). Select "Manage." Select "Device manager." Go through the list of all installed devices and identify which ones are not necessary for server operations. Double click each unneeded device and select "Uninstall" from the "Driver" tab in the "Properties" window that pops up. Typical devices that are not needed for a server are sound cards and wireless network interfaces.
+
+5. **Remove unnecessary drivers on Linux systems.** The recommended way to remove unnecessary device drivers on Linux is to recompile the kernel. Recompiling the kernel requires an expert to configure the many kernel options correctly, and the exact procedure and settings depend on the exact server configuration.
+
+6. **Remove unnecessary features and subsystems on Windows systems.** Go to the "Control Panel", “Classic View”, "Programs and Features", "Turn Windows features on or off", A "Server Manager" window should appear. Select "Features". Identify all features necessary for server operations. Remove all unneeded features by clicking "Remove Features", selecting features to remove, and pressing "Next”. Select "Roles". Identify all roles necessary for server operations. Remove all unneeded roles by clicking "Remove Roles", selecting roles to remove, and pressing "Next". By default, there are no roles or features installed, so there might be nothing that needs to be done here.
+
+7. **Remove unnecessary applications on Windows systems.** Go to the "Control Panel." Select "Add or Remove Programs" or "Programs and Features" in the "Classic View." Identify which programs in the list are needed for server operations. Uninstall all unneeded programs by clicking the "Uninstall" button for each unneeded application. It is ok to leave programs necessary for server maintenance.
+
+8. **Remove unnecessary applications on Linux systems.** Removing unnecessary applications on Linux varies by distribution. Typically, there is a user-friendly package manager that allows removing applications. If a package manager is available, use it to view the installed applications and see which ones are necessary for server functionality. Remove all unnecessary packages by selecting them for removal. Linux has a complex package dependency system, so it may be difficult to remove some packages because they may be required by the needed applications. It is ok to leave packages that are required by the applications necessary for server functionality. It is ok to leave programs necessary for server maintenance. For the exact instructions on managing applications on your Linux distribution, please refer to the respective Linux distribution documentation.
+
+9. **Remove unnecessary applications on Mac OS X systems.** Go to the "Applications" folder. Identify all programs necessary for server functionality. Remove all other applications by dragging them to the "trash bin." It is ok to leave programs necessary for server maintenance.
+
+10. **Remove unnecessary file systems on Windows systems.** Right click on "My Computer" (or "Computer" in the "Start menu"). Select "Manage." Select "Disk Management." Identify which file systems are needed for server operations. If there are file systems that are not needed for server operations, right click on each one and select "Delete Partition....” Be careful to delete only unnecessary file systems. Press "Yes" to verify that you want to delete the selected file system.
+
+11. **Remove unnecessary file systems on Linux systems.** Removing unnecessary file systems on Linux varies by distribution, based on the partitioning tools that are available. fdisk is considered the "lowest common denominator" and is very primitive. If available, gparted or qtparted file system management tools should be used. Gparted and qtparted are very simple to use and should be intuitive - they provide a graphical representation of the file systems on the selected disk. Identify which file systems are necessary for server operations. If there are unneeded file systems, remove them by right clicking on each partition and selecting "Delete." Gparted and qtparted wait for the user to "commit" the changes before writing them to disk. When you are confident with the changes you've made, press the "Commit" button on the main toolbar.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

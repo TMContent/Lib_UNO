@@ -4,7 +4,7 @@
     <Id>51b6776e-c771-4d63-b77d-b16ba295a62f</Id>
     <Id_History>51b6776e-c771-4d63-b77d-b16ba295a62f,ac88482f-edca-4436-9e29-55d8d7703d37,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>[SINK] Encrypt Sensitive Data in the Database</Title>
+    <Title>0sink Encrypt Sensitive Data in the Database</Title>
     <Category>Cryptography</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -47,7 +47,7 @@
       <p>Certificates are essentially wrappers for a public key. The database master key must already exist. The following will create a certificate associated with User1, encrypted with the database master key:</p>
       <pre>CREATE CERTIFICATE User1Certificate    AUTHORIZATION User1 WITH subject = 'Certificate For User1'GO</pre>
       <p>Create a certificate for User2 that is limited:</p>
-      <pre>CREATE CERTIFICATE User2Certificate    AUTHORIZATION User2 WITH subject = 'Certificate For User2',  <br />  EXPIRY_DATE = '12/31/2005',    ENCRYPTION_PASSWORD = 'q%dsabciJ&#QZk#wM5G!WB36z5m7'</pre>
+      <pre>CREATE CERTIFICATE User2Certificate    AUTHORIZATION User2 WITH subject = 'Certificate For User2',  <br />  EXPIRY_DATE = '12/31/2005',    ENCRYPTION_PASSWORD = 'q%dsabciJ&amp;#QZk#wM5G!WB36z5m7'</pre>
     </li>
   </ul>
   <p>You can have SQL Server create a certificate for its own use or import a certificate created by any trusted certificate authority, such as Microsoft Certificate Server or VeriSign. Options include setting a password to use to encrypt the private key or letting SQL Server use the database master key, as well as setting the creation and expiration dates. </p>
@@ -126,6 +126,6 @@
   <pre> EncryptByCert(Cert_ID('User1Certificate'),         'This customer is a real flake. Don''t trust him!'))</pre>
   <p>When the site suffers a security breach via a SQL injection vulnerability they lose only the names and addresses of their customers to the attacker; the credit card details and notes are encrypted and unreadable to the attacker.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

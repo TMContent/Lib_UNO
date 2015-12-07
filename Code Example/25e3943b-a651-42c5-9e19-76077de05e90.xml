@@ -3,8 +3,8 @@
   <Metadata>
     <Id>25e3943b-a651-42c5-9e19-76077de05e90</Id>
     <Id_History>25e3943b-a651-42c5-9e19-76077de05e90,c2b7182c-eb09-4f2d-88c5-0d976dfa0d00,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
-    <Title>Add Unique Tokens to HTTP Requests Using Java Server Faces (JSF)</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[VERIFYME] Add Unique Tokens to HTTP Requests Using Java Server Faces (JSF)</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -37,55 +37,55 @@
       <pre>
         <p>//in authentication function</p>
         <p>session.setAttribute("csrfToken", generateCSRFToken());</p>
-        <p>&nbsp;</p>
+        <p>&amp;nbsp;</p>
         <p>//sample implementation of token generation</p>
-        <p>public static String generateCSRFToken() &#123;</p>
-        <p>&#9;SecureRandom rng = new SecureRandom();</p>
-        <p>&#9;int length = 64;</p>
-        <p>&#9;String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";</p>
-        <p>&#9;char&#91;&#93; text = new char&#91;length&#93;;</p>
-        <p>&#9;for (int i = 0; i &lt; length; i&#43;&#43;) &#123;</p>
-        <p>&#9;&#9;text&#91;i&#93; = characters.charAt(rng.nextInt(characters.length()));</p>
-        <p>&#9;&#125;</p>
-        <p>&#9;return String.valueOf(text);</p>
-        <p>&#125;</p>
+        <p>public static String generateCSRFToken() &amp;#123;</p>
+        <p>&amp;#9;SecureRandom rng = new SecureRandom();</p>
+        <p>&amp;#9;int length = 64;</p>
+        <p>&amp;#9;String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";</p>
+        <p>&amp;#9;char&amp;#91;&amp;#93; text = new char&amp;#91;length&amp;#93;;</p>
+        <p>&amp;#9;for (int i = 0; i &lt; length; i&amp;#43;&amp;#43;) &amp;#123;</p>
+        <p>&amp;#9;&amp;#9;text&amp;#91;i&amp;#93; = characters.charAt(rng.nextInt(characters.length()));</p>
+        <p>&amp;#9;&amp;#125;</p>
+        <p>&amp;#9;return String.valueOf(text);</p>
+        <p>&amp;#125;</p>
       </pre>
       <li>
         <p>
           <strong>Add security tokens to transaction pages.</strong> For any function in the application representing a transaction (ie. causes a server side state change), the associated client form should have a hidden form field containing the token retrieved from the session.</p>
         <pre>
           <p>&lt;h:form&gt;</p>
-          <p>&#9;...</p>
-          <p>&#9;&lt;h:inputHidden id="token" value="#&#123;sessionScope&#91;'csrfToken'&#93;&#125;" /&gt;</p>
-          <p>&#9;...</p>
+          <p>&amp;#9;...</p>
+          <p>&amp;#9;&lt;h:inputHidden id="token" value="#&amp;#123;sessionScope&amp;#91;'csrfToken'&amp;#93;&amp;#125;" /&gt;</p>
+          <p>&amp;#9;...</p>
           <p>&lt;/h:form&gt;</p>
         </pre>
         <li>
           <p>
-            <strong>Verify that&nbsp;server-side and client-side tokens match.</strong>&nbsp;For any function in the application representing a transaction (ie. causes a server side state change), the associated server-side request processing code should retrieve the token from the session. It should then compare that token to the submitted token from the client for the given request. If the tokens match, the transaction may be processed. If the tokens do not match, the transaction should not be processed, and the associated request should be treated as an attack and dealt with accordingly.</p>
+            <strong>Verify that&amp;nbsp;server-side and client-side tokens match.</strong>&amp;nbsp;For any function in the application representing a transaction (ie. causes a server side state change), the associated server-side request processing code should retrieve the token from the session. It should then compare that token to the submitted token from the client for the given request. If the tokens match, the transaction may be processed. If the tokens do not match, the transaction should not be processed, and the associated request should be treated as an attack and dealt with accordingly.</p>
           <pre>
             <p>//in your backing bean that handles the associated request from the form above</p>
             <p>private String token;</p>
-            <p>public String getToken() &#123;</p>
-            <p>&#9;return token;</p>
-            <p>&#125;</p>
-            <p>public void setToken(String token) &#123;</p>
-            <p>&#9;this.token = token;</p>
-            <p>&#125;</p>
+            <p>public String getToken() &amp;#123;</p>
+            <p>&amp;#9;return token;</p>
+            <p>&amp;#125;</p>
+            <p>public void setToken(String token) &amp;#123;</p>
+            <p>&amp;#9;this.token = token;</p>
+            <p>&amp;#125;</p>
             <p>...</p>
             <p>//method that handles form submit</p>
-            <p>public void action() &#123;</p>
-            <p>&#9;FacesContext facesContext = FacesContext.getCurrentInstance();</p>
-            <p>&#9;HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);</p>
-            <p>&#9;String storedToken = (String)session.getAttribute("csrfToken");</p>
+            <p>public void action() &amp;#123;</p>
+            <p>&amp;#9;FacesContext facesContext = FacesContext.getCurrentInstance();</p>
+            <p>&amp;#9;HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);</p>
+            <p>&amp;#9;String storedToken = (String)session.getAttribute("csrfToken");</p>
             <p />
-            <p>&#9;//do check</p>
-            <p>&#9;if (storedToken.equals(token)) &#123;</p>
-            <p>&#9;&#9;//go ahead and process ... do business logic here</p>
-            <p>&#9;&#125; else &#123;</p>
-            <p>&#9;&#9;//DO NOT PROCESS ... this is to be considered a CSRF attack - handle appropriately</p>
-            <p>&#9;&#125;</p>
-            <p>&#125;</p>
+            <p>&amp;#9;//do check</p>
+            <p>&amp;#9;if (storedToken.equals(token)) &amp;#123;</p>
+            <p>&amp;#9;&amp;#9;//go ahead and process ... do business logic here</p>
+            <p>&amp;#9;&amp;#125; else &amp;#123;</p>
+            <p>&amp;#9;&amp;#9;//DO NOT PROCESS ... this is to be considered a CSRF attack - handle appropriately</p>
+            <p>&amp;#9;&amp;#125;</p>
+            <p>&amp;#125;</p>
           </pre>
           <li>
             <p>
@@ -101,7 +101,7 @@
   </ol>
   <h1>See Also</h1>
   <ul>
-    <li>For more information about Cross-Site Request Forgery, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29</a><li>For more information about Cross-Site Request Forgery prevention, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29_Prevention_Cheat_Sheet</a><li>For more information about Java SecureRandom API, please see <a href="http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html">http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html</a><li>For more information about the OWASP&nbsp;CSRFGuard project, please see <a href="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a><li>For more information about Cross-Site Request Forgery, please see <a href="http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/">http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/</a></li></li></li></li></li>
+    <li>For more information about Cross-Site Request Forgery, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29</a><li>For more information about Cross-Site Request Forgery prevention, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29_Prevention_Cheat_Sheet</a><li>For more information about Java SecureRandom API, please see <a href="http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html">http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html</a><li>For more information about the OWASP&amp;nbsp;CSRFGuard project, please see <a href="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a><li>For more information about Cross-Site Request Forgery, please see <a href="http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/">http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/</a></li></li></li></li></li>
   </ul>
   <h1>Java Session Management Guidelines</h1>
   <ul>

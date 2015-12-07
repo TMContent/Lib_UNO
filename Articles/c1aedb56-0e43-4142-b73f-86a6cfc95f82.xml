@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>c1aedb56-0e43-4142-b73f-86a6cfc95f82</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Validate File Formats</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Verify that the format of the file is correct when opening saved files or documents.
+
+## Why ##
+
+Many vulnerabilities are exploited via malformed documents supplied to the application. Attackers frequently embed malformed documents in web pages - some applications are integrated into the web browser and will open malicious documents automatically. Making sure that file format is valid before loading files into the application makes it harder to embed exploit code into documents.
+
+## How ##
+
+Perform the following actions to validate file format before loading files into the application:
+
+1. **Define file format.** Specify valid values for all possible fields in all document types used by your application. This information should be a part of project documentation and the developers may already have it.
+2. **Review code.** Search for code that loads saved files into the application. Examine the extent of the validation already being performed by the application. If some validation is already being performed, some code may be recycled in a more thorough validation routine.
+3. **Implement validation.** Write validation functions for all fields in all document types supported by the application.
+4. **Centralize validation.** Move the validation functions for all document fields to the centralized input and data validation class or library. Write a master file format validation function that calls all individual data field validation functions.
+5. **Use validation.** Go back to code that loads data files into the application. Remove any old validation code. Call the master file format validation function on all files before loading them into the application.]]></Data>
+  </Content>
+</TeamMentor_Article>

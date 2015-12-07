@@ -4,7 +4,7 @@
     <Id>90893370-cbce-4116-b9ff-2e69dab56cfa</Id>
     <Id_History>90893370-cbce-4116-b9ff-2e69dab56cfa,1ae3c658-7f81-4b88-a7d4-85b5a863cacf,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>All Untrusted Data in HTML Contexts Is Escaped in JSF</Title>
+    <Title>[VERIFYME] All Untrusted Data in HTML Contexts Is Escaped in JSF</Title>
     <Category>Encoding</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -55,14 +55,14 @@
     </li>
   </ol>
   <h1>Problem Example</h1>
-  <pre>&lt;p&gt;User input is: #&#123;user.input&#125;&lt;/p&gt;</pre>
+  <pre>&lt;p&gt;User input is: #&amp;#123;user.input&amp;#125;&lt;/p&gt;</pre>
   <p>The problem example above is vulnerable to XSS attacks - if the <em>user.input</em> expression contains malicious script entered by an attacker, whoever views the page with the code above will be at risk of running that script in the context of their browser.</p>
   <h1>Solution Example</h1>
-  <pre>&lt;p&gt;User input is: &lt;h:outputText value="#&#123;user.input&#125;"/&gt;&lt;/p&gt;</pre>
+  <pre>&lt;p&gt;User input is: &lt;h:outputText value="#&amp;#123;user.input&amp;#125;"/&gt;&lt;/p&gt;</pre>
   <p>In the solution example above, HTML tags are escaped in the expression <em>user.input</em> when being displayed. If the expression <em>user.input</em> contains malicious script entered by an attacker, it will not be executable, because HTML tags will have been escaped, and thus not interpreted as script by the browser.</p>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more infromation about JSF tags, please see <a href="http://www.horstmann.com/corejsf/jsf-tags.html">http://www.horstmann.com/corejsf/jsf-tags.html</a><li>For more information about jTidy HTMLEncode, please see <a href="http://jtidy.sourceforge.net/multiproject/jtidyservlet/apidocs/org/w3c/tidy/servlet/util/HTMLEncode.html">http://jtidy.sourceforge.net/multiproject/jtidyservlet/apidocs/org/w3c/tidy/servlet/util/HTMLEncode.html</a><li>For more information about OWASP Reform, please see <a href="https://www.owasp.org/index.php/Category:OWASP_Encoding_Project">https://www.owasp.org/index.php/Category:OWASP_Encoding_Project</a><li>For more information about using OWASP ESAPI to prevent XSS, please see <a href="http://www.jtmelton.com/2009/01/12/the-owasp-top-ten-and-esapi-part-2-cross-site-scripting-xss/">http://www.jtmelton.com/2009/01/12/the-owasp-top-ten-and-esapi-part-2-cross-site-scripting-xss/</a><li>For more information about OWASP ESAPI, please see <a href="https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API">https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API</a><li>For more information about preventing XSS vulnerabilities, please see <a href="https://www.owasp.org/index.php/XSS_&#37;28Cross_Site_Scripting&#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/XSS_&#37;28Cross_Site_Scripting&#37;29_Prevention_Cheat_Sheet</a><li>For more information about preventing DOM-based XSS vulnerabilities, please see <a href="https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet</a></li></li></li></li></li></li></li>
+    <li>For more infromation about JSF tags, please see <a href="http://www.horstmann.com/corejsf/jsf-tags.html">http://www.horstmann.com/corejsf/jsf-tags.html</a><li>For more information about jTidy HTMLEncode, please see <a href="http://jtidy.sourceforge.net/multiproject/jtidyservlet/apidocs/org/w3c/tidy/servlet/util/HTMLEncode.html">http://jtidy.sourceforge.net/multiproject/jtidyservlet/apidocs/org/w3c/tidy/servlet/util/HTMLEncode.html</a><li>For more information about OWASP Reform, please see <a href="https://www.owasp.org/index.php/Category:OWASP_Encoding_Project">https://www.owasp.org/index.php/Category:OWASP_Encoding_Project</a><li>For more information about using OWASP ESAPI to prevent XSS, please see <a href="http://www.jtmelton.com/2009/01/12/the-owasp-top-ten-and-esapi-part-2-cross-site-scripting-xss/">http://www.jtmelton.com/2009/01/12/the-owasp-top-ten-and-esapi-part-2-cross-site-scripting-xss/</a><li>For more information about OWASP ESAPI, please see <a href="https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API">https://www.owasp.org/index.php/Category:OWASP_Enterprise_Security_API</a><li>For more information about preventing XSS vulnerabilities, please see <a href="https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet</a><li>For more information about preventing DOM-based XSS vulnerabilities, please see <a href="https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/DOM_based_XSS_Prevention_Cheat_Sheet</a></li></li></li></li></li></li></li>
   </ul>
   <h1>Java Data Sanitization Guidelines</h1>
   <ul>

@@ -4,7 +4,7 @@
     <Id>417fdfc4-572a-4158-b0dc-7623e2507ef7</Id>
     <Id_History>417fdfc4-572a-4158-b0dc-7623e2507ef7,1d3683c8-9ac8-4901-9433-ca4116286406,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>[SINK] Do Not Leave the System Vulnerable After Unrecoverable Exceptions Occur</Title>
+    <Title>0sink Do Not Leave the System Vulnerable After Unrecoverable Exceptions Occur</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Design</Phase>
     <Technology>.NET 3.5</Technology>
@@ -22,9 +22,9 @@
   <p>Ensure that exceptions that cannot be recovered from do not cause the application to be left in a vulnerable state (i.e., lacking any assurances of exception safety).</p>
   <h1>Why</h1>
   <p>Some systems become vulnerable after exceptions occur, because the default behavior is to simply stop executing certain code when encountering an error. Weve all seen example code like the following when looking at various API docs and reference implementations: </p>
-  <pre>&#36;result = perform_some_operation(test string, 45, &#36;class_type); </pre>
-  <pre>If (&#33;&#36;result) die(an error occurred); </pre>
-  <p>These examples run rampant like dandelions all over the internet. A simple demonstration of how to use a specific API, right? Sure, but it also ignores error handling&#33; What if there is sensitive data lying around in a temporary file somewhere? Our above example simply stops execution in the current context, and performs no cleanup. Worse still, handling errors this way is troublesome, since almost every function call is capable of throwing several different kinds of errors, all of which need to be trapped. A better strategy is needed to handle all errors and gracefully prevent awkward, unsafe system states. </p>
+  <pre>&amp;#36;result = perform_some_operation(test string, 45, &amp;#36;class_type); </pre>
+  <pre>If (&amp;#33;&amp;#36;result) die(an error occurred); </pre>
+  <p>These examples run rampant like dandelions all over the internet. A simple demonstration of how to use a specific API, right? Sure, but it also ignores error handling&amp;#33; What if there is sensitive data lying around in a temporary file somewhere? Our above example simply stops execution in the current context, and performs no cleanup. Worse still, handling errors this way is troublesome, since almost every function call is capable of throwing several different kinds of errors, all of which need to be trapped. A better strategy is needed to handle all errors and gracefully prevent awkward, unsafe system states. </p>
   <h1>When</h1>
   <p>This rule needs to be applied for all code segments that contain any code capable of generating or propagating unrecoverable exceptions. If there is even one place in the code where this constraint is not satisfied, a system state will eventually occur that causes an unrecoverable, unhandled exception. </p>
   <h1>How</h1>
@@ -39,6 +39,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -3,8 +3,8 @@
   <Metadata>
     <Id>abbeedc4-e1bb-4fc8-bb61-c1ca98d04621</Id>
     <Id_History>abbeedc4-e1bb-4fc8-bb61-c1ca98d04621,15f9a7af-80f0-47a7-b457-ead0ff82368b,</Id_History>
-    <Library_Id>92718d53-36b2-47bc-b6f5-e60994385f46</Library_Id>
-    <Title>How to Map Roles to Certificates</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[VERIFYME] How to Map Roles to Certificates</Title>
     <Category>Authorization</Category>
     <Phase>Implementation</Phase>
     <Technology>WCF</Technology>
@@ -20,19 +20,19 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Microsoft&#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&#174; 2008</li></li>
+    <li>Microsoft&amp;#174; Windows Communication Foundation (WCF) 3.5 <li>Microsoft Visual Studio&amp;#174; 2008</li></li>
   </ul>
   <h1>Description</h1>
   <p>If you are using Certificates authentication you can map the certificate to a windows account and authorize based on this account.</p>
   <p>Use the following steps to associate roles with a certificate:</p>
   <ol>
-    <li>Configure IIS to enable client certificate mapping.<ol><li>Open the IIS service applet<li>Right-click on the web site you will be using for your service and select Properties<li>Select the Directory Security tab and click Edit button within the Secure Communications section.<li>Check the &#8220;Enable Client Certificate Mapping&#8221; checkbox. Click the mapping edit button and fill in 1-1 or Many-to-1 depending on your configuration.</li></li></li></li></ol><li>Configure the service to require ClientCredentialType = &#8220;Certificate&#8221;. This will require clients to connect using Certificate authentication.<ol><pre>      &lt;message clientCredentialType="Certificate" /&gt;</pre></ol><li>Configure the service to map certificates to user accounts in the web.config or app.config file. Set the mapClientCertificateToWindowsAccount to &#8220;true&#8221;.<ol><pre>&lt;serviceBehaviors&gt;<br /> &lt;behavior name="MappingBehavior"&gt;<br />  &lt;serviceCredentials&gt;<br />   &lt;clientCertificate&gt;<br />    &lt;authentication certificateValidationMode="None" mapClientCertificateToWindowsAccount="true" /&gt;<br />   &lt;/clientCertificate&gt;<br />  &lt;/serviceCredentials&gt;<br /> &lt;/behavior&gt;<br />&lt;/serviceBehaviors&gt;</pre></ol><li>Configure clients to supply a certificate. The incoming client requests will contain a certificate name and thumbprint ID. IIS will map the client certificates to a Windows user account.<ol><pre>      &lt;message clientCredentialType="Certificate" /&gt;</pre></ol><li>Authorize the windows group required by adding the PrincipalPermission attribute above each service method that requires authorization. Specify the Windows user group required to access the method in the Role field.<ol><pre>&#91;PrincipalPermission(SecurityAction.Demand, Role = "accounting")&#93;<br />public double Add(double a, double b)<br />&#123;<br />    return a &#43; b;<br />&#125;<br /></pre></ol></li></li></li></li></li>
+    <li>Configure IIS to enable client certificate mapping.<ol><li>Open the IIS service applet<li>Right-click on the web site you will be using for your service and select Properties<li>Select the Directory Security tab and click Edit button within the Secure Communications section.<li>Check the &amp;#8220;Enable Client Certificate Mapping&amp;#8221; checkbox. Click the mapping edit button and fill in 1-1 or Many-to-1 depending on your configuration.</li></li></li></li></ol><li>Configure the service to require ClientCredentialType = &amp;#8220;Certificate&amp;#8221;. This will require clients to connect using Certificate authentication.<ol><pre>      &lt;message clientCredentialType="Certificate" /&gt;</pre></ol><li>Configure the service to map certificates to user accounts in the web.config or app.config file. Set the mapClientCertificateToWindowsAccount to &amp;#8220;true&amp;#8221;.<ol><pre>&lt;serviceBehaviors&gt;<br /> &lt;behavior name="MappingBehavior"&gt;<br />  &lt;serviceCredentials&gt;<br />   &lt;clientCertificate&gt;<br />    &lt;authentication certificateValidationMode="None" mapClientCertificateToWindowsAccount="true" /&gt;<br />   &lt;/clientCertificate&gt;<br />  &lt;/serviceCredentials&gt;<br /> &lt;/behavior&gt;<br />&lt;/serviceBehaviors&gt;</pre></ol><li>Configure clients to supply a certificate. The incoming client requests will contain a certificate name and thumbprint ID. IIS will map the client certificates to a Windows user account.<ol><pre>      &lt;message clientCredentialType="Certificate" /&gt;</pre></ol><li>Authorize the windows group required by adding the PrincipalPermission attribute above each service method that requires authorization. Specify the Windows user group required to access the method in the Role field.<ol><pre>&amp;#91;PrincipalPermission(SecurityAction.Demand, Role = "accounting")&amp;#93;<br />public double Add(double a, double b)<br />&amp;#123;<br />    return a &amp;#43; b;<br />&amp;#125;<br /></pre></ol></li></li></li></li></li>
   </ol>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information on authorization, see &#8220;Authorization&#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733071.aspx">http://msdn2.microsoft.com/en-us/library/ms733071.aspx</a><li>For authorization Guidelines, see the Authorization section of &#8220;WCF 3.5 Guidelines &#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Security&#37;20Guidelines&referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&#37;20Security&#37;20Guidelines&referringTitle=Home</a><br /></li></li>
+    <li>For more information on authorization, see &amp;#8220;Authorization&amp;#8221; at <a href="http://msdn2.microsoft.com/en-us/library/ms733071.aspx">http://msdn2.microsoft.com/en-us/library/ms733071.aspx</a><li>For authorization Guidelines, see the Authorization section of &amp;#8220;WCF 3.5 Guidelines &amp;#8220; at <a href="http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home">http://www.codeplex.com/WCFSecurityGuide/Wiki/View.aspx?title=WCF&amp;#37;20Security&amp;#37;20Guidelines&amp;referringTitle=Home</a><br /></li></li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

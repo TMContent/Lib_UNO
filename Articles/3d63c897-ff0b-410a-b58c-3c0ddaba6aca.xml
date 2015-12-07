@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>3d63c897-ff0b-410a-b58c-3c0ddaba6aca</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Minimize Sensitive Data in Memory</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Minimize the amount of sensitive data in memory, especially memory that has been deallocated or is otherwise not being used.
+
+## Why ##
+
+Some attackers use malware that reads the application's memory space for text strings or other patterns to find sensitive data and compromise it this way (thus defeating cryptography and access controls). While having such malware installed in the first place is totally unacceptable, minimizing sensitive data in memory is a valuable defense-in-depth measure for those who are serious about application security. Another way sensitive data in memory can be compromised is through memory leaks, such as the Heartbleed vulnerability.
+
+## How ##
+
+To minimize sensitive data in memory:
+
+1. **Identify code that handles sensitive data.** Make a spreadsheet about the code that handles sensitive data.
+
+2. **Identify variables and/or objects that store sensitive data.** Review code and take note of each piece of code that handles sensitive data. Add information about the variables and/or objects that store sensitive data to the spreadsheet.
+
+3. **Examine how sensitive variables and/or objects are disposed of.** Most platforms don't actually zero out or otherwise overwrite memory used by objects or variables, even if these objects or variables are not used anymore or explicitly deallocated. Some platforms provide functionality that will allow overwriting data in memory on demand, some allow the developer to implement such functionality, and some make it nearly impossible. Take notes on how each sensitive variable and/or object is disposed off with the emphasis on whether the actual memory locations are overwritten as soon as possible after the data is no longer needed, such as after processing a transaction.
+
+4. **Dispose of sensitive variables and/or objects as quickly as possible.** Identify whatever functionality is made available by your platform to securely overwrite memory locations used by objects and/or variables. Some platforms will allow direct memory access and some provide classes and APIs specifically for handling sensitive data that take care of this (such as SecureString on .NET). Use this functionality to dispose of sensitive variables and/or objects as soon as possible after the sensitive data has been used.]]></Data>
+  </Content>
+</TeamMentor_Article>

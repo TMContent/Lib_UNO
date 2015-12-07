@@ -4,7 +4,7 @@
     <Id>8cc6c40a-5a4c-4d77-8900-4b896e2d3912</Id>
     <Id_History>8cc6c40a-5a4c-4d77-8900-4b896e2d3912,c9c8b3ce-cdc9-4b18-9c1a-e8afb9784219,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use H:outputText to Encode Echoed Input in JSF</Title>
+    <Title>[VERIFYME] Use H:outputText to Encode Echoed Input in JSF</Title>
     <Category>Encoding</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -25,7 +25,7 @@
   <h1>What to Do</h1>
   <p>Use<em> h:outputText</em> to encode output for display in the HTML entity context. This provides protection from XSS attacks.</p>
   <h1>Why</h1>
-  <p>The <em>h:outputText</em> tag HTML entity encodes the &lt;, &gt;, and & characters. This prevents XSS in the HTML entity context and ensures dynamic input does not result in executable code when presented to a user.</p>
+  <p>The <em>h:outputText</em> tag HTML entity encodes the &lt;, &gt;, and &amp; characters. This prevents XSS in the HTML entity context and ensures dynamic input does not result in executable code when presented to a user.</p>
   <h1>When</h1>
   <p>
     <em>h:outputText</em> is a JSF (Java Server Faces) specific tag, and can only be used in JSF applications.</p>
@@ -38,7 +38,7 @@
         <strong>Identify all echoed input.</strong> Find locations in the code where data should be displayed in a non-editable location.</p>
       <li>
         <p>
-          <strong>Determine the&nbsp;type of encoding.</strong>
+          <strong>Determine the&amp;nbsp;type of encoding.</strong>
           <em>h:outputText</em> should be used in only the HTML entity context.</p>
         <li>
           <strong>Apply the encoding. </strong>After identifying the echoed input and determining the appropriate encoding method, apply the encoding before the input is returned to the client.</li>
@@ -47,22 +47,22 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The use of <em>h:outputText</em> is improper in these examples due to the inappropriate context or configuration. See the examples below:</p>
-  <pre>&lt;a href="&lt;h:outputText value="#&#123;myobj.myvar&#125;"/&gt;"&gt;Some Website&lt;/a&gt;</pre>
+  <pre>&lt;a href="&lt;h:outputText value="#&amp;#123;myobj.myvar&amp;#125;"/&gt;"&gt;Some Website&lt;/a&gt;</pre>
   <p>Use of tag in the URL context - HTML entity encoding is not sufficient in this context.</p>
   <p>or </p>
-  <pre>&lt;b&gt;&lt;h:outputText value="#&#123;myobj.myvar&#125;" escape="false" /&gt;&lt;/b&gt;</pre>
+  <pre>&lt;b&gt;&lt;h:outputText value="#&amp;#123;myobj.myvar&amp;#125;" escape="false" /&gt;&lt;/b&gt;</pre>
   <p>Use of <em>escape="false"</em> prevents encoding - overrides the default, which is <em>true</em>.</p>
   <h1>Solution Example</h1>
   <p>The use of <em>h:outputText</em> is appropriate in these examples due to the inappropriate context or configuration. See the examples below:</p>
-  <pre>&lt;div class="container"&gt;<br />  &lt;h:outputText value="#&#123;param.name&#125;"/&gt;<br />&lt;/div&gt;</pre>
+  <pre>&lt;div class="container"&gt;<br />  &lt;h:outputText value="#&amp;#123;param.name&amp;#125;"/&gt;<br />&lt;/div&gt;</pre>
   <p>or</p>
-  <pre>&lt;b&gt;&lt;h:outputText value="#&#123;myobj.myvar&#125;"/&gt;&lt;/b&gt;</pre>
+  <pre>&lt;b&gt;&lt;h:outputText value="#&amp;#123;myobj.myvar&amp;#125;"/&gt;&lt;/b&gt;</pre>
   <p>or </p>
-  <pre>&lt;b&gt;&lt;h:outputText value="#&#123;myobj.myvar&#125;" escape="true"/&gt;&lt;/b&gt;</pre>
+  <pre>&lt;b&gt;&lt;h:outputText value="#&amp;#123;myobj.myvar&amp;#125;" escape="true"/&gt;&lt;/b&gt;</pre>
   <p>Use of <em>escape="true"</em> - ensures encoding occurs - <em>true</em> is the default.</p>
   <h1>Additional Resources</h1>
   <ul>
-    <li>To learn more about the <em>h:outputText</em> tag,&nbsp;see <a href="http://download.oracle.com/javaee/5/javaserverfaces/1.2/docs/tlddocs/h/outputText.html">Oracle h:outputText reference</a><li>To learn more about the <em>h:outputText</em> tag, see <a href="http://www.horstmann.com/corejsf/jsf-tags.html#Table4_11">Horstmann h:outputText reference</a><li>To learn more about preventing cross-site scripting, see <a href="https://www.owasp.org/index.php/XSS_&#37;28Cross_Site_Scripting&#37;29_Prevention_Cheat_Sheet">OWASP XSS Prevention Cheatsheet</a></li></li></li>
+    <li>To learn more about the <em>h:outputText</em> tag,&amp;nbsp;see <a href="http://download.oracle.com/javaee/5/javaserverfaces/1.2/docs/tlddocs/h/outputText.html">Oracle h:outputText reference</a><li>To learn more about the <em>h:outputText</em> tag, see <a href="http://www.horstmann.com/corejsf/jsf-tags.html#Table4_11">Horstmann h:outputText reference</a><li>To learn more about preventing cross-site scripting, see <a href="https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet">OWASP XSS Prevention Cheatsheet</a></li></li></li>
   </ul>
   <h1>Java Data Sanitization Guidelines</h1>
   <ul>

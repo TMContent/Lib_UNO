@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>fc71ec26-56a0-47e8-9394-0f637870f01f</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use a Strong PRNG</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Use a cryptographically strong pseudo-random number generator (PRNG) whenever it is necessary to generate random numbers for cryptography.
+
+## Why ##
+
+Most common encryption algorithms rely on difficult to predict random numbers to be used properly. The level of difficulty to predict or enumerate the output of a random number generator is called its entropy. Cryptographically strong PRNGs are software algorithms that produce pseudo-random numbers considered to have sufficient entropy to be suitable for use in cryptography. Using PRNGs that have low entropy is likely to make the resulting cryptographic solution easier to break and thus compromise the data or the authentication mechanism that the solution is used for.
+
+## How ##
+
+To use cryptographically strong PRNGs:
+
+1. **Find code that uses PRNGs.** Review all code that uses cryptography to find code that uses pseudo-random numbers. Make a spreadsheet of all the code that uses pseudo-random numbers for cryptography.
+2. **Use /dev/urandom on Unix/Linux.** On Unix/Linux platforms, update all code that uses PRNGs for cryptography to use /dev/urandom. Update each piece of this code to open /dev/urandom as a file and read the required amount of bytes to use as the pseudo-random number.
+3. **Use the OS PRNG on Windows.** On Windows platforms, update all code that uses PRNGs for cryptography to use OS APIs. Update each piece of code to call the GetRandom() function from the CAPICOM.Utilities.The first parameter to the GetRandom() function is the amount of bytes of random data that are needed.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

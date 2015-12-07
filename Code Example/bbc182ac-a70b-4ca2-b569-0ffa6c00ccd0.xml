@@ -4,7 +4,7 @@
     <Id>bbc182ac-a70b-4ca2-b569-0ffa6c00ccd0</Id>
     <Id_History>bbc182ac-a70b-4ca2-b569-0ffa6c00ccd0,b2f9f7b4-5ca2-41f0-8bd9-102daeee74d5,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Encode Output Within a Data Table</Title>
+    <Title>[VERIFYME] Encode Output Within a Data Table</Title>
     <Category>Encoding</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
@@ -23,7 +23,7 @@
     <li>ASP.NET 4.0</li>
   </ul>
   <h1>Summary</h1>
-  <p>This code demonstrates how to implement security output encoding when using the .NET <em>DataTable</em> object to display application data. Output encoding mitigates against client-side script vulnerabilities by representing output data using escape character equivalents for values that might otherwise be interpreted by the browser, such as those characters used in the formatting of HTML pages (&lt;,&gt;,&,",').</p>
+  <p>This code demonstrates how to implement security output encoding when using the .NET <em>DataTable</em> object to display application data. Output encoding mitigates against client-side script vulnerabilities by representing output data using escape character equivalents for values that might otherwise be interpreted by the browser, such as those characters used in the formatting of HTML pages (&lt;,&gt;,&amp;,",').</p>
   <h1>Objectives</h1>
   <ul>
     <li>Protect application users from client-side scripting attacks.</li>
@@ -46,16 +46,16 @@
   <p>The following classes must be included in any project making use of the sample code provided above:</p>
   <pre>using System.Data;<br />using System.Data.SqlClient;<br />using System.Web;</pre>
   <p>Create a new C# ASP.NET application and use the following <em>Page_Load</em> method to test the provided example methods (adjust database code for your example):</p>
-  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp; if (!Page.IsPostBack)<br />&nbsp;&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Create a new database connection using Integrated Security and open that connection<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlConnection cn = new SqlConnection(connectionString);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cn.Open(); <br />&nbsp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Create a new SQL Command object with a query to execute the stored procedure<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlCommand cmd = new SqlCommand("exec spFullNames", cn);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SqlDataAdapter adapter = new SqlDataAdapter(cmd);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LoadEncodedPeopleTableEvent(adapter);<br />&nbsp;&nbsp;&nbsp;&nbsp; }<br />}</pre>
+  <pre>protected void Page_Load(object sender, EventArgs e)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (!Page.IsPostBack)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new database connection using Integrated Security and open that connection<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string connectionString = "Initial Catalog=snippets;Data Source=vm-win2003\\sqlexpress;Integrated Security=SSPI;";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlConnection cn = new SqlConnection(connectionString);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; cn.Open(); <br />&amp;nbsp;<br /> &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Create a new SQL Command object with a query to execute the stored procedure<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlCommand cmd = new SqlCommand("exec spFullNames", cn);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; SqlDataAdapter adapter = new SqlDataAdapter(cmd);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; LoadEncodedPeopleTableEvent(adapter);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
   <h1>Expected Result</h1>
-  <pre>&lt;table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;"&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Name&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Elvin Jones&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Gene Krupa&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;Tony Williams&lt;/td&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;&lt;td&gt;&lt;script&gt;alert('XSS!');&lt;/script&gt; XSS&lt;/td&gt;&lt;/tr&gt;<br />&lt;/table&gt;</pre>
+  <pre>&lt;table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Name&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Elvin Jones&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Gene Krupa&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;Tony Williams&lt;/td&gt;&lt;/tr&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;tr&gt;&lt;td&gt;&lt;script&gt;alert('XSS!');&lt;/script&gt; XSS&lt;/td&gt;&lt;/tr&gt;<br />&lt;/table&gt;</pre>
   <h1>More Information</h1>
   <ul>
     <li>In addition to output validation, developers should always validate any input that originates from untrusted sources, such as application users or external feeds. </li>
   </ul>
   <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>
   <h1>
   </h1>]]></Data>
   </Content>
