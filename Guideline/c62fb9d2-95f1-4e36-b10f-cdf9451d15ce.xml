@@ -46,6 +46,52 @@ Perform the following steps to assure that your code allocates enough buffer spa
 
 4. **Check bounds when copying.** Use the size of the allocated array or string when copying to assure that only the amount of data that fits into the array is copied. This should always be the case if the amount of memory to allocate is calculated correctly, but for extra security it is a good idea to write code in a way that truncates data if it doesn't fit into the buffer.
 
+## Problem Example ##
+
+Here is a classic buffer overflow example:
+
+	#include <stdio.h>
+	#include <string.h>
+
+	int main(int argc, char *argv[])
+	{
+	if (argc != 2) return 0;
+
+	char buffer[8];
+	strcpy(buffer, argv[1]);
+	return 1;
+	}
+
+## Solution Example ##
+
+One solution is to simply truncate any data that does not fit in the buffer:
+
+	#include <stdio.h>
+	#include <string.h>
+
+	int main(int argc, char *argv[])
+	{
+	if (argc != 2) return 0;
+	int buffersize = 8;
+	char buffer[buffersize];
+	strncpy(buffer, argv[1], buffersize);
+	return 1;
+	}
+	
+It is better to actually calculate the size of the data that is being copied and allocate the correct amount of memory for it. However, just in case the calculation is somehow incorrect, any data that does not fit in the buffer should be truncated:
+
+	#include <stdio.h>
+	#include <string.h>
+
+	int main(int argc, char *argv[])
+	{
+	if (argc != 2) return 0;
+	int buffersize = sizeof(argv[1]);
+	char buffer[buffersize];
+	strncpy(buffer, argv[1], buffersize);
+	return 1;
+	}
+
 ## Additional Resources ##
 
 * For more information about assuring that data is copied to sufficiently large storage, please see "ARR33-C. Guarantee that copies are made into storage of sufficient size" at [https://www.securecoding.cert.org/confluence/display/seccode/ARR33-C.+Guarantee+that+copies+are+made+into+storage+of+sufficient+size](https://www.securecoding.cert.org/confluence/display/seccode/ARR33-C.+Guarantee+that+copies+are+made+into+storage+of+sufficient+size
