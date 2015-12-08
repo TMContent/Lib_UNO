@@ -55,9 +55,12 @@ Here is a classic buffer overflow example:
 
 	int main(int argc, char *argv[])
 	{
+	// make sure one argument is supplied to the executable
 	if (argc != 2) return 0;
 
+	// buffer size does not correspond to the size of the data being copied
 	char buffer[8];
+	// data that doesn't fit in the buffer overflows
 	strcpy(buffer, argv[1]);
 	return 1;
 	}
@@ -73,8 +76,10 @@ One solution is to simply truncate any data that does not fit in the buffer:
 	{
 	if (argc != 2) return 0;
 	
+	// buffer size does not correspond to the size of the data being copied
 	int buffersize = 8;
 	char buffer[buffersize];
+	// data that doesn't fit in the buffer is truncated, so no overflow occurs
 	strncpy(buffer, argv[1], buffersize);
 	return 1;
 	}
@@ -88,8 +93,10 @@ It is better to actually calculate the size of the data that is being copied and
 	{
 	if (argc != 2) return 0;
 	
+	// buffer size is the same as the size of the data being copied
 	int buffersize = sizeof(argv[1]);
 	char buffer[buffersize];
+	// data that doesn't fit in the buffer is truncated, so no overflow occurs
 	strncpy(buffer, argv[1], buffersize);
 	return 1;
 	}
