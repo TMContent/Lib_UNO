@@ -67,6 +67,38 @@ Perform the following actions to assure that user input is not used in format st
 
 3. **(Re-)Write code to exclude user input from format strings.** Place user input in separate variables and pass it as variadic arguments to the formatted input-output functions, instead of placing it in a format strings.
 
+## Problem Example ##
+
+A classic format string vulnerability example:
+
+	#include <stdio.h>
+	#include <string.h>
+
+	int main(int argc, char* argv[]) {
+	if (argc != 2) return 0;
+
+	printf(argv[1]);
+	return 1;
+	}
+	
+Compilers can often detect such vulnerabilities and produce warnings like this:
+
+    format_string_vuln.c:7:1: warning: format not a string literal and no format arguments [-Wformat-security]
+
+## Solution Example ##
+
+Make sure that user input is not processed as a format string by specifying a static format string and then passing user input as data to it:
+
+	#include <stdio.h>
+	#include <string.h>
+
+	int main(int argc, char* argv[]) {
+	if (argc != 2) return 0;
+
+	printf("%s", argv[1]);
+	return 1;
+	}
+
 ## Additional Resources ##
 
 For more information about excluding user input from format strings, please see [https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.+Exclude+user+input+from+format+strings](https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.+Exclude+user+input+from+format+strings)
