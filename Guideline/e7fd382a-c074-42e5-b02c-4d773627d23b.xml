@@ -4,12 +4,12 @@
     <Id>e7fd382a-c074-42e5-b02c-4d773627d23b</Id>
     <Id_History>e7fd382a-c074-42e5-b02c-4d773627d23b,61645ddf-942b-4ef2-84ae-4b84ecfb5f4f,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Don&#39;t Use User Input in Format Strings</Title>
+    <Title>Don't Use User Input in Format Strings</Title>
     <Category>Dangerous APIs</Category>
     <Phase>Implementation</Phase>
     <Technology>C++</Technology>
     <Type>Guideline</Type>
-    <DirectLink>Don&#39;t Use User Input in Format Strings</DirectLink>
+    <DirectLink>Don't Use User Input in Format Strings</DirectLink>
     <Tag />
     <Security_Demand />
     <Author />
@@ -17,39 +17,59 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>C&#43;&#43;</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Don't use user input in format strings. Use C&#43;&#43; stream functions to avoid using formatted input-output functions, if possible. (Re-)Write code to guarantee that user input is never used in format strings.</p>
-  <h1>Why</h1>
-  <p>An attacker that can control the contents of a format string may be able to execute arbitrary code.</p>
-  <h1>When</h1>
-  <p>Avoid using user input in format strings when using formatted input-output functions.</p>
-  <h1>How</h1>
-  <p>Perform the following actions to assure that user input is not used in format strings:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify code that uses&nbsp;formatted input-output functions.</strong> The following is a list of formatted input-output functions:</p>
-      <ul>
-        <li>sprintf <li>_snprintf <li>printf <li>fprintf <li>scanf&nbsp; <li>fscanf<li>sscanf<li>swprintf <li>wsprintfA <li>wsprintfW <li>vsprintf <li>vswprintf <li>_snwprintf <li>_vsnprintf <li>_vsnwprintf <li>vprintf <li>vwprintf <li>vfprintf <li>vwfprintf <li>fwscanf <li>wscanf <li>swscanf</li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li>
-      </ul>
-      <li>
-        <p>
-          <strong>Avoid using formatted functions.</strong> Consider replacing formatted input-output functions with iostream C&#43;&#43; functions, which are not prone to format string vulnerabilities.</p>
-        <li>
-          <p>
-            <strong>(Re-)Write code to exclude user input from format strings.</strong> Place user input in separate variables and pass it as variadic arguments to the formatted input-output functions, instead of placing it in a format strings.</p>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information about excluding user input from format strings, please see&nbsp;<a href="https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.&#43;Exclude&#43;user&#43;input&#43;from&#43;format&#43;strings">https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.&#43;Exclude&#43;user&#43;input&#43;from&#43;format&#43;strings</a></li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* C and C++
+
+## What to Do ##
+
+Don't use user input in format strings. Use C++ stream functions to avoid using formatted input-output functions, if possible. (Re-)Write code to guarantee that user input is never used in format strings.
+
+## Why ##
+
+An attacker that can control the contents of a format string may be able to execute arbitrary code.
+
+## When ##
+
+Avoid using user input in format strings when using formatted input-output functions.
+
+## How ##
+
+Perform the following actions to assure that user input is not used in format strings:
+
+1. **Identify code that uses formatted input-output functions.** The following is a list of formatted input-output functions:
+
+        sprintf
+        _snprintf
+        printf
+        fprintf
+        scanf 
+        fscanf
+        sscanf
+        swprintf
+        wsprintfA
+        wsprintfW
+        vsprintf
+        vswprintf
+        _snwprintf
+        _vsnprintf
+        _vsnwprintf
+        vprintf
+        vwprintf
+        vfprintf
+        vwfprintf
+        fwscanf
+        wscanf
+        swscanf
+
+2. **Avoid using formatted functions.** Consider replacing formatted input-output functions with iostream C++ functions, which are not prone to format string vulnerabilities.
+
+3. **(Re-)Write code to exclude user input from format strings.** Place user input in separate variables and pass it as variadic arguments to the formatted input-output functions, instead of placing it in a format strings.
+
+## Additional Resources ##
+
+For more information about excluding user input from format strings, please see [https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.+Exclude+user+input+from+format+strings](https://www.securecoding.cert.org/confluence/display/cplusplus/FIO30-CPP.+Exclude+user+input+from+format+strings)
+]]></Data>
   </Content>
 </TeamMentor_Article>
