@@ -39,110 +39,25 @@ To encode PHP input included in output:
 
 ## Problem Example ##
 
-xss_unsafe.php:
+Simply rendering user data submitted as a post parameter is dangerous and will result in a reflected XSS vulnerability:
 
-	<HTML>
-	<HEAD>
-	<TITLE>XSS Unsafe page</TITLE>
-	</HEAD>
-	<BODY>
-	<FORM name="xss1" action="xss_unsafe.php" method="POST" >
-	Enter your username:
-	<input type="text" name="username" value="<?php if (isset($_POST['username'])){ echo $_POST['username']; } ?>" />
-	<input type="submit" value="Submit">
-	</FORM>
-	<FORM name="xss2" action="xss_unsafe.php" method="POST" >
-	Enter URL:
-	<input type="text" name="url" value="" />
-	<input type="submit" value="Submit">
-	</FORM>
 	<?php
 	if (isset($_POST['username'])){
 	echo "The entered username is ";
 	echo $_POST['username'];
 	}
-	?>
-	<BR/>
-	<script>
-	var a= <?php if (isset($_POST['username'])){ echo $_POST['username']; }
-	?>;
-	document.write("The username processed by JS is ");
-	document.write(a);
-	</script>
-	<?php
-	$url= $_POST['url'];
-	?>
-	<!--
-	<style type="text/css">
-	body {
-	background-image: url(<?php echo '"'.$_POST['url'].'"'; ?>);
-	background-color: #cccccc;
-	}
-	</style>
-	-->
-	</BODY>
-	</HTML>
+	?>	
 
 ## Solution Example ##
 
-xss_safe.php:
+Use the htmlspecialchars() function to encode untrusted data before displaying it to prevent reflected XSS. Unfortunately, PHP has a limited built-in support for encoding functions, that essentially only support HTML and URL contexts. These are the two most common contexts, but it is a serious limitation that the developer has to be aware of. It is best to simply not include untrusted data in other contexts and that should be possible for most common applications.
 
-	<HTML>
-	<HEAD>
-	<TITLE>XSS safe page</TITLE>
-	</HEAD>
-	<?php
-	/*
-	You need to download the ESAPI codebase from Git and configure it. Make sure you give www-data or whatever user your webserver is running
-	as, permissions to this directory. If you get weird logger warnings adjust error reporting in PHP accordingly.
-	Trying to fix ESAPI cleanly does not appear to work. Did not spend too much time on this though.
-	*/
-	$newpath= set_include_path('/tmp');
-	require('/tmp/PHPEsapi/src/ESAPI.php');
-	new ESAPI('/tmp/PHPEsapi/ESAPI.xml');
-	$encoder = ESAPI::getEncoder();
-	?>
-	<?php
-	/* This is to ensure that XSS attacks using older encodings are prevented against */
-	$encoding= 'UTF-8';
-	header('Content-Type: text/html; charset=utf-8');
-	?>
-	<BODY>
-	<FORM name="xss1" action="xss_safe.php" method="POST" >
-	Enter your username:
-	<input type="text" name="username" value="<?php if (isset($_POST['username'])){ echo $encoder->encodeForHTMLAttribute($_POST['username']); } ?>" />
-	<input type="submit" value="Submit">
-	</FORM>
-	<FORM name="xss2" action="xss_safe.php" method="POST" >
-	Enter URL:
-	<input type="text" name="url" value="" />
-	<input type="submit" value="Submit">
-	</FORM>
 	<?php
 	if (isset($_POST['username'])){
 	echo "The entered username is ";
-	echo $encoder->encodeForHTML($_POST['username']) ;
+	echo htmlspecialchars($_POST['username']);
 	}
-	?>
-	<BR/>
-	<script>
-	var a= <?php if (isset($_POST['username'])){ echo $_POST['username']; } ?>;
-	document.write("The username processed by JS is ");
-	document.write($encoder->encodeForJS(a));
-	</script>
-	<?php
-	$url= $_POST['url'];
-	?>
-	<!--
-	<style type="text/css">
-	body {
-	background-image: url(<?php echo '"'.$encoder->encodeForCSS($_POST['url']).'"'; ?>);
-	background-color: #cccccc;
-	}
-	</style>
-	-->
-	</BODY>
-	</HTML>
+	?>	
 	
 ## Additional Resources ##
 
