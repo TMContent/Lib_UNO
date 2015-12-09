@@ -42,10 +42,7 @@ To encode PHP input included in output:
 Simply rendering user data submitted as a post parameter is dangerous and will result in a reflected XSS vulnerability:
 
 	<?php
-	if (isset($_POST['username'])){
-	echo "The entered username is ";
 	echo $_POST['username'];
-	}
 	?>	
 
 ## Solution Example ##
@@ -53,10 +50,7 @@ Simply rendering user data submitted as a post parameter is dangerous and will r
 Use the htmlspecialchars() function to encode untrusted data before displaying it to prevent reflected XSS. Unfortunately, PHP has a limited built-in support for encoding functions, that essentially only support HTML and URL contexts. These are the two most common contexts, but it is a serious limitation that the developer has to be aware of. It is best to simply not include untrusted data in other contexts and that should be possible for most common applications.
 
 	<?php
-	if (isset($_POST['username'])){
-	echo "The entered username is ";
 	echo htmlspecialchars($_POST['username']);
-	}
 	?>	
 	
 ## Additional Resources ##
