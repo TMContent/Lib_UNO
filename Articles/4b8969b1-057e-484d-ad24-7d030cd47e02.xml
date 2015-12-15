@@ -35,6 +35,34 @@ To use pcntl_exec to execute operating system commands:
 2. **Identify whether calling operating system commands is necessary.** With the spreadsheet of potentially dangerous code in hand, examine each piece of code that executes operating system commands and determine whether it is absolutely necessary to the application. If possible, rewrite that code to use only PHP functions, thus removing the possibility that it contains a command injection vulnerability.
 3. **Use pcntl_exec to execute operating system commands.** If application functionality requires executing operating system commands, this should be done using parameterized APIs. In PHP this is done using the pcntl_exec function. The reference for this function is available at [http://php.net/manual/en/function.pcntl-exec.php](http://php.net/manual/en/function.pcntl-exec.php). The pcntl_exec function is the safest command execution function in PHP, but it has some drawbacks and should still be used with care. One of the main drawbacks of the pcntl_exec function is that it doesn't return the output of the executed process. On the bright side, the executed program is not executed via a shell, so it is very hard to trick pcntl_exec into executing a program other than the one that is intended. The key point is that the arguments passed to the program being executed are passed via a separate variable from the path of the program - this is the "parameterization" part. Because the arguments are passed in a separate variable, the arguments cannot be manipulated into causing PHP to execute some other application in typical scenarios. It is possible to craft a scenario where pcntl_exec is used to execute a shell and pass it the name of some other command as the argument, but that is a crazy thing to do - don't do that. 
 4. **Use pcntl_exec correctly.** The correct way to use pcntl_exec is to not allow the user to supply the path of the program to execute, to supply a full path to the program that needs to be executed, and to make sure that the program being executed cannot execute any other programs based on the arguments that it receives. The path of the program to execute can usually be determined without any user input, and that should be done. The user should never be allowed to arbitrarily decide what program to run - that is the very definition of a command injection vulnerability. If it is absolutely necessary to choose what program to run based on user input, define a list of allowed and safe programs to run, place the paths to these programs in an array, and then choose the index of the array based on the user input to correspond to the program that needs to be executed based on the user's choice. All paths passed to pcntl_exec should be fully qualified paths from the file-system root. It is recommended to use the realpath function to determine the fully qualified path of the program to run. Most of the time, if user data is needed for executing an external program, user data is passed in the arguments to the application. Most user data should be safe to pass to external programs using pcntl_exec, however it is important to consider whether the external command itself can be somehow abused. One particular thing to watch out for is whether the external program can execute other programs based on the arguments that are sent to it - one obvious example would be passing arguments to a shell. For most practical scenarios, this should not be an issue, but it's something to be aware of. 
-]]></Data>
+
+## Problem Example ##
+
+A classic example of command injection:
+
+	<?php
+	system("/usr/bin/touch " . $_REQUEST['arg']);
+	?>
+	
+## Solution Example ##
+
+The best way to prevent command injection is to separate data and control:
+
+	<?php
+	$args = array($_REQUEST['arg']);
+	pcntl_exec("/usr/bin/touch", $args);
+	?>
+	
+Unfortunately, many PHP installations do not contain the pcntl_exec() function by default - it has to be built and added as a separate module. What PHP developers want you to do is to use escapeshellcmd() and escapeshellarg() functions to sanitize data passed to the command execution functions. This does mitigate command injection for most common scenarios, but it is a weak solution, because it relies on the implementation of those sanitization functions being absolutely correct (they are not, you can read the commens on php.net about the breakage they can introduce). If you trust PHP's implementation of these functions, here is how you can use escapeshellarg():
+
+	<?php
+	system("/usr/bin/touch " . escapeshellarg($_REQUEST['arg']));
+	?>
+	
+You really should never have to use escapeshellcmd(), because you're not supposed to be using untrusted input to specify which commands to execute. Technically, the reason for escapeshellcmd() is that it's supposed to be used when untrusted input is used to specify an arbitrary number of parameters to the command that is being executed. If you are doing this, it is probably a bad idea. However, just for the sake of completeness, escapeshellcmd() is used like this:
+
+	<?php
+	system(escapeshellcmd("/usr/bin/touch " . $_REQUEST['arg']));
+	?>]]></Data>
   </Content>
 </TeamMentor_Article>
