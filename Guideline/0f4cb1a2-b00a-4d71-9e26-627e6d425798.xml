@@ -25,19 +25,14 @@
 
 ## What to Do ##
 
-Use prepared statements to execute SQL queries. Do not generate SQL statements directly from user input.
+Use prepared statements to execute SQL queries. Do not concatenate user input into SQL queries.
 
 
 ## Why ##
 
-Prepared statements mitigate the number one risk for database-facing Web applications: SQL injection. This powerful attack is language independent, as it depends on the algorithm used to generate SQL strings passed to the database and affects the database engine, not the actual application. It exploits the creation of the SQL string, in which user input is embedded manually with escape sequences (such as the single quote (') or double quote (") characters). Using this method, an attacker inserts valid SQL statement fragments as part of user input so they, in turn, are embedded within the SQL query that is submitted to the database engine for execution. Successful exploitation allows an attacker to potentially compromise the entire database and often the underlying operating system.
+Prepared statements mitigate the number one risk for Internet-facing Web applications that use databases: SQL injection. This powerful attack is language independent, as it depends on the algorithm used to generate SQL strings passed to the database and affects the database engine, not the actual application. The vulnerability is caused by concatenating untrusted data into SQL query strings. This allows attackers to insert valid SQL statement fragments as part of user input so they, in turn, are embedded within the SQL query that is submitted to the database engine for execution. Successful exploitation allows an attacker to potentially compromise the entire database and often the application. Compromising the application can then potentially be leveraged to take over the server and then use it to pivot around whatever networks it might be connected to.
 
-Prepared statements offer a simple yet efficient mitigation since they automatically contain user-input in a non-escaped form, passing the input as parameters, much like a function call. By parameterizing input parameters and type-enforcing them, user input is effectively filtered.
-
-
-## When ##
-
-Type-safe SQL parameters should be used whenever SQL statements need to be executed by the database.
+Prepared statements offer a simple yet effective mitigation since they automatically separate user input from SQL syntax, making it impossible to modify the structure of the SQL query, regardless of what data is entered by the user. 
 
 
 ## How ##
@@ -77,7 +72,7 @@ Here is a classic SQL injection example:
 		$con->close();
 		}
 
-Concatenating untrusted data to the end of an SQL query is probably the most common type of SQL injection. It is so common that some people search google for URLs that contain an id GET parameter, because a lot of such pages are vulnerable.
+Concatenating untrusted data to the end of an SQL query is probably the most common type of SQL injection. It is so common that some attackers use search engines to look for URLs that contain an id parameter, because a lot of such pages are vulnerable.
 
 ## Solution Example ##
 
