@@ -17,23 +17,85 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>What to Do</h1>
-  <p>Check your array indexes before use to ensure that the index is within the array bounds.</p>
-  <h1>Why</h1>
-  <p>Array indexing errors, such as buffer overruns can lead to memory being overwritten at arbitrary locations. This can lead to application instability or, with a carefully constructed attack, can lead to code injection.</p>
-  <h1>When</h1>
-  <p>Whenever indexing into an array with a variable or calculated value.</p>
-  <h1>How</h1>
-  <p>Make sure that the following rules are followed: </p>
-  <ul>
-    <li>Make sure that indexes run from zero to n-1, where n is the number of array elements. <li>Where possible, make sure that code does not use input parameters as array indexes. <li>Make sure that any input parameters used as array indexes are validated and constrained to ensure that the maximum and minimum array bounds cannot be exceeded. </li></li></li>
-  </ul>
-  <h1>Problem Example</h1>
-  <p>In the following code the array is indexed without checking to ensure the index is within the array boundaries.</p>
-  <pre>int ArrayIndexing(int index)<br />&#123;<br />&nbsp; return intArray&#91;index&#93;;<br />&#125;</pre>
-  <h1>Solution Example</h1>
-  <p>In the following code the array index is checked before use.</p>
-  <pre>int ArrayIndexing(int index)<br />&#123;<br />&nbsp; if ((index &gt;= 0) &#124;&#124; (index &lt; CLOUD_REG_NUM_PROV_IFCS))<br />&nbsp; &#123;<br />&nbsp; &#9;return -1;<br />  &#125;<br />  return intArray&#91;index&#93;;<br />&#125;</pre>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Check your array indexes before use to ensure that the index is within the array bounds.
+
+## Why ##
+
+Array indexing errors, such as buffer overruns can lead to memory being overwritten at arbitrary locations. This can lead to application instability or, with a carefully constructed attack, can lead to code injection.
+
+## When ##
+
+Whenever indexing into an array with a variable or calculated value.
+
+## How ##
+
+Follow these steps to assure that all array indices are within bounds:
+
+1. **Identify all functions that use arrays.** Identify functions where array elements are addressed to verify that array indices are validated before use.
+
+2. **Iterate through array elements safely.** When iterating through array elements, make sure that indices run from zero to n-1, where n is the number of array elements. Array indices start at 0, so the index of the last element of an array is n-1, where n is the number of elements in the array. This is a basic programming concept and is mentioned here for completeness.
+
+3. **Avoid using input parameters as array indexes.** Write code that does not use input parameters as array indexes. If the application requires it, validate and constrain any input parameters used as array indexes to ensure that the maximum and minimum array bounds cannot be exceeded.
+
+4. **Validate array indexes before accessing data in the array.** Perform bound checks on array indexes used to access data within the arrays before performing the actual access.
+
+## Problem Example ##
+
+
+	int main(int argc, char *argv[])
+	{
+	int arraySize = 10;
+	int array[arraySize];
+	int i;
+
+	// We are going to populate the array with some arbitrary data
+	for(i = 0; i < arraySize; i++){
+		array[i] = i * 1000;
+	}
+
+	// As silly as this is, this is a common mistake
+	// This code will compile and run
+	// In this case, the data being written is not user controlled so it is not exploitable
+	i = arraySize;
+	array[i] = i * 1000; 
+
+	// We can in fact set the iterator to some crazy value 
+	// And the code will still compile and run
+	// If the data being written is attacker controlled, the code is probably explotable
+	i = 555;
+	array[i] = i * 1000;
+
+	// If we go too far outside the bounds, the code will compile but segfault at runtime
+	}
+
+
+## Solution Example ##
+
+
+	int main(int argc, char *argv[])
+	{
+	int arraySize = 10;
+	int array[arraySize];
+	int i;
+
+	// We are going to populate the array with some arbitrary data
+	for(i = 0; i < arraySize; i++){
+		array[i] = i * 1000;
+	}
+
+	// Somehow the iterator is set out of bounds
+	i = 5555;
+	// We are going to validate the iterator before performing an action
+	// Obviously the array will not be accessed in this case
+	if(i >= 0 && i < arraySize) array[i] = i * 1000; 
+	// If the iterator is outside of bounds, indicate an error condition 
+	else return -1;
+	}
+
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
