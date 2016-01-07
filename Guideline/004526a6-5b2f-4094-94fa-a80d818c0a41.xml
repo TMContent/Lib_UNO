@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>C&#43;&#43;</li>
+    <li>C++</li>
   </ul>
   <h1>What to Do</h1>
   <p>Canonicalize all input used to identify resources, such as filenames, paths, named pipes, etc.</p>
@@ -35,27 +35,27 @@
     <li>
       <p>
         <strong>Identify all functions used to access resources, such as files or folders, by name.</strong> On UNIX-type systems, named pipes and devices are other resources that may be accessed by name. Add code that canonicalizes and validates this input. It is recommended to create a separate class or library for data validation routines and include functions for canonicalizing input in it. </p>
-      <li>
-        <p>
-          <strong>Use realpath() on POSIX systems.</strong> The POSIX C&#43;&#43; standard includes a realpath() function, which is suitable for canonicalization.</p>
-        <li>
-          <p>
-            <strong>Use canonicalize_file_name() on gilbc systems.</strong> Glibc includes a canonicalize_file_name() function, which works a lot like realpath(), but automatically allocated a new buffer for its output. Free the memory allocated by canonicalize_file_name() after canonicalization, because that is not done automatically.</p>
-          <li>
-            <p>
-              <strong>Don't rely on canonicalization in Windows.</strong> Canonicalization in Windows is done by the GetFullPathName() function, however this function is very limited and provides a very low degree of assurance. Use ACLs on Windows to implement filesystem security and avoid making decisions based on file or folder names.</p>
-            <li>
-              <p>
-                <strong>Avoid time-of-check-to-time-of-use vulnerabilities.</strong> Most Unix systems implement versions of common filesystem calls that use file handles instead of file names, such as openat, statat, accessat, etc. Use these functions instead of the ones that use filenames to avoid TOCTOU vulnerabilities.</p>
-            </li>
-          </li>
-        </li>
-      </li>
+    </li>
+    <li>
+      <p>
+        <strong>Use realpath() on POSIX systems.</strong> The POSIX C++ standard includes a realpath() function, which is suitable for canonicalization.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Use canonicalize_file_name() on glibc systems.</strong> Glibc includes a canonicalize_file_name() function, which works a lot like realpath(), but automatically allocated a new buffer for its output. Free the memory allocated by canonicalize_file_name() after canonicalization, because that is not done automatically.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Don't rely on canonicalization in Windows.</strong> Canonicalization in Windows is done by the GetFullPathName() function, however this function is very limited and provides a very low degree of assurance. Use ACLs on Windows to implement filesystem security and avoid making decisions based on file or folder names.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Avoid time-of-check-to-time-of-use vulnerabilities.</strong> Most Unix systems implement versions of common filesystem calls that use file handles instead of file names, such as openat, statat, accessat, etc. Use these functions instead of the ones that use filenames to avoid TOCTOU vulnerabilities.</p>
     </li>
   </ol>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For more information about canonicalization, please see <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/FIO02-CPP.&#43;Canonicalize&#43;path&#43;names&#43;originating&#43;from&#43;untrusted&#43;sources">https://www.securecoding.cert.org/confluence/display/cplusplus/FIO02-CPP.&#43;Canonicalize&#43;path&#43;names&#43;originating&#43;from&#43;untrusted&#43;sources</a></li>
+    <li>For more information about canonicalization, please see <a href="https://www.securecoding.cert.org/confluence/display/cplusplus/FIO02-CPP.+Canonicalize+path+names+originating+from+untrusted+sources">https://www.securecoding.cert.org/confluence/display/cplusplus/FIO02-CPP.+Canonicalize+path+names+originating+from+untrusted+sources</a></li>
   </ul>]]></Data>
   </Content>
 </TeamMentor_Article>

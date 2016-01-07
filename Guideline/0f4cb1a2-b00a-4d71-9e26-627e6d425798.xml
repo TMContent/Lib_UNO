@@ -17,68 +17,92 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>PHP</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Use prepared statements to execute SQL queries. Do not generate SQL statements directly from user input.</p>
-  <h1>Why</h1>
-  <p>Prepared statements mitigate the number one risk for database-facing Web applications: SQL injection. This powerful attack is language independent, as it depends on the algorithm used to generate SQL strings passed to the database and affects the database engine, not the actual application. It exploits the creation of the SQL string, in which user input is embedded manually with escape sequences (such as the single quote (') or double quote (") characters). Using this method, an attacker inserts valid SQL statement fragments as part of user input so they, in turn, are embedded within the SQL query that is submitted to the database engine for execution. Successful exploitation allows an attacker to potentially compromise the entire database and often the underlying operating system. </p>
-  <p>Prepared statements offer a simple yet efficient mitigation since they automatically contain user-input in a non-escaped form, passing the input as parameters, much like a function call. By parameterizing input parameters and type-enforcing them, user input is effectively filtered.</p>
-  <h1>When</h1>
-  <p>Type-safe SQL parameters should be used whenever SQL statements need to be executed by the database.</p>
-  <h1>How</h1>
-  <p>To use prepared statements to prevent SQL injection, follow these steps:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify SQL queries. </strong>Locate all SQL queries throughout your application. </p>
-      <li>
-        <p>
-          <strong>Identify the parameters in each SQL query.</strong> After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data.</p>
-        <li>
-          <p>
-            <strong>Use prepared statements for SQL queries.</strong> Substitute the parameters in SQL queries with question marks ("?"). The basic steps for writing a prepared statement are: get a database handle, call the prepare function to make the prepared statement, use the bindParam function to bind prepared statement parameters to variables, load data into the variables, and call the execute function to execute the prepared statement. For examples and more information about writing prepared statements in PHP, please see the link at the bottom of this article. One example of a prepared statement is:</p>
-          <pre>// Create the prepared statement. Notice the ?, which defines the parameter.<br />&#36;preparedStatement = &#36;databaseHandle-&gt;prepare("SELECT &#42; FROM USERS WHERE Name =&nbsp; ?");<br />// Bind a variable to the parameter.<br />&#36;preparedStatement-&gt;bindParam(1, &#36;name);<br />// Load data into the parameter.<br />&#36;name = "Joe";<br />// Execute the prepared statement.<br />&#36;preparedStatement-&gt;execute();</pre>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information about PHP Data Objects, please see <a href="http://us.php.net/manual/en/book.pdo.php">http://us.php.net/manual/en/book.pdo.php</a></li>
-  </ul>
-  <h1>Guidelines for Preventing Injection Vulnerabilities</h1>
-  <ul>
-    <li>
-      <a href="/article/0f4cb1a2-b00a-4d71-9e26-627e6d425798">Use Prepared Statements for Data Access</a>
-    </li>
-    <li>
-      <a href="/article/c0a4f56c-1e8c-4d3a-97e2-fc9e969d5d52">Use Positive Input Validation</a>
-    </li>
-    <li>
-      <a href="/article/bac6fe53-5708-4297-a2d7-7df61603f09e">Use Helper Classes to Assure Input Validation</a>
-    </li>
-    <li>
-      <a href="/article/fe289976-08f4-46b3-a6ec-b80828d090b6">Disable Dangerous Functions</a>
-    </li>
-  </ul>
-  <h1>Checklists for Preventing Injection Vulnerabilities</h1>
-  <ul>
-    <li>
-      <a href="/article/8850ea3d-c43e-48bd-bf5c-f5a6ef898038">Prepared Statements Are Used for Data Access</a>
-    </li>
-    <li>
-      <a href="/article/d4129497-3a66-44d1-881e-e6f004af2e0d">Positive Input Validation Is Used</a>
-    </li>
-    <li>
-      <a href="/article/2d0d9e57-6d1d-4f07-9373-7442583bca0c">Helper Classes Are Used to Assure Input Validation</a>
-    </li>
-    <li>
-      <a href="/article/50ff859f-1562-4b27-b230-1e3d5bd8a3b9">Dangerous Functions Are Disabled</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- PHP
+
+
+## What to Do ##
+
+Use prepared statements to execute SQL queries, especially when untrusted data is being passed to the database. Do not concatenate user input into SQL queries. You can use static query strings without using prepared statements and it won't result in SQL injection, so long as all queries that include untrusted data, such as user input, use prepared statements. You can also use parameterized stored procedures as an alternative solution to similar effect.
+
+
+## Why ##
+
+Prepared statements mitigate the number one risk for Internet-facing Web applications that use databases: SQL injection. This powerful attack is language independent, as it depends on the algorithm used to generate SQL strings passed to the database and affects the database engine, not the actual application. The vulnerability is caused by concatenating untrusted data into SQL query strings. This allows attackers to insert valid SQL statement fragments as part of user input so they, in turn, are embedded within the SQL query that is submitted to the database engine for execution. Successful exploitation allows an attacker to potentially compromise the entire database and often the application. Compromising the application can then potentially be leveraged to take over the server and then use it to pivot around whatever networks it might be connected to.
+
+Prepared statements offer a simple yet effective mitigation since they automatically separate user input from SQL syntax, making it impossible to modify the structure of the SQL query, regardless of what data is entered by the user. 
+
+
+## How ##
+
+To use prepared statements to prevent SQL injection, follow these steps:
+
+1. **Identify SQL queries.** Locate all SQL queries throughout your application.
+
+2. **Identify the parameters in each SQL query.** After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data.
+
+3. **Use prepared statements for SQL queries.** The exact APIs are different for different database drivers. The very popular mysql interface does not support prepared statements, use msqli instead. To form query strings suitable for use with prepared statements, substitute the parameters in SQL queries with question marks ("?"). The basic steps for using prepared statements are: get a database handle, call the prepare function to make the prepared statement, bind prepared statement parameters to variables, load data into the variables, and call the execute function to execute the prepared statement. All the APIs necessary to use prepared statements are thoroughly documented on php.net. 
+
+## Problem Example ##
+
+Here is a classic SQL injection example:
+
+		<?php
+		$username = 'root';
+		$password = '';
+		$con = mysqli_connect("localhost", $username, $password, "tpcatalog");
+
+		if(mysqli_connect_errno())
+		{
+		echo "Error: could not connect to the database";
+		}
+
+		//VULNERABLE CODE BELOW
+		$query = "SELECT name, description FROM TPCourses WHERE id=".$_REQUEST['id'];
+		$result = $con->query($query);
+		//VULNERABLE CODE ABOVE
+
+		if($result->num_rows >0){
+		while($row = $result->fetch_assoc()){
+		echo $row['name'] . ' ' . $row['description'] . '<br>';
+		}
+
+		$con->close();
+		}
+
+Concatenating untrusted data to the end of an SQL query is probably the most common type of SQL injection. It is so common that some attackers use search engines to look for URLs that contain an id parameter, because a lot of such pages are vulnerable.
+
+## Solution Example ##
+
+Let's fix the vulnerable code from the example above using prepared statements:
+
+
+		<?php
+		$username = 'root';
+		$password = '';
+		$con = new mysqli("localhost", $username, $password, "tpcatalog");
+
+		if(mysqli_connect_errno())
+		{
+		echo "Error: could not connect to the database";
+		}
+
+		//INVULNERABLE CODE BELOW
+		$query = $con->prepare("SELECT name, description FROM TPCourses WHERE id=(?)");
+		$query->bind_param("i", intval($_REQUEST['id']));
+		$query->execute();
+		$query->bind_result($name, $description);
+		//INVULNERABLE CODE ABOVE
+
+		while($query->fetch()){
+		echo $name . ' ' . $description . '<br>';
+		}
+
+		$query->close();
+		$con->close();
+		
+There is no error checking or handling in the solution example to make it simpler and easier to read, but you should always do error checking and handling on production systems. A database connection might fail for example. The solution example does not contain an SQL injection vulnerability, even though it passes untrusted input to the database without validation, encoding, escaping or sanitization. In practice, all untrusted input should be validated.]]></Data>
   </Content>
 </TeamMentor_Article>

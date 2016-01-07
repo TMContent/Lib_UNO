@@ -3,7 +3,7 @@
   <Metadata>
     <Id>dc86e42f-0009-42f0-8a32-ce47e0f86753</Id>
     <Id_History>dc86e42f-0009-42f0-8a32-ce47e0f86753,e4041579-ab94-46f7-83f4-5eea83af9dab,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Lock Accounts After Consecutive Failed Login Attempts</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
-    <li>ASP.NET 4.0</li>
+    <li>ASP.NET</li>
   </ul>
   <h1>What to Do</h1>
   <p>Consider locking users' accounts after several consecutive failed login attempts. Keep in mind that a locked account can result in a denial of service vulnerability. Depending on the needs of your application, you may instead want to implement a progressive slowdown in the authentication response.</p>
@@ -51,18 +51,11 @@
         <li>
           <strong>passwordAnswerAttemptLockoutDuration</strong>: if supported by the membership provider, this attribute specifies the duration of a lockout due to invalid password attempts</li>
       </ul>
-      <p>Example:</p>
-      <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="false"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      passwordFormat="Hashed"<br /><strong>      maxInvalidPasswordAttempts = "4"<br /></strong><strong>passwordAttemptWindow = "10"<br /></strong>      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
       <p>Be aware that the standard .NET membership providers handle user passwords as System.string objects, which are immutable and can expose your application's user accounts. </p>
     </li>
   </ol>
-  <h1>Problem Example</h1>
-  <p>The following code executes a database transaction that is required during authentication. Because the transaction fails to check the login attempts counter, it may be possible for an attacker to compromise an account through the use of a brute force or a dictionary attack.</p>
-  <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="false"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      passwordFormat="Hashed"<br />      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
-  <h1>Solution Example</h1>
-  <p>The following code executes the database transaction that is required during authentication. Because the transaction checks the login attempts counter, it would be very expensive for an attacker to compromise an account through the use of brute force or a dictionary attack.</p>
-  <pre>&lt;membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="30"&gt;<br />  &lt;providers&gt;<br />    &lt;add name="MyAppMembershipProvider"<br />      type="System.Web.Security.SqlMembershipProvider"<br />      connectionStringName="MyAppMembershipDatabase"<br />      enablePasswordRetrieval="false"<br />      enablePasswordReset="true"<br />      requiresQuestionAndAnswer="true"<br />      passwordFormat="Hashed"<br /><strong>      maxInvalidPasswordAttempts = "4"<br /></strong><strong>passwordAttemptWindow = "10"<br /></strong>      applicationName="MyApp" /&gt;<br />  &lt;/providers&gt;<br />&lt;/membership&gt;</pre>
+  <br />
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>524e7083-1cf4-4db9-8c0c-2479ba45ded2</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Throttle Logs</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Throttle logging of events when they occur at very high frequencies. When identical events occur multiple times, make a single entry that states that such an event occurred and the amount of times it occurred. Consider sending logs to a remote log server.
+
+## Why ##
+
+Logging too much data causes denial of service attacks that may degrade application performance or result in missing log entries.
+
+## When ##
+
+Consider log throttling when it is possible for some logged event to occur at a very high frequency. It is up to you to determine what constitutes a high frequency for your application. The main criteria is whether the logging subsystem can handle the resulting amount of data.
+
+## How ##
+
+Perform the following actions to throttle logging:
+
+1. **Consider log throttling.** Use log throttling when important events may occur at a frequency that may overwhelm the logging subsystem.
+2. **Identify logging requirements.** Consider which events might occur at a high frequency and may be throttled without losing valuable auditing information. Make a list of all events for which logging should be throttled. Use these requirements for implementation.
+3. **Implement log throttling.** Use the list of events for which logging should be throttled to identify code that generates the corresponding log entries. Modify this code to throttle logs by counting identical or similar events that occur at a high frequency and producing a single record that includes the details of the event and the amount of times it has occured.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

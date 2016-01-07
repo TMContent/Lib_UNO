@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>ce8146b9-b250-4ef8-bc6f-c63a6eeb979e</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Verify Application Authenticity to the User</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Allow the user to verify the authenticity of your application.
+
+## Why ##
+
+Some applications are targets for phishing attacks. Failure to authenticate against the user allows attackers to spoof the application. This can fool the users into submitting their credentials or other sensitive information into an attacker's malicious application.
+
+## When ##
+
+If your application handles sensitive data and allows public access, verify your application's authenticity to your users.
+
+## How ##
+
+Use the following measures to authenticate your application to its users:
+
+1. **Use TLS.** Due to the nature of the TLS certificates, TLS can be used to certify the remote host's name. Because of TLS's chain of trust and DNS limitations, it is very diffcult to spoof a host that uses TLS.
+2. **Display personalized and identifiable content.** Do not ask the user for credentials in one step. Instead, after the user enters a valid username, display personal and identifiable content to which the user can relate, such as: a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password.
+
+## Problem Example ##
+
+MyApp is a financial application with a public web interface. Because the application does not use TLS to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of identifying the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface, they may be fooled into providing their credentials to the attacker.
+
+## Solution Example ##
+
+MyApp is a financial application with a public web interface. Because the application uses TLS to certify its identity in front of the user, the user's browser uses the TLS chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and the user will be warned that they are not accessing the real MyApp interface.]]></Data>
+  </Content>
+</TeamMentor_Article>

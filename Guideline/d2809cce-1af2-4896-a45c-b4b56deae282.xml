@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="Html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>Applications written using Servlets or JSP&nbsp;that interact with a database.</li>
+    <li>Applications written using Servlets or JSP&amp;nbsp;that interact with a database.</li>
   </ul>
   <h1>What to Do</h1>
   <p>Use Prepared Statements to execute SQL statements. Do not generate SQL statements directly from user input.</p>
@@ -42,7 +42,7 @@
   <p>Just using stored procedures isn't a complete remedy for SQL injection. The important thing to do is use parameters with stored procedures, or else your stored procedures can be susceptible to SQL injection if they use unfiltered input. Stored procedures provide several security advantages: </p>
   <ul>
     <li>By parameterizing input parameters and type-enforcing them, user input is effectively filtered. </li>
-    <li>Stored procedures are allowed by most databases&nbsp;to execute under different security privileges than&nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
+    <li>Stored procedures are allowed by most databases&amp;nbsp;to execute under different security privileges than&amp;nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
   </ul>
   <p>To use type-safe SQL parameters, follow these steps:</p>
   <ol>
@@ -61,7 +61,7 @@
     </li>
     <li>
       <p>
-        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
+        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&amp;nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
       <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("select login_attempts from myappUsers"<br />                     + " where user = ? and pass = ?;");<br />st.setString(1, user);<br />st.setString(2, new String(passDigest));<br />ResultSet rs = st.executeQuery();</pre>
     </li>
   </ol>
@@ -77,61 +77,6 @@
     <li>For more information about preventing SQL injection attacks, visit: <a href="http://www.owasp.org/index.php/Reviewing_Code_for_SQL_Injection">Reviewing Code for SQL Injection</a> from OWASP. </li>
     <li>To learn more about SQL server security, visit: <a href="http://www.sqlsecurity.com/">SQLSecurity.com</a>.</li>
   </ul>
-  <h1>Java Data Access Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/d2809cce-1af2-4896-a45c-b4b56deae282">Use Parameterized APIs for Data Access</a>
-    </li>
-    <li>
-      <a href="/article/bcfcbcbb-4bd6-4011-9e24-efa70d4a3724">Parameterize Dynamic SQL in Stored Procedures</a>
-    </li>
-    <li>
-      <a href="/article/5427d358-17f6-4ef6-948f-d670c5aefc38">Enforce Strong SQL Passwords</a>
-    </li>
-    <li>
-      <a href="/article/697891eb-5d97-44fa-a6eb-625f247f622d">Use Least Privileged Accounts for Database Access</a>
-    </li>
-    <li>
-      <a href="/article/159a8710-263c-4612-b9d8-ba3943f8286f">Allow Only Trusted Hosts to Connect to Database Server</a>
-    </li>
-    <li>
-      <a href="/article/0aaa1b15-8bdb-4486-9171-4eb3c2159829">Protect Connection Strings</a>
-    </li>
-  </ul>
-  <h1>Java Data Access Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/d5a1c94b-601e-4e2a-9ad8-33461792a8bb">Parameterized APIs Are Used for Data Access</a>
-    </li>
-    <li>
-      <a href="/article/93d15ca4-c950-4370-8de5-cdb2cc2974fe">Dynamic SQL in Stored Procedures Is Parameterized</a>
-    </li>
-    <li>
-      <a href="/article/73c2f6fa-3c97-452e-8163-7215bd995d58">Strong SQL Passwords Are Enforced</a>
-    </li>
-    <li>
-      <a href="/article/61af51d9-58f8-4ddf-a373-0b67ea8e6d4b">Least Privileged Accounts Are Used for Database Access</a>
-    </li>
-    <li>
-      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">
-      </a>
-      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">Only Trusted Hosts Are Allowed to Connect to Database Server</a>
-    </li>
-    <li>
-      <a href="/article/9fdc12bc-4208-4d0e-a56c-62e12b660bc0">Connection Strings Are Protected</a>
-    </li>
-  </ul>
-  <h1>Java Data Access Code Examples</h1>
-  <ul>
-    <li>
-      <a href="/article/5f55ac00-bb90-439e-a5fd-a85e9a327175">Use Stored Procedures</a>
-    </li>
-    <li>
-      <a href="/article/e3d7a7be-68a1-47ab-a515-54053d9171a4">Use Named Queries with Hibernate</a>
-    </li>
-    <li>
-      <a href="/article/d4645b55-6da1-4c3c-9e9f-bed1d021ed56">Use Named Queries with Java Persistence API (JPA)</a>
-    </li>
-  </ul>]]></Data>
+  <br />]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>c86d29f0-f218-40d7-a203-7c21b922a6b1</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Validate Results of Calculations</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Perform range checks before values of mathematical operations or conversions are assigned to integer-type variables.
+
+## Why ##
+
+Integer-type variables have minimum and maximum limits on data that they can store. Placing too much data in an integer-type variable results in an integer overflow. Different platforms fail differently as a result of integer overflows, but there is a possibility of an arbitrary code execution resulting from an integer overflow bug. When values that are too high or too low are assigned to unsigned integers, integer-wrapping results, which usually means that unexpected values are produced. Conversions between signed and unsigned integers, and other data types, may result in truncation or losing sign information. All of these bugs may result in very dangerous vulnerabilities. All of these bugs may be prevented by validating values of integer operations before assigning them to variables.
+
+## When ##
+
+Validate data when assigning it to integer-type variables.
+
+## How ##
+
+1. **Identify code.** Identify all code that assigns values to integer-type variables. For existing code, it may be a good idea to prioritize components, so that the most critical elements are checked first. Some development environments and compilers may be able to detect these types of errors, but automatic detection should not be relied on for critical software components.
+2. **Add range checks.** Use platform-defined constants to check that values being assigned to integer-type variables are valid. 
+
+
+
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>

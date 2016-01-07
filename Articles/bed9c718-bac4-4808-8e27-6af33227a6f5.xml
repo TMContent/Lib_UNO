@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>bed9c718-bac4-4808-8e27-6af33227a6f5</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Session IDs Are Protected</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Checklist Item</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Check For ##
+
+Verify that session IDs are protected.
+
+## Why ##
+
+Protecting session IDs helps protect user sessions from being hijacked.
+
+## How to Check ##
+
+To verify that session IDs are protected:
+
+1. **Login to the web site.** Authenticate as a user to the web application.
+
+2. **Examine the session cookie.** Examine the cookies stored by the browser. Find the session cookie. Verify that it has the "secure" and "HTTPOnly" flags set.
+
+3. **Verify that session IDs are not disclosed.** Examine logs, error messages, and hyperlinks to make sure that session IDs are not disclosed in them.
+
+
+## How to Fix ##
+
+To protect session IDs:
+
+1. **Store session IDs in cookies.** This is done automatically by virutally every web application platform. Make sure not to store the session IDs in any other user-accessible parameters.
+
+2. **Enable TLS.** TLS has to be enabled to protect session cookies from eavesdropping attacks. Please, refer to the documentation for your web platform for information about enabling and configuring TLS on your web server.
+
+3. **Set the "Secure" flag on session cookies.** Configure the platform to set the "Secure" flag on session cookies or do it programmatically whenever session cookies are created.
+
+4. **Set the "HTTPOnly" flag on session cookies.** Configure the platform to the set the "HTTPOnly" flag on session cookies or do it programmatically whenever session cookies are created.
+
+5. **Do not disclose session IDs.** Make sure that session IDs are not disclosed in URLs, logs, or error messages. Do not allow URL rewriting of session cookies.]]></Data>
+  </Content>
+</TeamMentor_Article>

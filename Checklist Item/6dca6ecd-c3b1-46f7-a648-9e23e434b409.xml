@@ -4,7 +4,7 @@
     <Id>6dca6ecd-c3b1-46f7-a648-9e23e434b409</Id>
     <Id_History>6dca6ecd-c3b1-46f7-a648-9e23e434b409,78f72a58-5bc7-492e-ab69-72fc9a9b18d6,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>[SINK] Where Appropriate, DPAPI Is Used to Protect Secrets And to Reduce Or Eliminate Key Management.</Title>
+    <Title>0sink Where Appropriate, DPAPI Is Used to Protect Secrets And to Reduce Or Eliminate Key Management.</Title>
     <Category>Cryptography</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET 3.5</Technology>
@@ -22,25 +22,25 @@
   <p>Check to ensure that your application uses DPAPI to encrypt sensitive data and avoids key management.</p>
   <p />
   <h1>How to Fix</h1>
-  <p>By using DPAPI to encrypt sensitive data&#8212;either in memory or in persistent stores, such as configuration files or the registry&#8212;you avoid having to manage and protect the encryption key. With DPAPI, the operating system manages and protects the key.</p>
+  <p>By using DPAPI to encrypt sensitive data&amp;#8212;either in memory or in persistent stores, such as configuration files or the registry&amp;#8212;you avoid having to manage and protect the encryption key. With DPAPI, the operating system manages and protects the key.</p>
   <p>For sensitive data stored in ASP.NET Web.config files, you can use the Aspnet_regiis tool and the data protection feature provided with ASP.NET 3.5.</p>
   <blockquote>
-    <b>Note</b>&nbsp;&nbsp;&nbsp;DPAPI encryption is not recommended for use in Web farm scenarios because of machine affinity. Instead, you should use RSA encryption, which is also supported by the Aspnet_regiis tool.<b></b></blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;DPAPI encryption is not recommended for use in Web farm scenarios because of machine affinity. Instead, you should use RSA encryption, which is also supported by the Aspnet_regiis tool.<b></b></blockquote>
   <p>For sensitive data stored in memory, you can use the <b>ProtectedMemory </b>class which provides a managed wrapper for DPAPI to encrypt the data. For text-based data, consider using <b>SecureString </b>instead.<b> SecureString</b> uses the <b>ProtectedMemory</b> class to encrypt text in memory<b>.</b></p>
   <p>The following example shows how to use the <b>ProtectedMemory</b> class for encrypting and decrypting data in memory.</p>
   <div>
-    <pre>using System.Security.Cryptography;<br />using System.Text;<br />...<br />byte&#91;&#93; optionalEntropy = &#123;7,5,4,9,0&#125;;<br />byte&#91;&#93; dataToBeEncrypted = Encoding.Unicode.GetBytes("Test String 1211");<br />ProtectedMemory.Protect(dataToBeEncrypted, MemoryProtectionScope.SameLogon);<br />ProtectedMemory.Unprotect(dataToBeEncrypted, MemoryProtectionScope.SameLogon);<br />string originalData = Encoding.Unicode.GetString(dataToBeEncrypted);  </pre>
+    <pre>using System.Security.Cryptography;<br />using System.Text;<br />...<br />byte&amp;#91;&amp;#93; optionalEntropy = &amp;#123;7,5,4,9,0&amp;#125;;<br />byte&amp;#91;&amp;#93; dataToBeEncrypted = Encoding.Unicode.GetBytes("Test String 1211");<br />ProtectedMemory.Protect(dataToBeEncrypted, MemoryProtectionScope.SameLogon);<br />ProtectedMemory.Unprotect(dataToBeEncrypted, MemoryProtectionScope.SameLogon);<br />string originalData = Encoding.Unicode.GetString(dataToBeEncrypted);  </pre>
   </div>
   <p>For sensitive data stored in any other data store, use the <b>ProtectedData </b>class as shown in the following example.</p>
   <div>
-    <pre>using System.Security.Cryptography;<br />using System.Text;...byte&#91;&#93; optionalEntropy = &#123;7,5,4,9,0&#125;;<br />byte&#91;&#93; dataToBeEncrypted = Encoding.Unicode.GetBytes("Test String");<br />byte&#91;&#93; encryptedData = ProtectedData.Protect(dataToBeEncrypted, <br />&#9;&#9;optionalEntropy, DataProtectionScope.CurrentUser);<br />byte&#91;&#93; decryptedData = ProtectedData.Unprotect(encryptedData, <br />&#9;&#9;optionalEntropy, DataProtectionScope.CurrentUser);<br />            string originalData = Encoding.Unicode.GetString(decryptedData);  </pre>
+    <pre>using System.Security.Cryptography;<br />using System.Text;...byte&amp;#91;&amp;#93; optionalEntropy = &amp;#123;7,5,4,9,0&amp;#125;;<br />byte&amp;#91;&amp;#93; dataToBeEncrypted = Encoding.Unicode.GetBytes("Test String");<br />byte&amp;#91;&amp;#93; encryptedData = ProtectedData.Protect(dataToBeEncrypted, <br />&amp;#9;&amp;#9;optionalEntropy, DataProtectionScope.CurrentUser);<br />byte&amp;#91;&amp;#93; decryptedData = ProtectedData.Unprotect(encryptedData, <br />&amp;#9;&amp;#9;optionalEntropy, DataProtectionScope.CurrentUser);<br />            string originalData = Encoding.Unicode.GetString(decryptedData);  </pre>
   </div>
   <p>When you use DPAPI, you can use the machine key store or the user key store. Use machine-level key storage in the following situations: </p>
   <ul>
     <li>Your application runs on its own dedicated server with no other applications. <li>You have multiple applications on the same server, and you want those applications to be able to share sensitive information. </li></li>
   </ul>
-  <p>Use user-level key storage if you run your application in a shared hosting environment and you want to make sure that your application's sensitive data is not accessible to other applications on the server. In this situation, each application should run under a separate identity, and the resources for the application&#8212;such as files and databases&#8212;should be restricted to that identity.</p>
+  <p>Use user-level key storage if you run your application in a shared hosting environment and you want to make sure that your application's sensitive data is not accessible to other applications on the server. In this situation, each application should run under a separate identity, and the resources for the application&amp;#8212;such as files and databases&amp;#8212;should be restricted to that identity.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

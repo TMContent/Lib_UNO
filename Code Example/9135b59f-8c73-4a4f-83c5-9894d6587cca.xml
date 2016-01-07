@@ -33,7 +33,7 @@
   <p>Using <em>s:hidden</em> to output a hidden field (performs HTML entity encoding).</p>
   <pre>&lt;s:hidden name="foo" value="bar" /&gt;</pre>
   <p>Using <em>s:url</em> / <em>s:a</em> to output a url (performs URL encoding on url parameter values).</p>
-  <pre>&lt;s:url id="addBookUrl" namespace="/book" action="myBookAction" method="add"&gt;<br />&nbsp; &lt;s:param name="id" value="&#36;&#123;bookId&#125;"/&gt;<br />&lt;/s:url&gt;<br />&lt;s:a href="&#37;&#123;addBookUrl&#125;"&gt;Add&lt;/s:a&gt;</pre>
+  <pre>&lt;s:url id="addBookUrl" namespace="/book" action="myBookAction" method="add"&gt;<br />&amp;nbsp; &lt;s:param name="id" value="&amp;#36;&amp;#123;bookId&amp;#125;"/&gt;<br />&lt;/s:url&gt;<br />&lt;s:a href="&amp;#37;&amp;#123;addBookUrl&amp;#125;"&gt;Add&lt;/s:a&gt;</pre>
   <p>
     <strong>Note</strong>: An important point to be aware of is that there are a few tags that allow you to disable the encoding performed by the tag. This is sometimes useful, the most common case being where you are allowing administrators for a site add HTML formatted messages to be displayed to users. There may also be cases where users can create formatted messages for other users. These approaches are often not handled properly to prevent XSS. However, through strong input validation, it is possible to allow users to enter limited HTML and still display that safely to users without allowing XSS. </p>
   <p>You can determine if this is being done by simply looking for the escape attribute in struts tags. If it is set to false, then the HTML entity encoding is disabled (the default is true). An example of disabling encoding is shown below.</p>
@@ -41,7 +41,7 @@
   <p>Struts 2 provides various tags that can perform output encoding. However, you must be aware of the encoding properties of the tag(s) you are using and encode appropriately for your given output context. </p>
   <h1>More Information</h1>
   <ul>
-    <li>For Struts 2 tag documentation, please see <a href="http://struts.apache.org/2.0.14/docs/tag-reference.html">http://struts.apache.org/2.0.14/docs/tag-reference.html</a><li>For more information about Cross-Site Scripting Prevention, please see <a href="https://www.owasp.org/index.php/XSS_&#37;28Cross_Site_Scripting&#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/XSS_&#37;28Cross_Site_Scripting&#37;29_Prevention_Cheat_Sheet</a></li></li>
+    <li>For Struts 2 tag documentation, please see <a href="http://struts.apache.org/2.0.14/docs/tag-reference.html">http://struts.apache.org/2.0.14/docs/tag-reference.html</a><li>For more information about Cross-Site Scripting Prevention, please see <a href="https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/XSS_&amp;#37;28Cross_Site_Scripting&amp;#37;29_Prevention_Cheat_Sheet</a></li></li>
   </ul>
   <h1>Java Data Sanitization Guidelines</h1>
   <ul>

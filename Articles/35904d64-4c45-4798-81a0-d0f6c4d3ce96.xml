@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>35904d64-4c45-4798-81a0-d0f6c4d3ce96</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Canonicalize File Names and Paths</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Technology Independent</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Avoid allowing the user to specify file names and/or paths. If such functionality is necessary, canonicalize all file paths and names obtained as input before making security decisions.
+
+## Why ##
+
+When input validation is applied to file paths and names, it only works properly when file paths and names are canonicalized. If file names and paths are not canonicalized before validation, a number of vulnerabilities may be introduced as a result. The possible attack vectors range from reading arbitrary files to installing backdoors.
+
+## How ##
+
+To canonicalize all file path and name input:
+
+1. **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
+2. **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
+3. **Avoid file path and name input if possible.** If possible, remove or replace the code that allows users to enter file names or paths.
+4. **Canonicalize file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use platform APIs to canonicalize file names and paths.
+5. **Validate file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use positive validation on canonicalized file names and paths. Ensure that the validation routines validate that the user has sufficient rights to access the requested resource.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
