@@ -73,11 +73,11 @@
       <p>For example, the following database transaction would lock all user accounts that have been inactive for more than 30 days. Such transaction should be scheduled to run once a day:</p>
       <pre>sql&gt; update users set locked = 1<br />      where (current_date - 30) &gt; last_login_date</pre>
       <p>
-        <strong>Note:</strong> The statement above uses Oracle syntax. Please consult your database manual if you use a&amp;nbsp;different database engine.</p>
+        <strong>Note:</strong> The statement above uses Oracle syntax. Please consult your database manual if you use a&nbsp;different database engine.</p>
     </li>
   </ol>
   <p>
-    <strong>Note:</strong> PCI DSS requirements state that a&amp;nbsp;user account should be locked out after no more than 90 days of inactivity.</p>
+    <strong>Note:</strong> PCI DSS requirements state that a&nbsp;user account should be locked out after no more than 90 days of inactivity.</p>
   <h1>Problem Example</h1>
   <p>The following segment illustrates the user database of a multi-user application. In its current state, the application logs the last time the user has logged in but does not enforce a lockout policy for its inactive users; therefore, an attacker can gain unauthorized access to the application by compromising an inactive account.</p>
   <pre>sql&gt; select username, locked, last_login_date from users;<br />+----------+--------+-----------------+<br />| username | locked | last_login_date |<br />+----------+--------+-----------------+<br />| adam     |      0 |      2013-10-11 |<br />| sue      |      0 |      2013-10-11 |<br />| jim      |      0 |      2013-10-01 |<br />| richard  |      0 |      2013-10-01 |<br />| julie    |      0 |      2013-09-23 |<br />| sam      |      0 |      2013-06-23 |<br />+----------+--------+-----------------+</pre>
