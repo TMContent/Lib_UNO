@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8a753772-b8bf-497a-9bbd-d900ff6eed13</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Leverage NetWeaver Functionality for Logging</Title>
+    <Category />
+    <Phase />
+    <Technology>ABAP</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Leverage the supplied SAP NetWeaver logging functionality by:
+
+- Using transactions, reports and other tools (such as spreadsheets and log analysis tools) to backup, consolidate and index data from various logs provided by NetWeaver.
+- Analyzing the source and indexed data to identify and measure events such as alerts, warnings, and anomalies. 
+- Creating response plans and actions to resolve issues which affect the security and operations of ABAP, associated framework, and database.
+
+
+## Why ##
+
+The guiding purpose of logging is to establish traceability of events on the business objects. There are several advantages to leveraging the logging functionality in NetWeaver. Operations and security personnel gain improved visibility to system events and can perform troubleshooting and mitigation more effectively. 
+
+With the addition of analysis tools to process large amounts of logging data, there is greater efficiency in collecting forensics and traceable data for auditing requests. Lastly, the aggregation, monitoring and reporting of access data allows organizations to reduce risk levels associated with security incidents.
+
+If logging collection and analysis is not part of everyday security and administrative work processes, each threat must be investigated and repaired without the benefit of log data history. The required response time and resources necessary to investigate will be substantial, and business interruptions will no doubt be longer than expected.
+
+
+## When ##
+
+Since ABAP code often includes access to sensitive data, such as financial information, passwords, and private keys, data logging plays an essential role in maintaining the security posture. Be careful not to log passwords in clear text into a log. When sensitive data is logged, it should be kept in protected tables with authorization checks.
+
+Refer to applicable regulatory statutes for your business area to identify sensitive data definitions, and which log data must be collected and archived. The scheduling and retention of access and event data is described in these regulations as a minimum value.
+
+
+## How ##
+
+SAP NetWeaver application server (AS) includes separate frameworks for logging changes in different data types. The following descriptions can be used to determine which logs should be activated and deactivated by the administrator. Apply logging judiciously, as the accumulation of logs over time can consume significant system resources.
+
+1. **Activate the security audit log.** The security audit log provides details for security-related events in SAP NetWeaver AS. When activated, records are collected for events specified as relevant. When these entries are processed in a report, it is possible to view failed logon attempts or transaction starts.
+
+2. **Read the system log.** The system log supplies a technical view of events such as: rollbacks, database read errors, and memory dumps. Since the system log is continuously written it cannot be deactivated. Events are saved as a system log messages. Refer to log numbers AU, BU, or CU for relevant captured data.
+
+3. **Enable the application log.** When the application log is enabled, messages, exceptions, and errors are organized and displayed. These events are gathered during application runtime and stored in QM for a standard SAP system. The store is temporary, however, so change documents or change data should not be kept in the application log. For more detail refer to the archiving object `BC_SBAL` by executing `SBAL_DOCUMENTATION` in ABAP (transaction SA38).
+
+4. **Utilize the audit info system.** There is a separate system called the Audit Info System (AIS), which facilitates the audit process for different types of auditors. SAP system administrators also use the AIS tool.
+
+5. **Use version management.** The version management function monitors repository objects when they are modified. All changes made to a repository object are automatically versioned when the function is used.
+
+6. **Activate table logs.** The table logs provide answers to important security questions, such as: who changed custom settings; when were items changed; and what has changed? Writing to the table logs is dependent on the rec/client parameter being set to allow data logging. The feature must also be activated. During development of the application, choose which tables to log, and activate table change logging in the technical settings: `ABAP Dictionary -> transaction SE11`.
+
+7. **Use standard change documents.** Since business objects change frequently, it may be advantageous to trace the actual changes in certain situations. This is carried out with change documents.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
