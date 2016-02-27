@@ -46,7 +46,9 @@ When built-in functions are not available, use validation against a white-list t
 Perform the following actions to canonicalize all input used to access filesystem resources:
 
 1. **Identify all functions used to access filesystem resources.** Find all functions used by the application to request filesystem resources. Include external calls and ABAP modules in your search.
+
 2. **Use built-in functions to canonicalize input.** With the SAP NetWeaver Platform (Web Dynpro ABAP and BSP Applications), use the method `CL_HTTP_UTILITY=> IF_HTTP_UTILITY~CHECK_HTTP_WHITELIST`. This is provided by the Web Application Server (ABAP AS) to check URL-like parameters against a white list of patterns in table `HTTP_WHITELIST`. The table itself can be maintained in transaction SE16. This process verifies that the URL from external sources can be accepted. For more information, refer to SAP Note 853878.
+
 3. **Add code that canonicalizes and validates input.** When built-in methods are not available or not applicable, it is recommended to create a separate class or library for data validation routines and include functions for canonicalizing input in it. Provide the following in the class or library:
 
 	- Unescape input and bring it to its shortest or simplest form (canonicalization).
