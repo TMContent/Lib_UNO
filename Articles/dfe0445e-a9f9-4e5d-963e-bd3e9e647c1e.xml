@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>dfe0445e-a9f9-4e5d-963e-bd3e9e647c1e</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Encode Echoed Untrusted Data</Title>
+    <Category />
+    <Phase />
+    <Technology>ABAP</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use the ABAP central library function `ESCAPE`, or the Class implementation in `CL_ABAP_DYN_PRG`, to encode (escape) echoed untrusted data used by your program.
+
+
+## Why ##
+
+When the built-in function (`ESCAPE`) or Class implementation (`CL_ABAP_DYN_PRG`) are used for encoding untrusted data, the application is protected from Cross-Site Scripting (XSS) attacks. Encoding or escaping data ensures that it is treated as literal text, and not executed as script.
+
+Application vulnerability to XSS is on the Open Web Application Security Project (OWASP) top 10 list for critical web application security flaws. XSS is a programming error which is highlighted by the Common Weakness Enumeration (CWE) project. By including built-in mitigation techniques, your application is protected from XSS security threats. 
+
+
+## When ##
+
+Always use a provided method to prevent XSS. Never echo untrusted or user-modifiable data back to the user without appropriate encoding. The ABAP built-in `ESCAPE` function was made available as of SAP_BASIS 731. ABAP code for previous versions should use Class `CL_ABAP_DYN_PRG` to encode user input. Previous mitigation techniques used should be carefully reviewed and replaced with the most recent function available.
+
+
+## How ##
+
+These steps encode the data in echoed untrusted data:
+
+1. **Identify all sources of user input.** Determine all possible tainted inputs to the application. The following list includes some common input sources:
+
+	- Form Fields
+	- Query strings
+	- Databases and data access methods
+	- Cookie collection
+	- Session and application variables
+
+2. **Identify all output that includes user input.** Trace all inputs to the system and determine which code will output it as a part of HTML, URL, JavaScript, CSS and XML contexts. Make a spreadsheet that contains all of this information.
+3. **Encode all untrusted data.** Use `ESCAPE` to encode data that gets included in HTTP response headers. Encode the data at the last possible moment before displaying it to reduce the possibility of double-encoding bugs. The following shows methods for various contexts:
+
+		* HTML or XML
+		out = escape(val = val format = cl_abap_format=>e_xss_ml)
+
+		* JavaScript
+		out = escape(val = val format = cl_abap_format=>e_xss_js)
+
+		* URL
+		out = escape(val = val format = cl_abap_format=>e_xss_url)
+
+		* CSS
+		out = escape(val = val format = cl_abap_format=>e_xss_css)
+
+4. **Encode all untrusted data (alternate method).** If the 'ESCAPE' method is unavailable use `ESCAPE_XSS_XML_HTML` to encode data at the last possible moment before displaying it to reduce the possibility of double-encoding bugs. The following shows methods for various contexts:
+
+		* HTML or XML
+		out = CL_ABAP_DYN_PRG=>ESCAPE_XSS_XML_HTML(val)
+
+		* JavaScript
+		out = CL_ABAP_DYN_PRG=>ESCAPE_XSS_JAVASCRIPT(val)
+
+		* URL
+		out = CL_ABAP_DYN_PRG=>ESCAPE_XSS_URL(val)
+
+		* CSS
+		out = CL_ABAP_DYN_PRG=>ESCAPE_XSS_CSS(val)
+]]></Data>
+  </Content>
+</TeamMentor_Article>
