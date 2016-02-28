@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>eeee258b-235e-45f4-8b23-13eb7fdd300f</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Iterative Hashing to Protect Stored Passwords</Title>
+    <Category />
+    <Phase />
+    <Technology>ABAP</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use iterative hashing to protect stored passwords. The default configuration of the hashing process used with the latest versions of SAP is `CODEVN H`, an iterative, salted hashing (SHA-1).
+
+
+## Why ##
+
+Storing hashes instead of plain-text passwords ensures that an attacker cannot easily recover the passwords if the storage tables are accessed. Adding salt to hashed files makes hashes much harder to break with dictionary attacks. Hashing should be applied multiple times (iteratively) to make hashing take longer and thus increase the computational resources required to attack the hashes. Iterative hashing applies a hashing function multiple times to a password and a salt, drastically increasing the time required to perform dictionary attacks.
+
+If iterative hashing is not used for stored passwords, and the stored tables are compromised, the passwords can be easily broken with well-known tools. The result would be loss of customer and client trust, as well as the possible compromise or theft of other secret data.
+
+
+## When ##
+
+So long as sufficient resources are available to the server systems, you should use the strongest settings for salt and iterations. In other words, go beyond the default algorithm settings for deeper security. As more computing power becomes available, however, it is necessary to use newer, stronger algorithms to mitigate brute force attacks. When a newer hashing algorithm becomes available, consider backward-compatibility, and implement the strongest method possible.
+
+
+## How ##
+
+Review the referenced additional sources for additional background on SAP password hashing algorithms. The following steps describe the `CODEVN H` hash and additional configuration which will affect its use.
+
+1. **Use the system-provided iterative hashing algorithm.** The default algorithm is `CODEVN H`. It supports these features:
+	- Support for multiple hashing algorithms (future).
+	- Uses iterated, salted SHA-1 algorithm with default settings of `iterations=1024`.  Can be configured with any value in the range [1-4294967294].
+	- Random salt default setting is `saltsize=96`. Length can be configured in the range [32-128] bits.
+	- Supports password length up to 40 characters.
+	- Upper and lower case passwords supported.
+	- UTF-8 support.
+
+2. **Generate a random salt value.** Each bit of salt doubles the memory and computational requirements for dictionary attacks. The default setting (`saltsize=96`) can be increased. The system generates the `random_salt`.
+
+3. **Combine the password and the salt.** The system concatenates the password and the salt.
+
+4. **Hash the password and salt using multiple iterations.** The system uses the specified iterative hashing algorithm to hash the password and salt as many times as specified by the setting for `iterations`.
+
+5. **Store the hash and the salt.** The system stores the hash in column `PWDSALTEDHASH` in table `USR02`. When comparing user-entered passwords to the hashed value, the system uses the stored salt and hashed value. The system also tracks the number of iterations used by the hashing algorithm.
+
+6. **Adjust profile parameters.** The following have an impact on the hash algorithm:
+	- SAP kernel version
+	- Profile parameters `login/password_charset` and `login/password_downwards_compatibility` 
+
+7. **Implement password verification.** During authentication the system checks the password entered by the user against the hashed and salted value. The system retrieves the hash value and the salt from password storage. User input is concatenated with the stored salt. The resulting string is hashed iteratively using the same amount of rounds as was used to calculate the stored hash. The system compares the resulting string against the stored hash. When these values are the same, the user has entered the correct password.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
