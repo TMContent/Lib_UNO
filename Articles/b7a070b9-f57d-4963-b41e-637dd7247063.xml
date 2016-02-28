@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b7a070b9-f57d-4963-b41e-637dd7247063</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use SAP Virus Scan on Uploaded Files</Title>
+    <Category />
+    <Phase />
+    <Technology>ABAP</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use the SAP Virus Scan Interface (VSI) API to scan all input channels for infected objects such as file uploads or exchanged documents.
+
+
+## Why ##
+
+The SAP VSI architecture provides the capability to integrate available products and handle platform dependencies that exist in separate systems, such as NetWeaver, ABAP, Java, and web clients. Business partners and other users may not have sufficient threat mitigation installed, such as virus and exploit scanning before uploading. If a system is already compromised, there may be no scanning. For these reasons SAP VSI provides layers of protection through library APIs that can effectively scan objects for threats.
+
+If there is insufficient or missing virus scan of input channels, an unidentified threat could potentially affect all SAP systems and sensitive data. The result would be considerable damage including downtime, loss of reputation, financial damages, and legal challenges.
+
+
+## When ##
+
+Virus scanning must always be in effect when data is imported to the system. If the program code allows file upload from client systems, application servers, internet sources, or through RFC/XML/XI, then the SAP systems require the virus scanning and other protective measures of `VSILIB`.
+
+Note that any application can use the VSI. If a previous application or called function has used VSI, then it is not necessary to repeat the process on the delivered object.
+
+
+## How ##
+
+These steps may be used to guide your implementation of the anti-virus scan functions. The controls in effect will then discard attachments and documents when they contain known threats.
+
+Scanner groups, virus scan servers, and virus scan profiles are described in the first three guideline steps. The remaining steps provide information to implement the virus scan API methods.
+
+1. **Define scanner groups.** The purpose of scanner groups is to bind together one or more virus scan servers or implementations of scan engines. With a scan group you can administer sets of configuration parameters to initialize various components.
+
+2. **Define virus scan servers.** The virus scan server (VSS) is an RFC server that holds the connection to the scan engine using the certified adapter. In one mode the VSS runs as part of the application server. An alternative is to run VSS as an executable with RFC communication. Each VSS belongs to a single scanner group. The VSS maintenance screen shows a summary of features, with the ability to start, stop, and reinitialize the engine. The server is customizable, and the VSI interface can be used with methods in a development effort. Refer to SAP notes 817623 and 786179 for more information.
+
+3. **Create virus scan profiles.** A virus scan profile can be created for each application. This allows mapping of scanner groups to virus scan servers or business add-ins. Profiles are placed in a separate namespace, such as `/<Name of package>/<Freely assignable name>`.
+Profiles can be selected as the default profile, can be activated or deactivated, and can be assigned to reference profiles
+
+4. **Identify all input channels.** Determine all possible polluted inputs to the application. Isolate the object read statement.
+
+5. **Create an instance of VSI.** As the object is read into memory, use the class `CL_VSI` in your ABAP code to perform a virus scan. Use the method `GET_INSTANCE` to instantiate the VSI.
+
+		CALL METHOD cl_vsi=>get_instance
+
+6. **Perform a byte sequence check.** Perform virus scanning of data present in `XSTRING` objects.
+
+		CALL METHOD lo_scanner->scan_bytes
+
+7. **Process the scan results.** The byte scan results belong to one of the following cases. Use supporting code in your program to handle the possible scan results.
+
+	- **Return code `LF_SCANRC` has the value `CL_VSI=>CON_SCANRC_OK`.** This indicates that the scan task was successfully performed and no infection was found.
+	- **Return code `LF_SCANRC` has another value.** Some of the error codes are `CON_SCANRC_…` attributes in class `CL_VSI`. Use the method `CL_VSI=>GET_SCANRC_TEXT` to retrieve an explanation, and handle this as a failed scan.
+	- **An exception is thrown.** This indicates a configuration error or severe problem during virus scanning. It must always be reported, and the virus scan is considered as failed.
+
+8. **Perform cleanup.** When the parameter `IF_DO_CLEAN` is set to value `ABAP_TRUE`, a cleanup is automatically performed. If the cleanup is successful, the parameter `EF_DATA` returns `EF_SCANRC = CON_SCANRC_CLEAN_OK`. When parameter `IF_DO_CLEAN` has the value `ABAP_FALSE,` automatic cleanup is not performed.
+
+9. **Perform local file or table virus scan.** Two other standard methods for virus scanning are found in class `CL_VSI`. The method `SCAN_FILE` can be used to scan a local file on the application server. The method `SCAN_ITAB` can be used to scan any internal table with row type X or C.
+
+For more information about the workings of VSI with objects, tables, views, and messages, see the online documentation in the ABAP Workbench.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
