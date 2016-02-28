@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>9c434a32-a16a-48b8-87ac-43ae37ffdbf8</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use TLS to Protect Connections</Title>
+    <Category />
+    <Phase />
+    <Technology>ABAP</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use Transport Layer Security (TLS) encryption to protect connections used by Advanced Business Application Programming (ABAP) application server (AS).
+
+
+## Why ##
+
+Encryption technology such as TLS is necessary for SAP back-end connections, as well as for ABAP data communications when sensitive data is sent, or where user identity is authenticated. If all messaging is not protected with effective security, then sensitive data could be compromised. This undermines any authentication and access controls which have been established. When properly used, secure transport prevents eavesdropping attacks and other types of man-in-the-middle attacks.
+
+Sensitive data in transit between a database and application always requires protection against interception by a malicious user during transport over untrusted networks. Without TLS protection, all data (including passwords) is transmitted throughout the network in plain text. With TLS the confidentiality of all data is maintained, for all message exchanges,
+
+The use of strong cryptography, security protocols, and trusted keys/certificates is a best practice required by certification authorities and agencies.
+
+
+## When ##
+
+It is always necessary to protect sensitive data transmitted or received over untrusted networks. Ensure that TLS is enabled and active for all connections.
+
+
+## How ##
+
+These steps provide an overview of SSL/TLS setup. After configuration, encrypted information is exchanged through the various servers. SSL/TLS uses asymmetric methodology to exchange the secret key. A private key is used server-side while the public key is used by the client to encrypt or decrypt messages. Detailed installation instructions are available through SAP notes for the Basis in use.
+
+1. **Update the instance profile.** A prerequisite is to define various parameters, such as `ssf/name`, `ssl/ssl_lib`, `sec/libsapsecu`, and others. This is required to define the crypto library and its location. Other parameters are required to set protocol, port, and timeout value. As part of setup, the directory `sec` is created, and the SAP environment variable `.sapenv_<hostname>.sh` is modified. 
+
+2. **Create Private key and Certificates and generate CSR certificate.** To begin the installation in ABAP AS, execute transaction `STRUSTSSO2` and create `SSL Server Standard`. Provide the details like DN, Algorithm and Key Length. Create a CSR request for Certificate Authority (CA). Save the file with *.csr* extension, and send the file to CA for signing.
+
+3. **Import digitally signed entrust certificates.** When the signed certificate is available, go to `STRUSTSSO2` and open `SSL Server Standard`. Under Owner, import the certificate, add it to the list, and save.
+
+4. **Restart ICM.** After restarting ICM, make sure HTTPS is active. The SSL configuration can be verified by opening `https://<fullyqualifiedname>:<HTTPS_Port>`. The LOCK icon at the bottom of the browser should show `Issued by: <Your Certificate Authority Name>`.
+
+5. **Verify TLS is active.** Check that the application is using the TLS option for database communications. If not, the setup and parameters need to be re-checked.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
