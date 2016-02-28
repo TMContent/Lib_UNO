@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>98f687cd-40d4-4ea6-aabe-d5505aae803b</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Secure Store and Forward Mechanisms to Protect Documents</Title>
+    <Category />
+    <Phase />
+    <Technology>ABAP</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use Secure Store and Forward (SSF) functions with your Advanced Business Application Programming (ABAP) code to provide digital signatures and encryption for documents that need to be transported and stored within the SAP system or in external locations.
+
+
+## Why ##
+
+SSF mechanisms are critical protection for ABAP documents and messages. When sensitive data is digitally signed and encrypted, you are assured of data integrity, authenticity and confidentiality for the wrapped object(s).
+
+If SSF is not used, protected information could be exposed to an intruder in unencrypted form. Also, the contents could be sent to unsafe storage areas, whether internal or external to the organization. Note that a digital signature guarantees the authenticity of the signer, and is required for many types of business record transmission. The digital signature is not forgeable, and secures the document from changes. It is also important that the document signer cannot repudiate, or deny, the validity of their signature.
+
+
+## When ##
+
+The SSF functions used with ABAP are dependent upon the crypto library which is installed. The latest versions of SAP NetWeaver includes the SAP Cryptographic Library `CommonCryptoLib`, which is backward-compatible with `SAPCRYPTOLIB`, as well as the SAP Security Library (`SAPSECULIB`). The crypto library can be used in all situations, as it supports the use of digital signatures, and also provides for encryption in these instances:
+
+- Secure Store and Forward (SSF) document signing and encryption
+- Secure Network Communications (SNC)
+- Secure Sockets Layer (SSL) protocol with SAP NetWeaver Application Server
+- Kerberos with SPNego
+
+Since these SSF mechanisms are critical for defense in depth, if the functions are not accessible, you must install the cryptographic library which works with your version of SAP NetWeaver.
+
+SSF requires the use of a third-party security product. For this reason SAP includes the SAP Cryptographic Library. If a different library is in use, be aware of changes in function use and name.
+
+Also be aware that the laws of various countries differ as to the regulation of cryptography and signatures. These laws may impact development, and their effect should be understood.
+
+
+## How ##
+
+1. **Determine cryptographic library in use.** Make sure you have the latest version of `CommonCryptoLib`. Use **SSF02 SAP ABAP Report -> SSF Test Program** to report the installed version. If the output does not include `CommonCryptoLib`, you will need to download and install the latest `SAPCRYPTOLIB`. Review all supplied notes and documentation to find best practices for the APIs using the library in effect.
+
+		SE38 -> SSF02 -> Determine Version
+
+		SSFLIB Version 1.840.40 ; CommonCryptoLib (SAPCRYPTOLIB) Version 8.4.15 (+MT) #Copyright (c) SAP AG, 2011-2014#compiled for linux-gcc-4.3-x86-64#
+
+2. **Identify sensitive data.** Review the ABAP code to find where sensitive data is handled. Also review any called functional modules and APIs in use for sensitive operations. Make a list of code that may handle sensitive or private information. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords, and private keys. Note that this is not a complete list of sensitive information. Refer to applicable regulatory requirements to identify sensitive data which applies to your business requirements.
+
+3. **Choose libraries and APIs.** The SSF functions include encryption and signing (PKCS#7) features. Usually, you do not directly call the `SSF_KRN_xxx` function modules. These are used by the ABAP AS to communicate with the SAP Basis kernel, and are included for information completeness. The following Secure Store and Forward mechanisms are found in the SSFG function group:
+	- `SSF_SIGN` (`SSF_KRN_SIGN`) to create digital signatures
+	- `SSF_VERIFY` (`SSF_KRN_VERIFY`) to check digital signatures
+	- `SSF_ENVELOPE` (`SSF_KRN_ENVELOPE`) to encrypt documents
+	- `SSF_DEVELOPE` (`SSF_KRN_DEVELOPE`) to decrypt documents
+
+4. **Set the encryption algorithm.** On the application server, set the symmetric encryption algorithm and other required parameters. Use either environment variables (as of Release 4.5A) or profile parameters to specify the SSF information. Profile parameters values override those in environment variables. If you do not use either option, then the system uses the default values. Also remove the asterisk when a parameter line is modified. In the following example, the symmetric encryption algorithm is set to AES. Other parameters may also require setting changes. Consult the applicable SAP notes.
+
+		SSF_SYMENCR_ALG=AES
+
+5. **Add encryption key.** Generate an individual encryption key for the secure storage (ABAP):
+
+	- Start transaction `SECSTORE`.
+	- Go to the **Key Management** tab.
+	- Choose the **Generate** button. The system generates a new encryption key and opens a popup that displays the key ID and key value. Write down the key ID and key value and store them in a safe place.
+
+		**Caution.** Do not store the key value in a plain text file on a file system that is accessible by the system itself.
+
+	- Choose **Continue**. Compare the key value written down with the key value in the following window. Type the required characters in the fields that are filled with a question mark. Press the TAB key to move from one of these fields to the next.
+	- Choose **Continue**. The system checks whether the data is correct. If it is correct, the encryption key is stored in the secure storage in the file system and marks it as *Current*. The system uses this key for encryption.
+
+		**Note.** Encrypt all data in the secure storage (ABAP) with the new current key. To do so, choose **Continue**. If you do not want to encrypt all data, close the popup without choosing to continue.
+
+6. **Use encryption and decryption.** Find code that handles sensitive data, and apply encryption or decryption as necessary. Add code that calls the function `SSF_ENVELOPE` to encrypt sensitive data, or apply function `SSF_DEVELOPE` to unencrypt. For additional information on use and optional parameters, enter the function module name `SSF_ENVELOPE` or `SSF_DEVELOPE` into the relevant SAP transaction.
+
+7. **Add or verify a digital signature.** Add `SSF_SIGN` or `SSF_VERIFY` to the processing code block to sign or verify your document object. For additional information on use and optional parameters, enter the function module name `SSF_SIGN` or `SSF_VERIFY` into the relevant SAP transaction.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
