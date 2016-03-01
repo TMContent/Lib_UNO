@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7e907626-e37e-4598-8b0f-ef35b3fccbcc</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Canonicalize Input Used for Filesystem Access</Title>
+    <Category>Canonicalization</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ABAP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Canonicalize all input used for filesystem access, including resource names, filenames, paths, and URLs.
+
+
+## Why ##
+
+There are often several ways to address the same resource by name in an operating system. An attacker may try to bypass validation routines in order to perform unauthorized access by supplying obfuscated input. Canonicalization reduces input to the simplest form, defeats obfuscation, and helps validate data access attempts.
+
+Canonicalization is necessary because the application environment may allow access to a resource through alternative commands. For example, in a Windows environment a single file may be addressed as `file`, `C:\file`, `C:\\file`, `..\file`, `..\..\..\file`, etc. Canonicalization is also important for systems that use Unicode, because there are many different Unicode strings that have the same meaning to the operating system (OS).
+
+Canonicalization means that the input variable's content is transformed into its simplest and shortest representation. Many attack methods depend on the usage of *polymorph representation*, that is, an unusual or overly complicated form that is designed to evade filter mechanisms. Transformation into the simplest form is fundamental for successful filter mechanisms.
+
+
+## When ##
+
+Canonicalize all input used to identify resources before using it for access. 
+
+When built-in functions are not available, use validation against a white-list table to eliminate the possibility of filter evasion.
+
+
+## How ##
+
+Perform the following actions to canonicalize all input used to access filesystem resources:
+
+1. **Identify all functions used to access filesystem resources.** Find all functions used by the application to request filesystem resources. Include external calls and ABAP modules in your search.
+
+2. **Use built-in functions to canonicalize input.** With the SAP NetWeaver Platform (Web Dynpro ABAP and BSP Applications), use the method `CL_HTTP_UTILITY=> IF_HTTP_UTILITY~CHECK_HTTP_WHITELIST`. This is provided by the Web Application Server (ABAP AS) to check URL-like parameters against a white list of patterns in table `HTTP_WHITELIST`. The table itself can be maintained in transaction SE16. This process verifies that the URL from external sources can be accepted. For more information, refer to SAP Note 853878.
+
+3. **Add code that canonicalizes and validates input.** When built-in methods are not available or not applicable, it is recommended to create a separate class or library for data validation routines and include functions for canonicalizing input in it. Provide the following in the class or library:
+
+	- Unescape input and bring it to its shortest or simplest form (canonicalization).
+	- Validate the input depending on the output (HTML, database or file system).
+		- Be aware of double-encoded characters.
+		- Check if you are working in the same character space (Unicode or ASCII).
+		- Remember that combinations of ASCII and HEX characters can represent malicious code. Use SQL Injection mitigation techniques.
+		- Remember case sensitivity and try to find a *capitalized* canonical form.
+	- Check against a white list of allowed patterns. Do not use a black list.
+	- Understand the operating mode of the interpreter and how it handles your data.
+	- Implement your class in the ABAP code with input data.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
