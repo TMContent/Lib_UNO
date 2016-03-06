@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>cbeb5be7-9425-44db-9446-cd0a56f7b7b6</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Unique Tokens for Sensitive Requests to Prevent CSRF</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Use Unique Tokens for Sensitive Requests to Prevent CSRF##
+
+
+##Applies To##
+
+- Ruby
+
+
+##What to Do##
+
+Use `ActionController::RequestForgeryProtection` methods to include and check unique tokens in HTTP requests when performing sensitive operations to prevent Cross-Site Request Forgery (CSRF).
+
+
+##Why##
+
+The CSRF compromise is possible when an attacker can form a URL which performs an action on behalf of an authenticated user. Forming such URLs becomes much more difficult if unique tokens are included in HTTP requests. Including a difficult-to-predict token in HTTP requests is an effective defense against CSRF attacks.
+
+If a CSRF attack succeeds, the consequences are only limited by the application scope. Such an attack could result in loss of sensitive information. The target is often unaware that their browser has been used to perform illegal functions.
+
+
+##When##
+
+Note that even when the user is logged into a web site which uses strong encryption (HTTPS), the CSRF attack will be successful. The attacker will use social engineering, and embed malicious HTML or JavaScript code into an email, or use a web site to request a specific 'task url'. The url can execute without the awareness of the user. This can be accomplished directly, or by using a Cross-site Scripting (XSS) flaw.
+
+For these reasons it is always necessary to use the available security measures which thwart CSRF attacks.
+
+This guideline protects HTML and JavaScript requests only. Where it is necessary to protect an XML API, there usually exists a different authentication scheme and CSRF protection.
+
+
+##How##
+
+Controller actions are protected from CSRF attacks by including a token in the rendered HTML. This token is stored as a session random string which the attacker cannot access. When the application receives a request the Ruby on Rails (RoR) module verifies the received token with the session. To use unique tokens for sensitive HTTP requests:
+
+1. **Identify sensitive operations.** Review Ruby code to identify all operations that handle sensitive data. Be sure to include any associated functions and modules in this search.
+2. **Identify code that performs sensitive operations.** Identify all statements and blocks that are involved in performing sensitive operations. Add information about this code to the spreadsheet.
+3. **Choose a method for generating unique tokens.** The recommended method is to use the default approach supplied by RoR. CSRF protection is turned on with the `protect_from_forgery` method, which checks the token and resets the session if the token does not match what was expected. A call to this method is generated for new RoR applications by default.
+4. **Add unique tokens to HTTP requests.** The default name for the token parameter is `authenticity_token`. The token name and value must be added to each layout that renders forms. This is performed by including `csrf_meta_tags` in the HTML head. Do not use session IDs as anti-CSRF tokens.
+5. **Perform application token validation.** In the application controller, `protect_from_forgery` is in effect for newly created applications. A security token is automatically included in all forms and requests. If the security token doesn't match, an exception is thrown.
+
+
+##Additional Resources##
+
+- [ActionController::RequestForgeryProtection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html "ActionController::RequestForgeryProtection ")
+- [Caching the Uncacheable: CSRF Security](https://www.fastly.com/blog/Caching-the-Uncacheable-CSRF-security "Caching the Uncacheable: CSRF Security")
+- [Cross-Site Request Forgery (CSRF)](http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf " Cross-Site Request Forgery (CSRF)")
+- [Understanding Rails' protect_from_forgery](https://blog.nvisium.com/2014/09/understanding-protectfromforgery.html "Understanding Rails' protect_from_forgery")]]></Data>
+  </Content>
+</TeamMentor_Article>
