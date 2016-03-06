@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b14c3718-48ac-4328-80c5-78ad98015a53</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use X-Frame-Options Header to Prevent Clickjacking</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Use X-Frame-Options Header to Prevent Clickjacking##
+
+
+##Applies To##
+
+- Ruby
+
+
+##What to Do##
+
+Use the X-Frame-Options response header to prevent clickjacking attacks.
+
+
+##Why##
+
+The X-Frame-Options response header instructs the browser to disallow the use of iframes across domains or limit their use to the same origin. This protects against clickjacking, a malicious technique that uses iframes to overlay or hide a clickable link or button on a web page. In a clickjacking attack, a user thinks he or she is clicking the intended link but actually clicks the overlaid iframe link, thus sending data to an unintended website.
+
+PCI PA-DSS requires that payment applications which send sensitive data over public networks must address high-risk vulnerabilities during development (Requirement 5.2.6).
+
+
+##When##
+
+Use this guideline when implementing Ruby applications where pages are not intended for rendering in a frame or iframe. The programmatic framework used with Ruby determines whether mitigation is required. With Rails 3, use the `secure_headers` RubyGem to mitigate several vulnerabilities, including clickjacking. Rails 4 sends the X-Frame-Options header by default, and does not require mitigation.
+
+
+##How##
+
+If you are using the Rails 3 framework use the SecureHeaders RubyGem to add an X-Frame-Options header:
+
+1. **Identify code which renders pages.** Find all instances where pages are rendered, and examine whether headers are being modified. Some of this functionality may need to be removed or modified.
+2. **Add the configuration for SecureHeaders.** Place the following code in an initializer. Note that the configuration is set to `DENY`:
+
+		::SecureHeaders::Configuration.configure do |config|
+		   # . . .
+		   config.x_frame_options = 'DENY'
+		   # . . .
+		end
+
+3. **Edit the controller.** Include the following code in *application_controller* to set security-related headers automatically, and apply x_frame_options:
+
+		class ApplicationController < ActionController::Base
+		   # . . .
+		   ensure_security_headers
+		   # . . .
+		end
+
+If you are using the Rails 4 framework, the application automatically sends the `X-Frame-Options` response header with the value of `SAMEORIGIN`. With this setting, the application tells the client browser to only frame pages that originate from the same domain.
+
+1. **Identify code which changes header.** Examine the application to find any instances where pages are rendered, and whether headers are being modified to allow framing.
+2. **Re-enable default settings for `X_Frame_Options`.** If `X_Frame_Options` is set to `ALLOW`, or is missing from configuration, re-enable the default settings and configuration.
+
+
+##Additional Resources##
+
+- [Clickjacking Defense Cheat Sheet - OWASP](https://www.owasp.org/ "Clickjacking Defense Cheat Sheet - OWASP")
+- [Rails' Insecure Defaults](http://blog.codeclimate.com/ "Rails' Insecure Defaults")
+- [twitter/secureheaders](https://github.com/twitter/secureheaders "twitter/secureheaders")]]></Data>
+  </Content>
+</TeamMentor_Article>
