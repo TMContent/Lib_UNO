@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>3dc98702-dd58-4f88-88be-3d9a2448eb56</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Strong TLS Cipher Suites</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Use Strong TLS Cipher Suites##
+
+
+##Applies To##
+
+- Ruby
+
+
+##What to Do##
+
+Configure Ruby to use strong TLS cipher suites.
+
+
+##Why##
+
+It is common for malicious individuals to intercept data in transit. For this reason, during public network transmissions encrypt sensitive information.
+
+Choose strong TLS cipher suites to avoid known vulnerabilities in the OpenSSL library or other suites used with Ruby applications. Weak crypto suites are subject to known attacks which will decipher and compromise confidential data.
+
+PCI PA-DSS requires that payment applications which send sensitive data over public networks must use strong cryptography and security protocols such as TLS which only support secure configurations (Requirement 11.1).
+
+
+##When##
+
+When using a cipher suite, it is important to note that not all "high security" library methods are classified as strong. To read all SSL options which are available in a cipher suite, you can run this code. The example specifies Ruby OpenSSL:
+
+       `ruby -ropenssl -e 'OpenSSL::SSL.constants.select {|c| /^OP_/ =~ c }.sort_by {|c| OpenSSL::SSL.const_get(c) }.each {|c| puts "%012x = %s"%[OpenSSL::SSL.const_get(c),c.to_s]};nil'`
+
+To use strong TLS from the standard library, it is necessary to follow the guideline steps in the next section.
+
+
+##How##
+
+Use the following steps to configure strong TLS ciphers for Ruby.
+
+1. **Check the build date for OpenSSL.** Check that OpenSSL in use is current by examining the build date from a system console:
+
+       `openssl version -a`
+
+2. **Verify which version of OpenSSL library is linked to Ruby.** Check the output of the command, and update OpenSSL to the latest version if necessary:
+
+       `ruby -v -ropenssl -rfiddle -e 'puts Fiddle::Function.new(Fiddle.dlopen(nil)["SSLeay_version"], [Fiddle::TYPE_INT], Fiddle::TYPE_VOIDP).call(0)'`
+
+3. **Configure strong ciphers.** Use the following code to configure strong ciphers into ssl_context.
+
+       `ciphers = '!ADH:!RC4:!aNULL:!MD5:!EXPORT:!SSLv2:HIGH'`
+       `ssl_context.ciphers = ciphers`
+
+       `# Don't use SSLv3`<br>
+       `no_ssl_3 = OpenSSL::SSL::OP_NO_SSLv3`
+
+       `# Don't use SSLv2`<br>
+       `no_ssl_2 = OpenSSL::SSL::OP_NO_SSLv2`
+
+       `# Don't use compression (CRIME CVE-2012-4929)`<br>
+       `no_ssl_compression = OpenSSL::SSL::OP_NO_COMPRESSION`
+
+       `ssl_options = no_ssl_2 + no_ssl_3 + no_ssl_compression`<br>
+       `ssl_context.options = ssl_options`
+
+
+##Additional Resources##
+
+- [Payment Card Industry (PCI) Payment Application Data Security Standard (PA-DSS)](https://www.pcisecuritystandards.org/ "PCI PA-DSS")
+- [Recommendations for TLS/SSL Cipher Hardening](https://www.acunetix.com/ "Recommendations for TLS/SSL Cipher Hardening")
+- [Ruby and ssl](http://bararchy.github.io/ "Ruby and ssl")
+]]></Data>
+  </Content>
+</TeamMentor_Article>
