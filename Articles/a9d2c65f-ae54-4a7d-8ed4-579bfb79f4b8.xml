@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>a9d2c65f-ae54-4a7d-8ed4-579bfb79f4b8</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Check Authorization for All Operations</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Check Authorization for All Operations##
+
+
+##Applies To##
+
+- Ruby
+
+
+##What to Do##
+
+Perform access control checks for all sensitive operations. Sensitive operations include any access to system resources, such as files, and any access to application data. Define the different types of users and create specific roles for them. When authorizing access to a resource, build the security checks on a per-role basis rather than on a per-user basis.
+
+
+##Why##
+
+With Ruby, everything is an object. A developer needs to consistently address the permissions on objects as they are created, updated, or destroyed.
+
+Performing an operation without checking authorization may expose sensitive data to attackers. Direct object reference attacks are very simple to execute and have been used in high profile, low-skill attacks. Checking access control permissions whenever referencing objects helps prevent direct object reference vulnerabilities. 
+
+Application roles allow multiple users to play the same role, and provide a clear way to manage the least privileges necessary for the execution of a given task. This provides a more robust and flexible way of managing the application's users. 
+
+The Cloud Security Alliance (CSA) recommends an architecture that implements authorization configured with entitlement rules. Authorization checks are a critical part of application security (CSA Domain 10) and Identity, Entitlement, and Authorization/Access Management (CSA Domain 12).
+
+##How##
+
+Check authorization for all operations by using these steps:
+
+1. **Identify all operations that require authorization.** Review the program architecture to list operations which require authorization. The review must also include sensitive operations performed by the program.
+2. **Identify all roles.** To identify application roles, understand how users will access resources to perform necessary business functions. Create role names that accurately describe the role.
+3. **Make an access control matrix.** Make a spreadsheet where the roles are the columns and the operations are the rows. For each cell in the spreadsheet, mark whether the operation is authorized for the corresponding role.
+4. **Write the centralized authorization subsystem.** To implement the access permissions defined by the access control matrix it is necessary to write a centralized authorization subsystem.
+5. **Identify code for all operations that require authorization.**  Review the code to identify where to place RBAC hooks. This will ensure that the application only permits operations after it is determined that the user is authorized to perform. 
+6. **Add code, which checks authorization before the operation is executed, to each operation.** Check authorization using a centralized function and the name of the operation. Instead of checking for specific roles here, the app should ask the centralized authorization code for authorization for the operation. If the operation is not authorized, the application should throw an error condition.
+
+
+##Additional Resources##
+
+- [Security Guidance for Critical Areas of Focus in Cloud Computing](https://downloads.cloudsecurityalliance.org/initiatives/guidance/ "Security Guidance for Critical Areas of Focus in Cloud Computing")
+- [Transaction Authorization Cheat Sheet - OWASP](https://www.owasp.org/ "Transaction Authorization Cheat Sheet - OWASP")]]></Data>
+  </Content>
+</TeamMentor_Article>
