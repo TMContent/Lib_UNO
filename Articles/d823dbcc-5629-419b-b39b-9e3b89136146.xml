@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d823dbcc-5629-419b-b39b-9e3b89136146</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use a Strong PRNG</Title>
+    <Category />
+    <Phase />
+    <Technology />
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[##Use a Strong PRNG##
+
+
+##Applies To##
+
+- Ruby
+
+
+##What to Do##
+
+Use a cryptographically-strong pseudo-random number generator (PRNG) whenever it is necessary to generate random numbers for cryptography.
+
+##Why##
+
+Most common encryption algorithms rely on the generation of difficult-to-predict random numbers. The level of difficulty to predict or enumerate the output of a random number generator is called its entropy. Cryptographically-strong PRNGs are software algorithms that produce pseudo-random numbers considered to have sufficient entropy to be suitable for use in cryptography. Using PRNGs that have low entropy is likely to make the resulting cryptographic solution easier to break and thus compromise the data or the authentication mechanism that the solution is used for.
+
+Certifying authorities require protection of sensitive information, such as Primary Account Numbers (PAN), with strong cryptography. Generating strong PRNGs is integral to the cryptographic classes and methods used by the application.
+
+
+##How##
+
+Follow these steps to use cryptographically-strong PRNGs:
+
+1. **Find code that uses PRNGs.** Review all code that uses cryptography. Identify code that uses pseudo-random numbers. Make a spreadsheet of all code that uses pseudo-random numbers for cryptography.
+2. **Use the `SecureRandom` class.** Use the Ruby public class `SecureRandom` to generate PRNG.
+
+		require 'securerandom'
+
+3. **Return a secure PRNG.** Use the random_number method to generate a secure PRNG. Without options specified, the method returns a 16-digit number between zero (0) and one (1):
+
+		SecureRandom.random_number
+		#=> 0.1150327304001743
+
+4. **Use other `SecureRandom` methods.** For other application requirements, related methods may be invoked with the SecureRandom class:
+
+		SecureRandom.base64
+		#=> "/2BuBuLf3+WfSKyQbRcc/A=="
+
+		SecureRandom.hex
+		#=> "eb693ec8252cd630102fd0d0fb7c3485"
+
+		SecureRandom.random_bytes
+		#=> "m\xDC\xFC/\a\x00Uf\xB2\xB2P\xBD\xFF6S\x97"
+
+		SecureRandom.random_number(100)
+		#=> 15
+
+		SecureRandom.random_number(100**16)
+		#=> 77243565207669492659835282655022
+
+		SecureRandom.urlsafe_base64 
+		#=> "b4GOKm4pOYU_-BOXcrUGDg"
+
+		SecureRandom.uuid
+		#=> "2d931510-d99f-494a-8c67-87feb05e1594"
+
+
+##Additional Resources##
+
+- [Module: SecureRandom](http://ruby-doc.org/ "Module: SecureRandom")]]></Data>
+  </Content>
+</TeamMentor_Article>
