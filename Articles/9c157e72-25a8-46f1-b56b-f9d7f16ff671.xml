@@ -15,20 +15,17 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Encrypt Network Connections##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Use Transport Layer Security (TLS) encryption to protect connections used by Ruby applications with your web server. If necessary, implement back-end APIs which support the TLS protocol for encrypting out-of-band network communications.
 
 
-##Why##
+## Why ##
 
 Encryption technology such as TLS is necessary for all data communications when sensitive data is sent, or user identity is authenticated. If connections are not protected with best practice security measures, then sensitive data could be compromised. This undermines any authentication and access controls which have been established. When properly used, secure transport prevents eavesdropping attacks and other types of man-in-the-middle attacks.
 
@@ -39,7 +36,7 @@ Sensitive data in transit between a database and application always requires pro
 The use of strong cryptography, security protocols, and trusted keys/certificates is a best practice required by certification authorities and agencies.
 
 
-##When##
+## When ##
 
 It is always necessary to protect sensitive data transmitted or received over untrusted networks. Ensure that TLS is enabled and active for all connections with your application.
 
@@ -48,11 +45,12 @@ In the future, SSLv3 will be disabled by default in all web browsers. However, t
 For security Defense-in-Depth (DiD), examine the configuration of your web server to make sure it uses TLS only. Refer to the server documentation for options and recommended settings.
 
 
-##How##
+## How ##
 
 Use the following steps as a guideline to encrypt network communications with your Ruby application.
 
 1. **Configure the web server.** If the web platform requires configuration and setup, it will be necessary to install a valid TLS certificate, and also configure the web server to use strong TLS cypher suites. Please refer to the documentation for your web platform for information about enabling and configuring TLS on the web server.
+
 2. **Enable TLS for web applications.** Set `config.force_ssl = true` in an environment file, such as *config/environments/production.rb*. The preference is to force TLS in this way for all applications in the environment. If not practical, this may be forced for the application only. To always force SSL connections in your application, add code to the *config/application.rb* file as follows:
 
 		class Application < Rails::Application
@@ -61,12 +59,8 @@ Use the following steps as a guideline to encrypt network communications with yo
 		  # ...
 
 3. **Identify back-end network connections.** The previous steps, which configure the web server and enable TLS for web applications, encrypt connections between your application and the user's browser. For a typical application, this is all that is necessary to protect network connections. However, an application may connect to back-end services which are not protected by the web server's strong TLS cypher suites. Make a spreadsheet that lists any network connections to back-end services used by the application. These communications should also be encrypted.
+
 4. **Encrypt back-end connections.** If the application connects to any back-end services, use TLS to protect these connections. The exact procedure depends on the type of connection. It will be necessary to examine the host interface provided, as well as the supplied APIs. Client-side keys and certificates will most likely be integral to establishing a secure connection for any back-end connections.
-
-
-##Additional Resources##
-
-- [Is it possible to enable TLS v1.2 in Ruby? If so, how?](http://stackoverflow.com/questions/11059059/is-it-possible-to-enable-tls-v1-2-in-ruby-if-so-how "Is it possible to enable TLS v1.2 in Ruby? If so, how?")
-- [Poodle – SSL Security Threat Explored](http://railscarma.com/blog/technical-articles/poodle-ssl-security-threat-explored/ "Poodle – SSL Security Threat Explored")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
