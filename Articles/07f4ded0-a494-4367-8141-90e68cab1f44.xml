@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>07f4ded0-a494-4367-8141-90e68cab1f44</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Strong Cryptographic Algorithms</Title>
+    <Category />
+    <Phase />
+    <Technology>Ruby</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Select a well-vetted cryptographic algorithm that is currently considered by experts in the field to be strong, such as AES-256 or RSA-2048. Implement the algorithm in Ruby applications by using complete programmatic methods that are well-documented, and have been thoroughly tested.
+
+
+## Why ##
+
+The omission or misuse of cryptography can result in sensitive information exposure. If a broken, risky, or non-standard algorithm is used, an attacker may break the algorithm with well-known techniques.
+
+Do not develop your own cryptographic algorithms. They will likely be exposed to attacks that are well-understood by cryptographers. Reverse engineering techniques are mature, and your algorithm can be compromised once attackers identify it as especially weak, and find out how it works.
+
+Proper use of cryptography ensures the confidentiality, integrity, and non-repudiation of data. Strong algorithms assure that an attacker cannot break encryption in a timely manner.
+
+
+## When ##
+
+Decide on an appropriate crypto method after reviewing available options that are maintained and tested for secured applications. Implement strong cryptography in the application design whenever sensitive data is handled.
+
+As commercially available computing power rapidly increases and new threats emerge, it becomes more and more important to use strong cryptographic algorithms to secure sensitive data.
+
+Make sure that the source code is available for analysis. For items on the FIPS 140-2 cryptographic modules list, source code has been submitted for validation. Remember, when using industry-approved techniques, you also need to implement cryptography correctly.
+
+Using the correct key size will also result in a more secure encryption. Different encryption algorithms require different key sizes for a similar level of security. For example, according to NIST guidelines, 15360-bit RSA keys are equivalent to 256-bit AES keys.
+
+With AES and other symmetric cryptology, you do not directly use the cipher primitives. Rather, you will select from available modes for the cryptology, such as these NIST-approved methods of operation for AES:
+
+- **Electronic Code Book (ECB) mode.** ECB mode uses AES without applying feedback. This is considered a vulnerable mode since the function applied in this way always returns the same cipher text. In ECB mode, AES processes data in same-size blocks as the encryption function, and synchronization is required between encryption/decryption engines. Performance of ECB mode is poor if used for large data movement.
+
+- **Cipher Block Chaining (CBC) mode.** With CBC mode, data is first processed by AES function, then feedback is used to modify data before encryption. Each block of cipher text will depend on the previous message block. Again, message block size must match the function size, and synchronization is required between encryption/decryption engines. CBC mode is used in IPsec, for a common example.
+
+- **Cipher FeedBack (CFB) mode.** CFB mode provides a method where the block cipher can work like a stream cipher, and process data shorter than a block. This mode is described as self-synchronizing. Still, synchronization between encryption/decryption is required, but this occurs at the data width, rather than at a larger block size. Other advantages are that the cipher block is used in the encrypting direction, and padding is not required for an unfilled cipher block.
+
+- **Output FeedBack (OFB) mode.** OFB mode uses a block cipher as a synchronous stream cipher. Keystream blocks are XORed with message blocks to produce ciphertext. An advantage of this mode is that error correcting codes will work when applied before or after encryption. A weakness of this mode is evident when the algorithm block size does not match the data width. Synchronization is required between encryption/decryption engines.
+
+- **Counter (CTR) mode.** CTR mode uses the block cipher as a stream cipher. Each successive keystream block is a product of encrypted successive counter values. The result is XORed with message data to produce encrypted output. The block output does not need to be padded, and synchronization is required between encryption/decryption engines. CTR mode operates optimally with multiple processors since parallel block encryption can be performed more efficiently.
+
+**Encryption mode characteristics.** As with the AES modes described, a developer always selects from various algorithm characteristics and encryption method behaviors. Consideration should be given to data bit errors, block sync errors, message length growth, padding, etc. A balance needs to be established between speed and cost by examining the effect of various mode characteristics in strong cryptographic algorithms.
+
+The following are examples of Ruby libraries and gems which support higher levels of encryption such as AES-256 and RSA-2048.
+
+- `attr_encrypted` (Rubygem). Generates `attr_accessors` that encrypt and decrypt attributes transparently. The default Encryptor uses the standard Ruby OpenSSL library. Default algorithm is aes-256-cbc.
+- Chilkat (Ruby library). Use in applications and websites to encrypt files, strings, and byte arrays using public/private key pairs.
+- Crypt (Ruby library) Pure-ruby implementation of a number of popular encryption algorithms.
+- Strongbox (Plugin). Provides public key encryption for `ActiveRecord`. Supports RSA-2048, etc.
+- `crypt_keeper` (Rubygem). Performs encryption by using AES-256 via Ruby OpenSSL library.
+- krypt (Ruby library). Platform- and library-independent cryptography for Ruby.
+- OpenSSL (Ruby built-in library). Provides SSL, TLS and general purpose cryptography.
+- `pkcs11` (Rubygem). Module that allows Ruby programs to interface with RSA Security Inc. PKCS #11 Cryptographic Token Interface (Cryptoki). Requires an installed PKCS #11 v2.20 implementation library.
+- `RSA.rb` (Ruby library). Ruby implementation of the RSA encryption algorithm and the PKCS#1 cryptography standard.
+- `symmetric-encryption` (Rubygem). Uses OpenSSL to encrypt and decrypt data with all encryption algorithms supported by Ruby OpenSSL library.
+
+
+## How ##
+
+Cryptographic implementation should exactly follow the algorithm definitions. Otherwise, encryption can be weaker than expected. There are a wide variety of cryptographic solutions. The specific steps for implementation must always be carried out according to vendor directions. Do not cut corners by skipping resource-intensive steps, as this is a documented weakness (CWE-325). These guideline steps are essential for preventing common attacks:
+
+1. **Identify sensitive data.** Review the application design to determine what kinds of sensitive data will be handled. Record the findings in a data flow diagram that can be used to confirm the completion of protective measures.
+
+2. **Choose cryptographic algorithms.** Strong symmetric algorithms are AES and, to a lesser extent, 3-DES. Strong asymmetric encryption algorithms are RSA, Elliptic Curve, and NTRU. The recommended key strengths are:
+ - 256-bit or more for AES
+ - 3-DES key length is fixed at 168-bit
+ - 2048-bit or more for RSA
+ - 384-bit for Elliptic Curve cryptography
+ - 80-bit for NTRU.
+
+3. **Choose libraries and APIs.** Find libraries that implement your chosen cryptographic algorithms, or use a library implemented by the platform, such as Ruby OpenSSL. Review documentation to find best practices for the APIs using these algorithms.
+
+4. **Add encryption keys.**  Make sure that any secret key is protected from unauthorized access. This example code creates a 2048-bit RSA keypair and writes it to the current directory:
+
+        key = OpenSSL::PKey::RSA.new 2048
+
+        open 'private_key.pem', 'w' do |io| io.write key.to_pem end
+        open 'public_key.pem', 'w' do |io| io.write key.public_key.to_pem end
+
+5. **Use encryption.** Find code that handles sensitive data, and apply encryption. Add code that calls the functions to encrypt sensitive data as appropriate. This example instantiates a Cipher for encryption, and generates a random IV plus a key derived from the password (using PBKDF2). PKCS #5 v2.0 recommends at least 8 bytes for the salt. The number of iterations largely depends on the hardware being used.
+
+        cipher = OpenSSL::Cipher.new 'AES-128-CBC'
+        cipher.encrypt
+        iv = cipher.random_iv
+
+        pwd = 'some hopefully not to easily guessable password'
+        salt = OpenSSL::Random.random_bytes 16
+        iter = 20000
+        key_len = cipher.key_len
+        digest = OpenSSL::Digest::SHA256.new
+
+        key = OpenSSL::PKCS5.pbkdf2_hmac(pwd, salt, iter, key_len, digest)
+        cipher.key = key
+
+        # Now encrypt the data:
+
+        encrypted = cipher.update document
+        encrypted << cipher.final
+
+6. **Use Decryption.** Find code that handles encrypted sensitive data, and apply decryption code as appropriate. In this example, use steps as before to derive the symmetric AES key. Then setup the Cipher for decryption.
+
+        cipher = OpenSSL::Cipher.new 'AES-128-CBC'
+        cipher.decrypt
+        cipher.iv = iv # the one generated with #random_iv
+
+        pwd = 'some hopefully not to easily guessable password'
+        salt = ... # the one generated above
+        iter = 20000
+        key_len = cipher.key_len
+        digest = OpenSSL::Digest::SHA256.new
+
+        key = OpenSSL::PKCS5.pbkdf2_hmac(pwd, salt, iter, key_len, digest)
+        cipher.key = key
+
+        # Now decrypt the data:
+
+        decrypted = cipher.update encrypted
+        decrypted << cipher.final
+]]></Data>
+  </Content>
+</TeamMentor_Article>
