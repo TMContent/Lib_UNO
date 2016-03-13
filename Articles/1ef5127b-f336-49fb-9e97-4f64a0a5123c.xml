@@ -15,20 +15,17 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Use Iterative Hashing to Protect Stored Passwords##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Use Ruby on Rails (RoR) built-in function `has_secure_password` to iteratively hash the password before it is stored.
 
 
-##Why##
+## Why ##
 
 By analyzing a simplified threat model of password storage, we know that an attacker may access a protected database store, and then reverse the hashing applied to passwords to reveal the credentials for illicit use. To build defense-in-depth for this hashing vulnerability, it is necessary to increase the time and resources required to crack the passwords if the database is compromised. The built-in RoR function `has_secure_password` provides such protection by loading the `bcrypt-ruby` Gem, and the secure hashing function of `bcrypt` is used.
 
@@ -37,18 +34,21 @@ Storing hashes instead of plain-text passwords assures that an attacker cannot e
 If your application does not use the built-in RoR function `has_secure_password` or similar function to securely hash and store passwords, there is significant exposure to possible database compromise and loss of sensitive data, such as customer identification numbers, credit card numbers and other secret data.
 
 
-##When##
+## When ##
 
 Stored passwords must always be hashed and salted with an iterative method or function. When the RoR framework authentication method is used, it is preferred to invoke `has_secure_password` in the environment. If a custom authentication method is used, however, then it will be required to use an iterative hashing algorithm such as `bcrypt` or `PBKDF2` to protect stored authentication credentials.
 
 
-##How##
+## How ##
 
 The following steps describe how to use iterative hashing to protect stored passwords.
 
 1. **Identify authentication requirements.** Your RoR application either uses the framework's password-based authentication, or a custom login method. Review the authentication requirements and document implementation functions, APIs, and gems for purpose of understanding calls and parameters for your application's code.
+
 2. **Identify authentication code.** In your application, search for authentication code, and make a spreadsheet which lists the files and line numbers where authentication code is found. Be sure to also review action controllers and gems which your application may employ.
+
 3. **Enable the `bcrypt` gem.** To enable the 'bcrypt' gem, uncomment this line in the Gemfile, `gem 'bcrypt-ruby', '~> X.X.X'`, where *X.X.X* is the bcrypt-ruby version included with your framework.
+
 4. **Implement password verification.** During authentication, the password entered by the user should be checked against the value calculated using the authentication function. With RoR, simply add `has_secure_password` to the User model file to use `bcrypt` during authentication.
 
 		# app/models/user.rb
@@ -84,10 +84,6 @@ The following steps describe how to use iterative hashing to protect stored pass
 
 6. **Use other built-in password management functions as necessary.** The `user.save` method can be used to save passwords. The `new` method can be used to create new users: `user = User.new(name: 'user', password: 'password')`. RoR provides other password management functions which should be investigated and used to implement all of the authentication functionality required by your application.
 
-
-##Additional Resources##
-
-- [has_secure_password (ActiveModel::SecurePassword::ClassMethods)](http://apidock.com/rails/v4.0.2/ActiveModel/SecurePassword/ClassMethods/has_secure_password "has_secure_password (ActiveModel::SecurePassword::ClassMethods)")
-- [Rails authentication using has_secure_password](http://www.millwoodonline.co.uk/blog/using-hassecurepassword-for-rails-authentication "Rails authentication using has_secure_password")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
