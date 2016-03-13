@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d9128595-be0d-4d5a-bed4-3a6be5d6f3e1</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Limit Session Lifetime</Title>
+    <Category />
+    <Phase />
+    <Technology>Ruby</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Set an absolute limit on sessions lifetime by including the `:expire_after` parameter in the *session_store* file.
+
+
+## Why ##
+
+Even when using TLS there is still a risk of session hijacking and replay attacks. There are other out-of-band ways to steal session tokens. The shorter the session limit, or session expiry, the less time an attacker has to capture a session cookie and use it to access your application.
+
+Session default behavior is to expire when the user closes the browser window or logs out. If the user does not log out, and leaves the browser window open, the session can be compromised by an attacker who keeps the session alive. Setting an absolute limit for the session is part of defense-in-depth, and helps to mitigate the amount of damage the attacker can perform.
+
+
+## When ##
+
+All applications should consider the length of their sessions carefully. An application which handles any sensitive information should make session length as short as possible.
+
+
+## How ##
+
+To set a default expiry time to limit session lifetime, follow these steps:
+
+1. **Find session code.** Find all instances in the application code where sessions are created. Check authentication and re-authentication activities for session hooks. Verify that standard configuration is in use.
+
+2. **Include `expire_after` in session configuration.** Edit *config/initializers/session_store.rb* to include a base session lifetime setting:
+
+		YourApp::Application.config.session_store :cookie_store,
+		  :expire_after => 30.minutes
+
+
+3. **Include `expire_after` in controllers.** If you need to set different expiration time in different controllers or actions, use the following code in action or some `before_filter`:
+
+		request.session_options = request.session_options.dup
+		request.session_options[:expire_after] = 15.minutes
+		request.session_options.freeze
+]]></Data>
+  </Content>
+</TeamMentor_Article>
