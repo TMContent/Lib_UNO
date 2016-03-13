@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d1506d78-59b7-4800-a497-f040d0bddb82</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Assign a New Session ID on Reauthentication</Title>
+    <Category />
+    <Phase />
+    <Technology>Ruby</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Assign a new session ID by resetting the session on reauthentication.
+
+
+## Why ##
+
+As part of the development of a secure application it is necessary to include a login time-out and rotate the session ID. If an attacker gains access to a session ID, they can assume the identity and privileges of the logged-in user. A properly-coded re-authentication process uses `reset_session`, so that unauthorized individuals cannot reuse any session ID.
+
+PCI PA-DSS addresses broken authentication and session management by requiring coding techniques for user time-outs and session ID rotation (Requirement 5.2.10).
+
+
+## When ##
+
+For security purpose, always assign a new session ID on reauthentication in a Ruby application.
+
+
+## How ##
+
+To assign a new session ID on reauthentication:
+
+1. **Identify authentication functionality.** Find code that is responsible for authentication.
+
+2. **Analyze authentication code.** It may be necessary to replace the authentication code entirely if it is flawed. Be sure to analyze carefully so that all functionality is preserved after the next step.
+
+3. **Add reset_session code.** Add code to the authentication function to save the current session, reset the session, and replace the authenticated object. This example is demonstrative, and may need additional code to work effectively with your application:
+
+		def authenticate
+			user =  User.find_by_email(params[:email])
+			if user && user.authenticate(params[:password])
+				temp_sess = session.dup
+				reset_session
+				session.replace(temp_sess)
+				session[:user_id] = user.id
+				redirect_to root_url, notice: "Welcome message."
+			else
+				flash.now.alert = "Invalid credentials, try again."
+				render "new"
+			end
+		end
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
