@@ -22,30 +22,29 @@
 
 ## What to Do ##
 
-Use `POST` as the HTTP request method to send sensitive information with the application. Do not place sensitive data in unprotected parameters. Do not use GET with sensitive requests.
+Use POST as the HTTP request method to send sensitive information with the application. Do not place sensitive data in unprotected parameters. Do not use GET with sensitive requests.
 
 
 ## Why ##
 
-Submitting sensitive data through public channels requires the use of TLS encryption. However, the HTTP request parameters must also be protected by using POST` for sensitive HTTP requests. To take advantage of the built-in Cross-Site Request Forgery (CSRF) protection, the developer must use `POST` requests for sensitive operations.
+Submitting sensitive data through public channels requires the use of TLS encryption. However, the HTTP request parameters must also be protected by using POST for sensitive HTTP requests. To take advantage of the built-in Cross-Site Request Forgery (CSRF) protection, the developer must use POST requests for sensitive operations.
 
-If the anti-CSRF feature is not used, then the authenticated user's Web browser could be forced to perform malicious actions. PCI PA-DSS requires that payment applications which send sensitive data over public networks must address high-risk vulnerabilities during development (Requirement 5.2.6).
-
+If the anti-CSRF feature is not used, then the authenticated user's Web browser could be forced to perform malicious actions.
 
 ## When ##
 
-Use this guideline to implement `POST` when handling sensitive requests with your Ruby applications.
+Use this guideline to implement POST when handling sensitive requests with your Ruby applications.
 
 
 ## How ##
 
 To use POST for sensitive requests:
 
-1. **Find all sensitive operations.** Determine what security-sensitive operations are mediated by the application. Sensitive operations may include handling of primary account number (PAN), full track data, card verification codes, and personal identification numbers (PINs).
+1. **Find all sensitive operations.** Determine what security-sensitive operations are mediated by the application. 
 
 2. **Find code that implements sensitive operations.** Search the application code to identify methods which handle sensitive data.
 
-3. **Use `POST` requests for sensitive operations.** Ensure the code uses `POST` for sensitive exchange of information. If necessary, rewrite to have user send sensitive data with `POST` as the HTTP request message.
+3. **Use POST requests for sensitive operations.** Ensure the code uses POST for sensitive exchange of information. If necessary, rewrite to have user send sensitive data with POST as the HTTP request message.
 ]]></Data>
   </Content>
 </TeamMentor_Article>
