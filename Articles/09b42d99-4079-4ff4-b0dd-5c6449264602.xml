@@ -15,50 +15,51 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Use Role-based Authorization##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Use role-based authorization to perform access control checks. Define the different user types required for the application and create specific roles. When authorizing access to a resource, implement strong access control measures and build the security checks on a per-role basis rather than on a per-user basis.
 
 
-##Why##
+## Why ##
 
 Specifying roles in order to group users into categories allows the efficient assignment of privileges. Role Based Access Control (RBAC) provides a clear way to discover and manage least privileges for task execution. Specifying roles also provides a robust and flexible method to manage application users.
 
 If the application retrieves cardholder data or other sensitive information, there must be limits and restrictions for each user based on their business role, area of responsibility (AOR), and need to know (PCI DSS Requirement 7.1.1).
 
 
-##When##
+## When ##
 
 If the application uses access control for its resources, then defining roles and performing role-based authorization checks is required as a security best practice.
 
 
-##How##
+## How ##
 
 Follow these steps to use RBAC as part of Defense in Depth (DiD). The specifics of each step will be determined by the library and classes used with Ruby. In addition, it may be useful to create a threat model to ensure that you correctly understand the implications of RBAC.
 
 1. **Identify authentication mechanism.** Find the code responsible for authentication in the application. This is necessary because role-membership is usually determined during authentication.
+
 2. **Identify credential store.** The credential store will need to be modified to store role membership information.
+
 3. **Implement assigning roles to users.** Add code that allows managing user role membership.
+
 4. **Identify all operations that require authorization.** Review the program architecture to list operations which require authorization. The review must also include sensitive operations performed by the program.
+
 5. **Identify all roles.** To identify application roles, understand how users will access resources to perform necessary business functions. Create role names that accurately describe the role.
+
 6. **Make an access control matrix.** Make a spreadsheet where the roles are the columns and the operations are the rows. For each cell in the spreadsheet, mark whether the operation is authorized for the corresponding role.
+
 7. **Write the centralized authorization subsystem.** To implement the access permissions defined by the access control matrix it is necessary to write a centralized authorization subsystem.
+
 8. **Identify code for all operations that require authorization.**  Review the code to identify where to place RBAC hooks. This will ensure that the application only permits operations after it is determined that the user is authorized to perform. 
+
 9. **Add code, which checks authorization before the operation is executed, to each operation.** Check authorization using a centralized function and the name of the operation. Instead of checking for specific roles here, the application should ask the centralized authorization code for authorization for the operation. If the operation is not authorized, the application should throw an error condition.
 
 
-##Additional Resources##
-
-- [NIST - Automated Combinatorial Testing for Software (ACTS)](http://csrc.nist.gov/groups/SNS/rbac/index.html "NISt - Automated Combinatorial Testing for Software (ACTS)")
-- [Payment Card Industry (PCI) Data Security Standard (DSS) - Requirements and Security Assessment Procedures](https://www.pcisecuritystandards.org/security_standards/ "PCI DSS Requirements and Security Assessment Procedures")
-- [Role Based Access Control to Achieve Defense in Depth](http://www.sans.edu/ "Role Based Access Control to Achieve Defense in Depth")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
