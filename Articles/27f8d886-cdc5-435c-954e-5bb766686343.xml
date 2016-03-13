@@ -15,34 +15,30 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Use Reference Maps for Object Access##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Use reference maps to access objects. Assign user-specific or session-specific identifiers to objects when exposing their names to the user, rather than exposing the operating system assigned names of these objects.
 
-##Why##
+## Why ##
 
 Use reference maps to prevent path manipulation vulnerabilities. If the application uses its own identifiers for objects when exposing them to the user, instead of file system paths, an attacker will not be able to manipulate the paths of the objects. While path manipulation refers almost exclusively to file system objects, the same technique of using aliases rather than operating system assigned names also works for other types of system resources, such as sockets.
 
 
-##How##
+## How ##
 
 To use reference maps to access objects:
 
 1.  **Identify objects that are being referenced.** Find all code that exposes the operating system names of objects handled by the application, especially files. Make a spreadsheet to track this code.
+
 2.  **Define object reference maps.** Object reference maps are arrays or hashes of objects that are being referenced. The application exposes the index of the array or the key of the hash that matches the required resource, rather than exposing the object itself. This approach ensures that only objects in the array may be accessed. For this approach to work, reference maps should only include objects for which access is authorized. It is possible to use per-user or per-session object mappings. Per-user mappings define objects that may be accessed by each user. Per-session mappings define objects that may be accessed by each user for the current session. Per-session references may offer additional security or flexibility, but require more work. Mappings should be generated dynamically and that means that code has to be written that defines objects that may be accessed by each user.
+
 3.  **Use reference maps instead of direct object references.** Update all the code that references objects to use the reference maps.
 
-
-##Additional Resources##
-
-- [Ruby-Doc.org: Documenting the Ruby Language](http://ruby-doc.org/ "Ruby-Doc.org: Documenting the Ruby Language")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
