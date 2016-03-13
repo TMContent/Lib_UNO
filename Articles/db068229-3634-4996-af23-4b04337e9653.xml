@@ -15,36 +15,34 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Limit Session Lifetime##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Set an absolute limit on sessions lifetime by including the `:expire_after` parameter in the *session_store* file.
 
 
-##Why##
+## Why ##
 
-Even when using SSL/TLS there is still a risk of session hijacking and replay attacks. There are other out-of-band ways to steal session tokens. The shorter the session limit, or session expiry, the less time an attacker has to capture a session cookie and use it to access your application.
+Even when using TLS there is still a risk of session hijacking and replay attacks. There are other out-of-band ways to steal session tokens. The shorter the session limit, or session expiry, the less time an attacker has to capture a session cookie and use it to access your application.
 
 Session default behavior is to expire when the user closes the browser window or logs out. If the user does not log out, and leaves the browser window open, the session can be compromised by an attacker who keeps the session alive. Setting an absolute limit for the session is part of defense-in-depth, and helps to mitigate the amount of damage the attacker can perform.
 
 
-##When##
+## When ##
 
 All applications should consider the length of their sessions carefully. An application which handles any sensitive information should make session length as short as possible.
 
 
-##How##
+## How ##
 
 To set a default expiry time to limit session lifetime, follow these steps:
 
 1. **Find session code.** Find all instances in the application code where sessions are created. Check authentication and re-authentication activities for session hooks. Verify that standard configuration is in use.
+
 2. **Include `expire_after` in session configuration.** Edit *config/initializers/session_store.rb* to include a base session lifetime setting:
 
 		YourApp::Application.config.session_store :cookie_store,
@@ -58,10 +56,6 @@ To set a default expiry time to limit session lifetime, follow these steps:
 		request.session_options.freeze
 
 
-##Additional Resources##
-
-- [config.session_store](http://guides.rubyonrails.org "config.session_store")
-- [Log in, log out | Ruby on Rails Tutorial](https://www.railstutorial.org/ "Log in, log out | Ruby on Rails Tutorial")
-- [Session Management Cheat Sheet - OWASP](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet "Session Management Cheat Sheet - OWASP")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
