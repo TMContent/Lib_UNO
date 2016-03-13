@@ -15,38 +15,34 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Destroy Sessions when Users Logout##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 When the authenticated user logs out, destroy (invalidate) the application session by using the delete.session method.
 
 
-##Why##
+## Why ##
 
 The application provides a logout option so that the user can signal their intent to stop the authenticated session. This makes it more difficult for an attacker to hijack the user session.
 
 Web applications must provide a visible and easily accessible logout (logoff, exit, or close session) button that is available on each page.  This grants the authenticated user a way to manually close the session.
 
-NIST SP 800-53 security and privacy controls require that information systems invalidate session identifiers for a user-initiated session upon user logout request.
 
-
-##When##
+## When ##
 
 Always destroy the session when the user requests to logout.
 
 
-##How##
+## How ##
 
 To invalidate sessions when users logout:
 
 1. **Find the logout function.** Find all instances in the application where logout is required, such as a logout button or menu choice on a page.
+
 2. **Add `log_out` method to helper.** Add code for the `log_out` method to *sessions_helper* module.
 
 		def log_out
@@ -62,13 +58,6 @@ To invalidate sessions when users logout:
 		end
 
 4. **Make calls to the `destroy` action.** Where logout is manually requested by the user, use the `destroy` action.
-
-
-##Additional Resources##
-
-- [Log in, log out | Ruby on Rails Tutorial](https://www.railstutorial.org/ "Log in, log out | Ruby on Rails Tutorial")
-- [NIST Special Publication 800-53, Security and Privacy Controls for Federal Information Systems and Organizations](http://csrc.nist.gov/ "NIST Special Publication 800-53, Security and Privacy Controls for Federal Information Systems and Organizations")
-- [Session Management Cheat Sheet - OWASP](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet "Session Management Cheat Sheet - OWASP")
 ]]></Data>
   </Content>
 </TeamMentor_Article>
