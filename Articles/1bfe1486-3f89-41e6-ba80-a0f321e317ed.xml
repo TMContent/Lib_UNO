@@ -15,25 +15,22 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Protect Session Cookies##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Set the *Secure* and *HttpOnly* flags on session cookies.
 
 
-##Why##
+## Why ##
 
 Set the *Secure* flag on all sensitive cookies to protect the contents of the sensitive cookies from eavesdropping attacks. When the *Secure* flag on sensitive cookies is enabled, they are only transferred over connections that are secured by TLS. The *HttpOnly* flag prevents the contents of the marked cookie from being accessed by a client-side script. When the *HttpOnly* flag is set, this helps reduce the potential damage of Cross-Site Scripting attacks.
 
 
-##When##
+## When ##
 
 If your application uses cookies with sensitive information, then use this guideline to protect the session cookie.
 
@@ -43,8 +40,11 @@ If your application uses cookies with sensitive information, then use this guide
 To set the *Secure* and *HttpOnly* flags on all sensitive cookies:
 
 1. **Verify that TLS is available.** The *Secure* flag forces cookies to be sent over TLS. TLS must be available for this to work. Please refer to the documentation for your web platform for information about enabling and configuring TLS on the web server.
+
 2. **Identify sensitive cookies.** Session cookies should always be considered sensitive. Enumerate all cookies used by the application. Make a list of cookies that may contain sensitive information.
+
 3. **Identify code that creates sensitive cookies.** For each sensitive cookie in the list, find the application code that creates the cookie.
+
 4. **Set the *Secure* and *HttpOnly* flags for each sensitive cookie.** For each piece of code that creates a sensitive cookie, add code that sets
 the *Secure* and *HttpOnly* flags for the cookie. For example:
 
@@ -54,10 +54,6 @@ the *Secure* and *HttpOnly* flags for the cookie. For example:
 		  :secure => true
 		}
 
-
-##Additional Resources##
-
-- [ActionDispatch::Cookies](http://api.rubyonrails.org/ "ActionDispatch::Cookies")
-- [Class: ActionDispatch::Request::Session — Documentation for rails](http://www.rubydoc.info/docs/rails/ "Class: ActionDispatch::Request::Session — Documentation for rails")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
