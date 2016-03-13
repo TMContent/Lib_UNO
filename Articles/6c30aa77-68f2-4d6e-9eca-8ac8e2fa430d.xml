@@ -15,37 +15,34 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Assign a New Session ID on Reauthentication##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Assign a new session ID by resetting the session on reauthentication.
 
 
-##Why##
+## Why ##
 
 As part of the development of a secure application it is necessary to include a login time-out and rotate the session ID. If an attacker gains access to a session ID, they can assume the identity and privileges of the logged-in user. A properly-coded re-authentication process uses `reset_session`, so that unauthorized individuals cannot reuse any session ID.
 
-PCI PA-DSS addresses broken authentication and session management by requiring coding techniques for user time-outs and session ID rotation (Requirement 5.2.10).
 
-
-##When##
+## When ##
 
 For security purpose, always assign a new session ID on reauthentication in a Ruby application.
 
 
-##How##
+## How ##
 
 To assign a new session ID on reauthentication:
 
 1. **Identify authentication functionality.** Find code that is responsible for authentication.
+
 2. **Analyze authentication code.** It may be necessary to replace the authentication code entirely if it is flawed. Be sure to analyze carefully so that all functionality is preserved after the next step.
+
 3. **Add reset_session code.** Add code to the authentication function to save the current session, reset the session, and replace the authenticated object. This example is demonstrative, and may need additional code to work effectively with your application:
 
 		def authenticate
@@ -63,12 +60,6 @@ To assign a new session ID on reauthentication:
 		end
 
 
-##Additional Resources##
-
-- [Payment Card Industry (PCI) Payment Application Data Security Standard (PA-DSS)](https://www.pcisecuritystandards.org/ "PCI PA-DSS")
-- [Rails: User/Password Authentication from Scratch, Part II](http://www.sitepoint.com/ "Rails: User/Password Authentication from Scratch, Part II")
-- [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html "Ruby on Rails Security Guide")
-- [Session Management Cheat Sheet - OWASP](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet "Session Management Cheat Sheet - OWASP")
-- [Use reset_session before authentication](http://brettu.com/ "Use reset_session before authentication")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
