@@ -15,50 +15,47 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Separate Parameters from Command Names##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Use the Ruby `system` method to separate parameters from command names. Do not concatenate parameter values or use interpreter commands directly when a safer, parameterized solution is available.
 
 
-##Why##
+## Why ##
 
 Your Ruby programmatic code is a bridge between the user and system resources. The internals of the operating system can be exposed by Ruby commands, including `exec(command)`, `syscall(command)`, `system(command)`, and `command`. If these methods are used improperly, your coding technique may expose sensitive data to an intruder. If a developer allows untrusted input, attackers are able to inject their own commands into communication messages. Unexpected, dangerous commands can be executed directly in the operating system, even when the attacker does not have direct access to the resources.
 
 If parameters are not separated from commands, an attacker may be able to specify commands that are beyond the privileges of the user. The result is that special system privileges may possibly be used, and the amount of damages would be extensive, costly, and in some cases, unrecoverable.
 
 
-##When##
+## When ##
 
 Always use user-supplied command line parameters with caution. If the Ruby application must execute commands in the operating system, be overly-cautious in the use of `exec`, `syscall`, `system`, and `command`. When the commands are combined with user input, means must be used to not allow concatenation of additional commands with a semicolon (;) or a vertical bar (|).
 
 
-##How##
+## How ##
 
 To separate parameters from commands names, follow these steps:
 
 1. **Find all calls to external commands.** Search for any code that executes external operating system commands. The commands are system-specific, and may include `exec`, `syscall`, `system`, and `command`. Be sure to familiarize yourself with all system calls that may be executed.
+
 2. **Identify parameterized solutions.** Review the associated documentation for classes and APIs that present secure methods for your calling statements. The goal is to neutralize any commands that could be modified when sent downstream.
+
 3. **Avoid using external processes.** Review each case where an external process is called, to determine if the call is absolutely necessary. Command injection vulnerabilities are very dangerous, so calling external processes should be avoided whenever possible to reduce the risk of such threats. If external processes must be used, be sure to use mitigation techniques.
+
 4. **Avoid direct use of external processes.** Remove any code that directly executes external commands and replace the code with best practice coding and/or or APIs that enforce parameterization. Do not let the user choose the external application or method. Allowing the user this choice is essentially the definition of a command injection vulnerability.
+
 5. **Validate data passed to command execution APIs and external commands.** Input passed to external commands should be very carefully validated. Even if parameterization is used, passing untrusted user data to such processes may result in command injection vulnerabilities. User data should be positively validated in all cases before being passed on.
-6. **Use parameterized command method.** Replace all code previously identified with the parameterized `system` method. Be sure to use positive
-input validation on data passed to the `system` method. Use the countermeasure `system(command, parameters)` to pass command line parameters safely:
+
+6. **Use parameterized command method.** Replace all code previously identified with the parameterized `system` method. Be sure to use positive input validation on data passed to the `system` method. Use the countermeasure `system(command, parameters)` to pass command line parameters safely:
 
 		system("/bin/echo","hello; rm *")
 		# prints "hello; rm *" and does not delete files
 
-
-##Additional Resources##
-
-- [Command Line Injection](http://guides.rubyonrails.org/security.html#csrf-countermeasures "Command Line Injection")
 ]]></Data>
   </Content>
 </TeamMentor_Article>
