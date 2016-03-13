@@ -15,53 +15,34 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Encode Data in Response Headers##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Use `URI.escape` to URL encode data that gets included in HTTP response headers.
 
 
-##Why##
+## Why ##
 
-If an application accepts user input and includes it in HTTP response headers, there is vulnerability to response-splitting. Data in HTTP response headers should be URL-encoded or sanitized to mitigate this occurrence.
+If an application accepts user input and includes it in HTTP response headers, there is a potential response-splitting vulnerability. Data in HTTP response headers should be URL-encoded or sanitized to mitigate this occurrence.
 
-A cross site scripting (XSS) attack can force your application to send carriage return (CR) and line feed (LF) followed by malicious content to the user's browser. Because CRLF is a response header separator and CRLF CRLF separates headers from the body, the browser sees the attacker's malignant content as legitimate.
-
-Application vulnerability to XSS is on the OWASP top 10 list for critical web application security flaws. The Common Weakness Enumeration (CWE)project also highlights programming errors that expose an application to XSS when data in response headers is not encoded:
-
-- Failure to Preserve Web Page Structure (CWE-79)
-- Failure to Sanitize CRLF Sequences in HTTP Headers (CWE-113)
-- Cross-Site Request Forgery - CSRF (CWE-352) 
-
-
-##How##
+## How ##
 
 Use `URI.escape` to escape the string and replace all unsafe characters with codes. In Ruby, encode is an alias for escape. These steps sanitize the data in response headers:
 
 1. **Identify all data included in HTTP response headers.** Identify programming functions that include data in HTTP response headers. Search your code for calls to these functions in order to find code instances that add data to HTTP response headers.
+
 2. **Validate all data included in HTTP response headers.** Use positive validation routines to check all data that gets included in HTTP response headers.
+
 3. **Encode all data included in HTTP response headers.** Use `URI::Escape` to encode data that gets included in HTTP response headers:
 
-       `require 'uri'`
-
-       `enc_uri = URI.escape("http://example.com/?a=\11\15")`<br>
-       `p enc_uri`<br>
-       `# => "http://example.com/?a=%09%0D"`
-
-
-##Additional Resources##
-
-- [CWE-79: Improper Neutralization of Input During Web Page Generation (Cross-site Scripting)](https://cwe.mitre.org/ "CWE-79: Improper Neutralization of Input During Web Page Generation (Cross-site Scripting)")
-- [CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers (HTTP Response Splitting)](https://cwe.mitre.org/ "CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers (HTTP Response Splitting)")
-- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html "CWE-352: Cross-Site Request Forgery (CSRF)")
-- [Module: URI::Escape](http://ruby-doc.org/ "Module: URI::Escape")
-- [OWASP Top Ten Project](https://www.owasp.org/ "OWASP Top Ten Project")]]></Data>
+        require 'uri'
+        enc_uri = URI.escape("http://example.com/?a=\11\15")
+        p enc_uri
+        # => "http://example.com/?a=%09%0D"
+]]></Data>
   </Content>
 </TeamMentor_Article>
