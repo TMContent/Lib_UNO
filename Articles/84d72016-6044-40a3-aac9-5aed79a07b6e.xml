@@ -15,24 +15,20 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[##Protect Session IDs##
-
-
-##Applies To##
+    <Data><![CDATA[## Applies To ##
 
 - Ruby
 
 
-##What to Do##
+## What to Do ##
 
 Protect the confidentiality of session IDs in the Ruby application by using:
 
 - Transport Layer Security (TLS) to protect connections
-- SSL for application environment configuration
 - `Action::Dispatch::Session` class APIs to protect session IDs and safely manage cookies.
 
 
-##Why##
+## Why ##
 
 Session IDs are used by an application to identify the session associated with a particular user. If an attacker gains access to a session ID they can assume the identity and privileges of the logged-in user. Protecting session IDs can help prevent an attacker from hijacking the session and using the application.
 
@@ -43,17 +39,14 @@ If the cookie is not protected locally, as might happen with an insecure wireles
 Certifying authorities require session management coding techniques such as flagging session cookies as secure, not exposing session IDs, using time-outs, and rotating sessions IDs after login. Using `Action:Dispatch:Session` API methods enable the application to protect session IDs.
 
 
-##When##
-
-Always use this guideline to protect the session ID.
-
-
 ##How##
 
 Use the following steps with Rails 4 to safeguard session IDs:
 
 1. **Store session IDs in cookies.** The default setting with Rails framework is to store session IDs in cookies with `ActionDispatch::Sessions::CookieStore`.
+
 2. **Enable TLS.** TLS must be enabled to protect session cookies from eavesdropping attacks. Please refer to the documentation for your web platform for information about enabling and configuring TLS on the web server.
+
 3. **Provide a secure connection over SSL.** Always force SSL connections in your application environment. Add code to *config/application.rb* file as follows:
 
 		class Application < Rails::Application
@@ -62,6 +55,7 @@ Use the following steps with Rails 4 to safeguard session IDs:
 		  # ...
 
 4. **Set the secure flag on session cookies.** Cookies are automatically marked as secure, and the session ID will only be exchanged through encrypted channels.
+
 5. **Set the `HTTPOnly` flag on session cookies.** Configure the session cookie `HTTPOnly` setting like this:
 
 		cookies[:user_id] = { :value => "user", :httponly => true }
@@ -69,9 +63,6 @@ Use the following steps with Rails 4 to safeguard session IDs:
 6. **Do not disclose session IDs.** Make sure that session IDs are not disclosed in URLs, logs, or error messages. Do not allow URL rewriting of session cookies.
 
 
-##Additional Resources##
-
-- [Class: ActionDispatch::Request::Session — Documentation for rails](http://www.rubydoc.info/docs/rails/ "Class: ActionDispatch::Request::Session — Documentation for rails")
-- [Ruby on Rails Security Guide - Session Storage](http://guides.rubyonrails.org/security.html "Ruby on Rails Security Guide - Session Storage")]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>
