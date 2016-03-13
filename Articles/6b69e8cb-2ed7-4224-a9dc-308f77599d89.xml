@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6b69e8cb-2ed7-4224-a9dc-308f77599d89</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Separate Data from SQL Query Syntax</Title>
+    <Category />
+    <Phase />
+    <Technology>Ruby</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Separate data from SQL queries by using prepared statements when executing SQL commands. Do not generate SQL statements directly from user input.
+
+1. **Use forced parameterization.** Forced parameterization, when available and enabled for the database, is automatically in effect for SELECT, INSERT, UPDATE, and DELETE SQL statements.
+
+2. **Use parameterized statements.** Use parameterization to specify query structure. Nearly all databases have built-in support for parameterizing or preparing SQL statements. When used in this way, an injection attack can be thwarted.
+
+
+## Why ##
+
+Prepared statements are SQL queries that are sent to, and precompiled by, the database engine. This means that subsequent queries can be executed by sending only the ID instead of the entire SQL string. There are performance gains for the application by using this technique due to a reduction of network traffic and processing overhead. Most importantly, by separating data from the SQL query, the developer will ensure that the query cannot be used by an attacker who inserts SQL commands into the page input.
+
+SQL injection attacks are very common. If your application does not use available methods such as database settings and library APIs which prevent SQL injection, there is significant exposure to database compromise and loss of sensitive data, such as customer identification numbers, credit card numbers and other secret data.
+
+
+## When ##
+
+Methods for mitigating SQL injection are mentioned in the following section. Techniques will need to work with the SQL interface API, framework version, and Ruby gems in use.
+
+Please remember that SQL Injection flaws are introduced when software developers create dynamic database queries that include user supplied input. The preferred, secure option is to always use a safe API which avoids direct use of SQL calls.
+
+
+## How ##
+
+Writing a prepared statement for Ruby applications can be generally summarized as follows. Get a database handle, and call the function to make the prepared statement. Use a framework function to bind prepared statement parameters to variables, then load data into the variables. Finally, call an execute function for the prepared statement. The result is that the application prepares a statement once, and reuses the prepared object each time it is necessary to execute the query.
+
+The following examples present examples that explain different approaches to separate data from SQL queries.
+
+1. **Identify SQL queries.** Locate all SQL queries in your application code. Also, investigate the functions of transaction calls and use of ABAP function modules that may additionally execute SQL statements.
+
+2. **Identify the parameters in each SQL query.** After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data, and how it is solicited from the user.
+
+3. **Use prepared statements with Rails for SQL queries.** With Rails 3.1 and later versions `ActiveRecord` generates a clause `WHERE people.id = ?`, followed by: `[[“id”, 1]]`. Note that previous ActiveRecord versions generated `WHERE people.id = 1`, which is vulnerable to SQL injection.
+
+4. **Use prepared statements with Ruby for SQL queries.** This describes use of the sqlite3-ruby gem library with Ruby. A database instance is created: `db = SQLite3::Database.new(":memory:")`. Then a series of db.execute statements are used to setup database handles:
+
+		# ...
+		db.execute('create temp table players (name, score, active, jerseyNum)')
+		db.execute('insert into players values ("name",0,"false",99)')`
+		# ...
+
+	With Ruby, parameterized statements may be prepared with one of the following methods.
+	
+	1. Use simple placeholders in a one line statement: `db.execute('update players set name=?, score=?, active=? where jerseyNum=?', 'Smith, Steve', 42, true, 99)`.
+	
+	2. Use named placeholders. Open a block with: `db.execute('update players set name=:name, score=:score, active=:active where jerseyNum=:num'`. For each field, load data into the variables with a series of block statements, such as: `num => 100`, `:name => 'John Doe'`, and so on.
+	
+	3. Use numbered placeholders. Open a block with: `stmt = db.prepare('update players set name=?4, score=?3, active=?2 where jerseyNum=?1')`. The use `bind_param` statements, such as: `stmt.bind_param(1, 101)`, `stmt.bind_param(2, true)`, etc. Finally, end the block with `stmt.execute`.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
