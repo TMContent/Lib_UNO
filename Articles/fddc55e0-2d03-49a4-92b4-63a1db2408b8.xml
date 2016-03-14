@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>fddc55e0-2d03-49a4-92b4-63a1db2408b8</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Wrap Input in ActionController::Parameters when Performing Deserialization</Title>
+    <Category />
+    <Phase />
+    <Technology>Ruby</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Wrap serialized input in `ActionController::Parameters` and use `strong_parameters` to white-list variables when performing deserialization.
+
+
+## Why ##
+
+If the application receives input from an upstream component that specifies multiple attributes, properties, or fields that are to be initialized in an object, but it does not properly control which attributes can be modified, deserialization could be vulnerable to untrusted code revealing the serialized content.
+
+Proper use of `Action:Controller::Parameters` and `strong_parameters` protects attributes from end-user assignment. By default, attributes are black-listed, and the developer chooses specific attributes to white-list for mass updating. Serialized object attributes which are not white-listed cannot be accidentally exposed or exploited by mass assignment.
+
+
+## When ##
+
+During development and implementation, use features that allow specification of white lists of attributes or fields that are allowed to be modified.
+
+
+## How ##
+
+Use the following steps to specify what user data can be exposed and  assigned to variables.
+
+1. **Find all code that uses ActiveRecord to parse untrusted data.** Search the code for use of `ActiveRecord` with untrusted data deserialization. Make a list of these line numbers for your change control record.
+
+2. **Wrap untrusted data in ActionController::Parameters before parsing.** Use `ActionController::Parameters` to wrap the untrusted data.
+
+3. **Use strong_parameters to prevent mass assignment.** White-list the untrusted data parameters with `params.permit`.
+
+4. **Commit code changes.** Commit the code changes and test the application. Make an entry in the change control record for the code updates.]]></Data>
+  </Content>
+</TeamMentor_Article>
