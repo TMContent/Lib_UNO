@@ -22,12 +22,12 @@
 
 ## What to Do ##
 
-Anchor regular expressions (regex) with `\A` for beginning of string, and `\z` for end of string, to prevent the execution of unsafe functions that an attacker might provide.
+Anchor regular expressions (regex) with `\A` for beginning of string, and `\z` for end of string to have more predictable application behavior.
 
 
 ## Why ##
 
-The implementation of regex in Ruby uses `^` and `$` to match line beginning and line end. Most regex engines use these patterns to match the beginning and end of entire strings. If `^` and `$` are used with Ruby, then an isolated line could be used by an attacker for redirection or execution of evil code. With proper use of `\A` and `\z` in Ruby regex, this type of threat is mitigated.
+The implementation of regex in Ruby uses `^` and `$` to match line beginning and line end. Most regex engines use these patterns to match the beginning and end of entire strings. If `^` and `$` are used with Ruby, then an isolated line could be used by an attacker to bypass validation. With proper use of `\A` and `\z` in Ruby regex, this type of threat is mitigated.
 
 
 ## When ##
