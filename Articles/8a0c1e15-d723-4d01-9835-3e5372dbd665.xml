@@ -31,6 +31,8 @@ It is important to properly encode data before output to a dynamically generated
 
 Without encoding of displayed data, your application is subject to Cross-Site Scripting (XSS) attacks, which work to make a client browser parse HTML that the developer did not intend to be included. When data is not encoded, an attacker can provide an embedded link in the site, and gain control of protected resources.
 
+Application vulnerability to XSS is on the OWASP top 10 list for critical web application security flaws. The Common Weakness Enumeration (CWE) project also highlights similar programming errors that expose an application to XSS when displayed data is not encoded. 
+
 
 ## When ##
 
@@ -63,8 +65,6 @@ With RoR 4, `to_json` always escapes HTML characters in strings using the *\uXXX
 8. **Do not display untrusted data in JavaScript contexts.** In relatively few cases untrusted data can be safely encoded and placed into JavaScript contexts. This practice is not recommended, however, and it is best to avoid placing untrusted data in client-side JavaScript. Attempt to use a safer method to implement the functionality if your application is doing this. If safer method(s) cannot be found, explore the possible use of the `escape_javascript` function.
 
 9. **Do not display untrusted data in other contexts.** If your application uses contexts other than mentioned above, avoid the use of untrusted data. Generally, if it is known that output data is being safely encoded for the correct context, then it can be used.
-
-
 ]]></Data>
   </Content>
 </TeamMentor_Article>
