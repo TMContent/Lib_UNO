@@ -7,62 +7,62 @@
     <Title>Consider Using Two Factor Authentication</Title>
     <Category>Authentication</Category>
     <Phase>Design</Phase>
-    <Technology>Scala Play</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Guideline</Type>
     <DirectLink>Consider Using Two Factor Authentication</DirectLink>
+    <Tag>2FA</Tag>
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+</p>
-  <h1>What to Do</h1>
-  <p>Use two-factor authentication when a system is critical to business functionality and/or operates with large number of critical assets.</p>
-  <h1>Why</h1>
-  <p>Two-factor authentication is a stronger authentication mechanism that requires more than a simple password to login. As such, it offers greater security for systems that need it.</p>
-  <h1>When</h1>
-  <p>Use two-factor authentication if your application is critical to your business functionality or handles a large number of critical assets.</p>
-  <h1>How</h1>
-  <p>Two factor authentication is based on the concept of something the user knows and something the user has. Because of the associated complexity, it may be necessary to consult with a technology vendor that specializes in two factor authentication.</p>
-  <p>Two factor authentication has been implemented by some vendors such as RSA. However, there are certain problems&nbsp;that hold it back from being&nbsp;widely implemented:</p>
-  <ul>
-    <li>It is expensive and troublesome to implement due to the proprietary software packages that need to be deployed and maintained on the client PCs.</li>
-    <li>It&nbsp;does not thwart certain attacks such as the man-in-the-middle and trojan attacks, details of which can be found in the article&nbsp;<a href="http://searchsecurity.techtarget.com/tip/1,289483,sid14_gci968784,00.html">The Insecurity of Two-Factor Authentication</a>.</li>
-    <li>There have been security concerns about the tools implementing this technology as they have been found to store passwords in plaintext.</li>
-  </ul>
-  <p>In spite of these problems, two-factor authentication does add a layer of security to the authentication process and is useful in thwarting certain types of attacks such as online identity theft. Hence, before implementing it, spend time carefully considering the value of the assets to be protected and the trade-offs involved in two-factor authentication.</p>
-  <p>To utilize two-factor authentication:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify the necessity for two-factor authentication.</strong>&nbsp;Examine your application and determine the need for two-factor authentication. You may want to use two-factor authentication when your application handles a large number of assets and/or performs critical business functionality.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Choose an authentication solution.</strong>&nbsp;Two factor authentication is a general solution for strong authentication. It is based on the concept of something the user knows and something the user has. For example, a debit card requires the user to have the physical card and know the PIN before any transactions can be made from the associated bank account. In the software world, two-factor authentication requires the user's credentials and the use of a device, recognized by the application, or a cryptographically developed code that evolves over time. Some of the solutions available are:</p>
-      <ul>
-        <li>RSA's SecurID product, which consists of a hardware or software token, assigned to a user, that generates an authentication code every 60 seconds.</li>
-        <li>VeriSign's Unified Authentication managed service, in which enterprises deploy USB tokens to all their users.</li>
-        <li>ActivIdentity's Strong Authentication solutions with smart cards, one-time password and USB tokens.</li>
-      </ul>
-      <p>A number of vendors use a cookie on the client machine as a "second factor," but this isn't a true implementation of the two-factor authentication mechanism. At best, a cookie ensures machine authentication, not user authentication. Even then, it does not provide a sufficient guarantee of independence from the security of the underlying platform, unlike a physically separate token.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Apply the authentication solution.</strong>&nbsp;After choosing the two-factor authentication solution that best fits your application's needs, consult the appropriate vendor about the technical aspects of integrating their solution into your application.</p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>MyApp is an online banking product. It uses single-factor authentication when verifying its users; therefore, the user would need to only supply their username and password (the single factor) in order to authenticate. If the user's credentials are not strong enough and can easily be guessed, or are leaked by means of a phishing attack, the attacker would be able to gain access to the user's bank account.</p>
-  <h1>Solution Example</h1>
-  <p>MyApp is an online banking product. It uses two-factor authentication when verifying its users. Because it implements two-factor authentication, the user would need to provide their user name, password (the first factor), and the information stored in their security token (the second factor, which is a physical "something you have" item) in order to authenticate. If the user's credentials are leaked, the account would be still protected as the attacker would not have the second required authentication token.</p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about strong authentication, see:&nbsp;<a href="http://en.wikipedia.org/wiki/Strong_authentication">Strong authentication</a>&nbsp;in Wikipedia.</li>
-    <li>To learn about the insecurities associated with two-factor authentication, visit:&nbsp;<a href="http://searchsecurity.techtarget.com/tip/1,289483,sid14_gci968784,00.html">The insecurity of two-factor authentication</a>.</li>
-    <li>To learn about some two-factor authentication failures, see:&nbsp;<a href="http://www.schneier.com/essay-083.html">Two-Factor Authentication: Too Little, Too Late</a>.</li>
-  </ul>
-  <br />]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Use two-factor authentication when a system is critical to business functionality and/or operates with large number of critical assets.
+
+
+## Why ##
+
+Two-factor authentication is a stronger authentication mechanism that requires more than a simple password to login. As such, it offers greater security for systems that need it.
+
+
+## When ##
+
+Use two-factor authentication if your application is critical to your business functionality or handles a large number of critical assets.
+
+
+## How ##
+
+Two factor authentication is based on the concept of something the user knows and something the user has. Because of the associated complexity, it may be necessary to consult with a technology vendor that specializes in two factor authentication.
+
+Two factor authentication has been implemented by some vendors such as RSA. However, there are certain problems that hold it back from being widely implemented:
+
+- It is expensive and troublesome to implement due to the proprietary software packages that need to be deployed and maintained on the client PCs.
+- It does not thwart certain attacks such as the man-in-the-middle and trojan attacks.
+- There have been security concerns about the tools implementing this technology as some of them have been found to store passwords in plaintext.
+
+In spite of these problems, two-factor authentication does add a layer of security to the authentication process and is useful in thwarting certain types of attacks such as online identity theft. Hence, before implementing it, spend time carefully considering the value of the assets to be protected and the trade-offs involved in two-factor authentication.
+
+To utilize two-factor authentication:
+
+Identify the necessity for two-factor authentication. Examine your application and determine the need for two-factor authentication. You may want to use two-factor authentication when your application handles a large number of assets and/or performs critical business functionality.
+
+1. **Choose an authentication solution.** Two factor authentication is a general solution for strong authentication. It is based on the concept of something the user knows and something the user has. For example, a debit card requires the user to have the physical card and know the PIN before any transactions can be made from the associated bank account. In the software world, two-factor authentication requires the user's credentials and the use of a device, recognized by the application, or a cryptographically developed code that evolves over time. Some of the solutions available are:
+	- RSA's SecurID product, which consists of a hardware or software token, assigned to a user, that generates an authentication code every 60 seconds.
+	- VeriSign's Unified Authentication managed service, in which enterprises deploy USB tokens to all their users.
+	- ActivIdentity's Strong Authentication solutions with smart cards, one-time password and USB tokens.
+A number of vendors use a cookie on the client machine as a "second factor," but this isn't a true implementation of the two-factor authentication mechanism. At best, a cookie ensures machine authentication, not user authentication. Even then, it does not provide a sufficient guarantee of independence from the security of the underlying platform, unlike a physically separate token.
+
+2. **Apply the authentication solution.** After choosing the two-factor authentication solution that best fits your application's needs, consult the appropriate vendor about the technical aspects of integrating their solution into your application.
+
+
+## Problem Example ##
+
+MyApp is an online banking product. It uses single-factor authentication when verifying its users; therefore, the user would need to only supply their username and password (the single factor) in order to authenticate. If the user's credentials are not strong enough and can easily be guessed, or are leaked by means of a phishing attack, the attacker would be able to gain access to the user's bank account.
+
+
+## Solution Example ##
+
+MyApp is an online banking product. It uses two-factor authentication when verifying its users. Because it implements two-factor authentication, the user would need to provide their user name, password (the first factor), and the information stored in their security token (the second factor, which is a physical "something you have" item) in order to authenticate. If the user's credentials are leaked, the account would be still protected as the attacker would not have the second required authentication token.]]></Data>
   </Content>
 </TeamMentor_Article>
