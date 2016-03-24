@@ -10,150 +10,69 @@
     <Technology>Scala Play</Technology>
     <Type>Guideline</Type>
     <DirectLink>Do Not Cache Sensitive Data</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>
-Scala and Play Framework 2.1.0+</p>
-  <h1>What to Do</h1>
-  <p>Exercise caution when manipulating sensitive data, and do not cache the data on the client.</p>
-  <p>
-    <b>Note:</b> Applications employ caching to speed up performance and save round-trips
- to the server. This is especially useful in AJAX applications, which 
-maintain a cached state on the client that mirrors that of the server. 
-Developers traditionally try to cache as much data as possible. In these
- cases, there should be a distinction between the non-sensitive, i.e. 
-cacheable data, and the sensitive data. The latter should be maintained 
-in memory on the server only.</p>
-  <h1>Why</h1>
-  <p>Sensitive data that is cached on the client can cause significant problems:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Loss of synchronization with the server.&nbsp;</strong>The server's data might change and become inconsistent with the cached data. This is not a security risk but could cause issues with the application's performance.</p>
-    </li>
-    <li>
-      <p>
-        <strong>The cache may reside on the client following the application's lifespan.&nbsp;</strong>Once the application is closed, the cache may&nbsp;be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may look up the "Temporary Internet Files" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.</p>
-    </li>
-  </ol>
-  <h1>When</h1>
-  <p>Never cache sensitive data on the client.<br /></p>
-  <h1>How</h1>
-  <p>Javascript variables and hidden input fields must not be used to store sensitive data, which may be rendered invalid. The only thing that may be stored on the client side across browser requests should be the Session ID. Session IDs are most often stored in an HTTP cookie, though other solutions exist.</p>
-  <p>Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from&nbsp;caching the information. To disable autocomplete, set the "<em>autocomplete</em>" attribute to "<em>off</em>".&nbsp;
-    </p>
-  <blockquote>
-  </blockquote>
-  <p>Web pages containing sensitive data should be marked as such, using appropriate meta tags, to prevent caching. When generating/serving the web page, add the appropriate HTTP headers. This will serve as a guideline to proxies and browsers alike that the data must not be cached. A possibly negative impact of this is the invalidation of the browser "back" button.</p>
-  <br />
-  <ul>
-    <li>Caching HTTP Headers: Your Global.scala class should look something like below: <br /><pre><p>import play.api._<br />import play.api.mvc._<br />import play.api.http.HeaderNames._<br /><br />/**<br /> * Global application settings.<br /> */<br />object Global extends GlobalSettings {<br /><br />  /**<br />   * Global action composition.<br />   */<br />  override def doFilter(action: EssentialAction): EssentialAction = EssentialAction { request =&gt;<br />    action.apply(request).map(_.withHeaders(<br />      PRAGMA -&gt; "no-cache"<br />      Cache-Control -&gt; "no-cache"<br />      Expires -&gt; "-1"<br />    ))<br />  }<br />}</p></pre></li>
-  </ul>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about the HTTP protocol, visit:&nbsp;<a href="http://www.faqs.org/rfcs/rfc2616.html">RFC 2616 - Hypertext Transfer Protocol</a>.</li>
-    <li>To learn more about caching, see:&nbsp;<a href="http://www.mnot.net/cache_docs/">Caching Tutorial</a>.</li>
-    <li>To learn how to prevent caching in Internet Explorer, see:&nbsp;<a href="http://support.microsoft.com/default.aspx?scid=kb;EN-US;Q234067">How to prevent caching in Internet Explorer</a>.</li>
-  </ul>
-  <div>
-    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Guidelines</h1>
-    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="52624de3-7c13-4456-974b-23c4588eef0d">Encrypt Communication Links</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="10886993-6dcd-4905-b577-2032edd530c5">Use SSL</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="8a5cb8a0-d7f9-4372-bae6-2d680bb498ad">Use SSL for All Sensitive Pages</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="5de9c87b-5678-4810-8636-65b720e023bf">Use SSL When Transmitting Credentials</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="189c97b5-78ac-4b3b-812d-587ea2a895e4">Use Valid SSL Certificates</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="0e774522-7d2e-4a14-b3cf-850d127c3895">Use Only Strong SSL Algorithms</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="f9d523ec-7328-4be5-93c6-00e671ecd068">Do Not Cache Sensitive Data</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="7718e002-fad0-4114-b51f-f46397cd3921">Do Not Place Sensitive Data in Parameters</a>
-        </b>
-      </li>
-    </ul>
-    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Checklists</h1>
-    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="d9212a71-9f66-4d55-91ad-40af4792f414">Communication Links are Encrypted</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="0c11e362-82d1-4132-ba66-8431eb02da94">SSL Is Used</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="60459daa-5678-45f7-834f-72ef487aaf2b">SSL Is Used for All Sensitive Pages</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="24771ceb-219a-41c5-8877-c040969a6933">SSL is Used When Transmitting Credentials</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="ec353b5b-901b-404b-811e-922561c1e632">Valid SSL Certificates Are Used</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="d4cad587-c5d7-4ccf-ad50-4e178154a70b">Only Strong SSL Algorithms Are Used</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="06c0bd2f-6d23-45ce-9c08-5145215ca9d8">Sensitive Data Is Not Cached</a>
-        </b>
-      </li>
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="3b87b42e-a1cd-4b62-85e9-c26337b04bdf">Sensitive Data Is Not Placed in Parameters</a>
-        </b>
-      </li>
-    </ul>
-    <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Communication Security Testing</h1>
-    <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
-      <li style="margin: 0px; padding: 0px;">
-        <b>
-          <a href="b928e4bf-8dc9-4e64-bbec-ad642f375ab4">How to Test for Network Credential Sniffing Bugs in Scala</a>
-        </b>
-      </li>
-    </ul>
-  </div>]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+Scala and Play Framework 2.1.0+
+
+
+## What to Do ##
+
+Exercise caution when manipulating sensitive data, and do not cache the data on the client.
+
+Note: Applications employ caching to speed up performance and save round-trips to the server. This is especially useful in AJAX applications, which maintain a cached state on the client that mirrors that of the server. Developers traditionally try to cache as much data as possible. In these cases, there should be a distinction between the non-sensitive, i.e. cacheable data, and the sensitive data. The latter should be maintained in memory on the server only.
+
+
+## Why ##
+
+Sensitive data that is cached on the client can cause significant problems:
+
+- Loss of synchronization with the server. The server's data might change and become inconsistent with the cached data. This is not a security risk but could cause issues with the application's performance.
+
+- The cache may reside on the client following the application's lifespan. Once the application is closed, the cache may be readable by an attacker, leaking sensitive information. This is especially serious in cases where the client is a non-trusted environment, such as a shared computer. Attackers may look up the "Temporary Internet Files" or corresponding browser cache and uncover useful fragments of information pertaining to the last logged on user.
+
+
+## When ##
+
+Never cache sensitive data on the client.
+
+
+## How ##
+
+Javascript variables and hidden input fields must not be used to store sensitive data, which may be rendered invalid. The only thing that may be stored on the client side across browser requests should be the Session ID. Session IDs are most often stored in an HTTP cookie, though other solutions exist.
+
+Autocomplete should be disabled for input fields that are used for sensitive information to prevent users' browsers from caching the information. To disable autocomplete, set the "autocomplete" attribute to "off". 
+
+Web pages containing sensitive data should be marked as such, using appropriate meta tags, to prevent caching. When generating/serving the web page, add the appropriate HTTP headers. This will serve as a guideline to proxies and browsers alike that the data must not be cached. A possibly negative impact of this is the invalidation of the browser "back" button.
+
+Caching HTTP Headers: Your Global.scala class should look something like below:
+
+    import play.api._
+    import play.api.mvc._
+    import play.api.http.HeaderNames._
+
+    /**
+     * Global application settings.
+     */
+    object Global extends GlobalSettings {
+
+      /**
+       * Global action composition.
+       */
+      override def doFilter(action: EssentialAction): EssentialAction = EssentialAction { request =>
+        action.apply(request).map(_.withHeaders(
+          PRAGMA -> "no-cache"
+          Cache-Control -> "no-cache"
+          Expires -> "-1"
+        ))
+      }
+    }
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
