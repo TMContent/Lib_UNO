@@ -136,15 +136,12 @@ In this case, the @au_id parameter is treated as a literal value and not as exec
 
 ### Review Your Application's Use of Parameterized Stored Procedures ###
 
-Because using stored procedures with parameters does not necessarily prevent SQL injection, you should review your application's use of this type of stored procedure. For example, the following parameterized stored procedure has several security vulnerabilities.
+Because using stored procedures with parameters does not necessarily prevent SQL injection, you should review your application's use of this type of stored procedure. For example, the following parameterized stored procedure is unsafe:
 
 	CREATE PROCEDURE dbo.RunQuery(@var ntext) AS
 	exec sp_executesql @var;
 
-An application that uses a stored procedure similar to the one in the preceding code example has the following vulnerabilities:
-
-- The stored procedure ultimately concatenates data passed to it into SQL syntax, thus negating parameterization. Consider the @var variable being set to: `DROP TABLE ORDERS;` In this case, the ORDERS table will be dropped. The main principle for preventing SQL injection is never concatenating untrusted data into SQL syntax or in other words never treating data as SQL syntax. In this example, data is being treated as SQL syntax.
-- The stored procedure runs with dbo privileges.
+This stored procedure ultimately concatenates data passed to it into SQL syntax, thus negating parameterization. Consider the @var variable being set to: `DROP TABLE ORDERS;` In this case, the ORDERS table will be dropped. The main principle for preventing SQL injection is never concatenating untrusted data into SQL syntax or in other words never treating data as SQL syntax. In this example, data is being treated as SQL syntax.
 
 
 ### Step 3. Use Parameters with Dynamic SQL ###
