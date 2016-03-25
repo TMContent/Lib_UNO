@@ -37,7 +37,7 @@ Attackers can use a SQL Injection to execute arbitrary queries with the privileg
 
 To use a parameterized stored procedure:
 
-1. **Create the stored procedure on the database.** Since stored procedures reside on the database server, you need to create the appropriate stored procedures on your application's database server. The following example creates a stored procedure:
+1. **Create the stored procedure on the database.** Since stored procedures reside on the database server, you need to create the appropriate stored procedures on your application's database server. Make sure not to concatenate untrusted data into SQL syntax, but to use parameters and let the database engine substitute data into them. The following example creates a parameterized stored procedure:
 
         CREATE OR REPLACE PROCEDURE PlaceOrder(custID INT, itemID INT, qty INT) AS
         INSERT INTO PendingPurchases (customer, item, quantity)
@@ -58,28 +58,6 @@ To use a parameterized stored procedure:
         REVOKE ALL ON PendingPurchases FROM myapp;
         GRANT EXECUTE ON PlaceOrder TO myapp;
 
-
-## Problem Example ##
-
-The following code places a new order into the application's backend database. Because the application does not use stored procedures, the developers need to grant extra priviliges to the application to allow it to directly manipulate data inside the PendingPurchases table.
-
-        Connection cn = MyApp.getDBConnection();
-        PreparedStatement st = cn.prepareStatement("insert into PendingPurchases "
-                          + "(customer, item, quantity) values (?, ?, ?);");
-        st.setInt(1, custID);
-        st.setInt(2, itemID);
-        st.setInt(3, qty);
-
-
-## Solution Example ##
-
-The following code places a new order into the application's backend database. Because the application uses stored procedures, the developers can allow the application to manipulate the data inside PendingPurchases without giving permissions to directly do so, therefore, further restricting the set of operations that the application can execute on the database server.
-
-        Connection cn = MyApp.getDBConnection();
-        PreparedStatement st = cn.prepareStatement("exec PlaceOrder(?, ?, ?);");
-        st.setInt(1, custID);
-        st.setInt(2, itemID);
-        st.setInt(3, qty);
 
 ]]></Data>
   </Content>
