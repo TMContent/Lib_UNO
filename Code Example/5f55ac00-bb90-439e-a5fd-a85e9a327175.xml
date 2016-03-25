@@ -44,7 +44,12 @@ To use a parameterized stored procedure:
         VALUES (custID, itemID, qty);
         END PlaceOrder;
 
-2. **Call the stored procedure.** This can be done using the following Java code:
+2. **Assign the appropriate permissions.** Once you have created the stored procedure, assign the appropriate permissions on the database server. Using the example above, allow your application to execute PlaceOrder and deny it access to PendingPurchases. Example:
+
+        REVOKE ALL ON PendingPurchases FROM myapp;
+        GRANT EXECUTE ON PlaceOrder TO myapp;
+
+3. **Call the stored procedure.** This can be done using the following Java code:
 
         Connection cn = MyApp.getDBConnection();
         PreparedStatement st = cn.prepareStatement("exec PlaceOrder(?, ?, ?);");
@@ -53,10 +58,6 @@ To use a parameterized stored procedure:
         st.setInt(3, qty);
         ResultSet rs = st.executeQuery();
 
-3. **Assign the appropriate permissions.** Once you have created the stored procedure, assign the appropriate permissions on the database server. Using the example above, allow your application to execute PlaceOrder and deny it access to PendingPurchases. Example:
-
-        REVOKE ALL ON PendingPurchases FROM myapp;
-        GRANT EXECUTE ON PlaceOrder TO myapp;
 
 
 ]]></Data>
