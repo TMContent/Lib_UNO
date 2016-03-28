@@ -103,9 +103,7 @@ Weak passwords exist because applications implement password policies that allow
 
 ### Protecting at the application level ###
 
-To protect against this vulnerability, make sure to enforce a strong password policy. That is, before storing any password, check if it is strong enough. An effective way to implement this check is by using regular expressions. For instance, MSDN suggests the following regular expression to check against weak passwords: '(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$'
-
-According to MSDN, the regular expression “. . . validates a strong password. It must be between 8 and 10 characters, contain at least one digit and one alphabetic character, and must not contain special characters.”
+To protect against this vulnerability, make sure to enforce a strong password policy. That is, before storing any password, check if it is strong enough. An effective way to implement this check is by using regular expressions. For instance, MSDN suggests the following regular expression to check against weak passwords: ` (?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$ ` According to MSDN, this regular expression “. . . validates a strong password. It must be between 8 and 10 characters, contain at least one digit and one alphabetic character, and must not contain special characters.”
 
 You can alter this expression to match a stronger password policy, such as one requiring at least one special character. In addition, if the risk of weak passwords is high, you can implement additional checks such as dictionary checks or checks against personal information (email address, birthday, etc.) before storing a password.
 
