@@ -20,13 +20,16 @@
 
 * iOS applications that accept user input.
 
+
 ## What to Check For ##
 
 Verify that all input is validated.
 
+
 ## Why ##
 
-Properly implemented input validation mitigates many types of injection vulnerabilities.
+Properly implemented input validation mitigates many types of injection vulnerabilities. Input validation should be used as a part of a defense-in-depth strategy.
+
 
 ## How to Check ##
 
@@ -41,6 +44,7 @@ To verify that all input is validated:
 4. **Inspect the input validation subsystem.** Each input source should have a data validation routine associated with it. The validation should occur as soon as possible after the input reaches your application. Shared validation routines are better than many different routines spread throughout your code base. Check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing. 
 
 5. **Ensure quality of validation routines.** Make sure that each validator verifies the characters, length, format, and range (for numerical values) of its respective type of input. Validation should check first for known valid and safe data and then for malicious, dangerous data. Do not rely on filtering out all malicious data, as it is easy to miss something.
+
 
 ## How to Fix ##
 
