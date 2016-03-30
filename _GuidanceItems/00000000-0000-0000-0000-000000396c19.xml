@@ -10,64 +10,59 @@
     <Technology>iOS</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>All Input Is Validated</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="WikiText">
-    <Data><![CDATA[==Applies To==
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
 
 * iOS applications that accept user input.
 
-==What to Check For==
+## What to Check For ##
 
 Verify that all input is validated.
 
-==Why==
+## Why ##
 
-Properly implemented input validation mitigates many types of injection vulnerabilities, such as Cross-Site Scripting and SQL injection.
+Properly implemented input validation mitigates many types of injection vulnerabilities.
 
-==How to Check==
+## How to Check ##
 
 To verify that all input is validated:
 
-# **Identify all entry points for user input.** Make a list of all possible sources of user input in your application.
-# **Identify all types on input accepted by the application.** For each source of user input on the list, define valid characters, length, format, and range (for numerical values).
-# **Trace data from source to sink.** Trace each source of input through your application until you find its ultimate destination.  The ultimate sink may be in memory, on the hard drive, or in a database, or the data may ultimately be sent over the network.
-# **Inspect the input validation subsystem.** Each input source should have a data validation routine associated with it. The validation should occur as soon as possible after the input reaches your application. Shared validation routines are better than many different routines spread throughout your code base. Check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing. 
-# **Ensure quality of validation routines.** Make sure that each validator verifies the characters, length, format, and range (for numerical values) of its respective type of input. Validation should check first for known valid and safe data and then for malicious, dangerous data. Do not rely on filtering out all malicious data, as it is easy to miss something.
+1. **Identify all entry points for user input.** Make a list of all possible sources of user input in your application.
 
-==How to Fix==
+2. **Identify all types on input accepted by the application.** For each source of user input on the list, define valid characters, length, format, and range (for numerical values).
+
+3. **Trace data from source to sink.** Trace each source of input through your application until you find its ultimate destination.  The ultimate sink may be in memory, on the hard drive, or in a database, or the data may ultimately be sent over the network.
+
+4. **Inspect the input validation subsystem.** Each input source should have a data validation routine associated with it. The validation should occur as soon as possible after the input reaches your application. Shared validation routines are better than many different routines spread throughout your code base. Check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing. 
+
+5. **Ensure quality of validation routines.** Make sure that each validator verifies the characters, length, format, and range (for numerical values) of its respective type of input. Validation should check first for known valid and safe data and then for malicious, dangerous data. Do not rely on filtering out all malicious data, as it is easy to miss something.
+
+## How to Fix ##
 
 To validate all user input using whitelist input validation:
 
-# **Identify all entry points for user input.** Make a list of all possible sources of user input in your application.
-# **Identify all types of input accepted by the application.** For each source of user input on the list, define valid characters, length, format, and range (for numerical values).
-# **Define an input validation subsystem.** Define a set of validator functions that should be used to validate each type of input handled by the application. Input should be validated on the server.
-# **Validate characters.** Restrict the acceptable range of characters in text input using regular expressions.
-# **Validate length.** Add code to check that the length of the user input is valid.
-# **Validate format.** If the input type has a specific pattern, such as a date or a phone number, use regular expressions to make sure user input matches the input type specified by the application. Use regular expressions to enforce strong password requirements.
-# **Validate range.** Restrict the acceptable range of numerical input by comparing the input to the maximum and minimum acceptable values.
-# **(Optional) Reject and respond to known bad input.** This step does not add much actual security, but it may provide some defense in depth. The input validation subsystem may check for known attack strings and respond to these likely attacks by alerting the user. The options for responding to invalid input are: reject invalid input, log invalid input, take evasive action.
-# **(Optional) Encode input.** If the input is going to be displayed back through the web application, consider encoding it to prevent Cross-Site Scripting attacks.
+1. **Identify all entry points for user input.** Make a list of all possible sources of user input in your application.
 
-==Data Validation Guidelines==
-* [[00000000-0000-0000-0000-000000866d55|Canonicalize File Names and Paths]]
-* [[00000000-0000-0000-0000-000000590dce|Check File Paths and Names for Null Bytes]]
-* [[00000000-0000-0000-0000-00000051c329|Validate All Input]]
-* [[00000000-0000-0000-0000-0000005804d8|Validate and Encode Data Inserted into XML Documents]]
-* [[00000000-0000-0000-0000-000000410a08|Validate and Encode Data Passed to UIWebView Controls]]
-* [[00000000-0000-0000-0000-00000049bb5e|Validate File Formats]]
+2. **Identify all types of input accepted by the application.** For each source of user input on the list, define valid characters, length, format, and range (for numerical values).
 
-==Data Validation Checklists==
-* [[00000000-0000-0000-0000-0000004d996e|File Names and Paths Are Canonicalized]]
-* [[00000000-0000-0000-0000-0000004446d0|File Paths and Names Are Checked for Null Bytes]]
-* [[00000000-0000-0000-0000-000000396c19|All Input Is Validated]]
-* [[00000000-0000-0000-0000-0000008c53b6|Data Inserted into XML Documents Is Validated and Encoded]]
-* [[00000000-0000-0000-0000-000000647d44|Data Passed to UIWebView Controls Is Validated and Encoded]]
-* [[00000000-0000-0000-0000-000000066105|File Formats Are Validated]]
+3. **Define an input validation subsystem.** Define a set of validator functions that should be used to validate each type of input handled by the application.
 
-==Additional Resources==
-* For a guide to input validation, see https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet]]></Data>
+4. **Validate characters.** Restrict the acceptable range of characters in text input using regular expressions.
+
+5. **Validate length.** Add code to check that the length of the user input is valid.
+
+6. **Validate format.** If the input type has a specific pattern, such as a date or a phone number, use regular expressions to make sure user input matches the input type specified by the application. 
+
+7. **Validate range.** Restrict the acceptable range of numerical input by comparing the input to the maximum and minimum acceptable values.
+
+8. **(Optional) Reject and respond to known bad input.** This step does not add much actual security, but it may provide some defense in depth. The input validation subsystem may check for known attack strings and respond to these likely attacks by alerting the user. The options for responding to invalid input are: reject invalid input, log invalid input, take evasive action.
+
+9. **(Context-sensitive) Encode input.** If the input is going to be displayed back through a web browser, consider encoding it to prevent Cross-Site Scripting attacks.
+]]></Data>
   </Content>
 </TeamMentor_Article>
