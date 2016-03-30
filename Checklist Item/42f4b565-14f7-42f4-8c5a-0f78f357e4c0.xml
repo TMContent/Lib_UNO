@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="markdown">
     <Data><![CDATA[## Applies To ##
 
-* Java applications that use databases
+* Java applications that use SQL databases
 
 
 ## What to Check For ##
@@ -51,7 +51,7 @@ Use the following steps to check if all input passed to database is validated:
 
 4. **Ensure quality of validators.** Validation routines should check for length, range, format and type. The validator should first check for good data via whitelisting and then for known malicious data via blacklisting. Do not rely on client-side validation alone as it can be bypassed easily.
 
-5. **Ensure that parameterized queries are used.** Verify that all database transactions are handled using PreparedStatement objects.
+5. **Ensure that parameterized queries are used.** Verify that all database transactions are handled using prepared statements or stored procedures with type-safe parameters.
 
 
 ## How to Fix ##
@@ -68,7 +68,7 @@ To properly validate input passed to database:
 
 2. **Create a set of validators.** Build a set of validators that work with the database-specific language. Determine the appropriate validation at each validator. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the component. Place the validators along the database entry points. All data should pass through the validators before transmitted to the database servers.
 
-3. **Use type safe SQL parameters in queries.** Stored procedures and parameterized queries improve your application's robustness against SQL injection based attacks.
+3. **Use type safe SQL parameters in queries.** Stored proceduresw with type-safe paremeters and parameterized queries, such as prepared statements, are a strong defense against SQL injection attacks.
 
 
 ## Problem Example ##
