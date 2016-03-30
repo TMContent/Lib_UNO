@@ -3,147 +3,134 @@
   <Metadata>
     <Id>42f4b565-14f7-42f4-8c5a-0f78f357e4c0</Id>
     <Id_History>42f4b565-14f7-42f4-8c5a-0f78f357e4c0,a274bdb4-2c69-41fe-82c4-aa02bec654eb,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>All Database Input Is Validated</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>All Database Input Is Validated</DirectLink>
-    <Tag />
+    <Tag>SQLi, SQL, SQL Injection</Tag>
     <Security_Demand />
     <Author />
     <Priority>2</Priority>
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Ensure that all input passed to the database is validated.</p>
-  <h1>Why</h1>
-  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities&nbsp;that would allow an attacker to gain unauthorized access to sensitive data.</p>
-  <h1>How to Check</h1>
-  <p>Use the following steps to check if all input passed to database is validated:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify database entry points. </strong>Identify all locations within your application that interface with the database servers. Potential sources of input include:</p>
-      <ul>
-        <li>URL based parameters <li>Form based parameters <li>Hidden fields <li>Cookies <li>Local filesystem <li>Javascript variables</li></li></li></li></li></li>
-      </ul>
-      <li>
-        <p>
-          <strong>Trace data from source to sink. </strong>Trace each source of input from the immediate source, through your application and&nbsp;to the backend database.</p>
-        <li>
-          <p>
-            <strong>Identify validation routines. </strong>Each input source should have a validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If any input source does not have a validation routine associated with it, flag it for fixing.</p>
-          <li>
-            <p>
-              <strong>Ensure quality of validators. </strong>Validation routines should check for length, range, format and type.&nbsp;The validator&nbsp;should first check for good data&nbsp;via whitelisting and then for known malicious data&nbsp;via blacklisting. Do not rely on client-side validation alone as it can be bypassed easily.</p>
-            <li>
-              <p>
-                <strong>Ensure that parameterized queries are used. </strong>Verify that all database transactions are handled using <em>PreparedStatement</em> objects.</p>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <h1>How to Fix</h1>
-  <p>To properly validate input passed to database:</p>
-  <ol>
-    <li>
-      <strong>Identify database entry points. </strong>Identify all locations within your application that interface with the database servers. Potential sources of input include: <ul><li>URL-based parameters <li>Form-based parameters <li>Hidden fields <li>Cookies <li>Local filesystem <li>Javascript variables</li></li></li></li></li></li></ul><li><p><strong>Create a set of validators. </strong>Build a set of validators that work with the database-specific language. Determine the appropriate validation at each validator. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the component. Place the validators along the database entry points. All data should pass through the validators before transmitted to the database servers.</p><li><p><strong>Use type safe SQL parameters in queries. </strong>Stored procedures and parameterized queries improve your application's robustness against SQL injection based attacks.</p></li></li></li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input; therefore, an attacker can access the backend database on behalf of the application through the use of SQL injection. </p>
-  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application fails to validate the user-supplied<br />     // query before submitting it to the database server<br />     retData = queryDB(query);<br /><br />     ...<br /><br />     out.flush();<br />     out.close();<br />&#125;</pre>
-  <h1>Solution Example</h1>
-  <p>The following code allows the user to query a database. Because the application validates the user's input, it is much more difficult for an attacker to access the backend database through a SQL injection attack.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application validates the user-supplied query<br />     // before submitting it to the database server<br />     if (validateQuery(query))<br />     &#123;<br />          retData = queryDB(query);<br /><br />          ...<br /><br />     &#125;<br /><br />     out.flush();<br />     out.close();<br />&#125;<br /><br /><br />public boolean validateQuery(String input)&#123;<br /><br />      // The input can be only of numeric characters<br />      String goodPattern = "&#91;0-9&#93;&#43;&#43;";<br /><br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br /><br />      if(&#33;m.matches())<br />      &#123;<br />            return false;<br />      &#125;<br /><br />      return true;<br />&#125;</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>A tutorial on regular expressions is available at: <a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>. <li>For more information on using regular expression in Java, see: <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Class Pattern</a> in Java SDK. </li></li>
-  </ul>
-  <h1>Input and Data Validation Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/b531d29c-86f7-4812-90ce-5f3f0f780aba">Validate Input from All Sources</a>
-      <li>
-        <a href="/article/c98695c5-cf02-44a1-96bf-1f8046b8ad9d">Validate Input for Length, Range, Format, and Type</a>
-        <li>
-          <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">
-            <a href="/article/67060e7b-7145-4e84-b574-c07548f81d9f">Validate All Input Passed to the Database</a>
-          </a>
-          <li>
-            <a href="/article/a5491c44-164b-4046-94d3-b575b9745e8b">Filter All User-Supplied Filename and Path Input</a>
-            <li>
-              <a href="/article/9f21442f-2aee-4573-8be6-a5b51d9c89b8">Do Not Rely on Client-Side Validation</a>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Input and Data Validation Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/7f8deb21-cd52-41be-80b4-8897612021dc">Input from All Sources Is Validated</a>
-      <li>
-        <a href="/article/61869793-2c10-40c0-b82a-babcc0312697">Input Is Validated for Length, Range, Format and Type</a>
-        <li>
-          <a href="/article/42f4b565-14f7-42f4-8c5a-0f78f357e4c0">All Database Input Is Validated</a>
-          <li>
-            <a href="/article/17884af0-fc83-412a-b613-4def4a6f84ad">User-Supplied Filenames and Paths Are Validated</a>
-            <li>
-              <a href="/article/b1803c35-9579-4a38-9a63-30202160ef25">The Application Does Not Rely on Client-Side Validation</a>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Input and Data Validation Code Examples</h1>
-  <ul>
-    <li>
-      <a href="/article/0f49430b-2abe-408f-b046-89fa739f5d53">Input Validation Using JSF</a>
-      <li>
-        <a href="/article/18ac74df-602b-4a58-8998-52f638f3a045">Input Validation Using SpringMVC</a>
-        <li>
-          <a href="/article/d124abb1-e230-43ef-8762-1caa0dbb89ca">Input Validation Using Struts 1</a>
-          <li>
-            <a href="/article/2f917654-65a8-49c9-b000-c17f9765bf42">Input Validation Using Struts 2</a>
-            <li>
-              <a href="/article/38342130-4e4b-47df-afd9-c7e8c86f77ee">Use ESAPI Executor</a>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Input and Data Validation Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/fd3ecaaa-cb7c-43a2-a91a-f19862f736d4">How to Test for Server-Side Code Injection in Java</a>
-      <li>
-        <a href="/article/c00b9149-1290-4c9e-bcd0-392a9c5a6fb0">How to Test for Path Manipulation Bugs in Java</a>
-        <li>
-          <a href="/article/5c99da7b-b4eb-4315-b48c-ac2598c13144">How to Test for Double Encoding Bugs in Java</a>
-          <li>
-            <a href="/article/fc95c5e5-667a-4e66-b1cf-f7d0529c4c2f">How to Test for Client-side Validation Bypass Bugs in Java</a>
-            <li>
-              <a href="/article/6f4e927b-bd45-498b-95c4-78fd2c3287c1">How to Test for Integer Overflows in Java</a>
-              <li>
-                <a href="/article/ed20009a-59ef-415d-8e72-0ff3221a1346">How to Test for Integer Underflow Bugs in Java</a>
-                <li>
-                  <a href="/article/d7682043-0095-4700-97dd-01ce797c4ada">How to Test for Deserialization of Untrusted Data Bugs in Java</a>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java applications that use databases
+
+
+## What to Check For ##
+
+Ensure that all input passed to the database is validated.
+
+
+## Why ##
+
+Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities that would allow an attacker to gain unauthorized access to sensitive data.
+
+
+## How to Check ##
+
+Use the following steps to check if all input passed to database is validated:
+
+1. **Identify database entry points.** Identify all locations within your application that interface with the database servers. Potential sources of input include:
+    - URL based parameters
+    - Form based parameters
+    - Hidden fields
+    - Cookies
+    - Local filesystem
+    - Javascript variables
+
+2. **Trace data from source to sink.** Trace each source of input from the immediate source, through your application and to the backend database.
+
+3. **Identify validation routines.** Each input source should have a validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If any input source does not have a validation routine associated with it, flag it for fixing.
+
+4. **Ensure quality of validators.** Validation routines should check for length, range, format and type. The validator should first check for good data via whitelisting and then for known malicious data via blacklisting. Do not rely on client-side validation alone as it can be bypassed easily.
+
+5. **Ensure that parameterized queries are used.** Verify that all database transactions are handled using PreparedStatement objects.
+
+
+## How to Fix ##
+
+To properly validate input passed to database:
+
+1. **Identify database entry points.** Identify all locations within your application that interface with the database servers. Potential sources of input include:
+    - URL-based parameters
+    - Form-based parameters
+    - Hidden fields
+    - Cookies
+    - Local filesystem
+    - Javascript variables
+
+2. **Create a set of validators.** Build a set of validators that work with the database-specific language. Determine the appropriate validation at each validator. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the component. Place the validators along the database entry points. All data should pass through the validators before transmitted to the database servers.
+
+3. **Use type safe SQL parameters in queries.** Stored procedures and parameterized queries improve your application's robustness against SQL injection based attacks.
+
+
+## Problem Example ##
+
+The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input and does not use parameterized APIs for data accesss. The result is that an attacker can access the backend database on behalf of the application through the use of SQL injection.
+
+	public void doGet(HttpServletRequest request,
+		 HttpServletResponse response) throws ServletException, IOException{
+		 PrintWriter out = response.getWriter();
+		 String query = request.getParameter("query");
+		 String retData = "";
+
+		 // The application fails to validate the user-supplied
+		 // query before submitting it to the database server
+		 retData = queryDB(query);
+
+		 ...
+
+		 out.flush();
+		 out.close();
+	}
+
+
+## Solution Example ##
+
+The following code allows the user to query a database. Because the application validates the user's input, it is much more difficult for an attacker to access the backend database through a SQL injection attack. Data validation is only one layer in a defense-in-depth paradigm; make sure to use parameterized APIs for data access as well.
+
+	public void doGet(HttpServletRequest request,
+		 HttpServletResponse response) throws ServletException, IOException{
+		 PrintWriter out = response.getWriter();
+		 String query = request.getParameter("query");
+		 String retData = "";
+
+		 // The application validates the user-supplied query
+		 // before submitting it to the database server
+		 if (validateQuery(query))
+		 {
+			  retData = queryDB(query);
+
+			  ...
+
+		 }
+
+		 out.flush();
+		 out.close();
+	}
+
+
+	public boolean validateQuery(String input){
+
+		  // The input can be only of numeric characters
+		  String goodPattern = "[0-9]++";
+
+		  Pattern p = Pattern.compile(goodPattern);
+		  Matcher m = p.matcher(input);
+
+		  if(!m.matches())
+		  {
+				return false;
+		  }
+
+		  return true;
+	}]]></Data>
   </Content>
 </TeamMentor_Article>
