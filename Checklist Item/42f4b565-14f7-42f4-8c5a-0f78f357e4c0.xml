@@ -68,12 +68,12 @@ To properly validate input passed to database:
 
 2. **Create a set of validators.** Build a set of validators that work with the database-specific language. Determine the appropriate validation at each validator. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the component. Place the validators along the database entry points. All data should pass through the validators before transmitted to the database servers.
 
-3. **Use type safe SQL parameters in queries.** Stored proceduresw with type-safe paremeters and parameterized queries, such as prepared statements, are a strong defense against SQL injection attacks.
+3. **Use type safe SQL parameters in queries.** Stored procedures with type-safe parameters and parameterized queries, such as prepared statements, are a strong defense against SQL injection attacks.
 
 
 ## Problem Example ##
 
-The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input and does not use parameterized APIs for data accesss. The result is that an attacker can access the backend database on behalf of the application through the use of SQL injection.
+The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input and does not use parameterized APIs for data access. The result is that an attacker can access the backend database on behalf of the application through the use of SQL injection.
 
 	public void doGet(HttpServletRequest request,
 		 HttpServletResponse response) throws ServletException, IOException{
@@ -119,7 +119,7 @@ The following code allows the user to query a database. Because the application 
 
 	public boolean validateQuery(String input){
 
-		  // The input can be only of numeric characters
+		  // The input can be only numbers
 		  String goodPattern = "[0-9]++";
 
 		  Pattern p = Pattern.compile(goodPattern);
