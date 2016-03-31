@@ -17,76 +17,43 @@
     <Status />
     <Source>C++</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>C&amp;#43;&amp;#43;</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Use regular expressions to validate input.</p>
-  <h1>Why</h1>
-  <p>A good input validation strategy is to constrain input to known valid values, reject known bad values and to sanitize the input that passes validation. Rejecting bad values is not to be relied on, because there are too many possible bad values. However, it is possible to filter out at least some bad input. Constraining input can be done effectively using regular expressions.</p>
-  <h1>When</h1>
-  <p>Constrain input as the first step of input validation.</p>
-  <h1>How</h1>
-  <p>Perform the following actions to constrain input using regular expressions:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Use a regular expression library.</strong> C&amp;#43;&amp;#43; does not have built-in regular expression functionality. The Boost.Regex library is recommended for regular expressions with C&amp;#43;&amp;#43;. If your application uses managed code, .NET has a nice regular expressions API built-in as System.Text.RegularExpressions.</p>
-      <li>
-        <p>
-          <strong>Determine valid input patterns.</strong> Identify the types of valid input for your input application. For example, some input follows obvious patterns, such as social security or credit card numbers. Other types of input may have less obvious patterns, such as file names. Write regular expressions that describe valid input for your application. Some common regular expressions are listed below:</p>
-        <ul>
-          <li>
-            <p>
-              <strong>Name<br /></strong>&amp;#94;&amp;#91;a-zA-Z''-'\s&amp;#93;&amp;#123;1,40&amp;#125;&amp;#36;<br />Validates a name. Allows up to 40 uppercase and lowercase characters and a few special characters that are common to some names. You can modify this list.</p>
-            <li>
-              <p>
-                <strong>Social Security Number<br /></strong>&amp;#94;\d&amp;#123;3&amp;#125;-\d&amp;#123;2&amp;#125;-\d&amp;#123;4&amp;#125;&amp;#36;<br />Validates the format, type, and length of the supplied input field. The input must consist of 3 numeric characters followed by a dash, then 2 numeric characters followed by a dash, and then 4 numeric characters.</p>
-              <li>
-                <p>
-                  <strong>Phone Number<br /></strong>&amp;#94;&amp;#91;01&amp;#93;?&amp;#91;- .&amp;#93;?(\(&amp;#91;2-9&amp;#93;\d&amp;#123;2&amp;#125;\)&amp;#124;&amp;#91;2-9&amp;#93;\d&amp;#123;2&amp;#125;)&amp;#91;- .&amp;#93;?\d&amp;#123;3&amp;#125;&amp;#91;- .&amp;#93;?\d&amp;#123;4&amp;#125;&amp;#36;<br />Validates a U.S. phone number. It must consist of 3 numeric characters, optionally enclosed in parentheses, followed by a set of 3 numeric characters and then a set of 4 numeric characters. </p>
-                <li>
-                  <p>
-                    <strong>E-mail<br /></strong>&amp;#94;(&amp;#91;0-9a-zA-Z&amp;#93;(&amp;#91;-.\w&amp;#93;&amp;#42;&amp;#91;0-9a-zA-Z&amp;#93;)&amp;#42;&amp;#64;(&amp;#91;0-9a-zA-Z&amp;#93;&amp;#91;-\w&amp;#93;&amp;#42;&amp;#91;0-9a-zA-Z&amp;#93;\.)&amp;#43;&amp;#91;a-zA-Z&amp;#93;&amp;#123;2,9&amp;#125;)&amp;#36;<br />Validates an e-mail address.</p>
-                  <li>
-                    <p>
-                      <strong>URL<br /></strong>&amp;#94;(ht&amp;#124;f)tp(s?)\:\/\/&amp;#91;0-9a-zA-Z&amp;#93;(&amp;#91;-.\w&amp;#93;&amp;#42;&amp;#91;0-9a-zA-Z&amp;#93;)&amp;#42;(:(0-9)&amp;#42;)&amp;#42;(\/?)(&amp;#91;a-zA-Z0-9\-\.\?\,\'\/\\\&amp;#43;&amp;&amp;#37;\&amp;#36;#_&amp;#93;&amp;#42;)?&amp;#36;<br />Validates a URL </p>
-                    <li>
-                      <p>
-                        <strong>ZIP Code<br /></strong>&amp;#94;(\d&amp;#123;5&amp;#125;-\d&amp;#123;4&amp;#125;&amp;#124;\d&amp;#123;5&amp;#125;&amp;#124;\d&amp;#123;9&amp;#125;)&amp;#36;&amp;#124;&amp;#94;(&amp;#91;a-zA-Z&amp;#93;\d&amp;#91;a-zA-Z&amp;#93; \d&amp;#91;a-zA-Z&amp;#93;\d)&amp;#36;<br />Validates a U.S. ZIP Code. The code must consist of 5 or 9 numeric characters.</p>
-                      <li>
-                        <p>
-                          <strong>Password<br /></strong>(?&amp;#33;&amp;#94;&amp;#91;0-9&amp;#93;&amp;#42;&amp;#36;)(?&amp;#33;&amp;#94;&amp;#91;a-zA-Z&amp;#93;&amp;#42;&amp;#36;)&amp;#94;(&amp;#91;a-zA-Z0-9&amp;#93;&amp;#123;8,40&amp;#125;)&amp;#36;<br />Validates a strong password. It must be between 8 and 40 characters, contain at least one digit and one alphabetic character, and must not contain special characters.</p>
-                        <li>
-                          <p>
-                            <strong>Non- negative integer<br /></strong>&amp;#94;\d&amp;#43;&amp;#36;<br />Validates that the field contains an integer greater than zero.</p>
-                          <li>
-                            <p>
-                              <strong>Currency (non- negative)<br /></strong>&amp;#94;\d&amp;#43;(\.\d\d)?&amp;#36;<br />Validates a positive currency amount. If there is a decimal point, it requires 2 numeric characters after the decimal point. For example, 3.00 is valid but 3.1 is not.</p>
-                            <li>
-                              <p>
-                                <strong>Currency (positive or negative)<br /></strong>&amp;#94;(-)?\d&amp;#43;(\.\d\d)?&amp;#36;<br />Validates for a positive or negative currency amount. If there is a decimal point, it requires 2 numeric characters after the decimal point.</p>
-                            </li>
-                          </li>
-                        </li>
-                      </li>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </ul>
-        <li>
-          <p>
-            <strong>Use regular expressions to constrain input.</strong> Use the regular expressions you have written to constrain input as the first step of your input validation strategy.</p>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
+
+Use regular expressions to validate input.
+
+
+## Why ##
+
+A good input validation strategy is to constrain input to known valid values, reject known bad values and to sanitize the input that passes validation. Rejecting bad values is not to be relied on, because there are too many possible bad values. However, it is possible to filter out at least some bad input. Constraining input can be done effectively using regular expressions.
+
+
+## When ##
+
+Constrain input as the first step of input validation.
+
+
+## How ##
+
+Perform the following actions to constrain input using regular expressions:
+
+1. **Use a regular expression library.** C++ does not have built-in regular expression functionality. Find a trusted library that provides regular expression functionality.
+
+2. **Determine valid input patterns.** Identify the types of valid input for your input application. For example, some input follows obvious patterns, such as social security or credit card numbers. Other types of input may have less obvious patterns, such as file names. Write regular expressions that describe valid input for your application. 
+
+3. **Validate length before applying regular expressions.** Applying regular expressions to very long data can result in denial of service conditions, so length of data should be validated first.
+
+4. **Use regular expressions to constrain input.** Use the regular expressions you have written to constrain input as the first step of your input validation strategy.
+
+
+## Additional Resources ##
+
+* For examples of regular expressions that can be used for input validation, see [https://www.owasp.org/index.php/OWASP_Validation_Regex_Repository](https://www.owasp.org/index.php/OWASP_Validation_Regex_Repository)
+
+
+---
+
+Adapted from Microsoft patterns & practices guidance.
+]]></Data>
   </Content>
 </TeamMentor_Article>
