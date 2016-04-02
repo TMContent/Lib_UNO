@@ -41,18 +41,18 @@ To check if parameterized APIs with type-safe parameters are used to execute SQL
 
 2. **Verify that each transaction uses stored procedures with type-safe parameters or prepared statements.** Verify that your application interacts with the backend database through the use of parameterized APIs instead of concatenating untrusted data into SQL syntax. 
 
-An example of using a stored procedure: 
+    An example of using a stored procedure: 
 
-	Connection.prepareStatement("exec PlaceOrder(?, ?, ?);");
+        Connection.prepareStatement("exec PlaceOrder(?, ?, ?);");
 
-An example of using a prepared statement:
+    An example of using a prepared statement:
 
-	Connection cn = MyApp.getDBConnection();
-	PreparedStatement st = cn.prepareStatement(
-	   "select user from myappUsers where user = ? and pass = ?;");
-	st.setString(1, user);
-	st.setString(2, new String(passDigest));
-	ResultSet rs = st.executeQuery();
+        Connection cn = MyApp.getDBConnection();
+        PreparedStatement st = cn.prepareStatement(
+           "select user from myappUsers where user = ? and pass = ?;");
+        st.setString(1, user);
+        st.setString(2, new String(passDigest));
+        ResultSet rs = st.executeQuery();
 
 
 ## How to Fix ##
