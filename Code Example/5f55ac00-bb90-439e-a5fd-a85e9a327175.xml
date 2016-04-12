@@ -4,7 +4,7 @@
     <Id>5f55ac00-bb90-439e-a5fd-a85e9a327175</Id>
     <Id_History>5f55ac00-bb90-439e-a5fd-a85e9a327175,9dae3ac8-f3b1-4407-bed8-df55d0dc29b2,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Stored Procedures</Title>
+    <Title>Use Parameterized Stored Procedures</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,34 +17,49 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Use stored procedures when interacting with a database if other parameterized APIs are not available. This increases performance and reduces the risk of a successful SQL injection attack.</p>
-  <h1>Why</h1>
-  <p>Attackers can use a SQL Injection Attack to manipulate the database in unforeseen ways. SQL injection allows an attacker to assume the credentials of the SQL account used to connect to the database, which may lead to arbitrary reading, writing, updating or deleting of data. In an improperly secured database, this can also lead to remote code execution through the use of certain stored procedures that allow for direct Operating System command injection.</p>
-  <h1>How</h1>
-  <p>To use a stored procedure:</p>
-  <ol>
-    <li>
-      <p />
-      <strong>Create the stored procedure on the database. </strong>Since stored procedures reside on the database server, you need to create the appropriate stored procedures on your application's database server. The following example creates a stored procedure on an Oracle database server: <pre>CREATE OR REPLACE PROCEDURE<br /> PlaceOrder(custID INT, itemID INT, qty INT)<br /> ISBEGIN<br />   INSERT INTO PendingPurchases (customer, item, quantity)<br />    VALUES (custID, itemID, qty);END PlaceOrder;</pre></li>
-    <li>
-      <p />
-      <strong>Call the stored procedure. </strong>This can be done&nbsp;using the following Java code:<pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("exec PlaceOrder(?, ?, ?);");<br />st.setInt(1, custID);<br />st.setInt(2, itemID);<br />st.setInt(3, qty);<br />ResultSet rs = st.executeQuery();</pre></li>
-    <li>
-      <p />
-      <strong>Assign the appropriate permissions. </strong>Once you have created the stored procedure, assign the appropriate permissions on the database server. Using the example above, allow your application to execute <em>PlaceOrder</em> and deny it access to <em>PendingPurchases</em>. Example: <p /><pre>REVOKE ALL ON PendingPurchases FROM myapp;<br />GRANT EXECUTE ON PlaceOrder TO myapp;</pre></li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code places a new order into the application's backend database. Because the application does not use stored procedures, the developers need to grant extra priviliges to the application to allow it to directly manipulate data inside the <em>PendingPurchases</em> table.</p>
-  <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("insert into PendingPurchases "<br />                      + "(customer, item, quantity) values (?, ?, ?);");<br />st.setInt(1, custID);st.setInt(2, itemID);st.setInt(3, qty);</pre>
-  <h1>Solution Example</h1>
-  <p>The following code places a new order into the application's backend database. Because the application uses stored procedures, the developers can allow the application to manipulate the data inside <em>PendingPurchases</em> without giving permissions to directly do so, therefore, further restricting the set of operations that the application can execute on the database server.</p>
-  <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("exec PlaceOrder(?, ?, ?);");<br />st.setInt(1, custID);st.setInt(2, itemID);st.setInt(3, qty);</pre>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Applications written using Servlets or JSP.
+
+
+## What to Do ##
+
+Use parameterized stored procedures when interacting with a database if other parameterized APIs are not available. This increases performance and reduces the risk of a successful SQL injection attack.
+
+
+## Why ##
+
+Attackers can use a SQL Injection to execute arbitrary queries with the privileges of the application. Under certain conditions SQL Injection can also lead to remote code execution.
+
+
+## How ##
+
+To use a parameterized stored procedure:
+
+1. **Create the stored procedure on the database.** Since stored procedures reside on the database server, you need to create the appropriate stored procedures on your application's database server. Make sure not to concatenate untrusted data into SQL syntax, but to use parameters and let the database engine substitute data into them. The following example creates a parameterized stored procedure:
+
+        CREATE OR REPLACE PROCEDURE PlaceOrder(custID INT, itemID INT, qty INT) AS
+        INSERT INTO PendingPurchases (customer, item, quantity)
+        VALUES (custID, itemID, qty);
+        END PlaceOrder;
+
+2. **Assign the appropriate permissions.** Once you have created the stored procedure, assign the appropriate permissions on the database server. Using the example above, allow your application to execute PlaceOrder and deny it access to PendingPurchases. Example:
+
+        REVOKE ALL ON PendingPurchases FROM myapp;
+        GRANT EXECUTE ON PlaceOrder TO myapp;
+
+3. **Call the stored procedure.** This can be done using the following Java code:
+
+        Connection cn = MyApp.getDBConnection();
+        PreparedStatement st = cn.prepareStatement("exec PlaceOrder(?, ?, ?);");
+        st.setInt(1, custID);
+        st.setInt(2, itemID);
+        st.setInt(3, qty);
+        ResultSet rs = st.executeQuery();
+
+
+
+]]></Data>
   </Content>
 </TeamMentor_Article>

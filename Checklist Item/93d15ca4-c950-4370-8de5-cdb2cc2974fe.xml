@@ -4,10 +4,10 @@
     <Id>93d15ca4-c950-4370-8de5-cdb2cc2974fe</Id>
     <Id_History>93d15ca4-c950-4370-8de5-cdb2cc2974fe,2b70799d-acef-4f07-913d-e12f8fdf7c42,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Dynamic SQL in Stored Procedures Is Parameterized</Title>
+    <Title>Data Passed to Stored Procedures Is Parameterized</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
-    <Technology>Java</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Dynamic SQL in Stored Procedures Is Parameterized</DirectLink>
     <Tag />
@@ -17,39 +17,35 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Verify that dynamic SQL in stored procedures is parameterized.</p>
-  <h1>Why</h1>
-  <p>Using dynamic SQL in stored procedures to build queries that include user input may result in SQL injection vulnerabilities, unless user input is explicitly parameterized inside the stored procedures themselves. </p>
-  <h1>How to Check</h1>
-  <p>To verify that dynamic SQL in stored procedures is parameterized:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify all stored procedures that use dynamic SQL.</strong> Review the database to identify all stored procedures that use dynamic SQL. </p>
-    </li>
-    <li>
-      <p>
-        <strong>Review all stored procedures that use dynamic SQL.</strong> Examine each stored procedure that uses dynamic SQL to make sure that user input is separated from the SQL statement. Pay particular attention to the lines that include the <em>EXEC</em> or the <em>EXECUTE</em> statements. These lines should pass user input as parameters to the stored procedures. </p>
-    </li>
-  </ol>
-  <h1>How to Fix</h1>
-  <p>To parameterize dynamic SQL in stored procedures:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify all stored procedures that use dynamic SQL.</strong> Review the database to identify all stored procedures that use dynamic SQL. </p>
-    </li>
-    <li>
-      <p>
-        <strong>Review all stored procedures that use dynamic SQL.</strong> Examine each stored procedure that uses dynamic SQL to make sure that user input is separated from the SQL statement. Pay particular attention to the lines that include the <em>EXEC</em> or the <em>EXECUTE</em> statements. These lines should pass user input as parameters to the stored procedures. </p>
-    </li>
-    <li>
-      <p>
-        <strong>Rewrite affected stored procedures.</strong> Rewrite each stored procedure that does not explicitly parameterize untrusted data. The exact syntax for this is different for different platforms. Please, refer to your database server vendor's documentation for information about using parameterized stored procedures. </p>
-    </li>
-  </ol>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## What to Check For ##
+
+Verify that data passed to stored SQL procedures is parameterized.
+
+
+## Why ##
+
+Using dynamic SQL in stored procedures to build queries that include user input may result in SQL injection vulnerabilities, unless user input is explicitly parameterized inside the stored procedures themselves and never treated as SQL syntax.
+
+
+## How to Check ##
+
+To verify that dynamic SQL in stored procedures is parameterized:
+
+1. **Identify all stored procedures.** Review the application code and examine the database(s) it uses to identify all stored procedures that use dynamic SQL.
+
+2. **Review all stored procedures.** Examine each stored procedure that uses dynamic SQL to make sure that user input is placed into parameters and never treated as SQL syntax. 
+
+
+## How to Fix ##
+
+To parameterize dynamic SQL in stored procedures:
+
+1. **Identify all stored procedures.** Review the application code and examine the database(s) it uses to identify all stored procedures that use dynamic SQL.
+
+2. **Review all stored procedures.** Examine each stored procedure to make sure that user input is placed in parameters and never treated as SQL syntax.
+
+3. **Rewrite affected stored procedures.** Rewrite each stored procedure that does not explicitly parameterize untrusted data. The exact syntax for this is different for different platforms. Refer to your database server vendor's documentation for information about using parameterized stored procedures.
+]]></Data>
   </Content>
 </TeamMentor_Article>

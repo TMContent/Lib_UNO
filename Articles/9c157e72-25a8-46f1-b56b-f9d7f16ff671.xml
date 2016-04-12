@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>9c157e72-25a8-46f1-b56b-f9d7f16ff671</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Encrypt Network Connections</Title>
+    <Category>Communication Security</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Use Transport Layer Security (TLS) encryption to protect connections used by Ruby applications with your web server. If necessary, implement back-end APIs which support the TLS protocol for encrypting out-of-band network communications.
+
+
+## Why ##
+
+Encryption technology such as TLS is necessary for all data communications when sensitive data is sent, or user identity is authenticated. If connections are not protected with best practice security measures, then sensitive data could be compromised. This undermines any authentication and access controls which have been established. When properly used, secure transport prevents eavesdropping attacks and other types of man-in-the-middle attacks.
+
+If communications are not protected by newer versions of TLS, an attacker can use an agent to send HTTPS cookies with requests to an alternate website. These cookies can then be modified and sent. The result is that the attack can be used to decrypt the cookie by reading one byte at a time. TLS performs more vigorous validation of data that has been decrypted. SSLv3 and previous versions are susceptible to the attack, and cannot be used. Most legitimate websites have halted support for SSLv3 and similar, and will only accept TLS negotiated communications.
+
+Sensitive data in transit between a database and application always requires protection against interception by a malicious user during transport over untrusted networks. Without SSL/TLS protection, all data (including passwords) is transmitted throughout the network in plain text. With TLS the confidentiality of all data is maintained for all information exchanges.
+
+The use of strong cryptography, security protocols, and trusted keys/certificates is a best practice required by certification authorities and agencies.
+
+
+## When ##
+
+It is always necessary to protect sensitive data transmitted or received over untrusted networks. Ensure that TLS is enabled and active for all connections with your application.
+
+In the future, SSLv3 will be disabled by default in all web browsers. However, this cannot be assured for all users of your Ruby application, as some may be using older, out-of-date browsers. Therefore it is necessary to always force TLS to the latest version on the web server, and disable SSLv3, SSLv2, etc. as possible options.
+
+For security Defense-in-Depth (DiD), examine the configuration of your web server to make sure it uses TLS only. Refer to the server documentation for options and recommended settings.
+
+
+## How ##
+
+Use the following steps as a guideline to encrypt network communications with your Ruby application.
+
+1. **Configure the web server.** If the web platform requires configuration and setup, it will be necessary to install a valid TLS certificate, and also configure the web server to use strong TLS cypher suites. Please refer to the documentation for your web platform for information about enabling and configuring TLS on the web server.
+
+2. **Enable TLS for web applications.** Set `config.force_ssl = true` in an environment file, such as *config/environments/production.rb*. The preference is to force TLS in this way for all applications in the environment. If not practical, this may be forced for the application only. To always force SSL connections in your application, add code to the *config/application.rb* file as follows:
+
+		class Application < Rails::Application
+		  # ...
+		  config.force_ssl = true
+		  # ...
+
+3. **Identify back-end network connections.** The previous steps, which configure the web server and enable TLS for web applications, encrypt connections between your application and the user's browser. For a typical application, this is all that is necessary to protect network connections. However, an application may connect to back-end services which are not protected by the web server's strong TLS cypher suites. Make a spreadsheet that lists any network connections to back-end services used by the application. These communications should also be encrypted.
+
+4. **Encrypt back-end connections.** If the application connects to any back-end services, use TLS to protect these connections. The exact procedure depends on the type of connection. It will be necessary to examine the host interface provided, as well as the supplied APIs. Client-side keys and certificates will most likely be integral to establishing a secure connection for any back-end connections.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>15aa6cfc-9e95-44a6-8e6f-25bc2fac7911</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Anchor Regular Expressions Using \A and \z</Title>
+    <Category>Input and Data Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Anchor regular expressions (regex) with `\A` for beginning of string, and `\z` for end of string to have more predictable application behavior.
+
+
+## Why ##
+
+The implementation of regex in Ruby uses `^` and `$` to match line beginning and line end. Most regex engines use these patterns to match the beginning and end of entire strings. If `^` and `$` are used with Ruby, then an isolated line could be used by an attacker to bypass validation. With proper use of `\A` and `\z` in Ruby regex, this type of threat is mitigated.
+
+
+## When ##
+
+When using regex with Ruby, always remember that `^` and `$` match the line beginning and line end, and not the beginning and end of a string. Always anchor Ruby regex with `\A` and `\z`.
+
+
+## How ##
+
+Use these steps to safely anchor regular expressions in Ruby.
+
+1. **Search code for regex patterns.** Search all Ruby code used in the application for expressions that begin with `/^`. Make a list of these line numbers for your change control record. An example found line is:
+
+    `/^https?:\/\/[^\n]+$/i`
+
+2. **Replace unsafe regex.** Edit each found line to replace `^` and `$` with `\A` and `\z` respectively, as shown in this example:
+
+    `/\Ahttps?:\/\/[^\n]+\z/i`
+
+3. **Test the changed expression.** Use sample text in combination with the new regex to validate it is working as expected.
+
+]]></Data>
+  </Content>
+</TeamMentor_Article>
