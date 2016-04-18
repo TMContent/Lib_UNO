@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -62,10 +62,6 @@
     </li>
     <li>
       <p>
-        <strong>Protect the IIS metabase.</strong> Grant only the necessary users access to the IIS metabase. These users should be the administrators and the ASP.NET account only. See <a href="http://support.microsoft.com/kb/326902">Microsoft's KB 326902</a> for more information.</p>
-    </li>
-    <li>
-      <p>
         <strong>Do not hard-code keys in the application.</strong> Hard-coding the encryption keys into the source code, hoping that an attacker will not reverse engineer the application, is security through obscurity. A determined attacker will usually find a way to defeat such mechanism.</p>
     </li>
     <li>
@@ -84,6 +80,6 @@
   <p>The following code shows an application that securely stores its encryption keys. Because the keys are stored into the Windows Registry and are protected with the ASP.NET's DPAPI encryption keys, it is extremely difficult for an attacker to steal the actual key without compromising the password associated with the ASP.NET local system account.</p>
   <pre>byte[] salt = MyApp.Crypto.GenerateSalt(); <br />RegistryKey regKey =<br /> Registry.LocalMachine.OpenSubKey("SOFTWARE\\MyApp\\KeyStore", true);<br />byte[] rawKey = (byte[])regKey.GetValue("encKey", null);<br />rawKey =<br /> ProtectedData.Unprotect(rawKey, salt, DataProtectionScope.CurrentUser); <br />Rijndael encMD = Rijndael.Create();<br />encMD.Key = rawKey;<br />encMD.IV = salt;<br />ICryptoTransform encCT = encMD.CreateEncryptor();</pre>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
