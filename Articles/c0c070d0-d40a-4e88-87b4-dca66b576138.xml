@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>c0c070d0-d40a-4e88-87b4-dca66b576138</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Platform-provided Session Management</Title>
+    <Category>Session Management</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ABAP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use the platform-provided session management features for Web applications built with SAP Advanced Business Application Programming (ABAP).
+
+
+## Why ##
+
+Session management is best provided by the SAP NetWeaver platform, as it provides the core foundation for communications between the database servers and application server instances, such as the ABAP Application Server (AS) software stack. The platform works on a lower level than the application and is therefore better suited to provide session management duties. Mature web application frameworks (or platforms) offer secure session management functionality which developers should use to enhance security posture.
+
+The ABAP-to-database communications require a minimum of one central dialog instance that contains the message server and the enqueue server. This instance cannot process any dialog requests. Users (or an application) may choose to execute other dialogs. However, the central instance always retains key components, including:
+
+- Internet Communication Manager (ICM), which sets up connection to the Internet. It processes server and client Web requests through HTTP, HTTPS, and SMTP protocols.
+- Dispatcher, which distributes requests to the work processes, or stores requests in a queue.
+- Work processes, to execute ABAP or other programs.
+- SAP Gateway, to make the RFC interface between SAP instances available within a system or beyond system boundaries.
+- Message server, to exchange current messages while balancing resource loads.
+
+Platform-provided session management yields key benefits to ABAP:
+
+- Session implementation is well-tested and fully functional.
+- Potential vulnerabilities which would be introduced by custom session management are not possible.
+- Simple to implement strategy requires only server-side configuration.
+- Governance features such as authentication, authorization, and auditing are included.
+
+
+## When ##
+
+Use SAP NetWeaver platform-provided session management in all web applications that require authentication. With the platform it is necessary to configure various authentication and session mechanisms so that authorized users can access required services. The mechanisms you use, and configuration of parameters, depends on the underlying technology of the SAP NetWeaver system and the communication channels used by your ABAP code.
+
+
+## How ##
+
+To use session management offered by the platform, please refer to the documentation for your platform. Once framework parameters are configured, the various aspects of session management are automatically provided to ABAP users who are authenticated and authorized. The following steps are offered as a guide only. The specific parameter settings depend on your application, ABAP stack, NetWeaver version and SAP Basis.
+
+1. **Determine server login parameters to change.** Determine if changes to server parameters are required. For example, in a Single Sign-On environment (SSO), applicable parameters include: `login/create_sso2_ticket` and `login/accept_sso2_ticket`. Other authentication methods may require different server configuration.
+
+2. **Use HTTP Session Management.** On the application server for ABAP, use the option for HTTP security sessions. Start HTTP Session Management (transaction `SICF_SESSIONS`). With an existing security session, users can then start applications that require a user logon without logging on again. When a security session is ended, the system also ends all applications that are linked to this security session. Review other available profile parameters and make changes as required. For example, set the `http/security_session_timeout` to define the maximum time period between receipt of two HTTP requests that have a valid security session ID. Other parameters need to be enabled, depending on the security requirements.
+
+3. **Change the *Secure* and *HttpOnly* profile parameters.** On the ABAP application server, change the following profile parameters for HTTP security session management. Set `login/ticket_only_by_https` to 1, so that the session cookie is only sent to the browser during HTTPS connections. Set `icf/set_HTTPonly_flag_on_cookies` to 0, so that the HTTPonly attribute is active for all ICF (Internet Communication Framework) cookies.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

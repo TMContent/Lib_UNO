@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>55783bb4-54b8-4899-bb07-63f5a77381bb</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use FILE_GET_NAME and FILE_VALIDATE_NAME to Validate File Names</Title>
+    <Category>Input Validation</Category>
+    <Phase>Implementation</Phase>
+    <Technology>ABAP</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- SAP ABAP
+
+
+## What to Do ##
+
+Use function modules `FILE_GET_NAME` and `FILE_VALIDATE_NAME` with Advanced Business Application Programming (ABAP) to validate physical filenames and counter the threat of filepath traversal.
+
+
+## Why ##
+
+The web and application servers are set up with restrictions to specific areas of the server's file system. Without programmatic protection against file traversal, an intruder could gain access to forbidden areas by altering and manipulating a URL and submitting it to the system. The function modules `FILE_GET_NAME` and `FILE_VALIDATE_NAME` protect the SAP system by converting a logical file name to the corresponding physical file name and path. This ensures that an attacker cannot manipulate the filename and/or path.
+
+
+## When ##
+
+File names should always be validated when a SAP program accesses files on the application server. When you are invoking the ABAP command `OPEN DATASET`, or related statements, users may be able to enter the requested file name. This activity must always be restricted and filtered by using the functions `FILE_GET_NAME` and `FILE_VALIDATE_NAME`.
+
+
+## How ##
+
+To prevent path traversal attacks in ABAP programs, use the following guided steps. For more detailed instructions and code examples, refer to the Additional Resources section of this document.
+
+1. **Create a default logical path.** It is necessary to first create a logical path to specify the OS-dependent physical path to the location where users will create filenames. SAP installs a default logical path `TMP` to temporary directories on UNIX and MS Windows.
+
+2. **Create a logical file of data format DIR.** Create a logical file of data format DIR (directory) that uses the logical path created previously. It is best to use an absolute filename in this case.
+
+3. **Define a constant logical filename.** The constant logical filename is used for filename validation. For each physical filename parameter in the application, create one constant of type `FILEINTERN` (logical filename).This constant can be a global within your program, local within the program, or defined in a type pool for multiple-use across programs. The constant value is set to the logical filename used for filename validation. For example:
+
+	`CONSTANTS lc_log_fname LIKE FILENAME-FILEINTERN VALUE 'ZMY_OUTDIR'.`
+
+4. **Create a default value for the physical filename.** Call the function module `FILE_GET_NAME` with the parameter `INCLUDING_DIR` set to 'X' (for example, during INITIALIZATION). This establishes a default value for the physical filename. Be sure to catch an exception and change the message type to avoid the program aborting with a message. `FILE_GET_NAME` raises the exception with message type E, which is converted to message type A during Process before Output (PBO).
+
+5. **Check for a relative filename path.** The function module `FILE_VALIDATE_NAME` always checks absolute filenames with specified paths. If a relative filename is passed for checking, the default path is implicitly added as a prefix to `DIR_HOME` in accordance with the profile parameter. A complete example follows:
+
+		AT SELECTION-SCREEN
+		* Check whether the filename is a relative one 
+		  IF  cl_fs_path => create (  pv_fname  ) ->is_relative ( ) =  abap_true .
+		    " Filename is a relative one, put the default path before the filename
+		    " We also need to check in this case, as '/tmp' + '../etc/test.txt' is still outside /tmp
+		    lv_full_name  =  lv_defaultpath && pv_fname .
+		  ELSE .
+		    " Filename is already absolute, just use it.
+		    lv_full_name  =  pv_fname . 
+		  ENDIF .
+
+6. **Validate input.** Validate the physical filename supplied by the user on the screen where the filename was entered. This ensures that an error is immediately returned when the filename is invalid. The user then has an opportunity to change the filename to a valid entry. If additional logic is performed after entry, the processing time and the use of system resources was unnecessary. A complete input validation example follows:
+
+		CALL FUNCTION 'FILE_VALIDATE_NAME'
+		EXPORTING
+		logical_filename   = lc_log_fname
+		CHANGING
+		physical_filename  = lv_full_name
+		EXCEPTIONS
+		  LOGICAL_FILENAME_NOT_FOUND = 2
+		  VALIDATION_FAILED  = 1
+		OTHERS   = 4.
+
+		IF  SY - SUBRC <>  0.
+		  IF  SY - SUBRC >  1.
+		    MESSAGE ID sy-msgid  TYPE  'A'  NUMBER  sy-msgno
+		      WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+		  ELSE .
+		    MESSAGE 'The filename >' && pv_fname && '< is not valid, please try again.' TYPE 'E'.
+		  ENDIF.
+		ENDIF.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

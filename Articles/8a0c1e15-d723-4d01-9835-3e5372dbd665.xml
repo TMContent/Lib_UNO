@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>8a0c1e15-d723-4d01-9835-3e5372dbd665</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Encode Displayed Data</Title>
+    <Category>Encoding</Category>
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- Ruby
+
+
+## What to Do ##
+
+Encode data that the application displays to the user in output pages and views.
+
+
+## Why ##
+
+It is important to properly encode data before output to a dynamically generated Web page or local view. When data is not encoded, then it will be seen in the browser in its original representation or hidden as a link, which could be executable script code. The browser would then interpret the malicious code and run it. The most common case is of user-controlled input making its way into plain HTML. Therefore, page markup must be HTML-encoded before being sent to the client browser.
+
+Without encoding of displayed data, your application is subject to Cross-Site Scripting (XSS) attacks, which work to make a client browser parse HTML that the developer did not intend to be included. When data is not encoded, an attacker can provide an embedded link in the site, and gain control of protected resources.
+
+Application vulnerability to XSS is on the OWASP top 10 list for critical web application security flaws. The Common Weakness Enumeration (CWE) project also highlights similar programming errors that expose an application to XSS when displayed data is not encoded. 
+
+
+## When ##
+
+If your Ruby on Rails (RoR) application handles markup that uses untrusted input such as user input, shared database, or local file, it must always be encoded before display. Since the displayed pages contain HTML as well as data from other contexts, validation is difficult. Encoding is also difficult, since it potentially can break legitimate HTML tags in the output. Therefore, it is preferable to use a framework-supported library that can parse and clean HTML-formatted text. If the application does not use a framework, then Ruby class libraries must be used as required to encode data before it is executed.
+
+
+## How ##
+
+If you write output that includes user input or data from a shared database or a local file that you do not trust, encode it. Encoding the data ensures that it is treated as literal text and not as script. Use the following guidelines to encode user input:
+
+1. **Identify all pages that display untrusted data.** Enumerate all the pages and views in the application. Make a spreadsheet list of all pages and views that display untrusted data from all sources.
+
+2. **Identify all untrusted data included in displayed data.** Identify functions that include untrusted data in program variables. Search your code for calls to these functions in order to find instances that add untrusted data to variables that build displayed markup.
+
+3. **Identify contexts of untrusted data.** In your application, untrusted data may be rendered in different contexts, such as HTML, CSS, and JavaScript. Add the context for untrusted data to the spreadsheet list.
+
+4. **Leverage built-in encoding.** In the latest versions of RoR, string output is automatically escaped and effectively encoded in most HTML contexts. However, in some cases it may be necessary for developers to encode output when the framework library is not sufficient, or the output is not automatically encoded.
+
+5. **Encode URIs assigned to links.** A common scenario where data is not  automatically encoded is when a URI is being assigned to a link using the `link_to` method. For this case use the `html_escape` method to encode data passed to `link_to`. It is possible to use `h` as an alias for `html_escape`.
+
+6. **Encode data in JSON contexts.** With RoR 3, use the `json_escape` function to encode data in JSON contexts. To accomplish this, pass the output of `to_json` to `json_escape` in the following manner:
+
+		<script>
+			var user = <%= json_escape(@user.to_json) %>;
+		</script>
+With RoR 4, `to_json` always escapes HTML characters in strings using the *\uXXXX* notation. This is an RoR 4 configuration option (`escape_html_entities_in_json`) which is enabled by default.
+
+7. **Sanitize data in CSS contexts.** Untrusted data should not be placed in CSS contexts, and the practice should be avoided. If placing data in CSS contexts is absolutely necessary for proper application functioning, the `sanitize_css` function can be used. Sanitizing CSS data in this case will remove malicious data that is found. However, the output is not encoded by the function.
+
+8. **Do not display untrusted data in JavaScript contexts.** In relatively few cases untrusted data can be safely encoded and placed into JavaScript contexts. This practice is not recommended, however, and it is best to avoid placing untrusted data in client-side JavaScript. Attempt to use a safer method to implement the functionality if your application is doing this. If safer method(s) cannot be found, explore the possible use of the `escape_javascript` function.
+
+9. **Do not display untrusted data in other contexts.** If your application uses contexts other than mentioned above, avoid the use of untrusted data. Generally, if it is known that output data is being safely encoded for the correct context, then it can be used.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

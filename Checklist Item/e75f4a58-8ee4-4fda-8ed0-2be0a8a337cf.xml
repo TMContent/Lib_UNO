@@ -7,7 +7,7 @@
     <Title>Locks Are Used with Mutexes to Avoid Deadlocks</Title>
     <Category>Concurrency</Category>
     <Phase>Implementation</Phase>
-    <Technology>Technology Independent</Technology>
+    <Technology>C++</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Locks Are Used with Mutexes to Avoid Deadlocks</DirectLink>
     <Tag />
@@ -18,13 +18,20 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="markdown">
-    <Data><![CDATA[## What to Check For ##
+    <Data><![CDATA[## Applies To ##
+
+* C++
+
+
+## What to Check For ##
 
 Verify that locks are used with mutexes, instead of manual locking and unlocking.
+
 
 ## Why ##
 
 Using `std::lock_guard` makes it simpler to prevent deadlocks, because it unlocks mutexes automaticaly when a function exits.
+
 
 ## How to Check ##
 
@@ -33,6 +40,7 @@ Use the following steps to check if locks are used with mutexes:
 1. **Locate mutexes.** Search code for declarations of `std::mutex` objects and their subsequent use to make sure mutexes are being used.
 
 2. **Verify that locks are used.** Locate functions that use mutexes and make sure they use `std::lock_guard` instead of calling `lock()` and `unlock()`.
+
 
 ## How to Fix ##
 
@@ -61,7 +69,7 @@ In the following example, a lock is being used with the mutex. Notice that nothi
 
 ## Additional Resources ##
 
-For more information about using locks with mutexes, see [https://www.securecoding.cert.org/confluence/display/cplusplus/CON02-CPP.+Use+lock+classes+for+mutex+management](https://www.securecoding.cert.org/confluence/display/cplusplus/CON02-CPP.+Use+lock+classes+for+mutex+management)
+* For more information about using locks with mutexes, see [https://www.securecoding.cert.org/confluence/display/cplusplus/CON02-CPP.+Use+lock+classes+for+mutex+management](https://www.securecoding.cert.org/confluence/display/cplusplus/CON02-CPP.+Use+lock+classes+for+mutex+management)
 ]]></Data>
   </Content>
 </TeamMentor_Article>

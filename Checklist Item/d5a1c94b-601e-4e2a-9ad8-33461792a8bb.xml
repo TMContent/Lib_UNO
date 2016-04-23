@@ -4,7 +4,7 @@
     <Id>d5a1c94b-601e-4e2a-9ad8-33461792a8bb</Id>
     <Id_History>d5a1c94b-601e-4e2a-9ad8-33461792a8bb,961f7b5b-37db-4e88-8851-507958322450,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Parameterized APIs Are Used for Data Access</Title>
+    <Title>Parameterized APIs with Type-safe Parameters Are Used for Data Access</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,73 +17,91 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Ensure that type safe SQL parameters are used when performing database transactions.</p>
-  <h1>Why</h1>
-  <p>Attackers can use a SQL Injection Attack to manipulate the database in unforeseen ways. SQL injection allows an attacker to assume the credentials of the SQL account used to connect to the database, which may lead to arbitrary reading, writing, updating or deleting of data. In an improperly secured database, this can also lead to remote code execution through the use of certain stored procedures that allow for direct Operating System command injection.</p>
-  <h1>How to Check</h1>
-  <p>To check if parameterized queries are used:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify all database transactions. </strong>Locate all SQL queries throughout your application. Example:</p>
-      <pre>"select user from myappUsers where user = ? and pass = ?;"</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Verify that each transaction uses Stored Procedures. </strong>Verify that your application interacts with the backend database through the use of Stored Procedures. Ensure that all SQL queries look like:</p>
-      <pre>Connection.prepareStatement("exec PlaceOrder(?, ?, ?);");</pre>
-      <p>and not like:</p>
-      <pre>Connection.prepareStatement("insert into PendingPurchases "<br />               + "(customer, item, quantity) values (?, ?, ?);");<br /></pre>
-      <p>Some databases (or versions) do not support stored procedures. If possible, use a database product that supports stored procedures. If that is not possible, then continue to use prepared statements in conjunction with strong input validation.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Verify that each transaction uses Prepared Statement. </strong>Verify that each SQL query is executed through the use of a PreparedStatement object. Example:</p>
-      <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement(<br />   "select user from myappUsers where user = ? and pass = ?;");<br />st.setString(1, user);<br />st.setString(2, new String(passDigest));<br />ResultSet rs = st.executeQuery();</pre>
-    </li>
-  </ol>
-  <h1>How to Fix</h1>
-  <p>One way of making the application less susceptible to SQL injection attacks is by using stored procedures. Stored procedures are subroutines stored in the database that are available to applications for accessing the data. </p>
-  <p>Just using stored procedures isn't a complete remedy for SQL injection. The important thing to do is use parameters with stored procedures, or else your stored procedures can be susceptible to SQL injection if they use unfiltered input. Stored procedures provide several security advantages: </p>
-  <ul>
-    <li>By parameterizing input parameters and type-enforcing them, user input is effectively filtered. </li>
-    <li>Stored procedures are allowed by most databases&nbsp;to execute under different security privileges than&nbsp;from the database user, thereby restricting the ability of the application to do anything beyond the actions specified in the stored procedures. For instance, an application would have execute access to a stored procedure but no access to the base tables. </li>
-  </ul>
-  <p>To use type-safe SQL parameters, follow these steps:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>If possible, use stored procedures. </strong>Stored procedures are pre-compiled statements that are stored on the database server. Using stored procedures improves your application's performance and security.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Identify the SQL queries. </strong>Locate all SQL queries throughout your application. Example:</p>
-      <pre>Connection cn = MyApp.getDBConnection();<br />Statement st = cn.createStatement();<br />String query = "select login_attempts from myappUsers where user = \"" + user<br />             + "\" and pass = \"" + new String(passDigest) + "\";";<br />ResultSet rs = st.executeQuery(query);</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Identify the parameters in each SQL query. </strong>After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Use PreparedStatement. </strong>Java supports parameterized queries via its <em>PreparedStatement</em> class. <em>PreparedStatement</em> is mapped by most databases to a parameterized query or a stored procedure. Although the implementation may differ&nbsp;among databases, the functionality is the same. Turn all SQL queries into parameterized queries. To accomplish this, turn all <em>Statement</em> objects into <em>PreparedStatement</em> objects. For example, the SQL query from Step 1 would be:</p>
-      <pre>Connection cn = MyApp.getDBConnection();<br />PreparedStatement st = cn.prepareStatement("select login_attempts from myappUsers"<br />                     + " where user = ? and pass = ?;");<br />st.setString(1, user);<br />st.setString(2, new String(passDigest));<br />ResultSet rs = st.executeQuery();</pre>
-      <p>For more information, consult the documentation for <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/PreparedStatement.html">Class PreparedStatement</a> in the Java SDK.</p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code validates the user based on a given username and password. It hashes the password with a random salt, then it compares the username and the produced hash against the data stored in the backend database. Unfortunately, the SQL query is dynamically crafted by using the user's input. If there is no proper input validation, an attacker can access the application's database server through the use of SQL injection.</p>
-  <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      // Hash the credentials before querying the credential store<br />      // The application crafts the SQL query based on user's input<br />      Connection cn = MyApp.getDBConnection();<br />      Statement st = cn.createStatement();<br />      String query = "select login_attempts from myappUsers where user = \""<br />                    + user + "\" and pass = \"" + passHash + "\";";<br />      ResultSet rs = st.executeQuery(query);<br />      // Execute the rest of the authentication steps<br />}</pre>
-  <h1>Solution Example</h1>
-  <p>The following code validates the user based on given username and password. It hashes the password with a random salt, then it compares the username and the produced hash against the data stored in the backend database. Because the application uses <em>PreparedStatement</em>, it is much more difficult for an attacker to gain access to the application's database server through the use of SQL injection. </p>
-  <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      // Hash the credentials before querying the credential store<br />      // The application uses parameterized queries<br />      Connection cn = MyApp.getDBConnection();<br />      PreparedStatement st = cn.prepareStatement("select user from myappUsers"<br />                            + " where user = ? and pass = ?;");<br />      st.setString(1, user);<br />      st.setString(2, passHash);<br />      ResultSet rs = st.executeQuery();<br />      // Execute the rest of the authentication steps<br />}</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about using parameterized queries in Java, see: <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/PreparedStatement.html">PreparedStatement</a>. </li>
-    <li>For more information about preventing SQL injection attacks, visit: <a href="http://www.owasp.org/index.php/Reviewing_Code_for_SQL_Injection">Reviewing Code for SQL Injection</a>&nbsp;from OWASP. </li>
-  </ul>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java
+
+
+## What to Check For ##
+
+Ensure that type-safe SQL parameters are used with stored procedures or prepared statements when performing database transactions.
+
+
+## Why ##
+
+Use type-safe parameters with parameterized APIs to prevent SQL injection. Attackers can use a SQL injection to manipulate the database in unforeseen ways. SQL injection allows an attacker to execute arbitrary queries on the application database. In some cases, SQL injection can result in command execution.
+
+
+## How to Check ##
+
+To check if parameterized APIs with type-safe parameters are used to execute SQL queries:
+
+1. **Identify all database transactions.** Locate all SQL queries throughout your application. Example: `"select user from myappUsers where user = ? and pass = ?;"`
+
+2. **Verify that each transaction uses stored procedures with type-safe parameters or prepared statements.** Verify that your application interacts with the backend database through the use of parameterized APIs instead of concatenating untrusted data into SQL syntax. 
+
+    An example of using a stored procedure: 
+
+        Connection.prepareStatement("exec PlaceOrder(?, ?, ?);");
+
+    An example of using a prepared statement:
+
+        Connection cn = MyApp.getDBConnection();
+        PreparedStatement st = cn.prepareStatement(
+           "select user from myappUsers where user = ? and pass = ?;");
+        st.setString(1, user);
+        st.setString(2, new String(passDigest));
+        ResultSet rs = st.executeQuery();
+
+
+## How to Fix ##
+
+To use type-safe SQL parameters with parameterized APIs, follow these steps:
+
+1. **Identify the SQL queries.** Locate all SQL queries throughout your application. Example:
+
+		Connection cn = MyApp.getDBConnection();
+		Statement st = cn.createStatement();
+		String query = "select login_attempts from myappUsers where user = \"" + user
+					 + "\" and pass = \"" + new String(passDigest) + "\";";
+		ResultSet rs = st.executeQuery(query);
+
+2. **Identify the parameters in each SQL query.** After locating all SQL queries, identify the parameters in each query. Understand the format and type of each parameter's data.
+
+3. **Use PreparedStatement or stored procedures.** Java supports parameterized queries via its PreparedStatement class. PreparedStatement is mapped by most databases to a parameterized query or a stored procedure. Turn all SQL queries into parameterized queries. To accomplish this, turn all Statement objects into PreparedStatement objects. For example, the SQL query from Step 1 would be:
+
+		Connection cn = MyApp.getDBConnection();
+		PreparedStatement st = cn.prepareStatement("select login_attempts from myappUsers"
+							 + " where user = ? and pass = ?;");
+		st.setString(1, user);
+		st.setString(2, new String(passDigest));
+		ResultSet rs = st.executeQuery();
+
+
+## Problem Example ##
+
+In the following example untrusted input is concatenated into SQL syntax, which causes SQL injection.
+
+	// The application crafts the SQL query based on user's input
+	Connection cn = MyApp.getDBConnection();
+	Statement st = cn.createStatement();
+	String query = "select login_attempts from myappUsers where user = \""
+				+ user + "\" and pass = \"" + passHash + "\";";
+	ResultSet rs = st.executeQuery(query);
+
+
+## Solution Example ##
+
+The following code uses PreparedStatement, which prevents SQL injection:
+
+	// The application uses parameterized queries
+	Connection cn = MyApp.getDBConnection();
+	PreparedStatement st = cn.prepareStatement("select user from myappUsers"
+						+ " where user = ? and pass = ?;");
+	st.setString(1, user);
+	st.setString(2, passHash);
+	ResultSet rs = st.executeQuery();
+]]></Data>
   </Content>
 </TeamMentor_Article>

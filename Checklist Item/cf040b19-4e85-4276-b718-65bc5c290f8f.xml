@@ -3,7 +3,7 @@
   <Metadata>
     <Id>cf040b19-4e85-4276-b718-65bc5c290f8f</Id>
     <Id_History>cf040b19-4e85-4276-b718-65bc5c290f8f,a1484f9d-bc43-4145-827a-4025758df826,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Parameterized APIs Are Used for Database Access</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
@@ -17,67 +17,99 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Check For</h1>
-  <p>Ensure that type-safe parameters are used when constructing dynamic SQL queries or when passing parameters to stored procedures.</p>
-  <h1>Why</h1>
-  <p>If you use the <em>Parameters</em> collection, SQL treats the input is as a literal value rather than as executable code. The <em>Parameters</em> collection can be used to enforce type and length constraints on input data. Values outside of the range trigger an exception.</p>
-  <p>If type-safe SQL parameters are not used, attackers might be able to execute injection attacks that are embedded in the unfiltered input.</p>
-  <h1>How To Check</h1>
-  <p>To check if parameterized queries are used:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify all database transactions. </strong>Locate all SQL queries throughout your application. Example:</p>
-      <pre>"select user from myappUsers where user = ? and pass = ?;"</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Verify that each transaction uses Stored Procedures where possible. </strong>Verify that your application interacts with the backend database through the use of Stored Procedures. Ensure that SQL queries look like:</p>
-      <pre>SqlCommand myCommand = new SqlCommand("sp_SelectUser", myConnection);<br />//Specify our command is a stored procedure<br />myCommand.CommandType = CommandType.StoredProcedure; </pre>
-      <p>and not like:</p>
-      <pre>string SQLstr = "SELECT * from users<br />	 WHERE username = '" + un.Text + "'<br />	 AND password = '" + pass.Text + "'";<br />SqlCommand myCommand = new SqlCommand(SQLstr, myConnection);</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Verify that type-safe parameters are used. </strong>Verify that type-safe parameters are used in the dynamic SQL queries or stored procedures by using the SqlParameterCollection class. Example:</p>
-      <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />  connection.Open();<br />  SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />         "SELECT * from users WHERE username = '@uname'<br />          AND password = '@pwd'", connection);<br />  myCommand.SelectCommand.Parameters.Add("@uname", SqlDbType.VarChar, 24);<br />  myCommand.SelectCommand.Parameters.Add("@pwd", SqlDbType.VarChar, 16);<br />  myCommand.SelectCommand.Parameters["@uname"].Value = un.Text;<br />  myCommand.SelectCommand.Parameters["@pwd"].Value = pass.Text;<br />  myDataAdapter.Fill(userDataset);  ...  connection.Close();<br />}</pre>
-    </li>
-  </ol>
-  <h1>How To Fix</h1>
-  <p>You have two options for avoiding user input in dynamic SQL queries:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Use parameters with stored procedures.</strong> Stored procedures alone will not prevent SQL injection. Lack of parameter usage means that stored procedures will be susceptible to SQL injection, especially if they use unfiltered input. The following code shows how to use <em>SqlParameterCollection</em> when calling a stored procedure:</p>
-      <pre>using System.Data;<br />using System.Data.SqlClient;</pre>
-      <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&nbsp; DataSet userDataset = new DataSet();<br />&nbsp; SqlDataAdapter myCommand = new SqlDataAdapter( <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "LoginStoredProcedure", connection);<br />&nbsp; myCommand.SelectCommand.CommandType = CommandType.StoredProcedure;<br />&nbsp; myCommand.SelectCommand.Parameters.Add("@au_id", SqlDbType.VarChar, 11);<br />&nbsp; myCommand.SelectCommand.Parameters["@au_id"].Value = AuthId.Text;</pre>
-      <pre>&nbsp; myCommand.Fill(userDataset);<br />}</pre>
-      <p>In this case, the @au_id parameter is treated as a literal value and not as executable code. Also, the parameter is checked for type and length. In the preceding code example, the input value cannot be longer than 11 characters. If the data does not conform to the type or length defined by the parameter, the <em>SqlParameter</em> class throws an exception.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Use parameters with dynamic SQL.</strong> If stored procedures are unavailable, use parameters when constructing dynamic SQL statements. The following code shows how to use <em>SqlParametersCollection</em> with dynamic SQL:</p>
-      <pre>using System.Data;<br />using System.Data.SqlClient;</pre>
-      <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&nbsp; DataSet userDataset = new DataSet();<br />&nbsp; SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "SELECT au_lname, au_fname FROM Authors WHERE au_id = @au_id", <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connection);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />&nbsp; myCommand.SelectCommand.Parameters.Add("@au_id", SqlDbType.VarChar, 11);<br />&nbsp; myCommand.SelectCommand.Parameters["@au_id"].Value = AuthId.Text;<br />&nbsp; myDataAdapter.Fill(userDataset);<br />}</pre>
-    </li>
-  </ol>
-  <h1>Related Items</h1>
-  <em>You may find these additional articles useful</em>
-  <ul>
-    <li>
-      <a href="/article/92e7b9b6-b0fb-4ec0-b529-0c6156430198">Use Parameterized APIs for Database Access</a>
-    </li>
-  </ul>
-  <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>
-  <h1>
-  </h1>
-  <h1>
-  </h1>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+- ASP.NET 4.0
+
+
+## What to Check For ##
+
+Ensure that type-safe parameters are used when constructing dynamic SQL queries or when passing parameters to stored procedures.
+
+
+## Why ##
+
+If you use the Parameters collection, SQL treats the input is as a literal value rather than as executable code. The Parameters collection can be used to enforce type and length constraints on input data. Values outside of the range trigger an exception.
+
+If type-safe SQL parameters are not used, attackers might be able to execute injection attacks that are embedded in the unfiltered input.
+
+
+## How To Check ##
+
+To check if parameterized queries are used:
+
+1. **Identify all database transactions.** Locate all SQL queries throughout your application. Example: `select user from myappUsers where user = ? and pass = ?;`
+
+2. **Verify that each transaction uses Stored Procedures where possible.** Verify that your application interacts with the backend database through the use of Stored Procedures. Ensure that SQL queries look like:
+
+        SqlCommand myCommand = new SqlCommand("sp_SelectUser", myConnection);
+        //Specify our command is a stored procedure
+        myCommand.CommandType = CommandType.StoredProcedure; 
+
+    and not like:
+
+        string SQLstr = "SELECT * from users
+                 WHERE username = '" + un.Text + "'
+                 AND password = '" + pass.Text + "'";
+        SqlCommand myCommand = new SqlCommand(SQLstr, myConnection);
+
+3. **Verify that type-safe parameters are used.** Verify that type-safe parameters are used in the dynamic SQL queries or stored procedures by using the SqlParameterCollection class. Example:
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+          connection.Open();
+          SqlDataAdapter myDataAdapter = new SqlDataAdapter(
+                 "SELECT * from users WHERE username = '@uname'
+                  AND password = '@pwd'", connection);
+          myCommand.SelectCommand.Parameters.Add("@uname", SqlDbType.VarChar, 24);
+          myCommand.SelectCommand.Parameters.Add("@pwd", SqlDbType.VarChar, 16);
+          myCommand.SelectCommand.Parameters["@uname"].Value = un.Text;
+          myCommand.SelectCommand.Parameters["@pwd"].Value = pass.Text;
+          myDataAdapter.Fill(userDataset);
+            ...
+          connection.Close();
+        }
+
+
+## How To Fix ##
+
+You have two options for avoiding user input in dynamic SQL queries:
+
+1. **Use parameters with stored procedures.** Stored procedures alone will not prevent SQL injection. Lack of parameter usage means that stored procedures will be susceptible to SQL injection, especially if they use unfiltered input. The following code shows how to use SqlParameterCollection when calling a stored procedure:
+
+        using System.Data;
+        using System.Data.SqlClient;
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+          DataSet userDataset = new DataSet();
+          SqlDataAdapter myCommand = new SqlDataAdapter( 
+                     "LoginStoredProcedure", connection);
+          myCommand.SelectCommand.CommandType = CommandType.StoredProcedure;
+          myCommand.SelectCommand.Parameters.Add("@au_id", SqlDbType.VarChar, 11);
+          myCommand.SelectCommand.Parameters["@au_id"].Value = AuthId.Text;
+          myCommand.Fill(userDataset);
+        }
+	
+    In this case, the @au_id parameter is treated as a literal value and not as executable code. Also, the parameter is checked for type and length. In the preceding code example, the input value cannot be longer than 11 characters. If the data does not conform to the type or length defined by the parameter, the SqlParameter class throws an exception.
+
+2. **Use parameters with dynamic SQL.** If stored procedures are unavailable, use parameters when constructing dynamic SQL statements. The following code shows how to use SqlParametersCollection with dynamic SQL:
+
+        using System.Data;
+        using System.Data.SqlClient;
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+          DataSet userDataset = new DataSet();
+          SqlDataAdapter myDataAdapter = new SqlDataAdapter(
+                 "SELECT au_lname, au_fname FROM Authors WHERE au_id = @au_id", 
+                 connection);                
+          myCommand.SelectCommand.Parameters.Add("@au_id", SqlDbType.VarChar, 11);
+          myCommand.SelectCommand.Parameters["@au_id"].Value = AuthId.Text;
+          myDataAdapter.Fill(userDataset);
+        }
+
+---
+
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>
