@@ -17,184 +17,96 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Java web-based applications using JSF.</li>
-  </ul>
-  <h1>Summary</h1>
-  <p>Implementing protections that prevent Cross-Site Request Forgery (CSRF) within a JSF application.</p>
-  <h1>Objectives</h1>
-  <p>CSRF is a powerful attack that allows an attacker to force a victim to execute functionality within an application on behalf of the attacker. The example below gives an example of how to prevent CSRF within a JSF application.</p>
-  <h1>Scenarios</h1>
-  <p>CSRF is a type of attack that occurs when a malicious web site causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated, causing the victim to perform activities on behalf of the attacker. In order to prevent CSRF, the most common effective solution currently used is the synchronizer token pattern. The flow below shows the basic steps in prevention. </p>
-  <h1>Solution Example</h1>
-  <p>To add unique tokens to HTTP requests using JSF:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Store a randomly generated token for each authenticated user.</strong> Upon successful authentication of a user, store a randomly generated (using a secure pseudo-random number generator such as <em>java.security.SecureRandom</em>) string (token) in the <em>HttpSession</em> for the user.</p>
-      <pre>
-        <p>//in authentication function</p>
-        <p>session.setAttribute("csrfToken", generateCSRFToken());</p>
-        <p>&nbsp;</p>
-        <p>//sample implementation of token generation</p>
-        <p>public static String generateCSRFToken() &#123;</p>
-        <p>&#9;SecureRandom rng = new SecureRandom();</p>
-        <p>&#9;int length = 64;</p>
-        <p>&#9;String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";</p>
-        <p>&#9;char&#91;&#93; text = new char&#91;length&#93;;</p>
-        <p>&#9;for (int i = 0; i &lt; length; i&#43;&#43;) &#123;</p>
-        <p>&#9;&#9;text&#91;i&#93; = characters.charAt(rng.nextInt(characters.length()));</p>
-        <p>&#9;&#125;</p>
-        <p>&#9;return String.valueOf(text);</p>
-        <p>&#125;</p>
-      </pre>
-      <li>
-        <p>
-          <strong>Add security tokens to transaction pages.</strong> For any function in the application representing a transaction (ie. causes a server side state change), the associated client form should have a hidden form field containing the token retrieved from the session.</p>
-        <pre>
-          <p>&lt;h:form&gt;</p>
-          <p>&#9;...</p>
-          <p>&#9;&lt;h:inputHidden id="token" value="#&#123;sessionScope&#91;'csrfToken'&#93;&#125;" /&gt;</p>
-          <p>&#9;...</p>
-          <p>&lt;/h:form&gt;</p>
-        </pre>
-        <li>
-          <p>
-            <strong>Verify that&nbsp;server-side and client-side tokens match.</strong>&nbsp;For any function in the application representing a transaction (ie. causes a server side state change), the associated server-side request processing code should retrieve the token from the session. It should then compare that token to the submitted token from the client for the given request. If the tokens match, the transaction may be processed. If the tokens do not match, the transaction should not be processed, and the associated request should be treated as an attack and dealt with accordingly.</p>
-          <pre>
-            <p>//in your backing bean that handles the associated request from the form above</p>
-            <p>private String token;</p>
-            <p>public String getToken() &#123;</p>
-            <p>&#9;return token;</p>
-            <p>&#125;</p>
-            <p>public void setToken(String token) &#123;</p>
-            <p>&#9;this.token = token;</p>
-            <p>&#125;</p>
-            <p>...</p>
-            <p>//method that handles form submit</p>
-            <p>public void action() &#123;</p>
-            <p>&#9;FacesContext facesContext = FacesContext.getCurrentInstance();</p>
-            <p>&#9;HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);</p>
-            <p>&#9;String storedToken = (String)session.getAttribute("csrfToken");</p>
-            <p />
-            <p>&#9;//do check</p>
-            <p>&#9;if (storedToken.equals(token)) &#123;</p>
-            <p>&#9;&#9;//go ahead and process ... do business logic here</p>
-            <p>&#9;&#125; else &#123;</p>
-            <p>&#9;&#9;//DO NOT PROCESS ... this is to be considered a CSRF attack - handle appropriately</p>
-            <p>&#9;&#125;</p>
-            <p>&#125;</p>
-          </pre>
-          <li>
-            <p>
-              <strong>Invalidate sessions upon logout or expiration.</strong> Upon logout or session timeout, invalidate the session, which will in turn void the generated random token</p>
-            <pre>
-              <p>//in logout function</p>
-              <p>session.invalidate();</p>
-            </pre>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <h1>See Also</h1>
-  <ul>
-    <li>For more information about Cross-Site Request Forgery, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29</a><li>For more information about Cross-Site Request Forgery prevention, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&#37;28CSRF&#37;29_Prevention_Cheat_Sheet</a><li>For more information about Java SecureRandom API, please see <a href="http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html">http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html</a><li>For more information about the OWASP&nbsp;CSRFGuard project, please see <a href="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a><li>For more information about Cross-Site Request Forgery, please see <a href="http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/">http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/</a></li></li></li></li></li>
-  </ul>
-  <h1>Java Session Management Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/42276b64-f51d-4b89-8c33-0ffd9b098890">Use Session Management Offered by the Framework</a>
-      <li>
-        <a href="/article/2aa12bed-347a-43c6-a419-48ffd5bc3f5a">Protect Session IDs</a>
-        <li>
-          <a href="/article/6012e717-6ba6-4380-8ca8-2f0b7c69d717">Protect Session Cookies</a>
-          <li>
-            <a href="/article/7a517ad5-8640-4bc7-9e84-ccc313a71901">Set the Domain and Path Values of Session Cookies</a>
-            <li>
-              <a href="/article/9b7e6e63-c37c-403b-a2f5-60b1e1abbb0b">Set the Secure and HTTPOnly Flags on All Sensitive Cookies</a>
-              <li>
-                <a href="/article/6c470029-5c62-4394-99a9-8990bc48b0a8">Change Session IDs During Authentication</a>
-                <li>
-                  <a href="/article/a223c2d8-ab42-47fb-81a2-86ad677a5632">Invalidate Sessions when Users Log Out</a>
-                  <li>
-                    <a href="/article/acfe1a16-3f00-4383-ada4-bebafc98a836">Make Inactive Sessions Time-out</a>
-                    <li>
-                      <a href="/article/61b8ebc8-3ba5-4e75-aea8-94d6d3b3177e">Include Unique Tokens in HTTP Requests</a>
-                      <li>
-                        <a href="/article/9df0b518-f832-4a7c-9857-0517638c47db">Do Not Make Security Decisions Based on Client-Accessible Parameters</a>
-                      </li>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Session Management Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/3f2660b3-a935-4b4e-85ff-27ae28683f5b">Session Management Offered by the Framework Is Used</a>
-      <li>
-        <a href="/article/1de62774-3392-4da7-9bae-065fb15b4a2b">Session IDs Are Protected</a>
-        <li>
-          <a href="/article/59132a30-2bae-45e9-9d85-8de26441be29">Session Cookies are Protected</a>
-          <li>
-            <a href="/article/500d61f2-c9fa-4b1e-91f5-0a589c0fe00b">The Domain and Path Values of Session Cookies Are Strict</a>
-            <li>
-              <a href="/article/d8922a46-a943-4ae0-b8af-b88eb01d6997">The Secure and HTTPOnly Flags Are Set on All Sensitive Cookies</a>
-              <li>
-                <a href="/article/58df5418-8c03-4121-83e0-bc68247c5d7b">Session IDs Are Changed During Authentication</a>
-                <li>
-                  <a href="/article/0e40c446-c740-42a9-a4d2-72c9d05e55ac">Sessions Are Invalidated When Users Log Out</a>
-                  <li>
-                    <a href="/article/c486eeb2-f64f-480b-9823-48bd7d21047d">Inactive Sessions Time-out</a>
-                    <li>
-                      <a href="/article/0463ae25-dc35-45e7-8b24-9b1f8ddb6af0">Unique Tokens Are Included in HTTP Requests</a>
-                      <li>
-                        <a href="/article/4436e342-64d9-4b1b-ae9b-3e00696053fb">Security Decisions are Not Made Based on Client-Accessible Parameters</a>
-                      </li>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Session Management Code Examples</h1>
-  <ul>
-    <li>
-      <a href="/article/7d647e95-e47f-42e3-bb84-fd0dd727245c">Add Unique Tokens to HTTP Requests Using ESAPI</a>
-      <li>
-        <a href="/article/25e3943b-a651-42c5-9e19-76077de05e90">Add Unique Tokens to HTTP Requests Using Java Server Faces (JSF)</a>
-        <li>
-          <a href="/article/986c7161-0a76-430a-8d0e-80d4615ab5db">Add Unique Tokens to HTTP Requests Using Plain Java Server Pages (JSP)</a>
-          <li>
-            <a href="/article/bf931bed-21c0-4b89-9cb2-9274d8c796a6">Cross-Site Request Forgery (CSRF) Prevention Using SpringMVC</a>
-            <li>
-              <a href="/article/63deed1a-6df4-4e04-9f61-898f190e1fe1">Cross-Site Request Forgery (CSRF) Prevention Using Struts 1</a>
-              <li>
-                <a href="/article/a9c2c121-614c-4a3f-9b7c-f2cf57d6aa0b">Cross-Site Request Forgery (CSRF) Prevention Using Struts 2</a>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Session Management Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/40771780-be59-4d4c-b283-5ec3cc286357">How to Test for Session Prediction Bugs in Java</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java web-based applications using JSF.
+
+
+## Summary ##
+
+Implementing protections that prevent Cross-Site Request Forgery (CSRF) within a JSF application.
+
+
+## Objectives ##
+
+CSRF is a powerful attack that allows an attacker to force a victim to execute functionality within an application on behalf of the attacker. The example below gives an example of how to prevent CSRF within a JSF application.
+
+
+## Scenarios ##
+
+CSRF is a type of attack that occurs when a malicious web site causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated, causing the victim to perform activities on behalf of the attacker. In order to prevent CSRF, the most common effective solution currently used is the synchronizer token pattern. The flow below shows the basic steps in prevention.
+
+
+## Solution Example ##
+
+To add unique tokens to HTTP requests using JSF:
+
+1. **Store a randomly generated token for each authenticated user.** Upon successful authentication of a user, store a randomly generated (using a secure pseudo-random number generator such as java.security.SecureRandom) string (token) in the HttpSession for the user.
+
+		//in authentication function
+		session.setAttribute("csrfToken", generateCSRFToken());
+
+		//sample implementation of token generation
+		public static String generateCSRFToken() {
+			SecureRandom rng = new SecureRandom();
+			int length = 64;
+			String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+			char[] text = new char[length];
+			for (int i = 0; i < length; i++) {
+				text[i] = characters.charAt(rng.nextInt(characters.length()));
+			}
+			return String.valueOf(text);
+		}
+
+2. **Add security tokens to transaction pages.** For any function in the application representing a transaction (ie. causes a server side state change), the associated client form should have a hidden form field containing the token retrieved from the session.
+
+		<h:form>
+		...
+		<h:inputHidden id="token" value="#{sessionScope['csrfToken']}" />
+		...
+		</h:form>
+
+3. **Verify that server-side and client-side tokens match.** For any function in the application representing a transaction (ie. causes a server side state change), the associated server-side request processing code should retrieve the token from the session. It should then compare that token to the submitted token from the client for the given request. If the tokens match, the transaction may be processed. If the tokens do not match, the transaction should not be processed, and the associated request should be treated as an attack and dealt with accordingly.
+
+		//in your backing bean that handles the associated request from the form above
+		private String token;
+
+		public String getToken() {
+			return token;
+		}
+
+		public void setToken(String token) {
+			this.token = token;
+		}
+		...
+
+		//method that handles form submit
+		public void action() {
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+			String storedToken = (String)session.getAttribute("csrfToken");
+
+			//do check
+			if (storedToken.equals(token)) {
+				//go ahead and process ... do business logic here
+			} else {
+				//DO NOT PROCESS ... this is to be considered a CSRF attack - handle appropriately
+			}
+		}
+
+4. **Invalidate sessions upon logout or expiration.** Upon logout or session timeout, invalidate the session, which will in turn void the generated random token
+
+		//in logout function
+		session.invalidate();
+
+
+## Additional Resources ##
+
+* For more information about Cross-Site Request Forgery, see [https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29)
+
+* For more information about Cross-Site Request Forgery prevention, please see [https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet)
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
