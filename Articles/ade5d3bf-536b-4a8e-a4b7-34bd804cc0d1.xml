@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>ade5d3bf-536b-4a8e-a4b7-34bd804cc0d1</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Stack Canaries to Detect Buffer Overflow Attempts</Title>
+    <Category />
+    <Phase />
+    <Technology>Embedded</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+C and C++.
+
+
+## What to Do ##
+
+To combat stack buffer overflows, set an initial canary value on the stack. This value must be unpredictable to ensure that the attacker cannot adjust the attack vector to reflect the canary value. Implement the function `int get_canary_value()` which returns a single integer value to be used as the canary value. Verify this value before the function returns. If a buffer overflow attack has occurred, the canary value is changed. Implement another function `void check_canary_value (int value)` that validates the canary value and compare it to the original one.
+
+
+## Why ##
+
+For any function, the stack is the area of memory that contains all local variables and the calling function’s return address. 
+
+A stack-based buffer overflow may lead to unauthorized modification of program data, or to changes in the behavior of the application. If the source data length is bigger than the target buffer, then the adjacent memory area is modified as well. Effectively, some local variables and the function’s return address are modified. 
+
+The edge of the target buffer is exactly where the canary variable is placed. In case of a buffer overflow, its value is modified as well, so the buffer overflow is easily detected.
+
+If the buffer overflow is undetected, overwriting the function’s return address leads to changing the control flow of the system.
+
+An attacker who has access to the application source code will be able to perform well-targeted, and hence more dangerous, buffer overflow attacks to execute malicious commands or access sensitive data.
+
+
+##How##
+
+The following is an example. Adapt real production code according to your platform specifics.
+
+1. **Implement the `int get_canary_value ()` function**. This function generates and returns an unpredictable integer value:
+
+		static int canary_value__ = -1;
+
+		int get_canary_value ()
+		{
+		  if (canary_value__ == -1) {
+			/* Intializes random number generator */
+			time_t t;
+			srand ((unsigned) time(&t));
+			/* Generate canary value */
+			canary_value__ = rand ();
+		  }
+		  /* Return */
+		  return canary_value__;
+		}
+
+2. **Implement the `void check_canary_value (int value)` function**. This function verifies the canary value by comparing it to its original value.
+
+		void check_canary_value (int value)
+		{
+		  /* Compare canary value to original */
+		  if (value != canary_value__) {
+			/* If modified stop the program */
+			exit (0);
+		  }
+		}
+
+3. **Initialize the canary variable at the first statement of the function**. 
+
+		void canary_test () 
+		{
+		  /* initialize canary value */
+		  int canary = get_canary_value ();
+
+4. **After the code above, insert your code which might be affected by a buffer overflow attack**.
+
+		/* target buffer */
+		char buffer[100];
+		/* perform operation which might be the target for attack */
+		strcpy (&buffer[0], some_malicious_value_provided_by_attacker);
+		/* after this operation canary value might have changed */
+
+5. **Finally, compare the canary variable to its original value**. If the canary value has changed, then an attack has occurred and execution of the application should immediately stop.
+
+		/* verify canary value */
+		check_canary_value (canary);
+		return;
+]]></Data>
+  </Content>
+</TeamMentor_Article>
