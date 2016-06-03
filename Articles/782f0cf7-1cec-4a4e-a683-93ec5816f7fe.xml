@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>782f0cf7-1cec-4a4e-a683-93ec5816f7fe</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use the Stack Unwind Technique for Error Handling</Title>
+    <Category />
+    <Phase />
+    <Technology>Embedded</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+C++
+
+## What to Do ##
+
+Use the exception mechanism to report runtime and logical errors.
+
+Do not use error codes as function return values unless it is absolutely necessary or your application is very simple.
+
+Do not use the global error code state.
+
+
+## Why ##
+
+Exceptions do not interfere with function return values. This separation of concerns helps to distinguish result return logic from error reporting logic.
+
+This mechanism is especially useful in situations where the stack contains multiple function calls between the function that produced an error and the top-level function that could handle that error. Very often, depending on the application, when a function encounters an error condition it does not have enough knowledge of how to handle a particular situation.
+
+The stack-unwind technique ensures that the exact order of error propagation backward through the calling stack is maintained.
+
+Using an error code as a function return value is an old-style mechanism that is not recommended because the error code may be confused with a more meaningful result value returned by the function. This distinction is especially important when the function return result and error code types are different.
+
+Using a global error code is unacceptable in multi-threaded applications or in a nested function call context.
+
+
+## When ##
+
+Use exceptions if a runtime or logical error condition occurs during function execution.
+
+Example: function `A()` calls function `B()`, function `B()` calls function `C()` and function `C()` throws an exception. In this case function `B()` catches the exception, handles it, and/or propagates it backward to function `A()`.
+
+
+## How ##
+
+1. **Define an application-specific exception class**. This exception class must be a subclass of `std::exception`. Add an __error code__ class attribute to the exception. For complex applications, define multiple exception classes to better distinguish error conditions. 
+
+2. **Rewrite functions to throw exceptions**. Review your code and find all the functions returning error codes. Rewrite them in such a way that instead of returning error codes they throw appropriate exceptions as defined in step 1.
+
+3. **Rewrite error-handling code**. Review your code and find all the places where error codes returned from the functions are handled. Rewrite these pieces in such a way that each function is called in a `try {}` block and error handling is performed in a `catch () {}` block. 
+]]></Data>
+  </Content>
+</TeamMentor_Article>
