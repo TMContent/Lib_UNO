@@ -3,11 +3,11 @@
   <Metadata>
     <Id>411953e6-f7c4-4921-a28f-7cb56f5fdc5b</Id>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Implement Proper Local Cleanup for Error Handling Code</Title>
-    <Category />
-    <Phase />
+    <Title>Implement Local Cleanup for Error Handling Code</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
     <Technology>Embedded</Technology>
-    <Type />
+    <Type>Guideline</Type>
     <DirectLink />
     <Tag />
     <Author />
@@ -17,8 +17,10 @@
   <Content Sanitized="false" DataType="markdown">
     <Data><![CDATA[## Applies To ##
 
-C++
-
+* C++
+* Linux
+* Windows
+* Embedded Systems
 
 ## What to Do ##
 
@@ -29,7 +31,7 @@ In languages like Java and C# there is a special `finally` block with guaranteed
 
 ## Why ##
 
-Unlike Java or C#, where an object destructor is called only by a garbage collector, and therefore cannot be used by the developer, in C++ the object destructor is called when the object goes out of scope. An object going out of scope happens either when the function returns or when an exception is thrown. Variables located on the function stack are called automatic variables because they are initialized at function entry and automatically destroyed at function exit. The developer can use this feature by putting code responsible for resource release in the object destructor. In this case, no matter what, the resources will be cleaned up upon function exit. The most useful technique for this in C++ is called __Resource Acquisition Is Initialization (RAII)__, when initialization is performed in an object constructor and cleanup in the destructor.
+Unlike Java or C#, where an object destructor is called only by a garbage collector, and therefore cannot be used by the developer, in C++ the object destructor is called when the object goes out of scope. An object going out of scope happens either when the function returns or when an exception is thrown. Variables located on the function stack are called automatic variables because they are initialized at function entry and automatically destroyed at function exit. The developer can use this feature by putting code responsible for resource release in the object destructor. In this case, no matter what, the resources will be cleaned up upon function exit. The most useful technique for this in C++ is called "Resource Acquisition Is Initialization (RAII)", when initialization is performed in an object constructor and cleanup in the destructor.
 
 
 ## When ##
@@ -38,6 +40,8 @@ Always perform proper cleanup of local resources before function exit. Pay extra
 
 
 ## How ##
+
+To implement local cleanup for error handling code:
 
 1. **Review the application code**. Review the application code and find all places where exceptions are thrown. Ensure that all functions that could throw exceptions are called within a try – catch {} block. Don’t leave uncaught exceptions. Doing so could lead to unexpected process termination.
 
