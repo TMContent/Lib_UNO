@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>411953e6-f7c4-4921-a28f-7cb56f5fdc5b</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Implement Proper Local Cleanup for Error Handling Code</Title>
+    <Category />
+    <Phase />
+    <Technology>Embedded</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+C++
+
+
+## What to Do ##
+
+Review, and rewrite if necessary, all the functions that throw exceptions to ensure that cleanup code is executed in object destructors.
+
+In languages like Java and C# there is a special `finally` block with guaranteed execution immediately before function exit, regardless of whether an exception was thrown or not. In C++, it is the developer’s responsibility to ensure proper local cleanup. 
+
+
+## Why ##
+
+Unlike Java or C#, where an object destructor is called only by a garbage collector, and therefore cannot be used by the developer, in C++ the object destructor is called when the object goes out of scope. An object going out of scope happens either when the function returns or when an exception is thrown. Variables located on the function stack are called automatic variables because they are initialized at function entry and automatically destroyed at function exit. The developer can use this feature by putting code responsible for resource release in the object destructor. In this case, no matter what, the resources will be cleaned up upon function exit. The most useful technique for this in C++ is called __Resource Acquisition Is Initialization (RAII)__, when initialization is performed in an object constructor and cleanup in the destructor.
+
+
+## When ##
+
+Always perform proper cleanup of local resources before function exit. Pay extra attention in a situation when the function throws an exception and regular call flow is disrupted.
+
+
+## How ##
+
+1. **Review the application code**. Review the application code and find all places where exceptions are thrown. Ensure that all functions that could throw exceptions are called within a try – catch {} block. Don’t leave uncaught exceptions. Doing so could lead to unexpected process termination.
+
+2. **Release all allocated memory**. Release all the memory allocated during function execution that is not shared with other application modules. If memory was allocated with C `…alloc()` family methods, use `free()` to deallocate it. For C++ style `new` and `new[]` operators, use the corresponding `delete` and `delete[]` operators. Never mix C functions and C++ operators.
+
+3. **Release all acquired locks**. Release all the locks acquired during function execution. If locks are not released in a timely fashion, multi-threaded applications could easily run into a deadlock situation, where application reset, or even whole device reset, is the only option.
+
+4. **Close all files and database connections**. Close all the open files and database connections that are no longer needed by the application upon function exit. Files and database connections left opened consume system memory and, especially on embedded devices with limited memory, could exhaust all system resources. Additionally, file handles that are not closed may prevent other processes or users from working with these files.
+
+5. **Identify all local resources acquired or initialized in a function**. These resources could be memory pointers, opened files, database or network connections, acquired locks, and other resources that require explicit calls to clean, close, release, or have other actions be performed before object destruction.
+
+6. **Use STL special helper classes for automatic cleanup**. The C++ STL library provides several utility classes for automated memory and lock release, like `unique_ptr`, `shared_ptr`, and `lock_guard`. 
+
+7. **Use object destructors**. For other objects, when possible re-write destructors of identified object classes in such a way that ensures that proper cleanup code is executed during object destruction. If there is a chance that cleanup code in the destructor may throw an exception, always enclose it in try – catch {} block.
+
+8. **Use object wrappers**. If re-writing is not possible, for example for third party classes and libraries, define a special automatic cleanup helper class. In the constructor, provide as a parameter a reference to the object that needs to be cleaned up or closed. Save this reference as a helper object attribute. Put all the code related to object cleanup in a helper class destructor.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
