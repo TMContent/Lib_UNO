@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b90b2a60-1a3c-4215-8fbe-3d3756cc32cb</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Separate Error Detection Code from Error Handling Code</Title>
+    <Category />
+    <Phase />
+    <Technology>Embedded</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+C++
+
+
+## What to Do ##
+
+Throw an exception when an error condition is detected.
+Put functional code inside a try {} block, and error handling code inside a catch {} block.
+
+
+## Why ##
+
+If the function is executed in a context where proper error handling is impossible, the easiest way to deal with an error condition is to throw an exception. In this case, the caller’s context might be more appropriate to handle the error. Sometimes it is easier and much more effective to have a single error-handling module, rather than multiple ones spread across the application.
+
+
+## When ##
+
+If your application is complex with many modules and functions, you need to separate error detection and error handling code. 
+
+If you have an application that contains business logic and user interface layers, you may decide to put error detection in the business logic modules and error handling in the user interface.
+
+
+## How ##
+
+1. **Identify possible error conditions for every function.** Identify all possible error conditions for every function in your application. Decide which of them can be handled within the function and which cannot. If it is possible to handle certain types of exceptions within a function, wrap the function logic in a try {} block and handle these types of exceptions inside a catch{} block.
+
+2. **Categorize errors.** If it is possible, categorize errors by certain criteria and use an inheritance mechanism to do so. Make the base exception class general for the module or application component, and the derived classes specific to certain functions or operations. Some applications may require you to separate exceptions by severity level or security risk level. You need to assign this level for every exception category.
+
+3. **Identify error handling places.** Identify the place or places in the application where error handling would be most efficient. Usually there are modules in the application that have the ability to communicate with error or event logging services or file systems to report error conditions.
+
+4. **Define error handling procedures.** Define an appropriate procedure to handle every error or error category. Some applications require that different types of exceptions have different handling procedures. Other applications may require that you separately handle exceptions with different severity or security risk levels. For high-risk error conditions, you may want to create special procedures for immediate notifications or system alerts to security officers.
+
+5. **Use try-catch blocks.** Put application code that may produce an error inside a __try {}__ block. Put code with error handling inside a __catch {}__ block. If during error handling you expect another error condition, it is acceptable to create nested try-catch {} blocks. It is not necessary to handle all types of exceptions inside one catch {} block. For example, you can handle some types of exception inside one function and re-throw all other exception types to an upper-level function.
+]]></Data>
+  </Content>
+</TeamMentor_Article>
