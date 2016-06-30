@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>682dfd98-d975-45fb-9caa-1fd4c7df1938</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Mutual Exclusion Techniques to Mitigate Race Conditions</Title>
+    <Category>Concurrency</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* C
+* C++
+* Embedded Systems
+* Linux
+* Windows
+
+
+## What to Do ##
+
+If you are developing a multi-threaded application, design it in such a way to avoid simultaneous access to shared resources such as memory, files, or database or network connections from different threads. To achieve mutual exclusivity, use a special mechanism called Mutex, short for Mutually-Exclusive object. Any platform that allows multi-threaded applications provides this synchronization technique.
+
+
+## Why ##
+
+If access to a given shared resource is not synchronized for different application threads, and these threads modify the state or content of the underlying resource, such access could easily lead to data corruption.
+
+If synchronization is used, then every thread has a dedicated, non-overlapping time frame during which it can safely perform any update on a shared resource in a consistent and controlled way. The next thread can start working with the shared resource only after the previous one finishes its job.
+
+
+## When ##
+
+Always apply this technique in multi-threaded applications in which different threads access shared resources.
+
+Do not use this technique for single-threaded applications, or multiple-threaded applications in which  each thread performs its own job and does not communicate or share data or resources with others.
+
+
+## How ##
+
+To use mutual exclusion techniques to mitigate race conditions:
+
+1. **Identify all shared resources**. Review your application design and identify which resources are shared between different application modules and functions. These resources could be files, database and network connections, memory areas, global variables, etc.
+
+2. **Identify race conditions**. Using the list of shared resources, analyze all the application functions where these resources are being accessed at the same time.
+
+3. **Consider change of application design**. Analyze your application design and figure out if there is an option to change it in such a way to avoid race conditions.
+
+4. **Decide which synchronization mechanism is available for the target platform**. Consult your platform documentation to determine which synchronization mechanism is available for it. Windows and Unix/Linux platforms have their respective libraries in C. The C++ standard  defines a universal approach for using synchronization techniques on different platforms. Use it in preference to a proprietary API if possible. 
+
+5. **Use Mutex to synchronize access to a shared resource**. For every resource that is shared between application threads, create a separate Mutex object. In every thread using such a resource, follow this sequence of operations: acquire the lock on the Mutex object, perform the necessary work with the resource, and release the lock. 
+
+6. **Avoid unreleased locks**. Pay extra attention to releasing locks. Avoid multiple return points from functions during error conditions. Multiple return points make your code more complex; you may accidentally forget to release a lock, leaving Mutex locked forever. The application could then get into an unresponsive state. Use helper classes in C++ that automatically release locks upon function return.
+
+7. **Avoid deadlocks**. Sometimes an application requires more than one shared resource to work at the same time. In this case, pay extra attention to the order in which several locks are acquired to avoid a situation such as when different threads each acquire just one resource and then wait forever for each other to release another resource. When an application gets into such an unresponsive and locked state, it is called a deadlock condition.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

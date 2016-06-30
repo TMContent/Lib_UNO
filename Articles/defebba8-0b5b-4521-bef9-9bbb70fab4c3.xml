@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>defebba8-0b5b-4521-bef9-9bbb70fab4c3</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Parameterized APIs to Execute OS Commands</Title>
+    <Category />
+    <Phase />
+    <Technology>Embedded</Technology>
+    <Type />
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+C and C++ 
+
+## What to Do ##
+
+Do not use the ``system()`` function to execute OS commands.
+
+On Unix/Linux platforms, use the ``execv()`` or ``execl()`` family of functions.
+
+On Windows, use the ``CreateProcess()`` function.
+
+
+## Why ##
+
+Passing an OS command with parameters as a single line parameter into a ``system()`` call introduces potential command injection risk. Command injection is when a malicious command is injected as a parameter to a valid command call. In this case, after the valid command is executed, the malicious command is executed as well. Separation of a command and its parameters ensures that if a malicious command is passed as a parameter, it will not be executed. 
+
+
+## When ##
+
+Always use the safe ``execv()``, ``execl()``, or ``CreateProcess()`` functions instead of the unsafe ``system()`` function for executing OS commands.
+
+
+## How ##
+
+1.	**Identify OS command calls**. Review your application code and find all the functions where OS commands are executed. Verify that the command name is not provided as an input parameter and, therefore, cannot be affected by any external source.
+
+2.	**Validate command parameters**. Verify which command parameters are pre-defined and which are coming from external sources. For those parameters coming from external sources or affected by external sources, perform strict validation. Use the white-list technique to pass only allowed values as parameters.
+
+3.	**Find all single-string OS command calls**. Review the code and identify all the places where OS commands are called using a single string that contains the command name and its parameters. Split this string to separate the command name from its parameters.
+
+4.	**Call safe functions**. On Unix-like platforms, use the ``execl()`` or ``execv()`` family of functions which have separate arguments for the OS command name and its parameters. On Windows, use the ``CreateProcess()`` function with separate arguments for the OS command name and its parameters.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

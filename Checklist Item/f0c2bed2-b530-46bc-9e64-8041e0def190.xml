@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -28,22 +28,11 @@
   <p>Unhandled exceptions can be a serious stumbling block to an application's performance and security. Unhandled exceptions must be avoided as they can result in the application entering an unknown state and/or revealing sensitive internal application details. Using a global exception handler will prevent unhandled exceptions.</p>
   <h1>How To Check</h1>
   <p>Check <em>Global.asax</em> the ensure an application-level global error handler has been defined. Check to ensure <em>Application_Error</em> has been overridden and implemented. The error handler will look similar to the following code:</p>
-  <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br />&lt;script language="C#" runat="server"&gt;<br />&nbsp;void Application_Error(object sender, EventArgs e)<br />&nbsp;{<br />&nbsp;&nbsp;&nbsp; //get reference to the source of the exception chain<br />&nbsp;&nbsp;&nbsp; Exception ex = Server.GetLastError().GetBaseException();<br />&nbsp;&nbsp;&nbsp; // log the details of the exception and page state to the<br />&nbsp;&nbsp;&nbsp; // event log.<br />&nbsp;&nbsp;&nbsp; EventLog.WriteEntry("My Web Application",<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "MESSAGE: " + ex.Message +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "\nSOURCE: " + ex.Source,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EventLogEntryType.Error);<br />&nbsp;&nbsp;&nbsp;&nbsp; // Optional e-mail or other notification here...<br />&nbsp;}<br />&lt;/script&gt; </pre>
+  <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br />&lt;script language="C#" runat="server"&gt;<br />&amp;nbsp;void Application_Error(object sender, EventArgs e)<br />&amp;nbsp;{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; //get reference to the source of the exception chain<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; Exception ex = Server.GetLastError().GetBaseException();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // log the details of the exception and page state to the<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; // event log.<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; EventLog.WriteEntry("My Web Application",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "MESSAGE: " + ex.Message +<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "\nSOURCE: " + ex.Source,<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; EventLogEntryType.Error);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // Optional e-mail or other notification here...<br />&amp;nbsp;}<br />&lt;/script&gt; </pre>
   <h1>How To Fix</h1>
   <p>Global exception handlers will catch exceptions that are not otherwise handled in your code. Define an application-level global error handler in <em>Global.asax</em> to catch all exceptions that are not handled in the code. Do this to avoid returning detailed error information to the client. You should record all exceptions in the event log for tracking purposes and later analysis. Use code similar to the following.</p>
   <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br /> &lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> {<br />     // Add the appropriate logging code<br />     Response.Write("We are sorry, but we cannot complete your request. Please try again later!");<br />     Server.ClearError();<br /> }<br /> &lt;/script&gt;</pre>
-  <h1>Related Items</h1>
-  <em>You may find these additional articles useful</em>
-  <ul>
-    <li>
-      <a href="/article/461370b3-66e7-4ac3-900f-7e2f757c54a8">Use Global Error Handlers to Catch Unhandled Exceptions</a>
-    </li>
-  </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>
-  <h1>
-  </h1>
-  <h1>
-  </h1>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

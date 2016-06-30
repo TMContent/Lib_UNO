@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>
     <span>Applies To</span>
   </h1>
@@ -30,32 +30,32 @@
     <span>Summary</span>
   </h1>
   <p>
-    <span>HTTP response splitting bugs are a relatively rare vulnerability class that allows an attacker to control the response of a vulnerable web server by splitting it and adding an additional response.<span>&nbsp;</span>Attackers use the additional response to perform different types of attacks such as cross user defacement, web cache poising, and cross site scripting (XSS).<span>&nbsp; </span></span>
+    <span>HTTP response splitting bugs are a relatively rare vulnerability class that allows an attacker to control the response of a vulnerable web server by splitting it and adding an additional response.<span>&amp;nbsp;</span>Attackers use the additional response to perform different types of attacks such as cross user defacement, web cache poising, and cross site scripting (XSS).<span>&amp;nbsp; </span></span>
   </p>
   <p>
-    <span>HTTP response splitting vulnerabilities involve three common parties: the attacker, the vulnerable web server, and the target.&nbsp;The attacker uses the vulnerable server to carry the attack on the target.&nbsp;The target is usually an Internet browser client (in cases of XSS and cross user defacement) or a cache server (in cases of cache poisoning).</span>
+    <span>HTTP response splitting vulnerabilities involve three common parties: the attacker, the vulnerable web server, and the target.&amp;nbsp;The attacker uses the vulnerable server to carry the attack on the target.&amp;nbsp;The target is usually an Internet browser client (in cases of XSS and cross user defacement) or a cache server (in cases of cache poisoning).</span>
   </p>
   <p>
     <span>Follow these steps to test for HTTP response splitting bugs:</span>
   </p>
   <ul>
     <li>
-      <span>Step 1:<span>&nbsp; </span>Understand Attack Scenarios</span>
+      <span>Step 1:<span>&amp;nbsp; </span>Understand Attack Scenarios</span>
     </li>
     <li>
-      <span>Step 2:<span>&nbsp; </span>Analyze Causes and Countermeasures</span>
+      <span>Step 2:<span>&amp;nbsp; </span>Analyze Causes and Countermeasures</span>
     </li>
     <li>
-      <span>Step 3:<span>&nbsp; </span>Start Testing and Exploring</span>
+      <span>Step 3:<span>&amp;nbsp; </span>Start Testing and Exploring</span>
     </li>
     <li>
-      <span>Step 4:<span>&nbsp; </span>Fine-tune Test Cases</span>&nbsp;</li>
+      <span>Step 4:<span>&amp;nbsp; </span>Fine-tune Test Cases</span>&amp;nbsp;</li>
   </ul>
   <h1>
-    <span>Step 1:&nbsp;Understand Attack Scenarios</span>
+    <span>Step 1:&amp;nbsp;Understand Attack Scenarios</span>
   </h1>
   <p>
-    <span>The first step in testing for HTTP response splitting vulnerabilities is to understand their attack scenarios.<span>&nbsp;</span>There are two common scenarios to execute an HTTP response splitting attack:</span>
+    <span>The first step in testing for HTTP response splitting vulnerabilities is to understand their attack scenarios.<span>&amp;nbsp;</span>There are two common scenarios to execute an HTTP response splitting attack:</span>
   </p>
   <ul>
     <li>
@@ -79,7 +79,7 @@
       <span>Web cache poisoning</span>
     </li>
     <li>
-      <span>Page hijacking</span>&nbsp;</li>
+      <span>Page hijacking</span>&amp;nbsp;</li>
   </ul>
   <h2>
     <span>
@@ -87,9 +87,9 @@
     </span>
   </h2>
   <p>
-    The first and most popular response splitting attack targets an Internet client browser and uses a redirect to accomplish the attack.<span>&nbsp;</span>In order to understand this scenario you must understand how a redirect works.<span>&nbsp;</span>A simple PHP redirect page (<i>redirect.php</i>) looks like this:</p>
+    The first and most popular response splitting attack targets an Internet client browser and uses a redirect to accomplish the attack.<span>&amp;nbsp;</span>In order to understand this scenario you must understand how a redirect works.<span>&amp;nbsp;</span>A simple PHP redirect page (<i>redirect.php</i>) looks like this:</p>
   <p>
-    <font face="'Courier New'">&lt;?php<br />&nbsp; &nbsp; header ("Location: " . $_GET['page']);<br />?&gt;</font>
+    <font face="'Courier New'">&lt;?php<br />&amp;nbsp; &amp;nbsp; header ("Location: " . $_GET['page']);<br />?&gt;</font>
   </p>
   <p>
     The following link redirects an Internet browser client to <i>www.yahoo.com</i>:</p>
@@ -159,7 +159,7 @@
     </span>
   </p>
   <p>
-    <span>The server responds with the following two packets instead of one.<span>&nbsp;</span>The server responds like this because it parses the double </span>
+    <span>The server responds with the following two packets instead of one.<span>&amp;nbsp;</span>The server responds like this because it parses the double </span>
     <span>CR/LF</span>
     <span> after the </span>
     <i>
@@ -173,7 +173,7 @@
     <font face="'Courier New'">HTTP/1.1 302 Found<br />Date: Tue, 13 May 2008 20:22:28 GMT<br />Server: Apache/2.2.6 (Win32) PHP/5.2.5<br />X-Powered-By: PHP/5.2.5<br />Location: abc<br />Content-Length: 0</font>
   </p>
   <p>
-    <font face="'Courier New'">HTTP/1.1 200 OK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (separate packet)<br />Content-Type: text/html<br />Content-Length: 47<br />&lt;html&gt;&lt;font color=red&gt;Attacked!!!&lt;/font&gt;&lt;/html&gt;</font>
+    <font face="'Courier New'">HTTP/1.1 200 OK&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; (separate packet)<br />Content-Type: text/html<br />Content-Length: 47<br />&lt;html&gt;&lt;font color=red&gt;Attacked!!!&lt;/font&gt;&lt;/html&gt;</font>
   </p>
   <p>
     <span>
@@ -197,13 +197,13 @@
   </p>
   <p>
     <span>The attacker can select more complex pages to use during the defacement such as a page that phishes for bank accounts or a cross-site scripting script that sends the victim’s session cookie to an attacker’s site.</span>
-    <span>&nbsp;</span>&nbsp;</p>
+    <span>&amp;nbsp;</span>&amp;nbsp;</p>
   <h2>
     <span>Scenario 2: </span>
     <span>HTTP response splitting by exploiting header construction</span>
   </h2>
   <p>
-    <span>During this scenario the attacker doesn’t need a redirect page.&nbsp;Many applications build response headers such as </span>
+    <span>During this scenario the attacker doesn’t need a redirect page.&amp;nbsp;Many applications build response headers such as </span>
     <span>
       <i>Set-Cookie</i>
     </span>
@@ -211,10 +211,10 @@
     <span>
       <i>Location </i>
     </span>
-    <span>by reading data from a temporary store such as a URL parameter or a permanent store such as database.<span>&nbsp;</span>For example the following Java code sets a cookie by reading an ID value from a database:</span>
+    <span>by reading data from a temporary store such as a URL parameter or a permanent store such as database.<span>&amp;nbsp;</span>For example the following Java code sets a cookie by reading an ID value from a database:</span>
   </p>
   <p>
-    <font face="'Courier New'">SqlCommand sqlComm = new SqlCommand("SELECT userid FROM users WHERE username LIKE " + Request.QueryString["user"], sqlConn);<br />SqlDataReader sqlReader = sqlComm.ExecuteReader();<br />string userid = sqlReader.GetString("userid");<br />Cookie cookie = new Cookie("ID", userid);<br />response.addCookie(cookie);&nbsp;</font>
+    <font face="'Courier New'">SqlCommand sqlComm = new SqlCommand("SELECT userid FROM users WHERE username LIKE " + Request.QueryString["user"], sqlConn);<br />SqlDataReader sqlReader = sqlComm.ExecuteReader();<br />string userid = sqlReader.GetString("userid");<br />Cookie cookie = new Cookie("ID", userid);<br />response.addCookie(cookie);&amp;nbsp;</font>
   </p>
   <p>
     <span>If the user id has a normal value such as </span>
@@ -242,21 +242,21 @@
     <font face="'Courier New'">HTTP/1.1 200 OK<br />...<br />Set-Cookie: id=10-300-565<br />Content-Length: 0</font>
   </p>
   <p>
-    <font face="'Courier New'">HTTP/1.1 200 OK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (separate packet)<br />Content-Type: text/html<br />Content-Length: 47<br />&lt;html&gt;&lt;font color=red&gt;Attacked!!!&lt;/font&gt;&lt;/html&gt;</font>
+    <font face="'Courier New'">HTTP/1.1 200 OK&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; (separate packet)<br />Content-Type: text/html<br />Content-Length: 47<br />&lt;html&gt;&lt;font color=red&gt;Attacked!!!&lt;/font&gt;&lt;/html&gt;</font>
   </p>
   <h3>
-    <span>Payload 1:<span>&nbsp; </span>Phishing</span>
+    <span>Payload 1:<span>&amp;nbsp; </span>Phishing</span>
   </h3>
   <p>
-    <span>This payload is seen in the previous two scenarios and consists of sending an additional page to the victim.&nbsp;The goal is trick victims into believing that the second response is legitimate and that they are safely browsing the original site.&nbsp;The attacker then modifies the second response for specific phishing purposes such a retrieving a username and password or a bank account and PIN number.&nbsp;The target browser parses the second response and it appears to the web client as if this response is coming from a legitimate server.<span>&nbsp; </span>The attack data used for this payload shows a second page (as seen above):</span>
+    <span>This payload is seen in the previous two scenarios and consists of sending an additional page to the victim.&amp;nbsp;The goal is trick victims into believing that the second response is legitimate and that they are safely browsing the original site.&amp;nbsp;The attacker then modifies the second response for specific phishing purposes such a retrieving a username and password or a bank account and PIN number.&amp;nbsp;The target browser parses the second response and it appears to the web client as if this response is coming from a legitimate server.<span>&amp;nbsp; </span>The attack data used for this payload shows a second page (as seen above):</span>
   </p>
   <p>
-    <font face="'Courier New'">0d%0a%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:%20text/html%0d%0aContent-Length:%2047%0d%0a%0d%0a&lt;html&gt;&lt;font%20color=red&gt;Attacked!!!&lt;/font&gt;&lt;/html&gt;&nbsp; &nbsp;&nbsp;</font>&nbsp;</p>
+    <font face="'Courier New'">0d%0a%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:%20text/html%0d%0aContent-Length:%2047%0d%0a%0d%0a&lt;html&gt;&lt;font%20color=red&gt;Attacked!!!&lt;/font&gt;&lt;/html&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;</font>&amp;nbsp;</p>
   <h3>
-    <span>Payload 2:<span>&nbsp; </span>Cross site scripting</span>
+    <span>Payload 2:<span>&amp;nbsp; </span>Cross site scripting</span>
   </h3>
   <p>
-    <span>In response splitting vulnerabilities the second response is absolutely controlled by the attacker.<span>&nbsp;</span>The attacker can sent a split page with a script that executes in the context of victim.&nbsp;This leads to a cross-site scripting attack (XSS).&nbsp;The attack data may look like this:</span>
+    <span>In response splitting vulnerabilities the second response is absolutely controlled by the attacker.<span>&amp;nbsp;</span>The attacker can sent a split page with a script that executes in the context of victim.&amp;nbsp;This leads to a cross-site scripting attack (XSS).&amp;nbsp;The attack data may look like this:</span>
   </p>
   <p>
     <font face="'Courier New'">0d%0a%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:%20text/html%0d%0aContent-Length:%2052%0d%0a%0d%0a&lt;html&gt;&lt;script&gt;alert('document.cookie')&lt;/script&gt;&lt;/html&gt;</font>
@@ -268,7 +268,7 @@
     <span>Payload 3: Web cache poisoning</span>
   </h3>
   <p>
-    <span>This popular scenario doesn’t target an Internet browser client; its targets are web cache servers.<span>&nbsp;</span>The attacker makes the first request through the web cache server and receives the two split packets.&nbsp;The attacker then sends a second request to any resource.&nbsp;The cache server will match the second request with the split response (controlled by the attacker).<span>&nbsp;</span>This will propagate the attack to any users of the web cache server. The attack string manipulates cache-related headers:</span>
+    <span>This popular scenario doesn’t target an Internet browser client; its targets are web cache servers.<span>&amp;nbsp;</span>The attacker makes the first request through the web cache server and receives the two split packets.&amp;nbsp;The attacker then sends a second request to any resource.&amp;nbsp;The cache server will match the second request with the split response (controlled by the attacker).<span>&amp;nbsp;</span>This will propagate the attack to any users of the web cache server. The attack string manipulates cache-related headers:</span>
   </p>
   <p>
     <font face="'Courier New'">%0d%0aContent-Type: text/html%0d%0a%0d%0aHTTP/1.1 200 OK%0d%0aLast-Modified: Wed, 13 Jan 2010%0d%0aContent-Type: text/html%0d%0a%0d%0a&lt;html&gt;&lt;font color=red&gt;hey&lt;/font&gt;&lt;/html&gt;</font>
@@ -300,9 +300,9 @@
     <span>Since the attacker fully controls a2, he can poison resource B in the cache with anything.</span>
   </p>
   <p>
-    Setting the&nbsp;<i></i><i><span>Last-Modified</span></i>
+    Setting the&amp;nbsp;<i></i><i><span>Last-Modified</span></i>
     
-    header to a future date makes the cache server return the attacker’s page instead of contacting the origin server to request the page from its valid domain.<span>&nbsp;</span>The attacker can also use the 
+    header to a future date makes the cache server return the attacker’s page instead of contacting the origin server to request the page from its valid domain.<span>&amp;nbsp;</span>The attacker can also use the 
     <i>Cache-Control</i> 
     or the 
     <i>Pragma</i>
@@ -312,7 +312,7 @@
     <span>Payload 4: Page Hijacking</span>
   </h3>
   <p>
-    <span>This attack is achieved through a proxy server.<span>&nbsp;</span>The attacker needs to pay extra attention to timing since it needs to make a request at the correct time to get back a response that was previously made by a legitimate user.<span>&nbsp;</span>The scenario follows these specific steps:</span>
+    <span>This attack is achieved through a proxy server.<span>&amp;nbsp;</span>The attacker needs to pay extra attention to timing since it needs to make a request at the correct time to get back a response that was previously made by a legitimate user.<span>&amp;nbsp;</span>The scenario follows these specific steps:</span>
   </p>
   <ol>
     <li>
@@ -347,12 +347,12 @@
     </li>
   </ol>
   <p>
-    <span>Since the attacker was able to insert an unexpected response to the communication flow, the proxy server gets sends the response b containing confidential data to the wrong client (the attacker).<span>&nbsp;</span></span>&nbsp;</p>
+    <span>Since the attacker was able to insert an unexpected response to the communication flow, the proxy server gets sends the response b containing confidential data to the wrong client (the attacker).<span>&amp;nbsp;</span></span>&amp;nbsp;</p>
   <h1>
-    <span>Step 2:&nbsp;Analyze Causes and Countermeasures</span>
+    <span>Step 2:&amp;nbsp;Analyze Causes and Countermeasures</span>
   </h1>
   <p>
-    <span>The next step is to comprehend what causes HTTP response splitting vulnerabilities and how to defend against them.&nbsp;This knowledge will aid you in recognizing this attack class in the source codebase and use best coding practices.</span>
+    <span>The next step is to comprehend what causes HTTP response splitting vulnerabilities and how to defend against them.&amp;nbsp;This knowledge will aid you in recognizing this attack class in the source codebase and use best coding practices.</span>
   </p>
   <h2>
     <span>
@@ -362,7 +362,7 @@
   <p>
     <span>HTTP protocol specifications indicate that each header is separated by a carriage return character (CR, ASCII 0x0D) followed by a line feed character (LF, ASCII 0x0A) represented as the string </span>
     <span>CR/LF</span>
-    <span>.<span>&nbsp;</span>In addition, the response headers are separated by the body by two (</span>
+    <span>.<span>&amp;nbsp;</span>In addition, the response headers are separated by the body by two (</span>
     <span>CR/LF/CR/LF). </span>
   </p>
   <p>
@@ -371,26 +371,26 @@
     <span> strings into</span>
     <span>
     </span>
-    <span>HTTP headers.<span>&nbsp;</span>Web applications that build headers without checking for </span>
+    <span>HTTP headers.<span>&amp;nbsp;</span>Web applications that build headers without checking for </span>
     <span>CR/LF </span>
-    <span>are vulnerable to this attack.<span>&nbsp;</span>Failing to check data used for header construction and remove malicious </span>
+    <span>are vulnerable to this attack.<span>&amp;nbsp;</span>Failing to check data used for header construction and remove malicious </span>
     <span>CR/LF</span>
-    <span> is what allows the attack and the cause of this vulnerability.&nbsp;</span>It is important to note that, even victims of this attack are web clients, this is a server-side bug.</p>
+    <span> is what allows the attack and the cause of this vulnerability.&amp;nbsp;</span>It is important to note that, even victims of this attack are web clients, this is a server-side bug.</p>
   <h2>
     <span>
       HTTP Response Splitting Countermeasures
     </span>
   </h2>
   <p>
-    <span>There is a simple solution for response splitting bugs: check the data in the headers before sending them to the client.<span>&nbsp;</span>Absolutely don’t write any data to the headers before checking the data for </span>
+    <span>There is a simple solution for response splitting bugs: check the data in the headers before sending them to the client.<span>&amp;nbsp;</span>Absolutely don’t write any data to the headers before checking the data for </span>
     <span>CR/LF</span>
     <span> characters (</span>
     <span>
       <i>%0d%0a</i>
     </span>
-    <span>) and other HTTP special characters.<span>&nbsp;&nbsp; </span>An alternative approach is to have a white list that indicates the safe patterns to write to the headers.<span>&nbsp;</span>The server checks the data to be written to the header to see if it matches one of the white list’s safe patterns.<span>&nbsp;</span>The server allows the data into the header only if it matches one of the safe patterns while disallowing any data that doesn’t match a safe pattern.</span>&nbsp;</p>
+    <span>) and other HTTP special characters.<span>&amp;nbsp;&amp;nbsp; </span>An alternative approach is to have a white list that indicates the safe patterns to write to the headers.<span>&amp;nbsp;</span>The server checks the data to be written to the header to see if it matches one of the white list’s safe patterns.<span>&amp;nbsp;</span>The server allows the data into the header only if it matches one of the safe patterns while disallowing any data that doesn’t match a safe pattern.</span>&amp;nbsp;</p>
   <h1>
-    <span>Step 3:<span>&nbsp;</span>Start Testing and Exploring</span>
+    <span>Step 3:<span>&amp;nbsp;</span>Start Testing and Exploring</span>
   </h1>
   <p>
     <span>This step focuses on executing a first round of test cases to find HTTP response splitting bugs.</span>
@@ -401,10 +401,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>One client computer and one server computer running the web application.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>One client computer and one server computer running the web application.</span>
   </p>
   <p>
-    Tools:<span>&nbsp;</span>Web browser, network monitoring tool (<i>Wireshark</i>).
+    Tools:<span>&amp;nbsp;</span>Web browser, network monitoring tool (<i>Wireshark</i>).
   </p>
   <p>
     <span>Testing steps:</span>
@@ -425,7 +425,7 @@
        CR/LF 
       and an additional <i>HTTP 200 (OK)</i> response with an injected page through the 
       <i><span>Location</span></i>
-       header’s parameter.<span>&nbsp; </span></li>
+       header’s parameter.<span>&amp;nbsp; </span></li>
     <li>
       In the client computer, start monitoring network traffic using <i>Wireshark</i>.
     </li>
@@ -440,7 +440,7 @@
     </li>
   </ol>
   <p>
-    Expected results:&nbsp;the application is vulnerable to HTTP response splitting if the web server sends two HTTP responses (a <i>200 OK</i> and <i>302 Redirect</i>) and if the client browser displays the injected page.
+    Expected results:&amp;nbsp;the application is vulnerable to HTTP response splitting if the web server sends two HTTP responses (a <i>200 OK</i> and <i>302 Redirect</i>) and if the client browser displays the injected page.
   </p>
   <h2>
     <span>
@@ -448,10 +448,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>One client computer and one server computer running the web application.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>One client computer and one server computer running the web application.</span>
   </p>
   <p>
-    Tools:&nbsp;Web browser, network monitoring tool (<i>Wireshark</i>), database client.
+    Tools:&amp;nbsp;Web browser, network monitoring tool (<i>Wireshark</i>), database client.
   </p>
   <p>
     <span>Testing steps:</span>
@@ -482,7 +482,7 @@
     </li>
   </ol>
   <p>
-    <span>Expected results:<span>&nbsp;</span>Same as first test case.</span>
+    <span>Expected results:<span>&amp;nbsp;</span>Same as first test case.</span>
   </p>
   <p>
     <span>
@@ -494,10 +494,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>One client computer and one server computer running the web application.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>One client computer and one server computer running the web application.</span>
   </p>
   <p>
-    Tools:<span>&nbsp;</span>Web browser, network monitoring tool (<i>Wireshark</i>).
+    Tools:<span>&amp;nbsp;</span>Web browser, network monitoring tool (<i>Wireshark</i>).
   </p>
   <p>
     <span>Testing steps:</span>
@@ -525,7 +525,7 @@
     </li>
   </ol>
   <p>
-    <span>Expected results:<span>&nbsp;</span>Same as first test case.</span>
+    <span>Expected results:<span>&amp;nbsp;</span>Same as first test case.</span>
   </p>
   <p>
     <span>
@@ -537,10 +537,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>One client computer and one server computer running the web application.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>One client computer and one server computer running the web application.</span>
   </p>
   <p>
-    <span>Tools:&nbsp;Web browser. </span>
+    <span>Tools:&amp;nbsp;Web browser. </span>
   </p>
   <p>
     <span>Testing steps:</span>
@@ -562,7 +562,7 @@
     </li>
   </ol>
   <p>
-    <span>Expected results:<span>&nbsp;</span>The test case fails if an alert box pops up.<span>&nbsp; </span></span>
+    <span>Expected results:<span>&amp;nbsp;</span>The test case fails if an alert box pops up.<span>&amp;nbsp; </span></span>
   </p>
   <p>
     <span>
@@ -574,10 +574,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>One client computer and one server computer running the web application.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>One client computer and one server computer running the web application.</span>
   </p>
   <p>
-    <span>Tools:&nbsp;Web browser, database client. </span>
+    <span>Tools:&amp;nbsp;Web browser, database client. </span>
   </p>
   <p>
     <span>Testing steps:</span>
@@ -599,7 +599,7 @@
     </li>
   </ol>
   <p>
-    <span>Expected results:<span>&nbsp;</span>The test case fails if an alert box pops up.<span>&nbsp; </span></span>
+    <span>Expected results:<span>&amp;nbsp;</span>The test case fails if an alert box pops up.<span>&amp;nbsp; </span></span>
   </p>
   <p>
     <span>
@@ -611,10 +611,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>Two client computers, one web cache server computer, and one web application server.<span>&nbsp;</span>The two clients use the same web cache server.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>Two client computers, one web cache server computer, and one web application server.<span>&amp;nbsp;</span>The two clients use the same web cache server.</span>
   </p>
   <p>
-    <span>Tools:&nbsp;Web browser. </span>
+    <span>Tools:&amp;nbsp;Web browser. </span>
   </p>
   <p>
     <span>Testing steps:</span>
@@ -626,20 +626,20 @@
     <li>
       In client A use an Internet browser to send a request to the application server containing a double
        CR/LF 
-      and an additional injected <i>HTTP 200 (OK)</i> response with an injected HTML page.&nbsp;Set the cache header in the additional response so that the page is cached by the server. The client sends this request to the web cache server which in turns forwards the request to the application server.
+      and an additional injected <i>HTTP 200 (OK)</i> response with an injected HTML page.&amp;nbsp;Set the cache header in the additional response so that the page is cached by the server. The client sends this request to the web cache server which in turns forwards the request to the application server.
     </li>
     <li>
       <span>In client A, wait until the client receives all the responses from the server (this takes less than ten seconds in an average speed network) and observe the last response rendered in the browser.</span>
     </li>
     <li>
-      <span>In client A, make another request to the client to a target resource.<span>&nbsp;</span>This will trigger the attack.&nbsp;If the application server is vulnerable, the cache server will associate this request with the injected response from step 2.</span>
+      <span>In client A, make another request to the client to a target resource.<span>&amp;nbsp;</span>This will trigger the attack.&amp;nbsp;If the application server is vulnerable, the cache server will associate this request with the injected response from step 2.</span>
     </li>
     <li>
       <span>In client B, make a request to the same resource targeted in step 4.</span>
     </li>
   </ol>
   <p>
-    <span>Expected results:&nbsp;The test case fails if the client B gets the injected response from step 2 to the request made in step 5.</span>
+    <span>Expected results:&amp;nbsp;The test case fails if the client B gets the injected response from step 2 to the request made in step 5.</span>
   </p>
   <h2>
     <span>
@@ -647,10 +647,10 @@
     </span>
   </h2>
   <p>
-    <span>Hardware Requirements:<span>&nbsp;</span>Two client computers, one web cache server computer, and one web application server.&nbsp;The two clients use the proxy server.</span>
+    <span>Hardware Requirements:<span>&amp;nbsp;</span>Two client computers, one web cache server computer, and one web application server.&amp;nbsp;The two clients use the proxy server.</span>
   </p>
   <p>
-    <span>Tools:&nbsp;Web browser.</span>
+    <span>Tools:&amp;nbsp;Web browser.</span>
   </p>
   <p>
     <span>Testing steps:</span>
@@ -665,7 +665,7 @@
     <li>
       In client A use an Internet browser to send a request to the application server containing a double
        CR/LF 
-      and an additional injected <i>HTTP 200 (OK)</i> response with a defaced HTML page.&nbsp;The client will send this request through the proxy.
+      and an additional injected <i>HTTP 200 (OK)</i> response with a defaced HTML page.&amp;nbsp;The client will send this request through the proxy.
     </li>
     <li>
       <span>In client B, open an Internet browser and browse to a confidential page.</span>
@@ -675,9 +675,9 @@
     </li>
   </ol>
   <p>
-    <span>Expected results:<span>&nbsp;</span>The test case fails if the client A gets the response to the confidential page requested by client B in step 4.</span>&nbsp;</p>
+    <span>Expected results:<span>&amp;nbsp;</span>The test case fails if the client A gets the response to the confidential page requested by client B in step 4.</span>&amp;nbsp;</p>
   <h1>
-    <span>Step 4:&nbsp;Fine-tune Test Case Data</span>
+    <span>Step 4:&amp;nbsp;Fine-tune Test Case Data</span>
   </h1>
   <p>
     <span>During this step you need to repeat the test cases from the previous step while tuning the test case data per entry point and making sure to split the responses by finishing the first HTTP response. </span>
@@ -688,7 +688,7 @@
     </span>
   </h2>
   <p>
-    <span>The format of test case data varies depending on the entry point used to submit it.&nbsp;For example, if you are testing through the URL the next two strings are equivalent depending on the URL-encoding schema in use:</span>
+    <span>The format of test case data varies depending on the entry point used to submit it.&amp;nbsp;For example, if you are testing through the URL the next two strings are equivalent depending on the URL-encoding schema in use:</span>
   </p>
   <p>
     <font face="'Courier New'">%0d%0aContent-Type:%20text/html%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:%20text/html%0d%0aContent-Length:%2047%0d%0a%0d%0a%3Chtml%3E%3Cfont%20color=red%3EAttacked!!%3C/font%3E%3C/html%3E</font>
@@ -709,17 +709,17 @@
     </span>
   </h2>
   <p>
-    <span>A challenge in HTTP response splitting testing is to be able to tell the web server to terminate the original response and start the split one.&nbsp;Some web servers have a minimum required length for a response.&nbsp;This means that responses cannot be smaller than a certain size.<span>&nbsp;</span>You must tune the injected data to pad the first response so that the server knows to finish it and start a new one.<span>&nbsp;</span>Other web application servers will finish the response if the </span>
+    <span>A challenge in HTTP response splitting testing is to be able to tell the web server to terminate the original response and start the split one.&amp;nbsp;Some web servers have a minimum required length for a response.&amp;nbsp;This means that responses cannot be smaller than a certain size.<span>&amp;nbsp;</span>You must tune the injected data to pad the first response so that the server knows to finish it and start a new one.<span>&amp;nbsp;</span>Other web application servers will finish the response if the </span>
     <span>
       <i>Content-Length</i>
     </span>
-    <span> is set to zero.<span>&nbsp;</span>Please consult the references below for advanced padding considerations when testing under different platforms.</span>
+    <span> is set to zero.</span>
   </p>
   <h1>
     <span>Conclusions</span>
   </h1>
   <p>
-    <span>HTTP resource splitting is a new attack class that facilitates different attacks such as phishing, XSS, and web cache poisoning.&nbsp;Testing for resource splitting bugs needs to cover all these different attacks. It is important that you understand attack scenarios and to execute each test case in detail.&nbsp;Finally make sure to cover all entry points and fine-tune the test data according to their format.</span>
+    <span>HTTP resource splitting is a new attack class that facilitates different attacks such as phishing, XSS, and web cache poisoning.&amp;nbsp;Testing for resource splitting bugs needs to cover all these different attacks. It is important that you understand attack scenarios and to execute each test case in detail.&amp;nbsp;Finally make sure to cover all entry points and fine-tune the test data according to their format.</span>
   </p>
   <p />]]></Data>
   </Content>

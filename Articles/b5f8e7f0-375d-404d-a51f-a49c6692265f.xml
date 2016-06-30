@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>b5f8e7f0-375d-404d-a51f-a49c6692265f</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Disconnect Dangerous Functionality from Outside Networks</Title>
+    <Category>System Hardening</Category>
+    <Phase>Design</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Embedded Systems
+* C
+* C++
+* Linux
+* Windows
+
+
+## What to Do ##
+
+Design your system in such a way that all critical components that are capable of producing any physical damage are separated from network and communication modules.
+
+Do not allow any communication between network services and the mechanical components of the system.
+
+For existing applications, review the design and ensure that these requirements are satisfied. Otherwise, you need to redesign your application.
+
+Do not include any “debugging”, “maintenance”, or “monitoring” channel to connect mechanical and network components.
+
+
+## Why ##
+
+Any channel which exists between mechanical and network components of the system may be exploited by an attacker. Many vulnerabilities in network libraries and services are discovered from time to time, and very often vendors cannot fix these security problems immediately. In some cases, especially for embedded systems, prompt patches may not be available at all. In this situation, hackers may exploit such vulnerabilities to gain access to the system. Depending on the application, the consequences might be dangerous. For example, consider a car engine or power plant control system.
+
+
+## When ##
+
+Use this precaution if your system is exposed on a network, and especially if your system is accessible through the Internet.
+
+
+## How ##
+
+To disconnect dangerous functionality from outside networks:
+
+1. **Identify critical components of your system**. Review your application design and identify all critical components of your system that may produce physical damage. Usually these components are control units for various mechanical equipment, electrical grids, etc.
+
+2. **Identify all access points to the system**. Review all the data input/output and control ports for your application. Don’t forget “debugging”, “monitoring” or “maintenance” channels. These entry points may be used to access the system.
+
+3. **Identify control flow paths**. Review all control paths between the modules of your system and establish if there is a channel between network ports and critical components. If such a channel exists, redesign your application to separate these parts. Ensure that there are no physical paths that allow external sources to impact your system behavior.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

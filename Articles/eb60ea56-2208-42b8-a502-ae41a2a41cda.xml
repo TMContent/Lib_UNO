@@ -10,6 +10,7 @@
     <Technology>Scala Play</Technology>
     <Type>Guideline</Type>
     <DirectLink>Do Not Disclose Valuable Information During Authentication Errors</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
@@ -17,7 +18,7 @@
   <Content Sanitized="false" DataType="html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-  </ul>Scala and Play Framework 2.1.0+<br /><ul></ul><h1>What to Do</h1><p>Display a generic message when authentication fails.</p><h1>Why</h1><p>Disclosing information regarding invalid usernames and passwords can help an attacker obtain a list of valid users.</p><h1>When</h1><p>If your application authenticates users, use generic error messages when authentication fails.</p><h1>How</h1><p>To provide secure error messages when authentication fails, use the following steps:</p><ol><li><p><strong>Choose an error message.&nbsp;</strong>The message should be very generic. It should signify "yes" or "no" to the authentication attempt. For example: "Authentication failed."</p></li><li><p><strong>Display only one message.&nbsp;</strong>Your application should provide feedback only after all credentials have been verified. Structure your code in a manner that allows all checks to be executed at once. For example:</p><pre>if (!validUser() || !validPass())<br />{<br />      val message="Authentication failed"
+  </ul>Scala and Play Framework 2.1.0+<br /><ul></ul><h1>What to Do</h1><p>Display a generic message when authentication fails.</p><h1>Why</h1><p>Disclosing information regarding invalid usernames and passwords can help an attacker obtain a list of valid users.</p><h1>When</h1><p>If your application authenticates users, use generic error messages when authentication fails.</p><h1>How</h1><p>To provide secure error messages when authentication fails, use the following steps:</p><ol><li><p><strong>Choose an error message.&amp;nbsp;</strong>The message should be very generic. It should signify "yes" or "no" to the authentication attempt. For example: "Authentication failed."</p></li><li><p><strong>Display only one message.&amp;nbsp;</strong>Your application should provide feedback only after all credentials have been verified. Structure your code in a manner that allows all checks to be executed at once. For example:</p><pre>if (!validUser() || !validPass())<br />{<br />      val message="Authentication failed"
       Ok(html.message.main(message))
 }</pre><p>Because sometimes it is impossible to structure the code in a manner where all checks are performed at once, it is important that all error messages contain the exact same information. Any variation in the error messages can give away the information that a username is valid.</p></li></ol><h1>Problem Example</h1><p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p><pre>  def login(p1:Integer) = Action{ implicit request =&gt;
     if (p1==0)
@@ -33,6 +34,6 @@
             val message="Authentication failed"
 	    Ok(html.message.main(message))
       }else {....}
-  }</pre><h1>Additional Resources</h1><ul><li>To read more about authentication best practices, see:&nbsp;<a href="http://www.owasp.org/index.php/Guide_to_Authentication">Guide to Authentication</a>&nbsp;available from OWASP.</li></ul>]]></Data>
+  }</pre>]]></Data>
   </Content>
 </TeamMentor_Article>
