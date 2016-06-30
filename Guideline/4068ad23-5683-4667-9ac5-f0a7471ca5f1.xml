@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Do</h1>
   <p>Do not allow exception details to propagate from your Web applications back to the client. A malicious user could use system-level diagnostic information to learn about your application and probe for weaknesses to exploit in future attacks.</p>
   <h1>Why</h1>
@@ -38,16 +38,16 @@
   </div>
   <p>The <b>defaultRedirect</b> attribute allows you to use a custom error page for your application, which for example might include support contact details.</p>
   <blockquote>
-    <b>Note</b>&nbsp;&nbsp;&nbsp;Do not use <b>mode="Off"</b> because it causes detailed error pages that contain system-level information to be returned to the client.</blockquote>
+    <b>Note</b>&amp;nbsp;&amp;nbsp;&amp;nbsp;Do not use <b>mode="Off"</b> because it causes detailed error pages that contain system-level information to be returned to the client.</blockquote>
   <p>If you want separate error pages for different types of error, use one or more <b>&lt;error&gt;</b> elements as shown below. In this example, "404 (not found)" errors are redirected to one page, "500 (internal system errors)" are directed to another page, and all other errors are directed to the page specified on the <b>defaultRedirect</b> attribute.</p>
   <div>
     <div>
     </div>
     <div>
-      <pre>&lt;customErrors mode="On" defaultRedirect="YourErrorPage.htm"&gt;<br />&nbsp;&nbsp; &lt;error statusCode="404" redirect="YourNotFoundPage.htm"/&gt;<br />&nbsp;&nbsp; &lt;error statusCode="500" redirect="YourInternalErrorPage.htm"/&gt;<br />&lt;/customErrors&gt;<br />&nbsp;</pre>
+      <pre>&lt;customErrors mode="On" defaultRedirect="YourErrorPage.htm"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;error statusCode="404" redirect="YourNotFoundPage.htm"/&gt;<br />&amp;nbsp;&amp;nbsp; &lt;error statusCode="500" redirect="YourInternalErrorPage.htm"/&gt;<br />&lt;/customErrors&gt;<br />&amp;nbsp;</pre>
     </div>
     <p>
-      <strong>Use a Global Error Handler to Catch&nbsp;Unhandled Exceptions</strong>
+      <strong>Use a Global Error Handler to Catch&amp;nbsp;Unhandled Exceptions</strong>
     </p>
     <p>Make sure that the code includes an application-level global error handler in Global.asax to catch any exceptions that are not handled in code. This can prevent accidentally returning detailed error information to the client. The code should log all exceptions in the event log to record them for tracking and later analysis.</p>
     <p>The application should contain code similar to the following:</p>
@@ -55,15 +55,11 @@
       <div>
       </div>
       <div>
-        <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br /><br />&lt;script language="C#" runat="server"&gt;<br />void Application_Error(object sender, EventArgs e)<br />{<br />&nbsp; // Get reference to the source of the exception chain<br />&nbsp; Exception ex = Server.GetLastError().GetBaseException();<br /><br />&nbsp; // log the details of the exception and page state to the<br />&nbsp; // event log.<br />&nbsp; EventLog.WriteEntry( "My Web Application",<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "MESSAGE: " + ex.Message + <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "\nSOURCE: " + ex.Source, <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EventLogEntryType.Error);<br />&nbsp; // Optional e-mail or other notification here...<br />}<br />&lt;/script&gt;</pre>
+        <pre>&lt;%@ Application Language="C#" %&gt;<br />&lt;%@ Import Namespace="System.Diagnostics" %&gt;<br /><br />&lt;script language="C#" runat="server"&gt;<br />void Application_Error(object sender, EventArgs e)<br />{<br />&amp;nbsp; // Get reference to the source of the exception chain<br />&amp;nbsp; Exception ex = Server.GetLastError().GetBaseException();<br /><br />&amp;nbsp; // log the details of the exception and page state to the<br />&amp;nbsp; // event log.<br />&amp;nbsp; EventLog.WriteEntry( "My Web Application",<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "MESSAGE: " + ex.Message + <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "\nSOURCE: " + ex.Source, <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; EventLogEntryType.Error);<br />&amp;nbsp; // Optional e-mail or other notification here...<br />}<br />&lt;/script&gt;</pre>
       </div>
     </div>
   </div>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information see, "Chapter 4 - Design Guidelines for Secure Web Applications" at <a href="http://msdn2.microsoft.com/en-us/library/aa302420.aspx">http://msdn2.microsoft.com/en-us/library/aa302420.aspx</a>&nbsp;&nbsp;&nbsp; </li>
-  </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

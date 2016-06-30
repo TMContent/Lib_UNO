@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>adb724fa-4e7c-4c8e-a547-3cc7e7b5ca95</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Implement Recovery to a Known Safe State</Title>
+    <Category>Error Handling</Category>
+    <Phase>Design</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Any Programming Language
+* Embedded Systems
+* Linux
+* Windows
+
+
+## What to Do ##
+
+Provide backup functionality for your application and the ability to restore it to a known safe state.
+
+
+## Why ##
+
+This functionality is important because it allows the system to function in a safe and secure mode in case it is compromised or unavailable due to various failures or misconfiguration.
+Unsecure operation may lead to compromise of sensitive data or loss of system integrity.
+
+
+## When ##
+
+Use this measure if the system allows a change of its configuration or its state of operation. Including this functionality is especially important if a change of parameters can introduce security risks, degrade performance, or affect system availability.
+
+
+## How ##
+
+To implement recovery to a known safe state:
+
+1. **Identify all possible system states or modes of operation**. Review your system requirements. Identify which states or modes of operation are available for the system and which state-to-state transitions are permissible.
+
+2. **Identify system configuration parameters**. For every state, define all possible configuration parameters. Consult platform documentation to find out which mechanisms are available to store system parameters.
+
+3. **Use role-based authorization**. Do not allow unauthorized users to change system states or modify parameters. Reserve this option only for users with system-defined roles like ‘admin’ or ‘security officer’. Check the target platform documentation to see which authentication mechanisms are available..
+
+4.	**Implement backup functionality**. Before any system modification, perform a backup of the system configuration in a safe location, such as network or external storage. If possible, prevent access to the backup by unauthorized users. If available, use cryptographic services to ensure backup integrity.
+
+5. **Implement restore functionality**. Design a special restore feature to be able to recover the system from a previous backup. Enable backup integrity verification before performing the restore procedure. Don’t forget to authorize the user who performs system restoration.
+
+6. **Provide restore functionality as a separate utility**. In case the application gets into an unavailable state and, therefore, cannot be operated, it is very important to have an external utility that can be operated independently from the application. For embedded systems, which may lack access to devices like a keyboard or display, a hot-key combination may be used to trigger a restore operation.
+
+7. **Log every system modification activity**. For audit purposes, use a logging mechanism to record all the activity pertaining to changing system configuration parameters. Consult platform documentation to see which logging options are available. If available, use cryptographic services to ensure log integrity.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

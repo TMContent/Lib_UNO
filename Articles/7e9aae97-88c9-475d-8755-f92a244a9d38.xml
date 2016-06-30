@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7e9aae97-88c9-475d-8755-f92a244a9d38</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Use Different Error Codes to Distinguish Errors</Title>
+    <Category>Error Handling</Category>
+    <Phase>Implementation</Phase>
+    <Technology>C++</Technology>
+    <Type>Guideline</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* C
+* C++
+* Linux
+* Windows
+
+
+## What to Do ##
+
+Define all possible error conditions for your application.
+
+For C applications, use single-value integer error codes to identify an error condition as the function return value. The industry-adopted approach is to reserve the integer value zero to indicate general success status, positive integers to indicate meaningful return results, such as number of bytes processed, and negative integers to indicate different error conditions.
+
+For C++ applications, use an exception mechanism unless there is a strong reason against doing so, or an exception mechanism is not available on a particular platform. In that case use a C-style error code function return value. 
+
+
+## Why ##
+
+Using different error codes or exceptions helps an application to distinguish different types of error conditions and provide different error handling procedures accordingly. Sometimes certain errors indicate serious situations or security risks and, therefore, require the immediate attention of a system administrator or security officer.
+
+Very often it is not possible or not effective for every application module to handle all possible error conditions. Instead, dedicate a special dispatch module for routing error handling. For example, file system and network or database connection problems may be handled in a different way than authentication or authorization errors.
+
+
+## When ##
+
+Always use this approach in your applications, unless you are developing a very simple single-operation utility without different modules or multi-stage operations.
+
+
+## How ##
+
+To use different error codes to distinguish errors:
+
+1. **Identify possible error conditions for every function**. Identify all possible error conditions for every function in your application. Assign a unique code for every function or operation. Do not share single code values between different operations.
+
+2. **Define error categories/types and severity levels**. Group error conditions based on types or categories, such as file system, network, database, authentication, authorization, etc. Based on your application requirements, define different severity levels. This practice enables you to handle the more critical errors with higher priority faster, reducing security risks.
+
+3. **(C style) Define universal error code integer value composition rule**. Following this rule is an example. You may adjust the example for your situation or target platform limitations. Example: Use a 32-bit integer value as an error code type. As a general practice, reserve zero for the __success__ indicator. Use the 31st bit to indicate a negative integer value as an error. Use bits 24-30 for the severity level (127 possible values, exclude 0). Use bits 16-23 for the error category (255 possible values, exclude 0). Use bits 1-15 for the unique error code for every operation (65535 possible values, exclude 0).
+
+4. **(C style) Use error code as function return value**. Make sure every function or operation returns an error code as a result. There are two ways to return a meaningful result to the caller: either returning a positive integer value or using output parameter(s). After every function call verify the return value to detect error conditions and call the appropriate handler procedure.
+
+5. **(C++ style) Define exception classes**. For every category defined in step 2, create an exception class. Use ``std::exception`` or its subclasses as a base. Use unique severity level and error code as exception class attributes. Optionally provide a text-based error message. For multi-language applications, use a translation mechanism to provide language-specific error messages.
+
+6. **(C++ style) Use the standard try-catch{} mechanism**. When a function detects an error condition throw an exception as defined in the previous step. Always wrap the application code where an error condition is expected in a try {} block. Handle an exception in the catch {} block. If an error condition cannot be properly handled in the function, pass it to the caller.
+
+7. **(Both C and C++ styles) Define a consistent error-logging procedure**. Check your target platform services for error-logging functionality. On Windows systems, use the Event Log mechanism API. On Unix-based systems, use the Syslog API. If these mechanisms are not available, use the STDERR pre-defined file handle as an output stream for error reporting.
+]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure that the confidentiality of session cookies is protected.</p>
   <h1>Why</h1>
@@ -71,10 +71,6 @@
   <pre>public boolean logout() throws LoginException{<br />      subject.getPrincipals().remove(userToken);<br /><br />      clearCredentials();<br />      userToken = null;<br /><br />      // The application should have invalidated the session here.<br /><br />      // Log the logout event. Consult the Logging section for more details<br /><br />      return true;<br />}</pre>
   <h1>Solution Example</h1>
   <p>The following code shows the logout function of the <em>LoginModule</em> used when relying on JAAS for authentication. The code removes all authentication tokens associated with the current session and invalidates the session.</p>
-  <pre>public boolean logout() throws LoginException{<br />      subject.getPrincipals().remove(userToken);<br /><br />      clearCredentials();<br />      userToken = null;<br /><br />      // The application invalidates the session when<br />      // the user is logging out<br />      HttpSession session = common.getCurrentSession();<br />      session.invalidate();<br /><br />      // Log the logout event. Consult the Logging section for more details<br /><br />      return true;<br />}</pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about session prediction attacks, see: <a href="http://www.webappsec.org/projects/threat/classes/credential_session_prediction.shtml">Credential and Session Prediction</a>.</li>
-  </ul>]]></Data>
+  <pre>public boolean logout() throws LoginException{<br />      subject.getPrincipals().remove(userToken);<br /><br />      clearCredentials();<br />      userToken = null;<br /><br />      // The application invalidates the session when<br />      // the user is logging out<br />      HttpSession session = common.getCurrentSession();<br />      session.invalidate();<br /><br />      // Log the logout event. Consult the Logging section for more details<br /><br />      return true;<br />}</pre>]]></Data>
   </Content>
 </TeamMentor_Article>

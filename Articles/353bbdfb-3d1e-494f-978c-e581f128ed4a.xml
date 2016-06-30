@@ -10,12 +10,13 @@
     <Technology>Scala Play</Technology>
     <Type>Guideline</Type>
     <DirectLink>Use Mapping Values When Redirecting on User Input</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to<span>&nbsp;</span>&nbsp;</h1>
+    <Data><![CDATA[<h1>Applies to<span>&amp;nbsp;</span>&amp;nbsp;</h1>
   <p>
     <span>Scala and Play Framework 2.1.0+</span>
   </p>
@@ -38,19 +39,19 @@
   <ol>
     <li>
       <p>
-        <strong>Identify redirects and forwards.</strong>&nbsp;Review code to find all redirects and forwards.</p>
+        <strong>Identify redirects and forwards.</strong>&amp;nbsp;Review code to find all redirects and forwards.</p>
     </li>
     <li>
       <p>
-        <strong>Enumerate destinations.</strong>&nbsp;Make a list of all destinations pointed to by redirects and forwards.</p>
+        <strong>Enumerate destinations.</strong>&amp;nbsp;Make a list of all destinations pointed to by redirects and forwards.</p>
     </li>
     <li>
       <p>
-        <strong>Define mapping values.</strong>&nbsp;Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
+        <strong>Define mapping values.</strong>&amp;nbsp;Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
     </li>
     <li>
       <p>
-        <strong>Rewrite redirects and forwards.</strong>&nbsp;Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards.</p>
+        <strong>Rewrite redirects and forwards.</strong>&amp;nbsp;Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards.</p>
     </li>
   </ol>
   <p />
@@ -59,19 +60,19 @@
   <ol>
     <li>
       <p>
-        <strong>Identify redirects and forwards.</strong>&nbsp;Review code to find all redirects and forwards.</p>
+        <strong>Identify redirects and forwards.</strong>&amp;nbsp;Review code to find all redirects and forwards.</p>
     </li>
     <li>
       <p>
-        <strong>Enumerate destinations.</strong>&nbsp;Make a list of all destinations pointed to by redirects and forwards.</p>
+        <strong>Enumerate destinations.</strong>&amp;nbsp;Make a list of all destinations pointed to by redirects and forwards.</p>
     </li>
     <li>
       <p>
-        <strong>Define mapping values.</strong>&nbsp;Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
+        <strong>Define mapping values.</strong>&amp;nbsp;Define mapping values for all destinations used by redirects and forwards. A mapping value is a short identifying string that symbolically represents a resource.</p>
     </li>
     <li>
       <p>
-        <strong>Rewrite redirects and forwards.</strong>&nbsp;Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards.</p>
+        <strong>Rewrite redirects and forwards.</strong>&amp;nbsp;Rewrite redirects and forwards to use mapping values as input to calculate the final destinations of redirects or forwards.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
@@ -85,20 +86,13 @@
   </p>
   <p>When a user sees a link that appears to point to his bank at onlinebank.com in an e-mail message, he clicks that link and sees a web site that looks exactly like the bank's, but is actually a phishing web site used to steal authentication credentials. The user enters his account number and PIN into the web page, receives an error message telling him to try again, and is redirected to the bank's real site. After entering his credentials again, the user successfully views his account. However, the phisher now has the user's online banking information.</p>
   <h1>Solution Example</h1>
-  <p>The simplest solution is to get rid of the redirect altogether, but if it is necessary for application design, then mapping values may be used to mitigate this vulnerability. For example, if&nbsp;<i>redirect</i>&nbsp;page is used by the application to redirect to&nbsp;<i>balance</i>, a mapping value called "<i>page1</i>" may be created to signify&nbsp;<i>balance</i>. The page&nbsp;<i>redirect</i>&nbsp;should then be rewritten to accept mapping values as input, instead of URLs. The following URL should then redirect to&nbsp;<i>balance</i>:</p>
+  <p>The simplest solution is to get rid of the redirect altogether, but if it is necessary for application design, then mapping values may be used to mitigate this vulnerability. For example, if&amp;nbsp;<i>redirect</i>&amp;nbsp;page is used by the application to redirect to&amp;nbsp;<i>balance</i>, a mapping value called "<i>page1</i>" may be created to signify&amp;nbsp;<i>balance</i>. The page&amp;nbsp;<i>redirect</i>&amp;nbsp;should then be rewritten to accept mapping values as input, instead of URLs. The following URL should then redirect to&amp;nbsp;<i>balance</i>:</p>
   <p>
     <pre>http://www.onlinebank.com/redirectpage?map=page1</pre>
   </p>
   <p>However, the following malicious hyperlinks will not work, because supplied input will not match any mapping value defined in the application:</p>
   <p>
     <pre>http://www.onlinebank.com/redirectpage?url=www.phisher.com</pre>
-   </p>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For more information about unvalidated redirects and forwards, please see&nbsp;<a href="http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards">http://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards</a></li>
-  </ul>
-  <div>
-    <br />
-  </div>]]></Data>
+  </p>]]></Data>
   </Content>
 </TeamMentor_Article>

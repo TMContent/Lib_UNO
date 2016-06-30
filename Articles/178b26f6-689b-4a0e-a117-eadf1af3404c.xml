@@ -10,6 +10,7 @@
     <Technology>Scala Play</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Unique Tokens Are Included in HTTP Requests</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
@@ -26,15 +27,15 @@
   <ol>
     <li>
       <p>
-        <strong>Identify sensitive operations.</strong>&nbsp;Review application design and code to identify all operations that require authorization.</p>
+        <strong>Identify sensitive operations.</strong>&amp;nbsp;Review application design and code to identify all operations that require authorization.</p>
     </li>
     <li>
       <p>
-        <strong>Identify code that performs sensitive operations.</strong>&nbsp;Identify all pages that are involved in performing sensitive operations - this includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
+        <strong>Identify code that performs sensitive operations.</strong>&amp;nbsp;Identify all pages that are involved in performing sensitive operations - this includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
     </li>
     <li>
       <p>
-        <strong>Examine code that performs sensitive operations.</strong>&nbsp;Review each page that allows calling sensitive operations to make sure that it stores a unique token in a session variable. Review each page that allows calling sensitive operations to make sure that it sends the unique token with the request in a hidden field. Review each page that performs sensitive information to make sure that it validates the unique token.</p>
+        <strong>Examine code that performs sensitive operations.</strong>&amp;nbsp;Review each page that allows calling sensitive operations to make sure that it stores a unique token in a session variable. Review each page that allows calling sensitive operations to make sure that it sends the unique token with the request in a hidden field. Review each page that performs sensitive information to make sure that it validates the unique token.</p>
     </li>
   </ol>
   <h1>How to Fix</h1>
@@ -43,18 +44,18 @@
   <ol>
     <li>
       <p>
-        <strong>Identify sensitive operations.</strong>&nbsp;Review application design and code to identify all operations that require authorization.</p>
+        <strong>Identify sensitive operations.</strong>&amp;nbsp;Review application design and code to identify all operations that require authorization.</p>
     </li>
     <li>
       <p>
-        <strong>Identify code that performs sensitive operations.&nbsp;</strong>Identify all pages that are involved in performing sensitive operations - this includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
+        <strong>Identify code that performs sensitive operations.&amp;nbsp;</strong>Identify all pages that are involved in performing sensitive operations - this includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
     </li>
     <li>
       <p />
-      <strong>Choose a method for generating unique tokens.</strong>&nbsp;There are different ways to generate unique tokens.&nbsp;<a href="https://github.com/orefalo/play2-authenticitytoken">Play 2 Authenticity tokens</a>&nbsp;can be used for this purpose. Every form post would contain a hidden parameter containing a signed UUID. Its signature is stored in the session. When the user submits the form, it includes the uuid, the signature and the other form inputs. The validation passes if the signatures match (session.sign=uuid.sign). An attacker would not be able to generate the correct signature, thus protecting the application from a CSRF attack</li>
+      <strong>Choose a method for generating unique tokens.</strong>&amp;nbsp;There are different ways to generate unique tokens.&amp;nbsp;<a href="https://github.com/orefalo/play2-authenticitytoken">Play 2 Authenticity tokens</a>&amp;nbsp;can be used for this purpose. Every form post would contain a hidden parameter containing a signed UUID. Its signature is stored in the session. When the user submits the form, it includes the uuid, the signature and the other form inputs. The validation passes if the signatures match (session.sign=uuid.sign). An attacker would not be able to generate the correct signature, thus protecting the application from a CSRF attack</li>
     <li>
       <p />
-      <strong>Add unique tokens to HTTP requests.</strong>&nbsp;Add code that sends the generated unique tokens in HTTP requests to the pages that link to sensitive operations. Adding the authenticity token is trivial: For every form, add @authenticityToken() inside the form elements. For example:<pre>@import _root_.views.html.authtoken.authenticityToken
+      <strong>Add unique tokens to HTTP requests.</strong>&amp;nbsp;Add code that sends the generated unique tokens in HTTP requests to the pages that link to sensitive operations. Adding the authenticity token is trivial: For every form, add @authenticityToken() inside the form elements. For example:<pre>@import _root_.views.html.authtoken.authenticityToken
 
 &lt;form action="@routes.Application.process()" method="post" /&gt;
    @authenticityToken()
@@ -63,17 +64,10 @@
 &lt;/form&gt;</pre></li>
     <li>
       <p />
-      <strong>Add token validation code.</strong>&nbsp;Add code to the pages that carry out sensitive operations to check if the tokens sent in HTTP requests are valid or not. To validate the token, use the @AuthenticityToken Play validator, as follows:<pre>import authtoken.validator.AuthenticityToken;<br /><br />public class FormData {<br /><br />    @AuthenticityToken<br />    public String authtoken;<br /><br />    public String name;<br />}<br /><br />public static Result process() {<br /><br />    Form<formdata> form = form(FormData.class).bindFromRequest();<br /><br />    if (form.hasErrors()) {<br />        return badRequest("authenticity validation FAILED");<br />    } else {<br />        return ok("authenticity validation PASSED");<br />    }<br />}</formdata></pre></li>
+      <strong>Add token validation code.</strong>&amp;nbsp;Add code to the pages that carry out sensitive operations to check if the tokens sent in HTTP requests are valid or not. To validate the token, use the @AuthenticityToken Play validator, as follows:<pre>import authtoken.validator.AuthenticityToken;<br /><br />public class FormData {<br /><br />    @AuthenticityToken<br />    public String authtoken;<br /><br />    public String name;<br />}<br /><br />public static Result process() {<br /><br />    Form<formdata> form = form(FormData.class).bindFromRequest();<br /><br />    if (form.hasErrors()) {<br />        return badRequest("authenticity validation FAILED");<br />    } else {<br />        return ok("authenticity validation PASSED");<br />    }<br />}</formdata></pre></li>
   </ol>
   <p />
   <ol>
-  </ol>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>For information about the OWASP CSRFGuard project, please see&nbsp;<a href="https://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">https://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a></li>
-  </ul>
-  <div>
-    <br />
-  </div>]]></Data>
+  </ol>]]></Data>
   </Content>
 </TeamMentor_Article>
