@@ -17,7 +17,7 @@
     <Status />
     <Source>C++</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Do</h1>
   <p>Debug assertions are a useful tool that can help you determine exceptional conditions in the course of testing and debugging. Be careful, however, not to rely on them for important error handling since they will be compiled out of your code for production.</p>
   <h1>Why</h1>
@@ -28,16 +28,9 @@
   <p>Carefully evaluate your debug assertions. Ensure they are written to cover cases that should be caught in testing or debugging but are not necessary in production. Any error handling code in assertions should probably be placed outside of the assertion so that it can be included in production code.</p>
   <h1>Problem Example</h1>
   <p>In the following example, the read API is called and then the return value is checked for errors in an assertion. </p>
-  <pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />  //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br />  assert(ret &gt;= 0)<br /><br />  return parseBuffer(recvBuffer, len);<br />&#125;</pre>
+  <pre>bool ReadFromSocket(SOCKET socket, char &amp;#42;recvBuffer, int len)<br />&amp;#123;<br />  //first read from the socket<br />&amp;nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br />  assert(ret &gt;= 0)<br /><br />  return parseBuffer(recvBuffer, len);<br />&amp;#125;</pre>
   <h1>Solution Example</h1>
   <p>In the following example, the read API is called and then the return value is checked for errors. </p>
-  <pre>bool ReadFromSocket(SOCKET socket, char &#42;recvBuffer, int len)<br />&#123;<br />  //first read from the socket<br />&nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br /><br />  if (ret &gt;= 0)<br />  &#123;<br />      //now parse the buffer<br />      return parseBuffer(recvBuffer, len);<br />  &#125;<br />  else<br />  &#123;<br />      //can call WSAGetLastError if we need error details<br />      return false;<br />  &#125;<br />&#125;</pre>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/e4a3052e-13f2-4062-9a83-49185ff14b0a">Centralize Error Handling</a>
-      <br />
-    </li>
-  </ul>]]></Data>
+  <pre>bool ReadFromSocket(SOCKET socket, char &amp;#42;recvBuffer, int len)<br />&amp;#123;<br />  //first read from the socket<br />&amp;nbsp; int ret = read(socket, recvBuffer, len, 0);<br /><br /><br />  if (ret &gt;= 0)<br />  &amp;#123;<br />      //now parse the buffer<br />      return parseBuffer(recvBuffer, len);<br />  &amp;#125;<br />  else<br />  &amp;#123;<br />      //can call WSAGetLastError if we need error details<br />      return false;<br />  &amp;#125;<br />&amp;#125;</pre>]]></Data>
   </Content>
 </TeamMentor_Article>
