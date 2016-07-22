@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="wikitext">
+  <Content Sanitized="true" DataType="markdown">
     <Data><![CDATA[## Applies To ##
 
 * C and C++
@@ -92,10 +92,10 @@ When crafting attack data for a string input you should try the following:
 
 Important: If the input has to conform to a known format construct your string input around this format. Apply the 4 steps above between each delimiter of the format independently and in combination. For instance if you were testing an url format of 'http://sitename/dirname' you would do the following:
 
-LONGSTRING://sitename/dirname
-http://LONGSTRING/dirname
-http://sitename/LONGSTRING
-LONGSTRING://LONGSTRING/LONGSTRING
+* LONGSTRING://sitename/dirname
+* http://LONGSTRING/dirname
+* http://sitename/LONGSTRING
+* LONGSTRING://LONGSTRING/LONGSTRING
 
 If you don't know the format to which the string input must conform you can:
 
@@ -131,13 +131,10 @@ To make it as easy as possible to investigate crashes, run your buffer overrun t
 
 A common crash that occurs when applying a buffer overrun attack, which is not in fact a buffer overrun, is the null dereference. If you see your application has crashed due to a null dereference it is unlikely you have discovered a buffer overrun.
 
-If you see pieces of your attack string on the heap you are likely to have discovered a heap-based buffer overrun.
-
-If you see pieces of your attack string on the stack you are likely to have discovered a stack-based buffer overrun.
-
-If you see pieces of your attack string in process registers you are very likely to have discovered a buffer overrun that is exploitable.
-
-If you see pieces of your attack string in the EIP process register you have discovered a buffer overrun and it is exploitable.
+* If you see pieces of your attack string on the heap you are likely to have discovered a heap-based buffer overrun.
+* If you see pieces of your attack string on the stack you are likely to have discovered a stack-based buffer overrun.
+* If you see pieces of your attack string in process registers you are very likely to have discovered a buffer overrun that is exploitable.
+* If you see pieces of your attack string in the EIP process register you have discovered a buffer overrun and it is exploitable.
 
 ---
 
