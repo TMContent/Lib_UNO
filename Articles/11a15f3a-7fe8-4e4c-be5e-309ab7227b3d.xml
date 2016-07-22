@@ -15,35 +15,40 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="markdown">
-    <Data><![CDATA[## What to Do ##
+    <Data><![CDATA[## Applies To ##
 
-Validate all user input using whitelist/positive input validation. Whitelist input validation allows only input that is explicitly defined as valid, as opposed to blacklist input validation, which filters out known bad input.
+* All applications
+* All system types
+
+## What to Do ##
+
+Validate all untrusted input using whitelist/positive input validation. Whitelist input validation allows only input that is explicitly defined as valid, as opposed to blacklist input validation, which filters out known bad input. Identify all types of input handled by the application and determine the valid format for each type, then add checks in code to make sure the data is valid before processing it.
 
 ## Why ##
 
-Properly implemented input validation mitigates many types of injection vulnerabilities, such as Cross-Site Scripting and SQL injection.
+Properly implemented input validation mitigates many types of injection vulnerabilities, such as Cross-Site Scripting and SQL injection. For native code applications, input validation can also mitigate memory management issues, such as Buffer Overflows.
 
 ## How ##
 
-To validate all user input using whitelist input validation:
+To validate all untrusted input using whitelist input validation:
 
-1. **Identify all entry points for user input.** Make a list of all possible sources of user input in your application.
+1. **Identify all entry points for untrusted input.** Make a list of all possible sources of untrusted input in your application. For a web application, this includes: form fields, request parameters, cookies, headers, files and databases. For a rich client or a mobile application, this includes: keyboard input, files, databases and network connections. 
 
-2. **Identify all types of input accepted by the application.** For each source of user input on the list, define valid characters, length, format, and range (for numerical values).
+2. **Identify all types of input accepted by the application.** For each source of untrusted input on the list, define valid characters, length, format, and range (for numerical values).
 
-3. **Define an input validation subsystem.** Define a set of validator functions to validate each type of input handled by the application. Input should be validated on the server.
+3. **Define an input validation subsystem.** Define a set of validator functions to validate each type of input handled by the application. Input has to be validated on the server for client-server applications; it can be validated on the client-side as well, but not instead of on the server.
 
-4. **Validate length.** Check that the length of the user input is valid. Checking length before using regular expressions helps prevent regular expression Denial-of-Service attacks.
+4. **(All input) Validate length.** Add code to all validators to check that the length of the untrusted input is valid. Checking length before using regular expressions helps prevent regular expression Denial-of-Service attacks.
 
-5. **Validate characters.** Restrict the acceptable range of characters in text input using regular expressions.
+5. **(Text input) Validate characters.** Add code to validators that handle text input to restrict the acceptable range of characters in text input using regular expressions.
 
-6. **Validate format.** If the input type has a specific pattern, such as a date or a phone number, use regular expressions to make sure user input matches the input type specified by the application. Use regular expressions to enforce strong password requirements.
+6. **(Structured input) Validate format.** For validators that handle input that has a specific pattern, such as a date or a phone number, use regular expressions to make sure untrusted input matches the input type specified by the application. 
 
-7. **Validate range.** Restrict the acceptable range of numerical input by comparing the input to the maximum and minimum acceptable values.
+7. **(Numeric input) Validate range.** For validators for numeric input, add code to restrict the acceptable range of numerical input by comparing the input to the maximum and minimum acceptable values.
 
-8. **(Optional) Reject and respond to known bad input.** This step does not add much actual security, but it may provide defense in depth. The input validation subsystem may check for known attack strings and respond to these likely attacks by alerting the user. The options for responding to invalid input are: reject invalid input, log the event, take evasive action.
+8. **(Optional) Reject and respond to known bad input.** This step does not add much actual security, but it may provide defense in depth. The input validation subsystem may check for known attack strings and respond to these likely attacks by alerting the untrusted. The options for responding to invalid input are: reject invalid input, log the event, take evasive action.
 
-9. **(Context-sensitive) Encode input.** If the input is going to be displayed back through a web browser, consider encoding it to prevent Cross-Site Scripting attacks.
+9. **(Context-sensitive) Encode input.** If the input is going to be displayed back through a web browser, consider encoding it to prevent Cross-Site Scripting attacks before processing or storing it. Be careful not to introduce double-encoding issues by encoding this data again elsewhere in the code.
 
 
 ## Related Guidelines ##
