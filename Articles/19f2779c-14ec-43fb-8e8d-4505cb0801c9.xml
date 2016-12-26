@@ -8,8 +8,9 @@
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Include Unique Tokens in HTTP Requests</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
@@ -26,16 +27,16 @@
   <ol>
     <li>
       <p>
-        <strong>Identify sensitive operations.</strong>&nbsp;Review application design and code to identify all operations that require authorization.</p>
+        <strong>Identify sensitive operations.</strong>&amp;nbsp;Review application design and code to identify all operations that require authorization.</p>
     </li>
     <li>
       <p>
-        <strong>Identify code that performs sensitive operations.&nbsp;</strong>Identify all pages that are involved in performing sensitive operations. This includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
+        <strong>Identify code that performs sensitive operations.&amp;nbsp;</strong>Identify all pages that are involved in performing sensitive operations. This includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
     </li>
     <li>
       <p />
-      <strong>Choose a method for generating unique tokens.</strong>&nbsp;There are different ways to generate unique tokens. In Play Framework, use a <a href="https://github.com/orefalo/play2-authenticitytoken">Play 2 Authenticity token</a>
- for this purpose.&nbsp; Every form post will contain a hidden parameter 
+      <strong>Choose a method for generating unique tokens.</strong>&amp;nbsp;There are different ways to generate unique tokens. In Play Framework, use a <a href="https://github.com/orefalo/play2-authenticitytoken">Play 2 Authenticity token</a>
+ for this purpose.&amp;nbsp; Every form post will contain a hidden parameter 
 containing a UUID. The UUID is signed and its signature is stored in the
  session. When the user submits the form, it includes the UUID and the 
 signature. The validation passes if the signatures match: <font face="Courier New">session.sign=uuid.sign</font>.
@@ -43,7 +44,7 @@ signature. The validation passes if the signatures match: <font face="Courier Ne
 signature. This protects the application from a CSRF attack. </li>
     <li>
       <p />
-      <strong>Add unique tokens to HTTP requests.</strong>&nbsp;Add code that sends
+      <strong>Add unique tokens to HTTP requests.</strong>&amp;nbsp;Add code that sends
  the generated unique tokens in HTTP requests to the pages that link to 
 sensitive operations. Adding the authenticity token is trivial: For 
 every form, add @authenticityToken() inside the form elements. For example:<pre>@import _root_.views.html.authtoken.authenticityToken
@@ -60,8 +61,8 @@ every form, add @authenticityToken() inside the form elements. For example:<pre>
   </ol>
   <h1>Additional Resources</h1>
   <ul>
-    <li>For information about the OWASP CSRFGuard project, please see&nbsp;<a href="https://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">https://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a></li>
-    <li>Sample code for Play 2 Authenticity Token can be seen&nbsp;<a href="https://github.com/orefalo/play2-authenticitytoken">https://github.com/orefalo/play2-authenticitytoken</a></li>
+    <li>For information about the OWASP CSRFGuard project, please see&amp;nbsp;<a href="https://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">https://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a></li>
+    <li>Sample code for Play 2 Authenticity Token can be seen&amp;nbsp;<a href="https://github.com/orefalo/play2-authenticitytoken">https://github.com/orefalo/play2-authenticitytoken</a></li>
     <li>
       <a href="https://github.com/jacobgroundwater/Scala-Play-CSRF">Here</a> is another way of implementing unique tokens in Play Framework successfully using cookie and hidden-field approach.</li>
   </ul>
