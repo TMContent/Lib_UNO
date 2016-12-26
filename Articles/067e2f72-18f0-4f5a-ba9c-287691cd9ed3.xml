@@ -8,8 +8,9 @@
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Checklist Item</Type>
+    <Type>Code Example</Type>
     <DirectLink>Input Is Validated for Length, Range, Format And Type</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
@@ -33,7 +34,7 @@
     <ol style="font-size: medium; font-weight: normal;">
       <li>
         <p>
-          <strong>Find all input sources.&nbsp;</strong>During design time, identify all of the potential input sources to your application. Scour the source code to discover sources of input that may have been missed in the design. The most common sources are:</p>
+          <strong>Find all input sources.&amp;nbsp;</strong>During design time, identify all of the potential input sources to your application. Scour the source code to discover sources of input that may have been missed in the design. The most common sources are:</p>
         <ul>
           <li>URL based parameters</li>
           <li>Form based parameters</li>
@@ -51,22 +52,22 @@
       </li>
       <li>
         <p>
-          <strong>Trace data from source to sink.&nbsp;</strong>Trace each source of input through your application until you find its ultimate destination. The final sink may be in memory, on the hard drive, sent over the network or stored in a data store such as a database.</p>
+          <strong>Trace data from source to sink.&amp;nbsp;</strong>Trace each source of input through your application until you find its ultimate destination. The final sink may be in memory, on the hard drive, sent over the network or stored in a data store such as a database.</p>
       </li>
       <li>
         <p>
-          <strong>Identify validation routines.&nbsp;</strong>Each input source should have a data validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many spread throughout your code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing.</p>
+          <strong>Identify validation routines.&amp;nbsp;</strong>Each input source should have a data validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many spread throughout your code base, so check for consolidation of routines to aid testing and reduce the chance of one-off bugs. If an input source does not have a validation routine associated with it, flag it for fixing.</p>
       </li>
       <li>
         <p>
-          <strong>Ensure quality of validation routines.&nbsp;</strong>Validation routines should check for length, range, format and type.</p>
+          <strong>Ensure quality of validation routines.&amp;nbsp;</strong>Validation routines should check for length, range, format and type.</p>
         <ul>
           <li>Validation routines should check for known good data and constrain input against each of the four categories: length, range, format and type.</li>
           <li>In web applications, look for application-supplied validators, such as a Custom Scala Validator, to validate and constrain input after it is received from an input source.</li>
-          <li>Ensure that all numeric fields are validated for type and range. Check for the use of regular expressions and&nbsp;<strong>scala.util.matching</strong>&nbsp;or the use of a validator that checks numeric ranges by converting the input value to an integer or double and then performing a range check.</li>
+          <li>Ensure that all numeric fields are validated for type and range. Check for the use of regular expressions and&amp;nbsp;<strong>scala.util.matching</strong>&amp;nbsp;or the use of a validator that checks numeric ranges by converting the input value to an integer or double and then performing a range check.</li>
           <li>Check that validators validate input against the least permissive expression possible that will accept all the input expected for that field.</li>
           <li>If you know that the field will have a certain internal structure, ensure that is checked for.</li>
-          <li>If the input has an internal checksum, like a credit card number, ensure that is checked.&nbsp;<br /><br />Validation should check first for whitelisted data, ie, known valid, safe data, and then for blacklisted data, ie, malicious, dangerous data. Do not rely only on filtering out malicious data as it is too easy to miss something. Validate on the server--do not rely on client-side validation alone as it can be easily bypassed.</li>
+          <li>If the input has an internal checksum, like a credit card number, ensure that is checked.&amp;nbsp;<br /><br />Validation should check first for whitelisted data, ie, known valid, safe data, and then for blacklisted data, ie, malicious, dangerous data. Do not rely only on filtering out malicious data as it is too easy to miss something. Validate on the server--do not rely on client-side validation alone as it can be easily bypassed.</li>
         </ul>
       </li>
     </ol>
@@ -86,15 +87,15 @@
           </tr>
           <tr>
             <td>Length checks</td>
-            <td>Regular expressions (<strong>scala.util.matching</strong><strong>.regex</strong>)<br /><p><i><b>play.api.data.validation</b></i>&nbsp;object</p><p>Custom Scala&nbsp;<strong>Validator</strong></p></td>
+            <td>Regular expressions (<strong>scala.util.matching</strong><strong>.regex</strong>)<br /><p><i><b>play.api.data.validation</b></i>&amp;nbsp;object</p><p>Custom Scala&amp;nbsp;<strong>Validator</strong></p></td>
           </tr>
           <tr>
             <td>Format checks</td>
-            <td>Regular expressions for pattern matching (<strong>Pattern</strong>,&nbsp;<strong>Matcher</strong>)<p>Scala type system</p><p><i><b>play.api.data.validation</b></i>&nbsp;object</p></td>
+            <td>Regular expressions for pattern matching (<strong>Pattern</strong>,&amp;nbsp;<strong>Matcher</strong>)<p>Scala type system</p><p><i><b>play.api.data.validation</b></i>&amp;nbsp;object</p></td>
           </tr>
           <tr>
             <td>Range checks</td>
-            <td>Custom Scala&nbsp;<strong>Validator</strong><p>Typed data comparisons</p><p><i><b>play.api.data.validation</b></i>&nbsp;object</p></td>
+            <td>Custom Scala&amp;nbsp;<strong>Validator</strong><p>Typed data comparisons</p><p><i><b>play.api.data.validation</b></i>&amp;nbsp;object</p></td>
           </tr>
         </tbody>
       </table>
@@ -106,7 +107,7 @@
     <ol style="font-size: medium; font-weight: normal;">
       <li>
         <p />
-        <strong>Validating length</strong>: Your application should check a string's length or the number of bits in a numeric value. Checking the length can help prevent buffer overflows as well as integer overflows in numeric values. A simple way to validate the numeric value for forms is through the use of&nbsp;<i>minLength(length: Int)</i>&nbsp;and<i>&nbsp;maxLength(length: Int)</i>&nbsp;from the&nbsp;<i>play.api.data.validation</i>&nbsp;constraints object of Play Framework:<pre>object SignUp extends Controller {
+        <strong>Validating length</strong>: Your application should check a string's length or the number of bits in a numeric value. Checking the length can help prevent buffer overflows as well as integer overflows in numeric values. A simple way to validate the numeric value for forms is through the use of&amp;nbsp;<i>minLength(length: Int)</i>&amp;nbsp;and<i>&amp;nbsp;maxLength(length: Int)</i>&amp;nbsp;from the&amp;nbsp;<i>play.api.data.validation</i>&amp;nbsp;constraints object of Play Framework:<pre>object SignUp extends Controller {
   
   /**
    * Sign Up Form definition.
@@ -127,7 +128,7 @@
 
     )
   )
-  }</pre>Also, you can validate any numeric value through the use of<font color="#ff0000"></font>&nbsp;BigInt/BigDecimal as follows:&nbsp;<pre>def productcheck = Action { implicit request =&gt;
+  }</pre>Also, you can validate any numeric value through the use of<font color="#ff0000"></font>&amp;nbsp;BigInt/BigDecimal as follows:&amp;nbsp;<pre>def productcheck = Action { implicit request =&gt;
     prodForm.bindFromRequest.fold(
       errors =&gt; BadRequest(views.html.index(errors, "There is some error")),
       prodForm =&gt; {
@@ -135,7 +136,7 @@
         val proname = prodForm.pname
         val prodprice = prodForm.price
         if(prodprice.compare(BigInt(0)) &gt; -1
-          && prodprice.compare(BigInt(Integer.MAX_VALUE)) 
+          &amp;&amp; prodprice.compare(BigInt(Integer.MAX_VALUE)) 
         {
           println("true")
           ............ //code for true
@@ -147,7 +148,7 @@
         }</pre></li>
       <li>
         <p />
-        <strong>Validating type</strong>:&nbsp;Validating the input's data type is important when your application expects a specific non-string parameter. Difference in data type can trigger unhandled exceptions that would throw your application into an unknown state. The following is an example of validating in forms:<pre>object ContactForm extends Controller {
+        <strong>Validating type</strong>:&amp;nbsp;Validating the input's data type is important when your application expects a specific non-string parameter. Difference in data type can trigger unhandled exceptions that would throw your application into an unknown state. The following is an example of validating in forms:<pre>object ContactForm extends Controller {
   
   /**
    * Contact Form definition.
@@ -182,8 +183,8 @@ val issafe =whitelistPattern.pattern.matcher(pname).matches</pre><pre>if (issafe
   <h1>Additional Resources</h1>
   <h1>
     <ul style="font-size: medium; font-weight: normal;">
-      <li>A tutorial on regular expressions is available at&nbsp;<a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>.</li>
-      <li>For more information on using regular expression in Scala, see: Documentation for&nbsp;<a href="http://www.scala-lang.org/api/current/index.html#scala.util.matching.Regex">Regex Pattern</a>&nbsp;in Scala documentation.</li>
+      <li>A tutorial on regular expressions is available at&amp;nbsp;<a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>.</li>
+      <li>For more information on using regular expression in Scala, see: Documentation for&amp;nbsp;<a href="http://www.scala-lang.org/api/current/index.html#scala.util.matching.Regex">Regex Pattern</a>&amp;nbsp;in Scala documentation.</li>
     </ul>
   </h1>
   <br />
