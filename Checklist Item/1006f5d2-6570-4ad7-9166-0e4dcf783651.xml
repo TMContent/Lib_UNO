@@ -3,8 +3,8 @@
   <Metadata>
     <Id>1006f5d2-6570-4ad7-9166-0e4dcf783651</Id>
     <Id_History>1006f5d2-6570-4ad7-9166-0e4dcf783651,b52710d9-6037-4bca-9bb0-b24eba10bd7e,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
-    <Title>Sensitive Data Is Not Logged</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[1612Dupe] Sensitive Data Is Not Logged</Title>
     <Category>Auditing and Logging</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,11 +17,11 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure no sensitive data is being logged.</p>
   <h1>Why</h1>
-  <p>The permissions required to access log files are often less than what is required to view sensitive information in an application. By logging sensitive information you may be allowing a less privileged user to view information they would otherwise not have access to. This also&nbsp;increases your attack surface by making your log files a target of interest for attackers.</p>
+  <p>The permissions required to access log files are often less than what is required to view sensitive information in an application. By logging sensitive information you may be allowing a less privileged user to view information they would otherwise not have access to. This also&amp;nbsp;increases your attack surface by making your log files a target of interest for attackers.</p>
   <h1>How to Check</h1>
   <p>Use the following steps to verify that your application does not log sensitive data:</p>
   <ol>
@@ -59,21 +59,21 @@
       </ul>
       <li>
         <p>
-          <strong>Review logging architecture. </strong>Evaluate your application's logging architecture. Make sure the logging and data streams are separated. Segregating&nbsp;the streams is a preventative measure against leaking sensitive data from one stream into the other. Make sure that no sensitive data is stored in data structures that will be logged. </p>
+          <strong>Review logging architecture. </strong>Evaluate your application's logging architecture. Make sure the logging and data streams are separated. Segregating&amp;nbsp;the streams is a preventative measure against leaking sensitive data from one stream into the other. Make sure that no sensitive data is stored in data structures that will be logged. </p>
         <li>
           <p>
             <strong>Avoid common logging mistakes. </strong>Common logging mistakes include, but are not limited to, storing sensitive data into exceptions or other objects that will be recorded. Clean the code from common logging mistakes. For example, do not store sensitive data into exceptions that are expected to be logged:</p>
-          <pre>if(&#33;validPaymentInfo)<br />&#123;<br />      throw new InvalidPaymentException(creditCardInfo.toString() &#43; " is not valid.");<br />&#125;</pre>
+          <pre>if(&amp;#33;validPaymentInfo)<br />&amp;#123;<br />      throw new InvalidPaymentException(creditCardInfo.toString() &amp;#43; " is not valid.");<br />&amp;#125;</pre>
         </li>
       </li>
     </li>
   </ol>
   <h1>Problem Example</h1>
   <p>The following segment displays a log entry for a multi-user application. Unfortunately, the application discloses the user's credit card information through the entry's message field:</p>
-  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyPayment&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;&#33;-- The application logs the user's credit card information --&gt;<br />  &lt;message&gt;Changed: primary_cc=4111-1111-1111-1111, exp_date=06/06, sec_code=000&lt;/message&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyPayment&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;&amp;#33;-- The application logs the user's credit card information --&gt;<br />  &lt;message&gt;Changed: primary_cc=4111-1111-1111-1111, exp_date=06/06, sec_code=000&lt;/message&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
   <h1>Solution Example</h1>
   <p>The following segment displays a log entry for a multi-user application. Fortunately, no sensitive data has been stored.</p>
-  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyPayment&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;&#33;-- The application logs a generic message when the --&gt;<br />  &lt;&#33;-- user's credit card information is modified      --&gt;<br />  &lt;message&gt;Payment information is modified.&lt;/message&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyPayment&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;&amp;#33;-- The application logs a generic message when the --&gt;<br />  &lt;&amp;#33;-- user's credit card information is modified      --&gt;<br />  &lt;message&gt;Payment information is modified.&lt;/message&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
   <h1>Java Logging Guidelines</h1>
   <ul>
     <li>
