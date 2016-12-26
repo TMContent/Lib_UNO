@@ -8,7 +8,7 @@
     <Category>Authorization</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Deny All Access by Default</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
     <Security_Demand />
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -38,18 +38,18 @@
     <li>
       <p>
         <strong>Enable forms authentication.</strong> Add the following section to <em>Web.config</em> using the appropriate settings:</p>
-      <pre>&lt;system.web&gt;<br />&nbsp; &lt;authentication mode="Forms"&gt;<br />&nbsp;&nbsp;&nbsp; ...<br />&nbsp; &lt;/authentication&gt;<br />&lt;/system.web&gt;</pre>
+      <pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp; &lt;/authentication&gt;<br />&lt;/system.web&gt;</pre>
     </li>
     <li>
       <p>
         <strong>Deny all access by default.</strong> Configure the following tags in <em>Web.config</em>:</p>
-      <pre>&lt;system.web&gt;<br />&nbsp; &lt;authorization&gt;<br />&nbsp;&nbsp;&nbsp; &lt;deny users="*" /&gt;<br />&nbsp; &lt;/authorization&gt;<br />&lt;/system.web&gt;</pre>
+      <pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*" /&gt;<br />&amp;nbsp; &lt;/authorization&gt;<br />&lt;/system.web&gt;</pre>
       <p>The line <em>&lt;deny users="*" /&gt;</em> denies access to all users, including authenticated users.</p>
     </li>
     <li>
       <p>
         <strong>Configure authorization.</strong> For each sensitive page, add a section to <em>Web.config</em> that looks like the following: </p>
-      <pre>&lt;location path="[Filename of the page]"&gt;<br />&nbsp;&nbsp; &lt;system.web&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;authorization&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;allow roles="[Authorized roles]"&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;deny users="*"&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/authorization&gt;<br />&nbsp;&nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
+      <pre>&lt;location path="[Filename of the page]"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="[Authorized roles]"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
       <p>
         <em>[Filename of the page]</em> is the file name of the sensitive page. <em>[Authorized roles]</em> is a comma separated list of roles that are authorized to use the page.</p>
     </li>
