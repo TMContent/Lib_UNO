@@ -8,7 +8,7 @@
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Do Not Disclose Valuable Information in Error Messages</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
     <Security_Demand />
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -33,7 +33,7 @@
   <ol>
     <li>
       <p>
-        <strong>Ensure all error messages are generic.</strong> Make sure no error message displays too much information about the quality of the data being processed or what mechanisms are being used to process the data. For example, an error message such as &#8220;the input contains invalid characters&#8221; is much more secure than "the input cannot contain '&lt;' or '&gt;' characters".</p>
+        <strong>Ensure all error messages are generic.</strong> Make sure no error message displays too much information about the quality of the data being processed or what mechanisms are being used to process the data. For example, an error message such as &amp;#8220;the input contains invalid characters&amp;#8221; is much more secure than "the input cannot contain '&lt;' or '&gt;' characters".</p>
       <li>
         <p>
           <strong>Be careful with dynamically generated error messages.</strong> Dynamic error messages are difficult to get right and should not be used unless absolutely necessary. If they must be used, be sure the error message cannot aid an attacker in any way. Dynamically generated error messages may open the application up for other vulnerabilities, such as SQL injection, Buffer Overflows or Cross Site Scripting.</p>
@@ -61,12 +61,12 @@
   </ol>
   <h1>Problem Example</h1>
   <p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p>
-  <pre>public void login()<br />&#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (&#33;validUser())<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new Exception("User not found.");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (&#33;validPass())<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new Exception("Wrong password.");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; commit();<br />&#125;</pre>
+  <pre>public void login()<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (&amp;#33;validUser())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; throw new Exception("User not found.");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (&amp;#33;validPass())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; throw new Exception("Wrong password.");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; commit();<br />&amp;#125;</pre>
   <h1>Solution Example</h1>
   <p>The following code authenticates a user. Since it presents the same error message regardless of why the authentication failed, an attacker can't determine if the credentials tried represent a valid user or not.</p>
-  <pre>public void login()<br />&#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (&#33;validUser() &#124;&#124; &#33;validPass())<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new Exception("Authentication failed.");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; commit();<br />&#125;</pre>
+  <pre>public void login()<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (&amp;#33;validUser() &amp;#124;&amp;#124; &amp;#33;validPass())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; throw new Exception("Authentication failed.");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; commit();<br />&amp;#125;</pre>
   <h1>Additional Resources</h1>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
