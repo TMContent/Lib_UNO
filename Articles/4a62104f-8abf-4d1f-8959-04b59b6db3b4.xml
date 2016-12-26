@@ -8,8 +8,9 @@
     <Category>Authorization</Category>
     <Phase>Design</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Guideline</Type>
+    <Type>How To</Type>
     <DirectLink>Automatically Lock Inactive User Accounts</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
@@ -28,12 +29,12 @@
   <ol>
     <li>
       <p>
-        <strong>Set a lockout policy.&nbsp;</strong>Create the application's lockout policy. Determine the necessary duration of inactivity before an account can be locked/disabled. This policy can vary depending on whether the account is of a normal user or an administrator. For example, disable normal accounts after 45 days of inactivity and administrative accounts after 30 days of inactivity.</p>
+        <strong>Set a lockout policy.&amp;nbsp;</strong>Create the application's lockout policy. Determine the necessary duration of inactivity before an account can be locked/disabled. This policy can vary depending on whether the account is of a normal user or an administrator. For example, disable normal accounts after 45 days of inactivity and administrative accounts after 30 days of inactivity.</p>
     </li>
     <li>
       <p />
       <p>
-        <strong>Keep track of user inactivity.&nbsp;</strong>Establish a mechanism to keep track of the last successful authentication. Successful authentication can be tracked via logs or a timestamp, which resides in the user database. Example:</p>
+        <strong>Keep track of user inactivity.&amp;nbsp;</strong>Establish a mechanism to keep track of the last successful authentication. Successful authentication can be tracked via logs or a timestamp, which resides in the user database. Example:</p>
       <p>
         <i>For Mongodb:</i>
       </p>
@@ -45,19 +46,19 @@
     </li>
     <li>
       <p>
-        <strong>Set a lockout mechanism.&nbsp;</strong>Establish a mechanism 
+        <strong>Set a lockout mechanism.&amp;nbsp;</strong>Establish a mechanism 
 to verify the current period of inactivity and automatically set the 
 disabled bit for inactive accounts. Use the application or database 
 server's scheduler to run this function during the hours with least user
  activity. Keep in mind that inactive accounts should be disabled, but 
 not removed until it is confirmed that they should be completely 
-removed.&nbsp;</p>
+removed.&amp;nbsp;</p>
       <p>For example, the following database transaction would lock all 
 user accounts that have been inactive for more than 30 days. Such a 
 transaction should be scheduled to run once a day:</p>
       <pre>Update users set locked = 1 where (current_date - 30) &gt; last_login_date</pre>
       <p>
-        <strong>Note:</strong>&nbsp;PCI DSS requirements state that a&nbsp;user account should be locked out after no more than 90 days of inactivity.</p>
+        <strong>Note:</strong>&amp;nbsp;PCI DSS requirements state that a&amp;nbsp;user account should be locked out after no more than 90 days of inactivity.</p>
     </li>
   </ol>
   <h1>Problem Example</h1>
