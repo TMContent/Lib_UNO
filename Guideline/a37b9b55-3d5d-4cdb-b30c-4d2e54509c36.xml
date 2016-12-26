@@ -3,12 +3,12 @@
   <Metadata>
     <Id>a37b9b55-3d5d-4cdb-b30c-4d2e54509c36</Id>
     <Id_History>a37b9b55-3d5d-4cdb-b30c-4d2e54509c36,731cfbb7-963b-4f58-acab-50c815019863,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Use Health Monitoring for Logging</Title>
     <Category>Auditing and Logging</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Use Health Monitoring for Logging</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
     <Security_Demand />
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -28,18 +28,18 @@
   <p>ASP.NET health monitoring supports many standard events that you can use to monitor the health of your application. Examples of security related events that are automatically generated include logon failures and successes when using the ASP.NET membership system, attempts to tamper with or reuse forms authentication tickets, and infrastructure events such as disk access failures. </p>
   <p>The health monitoring feature includes built-in providers that allow you to log events to an email message, to SQL server, to the event log, as an ASP.NET trace output, or to the Windows Management Instrumentation (WMI) web event provider.</p>
   <h1>How</h1>
-  <p>By default, health monitoring is enabled for ASP.NET applications and all Web infrastructure error events (inheriting from <em>System.Web.Management.WebErrorEvent</em>) and all audit failure events (inheriting from <em>System.Web.Management.WebFailureAuditEvent</em>) are written to the event log.&nbsp;The default configuration is defined in the <em>&lt;healthMonitoring&gt;</em> element in the machine-level <em>Web.config</em> file. To audit additional security related events, you create custom event types by deriving from one of the built-in types. </p>
-  <p>The health monitoring feature has built-in providers that allow you to log events in an e-mail message (<em>SimpleMailWebEventProvider, TemplatedMailWebEventProvider</em>), to SQL Server (<em>SqlWebEventProvider</em>), to the event log (<em>EventLogWebEventProvider</em>), as ASP.NET trace output (<em>TraceWebEventProvider</em>), or to the Windows Management Instrumentation (WMI) Web event provider (<em>WMIWebEventProvider</em>).&nbsp;You can configure health monitoring in the machine or application <em>Web.config</em> file to modify the events that are logged and the way in which they are logged.&nbsp;&nbsp;</p>
+  <p>By default, health monitoring is enabled for ASP.NET applications and all Web infrastructure error events (inheriting from <em>System.Web.Management.WebErrorEvent</em>) and all audit failure events (inheriting from <em>System.Web.Management.WebFailureAuditEvent</em>) are written to the event log.&amp;nbsp;The default configuration is defined in the <em>&lt;healthMonitoring&gt;</em> element in the machine-level <em>Web.config</em> file. To audit additional security related events, you create custom event types by deriving from one of the built-in types. </p>
+  <p>The health monitoring feature has built-in providers that allow you to log events in an e-mail message (<em>SimpleMailWebEventProvider, TemplatedMailWebEventProvider</em>), to SQL Server (<em>SqlWebEventProvider</em>), to the event log (<em>EventLogWebEventProvider</em>), as ASP.NET trace output (<em>TraceWebEventProvider</em>), or to the Windows Management Instrumentation (WMI) Web event provider (<em>WMIWebEventProvider</em>).&amp;nbsp;You can configure health monitoring in the machine or application <em>Web.config</em> file to modify the events that are logged and the way in which they are logged.&amp;nbsp;&amp;nbsp;</p>
   <h1>Problem Example</h1>
-  <p>An ASP.NET application is deployed on a machine in which the machine level web.config file has been unchanged from default values.&nbsp;However, the application-level <em>Web.config</em> file has been modified so that health monitoring is turned off:</p>
+  <p>An ASP.NET application is deployed on a machine in which the machine level web.config file has been unchanged from default values.&amp;nbsp;However, the application-level <em>Web.config</em> file has been modified so that health monitoring is turned off:</p>
   <pre>&lt;healthMonitoring heartbeatInterval="0" enabled="false"&gt;</pre>
   <h1>Solution Example</h1>
-  <p>An ASP.NET application is deployed on a machine in which the health monitoring element has been unchanged from defaults in both the machine level and application level web.config files, with one exception.&nbsp; </p>
+  <p>An ASP.NET application is deployed on a machine in which the health monitoring element has been unchanged from defaults in both the machine level and application level web.config files, with one exception.&amp;nbsp; </p>
   <p>The defaults look like this:</p>
   <pre>&lt;healthMonitoring heartbeatInterval="0" enabled="true"&gt;<br />&lt;rules&gt; <br />&lt;add name="All Errors Default" eventName="All Errors" provider="EventLogProvider"<br /><br />   profile="Default" minInstances="1" maxLimit="Infinite" <br />   minInterval="00:01:00" custom="" /&gt; <br />&lt;add name="Failure Audits Default" eventName="Failure Audits"<br />   provider="EventLogProvider" profile="Default" minInstances="1"<br />   maxLimit="Infinite" minInterval="00:01:00" custom="" /&gt;<br />&lt;/rules&gt;<br />&lt;/healthMonitoring&gt;</pre>
   <p>The only exception to the defaults is that A SQL event provider has been added:</p>
   <pre>&lt;providers&gt; <br />&lt;add connectionStringName="MySqlConnection" <br />   maxEventDetailsLength="1073741823" <br />   buffer="true" <br />   bufferMode="Extra Critical Notification" <br />   name="MySqlWebEventProvider" <br />   type="System.Web.Management.SqlWebEventProvider,System.Web,<br />   Version=2.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" /&gt; <br />&lt;/providers&gt;</pre>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
