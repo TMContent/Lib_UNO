@@ -3,8 +3,8 @@
   <Metadata>
     <Id>0595db83-3b6f-4db2-95eb-7c068d273b57</Id>
     <Id_History>0595db83-3b6f-4db2-95eb-7c068d273b57,5554dd6a-13f2-45e8-96da-e294f7e2c75a,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
-    <Title>Windows Authentication Is Used to Connect to the SQL Server</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[1612Dupe] Windows Authentication Is Used to Connect to the SQL Server</Title>
     <Category>Database Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -32,12 +32,12 @@
     <li>
       <p>
         <strong>Check that a connection string is configured.</strong> Check that the connection string is stored in the &lt;<em>connectionStrings</em>&gt; section of your application's <em>Web.config</em> file and it includes either the <em>'Trusted_Connection=Yes</em>' attribute, or the equivalent attribute '<em>Integrated Security=SSPI</em>' as follows:</p>
-      <pre>&nbsp;&lt;connectionStrings&gt;<br />&nbsp;&nbsp;&nbsp; &lt;add name="MyLocalSQLServer1"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionString="Server=MyServer;Database=pubs;Trusted_Connection=Yes;"/&gt;<br />&nbsp;&nbsp; &lt;add name="MyLocalSQLServer2"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionString="Initial Catalog=pubs;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data source=localhost;Integrated Security=SSPI;"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; providerName="System.Data.SqlClient"/&gt;<br />&nbsp;&lt;/connectionStrings&gt;</pre>
+      <pre>&amp;nbsp;&lt;connectionStrings&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;add name="MyLocalSQLServer1"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Server=MyServer;Database=pubs;Trusted_Connection=Yes;"/&gt;<br />&amp;nbsp;&amp;nbsp; &lt;add name="MyLocalSQLServer2"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Initial Catalog=pubs;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; data source=localhost;Integrated Security=SSPI;"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; providerName="System.Data.SqlClient"/&gt;<br />&amp;nbsp;&lt;/connectionStrings&gt;</pre>
     </li>
     <li>
       <p>
         <strong>Verify that the connection string is encrypted.</strong> Encrypting the connection string inside the configuration file ensures its confidentiality in case this file is compromised. Once the application accesses the configuration file, it should decrypt the connection string just before use. Once you have located the &lt;<em>connectionStrings</em>&gt; section in <em>Web.config</em>, it should look like the following:</p>
-      <pre>&lt;connectionStrings&gt;<br />&nbsp; &lt;EncryptedData&gt;<br />&nbsp;&nbsp;&nbsp; &lt;CipherData&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;CipherValue&gt;GHAFQEW234A21...&lt;/CipherValue&gt;<br />&nbsp;&nbsp;&nbsp; &lt;/CipherData&gt;<br />&nbsp; &lt;/EncryptedData&gt;<br />&lt;/connectionStrings&gt;</pre>
+      <pre>&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;EncryptedData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherData&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;CipherValue&gt;GHAFQEW234A21...&lt;/CipherValue&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/CipherData&gt;<br />&amp;nbsp; &lt;/EncryptedData&gt;<br />&lt;/connectionStrings&gt;</pre>
     </li>
     <li>
       <p>
@@ -54,12 +54,12 @@
     <li>
       <p>
         <strong>Configure a connection string.</strong> For ASP.NET applications, you should store connection strings in the &lt;<em>connectionStrings</em>&gt; section of your application's <em>Web.config</em> file. The connection string used with Windows authentication must include either the <strong>Trusted_Connection=Yes</strong> attribute, or the equivalent attribute <em>Integrated Security=SSPI</em>:</p>
-      <pre>&nbsp;&lt;connectionStrings&gt;<br />&nbsp; &lt;add name="MyLocalSQLServer" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionString="Initial Catalog=pubs;User Id=sa;Password=asdasd;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data source=localhost;Integrated Security=SSPI;"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
+      <pre>&amp;nbsp;&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Initial Catalog=pubs;User Id=sa;Password=asdasd;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; data source=localhost;Integrated Security=SSPI;"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
     </li>
     <li>
       <p>
         <strong>Encrypt the connection string.</strong> Even though database connection strings for Windows authentication do not contain usernames and passwords, you should still encrypt them in <em>Web.config</em> to reduce the possibility of disclosing server names and database names. </p>
-      <p>To encrypt the <em>connectionStrings</em> section&nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
+      <p>To encrypt the <em>connectionStrings</em> section&amp;nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
       <pre>aspnet_regiis -pe "connectionStrings"<br /> -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
     </li>
     <li>
@@ -68,7 +68,7 @@
     </li>
     <li>
       <p>
-        <strong>Test security access.</strong> Test database access that appropriate database permissions are available. Just as important, test that permissions unneccessary to the application's operation are denied.&nbsp;</p>
+        <strong>Test security access.</strong> Test database access that appropriate database permissions are available. Just as important, test that permissions unneccessary to the application's operation are denied.&amp;nbsp;</p>
     </li>
   </ol>
   <h1>Related Items</h1>
@@ -79,6 +79,6 @@
     </li>
   </ul>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>
