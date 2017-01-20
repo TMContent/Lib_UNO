@@ -27,14 +27,22 @@ Open redirects allow an attacker to send users to a malicious site via a legitim
 
 To prevent this problem, avoid using redirects altogether, if possible.  If redirects are necessary, avoid redirection based on user input if possible. If user input is necessary for redirects, use reference maps to limit permissible redirect destinations, and always validate destinations of redirects. 
 
+The choice depends on how much user input is required to determine where to redirect to. The less user input, the safer the application. If redirection takes place regardless of user input, destinations can be calculated without user input. If user input is necessary, ensure that there is a clearly defined list of valid redirection targets, and use these to build reference maps to limit permissible redirect destinations, and always validate the destinations.  NOTE: If valid targets cannot be reduced to a list of safe destinations, then an open redirect vulnerability is virtually guaranteed and it's better not to redirect at all.  
+
+If redirection can be calculated without user input:
+* [[ac326f27-12d4-46d8-91ed-256b4b336cdd|Calculate Destinations of Redirects Without User Input]]
+
+If user input is necessary, and it is possible to clearly define valid redirection targets:
+* [[4372db21-bc39-456b-a911-4a4603464358|Use Reference Maps When Redirecting]]
+
 =Application Check
 
-To check for adequate protection against this problem, choose the application check that fits the above Countermeasures strategy that you have chosen:  Ensure that redirects are not used.  OR  Ensure that redirection is not based on user input.  OR  If user input is needed, ensure that reference maps are used to limit permissible redirect destinations, and always validate the destinations of redirects.
+To check for adequate protection against this problem, choose the application checks below that fit the above Countermeasures strategy you have chosen:  Ensure that redirects are not used.  OR  Ensure that redirection is not based on user input.  OR  If user input is needed, ensure that reference maps are used to limit permissible redirect destinations, and always validate the destinations of redirects.
 
-=Specific Technologies
+If redirects can be calculated without user input:
+* [[1e8318ff-a6a8-4d0c-9ec3-8effbd34fbff|Destinations of Redirects Are Calculated Without User Input]]
 
-* [[fdd2fa70-27b7-4399-ba3c-3b0b1bc7360b|ASP.NET Open Redirect]]
-* [[79aaa6c6-54bd-4a98-9649-77f81312085e|Java Open Redirect]]
-* [[279ad567-2b34-44ce-8e56-8d96770ba500|PHP Open Redirect]]]]></Data>
+If user input is necessary, and it is possible to clearly define valid redirection targets:
+* [[a5dee3ea-30a0-433c-bbb3-22444d35c5a2|Mapping Values Are Used when Redirecting]]]]></Data>
   </Content>
 </TeamMentor_Article>
