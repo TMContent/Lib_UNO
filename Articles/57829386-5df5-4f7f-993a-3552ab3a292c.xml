@@ -15,25 +15,32 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[=Description
+    <Data><![CDATA[==Description
 
 An insufficiently protected credential weakness occurs when the application doesn't store or transmit the authentication credentials securely. If the passwords are not hashed and salted, an attacker might be able to recover stored passwords after compromising the application. If the passwords or hashes are not encrypted during transmission, an attacker might be able to intercept passwords or hashes vis a man-in-the-middle attack. All applications that use authentication are affected by this vulnerability type. 
 
-=Impact
+==Impact
 
 An insufficiently protected credential vulnerability makes it easier for an attacker to gain access to the authentication credentials. Usually, some other vulnerability has to be present for the attacker to recover the credentials. Once the attacker has the credentials, they can impersonate the user whose credentials have been compromised. Malicious hackers usually target privileged accounts to take over the application. After taking over the application, an attacker might leverage other vulnerabilities to take over the application platform and use it to pivot for other attacks. Compromising the application also gives the attacker access to user data, thus enabling them to impersonate the user. 
 
-=Countermeasures
+==Countermeasures=
 
 To prevent this vulnerability type, use PBKDF2 to secure passwords and send authentication credentials over encrypted tunnels. 
 
-=Application Check
+Use PBKDF2 to secure passwords:
+* [[00000000-0000-0000-0000-0000006adfa3|Store Passwords Securely]]
+
+Send authentication credentials only over TLS:
+* [[8f9abcf2-db84-4e46-9be6-9d2b166315ad|Protect Authentication Credentials in Transit]]
+
+==Application Check=
 
 To check for adequate protection against this vulnerability type, verify that PBKDF2 is used to secure passwords and that authentication credentials are never sent in plain-text. 
 
-=Specific Technologies
+PBKDF2 is used to secure passwords:
+* [[00000000-0000-0000-0000-00000077a50c|Passwords Are Stored Securely]]
 
-* [[9a44e0a4-823a-4d99-90fb-7de648a094c8|ASP.NET Insufficiently Protected Credentials]]
-* [[ac9e0d29-dfd0-4671-98f5-7106e6505c24|Java Insufficiently Protected Credentials]]]]></Data>
+Authentication credentials are only sent over TLS:
+* [[806abffc-7528-454e-aa90-826b2fad60a6|Authentication Credentials in Transit Are Protected]]]]></Data>
   </Content>
 </TeamMentor_Article>
