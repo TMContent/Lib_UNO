@@ -7,7 +7,7 @@
     <Title>Usernames Are Validated Before Use</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
-    <Technology>Java</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Usernames Are Validated Before Use</DirectLink>
     <Tag />
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Check For</h1>
   <p>Ensure user credentials are validated before processing them.</p>
   <h1>Why</h1>
@@ -43,17 +43,15 @@
       <ul>
         <li>
           <p>
-            <strong>Policy Requirements</strong>:&nbsp;Verify that&nbsp;your application's security requirements have established a policy regarding acceptable usernames. Such policy should state the length and input set for valid usernames as well as password requirements. <br /></p>
+            <strong>Policy Requirements</strong>:&amp;nbsp;Verify that&amp;nbsp;your application's security requirements have established a policy regarding acceptable usernames. Such policy should state the length and input set for valid usernames as well as password requirements. <br /></p>
         </li>
         <li>
           <p>
-            <strong>Design</strong>:&nbsp;Verify that&nbsp;all username validation routines are positioned properly at the trust boundaries of all of your application's routines that handle user credentials. For instance, all validation should occur before the username is processed by any component within your application.</p>
+            <strong>Design</strong>:&amp;nbsp;Verify that&amp;nbsp;all username validation routines are positioned properly at the trust boundaries of all of your application's routines that handle user credentials. For instance, all validation should occur before the username is processed by any component within your application.</p>
         </li>
         <li>
           <p>
-            <strong>Implementation:</strong>&nbsp;Verify that&nbsp;all username validation routines implement your application's username&nbsp;policy. Verify that the implementation is using whitelist and not blacklist validation techniques. Example:</p>
-          <pre>public boolean validateUsername(String input)<br />{<br />      String goodPattern = "(\\w|\\d)+";<br />      int goodLength = 6;<br />      if(input.length() &lt; goodLength)<br />      {<br />           return false;<br />      }<br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br />                if(!m.matches())<br />      {<br />            return false;<br />      }<br />      return true;<br />}</pre>
-          <p>Ensure that all error or exception conditions are handled correctly. Verify that all authentication procedures exit immediately in a graceful manner upon failed username validation.<br /></p>
+            <strong>Implementation:</strong>&amp;nbsp;Verify that&amp;nbsp;all username validation routines implement your application's username&amp;nbsp;policy. Verify that the implementation is using whitelist and not blacklist validation techniques. Ensure that all error or exception conditions are handled correctly. Verify that all authentication procedures exit immediately in a graceful manner upon failed username validation.</p>
         </li>
       </ul>
     </li>
@@ -63,19 +61,12 @@
   <ol>
     <li>
       <p>
-        <strong>Establish username requirements. </strong>Determine what is the acceptable character set and length that should be allowed within a username. For instance, require that usernames should be at least&nbsp;six characters long and must contain alpha-numeric characters only.</p>
+        <strong>Establish username requirements. </strong>Determine what is the acceptable character set and length that should be allowed within a username. For instance, require that usernames should be at least&amp;nbsp;six characters long and must contain alpha-numeric characters only.</p>
     </li>
     <li>
-      <p>
-        <strong>Use whitelist validation. </strong>Whitelisting involves the establishment of what is good input for your application. Once good input is defined, compare all input against the established good input. If the input does not resemble good input, your application should discard it. This technique can be implemented using regular expressions. Example:</p>
-      <pre>public boolean validateUsername(String input)<br />{<br />      String goodPattern = "(\\w|\\d)+";<br />      int goodLength = 6;<br />      if(input.length() &lt; goodLength)<br />      {<br />            return false;<br />      }<br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br /><br />      if(!m.matches())<br />      {<br />            return false;<br />      }<br /><br /><br />      return true;<br />}</pre>
+      <p />
+      <strong>Use whitelist validation. </strong>Whitelisting involves the establishment of what is good input for your application. Once good input is defined, compare all input against the established good input. If the input does not resemble good input, your application should discard it. This technique can be implemented using regular expressions.
     </li>
-  </ol>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>A tutorial on regular expressions is available at <a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>. </li>
-    <li>For more information on using regular expression in Java, see: <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Class Pattern</a> in Java SDK.</li>
-  </ul>
-  <br />]]></Data>
+  </ol>]]></Data>
   </Content>
 </TeamMentor_Article>
