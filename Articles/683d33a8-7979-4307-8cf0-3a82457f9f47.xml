@@ -15,17 +15,19 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[=Description
+    <Data><![CDATA[==Description==
 
 A web application's output is rendered as a web page. If user input is included in the web application output, then it is also rendered as a part of the web page. If user input is included in output without being validated and encoded, a cross-site scripting (XSS) vulnerability results. In that case, an attacker can modify the output web page to include malicious script, which is then executed by the browser that views the vulnerable page. XSS applies to all web applications. To prevent XSS, validate all input and encode input included in output. To check for this flaw, find all code that includes user input in output, and verify that user input is sufficiently validated and properly encoded.
 
 There are two primary types of XSS: persistent and non-persistent. If the attacker is able to inject their malicious script into the web applications data store, then the script will be persistent and anyone who loads a page with that content will run the script and become a victim of the attack. Non-Persistent XSS uses some reflective aspect of the page to deliver the payload. 
 
-=Impact
+
+==Impact==
 
 Cross-site scripting vulnerabilities allow an attacker to execute malicious script on the user's web browser. The attacker can use this to perform actions on the user's behalf within the application, such as change the password, submit messages, or perform some other actions available to the authenticated user. The malicious script can spread itself, becoming an XSS worm. An XSS worm can use up a lot of resources and be very costly to clean up. The attacker can write a script that steals session cookies or session identifiers and allows impersonating the user. Impersonating the user through stolen cookies is simpler and more powerful than through a script because it allows the attacker to interact with the application visually. The attacker can also use XSS to inject a JavaScript that captures the user's keystrokes on that web site to steal passwords and other information. XSS usually leads to privilege escalation, which the attacker leverages to take over some user's account. Usually, the attacker will target an administrative account to take full control of the application.
 
-=Countermeasures
+
+==Countermeasures==
 To prevent this vulnerability, validate all input, and encode all input that is included in output.
 
 Validate all input:
@@ -34,7 +36,8 @@ Validate all input:
 Encode input included in output:
 * [[9b0ef1a5-c143-4e64-81cc-9e02ccbd9fbd|Encode Untrusted Data in Output]]
 
-=Application Check
+
+==Application Check==
 
 To check for adequate protection against this vulnerability, ensure that all input is validated, and that all input included in output is encoded.
 
@@ -43,6 +46,24 @@ All input is validated:
 
 Input included in output is encoded:
 * [[13112146-7c14-4b6d-9e94-24daa22eefc4|Untrusted Data in Output Is Encoded]]
-]]></Data>
+
+
+==Computer Based Training Links==
+
+Use the following Computer Based Training course(s) for more background information about this type of vulnerabilities.
+
+===OWASP Top Threats & Mitigations===
+
+This course examines in depth the vulnerabilities, threats, and mitigations described in the OWASP Top 10 2013. Upon completion of this class, participants will be able to identify and mitigate the greatest threats that web application developers face, including: Injection, Broken Authentication and Session Management, Cross-Site Scripting (XSS), Insecure Direct Object References, Security Misconfiguration, Sensitive Data Exposure, Missing Function Level Access Control, Cross-Site Request Forgery (CSRF), Using Components with Known Vulnerabilities, and Unvalidated Redirects and Forwards.
+
+[[https://teamprofessor.absorbtraining.com/ninja/#/courses/course/139631|DES 221 OWASP Top Threats & Mitigations]]
+
+===Introduction to Cross-Site Scripting===
+
+As part of the Web development team, you are aware of the importance of securing your application against vulnerabilities that could put users at risk. Cross-site scripting vulnerabilities are extremely common as they affect seven out of ten Web applications. These vulnerabilities can have dire consequences such as allowing attackers to steal or tamper with sensitive data. In order to avoid creating insecure code, you need to understand the mechanisms behind cross-site scripting vulnerabilities.
+
+[[https://teamprofessor.absorbtraining.com/ninja/#/courses/course/127641|COD 232 Introduction to Cross-Site Scripting]]
+
+//Valid login credentials and enrollment in the course itself are required to access Team Professor content. If you need login credentials, please contact support@securityinnovation.com for help.//]]></Data>
   </Content>
 </TeamMentor_Article>
