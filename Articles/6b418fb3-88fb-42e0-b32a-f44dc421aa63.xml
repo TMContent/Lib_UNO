@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>6b418fb3-88fb-42e0-b32a-f44dc421aa63</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Separate Command Names from Parameters</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 2.7
+
+
+## Problem Example ##
+
+~~~~
+#! /usr/bin/env python
+
+'''
+Python Execute Command via Shell Antipattern
+'''
+
+import os
+import sys
+
+cmdname = "/usr/bin/tail"
+
+# Bad: create one big string and execute it
+cmd = cmdname + " " + " ".join(sys.argv[1:])
+os.system(cmd)
+~~~~
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python
+
+'''
+Python Execute Command without Shell Pattern
+'''
+
+
+import subprocess
+import sys
+
+def main():
+    if len(sys.argv) < 3:
+        print "Usage: [lines] [content]"
+        return
+
+    cmdname = "/usr/bin/tail"
+
+    # Provide a file handle for stdout in the Popen call to redirect output to a file
+    out_file = open('output_file', 'w')
+    program = subprocess.Popen([cmdname, "-" + sys.argv[1]], stdout=out_file, stdin=subprocess.PIPE, shell=False)
+    
+    # Write content to stdin, or provide a file handle in the Popen call
+    for i in range(100):
+    	print >>program.stdin, str(i) + " - " + "".join(sys.argv[2:])
+    program.stdin.close()
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>
