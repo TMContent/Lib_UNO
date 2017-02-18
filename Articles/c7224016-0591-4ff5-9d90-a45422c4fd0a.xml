@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>c7224016-0591-4ff5-9d90-a45422c4fd0a</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Separate Command Names from Parameters</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Ruby
+
+
+## Problem Example ##
+
+~~~~
+#! /usr/bin/env ruby
+if ARGV.length == 0
+	puts "Usage: #{$0} [lines]"
+	exit
+end
+
+cmdname = "/usr/bin/tail"
+cmd = "#{cmdname} -#{ARGV[0]} /etc/passwd"
+system(cmd)
+~~~~
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env ruby
+if ARGV.length <= 1
+	puts "Usage: #{$0} [lines] [text]"
+	exit
+end
+
+
+IO.popen(['/usr/bin/tail',"-"+ARGV[0]], 'r+') {|pipe|
+	# Provide input to stdin 
+	1.upto(100) { |i| pipe << i.to_s + " - " + ARGV[1] + "\n" }
+	pipe.close_write
+	# Redirect stdout to file
+	output = pipe.read
+	File.open('output_file', 'w') { |f| f.write(output) }
+}
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>
