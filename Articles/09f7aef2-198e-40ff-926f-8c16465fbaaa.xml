@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>09f7aef2-198e-40ff-926f-8c16465fbaaa</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Set a Strict Permissions Mask</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 3
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python3
+
+import os
+
+# Setup restrict default permissions
+os.umask(0o077)
+
+# Create a new world-readable file
+public_file = 'public.txt'
+with open(public_file, 'w') as f:
+	f.write("World Readable content.")
+
+# Increase permissions from restrictive umask to make file world readable
+os.chmod(public_file, 0o744)
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>
