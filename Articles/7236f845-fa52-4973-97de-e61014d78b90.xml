@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>7236f845-fa52-4973-97de-e61014d78b90</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Create a File Safely</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Ruby
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env ruby
+if ARGV.length == 0
+        puts "Usage: #{$0} [content]"
+        exit
+end
+
+begin
+	file = "temporary_file"
+	File.open(file, File::CREAT|File::EXCL|File::WRONLY) { |f| 
+		f.write ARGV[0]
+	}
+rescue
+	puts "File already exists."
+end
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>
