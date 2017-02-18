@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>87261961-99ad-4152-9292-419fbd3c2b81</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Create a File Safely</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 3
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python3
+import os
+import sys
+import stat
+file = "temporary_file"
+try:
+    fd = os.open(file, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+except OSError:
+    print("File already exists.")
+    sys.exit()
+
+with os.fdopen(fd, 'w') as f:
+    f.write('content')
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>
