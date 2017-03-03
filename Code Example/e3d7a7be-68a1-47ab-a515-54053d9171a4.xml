@@ -84,38 +84,33 @@
           <p>
             <strong>Use the defined named queries in code.</strong> If there is a need for dynamic data, use the parameter binding mechanism included in the query implementation. </p>
           <pre>
-            <p>--------------------------</p>
-            <p>Example using dynamic data</p>
-            <p>--------------------------</p>
-            <p>//get hibernate session</p>
-            <p>Session session = ...;</p>
-            <p>//get dynamic data</p>
-            <p>//request parameters should be validated before use - this is a simple example</p>
-            <p>String productName = request.getParameter("product_name"); </p>
-            <p>//use entity manager to retrieve named query</p>
-            <p>Query queryProductsByName = session.createNamedQuery("Product.findAllProductsByProductName");</p>
-            <p>//set dynamic data for query</p>
-            <p>queryProductsByName.setString("productName", productName);</p>
-            <p>//execute query and get results</p>
-            <p>List products = queryProductsByName.list();</p>
-            <p>--------------------------</p>
-            <p>Example without using dynamic data</p>
-            <p>--------------------------</p>
-            <p>//get hibernate session</p>
-            <p>Session session = ...;</p>
-            <p>//use entity manager to retrieve named query</p>
-            <p>Query queryProducts = session.createNamedQuery("Product.findAllProducts", Product.class);</p>
-            <p>//execute query and get results</p>
-            <p>List products = queryProducts.list();</p>
-          </pre>
+            --------------------------
+            Example using dynamic data
+            --------------------------
+            //get hibernate session
+            Session session = ...;
+            //get dynamic data
+            //request parameters should be validated before use - this is a simple example
+            String productName = request.getParameter("product_name"); 
+            //use entity manager to retrieve named query
+            Query queryProductsByName = session.createNamedQuery("Product.findAllProductsByProductName");
+            //set dynamic data for query
+            queryProductsByName.setString("productName", productName);
+            //execute query and get results
+            List products = queryProductsByName.list();<p>
+            --------------------------</p>
+            Example without using dynamic data<p>
+            --------------------------</p>
+            //get hibernate session<p>
+            Session session = ...;</p>
+            //use entity manager to retrieve named query<p>
+            Query queryProducts = session.createNamedQuery("Product.findAllProducts", Product.class);</p>
+            //execute query and get results<p>
+            List products = queryProducts.list();</p></pre>
           <p>The examples above show how to use named queries within Hibernate to create an environment where the queries are defined closely with the data they are operating against and that are safely used by requiring bound parameters for dynamic data. The use of other types of queries works in an identical manner, such as delete, update, insert, etc.</p>
         </li>
       </li>
     </li>
-  </ol>
-  <h1>See Also</h1>
-  <ul>
-    <li>For more information about externalizing Hibernate Query Language queries, please see <a href="http://www.javalobby.org/java/forums/m91885316.html">http://www.javalobby.org/java/forums/m91885316.html</a><li>For more examples of named queries in Hibernate, please see <a href="http://www.mkyong.com/hibernate/hibernate-named-query-examples/">http://www.mkyong.com/hibernate/hibernate-named-query-examples/</a><li>For reference documents about the Hibernate Query Language, please see <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/queryhql.html">http://docs.jboss.org/hibernate/core/3.3/reference/en/html/queryhql.html</a></li></li></li>
-  </ul>]]></Data>
+  </ol>]]></Data>
   </Content>
 </TeamMentor_Article>
