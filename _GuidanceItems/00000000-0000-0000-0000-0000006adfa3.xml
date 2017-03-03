@@ -10,30 +10,43 @@
     <Technology>Technology Independent</Technology>
     <Type>Guideline</Type>
     <DirectLink>Store Passwords Securely</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==What to Do==
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
 
 Use key derivation algorithms that will run multiple iterations of hashing algorithms to protect passwords. Some recommended key derivation algorithms are: PBKDF2, bcrypt and scrypt.
 
-==Why==
+
+## Why ##
 
 Storing hashes instead of plain-text passwords assures that an attacker cannot easily recover the passwords after gaining access to the stored passwords. Adding salt to hashed passwords makes hashes much harder to break with dictionary attacks. Hashing should be applied multiple times to make hashing take longer and thus increase the computational resources required to attack the hashes. Iterative hashing as employed by key derivation algorithms applies a hashing function multiple times to a password and a salt, drastically increasing the time required to perform dictionary attacks. 
 
-==How==
+
+## How ##
 
 Perform the following actions to use key derivation algorithms to protect storied passwords:
 
-# **Generate a random salt value.** Each bit of salt doubles the memory and computational requirements for dictionary attacks. Recommended salt lengths are 32-64bit. Use a random number generator of your choice to generate a random number of required size. Use this number as the salt.
-# **Hash the password and the salt using multiple iterations.** Use an iterative hashing algorithm, such as PBKDF2 or bcrypt to hash the password and the salt at least ten times. It is best to use a trusted library, such as OpenSSL, to make sure that the algorithm is implemented correctly.
-# **Store the hash and the salt.** Store the hash in the file or database of your choosing. It is important to store both the hash and the salt, because the salt will have to be used when comparing user entered passwords to the hashed value. Remember to keep track of the amount of iterations used by the hashing algorithm.
-# **Implement password verification.** During authentication, the password entered by the user should be checked against the hashed and salted value. To do this, retrieve the hash value and the salt from password storage. Hash the password and the salt iteratively using the same amount of rounds as was used to calculate the stored hash, and compare the resulting string against the stored hash. If the resulting hash is the same as the stored hash, the user has entered the correct password.
+1. **Generate a random salt value.** Each bit of salt doubles the memory and computational requirements for dictionary attacks. Recommended salt lengths are 32-64bit. Use a random number generator of your choice to generate a random number of required size. Use this number as the salt.
+2. **Hash the password and the salt using multiple iterations.** Use an iterative hashing algorithm, such as PBKDF2 or bcrypt to hash the password and the salt at least ten times. It is best to use a trusted library, such as OpenSSL, to make sure that the algorithm is implemented correctly.
+3. **Store the hash and the salt.** Store the hash in the file or database of your choosing. It is important to store both the hash and the salt, because the salt will have to be used when comparing user entered passwords to the hashed value. Remember to keep track of the amount of iterations used by the hashing algorithm.
+4. **Implement password verification.** During authentication, the password entered by the user should be checked against the hashed and salted value. To do this, retrieve the hash value and the salt from password storage. Hash the password and the salt iteratively using the same amount of rounds as was used to calculate the stored hash, and compare the resulting string against the stored hash. If the resulting hash is the same as the stored hash, the user has entered the correct password.
 
 
+## Code Examples ##
 
+* [Ruby](1ef5127b-f336-49fb-9e97-4f64a0a5123c)
+* [ABAP](eeee258b-235e-45f4-8b23-13eb7fdd300f)
+* [Java](6e0918c1-90db-46d5-9f0e-8a98ddbcd7d5)
+* [PHP](62593693-31c2-441a-b6f8-4fc47acac06d)
+
+
+## Vulnerabilities ##
+
+* [Insufficiently Protected Credentials](57829386-5df5-4f7f-993a-3552ab3a292c)
 ]]></Data>
   </Content>
 </TeamMentor_Article>
