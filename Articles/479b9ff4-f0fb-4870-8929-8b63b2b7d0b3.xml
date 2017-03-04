@@ -15,16 +15,41 @@
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>
-  Scala and Play Framework 2.1.0+</p>
-  <h1>Problem Example</h1>
-  <p>The following code allows a user to change their credentials. Unfortunately, the code enters the new credentials into the credentials repository without verifying that it is the actual user changing the credentials.</p>
-  <pre>
-    <pre>def changePassword(user:String user, oldPass: String, newPass:String){ implicit request =&gt;?</pre>{<br />       // The application fails to re-authenticate the user<br />       // Verify that new password meets password requirements<br />       // Update the credential store with the new password<br />}</pre>
-  <h1>Solution Example</h1>
-  <p>The following code allows a user to change their credentials. Before entering the new credentials into the credentials repository, the code verifies that it is the actual user doing the credentials change.</p>
-  <pre>def changePassword(user:String user, oldPass: String, newPass:String){ implicit request =&gt;?<br />{<br />      // The application forces re-authentication<br />      if(!validateUser(user, oldPass))<br />      {<br />            return false;<br />      }<br />      // Verify that new password meets password requirements<br />      // Update the credential store with the new password<br />}</pre>]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+
+## Problem Example ##
+
+The following code allows a user to change their credentials. Unfortunately, the code enters the new credentials into the credentials repository without verifying that it is the actual user changing the credentials.
+
+~~~~    
+def changePassword(user:String user, oldPass: String, newPass:String){ implicit request =>?
+{
+       // The application fails to re-authenticate the user
+       // Verify that new password meets password requirements
+       // Update the credential store with the new password
+}
+~~~~
+
+
+## Solution Example ##
+
+The following code allows a user to change their credentials. Before entering the new credentials into the credentials repository, the code verifies that it is the actual user doing the credentials change.
+
+~~~~
+def changePassword(user:String user, oldPass: String, newPass:String){ implicit request =>?
+{
+      // The application forces re-authentication
+      if(!validateUser(user, oldPass))
+      {
+            return false;
+      }
+      // Verify that new password meets password requirements
+      // Update the credential store with the new password
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
