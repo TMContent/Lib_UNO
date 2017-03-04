@@ -17,17 +17,41 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>Problem Example</h1>
-  <p>The following code allows a user to change their credentials. Unfortunately, the code enters the new credentials into the credentials repository without verifying that it is the actual user changing the credentials.</p>
-  <pre>public boolean changePassword(String user, char[] newPass)<br />{<br />       // The application fails to re-authenticate the user<br />       // Verify that new password meets password requirements<br />       // Update the credential store with the new password<br />}</pre>
-  <h1>Solution Example</h1>
-  <p>The following code allows a user to change their credentials. Before entering the new credentials into the credentials repository, the code verifies that it is the actual user doing the credentials change.</p>
-  <pre>public boolean changePassword(String user, char[] oldPass, char[] newPass)<br />{<br />      // The application forces re-authentication<br />      if(!validateUser(user, oldPass))<br />      {<br />            return false;<br />      }<br />      // Verify that new password meets password requirements<br />      // Update the credential store with the new password<br />}</pre>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Applications written using Servlets or JSP.
+
+
+## Problem Example ##
+
+The following code allows a user to change their credentials. Unfortunately, the code enters the new credentials into the credentials repository without verifying that it is the actual user changing the credentials.
+
+~~~~
+public boolean changePassword(String user, char[] newPass)
+{
+       // The application fails to re-authenticate the user
+       // Verify that new password meets password requirements
+       // Update the credential store with the new password
+}
+~~~~
+
+
+## Solution Example ##
+
+The following code allows a user to change their credentials. Before entering the new credentials into the credentials repository, the code verifies that it is the actual user doing the credentials change.
+
+~~~~
+public boolean changePassword(String user, char[] oldPass, char[] newPass)
+{
+      // The application forces re-authentication
+      if(!validateUser(user, oldPass))
+      {
+            return false;
+      }
+      // Verify that new password meets password requirements
+      // Update the credential store with the new password
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
