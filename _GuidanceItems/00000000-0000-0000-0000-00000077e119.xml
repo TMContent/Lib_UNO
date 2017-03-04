@@ -15,25 +15,29 @@
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==Applies To==
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
 
 * ASP.NET
 
-==What to Do==
+## What to Do ##
 
 Use parameterized APIs to launch external processes.
 
-==Why==
+## Why ##
 
 Using parameterized APIs helps prevent injection attacks.
 
-==How==
+## How ##
 
 To use parameterized APIs to launch external processes:
 
-# **Identify all calls to external commands.** Search for the following APIs to find code that executes external commands: //AppCommandHandler.ExecuteCommand//, //System.Diagnostics.Process//.
-# **Use parameterized APIs.** The //System.Diagnostics.Process// object provides a parameterized API for executing external commands. Command parameters can be set using a //System.Diagnostics.ProcessStartInfo// object, which is passed as an argument to the constructor of the //System.Diagnostics.Process// object. Use these APIs whenever executing external commands from your applications. This is the most common way to do it, so your application is probably already doing it this way.
-# **Validate data passed to command execution APIs.** Input passed to external commands should be very carefully validated. Be particularly cautious if passing user data to a command interpreter, such as cmd.exe or PowerShell. Be careful when passing user data to any program that may spawn another application, for example explorer.exe. Even if parameterized APIs are used, passing untrusted user data to such processes may result in command injection vulnerabilities. It is best to avoid calling programs that may spawn other programs based on parameters passed to them. If such programs cannot be avoided, user data has to be positively validated before being passed in parameters.]]></Data>
+1. **Identify all calls to external commands.** Search for the following APIs to find code that executes external commands: `AppCommandHandler.ExecuteCommand`, `System.Diagnostics.Process`.
+2. **Use parameterized APIs.** The `System.Diagnostics.Process` object provides a parameterized API for executing external commands. Command parameters can be set using a `System.Diagnostics.ProcessStartInfo` object, which is passed as an argument to the constructor of the `System.Diagnostics.Process` object. Use these APIs whenever executing external commands from your applications. This is the most common way to do it, so your application is probably already doing it this way.
+3. **Validate data passed to command execution APIs.** Input passed to external commands should be very carefully validated. Be particularly cautious if passing user data to a command interpreter, such as cmd.exe or PowerShell. Be careful when passing user data to any program that may spawn another application, for example explorer.exe. Even if parameterized APIs are used, passing untrusted user data to such processes may result in command injection vulnerabilities. It is best to avoid calling programs that may spawn other programs based on parameters passed to them. If such programs cannot be avoided, user data has to be positively validated before being passed in parameters.
+
+## Guideline ##
+
+* [Separate Parameters from Command Names](042253ce-3fe6-4138-926b-c3169ec0ea78)]]></Data>
   </Content>
 </TeamMentor_Article>
