@@ -64,6 +64,12 @@
   <p>The SQL statement can be made safer by re-writing it as a parameterized, stored procedure:</p>
   <pre>using System.Data;<br />using System.Data.SqlClient;</pre>
   <pre>using (SqlConnection connection = new SqlConnection(connectionString))<br />{<br />&amp;nbsp; DataSet userDataset = new DataSet();<br />&amp;nbsp; SqlDataAdapter myDataAdapter = new SqlDataAdapter(<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; "'0321194330'= @isbn", <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connection);&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp; myCommand.SelectCommand.Parameters.Add("@isbn", SqlDbType.VarChar, 11);<br />&amp;nbsp; myCommand.SelectCommand.Parameters["@isbn"].Value = ISBN.Text;<br />&amp;nbsp; myDataAdapter.Fill(userDataset);<br />}</pre>
-  <p>The SQL query statement is constructed similarly to the first SQL statement, except that the ISBN column selection criteria is represented as a placeholder rather than directly concatenated into the SQL query. The next two lines specify the variable type, the expected length, and the value of the ISBN field used in this particular query.&amp;nbsp; This protects against SQL injection attacks because @isbn is specified as a VarChar, which means it can't possibly be an executable SQL statement. Consequently, it will be interpreted by the database driver as a String literal.&amp;nbsp; </p>]]></Data>
+  <p>The SQL query statement is constructed similarly to the first SQL statement, except that the ISBN column selection criteria is represented as a placeholder rather than directly concatenated into the SQL query. The next two lines specify the variable type, the expected length, and the value of the ISBN field used in this particular query.&amp;nbsp; This protects against SQL injection attacks because @isbn is specified as a VarChar, which means it can't possibly be an executable SQL statement. Consequently, it will be interpreted by the database driver as a String literal.&amp;nbsp; </p>
+  <h1>Guideline</h1>
+  <ul>
+    <li>
+      <a href="397488da-ce91-4768-9ad9-1e6928980d72">Use Prepared Statements for SQL Queries</a>
+    </li>
+  </ul>]]></Data>
   </Content>
 </TeamMentor_Article>
