@@ -71,9 +71,11 @@
   <h1>Solution Example</h1>
   <p>The following code validates the user based on given username and password. It hashes the password with a random salt, then it compares the username and the produced hash against the data stored in the backend database. Because the application uses <em>PreparedStatement</em>, it is much more difficult for an attacker to gain access to the application's database server through the use of SQL injection. </p>
   <pre>public boolean validateUser(String user, char[] pass)<br />{<br />      // Hash the credentials before querying the credential store<br />      // The application uses parameterized queries<br />      Connection cn = MyApp.getDBConnection();<br />      PreparedStatement st = cn.prepareStatement("select user from myappUsers"<br />                            + " where user = ? and pass = ?;");<br />      st.setString(1, user);<br />      st.setString(2, passHash);<br />      ResultSet rs = st.executeQuery();<br />      // Execute the rest of the authentication steps<br />}</pre>
-  <h1>Additional Resources</h1>
+  <h1>Guideline</h1>
   <ul>
-    <li>For more information about preventing SQL injection attacks, visit: <a href="http://www.owasp.org/index.php/Reviewing_Code_for_SQL_Injection">Reviewing Code for SQL Injection</a> from OWASP. </li>
+    <li>
+      <a href="397488da-ce91-4768-9ad9-1e6928980d72">Use Prepared Statements for SQL Queries</a>
+    </li>
   </ul>]]></Data>
   </Content>
 </TeamMentor_Article>
