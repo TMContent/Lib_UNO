@@ -17,43 +17,52 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Deny all access by default.</p>
-  <h1>Why</h1>
-  <p>Denying all access by default assures that only explicitly authorized access is possible.</p>
-  <h1>When</h1>
-  <p>Deny all access by default in all web applications that implement access control.</p>
-  <h1>How</h1>
-  <p>To deny all access by default:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Enumerate all sensitive pages.</strong> Make a list of all pages that handle sensitive or private information.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Enable forms authentication.</strong> Add the following section to <em>Web.config</em> using the appropriate settings:</p>
-      <pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;authentication mode="Forms"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp; &lt;/authentication&gt;<br />&lt;/system.web&gt;</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Deny all access by default.</strong> Configure the following tags in <em>Web.config</em>:</p>
-      <pre>&lt;system.web&gt;<br />&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*" /&gt;<br />&amp;nbsp; &lt;/authorization&gt;<br />&lt;/system.web&gt;</pre>
-      <p>The line <em>&lt;deny users="*" /&gt;</em> denies access to all users, including authenticated users.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Configure authorization.</strong> For each sensitive page, add a section to <em>Web.config</em> that looks like the following: </p>
-      <pre>&lt;location path="[Filename of the page]"&gt;<br />&amp;nbsp;&amp;nbsp; &lt;system.web&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;authorization&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;allow roles="[Authorized roles]"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;deny users="*"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/authorization&gt;<br />&amp;nbsp;&amp;nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
-      <p>
-        <em>[Filename of the page]</em> is the file name of the sensitive page. <em>[Authorized roles]</em> is a comma separated list of roles that are authorized to use the page.</p>
-    </li>
-  </ol>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* ASP.NET 4.0+
+
+## Solution Example ##
+
+To deny all access by default:
+
+1. **Enable forms authentication.** Add the following section to Web.config using the appropriate settings:
+
+	~~~~
+	<system.web>
+	  <authentication mode="Forms">
+		...
+	  </authentication>
+	</system.web>
+	~~~~
+
+2. **Deny all access by default.** Configure the following tags in Web.config:
+
+	~~~~
+	<system.web>
+	  <authorization>
+		<deny users="*" />
+	  </authorization>
+	</system.web>
+	~~~~
+
+	The line <deny users="*" /> denies access to all users, including authenticated users.
+
+3. **Configure authorization.** For each page, add a section to Web.config that looks like the following:
+
+	~~~~
+	<location path="[Filename of the page]">
+	   <system.web>
+		  <authorization>
+			 <allow roles="[Authorized roles]">
+			 <deny users="*">
+		  </authorization>
+	   </system.web>
+	</location>
+	~~~~
+
+	[Filename of the page] is the file name of the page. [Authorized roles] is a comma separated list of roles that are authorized to use the page.
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
