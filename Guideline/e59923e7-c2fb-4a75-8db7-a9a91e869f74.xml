@@ -56,35 +56,31 @@
 In this case, the two fields being compared are "txtPWord" and "txtRePWord". If they do not match, validation fails with the error message, "Passwords do not match.".
 
 
-### Enforce type constraints on string fields ###
+3. **Enforce type constraints on string fields.** String fields are the most difficult type of input to effectively validate because the range of acceptable characters is much larger than numeric and enumerated types. Regular expressions provide a flexible mechanism for dictating valid patterns and characters. Use the RegularExpressionValidator to perform a variety of checks on string-based fields such as zip codes and phone numbers. Here is an example that declares a text field in an ASP page that should represent a five digit zip code, consisting entirely of numeric digits, and a validator to enforce those constraints:
 
-String fields are the most difficult type of input to effectively validate because the range of acceptable characters is much larger than numeric and enumerated types. Regular expressions provide a flexible mechanism for dictating valid patterns and characters. Use the RegularExpressionValidator to perform a variety of checks on string-based fields such as zip codes and phone numbers. Here is an example that declares a text field in an ASP page that should represent a five digit zip code, consisting entirely of numeric digits, and a validator to enforce those constraints:
-
-~~~~
-<input type=text runat=server id=txtZip>
-      <asp:RegularExpressionValidator runat=server
-             ControlToValidate="txtZip"
-             ErrorMessage="Zip code must be 5 digits, all numbers."
-             ValidationExpression="[0-9]{5}"> 
-      </asp:RegularExpressionValidator><td>Zip code:</td>
-<td><input type=text runat=server id=txtZip></td>
-~~~~
+	~~~~
+	<input type=text runat=server id=txtZip>
+		  <asp:RegularExpressionValidator runat=server
+				 ControlToValidate="txtZip"
+				 ErrorMessage="Zip code must be 5 digits, all numbers."
+				 ValidationExpression="[0-9]{5}"> 
+		  </asp:RegularExpressionValidator><td>Zip code:</td>
+	<td><input type=text runat=server id=txtZip></td>
+	~~~~
 
 
-### Use the Regex class to validate other sources ###
+4. **Use the Regex class to validate other sources.** Most Web applications accept input from various sources, including HTML controls, server controls, query strings, and cookies. Validate input from all of these sources to help prevent injection attacks. Use regular expressions to help validate input. The following example shows how to use the Regex class.
 
-Most Web applications accept input from various sources, including HTML controls, server controls, query strings, and cookies. Validate input from all of these sources to help prevent injection attacks. Use regular expressions to help validate input. The following example shows how to use the Regex class.
-
-~~~~
-using System.Text.RegularExpressions;
-// Instance method:Regex reg = new Regex(@"^[a-zA-Z'.\s]{1,40}$");
-Response.Write(reg.IsMatch(Request.QueryString["Name"]));
-// Static method:if (!Regex.IsMatch(Request.QueryString["Name"],@"^[a-zA-Z'.\s]{1,40}$"))
-{
-   // Name does not match expression
-}
-If you cannot cache your regular expression for frequent use, you should use the static IsMatch method where possible for performance reasons, to avoid unnecessary object creation.
-~~~~
+	~~~~
+	using System.Text.RegularExpressions;
+	// Instance method:Regex reg = new Regex(@"^[a-zA-Z'.\s]{1,40}$");
+	Response.Write(reg.IsMatch(Request.QueryString["Name"]));
+	// Static method:if (!Regex.IsMatch(Request.QueryString["Name"],@"^[a-zA-Z'.\s]{1,40}$"))
+	{
+	   // Name does not match expression
+	}
+	If you cannot cache your regular expression for frequent use, you should use the static IsMatch method where possible for performance reasons, to avoid unnecessary object creation.
+	~~~~
 
 ## Guideline ##
 
