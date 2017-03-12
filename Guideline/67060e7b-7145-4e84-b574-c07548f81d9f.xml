@@ -17,28 +17,78 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP&amp;nbsp;that interact with a database.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Validate all input before it is passed to the database.</p>
-  <h1>Why</h1>
-  <p>Unvalidated input can lead to persistent cross-site scripting, SQL injection and other vulnerabilities which would allow an attacker to gain unauthorized access to sensitive data.</p>
-  <h1>When</h1>
-  <p>If your application uses a backend database server, then validate all input before it is passed to the database.</p>
-  <h1>How</h1>
-  <p>To properly validate input passed to database:</p>
-  <ol>
-    <li>
-      <strong>Identify database entry points. </strong>Identify all locations within your application that interface with the database servers. Potential sources of input include: <ul><li>URL-based parameters <li>Form-based parameters <li>Hidden fields <li>Cookies <li>Local filesystem <li>Javascript variables</li></li></li></li></li></li></ul><li><p><strong>Create a set of validators. </strong>Build a set of validators that work with the database-specific language. Determine the appropriate validation at each validator. Centralize the validators as it helps strengthen your code by limiting the amount of scattered validation code throughout the component. Place the validators along the database entry points. All data should pass through the validators before transmitted to the database servers.</p><li><p><strong>Use type safe SQL parameters in queries. </strong>Stored procedures and parameterized queries improve your application's robustness against SQL injection based attacks.</p></li></li></li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input; therefore, an attacker can access the backend database on behalf of the application through the use of SQL injection. </p>
-  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&amp;#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application fails to validate the user-supplied<br />     // query before submitting it to the database server<br />     retData = queryDB(query);<br /><br />     ...<br /><br />     out.flush();<br />     out.close();<br />&amp;#125;</pre>
-  <h1>Solution Example</h1>
-  <p>The following code allows the user to query a database. Because the application validates the user's input, it is much more difficult for an attacker to access the backend database through a SQL injection attack.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />     HttpServletResponse response) throws ServletException, IOException&amp;#123;<br />     PrintWriter out = response.getWriter();<br />     String query = request.getParameter("query");<br />     String retData = "";<br /><br />     // The application validates the user-supplied query<br />     // before submitting it to the database server<br />     if (validateQuery(query))<br />     &amp;#123;<br />          retData = queryDB(query);<br /><br />          ...<br /><br />     &amp;#125;<br /><br />     out.flush();<br />     out.close();<br />&amp;#125;<br /><br /><br />public boolean validateQuery(String input)&amp;#123;<br /><br />      // The input can be only of numeric characters<br />      String goodPattern = "&amp;#91;0-9&amp;#93;&amp;#43;&amp;#43;";<br /><br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br /><br />      if(&amp;#33;m.matches())<br />      &amp;#123;<br />            return false;<br />      &amp;#125;<br /><br />      return true;<br />&amp;#125;</pre>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java
+* Servlets or JSP 
+* SQL Database
+
+
+## Problem Example ##
+
+The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input; therefore, an attacker can access the backend database on behalf of the application through the use of SQL injection.
+
+~~~~
+public void doGet(HttpServletRequest request,
+     HttpServletResponse response) throws ServletException, IOException{
+     PrintWriter out = response.getWriter();
+     String query = request.getParameter("query");
+     String retData = "";
+
+     // The application fails to validate the user-supplied
+     // query before submitting it to the database server
+     retData = queryDB(query);
+
+     ...
+
+     out.flush();
+     out.close();
+}
+~~~~
+
+
+## Solution Example ##
+
+The following code allows the user to query a database. Because the application validates the user's input, it is much more difficult for an attacker to access the backend database through a SQL injection attack.
+
+~~~~
+public void doGet(HttpServletRequest request,
+     HttpServletResponse response) throws ServletException, IOException{
+     PrintWriter out = response.getWriter();
+     String query = request.getParameter("query");
+     String retData = "";
+
+     // The application validates the user-supplied query
+     // before submitting it to the database server
+     if (validateQuery(query))
+     {
+          retData = queryDB(query);
+
+          ...
+
+     }
+
+     out.flush();
+     out.close();
+}
+
+
+public boolean validateQuery(String input){
+
+      // The input can be only of numeric characters
+      String goodPattern = "[0-9]++";
+
+      Pattern p = Pattern.compile(goodPattern);
+      Matcher m = p.matcher(input);
+
+      if(!m.matches())
+      {
+            return false;
+      }
+
+      return true;
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
