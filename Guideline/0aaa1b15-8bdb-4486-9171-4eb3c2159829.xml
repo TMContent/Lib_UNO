@@ -17,128 +17,163 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Secure database connection strings so they are not readily accessible to application users or attackers. Store these strings into configuration files and secure them.</p>
-  <h1>Why</h1>
-  <p>Connection strings include the location of the backend database, associated credentials and any other information that assists in establishing the connection between the application and its backend database server. Compromising the connection strings can aid an attacker to access the database server on behalf of the application.</p>
-  <h1>When</h1>
-  <p>If your application connects to a backend database server, secure the connection strings.</p>
-  <h1>How</h1>
-  <p>To secure connection strings:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Store connection strings in a configuration file. </strong>Locate all connection strings throughout your application. Structure the code such that database connectivity is not scattered throughout your application and is handled in a centralized fashion. If possible, avoid hard-coding the connection strings. Instead, place them into a configuration file.</p>
-      <p>Example of a hard-coded connection string in source code:</p>
-      <blockquote>
-        <pre>Connection cn = DriverManager.getConnection("jdbc:oracle:thin:@testbox:1521:orcl2",<br />                                            "myapp", "password");</pre>
-      </blockquote>
-      <p>Sample configuration file in plaintext:</p>
-      <blockquote>
-        <pre>#Test config file<br />connection=jdbc:oracle:thin:@testbox:1521:orcl2<br />user=myapp<br />password=password</pre>
-      </blockquote>
-      <p>The code for accessing the sample configuration file:</p>
-      <blockquote>
-        <pre>public Properties loadDatabaseCredentials() throws IOException{<br />      Properties prop = new Properties();<br />      InputStream propStream = new FileInputStream("../../config/testProp.config");<br />      prop.load(propStream);<br />      propStream.close();<br /><br />      return prop;}<br /><br />public String getConnectionUrl() throws IOException{<br />      Properties prop = new Properties();<br />      InputStream propStream = new FileInputStream("../../config/testProp.config");<br />      prop.load(propStream);<br />      propStream.close();<br /><br />      return prop.getProperty("connection");<br />}</pre>
-      </blockquote>
-    </li>
-    <li>
-      <p>
-        <strong>Encrypt connection strings. </strong>Encrypt connection strings within the configuration file to ensure they are not exposed if the file is compromised. It is recommended to place the&amp;nbsp;password for the keystore in a file separate from the other application&amp;nbsp;properties files. This way it can have additional security compared to other application files.&amp;nbsp;Example:</p>
-      <blockquote>
-        <pre>Connection cn = DriverManager.getConnection(getConnectionUrl(),<br />                                             loadDatabaseCredentials());<br /> ... <br />public static String getConnectionUrl()<br />       throws GeneralSecurityException, IOException{<br />      // Set the decryption mechanism<br />      byte[] rawKey = getEncryptionKey();<br />      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");<br />      Cipher cipher = Cipher.getInstance("AES");<br />      cipher.init(Cipher.DECRYPT_MODE, skeySpec);<br /><br />      // Decrypt config file<br /><br />      File configFile = new File("../../config/testProp.config");<br />      byte[] tempBuff = new byte[(int)configFile.length()];<br />      FileInputStream fileStream = new FileInputStream(configFile);<br />      fileStream.read(tempBuff, 0, tempBuff.length);<br /><br />      InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));<br />      prop.load(propStream);<br />      propStream.close();<br />      fileStream.close();<br /><br />      return prop.getProperty("connection");<br />}<br /><br />public Properties loadDatabaseCredentials()<br />      throws GeneralSecurityException, IOException{<br />      // Set the decryption mechanism<br />      byte[] rawKey = getEncryptionKey();<br />      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");<br />      Cipher cipher = Cipher.getInstance("AES");<br />      cipher.init(Cipher.DECRYPT_MODE, skeySpec);<br /><br />      // Decrypt config file<br /><br />      File configFile = new File("../../config/testProp.config");<br />      byte[] tempBuff = new byte[(int)configFile.length()];<br />      FileInputStream fileStream = new FileInputStream(configFile);<br />      fileStream.read(tempBuff, 0, tempBuff.length);<br /><br />      InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));<br />      prop.load(propStream);<br />      propStream.close();<br />      fileStream.close();<br /><br />      return prop;}</pre>
-      </blockquote>
-    </li>
-    <li>
-      <p>
-        <strong>Protect configuration files. </strong>Make sure that appropriate security measures are taken when storing the configuration files.</p>
-      <ul>
-        <li>
-          <strong>Choose a configuration directory</strong>: Dedicate a directory for storing your application's configuration files. Make sure the directory is not web-accessible. This limits the scope of users&amp;nbsp;who can potentially compromise the contents inside the directory. </li>
-        <li>
-          <strong>Set appropriate permissions</strong>: Apply the appropriate filesystem permissions such that the configuration files can only be accessed by your application and its administrators.</li>
-      </ul>
-    </li>
-    <li>
-      <p>
-        <strong>Encrypt the connection to the database server. </strong>Encrypting the connection between your application and the database server protects the database credentials when your application initially authenticates to the backend database. Because the implementation varies between the different brands of database servers, it is recommended to consult the server manual on how to utilize such functionality.</p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following snippet shows the application initiating a connection with a backend database server. Because the credentials are hard-coded as parameters to the connection API, anybody with access to the source code can access the database on behalf of the application.</p>
-  <blockquote>
-    <pre>DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());<br />Connection cn = DriverManager.getConnection(getConnectionUrl(),<br />                                          "myapp", "password");</pre>
-  </blockquote>
-  <h1>Solution Example</h1>
-  <p>The following snippet shows the application initiating a connection with a backend database server. The application loads the database credentials from a configuration file. If an attacker compromises the source code, he cannot access the database on behalf of the application.</p>
-  <blockquote>
-    <pre>Properties prop = loadDatabaseCredentials();<br />DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());<br />Connection cn = DriverManager.getConnection(getConnectionUrl(), prop);<br /> ... <br />public Properties loadDatabaseCredentials()<br />      throws GeneralSecurityException, IOException{<br />      // Set the decryption mechanism<br />      byte[] rawKey = getEncryptionKey();<br />      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");<br />      Cipher cipher = Cipher.getInstance("AES");<br />      cipher.init(Cipher.DECRYPT_MODE, skeySpec);<br /><br />      // Decrypt config file<br /><br />      File configFile = new File("../../config/testProp.config");<br />      byte[] tempBuff = new byte[(int)configFile.length()];<br />      FileInputStream fileStream = new FileInputStream(configFile);<br />      fileStream.read(tempBuff, 0, tempBuff.length);<br /><br />      InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));<br />      prop.load(propStream);<br />      propStream.close();<br />      fileStream.close();<br /><br />      return prop;<br />}</pre>
-  </blockquote>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>To learn more about securing database connection strings, see: <a href="http://msdn.microsoft.com/msdnmag/issues/03/11/ProtectYourData/default.aspx">Safeguard Database Connection Strings and Other Sensitive Settings in Your Code</a>. </li>
-    <li>To learn more about the JCE API, see: <a href="http://download.oracle.com/javase/1.4.2/docs/guide/security/jce/JCERefGuide.html">Java Cryptography Extension for the Java 2 SDK, v 1.4</a>. </li>
-  </ul>
-  <h1>Java Data Access Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/d2809cce-1af2-4896-a45c-b4b56deae282">Use Parameterized APIs for Data Access</a>
-    </li>
-    <li>
-      <a href="/article/bcfcbcbb-4bd6-4011-9e24-efa70d4a3724">Parameterize Dynamic SQL in Stored Procedures</a>
-    </li>
-    <li>
-      <a href="/article/5427d358-17f6-4ef6-948f-d670c5aefc38">Enforce Strong SQL Passwords</a>
-    </li>
-    <li>
-      <a href="/article/697891eb-5d97-44fa-a6eb-625f247f622d">Use Least Privileged Accounts for Database Access</a>
-    </li>
-    <li>
-      <a href="/article/159a8710-263c-4612-b9d8-ba3943f8286f">Allow Only Trusted Hosts to Connect to Database Server</a>
-    </li>
-    <li>
-      <a href="/article/0aaa1b15-8bdb-4486-9171-4eb3c2159829">Protect Connection Strings</a>
-    </li>
-  </ul>
-  <h1>Java Data Access Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/d5a1c94b-601e-4e2a-9ad8-33461792a8bb">Parameterized APIs Are Used for Data Access</a>
-    </li>
-    <li>
-      <a href="/article/93d15ca4-c950-4370-8de5-cdb2cc2974fe">Dynamic SQL in Stored Procedures Is Parameterized</a>
-    </li>
-    <li>
-      <a href="/article/73c2f6fa-3c97-452e-8163-7215bd995d58">Strong SQL Passwords Are Enforced</a>
-    </li>
-    <li>
-      <a href="/article/61af51d9-58f8-4ddf-a373-0b67ea8e6d4b">Least Privileged Accounts Are Used for Database Access</a>
-    </li>
-    <li>
-      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">
-      </a>
-      <a href="/article/54026187-bcbd-433b-a895-21d66b543052">Only Trusted Hosts Are Allowed to Connect to Database Server</a>
-    </li>
-    <li>
-      <a href="/article/9fdc12bc-4208-4d0e-a56c-62e12b660bc0">Connection Strings Are Protected</a>
-    </li>
-  </ul>
-  <h1>Java Data Access Code Examples</h1>
-  <ul>
-    <li>
-      <a href="/article/5f55ac00-bb90-439e-a5fd-a85e9a327175">Use Stored Procedures</a>
-    </li>
-    <li>
-      <a href="/article/e3d7a7be-68a1-47ab-a515-54053d9171a4">Use Named Queries with Hibernate</a>
-    </li>
-    <li>
-      <a href="/article/d4645b55-6da1-4c3c-9e9f-bed1d021ed56">Use Named Queries with Java Persistence API (JPA)</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Servlets or JSP
+
+
+## What to Do ##
+
+Secure database connection strings so they are not readily accessible to application users or attackers. Store these strings into configuration files and secure them.
+
+## Why ##
+
+Connection strings include the location of the backend database, associated credentials and any other information that assists in establishing the connection between the application and its backend database server. Compromising the connection strings can aid an attacker to access the database server on behalf of the application.
+
+## When ##
+
+If your application connects to a backend database server, secure the connection strings.
+
+## How ##
+
+To secure connection strings:
+
+1. **Store connection strings in a configuration file.** Locate all connection strings throughout your application. Structure the code such that database connectivity is not scattered throughout your application and is handled in a centralized fashion. If possible, avoid hard-coding the connection strings. Instead, place them into a configuration file.
+
+	Example of a hard-coded connection string in source code:
+
+	~~~~
+	Connection cn = DriverManager.getConnection("jdbc:oracle:thin:@testbox:1521:orcl2",
+												"myapp", "password");
+	Sample configuration file in plaintext:
+
+	#Test config file
+	connection=jdbc:oracle:thin:@testbox:1521:orcl2
+	user=myapp
+	password=password
+	The code for accessing the sample configuration file:
+
+	public Properties loadDatabaseCredentials() throws IOException{
+		  Properties prop = new Properties();
+		  InputStream propStream = new FileInputStream("../../config/testProp.config");
+		  prop.load(propStream);
+		  propStream.close();
+
+		  return prop;}
+
+	public String getConnectionUrl() throws IOException{
+		  Properties prop = new Properties();
+		  InputStream propStream = new FileInputStream("../../config/testProp.config");
+		  prop.load(propStream);
+		  propStream.close();
+
+		  return prop.getProperty("connection");
+	}
+	~~~~
+
+2. **Encrypt connection strings.** Encrypt connection strings within the configuration file to ensure they are not exposed if the file is compromised. It is recommended to place the password for the keystore in a file separate from the other application properties files. This way it can have additional security compared to other application files. Example:
+
+	~~~~
+	Connection cn = DriverManager.getConnection(getConnectionUrl(),
+												 loadDatabaseCredentials());
+	 ... 
+	public static String getConnectionUrl()
+		   throws GeneralSecurityException, IOException{
+		  // Set the decryption mechanism
+		  byte[] rawKey = getEncryptionKey();
+		  SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");
+		  Cipher cipher = Cipher.getInstance("AES");
+		  cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+
+		  // Decrypt config file
+
+		  File configFile = new File("../../config/testProp.config");
+		  byte[] tempBuff = new byte[(int)configFile.length()];
+		  FileInputStream fileStream = new FileInputStream(configFile);
+		  fileStream.read(tempBuff, 0, tempBuff.length);
+
+		  InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));
+		  prop.load(propStream);
+		  propStream.close();
+		  fileStream.close();
+
+		  return prop.getProperty("connection");
+	}
+
+	public Properties loadDatabaseCredentials()
+		  throws GeneralSecurityException, IOException{
+		  // Set the decryption mechanism
+		  byte[] rawKey = getEncryptionKey();
+		  SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");
+		  Cipher cipher = Cipher.getInstance("AES");
+		  cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+
+		  // Decrypt config file
+
+		  File configFile = new File("../../config/testProp.config");
+		  byte[] tempBuff = new byte[(int)configFile.length()];
+		  FileInputStream fileStream = new FileInputStream(configFile);
+		  fileStream.read(tempBuff, 0, tempBuff.length);
+
+		  InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));
+		  prop.load(propStream);
+		  propStream.close();
+		  fileStream.close();
+
+		  return prop;}
+	~~~~
+
+3. **Protect configuration files.**  Make sure that appropriate security measures are taken when storing the configuration files.
+
+	* Choose a configuration directory: Dedicate a directory for storing your application's configuration files. Make sure the directory is not web-accessible. This limits the scope of users who can potentially compromise the contents inside the directory.
+	* Set appropriate permissions: Apply the appropriate filesystem permissions such that the configuration files can only be accessed by your application and its administrators.
+
+4. **Encrypt the connection to the database server.** Encrypting the connection between your application and the database server protects the database credentials when your application initially authenticates to the backend database. Because the implementation varies between the different brands of database servers, it is recommended to consult the server manual on how to utilize such functionality.
+
+
+## Problem Example ##
+
+The following snippet shows the application initiating a connection with a backend database server. Because the credentials are hard-coded as parameters to the connection API, anybody with access to the source code can access the database on behalf of the application.
+
+~~~~
+DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+Connection cn = DriverManager.getConnection(getConnectionUrl(),
+                                          "myapp", "password");
+~~~~
+
+
+## Solution Example ##
+
+The following snippet shows the application initiating a connection with a backend database server. The application loads the database credentials from a configuration file. If an attacker compromises the source code, he cannot access the database on behalf of the application.
+
+~~~~
+Properties prop = loadDatabaseCredentials();
+DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+Connection cn = DriverManager.getConnection(getConnectionUrl(), prop);
+ ... 
+public Properties loadDatabaseCredentials()
+      throws GeneralSecurityException, IOException{
+      // Set the decryption mechanism
+      byte[] rawKey = getEncryptionKey();
+      SecretKeySpec skeySpec = new SecretKeySpec(rawKey, "AES");
+      Cipher cipher = Cipher.getInstance("AES");
+      cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+
+      // Decrypt config file
+
+      File configFile = new File("../../config/testProp.config");
+      byte[] tempBuff = new byte[(int)configFile.length()];
+      FileInputStream fileStream = new FileInputStream(configFile);
+      fileStream.read(tempBuff, 0, tempBuff.length);
+
+      InputStream propStream = new ByteArrayInputStream(cipher.doFinal(tempBuff));
+      prop.load(propStream);
+      propStream.close();
+      fileStream.close();
+
+      return prop;
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
