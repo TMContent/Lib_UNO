@@ -4,7 +4,7 @@
     <Id>a61487db-d1e1-4304-89b1-44bb8c88b1e3</Id>
     <Id_History>a61487db-d1e1-4304-89b1-44bb8c88b1e3,a5256e2d-27bd-4915-8e41-c36ea3b7bfa9,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>All Data Passed Between Native And Java Code Is Validated</Title>
+    <Title>Java JNI Data Validation</Title>
     <Category>Unmanaged Code</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -20,141 +20,112 @@
   <Content Sanitized="true" DataType="markdown">
     <Data><![CDATA[## Applies To ##
 
-- Java
-
-
-## What to Check For ##
-
-Verify that your application validates all data that is passed between Java code and native code.
-
-
-## Why ##
-
-Unchecked input passed to native code can lead to buffer overflows and other vulnerabilities that are typical for non-managed code.
-
-
-## How to Check ##
-
-Due to the security risk posed by the use of native code, verify that your application validates data that is passed between native code and Java:
-
-1. **Check if language boundaries are clearly defined.** If your Java application needs to use native code, ensure that you have identified all the locations where the Java code interacts with native code. As your application moves between Java code and native code, special attention needs to be given to error handling routines, so that no security holes are introduced in your application by its native component.
-
-2. **Verify the quality of your application's validators.** Verify that your application's data is properly validated for length, range, format and type.
-
-3. **Verify that all data is validated.** Verify that all data passing through the locations identified in Step 1 is validated.
-
-4. **Ensure that data validation code is centralized.** It is better that all validation routines in your application are centralized for cleaner and better control. Shared validation routines are better than creating many spread throughout your application's code base. Every time your application accepts external data as input, it should first pass through this set of validation routines.
-
-
-## How to Fix ##
-
-There are several things to consider when validating input/output between native and Java code:
-
-1. **Check language barriers.** Distinguishing the boundaries between native and Java code is very important. Because the Java sandbox provides multiple security checks to its code, it is important to know the boundary between where the Java sandbox ends and the compiled code begins to interact directly with the CPU, so you can compensate for the lack of such checks inside the native code.
-
-2. **Validate for length, range, format and type.** After discovering the language boundaries, determine the type, format and structure of the data that is passed between Java and native code. Build a validator for each type of data that is passed between the two environments.
-
-3. **Construct a set of validators.** Centralize your application's validators as it helps strengthen the code by limiting the amount of scattered validation code throughout your application. Place the set of validators on the language barriers. Your application should pass data between native and Java code only through its set of validators.
+* Java
 
 
 ## Problem Example ##
 
 The following segment shows a JNI code that utilizes a COM object. Making the assumption that the Java code will handle data validation, the JNI segment does not verify that the passed input is a valid GUID. Since invalid GUIDs may cause unhandled exceptions, an attacker can force the application to disclose its call stack and possibly its source filenames.
 
-	#include <jni.h>
-	#include <sys/types.h>
-	#include <fcntl.h>
-	#include <stdio.h>
-	#include <atlbase.h>
-	#include <windows.h>
-	#include <wtypes.h>
-	JNIEXPORT jboolean
-	JNICALL Java_Identifier_invokeObject
-		  (JNIEnv * env, jobject jobj, jstring jguid)
-	{
-		  HRESULT result;
-		  CLSID clsid;
-		  IUnknown *pIunkn;
-		  LPWSTR guid;
-		  jboolean iscopy;
-		  jboolean ret = false;
-		  char* temp_guid = (*env)->GetStringUTFChars(env, jguid, &iscopy);
-		  //The application fails to verify that the GUID is valid
-		  guid = SysAllocStringLen(0, 38);
-		  MultiByteToWideChar(CP_ACP, 0, temp_guid, -1, guid, 38);
-		  result = GUIDFromString(guid, &clsid);
-		  ...
-		  return ret;
-	}
+~~~~
+#include <jni.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <atlbase.h>
+#include <windows.h>
+#include <wtypes.h>
+JNIEXPORT jboolean
+JNICALL Java_Identifier_invokeObject
+      (JNIEnv * env, jobject jobj, jstring jguid)
+{
+      HRESULT result;
+      CLSID clsid;
+      IUnknown *pIunkn;
+      LPWSTR guid;
+      jboolean iscopy;
+      jboolean ret = false;
+      char* temp_guid = (*env)->GetStringUTFChars(env, jguid, &iscopy);
+      //The application fails to verify that the GUID is valid
+      guid = SysAllocStringLen(0, 38);
+      MultiByteToWideChar(CP_ACP, 0, temp_guid, -1, guid, 38);
+      result = GUIDFromString(guid, &clsid);
+      ...
+      return ret;
+}
+~~~~
 
-	
+
 ## Solution Example ##
 
 The following segment shows a JNI code that utilizes a COM object. Because the passed input is validated as being a GUID, the application reduces the risk of unhandled exceptions.
 
-	#include <jni.h>
-	#include <sys/types.h>
-	#include <fcntl.h>
-	#include <stdio.h>
-	#include <atlbase.h>
-	#include <windows.h>
-	#include <wtypes.h>  
-	JNIEXPORT jboolean 
-	JNICALL Java_Identifier_invokeObject
-		  (JNIEnv * env, jobject jobj, jstring jguid)
-	{
-		  HRESULT result;
-		  CLSID clsid;
-		  IUnknown *pIunkn;
-		  LPWSTR guid;
-		  jboolean iscopy;
-		  jboolean ret = false;
-		  char* temp_guid = (*env)->GetStringUTFChars(env, jguid, &iscopy);
-		  // The application verifies that the input matches the criteria for a GUID
-		  if(!validGUID(temp_guid))
-		  {
-				return ret;
-		  }
-		  guid = SysAllocStringLen(0, 38);
-		  MultiByteToWideChar(CP_ACP, 0, temp_guid, -1, guid, 38);
-		  result = GUIDFromString(guid, &clsid);
-		   ...
-		  return ret;
-	}
+~~~~
+#include <jni.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <atlbase.h>
+#include <windows.h>
+#include <wtypes.h>  
+JNIEXPORT jboolean 
+JNICALL Java_Identifier_invokeObject
+      (JNIEnv * env, jobject jobj, jstring jguid)
+{
+      HRESULT result;
+      CLSID clsid;
+      IUnknown *pIunkn;
+      LPWSTR guid;
+      jboolean iscopy;
+      jboolean ret = false;
+      char* temp_guid = (*env)->GetStringUTFChars(env, jguid, &iscopy);
+      // The application verifies that the input matches the criteria for a GUID
+      if(!validGUID(temp_guid))
+      {
+            return ret;
+      }
+      guid = SysAllocStringLen(0, 38);
+      MultiByteToWideChar(CP_ACP, 0, temp_guid, -1, guid, 38);
+      result = GUIDFromString(guid, &clsid);
+       ...
+      return ret;
+}
 
-	bool validGUID(char *guid)
-	{
-		  // Check that GUID is of right length
-		  if(strlen(guid) != 38) return false;
-		  // Sample GUID: {1EF4A023-143A-4e0e-AD72-69C2C68C2D70
-	}
-		  if(guid[0]  != '{') return false;
-		  if(guid[9]  != '-') return false;
-		  if(guid[14] != '-') return false;
-		  if(guid[19] != '-') return false;
-		  if(guid[24] != '-') return false;
-		  if(guid[37] != '}') return false;
-		  int i=1;
-		  while(i<37)
-		  {
-				if((guid[i] >= 'a' && guid[i] <= 'f')
-					  || (guid[i] >= 'A' && guid[i] <= 'F')
-					  || (guid[i] >= '0' && guid[i] <= '9')
-				{
-					  // GUID is valid
-				}
-				else
-				{
-					  return false;
-				}
-				i++;
-				if(i == 9 || i == 14 || i == 19 || i == 24)
-				{
-					  i++;
-				}
-		  }
+bool validGUID(char *guid)
+{
+      // Check that GUID is of right length
+      if(strlen(guid) != 38) return false;
+      // Sample GUID: {1EF4A023-143A-4e0e-AD72-69C2C68C2D70
+}
+      if(guid[0]  != '{') return false;
+      if(guid[9]  != '-') return false;
+      if(guid[14] != '-') return false;
+      if(guid[19] != '-') return false;
+      if(guid[24] != '-') return false;
+      if(guid[37] != '}') return false;
+      int i=1;
+      while(i<37)
+      {
+            if((guid[i] >= 'a' && guid[i] <= 'f')
+                  || (guid[i] >= 'A' && guid[i] <= 'F')
+                  || (guid[i] >= '0' && guid[i] <= '9')
+            {
+                  // GUID is valid
+            }
+            else
+            {
+                  return false;
+            }
+            i++;
+            if(i == 9 || i == 14 || i == 19 || i == 24)
+            {
+                  i++;
+            }
+      }
 
-		  return true;
-	}]]></Data>
+      return true;
+}
+~~~~
+]]></Data>
   </Content>
 </TeamMentor_Article>
