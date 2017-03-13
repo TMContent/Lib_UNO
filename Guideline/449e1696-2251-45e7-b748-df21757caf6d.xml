@@ -10,24 +10,42 @@
     <Technology>.NET</Technology>
     <Type>Code Example</Type>
     <DirectLink>Do Not Persist Authorization Cookies</DirectLink>
-    <Tag>ASP.NET,ASP.NET 3.5,ASP</Tag>
+    <Tag />
     <Security_Demand />
     <Author />
     <Priority>2</Priority>
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>What to Do</h1>
-  <p>Do not persist authorization cookies. </p>
-  <h1>Why</h1>
-  <p>Persistent authorization cookies will be stored in a user's profile and can be stolen if an attacker gets physical access to the machine.&amp;nbsp; This will also help prevent problems for users who access your application from public or shared machines and forget to log out. </p>
-  <h1>When</h1>
-  <p>All applications which use authorization cookies should ensure that they are not persisted. </p>
-  <h1>How</h1>
-  <p>The following example shows a &lt;roleManager&gt; element configured to protect the authorization cookie. </p>
-  <pre>&lt;roleManager enabled="true"<br />             cacheRolesInCookie="true"<br />             cookieName=".ASPROLES"<br />             cookieTimeout="30" <br />             cookiePath="/"<br />             cookieRequireSSL="true"<br />             cookieSlidingExpiration="true"<br />             cookieProtection="All"<br />             createPersistentCookie="false"&gt;<br />&lt;/roleManager&gt;</pre>
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* ASP.NET
+
+
+## Summary ##
+
+Do not persist authorization cookies. Persistent authorization cookies will be stored in a user's profile and can be stolen if an attacker gets physical access to the machine.  This will also help prevent problems for users who access your application from public or shared machines and forget to log out.
+
+
+## Solution Example ##
+
+The following example shows a <roleManager> element configured to protect the authorization cookie.
+
+~~~~
+<roleManager enabled="true"
+             cacheRolesInCookie="true"
+             cookieName=".ASPROLES"
+             cookieTimeout="30" 
+             cookiePath="/"
+             cookieRequireSSL="true"
+             cookieSlidingExpiration="true"
+             cookieProtection="All"
+             createPersistentCookie="false">
+</roleManager>
+~~~~
+
+---
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>
