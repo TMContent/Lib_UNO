@@ -15,55 +15,63 @@
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+</p>
-  <h1>What to Do</h1>
-  <p>Include unique tokens in HTTP requests when performing sensitive operations to prevent Cross-Site Request Forgery (CSRF).</p>
-  <h1>Why</h1>
-  <p>Unique tokens in HTTP requests help prevent CSRF attacks. An attacker who does not have the unique token will not be able to successfully form a URL that can carry out a malicious action on the behalf of an authenticated user. <br /></p>
-  <h1>How</h1>
-  <p>To include unique tokens in HTTP requests:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify sensitive operations.</strong>&amp;nbsp;Review application design and code to identify all operations that require authorization.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Identify code that performs sensitive operations.&amp;nbsp;</strong>Identify all pages that are involved in performing sensitive operations. This includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.</p>
-    </li>
-    <li>
-      <p />
-      <strong>Choose a method for generating unique tokens.</strong>&amp;nbsp;There are different ways to generate unique tokens. In Play Framework, use a <a href="https://github.com/orefalo/play2-authenticitytoken">Play 2 Authenticity token</a>
- for this purpose.&amp;nbsp; Every form post will contain a hidden parameter 
-containing a UUID. The UUID is signed and its signature is stored in the
- session. When the user submits the form, it includes the UUID and the 
-signature. The validation passes if the signatures match: <font face="Courier New">session.sign=uuid.sign</font>.
- An attacker who does not have the token cannot generate the correct 
-signature. This protects the application from a CSRF attack. </li>
-    <li>
-      <p />
-      <strong>Add unique tokens to HTTP requests.</strong>&amp;nbsp;Add code that sends
- the generated unique tokens in HTTP requests to the pages that link to 
-sensitive operations. Adding the authenticity token is trivial: For 
-every form, add @authenticityToken() inside the form elements. For example:<pre>@import _root_.views.html.authtoken.authenticityToken
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
 
-&lt;form action="@routes.Application.process()" method="post"&gt;
-   @authenticityToken()
-   Please input your name
-   &lt;input name="name" /&gt;
-   &lt;input type="submit"/&gt;
-&lt;/form&gt;</pre></li>
-    <li>
-      <p />
-      <strong>Add token-validation code.</strong> On the pages that carry out sensitive operations, add code that checks if the tokens sent in HTTP requests are valid or not. To validate the token, use the @AuthenticityToken Play validator. For example:<pre>import authtoken.validator.AuthenticityToken;<br /><br />public class FormData {<br /><br />    @AuthenticityToken<br />    public String authtoken;<br /><br />    public String name;<br />}<br /><br />public static Result process() {<br /><br />    Form<formdata> form = form(FormData.class).bindFromRequest();<br /><br />    if (form.hasErrors()) {<br />        return badRequest("authenticity validation FAILED");<br />    } else {<br />        return ok("authenticity validation PASSED");<br />    }<br />}</formdata></pre></li>
-  </ol>
-  <h1>Guideline</h1>
-  <ul>
-    <li>
-      <a href="fdb460e6-5d18-4e35-a093-4b260155d79e">Include Unique Tokens in HTTP Requests</a>
-    </li>
-  </ul>]]></Data>
+* Scala and Play Framework 2.1.0+
+
+
+## Summary ##
+
+Include unique tokens in HTTP requests when performing sensitive operations to prevent Cross-Site Request Forgery (CSRF). Unique tokens in HTTP requests help prevent CSRF attacks. An attacker who does not have the unique token will not be able to successfully form a URL that can carry out a malicious action on the behalf of an authenticated user. 
+
+
+## Solution Example ##
+
+To include unique tokens in HTTP requests:
+
+1. **Identify sensitive operations.** Review application design and code to identify all operations that require authorization.
+
+2. **Identify code that performs sensitive operations.** Identify all pages that are involved in performing sensitive operations. This includes both the pages that link to sensitive operations and the code that actually carries out the sensitive operations.
+
+3. **Choose a method for generating unique tokens.** There are different ways to generate unique tokens. In Play Framework, use a Play 2 Authenticity token for this purpose.  Every form post will contain a hidden parameter containing a UUID. The UUID is signed and its signature is stored in the session. When the user submits the form, it includes the UUID and the signature. The validation passes if the signatures match: session.sign=uuid.sign. An attacker who does not have the token cannot generate the correct signature. This protects the application from a CSRF attack.
+
+4. **Add unique tokens to HTTP requests.** Add code that sends the generated unique tokens in HTTP requests to the pages that link to sensitive operations. Adding the authenticity token is trivial: For every form, add @authenticityToken() inside the form elements. For example:
+
+	~~~~
+	@import _root_.views.html.authtoken.authenticityToken
+
+	<form action="@routes.Application.process()" method="post">
+	   @authenticityToken()
+	   Please input your name
+	   <input name="name" />
+	   <input type="submit"/>
+	</form>
+	~~~~
+
+5. **Add token-validation code.** On the pages that carry out sensitive operations, add code that checks if the tokens sent in HTTP requests are valid or not. To validate the token, use the @AuthenticityToken Play validator. For example:
+import authtoken.validator.AuthenticityToken;
+
+	~~~~
+	public class FormData {
+
+		@AuthenticityToken
+		public String authtoken;
+
+		public String name;
+	}
+
+	public static Result process() {
+
+		Form form = form(FormData.class).bindFromRequest();
+
+		if (form.hasErrors()) {
+			return badRequest("authenticity validation FAILED");
+		} else {
+			return ok("authenticity validation PASSED");
+		}
+	}
+	~~~~
+]]></Data>
   </Content>
 </TeamMentor_Article>
