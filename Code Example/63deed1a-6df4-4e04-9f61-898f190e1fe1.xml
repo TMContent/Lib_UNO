@@ -4,7 +4,7 @@
     <Id>63deed1a-6df4-4e04-9f61-898f190e1fe1</Id>
     <Id_History>63deed1a-6df4-4e04-9f61-898f190e1fe1,5d690172-965e-4f4d-86c0-1775a9ee64dc,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Cross-Site Request Forgery (CSRF) Prevention Using Struts 1</Title>
+    <Title>Struts1 Cross-Site Request Forgery (CSRF) Prevention</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,44 +17,57 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>JAVA <li>Struts 1</li></li>
-  </ul>
-  <h1>Summary</h1>
-  <p>Perform CSRF prevention using Struts 1 within an application.</p>
-  <h1>Objectives</h1>
-  <p>CSRF prevention is a key security control for an application that protects the application and its users from CSRF attacks. This article will describe how to use the built-in mechanisms provided by Struts 1 to perform CSRF prevention.</p>
-  <h1>Solution Example</h1>
-  <p>There is a standard model for CSRF prevention using Struts 1 that involves 3 basic steps</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Call <em>saveToken</em>().</strong> In the action class/method that handles the setup for your form display (ex. <em>EditBookAction</em>), you need to call <em>saveToken</em>().</p>
-      <pre>public ActionForward execute(ActionMapping mapping,<br />ActionForm form, HttpServletRequest request, HttpServletResponse response)<br />throws Exception &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; saveToken(request);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ....<br />&amp;#125;</pre>
-      <li>
-        <p>
-          <strong>Use <em>html:form</em> to create your form on your JSP (ex. <em>editBook.jsp</em>).</strong>
-        </p>
-        <pre>&lt;html:form action="..."&gt;<br />...<br />&lt;/html:form&gt;</pre>
-        <li>
-          <p>
-            <strong>Check <em>isTokenValid</em>() and call <em>resetToken</em>().</strong> In the action class/method that handles the saving of your form (ex. <em>SaveBookAction</em>), you need to call <em>isTokenValid</em>(). If the token is valid, then you need to call <em>resetToken</em>().</p>
-          <pre>public ActionForward execute(ActionMapping mapping,<br />ActionForm form, HttpServletRequest request, HttpServletResponse response)<br />throws Exception &amp;#123;<br />...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; if ( &amp;#33;isTokenValid(request) ) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return mapping.findForward(Constants.INVALID_TOKEN);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125; else &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;//normal business logic<br />&amp;nbsp;...<br />&amp;nbsp;resetToken(request);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />...</pre>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <p>Using these 3 simple steps you can effectively have a session specific per user token used to validate that a request was submitted by a user intentionally.</p>
-  <p>
-    <strong>Note</strong>: There have been effective attacks against various CSRF prevention techniques including this token-based approach when an application has XSS vulnerabilities. Removing XSS is therefore viewed as a prerequisite activity for a complete CSRF prevention mechanism.</p>
-  <p>In conclusion, CSRF prevention can function as a strong security control if used properly and applied thoroughly throughout the application. The Struts framework provides a simple series of steps for accomplishing this task.</p>
-  <h1>Guideline</h1>
-  <ul>
-    <li>
-      <a href="fdb460e6-5d18-4e35-a093-4b260155d79e">Include Unique Tokens in HTTP Requests</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* JAVA
+* Struts 1
+
+
+## Summary ##
+
+Perform CSRF prevention using Struts 1 within an application. CSRF prevention is a key security control for an application that protects the application and its users from CSRF attacks. 
+
+
+## Solution Example ##
+
+There is a standard model for CSRF prevention using Struts 1 that involves 3 basic steps
+
+1. **Call saveToken().** In the action class/method that handles the setup for your form display (ex. EditBookAction), you need to call saveToken().
+
+	~~~~
+	public ActionForward execute(ActionMapping mapping,
+	ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	throws Exception {
+		saveToken(request);
+		....
+	}
+	~~~~
+
+2. **Use html:form to create your form on your JSP (ex. editBook.jsp).**
+
+	~~~~
+	<html:form action="...">
+	...
+	</html:form>
+	~~~~
+
+3. **Check isTokenValid() and call resetToken().** In the action class/method that handles the saving of your form (ex. SaveBookAction), you need to call isTokenValid(). If the token is valid, then you need to call resetToken().
+
+	~~~~
+	public ActionForward execute(ActionMapping mapping,
+	ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	throws Exception {
+	...
+		if ( !isTokenValid(request) ) {
+			return mapping.findForward(Constants.INVALID_TOKEN);
+		} else {
+			...
+	  //normal business logic
+	 ...
+	 resetToken(request);
+		}
+	...
+	~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
