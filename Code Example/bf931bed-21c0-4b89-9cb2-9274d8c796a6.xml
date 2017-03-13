@@ -4,7 +4,7 @@
     <Id>bf931bed-21c0-4b89-9cb2-9274d8c796a6</Id>
     <Id_History>bf931bed-21c0-4b89-9cb2-9274d8c796a6,de955d28-5b9b-4a04-9f16-471ba56b1eff,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Cross-Site Request Forgery (CSRF) Prevention Using SpringMVC</Title>
+    <Title>SpringMVC Cross-Site Request Forgery (CSRF) Prevention</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,46 +17,74 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>JAVA<li>SpringMVC</li></li>
-  </ul>
-  <h1>Summary</h1>
-  <p>Perform CSRF prevention using SpringMVC within an application.</p>
-  <h1>Objectives</h1>
-  <p>CSRF prevention is a key security control for an application that protects the application and its users from CSRF attacks. This article will describe how to use the built-in mechanisms provided by SpringMVC to perform CSRF prevention.</p>
-  <h1>Solution Example</h1>
-  <p>There is a standard model for CSRF prevention using SpringMVC that involves 3 basic steps</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Build a base controller with CSRF generation and validation methods.</strong>
-      </p>
-      <pre>public class RootController &amp;#123;<br />...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; protected void init(ControllerContext ctx) &amp;#123;<br />&amp;nbsp;...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; initializeCsfrToken(ctx);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;</pre>
-      <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp; private void initializeCsfrToken(ControllerContext ctx) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; String csrfToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if(Utils.isEmpty(csrfToken)) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ctx.setSessionAttribute(ctx, ControllerContext.CSRF_TOKEN, generateCsrfToken(ctx));<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private String generateCsrfToken(ControllerContext ctx) &amp;#123;<br />&amp;nbsp;... generate random string<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp; protected boolean isValidCsrfToken(ControllerContext ctx) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; String csrfParamToken = ctx.getParameter(ControllerContext.CSRF_TOKEN);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; String csrfSessionToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if(&amp;#33;Utils.isEmpty(csrfParamToken) &amp;&amp; &amp;#33;Utils.isEmpty(csrfSessionToken) &amp;&amp; csrfParamToken.equals(csrfSessionToken)) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125; else &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //Log this as this can be a security threat<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Log.warn("Invalid security Token. Supplied token: " &amp;#43; csrfParamToken &amp;#43; ". Session token: " &amp;#43; csrfSessionToken &amp;#43; ". IP: " &amp;#43; ctx.request.getRemoteAddr());<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return false;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;</pre>
-      <li>
-        <p>
-          <strong>Include CSRF token in form submitted via JSP.</strong>
-        </p>
-        <pre>&lt;input type="hidden" name="ctoken" id="ctoken" value="&amp;#36;&amp;#123;sessionScope.ctoken&amp;#125;"/&gt;</pre>
-        <li>
-          <p>
-            <strong>In Controller handling request, validate CSRF token. </strong>In the action class/method that handles the saving of your form (ex. <em>SaveBookController</em>), you need to perform the token validation. </p>
-          <pre>...<br />ControllerContext ctx = new ControllerContext(request, response);<br />init(ctx);<br />if (&amp;#33;isValidCsrfToken(ctx)) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; result.addError(new ObjectError("employee", getMessage("error.invalidCsrfToken")));<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; return getModelAndView(ctx, "employee/list");<br />&amp;#125;<br />...</pre>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <p>Using these 3 simple steps you can effectively have a session specific per user token used to validate that a request was submitted by a user intentionally.</p>
-  <p>
-    <strong>Note</strong>: There have been effective attacks against various CSRF prevention techniques including this token-based approach when an application has XSS vulnerabilities. Removing XSS is therefore viewed as a prerequisite activity for a complete CSRF prevention mechanism.</p>
-  <p>In conclusion, CSRF prevention can function as a strong security control if used properly and applied thoroughly throughout the application. The SpringMVC framework provides a simple series of steps for accomplishing this task. </p>
-  <h1>Guideline</h1>
-  <ul>
-    <li>
-      <a href="fdb460e6-5d18-4e35-a093-4b260155d79e">Include Unique Tokens in HTTP Requests</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* JAVA
+* SpringMVC
+
+
+## Summary ##
+
+Perform CSRF prevention using SpringMVC within an application. CSRF prevention is a key security control for an application that protects the application and its users from CSRF attacks. 
+
+
+## Solution Example ##
+
+There is a standard model for CSRF prevention using SpringMVC that involves 3 basic steps
+
+1. **Build a base controller with CSRF generation and validation methods.**
+
+	~~~~
+	public class RootController {
+	...
+		protected void init(ControllerContext ctx) {
+	 ...
+			initializeCsfrToken(ctx);
+		}
+		private void initializeCsfrToken(ControllerContext ctx) {
+		   String csrfToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");
+		   if(Utils.isEmpty(csrfToken)) {
+			   ctx.setSessionAttribute(ctx, ControllerContext.CSRF_TOKEN, generateCsrfToken(ctx));
+		   }
+		}
+		
+		private String generateCsrfToken(ControllerContext ctx) {
+	 ... generate random string
+		}
+		
+		protected boolean isValidCsrfToken(ControllerContext ctx) {
+			String csrfParamToken = ctx.getParameter(ControllerContext.CSRF_TOKEN);
+			String csrfSessionToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");
+			if(!Utils.isEmpty(csrfParamToken) && !Utils.isEmpty(csrfSessionToken) && csrfParamToken.equals(csrfSessionToken)) {
+				return true;
+			} else {
+				//Log this as this can be a security threat
+				Log.warn("Invalid security Token. Supplied token: " + csrfParamToken + ". Session token: " + csrfSessionToken + ". IP: " + ctx.request.getRemoteAddr());
+				return false;
+			}
+		}
+	~~~~
+
+2. **Include CSRF token in form submitted via JSP.**
+
+	~~~~
+	<input type="hidden" name="ctoken" id="ctoken" value="${sessionScope.ctoken}"/>
+	~~~~
+
+3. **In Controller handling request, validate CSRF token.** In the action class/method that handles the saving of your form (ex. SaveBookController), you need to perform the token validation.
+
+	~~~~
+	...
+	ControllerContext ctx = new ControllerContext(request, response);
+	init(ctx);
+	if (!isValidCsrfToken(ctx)) {
+		result.addError(new ObjectError("employee", getMessage("error.invalidCsrfToken")));
+		return getModelAndView(ctx, "employee/list");
+	}
+	...
+	~~~~
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
