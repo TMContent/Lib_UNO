@@ -4,7 +4,7 @@
     <Id>ffa14c84-64d3-42db-9a48-73e4a9ce1877</Id>
     <Id_History>ffa14c84-64d3-42db-9a48-73e4a9ce1877,58530f68-667d-4ed4-a371-98345bcb67d6,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Minimize Sensitive Data in Memory</Title>
+    <Title>.NET Minimize Sensitive Data in Memory</Title>
     <Category>Other</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
@@ -17,50 +17,51 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0 and higher</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Sensitive data, such as encryption keys or private information, should be maintained in memory for the minimum amount of time required. As soon as the data is no longer is needed, it should be purged from memory. All traces of it must be eradicated, so it does not end up leaking to the swap file.</p>
-  <h1>Why</h1>
-  <p>Sensitive data residing in memory for more time than is strictly necessary is at high risk to be swapped out to disk. This could leave fragments of data available well after the application has terminated. Such data may be gathered by inspecting the contents of the disk, temporary files or the swap file.</p>
-  <h1>When</h1>
-  <p>If your application handles sensitive data.</p>
-  <h1>How</h1>
-  <p>Sensitive data can be cleared by overwriting the memory where the sensitive data was stored. Deallocating the memory is not sufficient since the .NET garbage collector gives no guarantee as to when the deallocated memory will be collected or reused. Be aware that any time you assign a sensitive data to a new buffer, or pass it as a parameter, the sensitive data is being copied and is now in memory in a new location. When clearing memory, ensure you clear every instance.</p>
-  <p>Keep in mind the following considerations when handling passwords: </p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify sensitive information.</strong> Sensitive data is any information that is kept secret and should be disclosed only to authorized parties. Common examples of sensitive data include, but are not limited to, names of customers, government issued ID numbers, credit card and other financial information, passwords, and private keys. Some industries, such as health care and banking, have regulatory standards that define sensitive information. Use regulatory requirements, as they apply to your application, to identify sensitive data. Sensitive data can be defined as follows:</p>
-      <ul>
-        <li>Information that either contains personally identifiable information or can be used to derive personally identifiable information that should not be shared with others.</li>
-        <li>Information that a user provides that they would not want shared with other users of the application.</li>
-        <li>Information that comes from an external trusted source that is not designed to be shared with users.</li>
-      </ul>
-    </li>
-    <li>
-      <p>
-        <strong>Identify all sensitive data use.</strong> Locate all code segments, both functions and data members, that handle sensitive data. These can be functions and data structures scattered throughout your application. If possible, centralize all code that handles sensitive data.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Store sensitive data in mutable objects.</strong> Mutable objects allow the data in them to be overwritten. This is especially useful in .NET as objects are required to be deallocated through the garbage collector. Therefore, there is no certainty when the sensitive data will be deallocated from the current process space. Examples of mutable objects include character arrays (i.e. char[]). .NET strings, however, are not mutable objects; therefore, once allocated, their current memory space cannot be modified. When storing sensitive data into an array, make sure that you use arrays of primitive data types such as byte, char, and int, but not arrays of the wrapper classes that .NET provides for primitive types such as Byte, Char or Int32. If you are forced to use .NET strings, (for instance, when calling a function which takes a .NET string), try to construct the string just before use and assign a new value to it as soon as you are done to encourage speedy garbage collection; this is sub-optimal and may lead to security issues, but until the .NET APIs allow for the exclusive use of mutable objects or SecureStrings, it may be unavoidable.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Clear all sensitive data instances.</strong> Make sure that all memory locations where sensitive data has been stored are cleared or overwritten after their use. Losing a pointer to a sensitive data instance can result in not cleaning that particular memory and allowing the sensitive data to leak.</p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code makes a use of a password. Although the pointer to the string is removed and garbage collection is called, .NET does not guarantee the data will be erased.</p>
-  <pre>string pass = GetPassword();<br />...<br />pass = null;<br />GC.Collect();</pre>
-  <h1>Solution Example</h1>
-  <p>The following code makes use of a password. After the password is used, the memory is explicitly cleared. Since strings are immutable objects, the code uses character arrays to store passwords. This makes it possible to overwrite the data after its use. </p>
-  <pre>char[] pass = GetPassword();<br />...<br />ClearPassword(pass);<br />pass = null;<br />...<br />void ClearPassword(char[] pass)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; for(int i=0; i&lt;pass.Length; i++)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; {<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; pass[i] = ' ';<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; }<br />}</pre>
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* ASP.NET 4.0 and higher
+
+
+## Summary ##
+
+Sensitive data, such as encryption keys or private information, should be maintained in memory for the minimum amount of time required. As soon as the data is no longer is needed, it should be purged from memory. All traces of it must be eradicated, so it does not end up leaking to the swap file.
+
+Sensitive data can be cleared by overwriting the memory where the sensitive data was stored. Deallocating the memory is not sufficient since the .NET garbage collector gives no guarantee as to when the deallocated memory will be collected or reused. Be aware that any time you assign a sensitive data to a new buffer, or pass it as a parameter, the sensitive data is being copied and is now in memory in a new location. When clearing memory, ensure you clear every instance.
+
+
+## Problem Example ##
+
+The following code makes a use of a password. Although the pointer to the string is removed and garbage collection is called, .NET does not guarantee the data will be erased.
+
+~~~~
+string pass = GetPassword();
+...
+pass = null;
+GC.Collect();
+~~~~
+
+
+## Solution Example ##
+
+The following code makes use of a password. After the password is used, the memory is explicitly cleared. Since strings are immutable objects, the code uses character arrays to store passwords. This makes it possible to overwrite the data after its use.
+
+~~~~
+char[] pass = GetPassword();
+...
+ClearPassword(pass);
+pass = null;
+...
+void ClearPassword(char[] pass)
+{
+      for(int i=0; i<pass.Length; i++)
+      {
+            pass[i] = ' ';
+      }
+}
+~~~~
+
+---
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>
