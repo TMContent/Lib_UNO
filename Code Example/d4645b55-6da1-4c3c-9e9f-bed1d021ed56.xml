@@ -20,88 +20,78 @@
   <Content Sanitized="true" DataType="markdown">
     <Data><![CDATA[## Applies To ##
 
-Java web-based applications using JPA.
+* Java
+* JPA
 
 
 ## Summary ##
 
-Executing Named Queries using JPA.
-
-
-## Objectives ##
-
-Use JPA named queries to perform database operations safely.
-
-
-## Scenarios ##
-
-JPA named queries provide a data access and manipulation mechanism that closely ties the query content to the Java code defining the objects that the query is executing against. It also removes the actual query language from Java code, which is a common tactic and creates certain maintainability issues. A security related advantage to named queries is that dynamic data must be bound, which prevents SQL injection attacks. The code below shows how to both define and use named queries in JPA.
+Use JPA named queries to perform database operations safely. JPA named queries provide a data access and manipulation mechanism that closely ties the query content to the Java code defining the objects that the query is executing against. It also removes the actual query language from Java code, which is a common tactic and creates certain maintainability issues. A security related advantage to named queries is that dynamic data must be bound, which prevents SQL injection attacks. The code below shows how to both define and use named queries in JPA.
 
 
 ## Solution Example ##
 
 To use named queries with Java Persistence API:
 
-Define the entity class and named queries. Define your entity class and use the @NamedQuery (or @NamedQueries with multiple @NamedQuery's) annotation to define each named query. The examples below are straightforward.
+1. **Define the entity class and named queries.** Define your entity class and use the @NamedQuery (or @NamedQueries with multiple @NamedQuery's) annotation to define each named query. 
 
-    @Entity
-    @NamedQuery(
-        name="Product.findAllProductsByProductName",queryString="SELECT pro FROM Product pro WHERE pro.name = :productName"
-    )
+	~~~~
+	@Entity
+	@NamedQuery(
+		name="Product.findAllProductsByProductName",queryString="SELECT pro FROM Product pro WHERE pro.name = :productName"
+	)
 
-    public class Product {
-    ...
-    }
+	public class Product {
+	...
+	}
 
-    @Entity
-    @NamedQueries({
-    @NamedQuery(name="Product.findAllProducts", queryString="SELECT pro FROM Product pro"),
-    @NamedQuery(name="Product.findAllProductsByProductId", queryString="SELECT pro FROM Product pro WHERE pro.id = :productId"),
-    @NamedQuery(name="Product.findAllProductsByProductName", queryString="SELECT pro FROM Product pro WHERE pro.name = :productName"),
-    @NamedQuery(name="Product.findAllProductsByProductPrice", queryString="SELECT pro FROM Product pro WHERE pro.price between :minPrice and :maxPrice")
-    })
+	@Entity
+	@NamedQueries({
+	@NamedQuery(name="Product.findAllProducts", queryString="SELECT pro FROM Product pro"),
+	@NamedQuery(name="Product.findAllProductsByProductId", queryString="SELECT pro FROM Product pro WHERE pro.id = :productId"),
+	@NamedQuery(name="Product.findAllProductsByProductName", queryString="SELECT pro FROM Product pro WHERE pro.name = :productName"),
+	@NamedQuery(name="Product.findAllProductsByProductPrice", queryString="SELECT pro FROM Product pro WHERE pro.price between :minPrice and :maxPrice")
+	})
 
-    public class Product {
-    ...
-    }
+	public class Product {
+	...
+	}
+	~~~~
 
-Use the defined named queries in code. If there is a need for dynamic data, use the parameter binding mechanism included in the query implementation.
+2. **Use the defined named queries in code.** If there is a need for dynamic data, use the parameter binding mechanism included in the query implementation.
 
+	Untyped results example:
 
-### Untyped results example ###
+	~~~~
+	//get dynamic data
+	//request parameters should be validated before use - this is a simple example
+	String productName = request.getParameter("product_name");
+	//use entity manager to retrieve named query
+	Query queryProductsByName = em.createNamedQuery("Product.findAllProductsByProductName");
+	//set dynamic data for query
+	queryProductsByName.setParameter("productName", productName);
+	//execute query and get results
+	Collection products = queryProductsByName.getResultList();
+	~~~~
 
-    //get dynamic data
-    //request parameters should be validated before use - this is a simple example
-    String productName = request.getParameter("product_name");
-    //use entity manager to retrieve named query
-    Query queryProductsByName = em.createNamedQuery("Product.findAllProductsByProductName");
-    //set dynamic data for query
-    queryProductsByName.setParameter("productName", productName);
-    //execute query and get results
-    Collection products = queryProductsByName.getResultList();
+	Typed results example:
 
-
-### Typed results example ###
-
-    //get dynamic data
-    //request parameters should be validated before use - this is a simple example
-    String productName = request.getParameter("product_name");
-    //use entity manager to retrieve named query
-    TypedQuery<Product> queryProductsByName = em.createNamedQuery("Product.findAllProductsByProductName", Product.class);
-    //set dynamic data for query
-    queryProductsByName.setParameter("productName", productName);
-    //execute query and get results
-    List<Product> products = queryProductsByName.getResultList();
-
-
-### Example without using dynamic data ###
-
-    //use entity manager to retrieve named query
-    TypedQuery<Product> queryProducts = em.createNamedQuery("Product.findAllProducts", Product.class);
-    //execute query and get results
-    List<Product> products = queryProducts.getResultList();
-
-The examples above show how to use named queries within JPA to create an environment where the queries are defined closely with the data they are operating against and that are safely used by requiring bound parameters for dynamic data. The use of other types of queries works in an identical manner, such as delete, update, insert, etc.
+	~~~~
+	//get dynamic data
+	//request parameters should be validated before use - this is a simple example
+	String productName = request.getParameter("product_name");
+	//use entity manager to retrieve named query
+	TypedQuery<Product> queryProductsByName = em.createNamedQuery("Product.findAllProductsByProductName", Product.class);
+	//set dynamic data for query
+	queryProductsByName.setParameter("productName", productName);
+	//execute query and get results
+	List<Product> products = queryProductsByName.getResultList();
+	Example without using dynamic data
+	//use entity manager to retrieve named query
+	TypedQuery<Product> queryProducts = em.createNamedQuery("Product.findAllProducts", Product.class);
+	//execute query and get results
+	List<Product> products = queryProducts.getResultList();
+	~~~~
 
 
 ## Guideline ##
