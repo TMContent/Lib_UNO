@@ -4,7 +4,7 @@
     <Id>f7806f64-b1c7-4990-a9e5-f6d814bae7f1</Id>
     <Id_History>f7806f64-b1c7-4990-a9e5-f6d814bae7f1,7407a6a1-eacb-43b1-a390-e70c2b0e232f,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Encode Untrusted Data in Output with ESAPI</Title>
+    <Title>Java Encode Untrusted Data in Output with ESAPI</Title>
     <Category>Encoding</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,41 +17,52 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Java web-based applications.</li>
-  </ul>
-  <h1>Summary</h1>
-  <span>
-    <p>Use the ESAPI library to encode or decode data for usage in a given context. </p>
-  </span>
-  <h1>Objectives</h1>
-  <span>
-    <p>The ESAPI library provides an Encoder control that prepares data to be used in a given output context. Depending on the output context, this can prevent XSS or other types of injection (xml, xpath, OS, etc.).</p>
-  </span>
-  <h1>Scenarios</h1>
-  <span>
-    <p>Applications constantly send data to an output location, such as a database, flat file, web page, etc. Whenever this occurs, care must be taken to ensure special characters that are specific to the output context are either filtered or escaped to ensure proper functioning. The ESAPI library provides the Encoder control to manipulate data to be output into a given context. Various examples are given below of using the Encoder to safely escape data for various output contexts.</p>
-  </span>
-  <h1>Solution Example</h1>
-  <span>
-    <p>Sending data to a webpage in the HTML context:</p>
-    <pre>&lt;div&gt;&lt;&amp;#37;= ESAPI.encoder().encodeForHTML(myString) &amp;#37;&gt;&lt;/div&gt;</pre>
-    <p>Sending data to a webpage in the HTML attribute context:</p>
-    <pre>&lt;input type="text" value="&lt;&amp;#37;= ESAPI.encoder().encodeForHTMLAttribute(myString) &amp;#37;&gt;" /&gt;</pre>
-    <p>Sending data to a webpage in the JavaScript context:</p>
-    <pre>var myVar = '&lt;&amp;#37;= ESAPI.encoder().encodeForJavaScript(myString) &amp;#37;&gt;';</pre>
-    <p>Sending data to a webpage in the URL context (Note: This is only for url parameter values, NOT the entire url):</p>
-    <pre>&lt;a href="/myapp/mypage.jsp?a=123&amp;b=&lt;&amp;#37;= ESAPI.encoder().encodeForURL(myString) &amp;#37;&gt;" /&gt;"&gt;Click me&lt;/a&gt;</pre>
-    <p>Encode data in the Base64 format:</p>
-    <pre>String base64Data = ESAPI.encoder().encodeForBase64(myStr);</pre>
-  </span>
-  <h1>Guideline</h1>
-  <ul>
-    <li>
-      <a href="9b0ef1a5-c143-4e64-81cc-9e02ccbd9fbd">Encode Untrusted Data in Output</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java
+
+
+## Summary ##
+
+Use the ESAPI library to encode or decode data for usage in a given context. The ESAPI library provides an Encoder control that prepares data to be used in a given output context. Depending on the output context, this can prevent XSS or other types of injection (xml, xpath, OS, etc.).
+
+
+## Solution Example ##
+
+Sending data to a webpage in the HTML context:
+
+~~~~
+<div><%= ESAPI.encoder().encodeForHTML(myString) %></div>
+~~~~
+
+Sending data to a webpage in the HTML attribute context:
+
+~~~~
+<input type="text" value="<%= ESAPI.encoder().encodeForHTMLAttribute(myString) %>" />
+~~~~
+
+Sending data to a webpage in the JavaScript context:
+
+~~~~
+var myVar = '<%= ESAPI.encoder().encodeForJavaScript(myString) %>';
+~~~~
+
+Sending data to a webpage in the URL context (Note: This is only for url parameter values, NOT the entire url):
+
+~~~~
+<a href="/myapp/mypage.jsp?a=123&b=<%= ESAPI.encoder().encodeForURL(myString) %>" />">Click me</a>
+~~~~
+
+Encode data in the Base64 format:
+
+~~~~
+String base64Data = ESAPI.encoder().encodeForBase64(myStr);
+~~~~
+
+
+## Guideline ##
+
+* [Encode Untrusted Data in Output](9b0ef1a5-c143-4e64-81cc-9e02ccbd9fbd)]]></Data>
   </Content>
 </TeamMentor_Article>
