@@ -18,23 +18,40 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Ensure that exceptions are logged to the server to allow further analysis and debugging.</p>
-  <h1>Why</h1>
-  <p>Malicious attacks may result in application exceptions. Exceptions contain critical information on problems which occur in production systems.&amp;nbsp;Logging them will help track down problems faster. </p>
-  <h1>How to Check</h1>
-  <p>Ensure that&amp;nbsp;your application uses structured exception handling and employs a global error handler. Ensure that in all exception handlers and the global error handler, code exists to log exception details to the server.&amp;nbsp;Code will be similar to this:</p>
-  <pre>    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />     // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " + ex.Message +<br />       "\nSOURCE: " + ex.Source,<br />       EventLogEntryType.Error);</pre>
-  <h1>How to Fix</h1>
-  <p>You should log all exceptions in the event log to record them for tracking and later analysis.&amp;nbsp;Event logging should occur in <strong>Try</strong>/<strong>Catch</strong>/<strong>Finally</strong> blocks in code as well as in the global error handler. Use code similar to the following:</p>
-  <pre>&lt;%@ Application Language="C#" %&gt;<br /> &lt;%@ Import Namespace="System.Diagnostics" %&gt;<br />  &lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> {<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />     // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " + ex.Message +<br />       "\nSOURCE: " + ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here...<br /> }<br />   &lt;/script&gt;</pre>
-  <h1>Problem Example</h1>
-  <p>An ASP.NET application is under attack by a malicious user. One side effect of the attack is a set of application exceptions when connecting to and retrieving data from the database.&amp;nbsp;Unfortunately the application doesn't log exception details to the server, so this debugging and auditing information is lost forever.</p>
-  <h1>Solution Example</h1>
-  <p>An ASP.NET application is under attack by a malicious user. One side effect of the attack is a set of application exceptions when connecting to and retrieving data from the database.&amp;nbsp;Fortunately the application logs exception details to the server, so this debugging and auditing information is discovered by the site admin and delivered to the development team for further analysis.</p>
-  <pre>&lt;%@ Application Language="C#" %&gt;<br /> &lt;%@ Import Namespace="System.Diagnostics" %&gt;<br />  &lt;script language="C#" runat="server"&gt;<br /> void Application_Error(object sender, EventArgs e)<br /> {<br />    //get reference to the source of the exception chain<br />    Exception ex = Server.GetLastError().GetBaseException();<br />     // log the details of the exception and page state to the<br />    // event log.<br />    EventLog.WriteEntry("My Web Application",<br />      "MESSAGE: " + ex.Message +<br />       "\nSOURCE: " + ex.Source,<br />       EventLogEntryType.Error);<br />     // Optional e-mail or other notification here...<br /> }<br />   &lt;/script&gt;</pre>
-  <br />
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+    <Data><![CDATA[## Applies To ##
+
+* ASP.NET
+
+
+## Problem Example ##
+
+An ASP.NET application is under attack by a malicious user. One side effect of the attack is a set of application exceptions when connecting to and retrieving data from the database. Unfortunately the application doesn't log exception details to the server, so this debugging and auditing information is lost forever.
+
+
+## Solution Example ##
+
+An ASP.NET application is under attack by a malicious user. One side effect of the attack is a set of application exceptions when connecting to and retrieving data from the database. Fortunately the application logs exception details to the server, so this debugging and auditing information is discovered by the site admin and delivered to the development team for further analysis.
+
+~~~~
+<%@ Application Language="C#" %>
+ <%@ Import Namespace="System.Diagnostics" %>
+  <script language="C#" runat="server">
+ void Application_Error(object sender, EventArgs e)
+ {
+    //get reference to the source of the exception chain
+    Exception ex = Server.GetLastError().GetBaseException();
+     // log the details of the exception and page state to the
+    // event log.
+    EventLog.WriteEntry("My Web Application",
+      "MESSAGE: " + ex.Message +
+       "\nSOURCE: " + ex.Source,
+       EventLogEntryType.Error);
+     // Optional e-mail or other notification here...
+ }
+   </script>
+~~~~
+   
+---
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>
