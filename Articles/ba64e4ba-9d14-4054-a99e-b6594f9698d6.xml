@@ -15,110 +15,35 @@
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+<br /></p>
-  <h1>What to Do</h1>
-  <p>Validate user credentials before processing them.</p>
-  <h1>Why</h1>
-  <p>Failure to validate user credentials could cause improper authentication. This can allow an attacker to authenticate as another user without the need to steal credentials.</p>
-  <h1>When</h1>
-  <p>If your application accepts and processes user credentials, then validate the credentials before processing them.</p>
-  <h1>How</h1>
-  <p />
-  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">Use the following steps when validating user credentials:</p>
-  <ol style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
-    <li style="margin: 0px; padding: 0px;">
-      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
-        <strong style="margin: 0px; padding: 0px;">Establish username requirements.&amp;nbsp;</strong>Determine what is the acceptable character set and length that should be allowed within a username. For instance, require that usernames should be at least&amp;nbsp;six characters long and must contain alpha-numeric characters only.</p>
-    </li>
-    <li style="margin: 0px; padding: 0px;">
-      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
-        <strong style="margin: 0px; padding: 0px;">Use whitelist validation.&amp;nbsp;</strong>Whitelisting involves the establishment of what is good input for your application. Once good input is defined, compare all input against the established good input. If the input does not resemble good input, your application should discard it. This technique can be implemented using regular expressions. Example:
-      </p>
-      <pre class="prettyprint">
-        <span class="pln">val pid </span>
-        <span class="pun">=</span>
-        <span class="pln">
-        </span>
-        <span class="typ">UserForm</span>
-        <span class="pun">.</span>
-        <span class="pln">empid<br />val uname </span>
-        <span class="pun">=</span>
-        <span class="pln">
-        </span>
-        <span class="typ">UserForm</span>
-        <span class="pun">.</span>
-        <span class="pln">username<br />val name </span>
-        <span class="pun">=</span>
-        <span class="pln">
-        </span>
-        <span class="typ">Name</span>
-        <span class="pun">.</span>
-        <span class="pln">findname</span>
-        <span class="pun">(</span>
-        <span class="pln">pid</span>
-        <span class="pun">,</span>
-        <span class="pln"> uname</span>
-        <span class="pun">)</span>
-        <span class="pln">
-          <br />val whitelistPattern </span>
-        <span class="pun">=</span>
-        <span class="pln">
-        </span>
-        <span class="str">"(\\w|\\d)+"</span>
-        <span class="pun">.</span>
-        <span class="pln">r<br />val issafe </span>
-        <span class="pun">=</span>
-        <span class="pln">whitelistPattern</span>
-        <span class="pun">.</span>
-        <span class="pln">pattern</span>
-        <span class="pun">.</span>
-        <span class="pln">matcher</span>
-        <span class="pun">(</span>
-        <span class="pln">uname</span>
-        <span class="pun">).</span>
-        <span class="pln">matches<br /></span>
-        <span class="kwd">if</span>
-        <span class="pln">
-        </span>
-        <span class="pun">(</span>
-        <span class="pln">issafe</span>
-        <span class="pun">){</span>
-        <span class="pln">
-          <br />
-        </span>
-        <span class="pun">......</span>
-        <span class="pln">
-        </span>
-        <span class="com">//Code for Action</span>
-        <span class="pln">
-          <br />
-        </span>
-        <span class="pun">}</span>
-        <span class="kwd">else</span>
-        <span class="pun">{</span>
-        <span class="pln">
-          <br />
-        </span>
-        <span class="pun">......</span>
-        <span class="pln">
-        </span>
-        <span class="com">//Code for Exception</span>
-        <span class="pln">
-          <br />
-        </span>
-        <span class="pun">}</span>
-      </pre>
-    </li>
-  </ol>
-  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-  </h1>
-  <h1 style="margin: 0px; padding: 10px 0px 0px; font-size: 17px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255);">Additional Resources</h1>
-  <ul style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
-    <li style="margin: 0px; padding: 0px;">A tutorial on regular expressions is available at&amp;nbsp;<a href="http://www.regular-expressions.info/" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153); font-weight: bold;">Regular-Expressions.info</a>.</li>
-    <li style="margin: 0px; padding: 0px;">For more information on using regular expression in Scala, see: Documentation for&amp;nbsp;<a href="http://www.scala-lang.org/api/current/index.html#scala.util.matching.Regex" target="_blank" style="margin: 0px; padding: 0px; color: rgb(51, 51, 153); font-weight: bold;">Regex Pattern</a>&amp;nbsp;in Scala documentation.</li>
-  </ul>
-  <p />]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+
+## Summary ## 
+
+Validate user credentials before processing them. Failure to validate user credentials could cause improper authentication. This can allow an attacker to authenticate as another user without the need to steal credentials.
+
+
+## Solution Example ##
+
+~~~~
+val pid = UserForm.empid
+val uname = UserForm.username
+val name = Name.findname(pid,uname)
+
+val whitelistPattern = "(\\w|\\d)+"
+val issafe = whitelistPattern.pattern.matcher(uname).matches
+if(issafe){
+...
+//Code for Action
+}
+else
+{
+...
+//Code for Exception
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
