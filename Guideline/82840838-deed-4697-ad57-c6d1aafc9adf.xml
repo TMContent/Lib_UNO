@@ -4,7 +4,7 @@
     <Id>82840838-deed-4697-ad57-c6d1aafc9adf</Id>
     <Id_History>82840838-deed-4697-ad57-c6d1aafc9adf,74a71e9e-96b2-4ccf-96a1-dcbf28dfedf6,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Set the CustomErrors Mode to On to Prevent Detailed Error Messages</Title>
+    <Title>.NET Prevent Detailed Error Messages</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
@@ -17,29 +17,34 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>What to Do</h1>
-  <p>Set the <b>customErrors</b> mode attribute to <strong>On</strong> to prevent detailed error messages from reaching the caller. </p>
-  <h1>Why</h1>
-  <p>Detailed error messages provide an attacker with valuable system&amp;nbsp;configuration information, making the system far easier to compromise.&amp;nbsp; Furthermore, some detailed error messages may contain sensitive user information.&amp;nbsp; Depending on how your application handles errors, leaving detailed error messages on could directly result in the disclosure of sensitive customer data. </p>
-  <h1>When</h1>
-  <p>All applications should set <b>customErrors</b> to <strong>On</strong> for normal operations.&amp;nbsp; <b>RemoteOnly</b> is an acceptable choice for situations when local debugging is required in an emergency, but is not the preferred setting.</p>
-  <h1>How</h1>
-  <p>Use the following steps to prevent detailed error messages:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Set CustomErrors. </strong>Prevent detailed error messages from being displayed by setting the <b>mode</b> attribute of the <b>&lt;customErrors&gt;</b> element to <strong>On. </strong>This will ensure that&amp;nbsp;callers receive only filtered exception information.&amp;nbsp; Do not use <b>mode="Off"</b> because this allows detailed error pages intended for application developers that contain system-level information to be returned to the client. </p>
-      <li>
-        <p>
-          <strong>Choose a default error page.</strong> Use the <b>&lt;customErrors&gt;</b> section of the Web.config file as shown in the following code example to specify a default error page to display, along with other required error pages for specific HTTP response codes that indicate errors. </p>
-        <p>The following example shows <b>&lt;customErrors&gt;</b> set correctly, with custom error pages specified:</p>
-        <pre>&lt;customErrors mode="On" defaultRedirect="ErrDefault.aspx"&gt;    <br />&amp;#9;&lt;error statusCode="401" redirect="ErrUnauthorized.aspx" /&gt;    <br />&amp;#9;&lt;error statusCode="404" redirect="ErrPageNotFound.aspx" /&gt;   <br />&amp;#9;&lt;error statusCode="500" redirect="ErrServer.htm" /&gt;<br />&lt;/customErrors&gt;</pre>
-        <p>The <b>defaultRedirect</b> attribute allows you to use a custom error page for your application, which, for example, might include support contact details.&amp;nbsp; Use these application-wide error pages to provide user-friendly responses for errors that are not caught in a structured event handling. </p>
-      </li>
-    </li>
-  </ol>
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* ASP.NET
+
+
+## Summary ##
+
+Set the customErrors mode attribute to On to prevent detailed error messages from reaching the caller. Detailed error messages provide an attacker with valuable system configuration information, making the system far easier to compromise.  Furthermore, some detailed error messages may contain sensitive user information.  Depending on how your application handles errors, leaving detailed error messages on could directly result in the disclosure of sensitive customer data.
+
+
+## Solution Example ##
+
+The following example shows <customErrors> set correctly, with custom error pages specified:
+
+~~~~
+<customErrors mode="On" defaultRedirect="ErrDefault.aspx">    
+        <error statusCode="401" redirect="ErrUnauthorized.aspx" />    
+        <error statusCode="404" redirect="ErrPageNotFound.aspx" />   
+        <error statusCode="500" redirect="ErrServer.htm" />
+</customErrors>
+~~~~
+
+The defaultRedirect attribute allows you to use a custom error page for your application, which, for example, might include support contact details.  Use these application-wide error pages to provide user-friendly responses for errors that are not caught in a structured event handling.
+
+---
+Adapted from Microsoft patterns & practices guidance.
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
