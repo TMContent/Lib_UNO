@@ -4,7 +4,7 @@
     <Id>6d74a22d-31d2-4584-9d93-85687ea4a637</Id>
     <Id_History>6d74a22d-31d2-4584-9d93-85687ea4a637,174834f9-652b-47c9-bf9f-a4807143d955,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Enforce Strong Passwords</Title>
+    <Title>Scala Enforce Strong Passwords</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
     <Technology>Scala Play</Technology>
@@ -15,43 +15,88 @@
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+</p>
-  <h1>What to Do</h1>
-  <p>Enforce the use of&amp;nbsp;strong passwords.</p>
-  <h1>Why</h1>
-  <p>Enforcing strong passwords minimizes the risk of a&amp;nbsp;Credentials Dictionary Attack&amp;nbsp;or guessing another user's password.</p>
-  <h1>When</h1>
-  <p>If your application handles passwords, always enforce the use of strong passwords.</p>
-  <h1>How</h1>
-  <p>What constitutes a strong password varies from organization to organization. However, there are minimum requirements for length and input character sets. Minimum requirements for a strong password are:</p>
-  <ul>
-    <li>The password must be at least 10 characters long.</li>
-    <li>It must contain letters, numbers, and special characters.</li>
-  </ul>
-  <p>The following steps are required for enforcing strong passwords:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Define password requirements.&amp;nbsp;</strong>Pick the schema that all passwords must follow. Check them for length and certain patterns. All passwords should be long (e.g. 10+ characters in length) and include a large input set (e.g. alpha-numeric and special character values).</p>
-    </li>
-    <li>
-      <strong>Enforce password requirements. </strong>Enforce password requirements while creating and modifying accounts.</li>
-    <li>
-      <p>
-        <strong>Enforce password lifetime.&amp;nbsp;</strong>Determine a lifetime of a password. Force the users to update their passwords on a given interval. Verify that the new password is different from the old password by comparing the produced hashes. Additionally users might be asked to not use previously used passwords.&amp;nbsp;</p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code creates a new user to the application. It stores the username and password into the credential repository. Unfortunately, the password is not being verified against a password policy.</p>
-  <pre>  def addUser(username:String,pass:String ) = Action{ implicit request =&gt;</pre>
-  <pre>    // Check if user exists in the user database<pre>      // The application fails to check that the<br />      // given password meets the password policy<br />      // Add user to the application's user database</pre>
-  }</pre>
-  <h1>Solution Example</h1>
-  <p>The following code adds a new user to the application. Before it stores the user's credentials into the repository, it verifies that the password meets the application's password requirements.</p>
-  <pre>
-    <pre>  def addUser(username:String,pass:String ) = Action{ implicit request =&gt;      </pre>      // Check if user exists in the user database<br />      // The application verifies that the given<br />      // password meets the password requirements<br />      if (!goodPassword(pass))<br />      {<br />            String errMsg = "User's password does not meet"<br />                           + " the password requirements";<br />            Ok(html.message.main(errMsg))<br />      }<br /><br />      // Add user to the application's user database<br />      ...<br />}<br /><br /><br /><pre>  def goodPassword(pass:String ) = Action{ implicit request =&gt;  </pre>{<br />      boolean alpha = false;<br />      boolean num = false;<br />      boolean sp = false;<br /><br />      if (pass.length <br />      {<br />            return false;<br />      }<br /><br />      for (int i = 0; i <br />      {<br />            if (!alpha &amp;&amp; Character.isLetter(pass[i]))<br />            {<br />                  alpha = true;<br />            }<br /><br />            if (!num &amp;&amp; Character.isDigit(pass[i]))<br />            {<br />                  num = true;<br />            }<br /><br />            if (!sp &amp;&amp; (pass[i] == '!' ||<br />                  pass[i] == '@' || pass[i] == '#' ||<br />                  pass[i] == '$' || pass[i] == '%' ||<br />                  pass[i] == '^'))<br />            {<br />                  sp = true;<br />            }<br />      }<br /><br />      return (alpha &amp; num) &amp; sp;<br />}</pre>
-  <br />]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+
+## Summary ##
+
+Enforce the use of strong passwords. Enforcing strong passwords minimizes the risk of a Credentials Dictionary Attack or guessing another user's password.
+
+
+## Problem Example ##
+
+The following code creates a new user to the application. It stores the username and password into the credential repository. Unfortunately, the password is not being verified against a password policy.
+
+~~~~
+  def addUser(username:String,pass:String ) = Action{ implicit request =>
+    // Check if user exists in the user database
+      // The application fails to check that the
+      // given password meets the password policy
+      // Add user to the application's user database
+
+  }
+~~~~
+
+
+## Solution Example ##
+
+The following code adds a new user to the application. Before it stores the user's credentials into the repository, it verifies that the password meets the application's password requirements.
+
+~~~~    
+  def addUser(username:String,pass:String ) = Action{ implicit request =>      
+      // Check if user exists in the user database
+      // The application verifies that the given
+      // password meets the password requirements
+      if (!goodPassword(pass))
+      {
+            String errMsg = "User's password does not meet"
+                           + " the password requirements";
+            Ok(html.message.main(errMsg))
+      }
+
+      // Add user to the application's user database
+      ...
+}
+
+
+  def goodPassword(pass:String ) = Action{ implicit request =>  
+{
+      boolean alpha = false;
+      boolean num = false;
+      boolean sp = false;
+
+      if (pass.length 
+      {
+            return false;
+      }
+
+      for (int i = 0; i 
+      {
+            if (!alpha && Character.isLetter(pass[i]))
+            {
+                  alpha = true;
+            }
+
+            if (!num && Character.isDigit(pass[i]))
+            {
+                  num = true;
+            }
+
+            if (!sp && (pass[i] == '!' ||
+                  pass[i] == '@' || pass[i] == '#' ||
+                  pass[i] == '$' || pass[i] == '%' ||
+                  pass[i] == '^'))
+            {
+                  sp = true;
+            }
+      }
+
+      return (alpha & num) & sp;
+}
+
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
