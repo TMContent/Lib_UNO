@@ -20,7 +20,7 @@
   <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
-    <li>C&amp;#43;&amp;#43;</li>
+    <li>C&#43;&#43;</li>
   </ul>
   <h1>What to Do</h1>
   <p>Write code in such a way that provides a guarantee that allocated memory is freed only once.</p>
@@ -29,19 +29,19 @@
   <h1>How</h1>
   <p>Write code in a way that guarantees that dynamically allocated memory is freed only once. Avoid freeing memory from loops, conditional statements, or error handling code. In the event that it is necessary to delete objects in such circumstances, pay particular care to write code in such a way that objects are not deleted multiple times. Rewrite code if there is no guarantee that deallocation is performed only once.</p>
   <h1>Problem Example</h1>
-  <pre>float &amp;#42;array = new float &amp;#91;5&amp;#93;;</pre>
+  <pre>float &#42;array = new float &#91;5&#93;;</pre>
   <pre>int errorcode = somefunction(array);</pre>
-  <pre>if(errorcode &lt; 1)<br />&amp;#123;<br />  //handle error<br />  delete&amp;#91;&amp;#93; array;<br />&amp;#125;</pre>
-  <pre>delete&amp;#91;&amp;#93; array;</pre>
+  <pre>if(errorcode &lt; 1)<br />&#123;<br />  //handle error<br />  delete&#91;&#93; array;<br />&#125;</pre>
+  <pre>delete&#91;&#93; array;</pre>
   <p>There are two mistakes in this code:</p>
   <ul>
     <li>The pointer is not set to null after deallocation.<li>Dynamically allocated memory may be deallocated twice if the error code returned by somefunction is less than 1.<br /></li></li>
   </ul>
   <h1>Solution Example</h1>
-  <pre>float &amp;#42;array = new float &amp;#91;5&amp;#93;;</pre>
+  <pre>float &#42;array = new float &#91;5&#93;;</pre>
   <pre>int errorcode = somefunction(array);</pre>
-  <pre>if(errorcode &lt;1)<br />&amp;#123;<br />  //handle error<br />&amp;#125;</pre>
-  <pre>delete&amp;#91;&amp;#93; array;<br />array = NULL;</pre>
+  <pre>if(errorcode &lt;1)<br />&#123;<br />  //handle error<br />&#125;</pre>
+  <pre>delete&#91;&#93; array;<br />array = NULL;</pre>
   <p>Dynamically allocated memory is only deallocated once, because the delete operator has been removed from error handling code. The pointer is set to null to prevent dangling pointer vulnerabilities.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

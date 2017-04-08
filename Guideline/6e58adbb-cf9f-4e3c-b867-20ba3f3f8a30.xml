@@ -23,23 +23,23 @@
     <li>ASP.NET 4.0</li>
   </ul>
   <h1>What to Do</h1>
-  <p>Use&amp;nbsp;Windows authentication when connecting to SQL Server&amp;nbsp;to gain security advantages over other authentication&amp;nbsp;methods such as mirrored local accounts&amp;nbsp;or impersonation/delegation. </p>
+  <p>Use&nbsp;Windows authentication when connecting to SQL Server&nbsp;to gain security advantages over other authentication&nbsp;methods such as mirrored local accounts&nbsp;or impersonation/delegation. </p>
   <h1>Why</h1>
-  <p>You do not need to embed user names and passwords in the database connection string when using Windows Authentication.&amp;nbsp;With Windows Authentication, you also&amp;nbsp;benefit from centralized account management. </p>
+  <p>You do not need to embed user names and passwords in the database connection string when using Windows Authentication.&nbsp;With Windows Authentication, you also&nbsp;benefit from centralized account management. </p>
   <h1>When</h1>
-  <p>Use Windows authentication whenever possible.&amp;nbsp; However, you might not be able to use Windows authentication if your database client and database server are separated by a firewall which prevents Kerberos or NTLM authentication, or your application server and database server are in separate domains with no trust. In these situations, you can use either mirrored local accounts or Impersonation/Delegation. Mirrored local accounts&amp;nbsp;are a better choice under most circumstances.&amp;nbsp;</p>
+  <p>Use Windows authentication whenever possible.&nbsp; However, you might not be able to use Windows authentication if your database client and database server are separated by a firewall which prevents Kerberos or NTLM authentication, or your application server and database server are in separate domains with no trust. In these situations, you can use either mirrored local accounts or Impersonation/Delegation. Mirrored local accounts&nbsp;are a better choice under most circumstances.&nbsp;</p>
   <h1>How</h1>
   <p>To connect to SQL Server using Windows authentication, perform the following steps:</p>
   <ol>
     <li>
       <p>
         <strong>Configure a connection string.</strong> For ASP.NET applications, you should store connection strings in the &lt;<em>connectionStrings</em>&gt; section of your application's <em>Web.config</em> file. The connection string used with Windows authentication must include either the <strong>Trusted_Connection=Yes</strong> attribute, or the equivalent attribute <em>Integrated Security=SSPI</em>:</p>
-      <pre>&amp;nbsp;&lt;connectionStrings&gt;<br />&amp;nbsp; &lt;add name="MyLocalSQLServer" <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; connectionString="Initial Catalog=pubs;User Id=sa;Password=asdasd;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; data source=localhost;Integrated Security=SSPI;"<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
+      <pre>&nbsp;&lt;connectionStrings&gt;<br />&nbsp; &lt;add name="MyLocalSQLServer" <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; connectionString="Initial Catalog=pubs;User Id=sa;Password=asdasd;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data source=localhost;Integrated Security=SSPI;"<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; providerName="System.Data.SqlClient"/&gt;<br />&lt;/connectionStrings&gt;</pre>
     </li>
     <li>
       <p>
         <strong>Encrypt the connection string.</strong> Even though database connection strings for Windows authentication do not contain usernames and passwords, you should still encrypt them in <em>Web.config</em> to reduce the possibility of disclosing server names and database names. </p>
-      <p>To encrypt the <em>connectionStrings</em> section&amp;nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
+      <p>To encrypt the <em>connectionStrings</em> section&nbsp;with the Machine Store, run the following command from a .NET command prompt:</p>
       <pre>aspnet_regiis -pe "connectionStrings" -app "/MachineDPAPI" -prov "DataProtectionConfigurationProvider" </pre>
     </li>
     <li>
@@ -48,7 +48,7 @@
     </li>
     <li>
       <p>
-        <strong>Test security access.</strong> Test database access that appropriate database permissions are available. Just as important, test that permissions unnecessary to the application's operations are denied.&amp;nbsp;</p>
+        <strong>Test security access.</strong> Test database access that appropriate database permissions are available. Just as important, test that permissions unnecessary to the application's operations are denied.&nbsp;</p>
     </li>
   </ol>
   <hr />
