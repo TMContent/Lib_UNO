@@ -17,66 +17,47 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>What to Check For</h1>
-  <p>Ensure the application always proves its credential to its users.</p>
-  <h1>Why</h1>
-  <p>Verifying the application's authenticity to the user makes it harder for phishers to trick users into disclosing sensitive information. A phishing attack is when an attacker makes a fake web site that looks like one that the user expects and then sending the user to that web site. If the web site displays unique elements to each user, the web site becomes harder to fake.</p>
-  <h1>How to Check</h1>
-  <p>Use the following steps to ensure the application is capable of proving its authenticity to its users:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Check if your application uses TLS to identify itself to the user. </strong>Verify that when your application's users are performing transactions of a sensitive nature, your application uses TLS&nbsp;with the following&nbsp;considerations in place: </p>
-      <ul>
-        <li>
-          <p>
-            <strong>Certificate Validity</strong>: Your application's TLS certificate has not reached its expiration date.</p>
-        </li>
-        <li>
-          <p>
-            <strong>Domain Name</strong>: The domain name for your application is the same as the domain name listed in the TLS certificate.</p>
-        </li>
-        <li>
-          <p>
-            <strong>Chain of Trust</strong>: Your application's users can verify your application's TLS certificate based on the root certificates that are stored in their browsers. If your application uses self-signed TLS certificates, ensure that your organization's root certificate is securely imported into the users' browsers.</p>
-        </li>
-        <li>
-          <p />
-          <strong>Server Configuration</strong>: Your application's environment has enabled HTTPS and transactions of a&nbsp;sensitive nature are transmitted only over HTTPS connections.
-        </li>
-      </ul>
-    </li>
-    <li>
-      <p>
-        <strong>Check if your application displays a shared secret with its users. </strong>Check if your application has a personal shared secret for each of its users. Shared secrets include, but are not limited to, combinations of any of the following:</p>
-      <ul>
-        <li>
-          <strong>Layout</strong>: a user-defined layout/color scheme. </li>
-        <li>
-          <strong>Picture</strong>: a user-defined image </li>
-        <li>
-          <strong>Word/Phrase</strong>: a user-defined word, phrase, or question</li>
-      </ul>
-      <p>Verify that the shared secret is displayed to the user after providing their ID and before providing their credentials.</p>
-    </li>
-  </ol>
-  <h1>How to Fix</h1>
-  <p>Use the following measures to authenticate your application to its users:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Use TLS. </strong>Due to the nature of the TLS certificates, TLS can be used to certify the remote host's name. Because of TLS's chain of trust and DNS limitations, spoofing a host that uses TLS is very difficult. </p>
-    </li>
-    <li>
-      <p>
-        <strong>Display personalized and identifiable content. </strong>Do not ask the user for credentials in one step. Instead,&nbsp;after the user&nbsp;enters a valid username, display personal and identifiable content to which the user can relate,&nbsp;for&nbsp;example:&nbsp;a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password. </p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>MyApp is a financial application with a public web interface. Because the application does not use TLS to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of identifying the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface, they may be fooled into providing their credentials to the attacker.</p>
-  <h1>Solution Example</h1>
-  <p>MyApp is a financial application with a public web interface. Because the application uses TLS to certify its identity in front of the user, the user's browser uses the TLS chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and&nbsp;the user will be warned that they are not accessing the real MyApp interface.</p>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## What to Check For ##
+
+Ensure the application always proves its credential to its users.
+
+
+## Why ##
+
+Verifying the application's authenticity to the user makes it harder for phishers to trick users into disclosing sensitive information. A phishing attack is when an attacker makes a fake web site that looks like one that the user expects and then sending the user to that web site. If the web site displays unique elements to each user, the web site becomes harder to fake.
+
+
+## How to Check ##
+
+Use the following steps to ensure the application is capable of proving its authenticity to its users:
+
+1. **Check if your application uses TLS to identify itself to the user.** Verify that when your application's users are performing transactions of a sensitive nature, your application uses TLS with the following considerations in place:
+	* Certificate Validity: Your application's TLS certificate has not reached its expiration date.
+	* Domain Name: The domain name for your application is the same as the domain name listed in the TLS certificate.
+	* Chain of Trust: Your application's users can verify your application's TLS certificate based on the root certificates that are stored in their browsers. If your application uses self-signed TLS certificates, ensure that your organization's root certificate is securely imported into the users' browsers.
+	* Server Configuration: Your application's environment has enabled HTTPS and transactions of a sensitive nature are transmitted only over HTTPS connections.
+2. **Check if your application displays a shared secret with its users.** Check if your application has a personal shared secret for each of its users. Verify that the shared secret is displayed to the user after providing their ID and before providing their credentials. Shared secrets include, but are not limited to, combinations of any of the following:
+	* Layout: a user-defined layout/color scheme.
+	* Picture: a user-defined image.
+	* Word/Phrase: a user-defined word, phrase, or question.
+
+
+## How to Fix ##
+
+Use the following measures to authenticate your application to its users:
+
+1. **Use TLS.** Due to the nature of the TLS certificates, TLS can be used to certify the remote host's name. Because of TLS's chain of trust and DNS limitations, spoofing a host that uses TLS is very difficult.
+2. **Display personalized and identifiable content.** Do not ask the user for credentials in one step. Instead, after the user enters a valid username, display personal and identifiable content to which the user can relate, for example: a personal user-supplied question, an image that has been pre-selected from a library, or a personalized color schema. After the user has authenticated the application, they may enter their password.
+
+
+## Problem Example ##
+
+MyApp is a financial application with a public web interface. Because the application does not use TLS to certify its identity in front of the user, an attacker can set up a fake site and pretend to be MyApp. Because the user's browser has no mechanism of identifying the real from the fake MyApp interface, it will not provide any warning signs to the user. Once a user accesses the fake MyApp interface, they may be fooled into providing their credentials to the attacker.
+
+
+## Solution Example ##
+
+MyApp is a financial application with a public web interface. Because the application uses TLS to certify its identity in front of the user, the user's browser uses the TLS chain of trust and MyApp's URL to verify MyApp's identity. If an attacker attempts to spoof the MyApp interface, the user's browser has a mechanism for detecting the fake site, and the user will be warned that they are not accessing the real MyApp interface.]]></Data>
   </Content>
 </TeamMentor_Article>
