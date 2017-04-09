@@ -17,39 +17,75 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Optimize your code in sauch a way&nbsp;that native code is executed as&nbsp;infrequently as possible.</p>
-  <h1>Why</h1>
-  <p>Executing native code forces the developer to implement extra security checks and may result in security bugs (such as buffer overflows), which would otherwise be mitigated by the Java Virtual Machine.</p>
-  <h1>When</h1>
-  <p>Always optimize your code so that native code is executed as&nbsp;infrequently as possible.</p>
-  <h1>How</h1>
-  <p>To minimize the number of times language boundaries are crossed:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Understand the functionality. </strong>Make sure there is a clear understanding of the required functionality. Label each component as low or high level:</p>
-      <ul>
-        <li>
-          <strong>Low level:</strong> Low-level components are closely tied to the hardware and operating system. Although low-level components are commonly written in native code, Java provides support for the most basic operations such as filesystem access, sockets, etc. <li><strong>High level:</strong> High-level components hold the business logic within an application. Their loose coupling with hardware and operating systems allows them to be implemented 100&#37; using Java. </li></li>
-      </ul>
-      <li>
-        <p>
-          <strong>Reduce calls into native code. </strong>Determine which functionalities should be executed in native code. Ensure that native code is called from as few locations in your application as possible. Segregate functionality that requires native code so that its use is isolated into a small number of components.</p>
-      </li>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following segment shows JNI code that utilizes a COM object. Because the code uses Java to verify the GUID's length, the application does unnecessary crossing of language boundaries by invoking Java functionality from native code, thereby disrupting the JVM's security optimization routines. </p>
-  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &#42; env, jobject jobj, jstring jguid)&#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries twice:<br />      // get the string and get the string's length<br />      char&#42; temp_guid = (&#42;env)-&gt;GetStringUTFChars(env, jguid, &iscopy);<br />      int guid_size = (int)(&#42;env)-&gt;GetStringLength(env, jguid);<br /><br />      ...<br /> &#125;</pre>
-  <h1>Solution Example</h1>
-  <p>The following segment shows JNI code that utilizes a COM object. Because the code uses C to verify the GUID's length, there is no extra crossing of language boundaries; therefore, the JVM's security optimization routines are not disrupted. </p>
-  <p />
-  <pre>JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject<br />      (JNIEnv &#42; env, jobject jobj, jstring jguid)&#123;<br /><br />      ...<br /><br /><br />      // The code crosses the language boundaries once:<br />      // get the string<br />      char&#42; temp_guid = (&#42;env)-&gt;GetStringUTFChars(env, jguid, &iscopy);<br />      int guid_size = (int)strlen(temp_guid);<br /><br />      ...<br /> &#125;</pre>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Applications written using Servlets or JSP.
+
+
+## What to Do ##
+
+Optimize your code in sauch a way that native code is executed as infrequently as possible.
+
+
+## Why ##
+
+Executing native code forces the developer to implement extra security checks and may result in security bugs (such as buffer overflows), which would otherwise be mitigated by the Java Virtual Machine.
+
+
+## When ##
+
+Always optimize your code so that native code is executed as infrequently as possible.
+
+
+## How ##
+
+To minimize the number of times language boundaries are crossed:
+
+1. **Understand the functionality.** Make sure there is a clear understanding of the required functionality. Label each component as low or high level:
+	* Low level: Low-level components are closely tied to the hardware and operating system. Although low-level components are commonly written in native code, Java provides support for the most basic operations such as filesystem access, sockets, etc.
+	* High level: High-level components hold the business logic within an application. Their loose coupling with hardware and operating systems allows them to be implemented 100% using Java.
+2. **Reduce calls into native code.** Determine which functionalities should be executed in native code. Ensure that native code is called from as few locations in your application as possible. Segregate functionality that requires native code so that its use is isolated into a small number of components.
+
+
+## Problem Example ##
+The following segment shows JNI code that utilizes a COM object. Because the code uses Java to verify the GUID's length, the application does unnecessary crossing of language boundaries by invoking Java functionality from native code, thereby disrupting the JVM's security optimization routines.
+
+~~~~
+JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject
+      (JNIEnv * env, jobject jobj, jstring jguid){
+
+      ...
+
+
+      // The code crosses the language boundaries twice:
+      // get the string and get the string's length
+      char* temp_guid = (*env)->GetStringUTFChars(env, jguid, &iscopy);
+      int guid_size = (int)(*env)->GetStringLength(env, jguid);
+
+      ...
+}
+~~~~
+
+
+## Solution Example ##
+
+The following segment shows JNI code that utilizes a COM object. Because the code uses C to verify the GUID's length, there is no extra crossing of language boundaries; therefore, the JVM's security optimization routines are not disrupted.
+
+~~~~
+JNIEXPORT jboolean JNICALL Java_Identifier_invokeObject
+      (JNIEnv * env, jobject jobj, jstring jguid){
+
+      ...
+
+
+      // The code crosses the language boundaries once:
+      // get the string
+      char* temp_guid = (*env)->GetStringUTFChars(env, jguid, &iscopy);
+      int guid_size = (int)strlen(temp_guid);
+
+      ...
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
