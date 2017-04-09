@@ -17,25 +17,33 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>PHP</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Escape HTML special characters in all user input that is displayed on web pages. </p>
-  <h1>Why</h1>
-  <p>It is important to properly encode all user-controlled data before it is outputted to a dynamically generated Web page. If data is not encoded then it will make its way to the browser in its original representation, which could be executable script code, causing the browser to interpret and run it. The most common case is of user-controlled input making its way into plain HTML; in this case it should be HTML-encoded before being inserted into the page.</p>
-  <h1>How</h1>
-  <p>To escape HTML characters in user input:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify all pages that display data entered by users.</strong> Enumerate all the pages in the application. Make a list of all the pages that display user input.</p>
-      <li>
-        <p />
-        <strong>Use <em>htmlentities()</em> whenever displaying data entered by users.</strong> Review each page that displays data entered by users. Verify that PHP code in each page uses <em>htmlentities()</em> to escape special characters in user input before displaying it to the user, like this:<pre> echo htmlentities(&#36;userinput);</pre><p>where <em>&#36;userinput</em> is a string that contains user input.</p><li><p><strong>Define your own, non-HTML special characters, if tags are required for user input.</strong> Many interactive web applications offer the users functionality to post links, images and other content that requires special tags to be rendered correctly. One solution is to define a custom syntax specific for your application to allow users to post rich content. One common solution is to use square brackets, such as &#91;&#93;, instead of the &lt;&gt; brackets used by HTML, and then translate the &#91;&#93; brackets into &lt;&gt; when rendering user input. This approach requires positive input validation to be safe.</p><li><p><strong>Write a parser for handling non-HTML special characters, if tags are required for user input.</strong> Use positive input validation to make sure that only allowed tags are rendered. For example, a user may be allowed to display bold text by using a &#91;b&#93; tag, instead of HTML &lt;b&gt;. The parser should then be allowed to only translate the square brackets into &lt;&gt; if the only thing inside the brackets is "b". Writing such a parser is application-specific and non-trivial - a lot of care has to be taken when writing this parser to prevent XSS vulnerabilities.</p></li></li></li>
-    </li>
-  </ol>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* PHP
+
+
+## What to Do ##
+
+Escape HTML special characters in all user input that is displayed on web pages.
+
+
+## Why ##
+
+It is important to properly encode all user-controlled data before it is outputted to a dynamically generated Web page. If data is not encoded then it will make its way to the browser in its original representation, which could be executable script code, causing the browser to interpret and run it. The most common case is of user-controlled input making its way into plain HTML; in this case it should be HTML-encoded before being inserted into the page.
+
+
+## How ##
+
+To escape HTML characters in user input:
+
+1. **Identify all pages that display data entered by users.** Enumerate all the pages in the application. Make a list of all the pages that display user input.
+2. **Use htmlentities() whenever displaying data entered by users.** Review each page that displays data entered by users. Verify that PHP code in each page uses htmlentities() to escape special characters in user input before displaying it to the user, like this:
+	~~~~
+	echo htmlentities($userinput);
+	~~~~
+	where $userinput is a string that contains user input.
+3. **Define your own, non-HTML special characters, if tags are required for user input.** Many interactive web applications offer the users functionality to post links, images and other content that requires special tags to be rendered correctly. One solution is to define a custom syntax specific for your application to allow users to post rich content. One common solution is to use square brackets, such as [], instead of the <> brackets used by HTML, and then translate the [] brackets into <> when rendering user input. This approach requires positive input validation to be safe.
+4. **Write a parser for handling non-HTML special characters, if tags are required for user input.** Use positive input validation to make sure that only allowed tags are rendered. For example, a user may be allowed to display bold text by using a [b] tag, instead of HTML `<b>`. The parser should then be allowed to only translate the square brackets into <> if the only thing inside the brackets is "b". Writing such a parser is application-specific and non-trivial - a lot of care has to be taken when writing this parser to prevent XSS vulnerabilities.]]></Data>
   </Content>
 </TeamMentor_Article>
