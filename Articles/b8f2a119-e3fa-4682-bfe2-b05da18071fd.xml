@@ -15,53 +15,39 @@
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+<br /></p>
-  <h1>What to Check For</h1>
-  <p>Verify that the "Secure" and "HTTPOnly" flags are set on all sensitive cookies, especially cookies containing session IDs.</p>
-  <h1>Why</h1>
-  <p>Set the "<em>Secure</em>" flag on all sensitive cookies to protect the contents of the sensitive cookies from eavesdropping attacks. Setting the "<em>Secure</em>" flag on sensitive cookies ensures they are only transferred over connections that are secured by SSL. The "<em>HTTPOnly</em>" flag prevents the contents of the marked cookie from being accessed by client-side script. This helps protect against Cross-Site Scripting attacks.</p>
-  <h1>How to Check</h1>
-  <p>To verify that the "<em>Secure</em>" and "<em>HTTPOnly</em>" flags are set on all sensitive cookies:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Verify that SSL is available.</strong>&nbsp;The "<em>Secure</em>" flag forces cookies to be sent over SSL. SSL has to be available for this to work.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Identify sensitive cookies.</strong>&nbsp;Session cookies should always be considered sensitive. Enumerate all cookies used by the application. Make a list of cookies that may contain sensitive information.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Identify code that creates sensitive cookies.</strong>&nbsp;For each sensitive cookie in the list, find the code that creates that cookie.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Verify that the "<em>Secure</em>" and&nbsp;"<em>HTTPOnly</em>"&nbsp;flags are set for each sensitive cookie.&nbsp;</strong>For each piece of code that creates a sensitive cookie, verify that code exists that sets the "<em>Secure</em>" and&nbsp;"<em>HTTPOnly</em>"&nbsp;flags, as follows: In the "<span style="color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small; line-height: 19.5px;">application.conf" file,&nbsp;</span><span style="font-size: 10pt;">“application.session.httpOnly=true” and "application.session.secure=true”" should be set.</span></p>
-    </li>
-  </ol>
-  <h1>How to Fix</h1>
-  <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">To set the "<em style="margin: 0px; padding: 0px;">Secure</em>" and "<em style="margin: 0px; padding: 0px;">HTTPOnly</em>" flags on all sensitive cookies:</p>
-  <ol style="margin: 10px 0px 10px 25px; padding: 0px 0px 0px 30px; color: rgb(17, 17, 17); font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: small;">
-    <li style="margin: 0px; padding: 0px;">
-      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
-        <strong style="margin: 0px; padding: 0px;">Verify that SSL is available.</strong>&nbsp;The "<em style="margin: 0px; padding: 0px;">Secure</em>" flag forces cookies to be sent over SSL. SSL has to be available for this to work.</p>
-    </li>
-    <li style="margin: 0px; padding: 0px;">
-      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
-        <strong style="margin: 0px; padding: 0px;">Identify sensitive cookies.</strong>&nbsp;Session cookies should always be considered sensitive. Enumerate all cookies used by the application. Make a list of cookies that may contain sensitive information.</p>
-    </li>
-    <li style="margin: 0px; padding: 0px;">
-      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
-        <strong style="margin: 0px; padding: 0px;">Identify code that creates sensitive cookies.&nbsp;</strong>For each sensitive cookie in the list, find the code that creates that cookie.</p>
-    </li>
-    <li style="margin: 0px; padding: 0px;">
-      <p style="margin: 0.5em 0px 1em; padding: 0px; line-height: 1.5em;">
-        <strong style="margin: 0px; padding: 0px;">Set the "S<em style="margin: 0px; padding: 0px;">ecure</em>" and "<em style="margin: 0px; padding: 0px;">HTTPOnly</em>" flags for each sensitive cookie.</strong>&nbsp; Enable the HTTPOnly flag using “application.session.httpOnly=true” in the “application.conf” file. Enable the Secure flag on the cookie using “application.session.secure=true” in the “application.conf” file.</p>
-    </li>
-  </ol>
-  <br />]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+
+## What to Check For ##
+
+Verify that the "Secure" and "HTTPOnly" flags are set on all sensitive cookies, especially cookies containing session IDs.
+
+
+## Why ##
+
+Set the "Secure" flag on all sensitive cookies to protect the contents of the sensitive cookies from eavesdropping attacks. Setting the "Secure" flag on sensitive cookies ensures they are only transferred over connections that are secured by TLS. The "HTTPOnly" flag prevents the contents of the marked cookie from being accessed by client-side script. This helps protect against Cross-Site Scripting attacks.
+
+
+## How to Check ##
+
+To verify that the "Secure" and "HTTPOnly" flags are set on all sensitive cookies:
+
+1. **Verify that TLS is available.** The "Secure" flag forces cookies to be sent over TLS. TLS has to be available for this to work.
+2. **Identify sensitive cookies.** Session cookies should always be considered sensitive. Enumerate all cookies used by the application. Make a list of cookies that may contain sensitive information.
+3. **Identify code that creates sensitive cookies.** For each sensitive cookie in the list, find the code that creates that cookie.
+4. **Verify that the "Secure" and "HTTPOnly" flags are set for each sensitive cookie.** For each piece of code that creates a sensitive cookie, verify that code exists that sets the "Secure" and "HTTPOnly" flags, as follows: In the "application.conf" file, “application.session.httpOnly=true” and "application.session.secure=true”" should be set.
+
+
+## How to Fix ##
+
+To set the "Secure" and "HTTPOnly" flags on all sensitive cookies:
+
+1. **Verify that TLS is available.** The "Secure" flag forces cookies to be sent over TLS. TLS has to be available for this to work.
+2. **Identify sensitive cookies.** Session cookies should always be considered sensitive. Enumerate all cookies used by the application. Make a list of cookies that may contain sensitive information.
+3. **Identify code that creates sensitive cookies.** For each sensitive cookie in the list, find the code that creates that cookie.
+4. **Set the "Secure" and "HTTPOnly" flags for each sensitive cookie.**  Enable the HTTPOnly flag using “application.session.httpOnly=true” in the “application.conf” file. Enable the Secure flag on the cookie using “application.session.secure=true” in the “application.conf” file.]]></Data>
   </Content>
 </TeamMentor_Article>
