@@ -17,22 +17,45 @@
     <Status />
     <Source>C++</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>C&#43;&#43;</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Convert integers in a way that does not cause truncation or lose sign information.</p>
-  <h1>Why</h1>
-  <p>If data is lost during conversion, an unpredictable/unintended value may be stored in a variable. If this variable is used for program flow control, memory operations, or array indexing, an arbitrary code execution vulnerability may result.</p>
-  <h1>How</h1>
-  <p>Identify all integer conversion operations. Add range checks to verify that the result of integer conversion is valid before assigning the result to a variable.</p>
-  <h1>Problem Example</h1>
-  <p>The following code may result in truncation, because an unsigned integer has a larger maximum value than a signed integer. The exact error may be different on different platforms.</p>
-  <pre>unsigned short a = 50000;<br />signed short b = static_cast&lt;signed short&gt;(a);</pre>
-  <h1>Solution Example</h1>
-  <p>To fix the problem example above, add range checks before assigning the result of conversion to a variable.</p>
-  <pre>unsigned short a = 50000;<br />if (a &gt; SHRT_MIN &&amp; a &lt; SHRT_MAX) signed short b = static_cast&lt;signed short&gt;(a);<br />else &#123;/&#42;handle error&#42;/&#125;</pre>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* C++
+
+
+## What to Do ##
+
+Convert integers in a way that does not cause truncation or lose sign information.
+
+
+## Why ##
+
+If data is lost during conversion, an unpredictable/unintended value may be stored in a variable. If this variable is used for program flow control, memory operations, or array indexing, an arbitrary code execution vulnerability may result.
+
+
+## How ##
+
+Identify all integer conversion operations. Add range checks to verify that the result of integer conversion is valid before assigning the result to a variable.
+
+
+## Problem Example ##
+
+The following code may result in truncation, because an unsigned integer has a larger maximum value than a signed integer. The exact error may be different on different platforms.
+
+~~~~
+unsigned short a = 50000;
+signed short b = static_cast<signed short>(a);
+~~~~
+
+
+## Solution Example ##
+
+To fix the problem example above, add range checks before assigning the result of conversion to a variable.
+
+~~~~
+unsigned short a = 50000;
+if (a > SHRT_MIN && a < SHRT_MAX) signed short b = static_cast<signed short>(a);
+else {/*handle error*/}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>
