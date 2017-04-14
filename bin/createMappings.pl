@@ -37,10 +37,12 @@ while (<MP>) {
   chomp;
   @guidParts=split(/-/);
   if ($mpline==$mplines) {
+     print VA_NEW ("{ \"subject\": \"article-$guidParts[9]\",\t\"predicate\": \"alias\",\t\"object\": \"$guidParts[4]\" },\r\n");
      print VA_NEW  ("{ \"subject\": \"article-$guidParts[9]\",\t\"predicate\": \"alias\",\t\"object\": \"$guidParts[0]-$guidParts[1]-$guidParts[2]-$guidParts[3]-$guidParts[4]\" }\r\n");
      print VA_NEW  "]\r\n";
   }
   else {
+     print VA_NEW ("{ \"subject\": \"article-$guidParts[9]\",\t\"predicate\": \"alias\",\t\"object\": \"$guidParts[4]\" },\r\n");
      print VA_NEW ("{ \"subject\": \"article-$guidParts[9]\",\t\"predicate\": \"alias\",\t\"object\": \"$guidParts[0]-$guidParts[1]-$guidParts[2]-$guidParts[3]-$guidParts[4]\" },\r\n");
   }
 }
