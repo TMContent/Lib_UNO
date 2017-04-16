@@ -7,7 +7,7 @@
     <Title>Dangerous APIs Are Avoided Or Used with Care</Title>
     <Category>Dangerous APIs</Category>
     <Phase>Implementation</Phase>
-    <Technology>C++</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>Dangerous APIs Are Avoided Or Used with Care</DirectLink>
     <Tag />
@@ -17,28 +17,15 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>C&#43;&#43;</li>
-  </ul>
-  <h1>What to Check For</h1>
+  <Content Sanitized="true" DataType="html">
+    <Data><![CDATA[<h1>What to Check For</h1>
   <p>Verify that dangerous APIs are used with care when they are used.</p>
   <h1>Why</h1>
   <p>Some APIs have been shown historically to be the most likely to result in security vulnerabilities. These APIs are known as dangerous APIs. Special care should be taken when using them to avoid making typical mistakes that result in vulnerabilities. Specifically, input and data passed to dangerous APIs should be validated, and user input should not be used in format strings.</p>
   <h1>How to Check</h1>
-  <p>Identify all code that uses any of the following dangerous APIs:</p>
-  <ul>
-    <li>strcpy&nbsp;&nbsp; <li>strcat&nbsp;&nbsp; <li>strcat&nbsp; <li>strlen&nbsp; <li>strncpy <li>strncat&nbsp; <li>strcmp&nbsp; <li>strcmp&nbsp; <li>mbcstows<li>_strdup&nbsp; <li>_strrev&nbsp; <li>strstr&nbsp; <li>strstr&nbsp; <li>sprintf&nbsp;&nbsp; <li>_snprintf&nbsp;&nbsp; <li>printf&nbsp;&nbsp; <li>fprintf&nbsp;&nbsp; <li>gets&nbsp; <li>scanf&nbsp;&nbsp; <li>fscanf&nbsp;&nbsp; <li>sscanf&nbsp;&nbsp;&nbsp; <li>strcspn&nbsp; <li>MultiByteToWideChar<li>WideCharToMultiByte <li>GetShortPathNameW&nbsp; <li>GetLongPathNameW&nbsp; <li>WinExec&nbsp; <li>CreateProcessW&nbsp; <li>GetEnvironmentVariableW&nbsp; <li>SetEnvironmentVariableW&nbsp; <li>SetEnvironmentVariableW&nbsp; <li>ExpandEnvironmentStringsW&nbsp; <li>SearchPathW&nbsp; <li>SearchPathW&nbsp; <li>SearchPathW&nbsp; <li>Lstrcpy&nbsp;&nbsp; <li>Wcscpy&nbsp;&nbsp; <li>_mbscpy&nbsp;&nbsp; <li>StrCpyA&nbsp;&nbsp; <li>StrCpyW&nbsp;&nbsp; <li>lstrcatA&nbsp;&nbsp; <li>lstrcatW&nbsp;&nbsp; <li>Wcscat&nbsp;&nbsp; <li>_mbscat&nbsp;&nbsp; <li>Wcslen&nbsp; <li>_mbslen&nbsp; <li>_mbstrlen&nbsp; <li>lstrlenA&nbsp; <li>lstrlenW&nbsp; <li>Wcsncpy <li>_mbsncpy <li>StrCpyN <li>lstrcpynW&nbsp; <li>lstrcatnA&nbsp; <li>lstrcatnW&nbsp; <li>wcsncat&nbsp; <li>_mbsncat&nbsp; <li>_mbsnbcat&nbsp;&nbsp; <li>lstrcmpA&nbsp; <li>lstrcmpW&nbsp; <li>StrCmp&nbsp; <li>Wcscmp&nbsp; <li>_mbscmp&nbsp; <li>strcoll&nbsp; <li>wcscoll&nbsp; <li>_mbscoll&nbsp; <li>_stricmp&nbsp; <li>lstrcmpiA&nbsp; <li>lstrcmpiW&nbsp; <li>_wcsicmp&nbsp; <li>_mbsicmp&nbsp; <li>StrCmp&nbsp; <li>_stricoll&nbsp; <li>_wcsicoll&nbsp; <li>_mbsicoll&nbsp; <li>StrColl&nbsp; <li>_wcsdup&nbsp; <li>_mbsdup&nbsp; <li>StrDup&nbsp; <li>_wcsrev&nbsp; <li>_mbsrev&nbsp; <li>_strlwr&nbsp; <li>_mbslwr&nbsp; <li>_wcslwr&nbsp; <li>_strupr&nbsp; <li>_mbsupr&nbsp; <li>_wcsupr&nbsp; <li>wcsstr&nbsp; <li>_mbsstr&nbsp; <li>strspn&nbsp; <li>wcsspn&nbsp; <li>_mbsspn&nbsp; <li>strpbrk&nbsp; <li>wcspbrk&nbsp; <li>_mbspbrk&nbsp; <li>wcsxfrm&nbsp; <li>wcscspn&nbsp; <li>_mbcscpn&nbsp; <li>swprintf&nbsp; <li>wsprintfA&nbsp; <li>wsprintfW&nbsp; <li>vsprintf&nbsp; <li>vswprintf&nbsp; <li>_snwprintf&nbsp; <li>_vsnprintf&nbsp; <li>_vsnwprintf&nbsp; <li>vprintf&nbsp; <li>vwprintf&nbsp; <li>vfprintf&nbsp; <li>vwfprintf&nbsp; <li>_getws&nbsp; <li>fwscanf&nbsp; <li>wscanf&nbsp; <li>swscanf&nbsp; <li>OemToCharA&nbsp;&nbsp; <li>OemToCharW&nbsp;&nbsp; <li>CharToOemA&nbsp;&nbsp; <li>CharToOemW&nbsp;&nbsp; <li>CharUpperA&nbsp; <li>CharUpperW&nbsp; <li>CharUpperBuffW&nbsp; <li>CharLowerA&nbsp; <li>CharLowerW&nbsp; <li>CharLowerBuffW&nbsp; </li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li></li>
-  </ul>
+  <p>Identify all code that uses dangerous APIs.</p>
   <p>Verify that input and data validation is performed when any of these functions are called. Verify that user input is not used in format strings, if any.</p>
   <h1>How to Fix</h1>
-  <p>Identify all code that uses any of the dangerous APIs as listed in the "How to Check" section. If possible, rewrite this code so that dangerous APIs are not used. Otherwise, add code that performs input and data validation when any of these functions are called. It is recommended to write a dedicated input and data validation class or library and use it. Pay special attention to functions that use format strings. If there is even a remote possibility of user input being used in the format strings, rewrite code so that it is impossible.</p>
-  <h1>Related Items</h1>
-  <ul>
-    <li>
-      <a href="/article/3f725650-1e28-4ee0-810c-133cd5912c91">Do Not Use Dangerous APIs</a>
-    </li>
-  </ul>]]></Data>
+  <p>Identify all code that uses dangerous APIs. If possible, rewrite this code so that dangerous APIs are not used. Otherwise, add code that performs input and data validation when any of these functions are called. It is recommended to write a dedicated input and data validation class or library and use it. Pay special attention to functions that use format strings. If there is even a remote possibility of user input being used in the format strings, rewrite code so that it is impossible.</p>]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -4,11 +4,11 @@
     <Id>ea25af24-8eca-45ad-9f41-94bad8880247</Id>
     <Id_History>ea25af24-8eca-45ad-9f41-94bad8880247,22c68cc0-4feb-4c90-af40-426d6ded7212,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Force Password Renewal</Title>
+    <Title>Java Force Password Renewal</Title>
     <Category>Authentication</Category>
     <Phase>Design</Phase>
     <Technology>Java</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Force Password Renewal</DirectLink>
     <Tag />
     <Security_Demand />
@@ -17,45 +17,96 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Force users to renew their passwords after a given period of time.</p>
-  <h1>Why</h1>
-  <p>Forcing users to renew their passwords reduces the risk of valid credentials becoming exposed. While this technique can prevent attackers from obtaining the valid credentials through the use of a Credentials Brute Force Attack or a Credentials Dictionary Attack, it can also reduce the business risk associated with any instances of discovered or leaked valid credentials.</p>
-  <h1>When</h1>
-  <p>Your application should always force its users to change their passwords.</p>
-  <h1>How</h1>
-  <p>Use the following steps to force users to change their passwords:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Define a password change policy. </strong>Establish a maximum password age for your application's users. For example, require that users must change passwords every 60 days and privileged users must change passwords every 30 days.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Design a password change mechanism. </strong>Track the password age and prompt the user to change their password when the password expires. For example, the following SQL transaction will help the application to determine whether a user's password has expired:</p>
-      <pre>sql&gt; select * from passHistory<br />      where userid = {{username}} and<br />            last_changed &lt; (current_timestamp - interval '30' day);</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Enforce the password change policy. </strong>Embed the change of password mechanism into the authentication routine. Example:</p>
-      <pre>String dbStatement = "select login_attempts from users"<br />                   + "where user = ? and pass = ?;";<br />PreparedStatement st = dbConnection.prepareStatement(dbStatement);<br />st.setString(1, user);<br />st.setString(2, passDigest);<br />ResultSet rs = st.executeQuery();<br /><br />if (rs.first())<br />{<br />      userIsValid = true;<br />      loginCount = rs.getInt(1);}else<br />{<br />      userIsValid = false;<br />}<br /><br />rs.close();<br /><br />if(userIsValid)<br />{<br />      checkPasswordMaturity(user);<br />}</pre>
-    </li>
-  </ol>
-  <p>
-    <strong>Note:</strong> PCI DSS requirements state that a user's password must be renewed at most every 90 days and that the new password cannot be the same as the previous four.</p>
-  <h1>Problem Example</h1>
-  <p>The following code is part of the application's authentication routine. Because the application fails to force the user to renew their password, it allows more time for an attacker to guess the user's password.</p>
-  <pre>String dbStatement = "select login_attempts from users"<br />                   + "where user = ? and pass = ?;";<br />PreparedStatement st = dbConnection.prepareStatement(dbStatement);<br />st.setString(1, user);<br />st.setString(2, passDigest);<br />ResultSet rs = st.executeQuery();<br /><br />if (rs.first())<br />{<br />      userIsValid = true;<br />      loginCount = rs.getInt(1);<br />}<br />else<br />{<br />      userIsValid = false;<br />}<br /><br />rs.close();<br /><br />if(userIsValid)<br />{<br />       // The application fails to check the password's maturity<br />}</pre>
-  <h1>Solution Example</h1>
-  <p>The following code is part of the application's authentication routine. Because the application forces its users to renew their passwords, there is limited time for an attacker to guess the user's password or to use a guessed password.</p>
-  <blockquote>
-    <pre>String dbStatement = "select login_attempts from users"<br />                   + "where user = ? and pass = ?;";<br />PreparedStatement st = dbConnection.prepareStatement(dbStatement);<br />st.setString(1, user);<br />st.setString(2, passDigest);<br />ResultSet rs = st.executeQuery();<br />if (rs.first())<br />{<br />      userIsValid = true;<br />      loginCount = rs.getInt(1);<br />}<br />else<br />{<br />      userIsValid = false;<br />}<br /><br />rs.close();<br /><br />if(userIsValid)<br />{<br />      // The application checks the password's maturity<br />      checkPasswordMaturity(user);<br />}<br /><br />...<br /><br />private void checkPasswordMaturity(String user)<br />      throws UserMustChangePasswordException<br />{<br />      Connection dbConnection = MyApp.getDBConnection();<br />      String dbStatement = "select * from passHistory"<br />                         + "where userid = ? and"<br />                         + " last_changed &lt; (current_timestamp - interval '30' day);";<br />      PreparedStatement st = dbConnection.prepareStatement(dbStatement);<br />      st.setString(1, user);<br />      ResultSet rs = st.executeQuery();<br />      if (rs.first())<br />      {<br />            rs.close();<br />            throw new UserMustChangePasswordException();<br />      }<br />      rs.close();<br />}</pre>
-  </blockquote>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Servlets or JSP
+
+
+## Summary ##
+
+Force users to renew their passwords after a given period of time. Forcing users to renew their passwords reduces the risk of valid credentials becoming exposed. While this technique can prevent attackers from obtaining the valid credentials through the use of a Credentials Brute Force Attack or a Credentials Dictionary Attack, it can also reduce the business risk associated with any instances of discovered or leaked valid credentials.
+
+
+## Problem Example ##
+
+The following code is part of the application's authentication routine. Because the application fails to force the user to renew their password, it allows more time for an attacker to guess the user's password.
+
+~~~~
+String dbStatement = "select login_attempts from users"
+                   + "where user = ? and pass = ?;";
+PreparedStatement st = dbConnection.prepareStatement(dbStatement);
+st.setString(1, user);
+st.setString(2, passDigest);
+ResultSet rs = st.executeQuery();
+
+if (rs.first())
+{
+      userIsValid = true;
+      loginCount = rs.getInt(1);
+}
+else
+{
+      userIsValid = false;
+}
+
+rs.close();
+
+if(userIsValid)
+{
+       // The application fails to check the password's maturity
+}
+~~~~
+
+
+## Solution Example ##
+
+The following code is part of the application's authentication routine. Because the application forces its users to renew their passwords, there is limited time for an attacker to guess the user's password or to use a guessed password.
+
+~~~~
+String dbStatement = "select login_attempts from users"
+                   + "where user = ? and pass = ?;";
+PreparedStatement st = dbConnection.prepareStatement(dbStatement);
+st.setString(1, user);
+st.setString(2, passDigest);
+ResultSet rs = st.executeQuery();
+if (rs.first())
+{
+      userIsValid = true;
+      loginCount = rs.getInt(1);
+}
+else
+{
+      userIsValid = false;
+}
+
+rs.close();
+
+if(userIsValid)
+{
+      // The application checks the password's maturity
+      checkPasswordMaturity(user);
+}
+
+...
+
+private void checkPasswordMaturity(String user)
+      throws UserMustChangePasswordException
+{
+      Connection dbConnection = MyApp.getDBConnection();
+      String dbStatement = "select * from passHistory"
+                         + "where userid = ? and"
+                         + " last_changed < (current_timestamp - interval '30' day);";
+      PreparedStatement st = dbConnection.prepareStatement(dbStatement);
+      st.setString(1, user);
+      ResultSet rs = st.executeQuery();
+      if (rs.first())
+      {
+            rs.close();
+            throw new UserMustChangePasswordException();
+      }
+      rs.close();
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>

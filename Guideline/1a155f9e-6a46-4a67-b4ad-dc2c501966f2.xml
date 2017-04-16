@@ -4,7 +4,7 @@
     <Id>1a155f9e-6a46-4a67-b4ad-dc2c501966f2</Id>
     <Id_History>1a155f9e-6a46-4a67-b4ad-dc2c501966f2,97e58216-91a7-47d3-a16e-5b625b2a52cf,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Perform a Dataflow Analysis</Title>
+    <Title>[1612Dupe] Perform a Dataflow Analysis</Title>
     <Category>Security Engineering</Category>
     <Phase>Implementation</Phase>
     <Technology>Technology Independent</Technology>
@@ -17,11 +17,11 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>What to Do</h1>
-  <p>Use a technique called dataflow analysis to find bugs associated with poor input handling.&nbsp; Since there can be many data flows in your application, use prioritization to focus your work.&nbsp; The process works as follows:</p>
+  <p>Use a technique called dataflow analysis to find bugs associated with poor input handling.&amp;nbsp; Since there can be many data flows in your application, use prioritization to focus your work.&amp;nbsp; The process works as follows:</p>
   <ol>
-    <li>For each input location determine how much you trust the source of input.&nbsp; When in doubt you should give it no trust.</li>
+    <li>For each input location determine how much you trust the source of input.&amp;nbsp; When in doubt you should give it no trust.</li>
     <li>Trace the flow of data to each possible output noting along the way any attempts at data validation.</li>
     <li>Move to the next input and continue.</li>
   </ol>
@@ -30,13 +30,13 @@
   <h1>When</h1>
   <p>Perform dataflow analysis during the development stage of the application development life cycle.</p>
   <h1>How</h1>
-  <p>Dataflow analysis is the mechanism used to trace data from the points of input to the points of output.&nbsp; Use a technique called dataflow analysis to find bugs associated with poor input handling.&nbsp; Since there can be many data flows in your application, use prioritization to focus your work.&nbsp; The process works as follows:</p>
+  <p>Dataflow analysis is the mechanism used to trace data from the points of input to the points of output.&amp;nbsp; Use a technique called dataflow analysis to find bugs associated with poor input handling.&amp;nbsp; Since there can be many data flows in your application, use prioritization to focus your work.&amp;nbsp; The process works as follows:</p>
   <ol>
-    <li>For each input location determine how much you trust the source of input.&nbsp; When in doubt you should give it no trust.</li>
+    <li>For each input location determine how much you trust the source of input.&amp;nbsp; When in doubt you should give it no trust.</li>
     <li>Trace the flow of data to each possible output noting along the way any attempts at data validation.</li>
     <li>Move to the next input and continue.</li>
   </ol>
-  <p>When you are done you should have a list of all the functions that each piece of input data touches as well as the eventual outputs where it ends up.&nbsp; Don’t forget to pay attention to areas where the data is parsed and may end up in multiple output locations.&nbsp; Also pay attention to intermediary output locations.&nbsp; For instance the input may end up in a database and then later placed in web page content.<br />Thinking about how much you trust each input source is tricky.&nbsp; Ideally you will trust no input that comes from outside your component and validate all data fully.&nbsp; For performance and maintainability reasons, however, this may not always be practical.&nbsp; In general you can trust code that is closest to you and give less trust to code that is less well known.&nbsp; Here is an example of how to think about trust boundaries:</p>
+  <p>When you are done you should have a list of all the functions that each piece of input data touches as well as the eventual outputs where it ends up.&amp;nbsp; Don’t forget to pay attention to areas where the data is parsed and may end up in multiple output locations.&amp;nbsp; Also pay attention to intermediary output locations.&amp;nbsp; For instance the input may end up in a database and then later placed in web page content.<br />Thinking about how much you trust each input source is tricky.&amp;nbsp; Ideally you will trust no input that comes from outside your component and validate all data fully.&amp;nbsp; For performance and maintainability reasons, however, this may not always be practical.&amp;nbsp; In general you can trust code that is closest to you and give less trust to code that is less well known.&amp;nbsp; Here is an example of how to think about trust boundaries:</p>
   <ul>
     <li>
       <strong>High trust</strong>
@@ -69,33 +69,33 @@
       </ul>
     </li>
   </ul>
-  <p>Remember to trace all the way to the source and assign trust based on the weakest link. As you conduct your traces look at the code carefully to ensure that input validation is performed rigorously on low trust input and performed adequately on medium trust input.&nbsp; Ideally you will have a set of common validation routines that can be called into as soon as un-trusted data is received by the application.&nbsp; This gives a central point of failure that can be updated as new information is discovered.&nbsp; However, in addition to knowing how much you trust the data you must also be aware of how the data is going to be used in order to know how it should be validated.&nbsp; This is where the dataflow analysis becomes important.&nbsp; For instance if the eventual output for the untrusted data is a database then you should check for SQL injection problems.&nbsp; If the data will be used to make a calculation then you should check for numeric overflows and underflows.&nbsp; If the data will be displayed in a web page then you should check for cross site scripting problems.&nbsp; Keep in mind while reviewing validation routines that validation should always opt-in, not opt-out; it’s easier to accurately define what’s good rather than what’s bad.</p>
+  <p>Remember to trace all the way to the source and assign trust based on the weakest link. As you conduct your traces look at the code carefully to ensure that input validation is performed rigorously on low trust input and performed adequately on medium trust input.&amp;nbsp; Ideally you will have a set of common validation routines that can be called into as soon as un-trusted data is received by the application.&amp;nbsp; This gives a central point of failure that can be updated as new information is discovered.&amp;nbsp; However, in addition to knowing how much you trust the data you must also be aware of how the data is going to be used in order to know how it should be validated.&amp;nbsp; This is where the dataflow analysis becomes important.&amp;nbsp; For instance if the eventual output for the untrusted data is a database then you should check for SQL injection problems.&amp;nbsp; If the data will be used to make a calculation then you should check for numeric overflows and underflows.&amp;nbsp; If the data will be displayed in a web page then you should check for cross site scripting problems.&amp;nbsp; Keep in mind while reviewing validation routines that validation should always opt-in, not opt-out; it’s easier to accurately define what’s good rather than what’s bad.</p>
   <p>The most common input validation bugs are as follows:</p>
   <h2>Numeric underflows and overflows</h2>
-  <p>This problem is caused when a calculation causes a data value to be larger or smaller than its data type allows.&nbsp; This will cause the value to wrap-around and generally become much larger or smaller than expected.&nbsp; For instance assigning -1 to an unsigned integer will result in the actual value becoming larger than four billion.&nbsp; VB will throw an exception as soon as an overflow or underflow occurs, however, C# will not.&nbsp; As you are tracing data through the code ensure that any location where a user can give input that results in a calculation will not cause an underflow or overflow condition.</p>
+  <p>This problem is caused when a calculation causes a data value to be larger or smaller than its data type allows.&amp;nbsp; This will cause the value to wrap-around and generally become much larger or smaller than expected.&amp;nbsp; For instance assigning -1 to an unsigned integer will result in the actual value becoming larger than four billion.&amp;nbsp; VB will throw an exception as soon as an overflow or underflow occurs, however, C# will not.&amp;nbsp; As you are tracing data through the code ensure that any location where a user can give input that results in a calculation will not cause an underflow or overflow condition.</p>
   <p>Example:</p>
-  <pre>int[] filter(uint len, int[] numbers)<br />{<br />  uint newLen =&nbsp; len * 3/4;<br />  int[] buf = new int[newLen];<br />  int j = 0;<br />  for(int i = 0; i &lt; len; i++)<br />  {<br />&nbsp;&nbsp;   if (i % 4 != 0)<br />&nbsp;&nbsp;&nbsp;  buf[j++] = numbers[i];<br />  }<br />&nbsp; return buf;<br />}</pre>
-  <p>The problem is that in calculating the value for len, the code first computes len * 3 and then divides by 4.&nbsp; When len is large enough (~1.4 billion), len * 3 overflows and newLen gets assigned too small of a value.&nbsp; The result in this code will be an unhandled IndexOutOfRange exception.</p>
+  <pre>int[] filter(uint len, int[] numbers)<br />{<br />  uint newLen =&amp;nbsp; len * 3/4;<br />  int[] buf = new int[newLen];<br />  int j = 0;<br />  for(int i = 0; i &lt; len; i++)<br />  {<br />&amp;nbsp;&amp;nbsp;   if (i % 4 != 0)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;  buf[j++] = numbers[i];<br />  }<br />&amp;nbsp; return buf;<br />}</pre>
+  <p>The problem is that in calculating the value for len, the code first computes len * 3 and then divides by 4.&amp;nbsp; When len is large enough (~1.4 billion), len * 3 overflows and newLen gets assigned too small of a value.&amp;nbsp; The result in this code will be an unhandled IndexOutOfRange exception.</p>
   <h2>SQL injection</h2>
-  <p>A SQL injection attack occurs when un-trusted input can modify the logic of a SQL query in unexpected ways.&nbsp; As you are tracing through the code ensure that any input that is used in a SQL query is validated or make sure that the SQL queries are parameterized.</p>
+  <p>A SQL injection attack occurs when un-trusted input can modify the logic of a SQL query in unexpected ways.&amp;nbsp; As you are tracing through the code ensure that any input that is used in a SQL query is validated or make sure that the SQL queries are parameterized.</p>
   <p>Example:</p>
   <p>The SQL query in code looks like this.</p>
   <pre>query = “SELECT * FROM USERS WHERE USER_ID = ‘” + userIdFromWebPage + “’”;</pre>
-  <p>userIdFromWebPage is a variable that contains untrusted data that has not been validated.&nbsp; Imagine that it contains “’ or 1=1 -“, or “’ ;DROP TABLE users -“, or “’ ;exec xp_cmdshell(‘format c:’) -“.&nbsp; The final query could look like this.</p>
-  <pre>&nbsp;“select * FROM USERS WHERE USER_ID = ‘’ ;exec xp_cmdshell(‘format c:’) -”</pre>
+  <p>userIdFromWebPage is a variable that contains untrusted data that has not been validated.&amp;nbsp; Imagine that it contains “’ or 1=1 -“, or “’ ;DROP TABLE users -“, or “’ ;exec xp_cmdshell(‘format c:’) -“.&amp;nbsp; The final query could look like this.</p>
+  <pre>&amp;nbsp;“select * FROM USERS WHERE USER_ID = ‘’ ;exec xp_cmdshell(‘format c:’) -”</pre>
   <p>This will result in a format of the c:\ drive on the database server. </p>
   <p>The code should look like:</p>
   <pre>SqlCommand queryCMD = new SqlCommand("GetUser", sqlConn);<br />queryCMD.CommandType = CommandType.StoredProcedure;<br />SqlParameter myParm = queryCMD.Parameters.Add("@UserID", SqlDbType.Int, 4);<br />myParm.Value = userIdFromWebPage;<br />SqlDataReader myReader = queryCMD.ExecuteReader();</pre>
   <h2>Cross Site Scripting</h2>
-  <p>Cross-site scripting is caused when an attacker manages to input script code into an application so that it is echoed back and executed in the security context of the application.&nbsp; This allows an attacker to steal user information including forms data and cookies.&nbsp; This vulnerability may be present whenever a web application echoes unfiltered user input back out to web content.</p>
-  <p>As you are tracing through the code ensure that un-trusted data whose ultimate output is web page content does not contain HTML tags.&nbsp; Be aware that the data could move from un-trusted input to web page output via a roundabout path - for instance through a database and then later queried out of the database and displayed on a web page.&nbsp; To protect against this bug, ensure HTMLEncode or URLEncode are used before user input is echoed back to web content.</p>
+  <p>Cross-site scripting is caused when an attacker manages to input script code into an application so that it is echoed back and executed in the security context of the application.&amp;nbsp; This allows an attacker to steal user information including forms data and cookies.&amp;nbsp; This vulnerability may be present whenever a web application echoes unfiltered user input back out to web content.</p>
+  <p>As you are tracing through the code ensure that un-trusted data whose ultimate output is web page content does not contain HTML tags.&amp;nbsp; Be aware that the data could move from un-trusted input to web page output via a roundabout path - for instance through a database and then later queried out of the database and displayed on a web page.&amp;nbsp; To protect against this bug, ensure HTMLEncode or URLEncode are used before user input is echoed back to web content.</p>
   <p>Example:</p>
-  <p>In this example, the web application is hosted at http://www.contoso.msft.&nbsp; The ASP script is designed to output “Welcome &lt;UserName&gt;”. This represents a cross-site scripting vulnerability because the value of UserName is not filtered or encoded. The attack proceeds as follows: </p>
+  <p>In this example, the web application is hosted at http://www.contoso.msft.&amp;nbsp; The ASP script is designed to output “Welcome &lt;UserName&gt;”. This represents a cross-site scripting vulnerability because the value of UserName is not filtered or encoded. The attack proceeds as follows: </p>
   <p>1.) An attacker sends email to an unsuspecting user containing malicious HTML form</p>
   <p>2.) When the user clicks on the link in the email, a post request is sent to the Contoso page. The request contains JavaScript for the value of the username field</p>
   <p>3.) The Contoso site sends the value of “username”, really the JavaScript generated by the attacker, to the user’s browser and the browser executes thinking the source of the script is the Contoso site. In this case, the script sends any cookie data associated with the page to the attacker’s machine.</p>
   <h2>Canonicalization </h2>
-  <p>Canonicalization errors occur whenever there are multiple ways to represent a resource and the different representations result in varying security logic being run.&nbsp; There are a several resource types for which this problem can occur:</p>
+  <p>Canonicalization errors occur whenever there are multiple ways to represent a resource and the different representations result in varying security logic being run.&amp;nbsp; There are a several resource types for which this problem can occur:</p>
   <ul>
     <li>
       <strong>File resources</strong>
@@ -112,33 +112,33 @@
       </ul>
     </li>
   </ul>
-  <p>The result of this bug is that an attacker gains access to a resource they would not otherwise have access to.&nbsp; As you are tracing through the code look carefully at areas where resources are being accessed based upon user input.&nbsp; Make sure that file names are canonicalized before use with Path.GetFullPath.&nbsp; Make sure that URLs are canonicalized before use with Uri.AbsoluteUri.&nbsp; Use CAS for an extra layer of protection. Refuse permissions that are not needed as well as indicate to the runtime what you need.</p>
+  <p>The result of this bug is that an attacker gains access to a resource they would not otherwise have access to.&amp;nbsp; As you are tracing through the code look carefully at areas where resources are being accessed based upon user input.&amp;nbsp; Make sure that file names are canonicalized before use with Path.GetFullPath.&amp;nbsp; Make sure that URLs are canonicalized before use with Uri.AbsoluteUri.&amp;nbsp; Use CAS for an extra layer of protection. Refuse permissions that are not needed as well as indicate to the runtime what you need.</p>
   <p>Example:</p>
   <pre>[assembly:FileIOPermission( SecurityAction.RequestMinimum, Read = "c:\\temp" )]<br />[assembly:FileDialogPermission( SecurityAction.RequestOptional )]<br />[assembly:FileIOPermission( SecurityAction.Deny, Write = "c:\\windows" )]</pre>
   <h2>Native code issues</h2>
-  <p>If the code you are reviewing makes calls into native code there are some additional checks that must be done to ensure security.&nbsp; Assumptions made in managed code about data validity and memory soundness may not hold true when running native code.&nbsp; The following bugs that are impossible or unusual in managed code are quite possible in native code.</p>
+  <p>If the code you are reviewing makes calls into native code there are some additional checks that must be done to ensure security.&amp;nbsp; Assumptions made in managed code about data validity and memory soundness may not hold true when running native code.&amp;nbsp; The following bugs that are impossible or unusual in managed code are quite possible in native code.</p>
   <h2>Buffer overflows </h2>
-  <p>Buffer overruns are a classic vulnerability that may lead to execution of arbitrary code.&nbsp; Successful exploitation of this vulnerability relies on low level details of the system architecture that is outside the scope of this guide, however, given the magnitude and frequent occurrence of the problem it is important to recognize when these vulnerabilities are present.</p>
-  <p>Buffer Overflows are largely prevented by managed code since the common language runtime abstracts out the underlying machine architecture.&nbsp; However, any code marked unsafe is allowed direct memory access and therefore can contain buffer overflows.&nbsp; Also, many applications contain a mixture of managed and unmanaged code and so the unmanaged code must be looked at closely. </p>
+  <p>Buffer overruns are a classic vulnerability that may lead to execution of arbitrary code.&amp;nbsp; Successful exploitation of this vulnerability relies on low level details of the system architecture that is outside the scope of this guide, however, given the magnitude and frequent occurrence of the problem it is important to recognize when these vulnerabilities are present.</p>
+  <p>Buffer Overflows are largely prevented by managed code since the common language runtime abstracts out the underlying machine architecture.&amp;nbsp; However, any code marked unsafe is allowed direct memory access and therefore can contain buffer overflows.&amp;nbsp; Also, many applications contain a mixture of managed and unmanaged code and so the unmanaged code must be looked at closely. </p>
   <p>While tracing through the code ensure that for unsafe code the following rules are followed:</p>
   <ul>
     <li>Make sure any functions that copy variable length data into a buffer take and use a maximum length parameter properly.</li>
     <li>Never rely on another layer or tier for data truncation.</li>
-    <li>If you see a problem always choose to truncate data instead of expanding the buffer to fit.&nbsp; Buffer expansion may just move the problem downstream.</li>
+    <li>If you see a problem always choose to truncate data instead of expanding the buffer to fit.&amp;nbsp; Buffer expansion may just move the problem downstream.</li>
     <li>Ensure any unmanaged code was compiled with /GS option.</li>
   </ul>
   <p>Example:</p>
-  <pre>public void ProcessInput<br />{<br />&nbsp;&nbsp; char[] data = new char[255];&nbsp; <br />&nbsp;&nbsp; GetData(data);<br />}<br /><br /><br />public unsafe void GetData(char[] buffer)<br />{<br />&nbsp;&nbsp; int ch = 0;<br />&nbsp;&nbsp; fixed (char* pBuf = buffer){<br />&nbsp;    do<br />&nbsp;    {<br />&nbsp;&nbsp;      ch = System.Console.Read();<br />&nbsp;&nbsp;      *(pBuf++) = (char)ch;<br />&nbsp;     }while(ch != '\n');<br />&nbsp;&nbsp; }<br />}</pre>
-  <p>An overflow occurs whenever a single line is more than 255 characters long.&nbsp; There are two problems in this code:</p>
+  <pre>public void ProcessInput<br />{<br />&amp;nbsp;&amp;nbsp; char[] data = new char[255];&amp;nbsp; <br />&amp;nbsp;&amp;nbsp; GetData(data);<br />}<br /><br /><br />public unsafe void GetData(char[] buffer)<br />{<br />&amp;nbsp;&amp;nbsp; int ch = 0;<br />&amp;nbsp;&amp;nbsp; fixed (char* pBuf = buffer){<br />&amp;nbsp;    do<br />&amp;nbsp;    {<br />&amp;nbsp;&amp;nbsp;      ch = System.Console.Read();<br />&amp;nbsp;&amp;nbsp;      *(pBuf++) = (char)ch;<br />&amp;nbsp;     }while(ch != '\n');<br />&amp;nbsp;&amp;nbsp; }<br />}</pre>
+  <p>An overflow occurs whenever a single line is more than 255 characters long.&amp;nbsp; There are two problems in this code:</p>
   <ol>
     <li>The ProcessInput function only allocates enough space for 255 characters.</li>
     <li>The GetData function does not check the size of the array as it fills it.</li>
   </ol>
   <h2>Format string</h2>
-  <p>Format String bugs emanate from the printf family of functions handling of variables, and the %n format directive.&nbsp; The printf family of functions will pop the stack as many times as they see “%” in the format string.&nbsp; Sufficient %’s can traverse the stack, and reach any location in it, or above.&nbsp; Additionally the use of %n can allow arbitrary writing of data anywhere within the stack.&nbsp; While tracing through the code make sure that format string data never contains user input.&nbsp; As this can only occur in unmanaged code it is only worth worrying about if untrusted input is used in a call to a native library.</p>
+  <p>Format String bugs emanate from the printf family of functions handling of variables, and the %n format directive.&amp;nbsp; The printf family of functions will pop the stack as many times as they see “%” in the format string.&amp;nbsp; Sufficient %’s can traverse the stack, and reach any location in it, or above.&amp;nbsp; Additionally the use of %n can allow arbitrary writing of data anywhere within the stack.&amp;nbsp; While tracing through the code make sure that format string data never contains user input.&amp;nbsp; As this can only occur in unmanaged code it is only worth worrying about if untrusted input is used in a call to a native library.</p>
   <p>Example:</p>
-  <pre>void main (int argc, char **argv)<br />{<br />&nbsp;&nbsp;&nbsp; /* Whatever the user said, spit back! */<br />&nbsp;&nbsp;&nbsp; printf (argv[1]);<br />}</pre>
-  <p>In this example untrusted input in the form of a command line parameter, is passed directly to a printf statement.&nbsp; This means an attacker could include format string % directives into the string and force the application to return or modify arbitrary memory on the stack.</p>
+  <pre>void main (int argc, char **argv)<br />{<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; /* Whatever the user said, spit back! */<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; printf (argv[1]);<br />}</pre>
+  <p>In this example untrusted input in the form of a command line parameter, is passed directly to a printf statement.&amp;nbsp; This means an attacker could include format string % directives into the string and force the application to return or modify arbitrary memory on the stack.</p>
   <br />]]></Data>
   </Content>
 </TeamMentor_Article>

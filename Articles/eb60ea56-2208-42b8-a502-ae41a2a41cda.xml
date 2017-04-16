@@ -4,36 +4,57 @@
     <Id>eb60ea56-2208-42b8-a502-ae41a2a41cda</Id>
     <Id_History>eb60ea56-2208-42b8-a502-ae41a2a41cda,bb647fc4-da51-48b8-9d5e-3c55b527c193,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Do Not Disclose Valuable Information During Authentication Errors</Title>
+    <Title>Scala Do Not Disclose Valuable Information During Authentication Errors</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Do Not Disclose Valuable Information During Authentication Errors</DirectLink>
     <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-  </ul>Scala and Play Framework 2.1.0+<br /><ul></ul><h1>What to Do</h1><p>Display a generic message when authentication fails.</p><h1>Why</h1><p>Disclosing information regarding invalid usernames and passwords can help an attacker obtain a list of valid users.</p><h1>When</h1><p>If your application authenticates users, use generic error messages when authentication fails.</p><h1>How</h1><p>To provide secure error messages when authentication fails, use the following steps:</p><ol><li><p><strong>Choose an error message.&amp;nbsp;</strong>The message should be very generic. It should signify "yes" or "no" to the authentication attempt. For example: "Authentication failed."</p></li><li><p><strong>Display only one message.&amp;nbsp;</strong>Your application should provide feedback only after all credentials have been verified. Structure your code in a manner that allows all checks to be executed at once. For example:</p><pre>if (!validUser() || !validPass())<br />{<br />      val message="Authentication failed"
-      Ok(html.message.main(message))
-}</pre><p>Because sometimes it is impossible to structure the code in a manner where all checks are performed at once, it is important that all error messages contain the exact same information. Any variation in the error messages can give away the information that a username is valid.</p></li></ol><h1>Problem Example</h1><p>The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:</p><pre>  def login(p1:Integer) = Action{ implicit request =&gt;
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+
+## Summary ##
+
+Display a generic message when authentication fails. Disclosing information regarding invalid usernames and passwords can help an attacker obtain a list of valid users.
+
+
+## Problem Example ##
+
+The following code authenticates a user. Unfortunately, the code reveals through its error messages whether the credentials sent represent a valid user or an invalid user:
+
+~~~~
+  def login(p1:Integer) = Action{ implicit request =>
     if (p1==0)
       {
             val message="Wrong Username"
-	    Ok(html.message.main(message))
+            Ok(html.message.main(message))
       }else if (p1==1){
             val message="Wrong Password"
-	    Ok(html.message.main(message))
+            Ok(html.message.main(message))
       }else {....}
-  }</pre><h1>Solution Example</h1><p>The following code authenticates a user. Since it presents the same error message regardless of why the authentication failed, an attacker can't determine if the credentials tried represent a valid user or not.</p><pre>  def login(p1:Integer) = Action{ implicit request =&gt;
+  }
+~~~~
+
+
+## Solution Example ##
+
+The following code authenticates a user. Since it presents the same error message regardless of why the authentication failed, an attacker can't determine if the credentials tried represent a valid user or not.
+
+~~~~
+  def login(p1:Integer) = Action{ implicit request =>
     if ((p1==0) || (p1==1){
             val message="Authentication failed"
-	    Ok(html.message.main(message))
+            Ok(html.message.main(message))
       }else {....}
-  }</pre>]]></Data>
+  }
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>

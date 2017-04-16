@@ -4,11 +4,11 @@
     <Id>b60e1477-f473-4dd5-9453-0a0e216bf8b0</Id>
     <Id_History>b60e1477-f473-4dd5-9453-0a0e216bf8b0,78db04eb-5237-48a2-a5f6-0cb39fe4034c,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use a Global Exception Handler to Catch Unhandled Exceptions</Title>
+    <Title>WCF Use a Global Exception Handler</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>WCF</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Use a Global Exception Handler to Catch Unhandled Exceptions</DirectLink>
     <Tag>WCF 3.5</Tag>
     <Security_Demand />
@@ -17,19 +17,38 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Microsoft® Windows Communication Foundation (WCF) 3.5 
-<li>Microsoft Visual Studio® 2008</li></li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Use a global exception handler to catch unhandled exceptions and prevent them from being propagated to the client. </p>
-  <h1>How</h1>
-  <p>You can handle the unhandled exceptions in a WCF service by subscribing to the Faulted event of a service host object. By subscribing to this event you can determine the cause of a failure, and then perform the necessary actions to abort or restart the service.</p>
-  <p>The following code snippet shows how to subscribe to the Faulted event.</p>
-  <pre>// hosting a WCF service <br />ServiceHost customerServiceHost;<br />customerServiceHost = new ServiceHost(…);<br />…<br />// Subscribe to the Faulted event of the customerServiceHost object<br />customerServiceHost.Faulted += new EventHandler(faultHandler);<br />…<br />// FaultHandler method - invoked when customerServiceHost enters the Faulted state<br />void faultHandler(object sender, EventArgs e)<br />{&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; // log the reasons for the fault…<br />}<br /></pre>
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* WCF
+
+
+## Summary ##
+
+Use a global exception handler to catch unhandled exceptions and prevent them from being propagated to the client.
+
+
+## Solution Example ##
+
+You can handle the unhandled exceptions in a WCF service by subscribing to the Faulted event of a service host object. By subscribing to this event you can determine the cause of a failure, and then perform the necessary actions to abort or restart the service.
+
+The following code snippet shows how to subscribe to the Faulted event.
+
+~~~~
+// hosting a WCF service 
+ServiceHost customerServiceHost;
+customerServiceHost = new ServiceHost(…);
+…
+// Subscribe to the Faulted event of the customerServiceHost object
+customerServiceHost.Faulted += new EventHandler(faultHandler);
+…
+// FaultHandler method - invoked when customerServiceHost enters the Faulted state
+void faultHandler(object sender, EventArgs e)
+{     // log the reasons for the fault…
+}
+~~~~
+
+---
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>

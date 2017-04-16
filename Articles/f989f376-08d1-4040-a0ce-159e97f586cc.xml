@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>f989f376-08d1-4040-a0ce-159e97f586cc</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Ruby Drop Privileges</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Ruby
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env ruby
+
+require 'etc'
+if not ARGV.length == 2
+	puts "Usage: #{$0} [username] [group name]"
+	exit
+end
+
+def drop_privileges(user, primary_group, extra_groups=nil)
+	if not Process::Sys.geteuid == 0
+		return
+	end
+	uid = Etc.getpwnam(user).uid
+	gid = Etc.getgrnam(primary_group).gid
+	
+	Process.groups = [gid]
+	if not extra_groups == nil
+		extra_groups do |gr|
+			Process.groups |= Etc.getgrnam(gr).gid
+		end
+	end
+	Process::Sys.setgid(gid)
+	Process::Sys.setuid(uid)
+end
+
+begin
+	drop_privileges(ARGV[0], ARGV[1])
+rescue Errno::EPERM, Errno::EAGAIN => err
+	puts "Error: Unable to successfully drop privileges."
+	exit
+end
+
+until false
+	puts "Sleeping"
+	sleep 1
+end
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>

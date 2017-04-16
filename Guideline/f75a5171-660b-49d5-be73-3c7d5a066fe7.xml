@@ -4,11 +4,11 @@
     <Id>f75a5171-660b-49d5-be73-3c7d5a066fe7</Id>
     <Id_History>f75a5171-660b-49d5-be73-3c7d5a066fe7,109075ea-427d-4768-8b2e-299ab56ab520,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Full Assembly Names When You Dynamically Load Assemblies</Title>
+    <Title>.NET Use Full Assembly Names When You Dynamically Load Assemblies</Title>
     <Category>Dangerous APIs</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Use Full Assembly Names When You Dynamically Load Assemblies</DirectLink>
     <Tag />
     <Security_Demand />
@@ -17,20 +17,43 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>What to Do</h1>
-  <p>If your code supports the dynamic loading of assemblies and you load the assembly by calling <b>Activator.CreateInstance</b>, make sure to refer to the assembly by using its strong name. </p>
-  <h1>Why</h1>
-  <p>This prevents your application from accidentally loading a malicious assembly with the same name as a legitimate assembly.</p>
-  <h1>When</h1>
-  <p>When your code supports the dynamic loading of assemblies.</p>
-  <h1>How</h1>
-  <p>The strong name of an assembly contains the public-key token that the assembly was signed with, providing evidence of the author.</p>
-  <p>The following example shows how to find the strong name for an assembly.</p>
-  <pre>public static StrongName GetStrongName(Assembly assembly)<br />&#123;<br />&nbsp;&nbsp;&nbsp; if(assembly == null)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new ArgumentNullException("assembly");</pre>
-  <pre>&nbsp;&nbsp;&nbsp; AssemblyName assemblyName = assembly.GetName();<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />&nbsp;&nbsp;&nbsp; // get the public key blob<br />&nbsp;&nbsp;&nbsp; byte&#91;&#93; publicKey = assemblyName.GetPublicKey();<br />&nbsp;&nbsp;&nbsp; if(publicKey == null &#124;&#124; publicKey.Length == 0)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new InvalidOperationException(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String.Format("&#123;0&#125; is not strongly named", <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; assembly));<br />&nbsp;&nbsp;&nbsp; <br />&nbsp;&nbsp;&nbsp; StrongNamePublicKeyBlob keyBlob = <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new StrongNamePublicKeyBlob(publicKey);</pre>
-  <pre>&nbsp;&nbsp;&nbsp; // create the StrongName<br />&nbsp;&nbsp;&nbsp; return new StrongName(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; keyBlob, assemblyName.Name, assemblyName.Version);<br />&#125;</pre>
-  <hr />
-  <p>Adapted from Microsoft patterns & practices guidance.</p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* .NET
+
+## Summary ##
+
+If your code supports the dynamic loading of assemblies and you load the assembly by calling Activator.CreateInstance, make sure to refer to the assembly by using its strong name. This prevents your application from accidentally loading a malicious assembly with the same name as a legitimate assembly.
+
+
+## Solution Example ##
+
+The strong name of an assembly contains the public-key token that the assembly was signed with, providing evidence of the author. The following example shows how to find the strong name for an assembly.
+
+~~~~
+public static StrongName GetStrongName(Assembly assembly)
+{
+    if(assembly == null)
+        throw new ArgumentNullException("assembly");
+    AssemblyName assemblyName = assembly.GetName();
+        
+    // get the public key blob
+    byte[] publicKey = assemblyName.GetPublicKey();
+    if(publicKey == null || publicKey.Length == 0)
+        throw new InvalidOperationException(
+            String.Format("{0} is not strongly named", 
+            assembly));
+    
+    StrongNamePublicKeyBlob keyBlob = 
+        new StrongNamePublicKeyBlob(publicKey);
+    // create the StrongName
+    return new StrongName(
+        keyBlob, assemblyName.Name, assemblyName.Version);
+}
+~~~~
+
+---
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>

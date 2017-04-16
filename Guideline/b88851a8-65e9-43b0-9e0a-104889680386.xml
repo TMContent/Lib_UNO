@@ -3,8 +3,8 @@
   <Metadata>
     <Id>b88851a8-65e9-43b0-9e0a-104889680386</Id>
     <Id_History>b88851a8-65e9-43b0-9e0a-104889680386,115d6422-56c1-4882-aeb0-4fa3f4358f58,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
-    <Title>Log Important Security Operations</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[1612Dupe] Log Important Security Operations</Title>
     <Category>Auditing and Logging</Category>
     <Phase>Design</Phase>
     <Technology>Java</Technology>
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies to</h1>
   <ul>
     <li>Applications written using Servlets or JSP.</li>
@@ -36,11 +36,11 @@
         <strong>Determine what is important. </strong>Review your application's architecture and security objectives to determine which operations are important to log. In general, you should log anything that can help you recognize or track a malicious attack on your system. This could include:</p>
       <ul>
         <li>
-          <strong>Authentication attempts: </strong>Log all authentication attempts whether they are successful or not. You may choose to include additional information such as the&nbsp;remote host IP/name. Logging authentication attempts provides a record of when accounts have been compromised or when your application has been used for malicious activities. <li><strong>Account changes: </strong>Log any changes made to a user's account. Such changes include, but are not limited to, change of password/PIN, account details and contact information. Such logs are useful when tracking the damage caused by a breach or when enforcing a lockout policy. <li><strong>Transactions performed by logged users: </strong>Log transactions performed by a logged user that have value. For instance, you should log e-commerce purchases since they have monetary value. It is also recommended to log the occurrence of user transactions when sensitive data is involved; however, do not log the actual sensitive data, such as credit card numbers. <li><strong>Creation, activation and locking/unlocking of accounts: </strong>Log any operations regarding the creation, activation and lockout of users. Logged information should include the remote IP address&nbsp;and a valid email address. These logs can be useful when investigating compromised accounts and non-legitimate users. <li><strong>System and security related administration events:</strong> Log any event pertaining to the overall wellness of your application. Examples&nbsp;include configuring, starting and terminating your application, auditing events, etc.</li></li></li></li></li>
+          <strong>Authentication attempts: </strong>Log all authentication attempts whether they are successful or not. You may choose to include additional information such as the&amp;nbsp;remote host IP/name. Logging authentication attempts provides a record of when accounts have been compromised or when your application has been used for malicious activities. <li><strong>Account changes: </strong>Log any changes made to a user's account. Such changes include, but are not limited to, change of password/PIN, account details and contact information. Such logs are useful when tracking the damage caused by a breach or when enforcing a lockout policy. <li><strong>Transactions performed by logged users: </strong>Log transactions performed by a logged user that have value. For instance, you should log e-commerce purchases since they have monetary value. It is also recommended to log the occurrence of user transactions when sensitive data is involved; however, do not log the actual sensitive data, such as credit card numbers. <li><strong>Creation, activation and locking/unlocking of accounts: </strong>Log any operations regarding the creation, activation and lockout of users. Logged information should include the remote IP address&amp;nbsp;and a valid email address. These logs can be useful when investigating compromised accounts and non-legitimate users. <li><strong>System and security related administration events:</strong> Log any event pertaining to the overall wellness of your application. Examples&amp;nbsp;include configuring, starting and terminating your application, auditing events, etc.</li></li></li></li></li>
       </ul>
       <li>
         <p>
-          <strong>Identify areas of code. </strong>Once you understand the important operations that should be tracked, conduct a thorough review of your application's design and code. The goal of this review should be to pinpoint each component, class and function in your system&nbsp;from where&nbsp;logging should take place.</p>
+          <strong>Identify areas of code. </strong>Once you understand the important operations that should be tracked, conduct a thorough review of your application's design and code. The goal of this review should be to pinpoint each component, class and function in your system&amp;nbsp;from where&amp;nbsp;logging should take place.</p>
         <li>
           <p>
             <strong>Add logging code. </strong>Log the beginning and end of all key security operations according to the logging mechanism adopted within your application. The logging schema should include universal date/time stamps, application name, subject/user ID, event type and resource, and state whether the event was a success or failure. Be careful not to log sensitive data that should otherwise be available only to privileged users.</p>
@@ -53,7 +53,7 @@
   <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyBasic&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;message&gt;Account modified&lt;/message&gt;<br />&lt;/record&gt;</pre>
   <h1>Solution Example</h1>
   <p>The following segment displays a log entry for a multi-user application. Because the application logs the application name, current user and return code, the log entry can be meaningful on its own during an audit or investigation of a security breach.</p>
-  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;&#33;-- Application name and current user have been stored --&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyBasic&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;message&gt;Account modified&lt;/message&gt;<br />  &lt;&#33;-- Return code has been stored --&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
+  <pre>&lt;record&gt;<br />  &lt;date&gt;2006-08-17T05:12:03&lt;/date&gt;<br />  &lt;millis&gt;1155805923743&lt;/millis&gt;<br />  &lt;sequence&gt;20&lt;/sequence&gt;<br />  &lt;&amp;#33;-- Application name and current user have been stored --&gt;<br />  &lt;application&gt;MyApp&lt;/application&gt;<br />  &lt;username&gt;adam&lt;/username&gt;<br />  &lt;logger&gt;myapp.inc&lt;/logger&gt;<br />  &lt;level&gt;INFO&lt;/level&gt;<br />  &lt;class&gt;application.admin.account&lt;/class&gt;<br />  &lt;method&gt;modifyBasic&lt;/method&gt;<br />  &lt;thread&gt;11&lt;/thread&gt;<br />  &lt;message&gt;Account modified&lt;/message&gt;<br />  &lt;&amp;#33;-- Return code has been stored --&gt;<br />  &lt;returnCode&gt;success&lt;/returnCode&gt;<br />&lt;/record&gt;</pre>
   <h1>Java Logging Guidelines</h1>
   <ul>
     <li>

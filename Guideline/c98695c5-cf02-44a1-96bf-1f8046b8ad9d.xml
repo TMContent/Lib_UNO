@@ -4,11 +4,11 @@
     <Id>c98695c5-cf02-44a1-96bf-1f8046b8ad9d</Id>
     <Id_History>c98695c5-cf02-44a1-96bf-1f8046b8ad9d,9531b837-344a-432e-83fa-2f61bf5bb503,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Validate Input for Length, Range, Format, And Type</Title>
+    <Title>Java Validate Input</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Validate Input for Length, Range, Format, And Type</DirectLink>
     <Tag />
     <Security_Demand />
@@ -17,23 +17,39 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Treat all input as untrusted data. Validate untrusted data using whitelist techniques to check against known good input.</p>
-  <h1>Why</h1>
-  <p>Unchecked malicious input may lead to integer overflows, injection based attacks, denial of service or information disclosure. </p>
-  <h1>When</h1>
-  <p>Always validate input. Do not assume that input is good based on origin.</p>
-  <h1>How</h1>
-  <p>Input can vary in several ways: length, data type contents. It is recommended to verify that all of these meet your application's expectations regarding its input.</p>
-  <ol>
-    <li>
-      <p />
-      <strong>Validating length</strong>: Validating an input's length suggests that your application should check a string's length or the number of bits in a numeric value. Checking the length can help prevent buffer overflows as well as integer overflows in numeric values. A simple way of validating the numeric value can be done through the use of <em>BigInteger/BigDecimal</em>:<pre>public boolean validateLength(String input)<br />&amp;#123;<br />      if(validateType(input))<br />      &amp;#123;<br />            BigInteger bi = new BigInteger(input);<br /><br />            if(bi.compareTo(BigInteger.valueOf(0)) &gt; -1<br />               &amp;&amp; bi.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) &lt; 1)<br />            &amp;#123;<br />                  return true;<br />            &amp;#125;<br />            else<br />            &amp;#123;<br />                  return false;<br />            &amp;#125;<br />      &amp;#125;<br />      else<br />      &amp;#123;<br />             return false;<br />      &amp;#125;<br />&amp;#125;</pre><li><p /><strong>Validating type</strong>: Validating the input's data type is important when your application expects a specific non-string parameter. Difference in data type can trigger unhandled exceptions that would throw your application into an unknown state. Example for validating that input is of integer value:<pre>public boolean validateType(String input)<br />&amp;#123;<br />      String goodPattern =\\d&amp;#43;;<br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br />            if(&amp;#33;m.matches())<br />      &amp;#123;<br /><br />            return false;<br />      &amp;#125;<br />      else<br />      &amp;#123;<br />            return true;<br />      &amp;#125;<br />&amp;#125;</pre><li><p /><strong>Validating contents</strong>: Validating the input's contents can be achieved using whitelist and blacklist techniques. The choice between the use of black and white listing is based upon the constraints that are imposed on the input. If the input follows a tight structure and format, then your application can use whitelisting alone to weed out malicious input. If there are unknowns about the input, then a combination of black and white listing must be used. In general, use blacklisting as a backup to whitelisting. Use a spiral-out approach as input is initially validated using whitelist techniques. When whitelisting cannot validate the input, fall back to blacklisting. If blacklist cannot validate, then discard the input. Whitelisting involves the establishment of what is good input to your application. Once good input is defined, your application must compare all input against the established good input. If the input does not resemble good input, your application should discard it. This technique can be implemented using regular expressions. Example:<pre>public boolean validateData(String input)<br />&amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; String goodPattern = "(\\w&amp;#124;\\d)&amp;#43;";<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; int goodLength = 10;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if(input.length() &gt; goodLength)<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return false;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Pattern p = Pattern.compile(goodPattern);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Matcher m = p.matcher(input);<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if(&amp;#33;m.matches())<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return false;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; else<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return true;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;</pre><p>Examples of useful regular expressions: </p><p><table><tbody><tr><td>Use</td><td>Regular Expression</td><td>Java String</td></tr><tr><td>Valid E-Mail Address</td><td>&amp;#94;\w&amp;#43;(\.&amp;#124;_&amp;#124;-)&amp;#123;0,1&amp;#125;\w&amp;#43;&amp;#64;(\w&amp;#43;\.)&amp;#42;\w&amp;#123;3,1024&amp;#125;\.(&amp;#91;a-zA-Z&amp;#93;&amp;#123;2&amp;#125;\.)&amp;#123;0,1&amp;#125;&amp;#91;a-zA-Z&amp;#93;&amp;#123;2,4&amp;#125;&amp;#36;</td><td>&amp;#94;\\w&amp;#43;(\\.&amp;#124;_&amp;#124;-)&amp;#123;0,1&amp;#125;\\w&amp;#43;&amp;#64;(\\w&amp;#43;\\.)&amp;#42;\\w&amp;#123;3,&amp;#125;\\.(&amp;#91;a-zA-Z&amp;#93;&amp;#123;2&amp;#125;\\.)&amp;#123;0,1&amp;#125;&amp;#91;a-zA-Z&amp;#93;&amp;#123;2,4&amp;#125;&amp;#36;</td></tr><tr><td>Alpha-numeric free text</td><td>(\w&amp;#124;\d&amp;#124;\s&amp;#124;;&amp;#124;\?&amp;#124;&amp;#33;&amp;#124;,&amp;#124;\.&amp;#124;-&amp;#124;:)&amp;#43;</td><td>(\\w&amp;#124;\\d&amp;#124;\\s&amp;#124;;&amp;#124;\\?&amp;#124;&amp;#33;&amp;#124;,&amp;#124;\\.&amp;#124;-&amp;#124;:)&amp;#43;</td></tr><tr><td>Word characters</td><td>\w&amp;#43;</td><td>\\w&amp;#43;</td></tr><tr><td>Numbers</td><td>\d&amp;#43;</td><td>\\d&amp;#43;</td></tr></tbody></table></p><ul></ul></li></li></li>
-  </ol>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java 
+
+
+## Solution Example ##
+
+~~~~
+public boolean validateData(String input)
+{
+      String goodPattern = "(\\w|\\d)+";
+      int goodLength = 10;
+      if(input.length() > goodLength)
+      {
+            return false;
+      }
+      Pattern p = Pattern.compile(goodPattern);
+      Matcher m = p.matcher(input);
+            if(!m.matches())
+      {
+            return false;
+      }
+      else
+      {
+            return true;
+      }
+}
+~~~~
+
+
+## Guideline ##
+
+* [Validate All Input](11a15f3a-7fe8-4e4c-be5e-309ab7227b3d)]]></Data>
   </Content>
 </TeamMentor_Article>

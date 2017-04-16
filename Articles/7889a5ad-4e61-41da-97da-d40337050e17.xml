@@ -4,54 +4,54 @@
     <Id>7889a5ad-4e61-41da-97da-d40337050e17</Id>
     <Id_History>7889a5ad-4e61-41da-97da-d40337050e17,8cb23f25-1263-4868-83e0-6d2f2e60f1c1,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Do Not Make Security Decisions Based on Client-Accessible Parameters</Title>
+    <Title>[170312Dupe] Do Not Make Security Decisions Based on Client-Accessible Parameters</Title>
     <Category>Session Management</Category>
     <Phase>Design</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Do Not Make Security Decisions Based on Client-Accessible Parameters</DirectLink>
     <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+<br /></p>
-  <h1>What to Do</h1>
-  <p>Do not make security decisions based on parameters that are sent by the client.</p>
-  <h1>Why</h1>
-  <p>Using client-accessible data to make security decisions allows the users to access and modify it. Therefore, an attacker would be able to bypass security measures.</p>
-  <h1>When</h1>
-  <p>If your application accepts and processes client-side information, do not use that information to make security decisions.</p>
-  <h1>How</h1>
-  <p>Security decisions should not be based on any data over which the client has control. Common mistakes include relying on data inside unprotected cookies, hidden fields or query strings.</p>
-  <p>To ensure that no security decisions are based on client-accessible data:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify security decision points.&amp;nbsp;</strong>Carefully examine the points in the code that are related to your application's security model. It is critical that no decision points are placed in the client. Because this is a design issue, it is recommended to use threat modeling to determine and evaluate the security decision points.</p>
-      <p />
-    </li>
-    <li>
-      <p>
-        <strong>Trace data that influences security decisions.&amp;nbsp;</strong>Tracing the data that influences security decisions helps&amp;nbsp;determine if the data is vulnerable to any client-based attacks. Make sure that the client cannot modify or influence this data.</p>
-      <p />
-    </li>
-    <li>
-      <p>
-        <strong>Prove that security-related data cannot be tampered with by the client.&amp;nbsp;</strong>Use cryptography or your application's design to ensure that security related data cannot be tampered with by the client.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Mark all exceptions to this guideline.&amp;nbsp;</strong>Note all exceptions made to this guideline. Thoroughly examine the code associated with such instances. Verify that all instances are provided in the business logic and are intended.</p>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code illustrates a servlet that accepts user-supplied input. Unfortunately, the application obtains the user's ID from the client which allows&amp;nbsp;an attacker to tamper with data that influences security decisions.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException{<br />      String userID = request.getParameter("userid");<br />       ...<br /> }</pre>
-  <h1>Solution Example</h1>
-  <p>The following code illustrates a servlet that accepts user-supplied input. Because the application obtains the user's ID from the user's session, it is not possible for an attacker to tamper with such data.</p>
-  <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException{<br />      Session sess = request.getSession();<br />      String userID = (String)sess.getAttribute("userid");<br /><br />      ...<br /><br />}</pre>]]></Data>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+
+## Summary ##
+
+Do not make security decisions based on parameters that are sent by the client. Using client-accessible data to make security decisions allows the users to access and modify it. Therefore, an attacker would be able to bypass security measures.
+
+
+## Problem Example ##
+
+The following code illustrates a servlet that accepts user-supplied input. Unfortunately, the application obtains the user's ID from the client which allows an attacker to tamper with data that influences security decisions.
+
+~~~~
+public void doGet(HttpServletRequest request,
+      HttpServletResponse response) throws ServletException, IOException{
+      String userID = request.getParameter("userid");
+       ...
+ }
+~~~~
+
+ 
+## Solution Example ##
+
+The following code illustrates a servlet that accepts user-supplied input. Because the application obtains the user's ID from the user's session, it is not possible for an attacker to tamper with such data.
+
+~~~~
+public void doGet(HttpServletRequest request,
+      HttpServletResponse response) throws ServletException, IOException{
+      Session sess = request.getSession();
+      String userID = (String)sess.getAttribute("userid");
+
+      ...
+
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>

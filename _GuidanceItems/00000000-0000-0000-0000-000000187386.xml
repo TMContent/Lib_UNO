@@ -3,39 +3,39 @@
   <Metadata>
     <Id>00000000-0000-0000-0000-000000187386</Id>
     <Id_History>00000000-0000-0000-0000-000000187386,db2d2d49-b44a-4a1f-94d2-72f792ab338e,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Avoid Using External Commands</Title>
     <Category>Dangerous APIs</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Guideline</Type>
     <DirectLink>Avoid Using External Commands</DirectLink>
-    <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
+    <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==Applies To==
-
-* ASP.NET
-
-==What to Do==
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## What to Do ##
 
 Avoid using external commands. Consider if it's possible to replace calls to external commands with some application code. In some cases, the functionality provided by the external command might not be worth the risk and the call to it can be simply removed.
 
-==Why==
+## Why ##
 
 Applications often use external commands to carry out some functionality. This helps programmers save time by having to write less code. Calling external commands is dangerous, as it creates the risk of introducing command injection vulnerabilities in your application. Command injection vulnerabilities allow attackers to execute external commands other than the ones intended by application. Most APIs used to execute external commands do not inherently provide protection against command injection. As a result, likelihood of introducing such vulnerability when calling external command is high.  It is recommended to avoid using external commands.
 
-==How==
+## How ##
 
 To avoid using external commands:
 
-# **Identify calls to external commands.** Search for the following APIs to find code that executes external commands: //AppCommandHandler.ExecuteCommand//, //System.Diagnostics.Process//.
-# **Identify all calls to external commands that include user input.** Narrow down the list of calls to external commands to those that include user data in parameters or, even worse, in deciding which application to run. 
-# **Determine if calls to external commands can be replaced.** For each piece of code that executes external commands, consider if it can be replaced with code that does the same thing without external commands or whether this code can be removed altogether.
-# **Replace calls to external commands.** Rewrite each piece of code that executes external commands without calling external commands or remove such code altogether.
-]]></Data>
+1. **Identify calls to external commands.** 
+2. **Identify all calls to external commands that include user input.** Narrow down the list of calls to external commands to those that include user data in parameters or, even worse, in deciding which application to run. 
+3. **Determine if calls to external commands can be replaced.** For each piece of code that executes external commands, consider if it can be replaced with code that does the same thing without external commands or whether this code can be removed altogether.
+4. **Replace calls to external commands.** Rewrite each piece of code that executes external commands without calling external commands or remove such code altogether.
+
+
+## Vulnerabilities ##
+
+* [Command Injection](94e52aca-06b6-4747-9bc9-f0149208f18c)]]></Data>
   </Content>
 </TeamMentor_Article>

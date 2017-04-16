@@ -4,11 +4,11 @@
     <Id>c566cabe-2463-4d24-8763-22e8468d167e</Id>
     <Id_History>c566cabe-2463-4d24-8763-22e8468d167e,ab769fee-0095-4d06-95ab-ca66b08ade80,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Validate Usernames Before Processing Them</Title>
+    <Title>Java Validate Usernames Before Processing Them</Title>
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Validate Usernames Before Processing Them</DirectLink>
     <Tag />
     <Security_Demand />
@@ -17,30 +17,39 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Validate user credentials before processing them.</p>
-  <h1>Why</h1>
-  <p>Failure to validate user credentials could cause improper authentication. This can allow an attacker to authenticate as another user without the need to steal credentials.</p>
-  <h1>When</h1>
-  <p>If your application accepts and processes user credentials, then validate the credentials before processing them.</p>
-  <h1>How</h1>
-  <p>Use the following steps when validating user credentials:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Establish username requirements. </strong>Determine what is the acceptable character set and length that should be allowed within a username. For instance, require that usernames should be at least&nbsp;six characters long and must contain alpha-numeric characters only.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Use whitelist validation. </strong>Whitelisting involves the establishment of what is good input for your application. Once good input is defined, compare all input against the established good input. If the input does not resemble good input, your application should discard it. This technique can be implemented using regular expressions. Example:</p>
-      <pre>public boolean validateUsername(String input)<br />{<br />      String goodPattern = "(\\w|\\d)+";<br />      int goodLength = 6;<br />      if(input.length() &lt; goodLength)<br />      {<br />            return false;<br />      }<br />      Pattern p = Pattern.compile(goodPattern);<br />      Matcher m = p.matcher(input);<br /><br />      if(!m.matches())<br />      {<br />            return false;<br />      }<br /><br /><br />      return true;<br />}</pre>
-    </li>
-  </ol>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Servlets or JSP
+
+
+## Summary ##
+
+Validate user credentials before processing them. Failure to validate user credentials could cause improper authentication. This can allow an attacker to authenticate as another user without the need to steal credentials.
+
+
+## Solution Example ##
+
+~~~~
+public boolean validateUsername(String input)
+{
+      String goodPattern = "(\\w|\\d)+";
+      int goodLength = 6;
+      if(input.length() < goodLength)
+      {
+            return false;
+      }
+      Pattern p = Pattern.compile(goodPattern);
+      Matcher m = p.matcher(input);
+
+      if(!m.matches())
+      {
+            return false;
+      }
+
+
+      return true;
+}
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>

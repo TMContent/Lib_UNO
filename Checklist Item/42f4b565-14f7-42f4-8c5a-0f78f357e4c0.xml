@@ -7,7 +7,7 @@
     <Title>All Database Input Is Validated</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
-    <Technology>Java</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>All Database Input Is Validated</DirectLink>
     <Tag>SQLi, SQL, SQL Injection</Tag>
@@ -18,12 +18,7 @@
     <Source>SI</Source>
   </Metadata>
   <Content Sanitized="true" DataType="markdown">
-    <Data><![CDATA[## Applies To ##
-
-* Java applications that use SQL databases
-
-
-## What to Check For ##
+    <Data><![CDATA[## What to Check For ##
 
 Ensure that all input passed to the database is validated.
 
@@ -70,67 +65,6 @@ To properly validate input passed to database:
 
 3. **Use type safe SQL parameters in queries.** Stored procedures with type-safe parameters and parameterized queries, such as prepared statements, are a strong defense against SQL injection attacks.
 
-
-## Problem Example ##
-
-The following code allows the user to query a database. Unfortunately, the application fails to validate the user's input and does not use parameterized APIs for data access. The result is that an attacker can access the backend database on behalf of the application through the use of SQL injection.
-
-	public void doGet(HttpServletRequest request,
-		 HttpServletResponse response) throws ServletException, IOException{
-		 PrintWriter out = response.getWriter();
-		 String query = request.getParameter("query");
-		 String retData = "";
-
-		 // The application fails to validate the user-supplied
-		 // query before submitting it to the database server
-		 retData = queryDB(query);
-
-		 ...
-
-		 out.flush();
-		 out.close();
-	}
-
-
-## Solution Example ##
-
-The following code allows the user to query a database. Because the application validates the user's input, it is much more difficult for an attacker to access the backend database through a SQL injection attack. Data validation is only one layer in a defense-in-depth paradigm; make sure to use parameterized APIs for data access as well.
-
-	public void doGet(HttpServletRequest request,
-		 HttpServletResponse response) throws ServletException, IOException{
-		 PrintWriter out = response.getWriter();
-		 String query = request.getParameter("query");
-		 String retData = "";
-
-		 // The application validates the user-supplied query
-		 // before submitting it to the database server
-		 if (validateQuery(query))
-		 {
-			  retData = queryDB(query);
-
-			  ...
-
-		 }
-
-		 out.flush();
-		 out.close();
-	}
-
-
-	public boolean validateQuery(String input){
-
-		  // The input can be only numbers
-		  String goodPattern = "[0-9]++";
-
-		  Pattern p = Pattern.compile(goodPattern);
-		  Matcher m = p.matcher(input);
-
-		  if(!m.matches())
-		  {
-				return false;
-		  }
-
-		  return true;
-	}]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -8,7 +8,7 @@
     <Category>Authentication</Category>
     <Phase>Implementation</Phase>
     <Technology>Android</Technology>
-    <Type>Guideline</Type>
+    <Type>How To</Type>
     <DirectLink>Use checkSignature() to Verify Applications Accessing AccountManager</DirectLink>
     <Author />
     <Priority />
@@ -37,7 +37,7 @@ Prior to calling the //getAuthToken()// method which will retrieve the authentic
 
 # **Determine the packages for which you are authorizing access.** Retrieve their user ID (UID) with a call to //Binder.getCallingUid()//. Take special care to call this method from within the application itself, and store the UIDs in a location accessible from the service.
 # **When a bound service invokes a method in your application, capture the UID of the calling service.** Doing so can be tricky, as many programmers do this in the //onBind()// method of the application’s service, thinking that the //Binder.getCallingUid()// method will return the remote process UID. (It does not, because //onBind()// is not remotely called.) Instead, place this call in an Android Interface Definition Language remotely accessible service, or override the //sendMessageAtTime(Message m, long l)// method in your bound service’s handler instance to obtain the calling UID.
-# **Validate the UID.** Check the UID against those you have used //getPackageManager().checkSignatures(UID1, UID2)// to authorize. Use the return to decide whether the remote application should be allowed access.  The return is >= 0 if the signatures match or < 0 if they do not.  
+# **Validate the UID.** Check the UID against those you have used //getPackageManager().checkSignatures(UID1, UID2)// to authorize. Use the return to decide whether the remote application should be allowed access.  The return is &gt;= 0 if the signatures match or &lt; 0 if they do not.  
 
 ==Problem Example==
 
@@ -75,13 +75,13 @@ You want to limit access to your service if for no other reason than to require 
 
 ==Solution Example==
 
-To authenticate application access to the MyApp service, you can first capture the sending application’s UID by overriding the //sendMessageAtTime()// method in the handler instance for the bound service. In this method, call //int uid = Binder.getCallingUid()//. Next, add a call to //checkSignatures()// with this UID and the one that is authorized access. If the //checkSignatures()// method does not return a match (<0), set the incoming message’s //arg1// field  = -1, and use this in the next method to determine whether this message should be accepted:
+To authenticate application access to the MyApp service, you can first capture the sending application’s UID by overriding the //sendMessageAtTime()// method in the handler instance for the bound service. In this method, call //int uid = Binder.getCallingUid()//. Next, add a call to //checkSignatures()// with this UID and the one that is authorized access. If the //checkSignatures()// method does not return a match (&lt;0), set the incoming message’s //arg1// field  = -1, and use this in the next method to determine whether this message should be accepted:
 
 {{{
 @Override 
 public boolean sendMessageAtTime(Message incoming, long l) {
 int uid = Binder.getCallingUid();
-if (getPackageManager().checkSignatures(uid, 10514)<=0) {
+if (getPackageManager().checkSignatures(uid, 10514)&lt;=0) {
 incoming.arg1=-1;
 }
 else {

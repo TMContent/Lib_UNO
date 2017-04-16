@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>d1d1ac28-92a3-430f-9260-efa1bfd0199d</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Python 3 Separate Data from SQL Syntax</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 3
+
+
+## Problem Example ##
+
+~~~~
+#! /usr/bin/env python3
+
+'''
+Python SQL Injection Example
+'''
+
+import sys
+
+def usage():
+    print("Usage: {} username".format(sys.argv[0]))
+
+
+def create_sample_table(conn):
+    c = conn.cursor()
+    c.execute(
+        '''CREATE TABLE users
+           (username text, name text, salt text, password text)
+        ''')
+    c.execute(
+        '''INSERT INTO users VALUES
+           ('administrator',
+           'Administrator',
+           'c087d4685cf4b1e7343076ec9dffd1d5150c5de9a756ae4e6cae4f34cc681832',
+           '87191194028399e2ec4363ac0f9772f7f438f2529cadf779bf4f904063de5b0e')
+        ''')
+    c.execute(
+        '''INSERT INTO users VALUES
+           ('apoodle',
+           'Arnold T. Poodle',
+           'f7186980e8052949cb6435f1e7a237897754ef8dd41b0d79b6c87c403bf30df0',
+           '0670fba1883cab2b39d45f8d6c975fc9bcd59fd3e4bed7c9ed3a4d48bde17599')
+        ''')
+    conn.commit()
+
+
+def main():
+    if len(sys.argv) != 2:
+        usage()
+        return 2
+
+    # This example uses the standard Python database API defined in PEP-249,
+    # and the sqlite3 module.
+    # Changing the following 3 lines should be sufficient to use the psycopg
+    # package (Postgres) or the mysql-python package (MySQL) instead.
+
+    import sqlite3
+    db = sqlite3
+    conn = db.connect(':memory:')
+
+    # Create a table with sample data
+    create_sample_table(conn)
+
+    # Take input and query the database
+    # Bad: SQL statement string contatenation
+    username = sys.argv[1]
+    statement = "SELECT * FROM users WHERE username = '{}'".format(username)
+
+    c = conn.cursor()
+    c.execute(statement)
+    row = c.fetchone()
+
+    # Cleanup
+    conn.close()
+
+    # Print the user info
+    if row:
+        print("Username: " + row[0])
+        print("Name: " + row[1])
+    else:
+        print("Username not found")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+~~~~
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python3
+
+'''
+Python Use Prepared Statements
+'''
+
+import sys
+
+def usage():
+    print("Usage: {} username".format(sys.argv[0]))
+
+
+def create_sample_table(conn):
+    c = conn.cursor()
+    c.execute(
+        '''CREATE TABLE users
+           (username text, name text, salt text, password text)
+        ''')
+    c.execute(
+        '''INSERT INTO users VALUES
+           ('administrator',
+           'Administrator',
+           'c087d4685cf4b1e7343076ec9dffd1d5150c5de9a756ae4e6cae4f34cc681832',
+           '87191194028399e2ec4363ac0f9772f7f438f2529cadf779bf4f904063de5b0e')
+        ''')
+    c.execute(
+        '''INSERT INTO users VALUES
+           ('apoodle',
+           'Arnold T. Poodle',
+           'f7186980e8052949cb6435f1e7a237897754ef8dd41b0d79b6c87c403bf30df0',
+           '0670fba1883cab2b39d45f8d6c975fc9bcd59fd3e4bed7c9ed3a4d48bde17599')
+        ''')
+    conn.commit()
+
+
+def main():
+    if len(sys.argv) != 2:
+        usage()
+        return 2
+
+    # This example uses the standard Python database API defined in PEP-249,
+    # and the sqlite3 module.
+    # Changing the following 3 lines should be sufficient to use the psycopg
+    # package (Postgres) or the mysql-python package (MySQL) instead.
+
+    import sqlite3
+    db = sqlite3
+    conn = db.connect(':memory:')
+
+    # Create a table with sample data
+    create_sample_table(conn)
+
+    # Take input and query the database
+    # Good: SQL prepated statement
+    username = sys.argv[1]
+    statement = "SELECT * FROM users WHERE username = ?"
+    sql_args = (username, )
+
+    c = conn.cursor()
+    c.execute(statement, sql_args)
+    row = c.fetchone()
+
+    # Cleanup
+    conn.close()
+
+    # Print the user info
+    if row:
+        print("Username: " + row[0])
+        print("Name: " + row[1])
+    else:
+        print("Username not found")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+~~~~
+
+
+## Guideline ##
+
+* [Use Prepared Statements for SQL Queries](397488da-ce91-4768-9ad9-1e6928980d72)]]></Data>
+  </Content>
+</TeamMentor_Article>

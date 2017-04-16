@@ -3,12 +3,12 @@
   <Metadata>
     <Id>508f4130-96fd-40b8-9358-552795b810e3</Id>
     <Id_History>508f4130-96fd-40b8-9358-552795b810e3,c39e4a5d-ca1d-46d5-93ae-6c43c38647e4,</Id_History>
-    <Library_Id>26bd1a04-beed-4a66-917d-b6ab0a7d634c</Library_Id>
-    <Title>Encrypt Sensitive Data During Transmission</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>[170312Dupe] Encrypt Sensitive Data During Transmission</Title>
     <Category>Communication Security</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Encrypt Sensitive Data During Transmission</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
     <Security_Demand />
@@ -17,7 +17,7 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
+  <Content Sanitized="true" DataType="html">
     <Data><![CDATA[<h1>Applies To</h1>
   <ul>
     <li>ASP.NET 4.0</li>
@@ -25,7 +25,7 @@
   <h1>What to Do</h1>
   <p>Use a protocol that allows adequate encryption to protect sensitive data, such as credentials and application-specific data.</p>
   <h1>Why</h1>
-  <p>When data is sent over the network, it typically passes through several intermediate relays on its way towards some final destination. Using a safe protocol to transmit information is important because it adds protection against&nbsp;the Network Eavesdropping Attack or the&nbsp;Man in the Middle Attack during transport.</p>
+  <p>When data is sent over the network, it typically passes through several intermediate relays on its way towards some final destination. Using a safe protocol to transmit information is important because it adds protection against&amp;nbsp;the Network Eavesdropping Attack or the&amp;nbsp;Man in the Middle Attack during transport.</p>
   <h1>When</h1>
   <p>This is required whenever sensitive data needs to be sent between two hosts.</p>
   <h1>How</h1>
@@ -81,6 +81,6 @@
   <pre>void ProcessPayment(byte[] ccInfo, float amount)<br />{<br />    byte[] ccDigest = MyApp.Crypto.EncryptCCInfo(ccInfo);<br />    SqlConnection connection;<br />    SqlCommand command;<br />    SqlDataReader result; <br />    string query = "execute QueuePayment @ccDigest @amount;";<br />    connection = MyApp.DBManager.GetDBConnection();<br />    command = new SqlCommand(query, connection);<br />    command.Parameters.Add("@ccDigest", System.Data.SqlDbType.Binary);<br />    command.Parameters["@ccDigest"].Value = ccDigest;<br />    command.Parameters.Add("@amount", System.Data.SqlDbType.Float);<br />    command.Parameters["@amount"].Value = amount;<br />    ...<br />} <br />... <br />public byte[] EncryptCCInfo(byte[] ccInfo)<br />{<br />    Rijndael encMD;<br />    ICryptoTransform encCT;<br />    byte[] digest;<br />    encMD = Rijndael.Create();<br />    encMD.Key = MyApp.Crypto.GetEncryptionKey();<br />    encMD.IV = MyApp.Crypto.GetEncryptionIV();<br />    encCT = encMD.CreateEncryptor();<br />    digest = encCT.TransformFinalBlock(ccInfo, 0, ccInfo.Length);<br />    encMD.Clear();<br />    return digest;<br />}</pre>
   <p>Because data between the two components is encrypted, the transmission medium is less likely to affect the application's ability to securely transmit payment information.</p>
   <hr />
-  <p>Adapted from Microsoft patterns & practices guidance. </p>]]></Data>
+  <p>Adapted from Microsoft patterns &amp; practices guidance. </p>]]></Data>
   </Content>
 </TeamMentor_Article>

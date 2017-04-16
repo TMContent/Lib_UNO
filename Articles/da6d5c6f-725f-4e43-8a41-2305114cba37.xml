@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>da6d5c6f-725f-4e43-8a41-2305114cba37</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Python 3 Drop Privileges</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 3
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python3
+
+'''
+Python Drop Privileges
+'''
+
+# This script assumes it is initially run from sudo or the root crontab.
+# This is not the correct pattern for a suid script.
+# Use this pattern if your script must perform a privileged action, then
+# perform other non-privileged actions.
+
+import grp
+import os
+import pwd
+import sys
+
+def perform_privileged_actions():
+    # ex: mount network drive, listen on privileged port, write to a system file
+    pass
+
+
+def drop_privileges(username="nobody", groupname="nogroup"):
+    if os.getuid() != 0:
+        return
+
+    # Get passwd struct and group list for username/groupname
+    pw = pwd.getpwnam(username)
+    gr = grp.getgrnam(groupname)
+    groups = [g.gr_gid for g in grp.getgrall() if username in g.gr_mem]
+
+    # Set supplemental groups
+    os.setgroups(groups)
+
+    # Set new uid/gid
+    os.setgid(gr.gr_gid)
+    os.setuid(pw.pw_uid)
+
+    # Change important environment variables
+    os.environ["HOME"] = pw.pw_dir
+    os.environ["LOGNAME"] = username
+    os.environ["USER"] = username
+
+
+def perform_unprivileged_actions():
+    # ex: monitor file for changes, listen for connections
+    pass
+
+
+def main():
+    perform_privileged_actions()
+    try:
+        drop_privileges()
+    except OSError:
+        print("Error: Unable to drop privileges.")
+        sys.exit()
+
+    perform_unprivileged_actions()
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>

@@ -3,8 +3,8 @@
   <Metadata>
     <Id>bf931bed-21c0-4b89-9cb2-9274d8c796a6</Id>
     <Id_History>bf931bed-21c0-4b89-9cb2-9274d8c796a6,de955d28-5b9b-4a04-9f16-471ba56b1eff,</Id_History>
-    <Library_Id>c4b9cb6a-4561-4451-9b6c-4e59d73584f6</Library_Id>
-    <Title>Cross-Site Request Forgery (CSRF) Prevention Using SpringMVC</Title>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>SpringMVC Cross-Site Request Forgery (CSRF) Prevention</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,137 +17,74 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>JAVA<li>SpringMVC</li></li>
-  </ul>
-  <h1>Summary</h1>
-  <p>Perform CSRF prevention using SpringMVC within an application.</p>
-  <h1>Objectives</h1>
-  <p>CSRF prevention is a key security control for an application that protects the application and its users from CSRF attacks. This article will describe how to use the built-in mechanisms provided by SpringMVC to perform CSRF prevention.</p>
-  <h1>Solution Example</h1>
-  <p>There is a standard model for CSRF prevention using SpringMVC that involves 3 basic steps</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Build a base controller with CSRF generation and validation methods.</strong>
-      </p>
-      <pre>public class RootController &#123;<br />...<br />&nbsp;&nbsp;&nbsp; protected void init(ControllerContext ctx) &#123;<br />&nbsp;...<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; initializeCsfrToken(ctx);<br />&nbsp;&nbsp;&nbsp; &#125;</pre>
-      <pre>&nbsp;&nbsp;&nbsp; private void initializeCsfrToken(ControllerContext ctx) &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String csrfToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(Utils.isEmpty(csrfToken)) &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctx.setSessionAttribute(ctx, ControllerContext.CSRF_TOKEN, generateCsrfToken(ctx));<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp; <br />&nbsp;&nbsp;&nbsp; private String generateCsrfToken(ControllerContext ctx) &#123;<br />&nbsp;... generate random string<br />&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp; <br />&nbsp;&nbsp;&nbsp; protected boolean isValidCsrfToken(ControllerContext ctx) &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String csrfParamToken = ctx.getParameter(ControllerContext.CSRF_TOKEN);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String csrfSessionToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(&#33;Utils.isEmpty(csrfParamToken) && &#33;Utils.isEmpty(csrfSessionToken) && csrfParamToken.equals(csrfSessionToken)) &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return true;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#125; else &#123;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Log this as this can be a security threat<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Log.warn("Invalid security Token. Supplied token: " &#43; csrfParamToken &#43; ". Session token: " &#43; csrfSessionToken &#43; ". IP: " &#43; ctx.request.getRemoteAddr());<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return false;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#125;<br />&nbsp;&nbsp;&nbsp; &#125;</pre>
-      <li>
-        <p>
-          <strong>Include CSRF token in form submitted via JSP.</strong>
-        </p>
-        <pre>&lt;input type="hidden" name="ctoken" id="ctoken" value="&#36;&#123;sessionScope.ctoken&#125;"/&gt;</pre>
-        <li>
-          <p>
-            <strong>In Controller handling request, validate CSRF token. </strong>In the action class/method that handles the saving of your form (ex. <em>SaveBookController</em>), you need to perform the token validation. </p>
-          <pre>...<br />ControllerContext ctx = new ControllerContext(request, response);<br />init(ctx);<br />if (&#33;isValidCsrfToken(ctx)) &#123;<br />&nbsp;&nbsp;&nbsp; result.addError(new ObjectError("employee", getMessage("error.invalidCsrfToken")));<br />&nbsp;&nbsp;&nbsp; return getModelAndView(ctx, "employee/list");<br />&#125;<br />...</pre>
-        </li>
-      </li>
-    </li>
-  </ol>
-  <p>Using these 3 simple steps you can effectively have a session specific per user token used to validate that a request was submitted by a user intentionally.</p>
-  <p>
-    <strong>Note</strong>: There have been effective attacks against various CSRF prevention techniques including this token-based approach when an application has XSS vulnerabilities. Removing XSS is therefore viewed as a prerequisite activity for a complete CSRF prevention mechanism.</p>
-  <p>In conclusion, CSRF prevention can function as a strong security control if used properly and applied thoroughly throughout the application. The SpringMVC framework provides a simple series of steps for accomplishing this task. </p>
-  <h1>More Information</h1>
-  <ul>
-    <li>For more information about the Web MVC framework, please see <a href="http://static.springsource.org/spring/docs/2.0.x/reference/mvc.html">http://static.springsource.org/spring/docs/2.0.x/reference/mvc.html</a></li>
-  </ul>
-  <h1>Java Session Management Guidelines</h1>
-  <ul>
-    <li>
-      <a href="/article/42276b64-f51d-4b89-8c33-0ffd9b098890">Use Session Management Offered by the Framework</a>
-      <li>
-        <a href="/article/2aa12bed-347a-43c6-a419-48ffd5bc3f5a">Protect Session IDs</a>
-        <li>
-          <a href="/article/6012e717-6ba6-4380-8ca8-2f0b7c69d717">Protect Session Cookies</a>
-          <li>
-            <a href="/article/7a517ad5-8640-4bc7-9e84-ccc313a71901">Set the Domain and Path Values of Session Cookies</a>
-            <li>
-              <a href="/article/9b7e6e63-c37c-403b-a2f5-60b1e1abbb0b">Set the Secure and HTTPOnly Flags on All Sensitive Cookies</a>
-              <li>
-                <a href="/article/6c470029-5c62-4394-99a9-8990bc48b0a8">Change Session IDs During Authentication</a>
-                <li>
-                  <a href="/article/a223c2d8-ab42-47fb-81a2-86ad677a5632">Invalidate Sessions when Users Log Out</a>
-                  <li>
-                    <a href="/article/acfe1a16-3f00-4383-ada4-bebafc98a836">Make Inactive Sessions Time-out</a>
-                    <li>
-                      <a href="/article/61b8ebc8-3ba5-4e75-aea8-94d6d3b3177e">Include Unique Tokens in HTTP Requests</a>
-                      <li>
-                        <a href="/article/9df0b518-f832-4a7c-9857-0517638c47db">Do Not Make Security Decisions Based on Client-Accessible Parameters</a>
-                      </li>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Session Management Checklists</h1>
-  <ul>
-    <li>
-      <a href="/article/3f2660b3-a935-4b4e-85ff-27ae28683f5b">Session Management Offered by the Framework Is Used</a>
-      <li>
-        <a href="/article/1de62774-3392-4da7-9bae-065fb15b4a2b">Session IDs Are Protected</a>
-        <li>
-          <a href="/article/59132a30-2bae-45e9-9d85-8de26441be29">Session Cookies are Protected</a>
-          <li>
-            <a href="/article/500d61f2-c9fa-4b1e-91f5-0a589c0fe00b">The Domain and Path Values of Session Cookies Are Strict</a>
-            <li>
-              <a href="/article/d8922a46-a943-4ae0-b8af-b88eb01d6997">The Secure and HTTPOnly Flags Are Set on All Sensitive Cookies</a>
-              <li>
-                <a href="/article/58df5418-8c03-4121-83e0-bc68247c5d7b">Session IDs Are Changed During Authentication</a>
-                <li>
-                  <a href="/article/0e40c446-c740-42a9-a4d2-72c9d05e55ac">Sessions Are Invalidated When Users Log Out</a>
-                  <li>
-                    <a href="/article/c486eeb2-f64f-480b-9823-48bd7d21047d">Inactive Sessions Time-out</a>
-                    <li>
-                      <a href="/article/0463ae25-dc35-45e7-8b24-9b1f8ddb6af0">Unique Tokens Are Included in HTTP Requests</a>
-                      <li>
-                        <a href="/article/4436e342-64d9-4b1b-ae9b-3e00696053fb">Security Decisions are Not Made Based on Client-Accessible Parameters</a>
-                      </li>
-                    </li>
-                  </li>
-                </li>
-              </li>
-            </li>
-          </li>
-        </li>
-      </li>
-    </li>
-  </ul>
-  <h1>Java Session Management Code Examples</h1>
-  <ul>
-    <li>
-      <a href="/article/7d647e95-e47f-42e3-bb84-fd0dd727245c">Add Unique Tokens to HTTP Requests Using ESAPI</a>
-    </li>
-    <li>
-      <a href="/article/25e3943b-a651-42c5-9e19-76077de05e90">Add Unique Tokens to HTTP Requests Using Java Server Faces (JSF)</a>
-    </li>
-    <li>
-      <a href="/article/986c7161-0a76-430a-8d0e-80d4615ab5db">Add Unique Tokens to HTTP Requests Using Plain Java Server Pages (JSP)</a>
-    </li>
-    <li>
-      <a href="/article/bf931bed-21c0-4b89-9cb2-9274d8c796a6">Cross-Site Request Forgery (CSRF) Prevention Using SpringMVC</a>
-    </li>
-    <li>
-      <a href="/article/63deed1a-6df4-4e04-9f61-898f190e1fe1">Cross-Site Request Forgery (CSRF) Prevention Using Struts 1</a>
-    </li>
-    <li>
-      <a href="/article/a9c2c121-614c-4a3f-9b7c-f2cf57d6aa0b">Cross-Site Request Forgery (CSRF) Prevention Using Struts 2</a>
-    </li>
-  </ul>
-  <h1>Java Session Management Testing</h1>
-  <ul>
-    <li>
-      <a href="/article/40771780-be59-4d4c-b283-5ec3cc286357">How to Test for Session Prediction Bugs in Java</a>
-    </li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* JAVA
+* SpringMVC
+
+
+## Summary ##
+
+Perform CSRF prevention using SpringMVC within an application. CSRF prevention is a key security control for an application that protects the application and its users from CSRF attacks. 
+
+
+## Solution Example ##
+
+There is a standard model for CSRF prevention using SpringMVC that involves 3 basic steps
+
+1. **Build a base controller with CSRF generation and validation methods.**
+
+	~~~~
+	public class RootController {
+	...
+		protected void init(ControllerContext ctx) {
+	 ...
+			initializeCsfrToken(ctx);
+		}
+		private void initializeCsfrToken(ControllerContext ctx) {
+		   String csrfToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");
+		   if(Utils.isEmpty(csrfToken)) {
+			   ctx.setSessionAttribute(ctx, ControllerContext.CSRF_TOKEN, generateCsrfToken(ctx));
+		   }
+		}
+		
+		private String generateCsrfToken(ControllerContext ctx) {
+	 ... generate random string
+		}
+		
+		protected boolean isValidCsrfToken(ControllerContext ctx) {
+			String csrfParamToken = ctx.getParameter(ControllerContext.CSRF_TOKEN);
+			String csrfSessionToken = ctx.getSessionAttribute(ControllerContext.CSRF_TOKEN, "");
+			if(!Utils.isEmpty(csrfParamToken) && !Utils.isEmpty(csrfSessionToken) && csrfParamToken.equals(csrfSessionToken)) {
+				return true;
+			} else {
+				//Log this as this can be a security threat
+				Log.warn("Invalid security Token. Supplied token: " + csrfParamToken + ". Session token: " + csrfSessionToken + ". IP: " + ctx.request.getRemoteAddr());
+				return false;
+			}
+		}
+	~~~~
+
+2. **Include CSRF token in form submitted via JSP.**
+
+	~~~~
+	<input type="hidden" name="ctoken" id="ctoken" value="${sessionScope.ctoken}"/>
+	~~~~
+
+3. **In Controller handling request, validate CSRF token.** In the action class/method that handles the saving of your form (ex. SaveBookController), you need to perform the token validation.
+
+	~~~~
+	...
+	ControllerContext ctx = new ControllerContext(request, response);
+	init(ctx);
+	if (!isValidCsrfToken(ctx)) {
+		result.addError(new ObjectError("employee", getMessage("error.invalidCsrfToken")));
+		return getModelAndView(ctx, "employee/list");
+	}
+	...
+	~~~~
+
+]]></Data>
   </Content>
 </TeamMentor_Article>
