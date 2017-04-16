@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>2c9102ca-ee5a-4bac-a981-9a31e7a92526</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Python 3 Handle Errors</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 3
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python3
+
+'''
+Python Error Handling
+'''
+
+# Open, read, and print a file handling exceptions that can occur
+
+import sys
+import os
+
+def usage():
+    print("Usage: {} filename".format(sys.argv[0]))
+
+
+def main():
+    if len(sys.argv) != 2:
+        usage()
+        sys.exit(2)
+
+    filename = sys.argv[1]
+    fin = None
+
+    try:
+        fin = open(filename, "r")
+    except IOError as err:
+        # Catch likely IO errors like file not found
+        print("I/O error({}): {}".format(err.errno, err.strerror))
+        sys.exit(1)
+
+    try:
+        for line in fin:
+            sys.stdout.write(line)
+    except IOError as err:
+        print("I/O error({}): {}".format(err.errno, err.strerror))
+        sys.exit(1)
+    finally:
+        # Cleanup, whether the IO succeeded or failed
+        fin.close()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt as err: # Ctrl-C
+        pass
+    except Exception as err:
+        # Catch all exceptions to prevent backtraces on the CLI
+        print("Unexpected error: {}".format(err))
+        sys.exit(1)
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>

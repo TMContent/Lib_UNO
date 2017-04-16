@@ -4,7 +4,7 @@
     <Id>7d647e95-e47f-42e3-bb84-fd0dd727245c</Id>
     <Id_History>7d647e95-e47f-42e3-bb84-fd0dd727245c,ea8e7afe-c1a8-43bd-87f3-9b9322dcdd40,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Add Unique Tokens to HTTP Requests Using ESAPI</Title>
+    <Title>Java Add Unique Tokens to HTTP Requests Using ESAPI</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,17 +17,73 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Java web-based applications</li>
-  </ul>
-  <h1>Summary</h1>
-  <p>Implementing protections that prevent Cross-Site Request Forgery (CSRF) within an application that uses ESAPI.</p>
-  <h1>Objectives</h1>
-  <p>CSRF is a powerful attack that allows an attacker to force a victim to execute functionality within an application on behalf of the attacker. The example below gives an example of how to prevent CSRF within an application that uses ESAPI.</p>
-  <h1>Scenarios</h1>
-  <p>CSRF is a type of attack that occurs when a malicious web site causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated, causing the victim to perform activities on behalf of the attacker. In order to prevent CSRF, the most common effective solution currently used is the synchronizer token pattern. The flow below shows the basic steps in prevention. </p>
-  <h1>Solution Example</h1>To add unique tokens to HTTP requests using ESAPI: <ol><li><p><strong>Store a randomly generated token for each authenticated user.</strong> Upon successful authentication of a user, store a randomly generated (using a secure pseudo-random number generator such as <em>java.security.SecureRandom</em>) string (token) in the <em>HttpSession</em> for the user.</p><p>The code below is in the <em>DefaultUser</em> class in ESAPI. If you override this class, you will need to execute a similar function</p><pre><p>/&amp;#42;&amp;#42; This user's CSRF token. &amp;#42;/</p><p>private String csrfToken = resetCSRFToken();</p><p>...</p><p>public String resetCSRFToken() &amp;#123;</p><p> csrfToken =<br />  ESAPI.randomizer().getRandomString(64, DefaultEncoder.CHAR_ALPHANUMERICS);</p><p> return csrfToken;</p><p>&amp;#125;</p></pre><li><p><strong>Add security tokens to transaction pages.</strong> For any function in the application representing a transaction (ie. causes a server side state change), the associated client form should have a hidden form field containing the token retrieved from the session.</p><pre><p>&lt;form action="..."&gt;</p><p> ...</p><p> &lt;input id="&lt;&amp;#37;= ESAPI.httpUtilities().CSRF_TOKEN_NAME &amp;#37;&gt;" type="hidden" value="&lt;&amp;#37;= ESAPI.httpUtilities().getCSRFToken() &amp;#37;&gt;" /&gt;</p><p>...</p><p>&lt;form&gt;</p></pre><li><p><strong>Verify that server-side and client-side tokens match.</strong> For any function in the application representing a transaction (ie. causes a server side state change), the associated server-side request processing code should retrieve the token from the session. It should then compare that token to the submitted token from the client for the given request. If the tokens match, the transaction may be processed. If the tokens do not match, the transaction should not be processed, and the associated request should be treated as an attack and dealt with accordingly.</p><pre><p>//in your servlet or other web request handling code</p><p>public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &amp;#123;</p><p>&amp;#9;...</p><p>&amp;#9;String storedToken = ESAPI.httpUtilities().getCSRFToken();</p><p>&amp;#9;String token = request.getParameter(ESAPI.httpUtilities().CSRF_TOKEN_NAME);</p><p /><p>&amp;#9;//do check</p><p>&amp;#9;if (storedToken.equals(token)) &amp;#123;</p><p>&amp;#9;&amp;#9;//go ahead and process ... do business logic here</p><p>&amp;#9;&amp;#125; else &amp;#123;</p><p>&amp;#9;&amp;#9;//DO NOT PROCESS ... this is to be considered a CSRF attack - handle appropriately</p><p>&amp;#9;&amp;#125;</p><p>&amp;#125;</p></pre><li><p><strong>Invalidate sessions upon logout or expiration.</strong> Upon logout or session timeout, invalidate the session, which will in turn void the generated random token</p><pre>//in logout function<p>session.invalidate();</p></pre></li></li></li></li></ol><h1>See Also</h1><ul><li>For more information about Cross-Site Request Forgery, please see <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29</a><li>For more information about Cross-Site Request Forgery prevention, please see&amp;nbsp;<a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29_Prevention_Cheat_Sheet">https://www.owasp.org/index.php/Cross-Site_Request_Forgery_&amp;#37;28CSRF&amp;#37;29_Prevention_Cheat_Sheet</a><li>For more information about SecureRandom, please see <a href="http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html">http://download.oracle.com/javase/6/docs/api/java/security/SecureRandom.html</a><li>For more information about the OWASP CSRFGuard project, please see <a href="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project">http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project</a><li>For more information about Cross-Site Request Forgery, please see <a href="http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/">http://www.jtmelton.com/2010/05/16/the-owasp-top-ten-and-esapi-part-6-cross-site-request-forgery-csrf/</a></li></li></li></li></li></ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java
+
+
+## Summary ##
+
+CSRF is a powerful attack that allows an attacker to force a victim to execute functionality within an application on behalf of the attacker. The example below gives an example of how to prevent CSRF within an application that uses ESAPI.
+
+
+## Solution Example ##
+
+To add unique tokens to HTTP requests using ESAPI:
+
+1. **Store a randomly generated token for each authenticated user.** Upon successful authentication of a user, store a randomly generated (using a secure pseudo-random number generator such as java.security.SecureRandom) string (token) in the HttpSession for the user.
+
+	The code below is in the DefaultUser class in ESAPI. If you override this class, you will need to execute a similar function
+
+	~~~~
+	/** This user's CSRF token. */
+	private String csrfToken = resetCSRFToken();
+	...
+
+	public String resetCSRFToken() {
+
+	 csrfToken =
+	  ESAPI.randomizer().getRandomString(64, DefaultEncoder.CHAR_ALPHANUMERICS);
+
+	 return csrfToken;
+	}
+	~~~~
+
+2. **Add security tokens to transaction pages.** For any function in the application representing a transaction (ie. causes a server side state change), the associated client form should have a hidden form field containing the token retrieved from the session.
+
+	~~~~
+	<form action="...">
+	 ...
+	 <input id="<%= ESAPI.httpUtilities().CSRF_TOKEN_NAME %>" type="hidden" value="<%= ESAPI.httpUtilities().getCSRFToken() %>" />
+	 ...
+	<form>
+	~~~~
+
+3. **Verify that server-side and client-side tokens match.** For any function in the application representing a transaction (ie. causes a server side state change), the associated server-side request processing code should retrieve the token from the session. It should then compare that token to the submitted token from the client for the given request. If the tokens match, the transaction may be processed. If the tokens do not match, the transaction should not be processed, and the associated request should be treated as an attack and dealt with accordingly.
+
+	~~~~
+	//in your servlet or other web request handling code
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	 ...
+	 String storedToken = ESAPI.httpUtilities().getCSRFToken();
+	 String token = request.getParameter(ESAPI.httpUtilities().CSRF_TOKEN_NAME);
+	 //do check
+	 if (storedToken.equals(token)) {
+	   //go ahead and process ... do business logic here
+	 } else {
+	   //DO NOT PROCESS
+	   ...
+	   //this is to be considered a CSRF attack - handle appropriately
+	  }
+	}
+	~~~~
+
+4. **Invalidate sessions upon logout or expiration.** Upon logout or session timeout, invalidate the session, which will in turn void the generated random token
+
+	~~~~
+	//in logout function
+	session.invalidate();
+	~~~~]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -4,11 +4,11 @@
     <Id>4795c643-0002-4213-a138-99c540427a22</Id>
     <Id_History>4795c643-0002-4213-a138-99c540427a22,4c02bc11-5f68-4cfc-aca7-e7d3c682c1e3,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Deny All Access by Default</Title>
+    <Title>.NET Deny All Access by Default</Title>
     <Category>Authorization</Category>
     <Phase>Implementation</Phase>
     <Technology>.NET</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Deny All Access by Default</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
     <Security_Demand />
@@ -17,43 +17,52 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="Html">
-    <Data><![CDATA[<h1>Applies To</h1>
-  <ul>
-    <li>ASP.NET 4.0</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Deny all access by default.</p>
-  <h1>Why</h1>
-  <p>Denying all access by default assures that only explicitly authorized access is possible.</p>
-  <h1>When</h1>
-  <p>Deny all access by default in all web applications that implement access control.</p>
-  <h1>How</h1>
-  <p>To deny all access by default:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Enumerate all sensitive pages.</strong> Make a list of all pages that handle sensitive or private information.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Enable forms authentication.</strong> Add the following section to <em>Web.config</em> using the appropriate settings:</p>
-      <pre>&lt;system.web&gt;<br />&nbsp; &lt;authentication mode="Forms"&gt;<br />&nbsp;&nbsp;&nbsp; ...<br />&nbsp; &lt;/authentication&gt;<br />&lt;/system.web&gt;</pre>
-    </li>
-    <li>
-      <p>
-        <strong>Deny all access by default.</strong> Configure the following tags in <em>Web.config</em>:</p>
-      <pre>&lt;system.web&gt;<br />&nbsp; &lt;authorization&gt;<br />&nbsp;&nbsp;&nbsp; &lt;deny users="*" /&gt;<br />&nbsp; &lt;/authorization&gt;<br />&lt;/system.web&gt;</pre>
-      <p>The line <em>&lt;deny users="*" /&gt;</em> denies access to all users, including authenticated users.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Configure authorization.</strong> For each sensitive page, add a section to <em>Web.config</em> that looks like the following: </p>
-      <pre>&lt;location path="[Filename of the page]"&gt;<br />&nbsp;&nbsp; &lt;system.web&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;authorization&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;allow roles="[Authorized roles]"&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;deny users="*"&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/authorization&gt;<br />&nbsp;&nbsp; &lt;/system.web&gt;<br />&lt;/location&gt;</pre>
-      <p>
-        <em>[Filename of the page]</em> is the file name of the sensitive page. <em>[Authorized roles]</em> is a comma separated list of roles that are authorized to use the page.</p>
-    </li>
-  </ol>
-  <br />]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* ASP.NET 4.0+
+
+## Solution Example ##
+
+To deny all access by default:
+
+1. **Enable forms authentication.** Add the following section to Web.config using the appropriate settings:
+
+	~~~~
+	<system.web>
+	  <authentication mode="Forms">
+		...
+	  </authentication>
+	</system.web>
+	~~~~
+
+2. **Deny all access by default.** Configure the following tags in Web.config:
+
+	~~~~
+	<system.web>
+	  <authorization>
+		<deny users="*" />
+	  </authorization>
+	</system.web>
+	~~~~
+
+	The line <deny users="*" /> denies access to all users, including authenticated users.
+
+3. **Configure authorization.** For each page, add a section to Web.config that looks like the following:
+
+	~~~~
+	<location path="[Filename of the page]">
+	   <system.web>
+		  <authorization>
+			 <allow roles="[Authorized roles]">
+			 <deny users="*">
+		  </authorization>
+	   </system.web>
+	</location>
+	~~~~
+
+	[Filename of the page] is the file name of the page. [Authorized roles] is a comma separated list of roles that are authorized to use the page.
+
+]]></Data>
   </Content>
 </TeamMentor_Article>

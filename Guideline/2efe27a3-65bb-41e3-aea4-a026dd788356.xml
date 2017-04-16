@@ -17,26 +17,46 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Web Application</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Reduce the lifetime of sessions to mitigate the risk of session hijacking and replay attacks.</p>
-  <h1>Why</h1>
-  <p>Even when using TLS, there's still&amp;nbsp;a risk of session hijacking and replay; there are lots of other out-of-band ways to steal session tokens.&amp;nbsp; The shorter the session timeout, however, the less time an attacker has to capture a session cookie and use it to access your application.</p>
-  <h1>When</h1>
-  <p>All applications should consider the length of their sessions carefully, and any application protecting any sensitive information should make it as short as possible.</p>
-  <h1>How</h1>
-  <p>There are two pieces of information that need to be handled to limit the session lifetime.&amp;nbsp; The first is the actual session cookie and the second is the server side session state.&amp;nbsp; With most frameworks, each time the user takes an action on the site the timestamps on the session cookie&amp;nbsp;and the corresponding field in the server-side session state&amp;nbsp;are both reset to the current time.&amp;nbsp; If someone attempts to use an expired cookie, the timestamp in the server-side session state for that session is checked and the request is disallowed.&amp;nbsp; If the session is old enough that the server-side state has been deleted, it's denied immediately.&amp;nbsp; In web farms, the timestamp may be embedded in the cookie and cryptographically signed, freeing up servers from the need to keep a single explicit session-state table.</p>
-  <p>Most web application frameworks will handle the details for you, so you'll only need to specify a simple timeout value.&amp;nbsp; In some situations, you'll be able to choose whether the session timer should reset after each action (an idle timer, the default) or if it should be a single fixed timer from the initial login (an absolute timer).&amp;nbsp; The latter is useful for fast transactions and especially security critical situations.</p>
-  <p>For most situations, thirty minutes is the maximum that an idle session should be accepted.&amp;nbsp; For sites which handle sensitive information, ten minutes is more appropriate.&amp;nbsp; If you want to allow a user to browse a site and let sessions sit for long periods of time and retain a customized experience, you can seperate out the cookies that control site customization from those that control access to more sensitive information or functionality; the customization cookies can be persisted while the actual session is expired.</p>
-  <h1>Problem Example</h1>
-  <p>A web site uses the default (one hour) session time set by their web application framework.&amp;nbsp; When a user in an internet cafe forgets to log off, an attacker using the machine after them can browse to the site and use the old session to gain access to the victim's sensitive information.</p>
-  <h1>Solution Example</h1>
-  <p>A web site locks down its session timeouts to ten minutes, overriding the default set by their web application framework.&amp;nbsp; When a user in an internet cafe forgets to log off, an attacker using the machine after them cannot browse to the site and use the old session to gain access to the victim's sensitive information, because the session has already expired.</p>
-  <hr />
-  <p>Adapted from Microsoft patterns &amp; practices guidance.</p>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Web Application
+
+
+## What to Do ##
+
+Reduce the lifetime of sessions to mitigate the risk of session hijacking and replay attacks.
+
+
+## Why ##
+
+Even when using TLS, there's still a risk of session hijacking and replay; there are lots of other out-of-band ways to steal session tokens. The shorter the session timeout, however, the less time an attacker has to capture a session cookie and use it to access your application.
+
+
+## When ##
+
+All applications should consider the length of their sessions carefully, and any application protecting any sensitive information should make it as short as possible.
+
+
+## How ##
+
+There are two pieces of information that need to be handled to limit the session lifetime. The first is the actual session cookie and the second is the server side session state. With most frameworks, each time the user takes an action on the site the timestamps on the session cookie and the corresponding field in the server-side session state are both reset to the current time. If someone attempts to use an expired cookie, the timestamp in the server-side session state for that session is checked and the request is disallowed. If the session is old enough that the server-side state has been deleted, it's denied immediately. In web farms, the timestamp may be embedded in the cookie and cryptographically signed, freeing up servers from the need to keep a single explicit session-state table.
+
+Most web application frameworks will handle the details for you, so you'll only need to specify a simple timeout value. In some situations, you'll be able to choose whether the session timer should reset after each action (an idle timer, the default) or if it should be a single fixed timer from the initial login (an absolute timer). The latter is useful for fast transactions and especially security critical situations.
+
+For most situations, thirty minutes is the maximum that an idle session should be accepted. For sites which handle sensitive information, ten minutes is more appropriate. If you want to allow a user to browse a site and let sessions sit for long periods of time and retain a customized experience, you can seperate out the cookies that control site customization from those that control access to more sensitive information or functionality; the customization cookies can be persisted while the actual session is expired.
+
+
+## Problem Example ##
+
+A web site uses the default (one hour) session time set by their web application framework. When a user in an internet cafe forgets to log off, an attacker using the machine after them can browse to the site and use the old session to gain access to the victim's sensitive information.
+
+
+## Solution Example ##
+
+A web site locks down its session timeouts to ten minutes, overriding the default set by their web application framework. When a user in an internet cafe forgets to log off, an attacker using the machine after them cannot browse to the site and use the old session to gain access to the victim's sensitive information, because the session has already expired.
+
+---
+Adapted from Microsoft patterns & practices guidance.]]></Data>
   </Content>
 </TeamMentor_Article>

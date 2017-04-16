@@ -4,11 +4,11 @@
     <Id>fd4b2a8a-db2d-4594-ba30-3ce5f63ad459</Id>
     <Id_History>fd4b2a8a-db2d-4594-ba30-3ce5f63ad459,202eb71a-19c5-45f2-b993-dfe7cbc25243,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Do Not Include Debug Data in Output</Title>
+    <Title>JSP Use Error Pages</Title>
     <Category>Error and Exception Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Do Not Include Debug Data in Output</DirectLink>
     <Tag />
     <Security_Demand />
@@ -17,55 +17,49 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>Applications written using Servlets or JSP.</li>
-  </ul>
-  <h1>What to Do</h1>
-  <p>Avoid disclosing debug information to the client. </p>
-  <h1>Why</h1>
-  <p>Debug information may&amp;nbsp;include sensitive information, such as call stack, fragments of the source code, and more. This information may aid an attacker by giving them inside information.</p>
-  <h1>When</h1>
-  <p>Though it may be useful during development,&amp;nbsp;do not&amp;nbsp;disclose data contained inside exceptions to the client after your application has been deployed.</p>
-  <h1>How</h1>
-  <p>The purpose of debug information is to identify and troubleshoot potential problems within your application. Use the following steps to ensure debug information is not transmitted to the client:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Collect debug information via a logging mechanism.</strong> Use a logging mechanism instead of transmitting debug information through the HTTP response to the client. </p>
-      <li>
-        <p>
-          <strong>Use proper exception handling.</strong> There are two approaches to placing an exception handler that allows your application to exit gracefully and hide debug and source data from the user:</p>
-        <ul>
-          <li>
-            <p>
-              <strong>Dynamic Handling</strong>: This allows the handling to be conducted inside the Java code. It consists of placing the entire root execution code inside a <em>try/catch/finally</em> block. Using dynamic handling allows your application to log the error and provide an error message to the user without having to disclose any detailed information about the raised exception. Example: </p>
-            <pre>public void doGet(HttpServletRequest request,<br />      HttpServletResponse response) throws ServletException, IOException<br />&amp;#123;<br />      PrintWriter out = response.getWriter();<br />      workDone = false;<br /><br />      try<br />      &amp;#123;<br />            ...<br />      &amp;#125;<br />      catch (Exception e)<br />      &amp;#123;<br />            // Add appropriate logging and exception handling mechanisms<br />             out.println("An error has occurred.");<br />      &amp;#125;<br />      out.flush();<br />      out.close();<br />&amp;#125;</pre>
-            <li>
-              <p>
-                <strong>JSP Error Pages</strong>: JSP error pages provide an effective way of telling the user that something went wrong. The location of the appropriate error page is specified in your application's web deployment descriptor (e.g. web.xml) using the <em>&lt;location&gt;</em> tag. </p>
-              <p>For example:</p>
-              <pre>&lt;&amp;#33;-- Catch a system error using an HTML page --&gt;<br />&lt;error-page&gt;<br />  &lt;exception-type&gt;java.lang.NullPointerException&lt;/exception-type&gt;<br />  &lt;location&gt;/NPEerror.html&lt;/location&gt;<br />&lt;/error-page&gt;</pre>
-              <p>Ensure that there are error pages written for all specific exceptions that you need to handle, including one that covers java.lang.Throwable. This will catch all previously unhandled exceptions and redirect the user to the specified error page. In addition to handling exceptions, you should also handle HTTP error codes. An example is below.</p>
-              <pre>&lt;ERROR-PAGE&gt;&lt;ERROR-CODE&gt;&lt;error-page&gt;<br />&amp;nbsp;&amp;nbsp; &lt;error-code&gt;404&lt;/error-code&gt;<br />&amp;nbsp;&amp;nbsp; &lt;location&gt;/error/error404.jsp&lt;/location&gt;<br />&lt;/error-page&gt;&amp;#9;&lt;/ERROR-PAGE&gt;</pre>
-              <p>The JSP error pages should begin with the <em>&lt;&amp;#37;&amp;#64;page &amp;#37;&gt;</em> tag.</p>
-              <p>For example:</p>
-              <pre>&lt;&amp;#37;&amp;#64;page isErrorPage="true" &amp;#37;&gt;</pre>
-              <p>Creating error pages for specific exception types not only allows you to ensure sensitive data is not sent to the client, but it also improves the user experience. Design your error pages so they are useful for a typical user (not a developer), and you are unlikely to include any information that an attacker will find useful.</p>
-            </li>
-          </li>
-        </ul>
-      </li>
-    </li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p>The following code produces a data analysis based on a financial index. Unfortunately, there is no global exception handling. Therefore, an attacker can force the application to reveal its call stack and possibly the source code filenames&amp;nbsp;by triggering an unhandled exception.</p>
-  <pre>import java.io.&amp;#42;;<br />import java.util.&amp;#42;;<br />import java.lang.&amp;#42;;<br />import javax.servlet.&amp;#42;;<br />import javax.servlet.http.&amp;#42;;<br />import java.util.regex.&amp;#42;;<br /><br />public final class DataAggregator extends HttpServlet<br />&amp;#123;<br />      public void doGet(HttpServletRequest request, HttpServletResponse response)<br />            throws ServletException, IOException<br />      &amp;#123;<br />            PrintWriter out = response.getWriter();<br />            String searchTerm = request.getParameter("index");<br />             // The application does not provide a global exception handler<br />            if (validateSearchTerm(searchTerm))<br />            &amp;#123;<br />                  String retString;<br />                  retString = "The queried index \"";<br />                  retString &amp;#43;= encodeHtml(searchTerm);<br />                  retString &amp;#43;= "\" produced the following results:&lt;br&gt; ";<br />                  out.println(retString);<br />                  common.aggregateData(out, searchTerm);<br />            &amp;#125;<br />            else<br />            &amp;#123;<br />                  // Add the appropriate logging and exception<br />                  // handling mechanisms. Consult the Exception<br />                  // Handling and Logging sections<br />                   out.println("We cannot handle your request at the moment."<br />                           &amp;#43; " Please try again later.");<br />            &amp;#125;<br />            out.flush();<br />            out.close();<br />      &amp;#125;<br />&amp;#125;</pre>
-  <h1>Solution Example</h1>
-  <p>The following code produces a data analysis based on a financial index. Because the code provides a global exception, it is impossible for an unhandled exception to surface to the client. Therefore, no debug and source data will be disclosed with the attacker.</p>
-  <blockquote>
-    <pre>import java.io.&amp;#42;;<br />import java.util.&amp;#42;;<br />import java.lang.&amp;#42;;<br />import javax.servlet.&amp;#42;;<br />import javax.servlet.http.&amp;#42;;<br />import java.util.regex.&amp;#42;;<br /><br />public final class DataAggregator extends HttpServlet<br />&amp;#123;<br />      public void doGet(HttpServletRequest request, HttpServletResponse response)<br />            throws ServletException, IOException<br />      &amp;#123;<br />            PrintWriter out = response.getWriter();<br />            String searchTerm = request.getParameter("index");<br /><br />            // The application provides a global exception handler<br />            try<br />            &amp;#123;<br />                  if (validateSearchTerm(searchTerm))<br />                  &amp;#123;<br />                        String retString;<br />                        retString = "The queried index \"";<br />                        retString &amp;#43;= encodeHtml(searchTerm);<br />                        retString &amp;#43;= "\" produced the following results:&lt;br&gt; ";<br />                        out.println(retString);<br />                        common.aggregateData(out, searchTerm);<br />                  &amp;#125;<br />                  else<br />                  &amp;#123;<br />                        // Add the appropriate logging and exception<br />                        // handling mechanisms. Consult the Exception<br />                        // Handling and Logging sections<br />                         out.println("We cannot handle your request at the moment."<br />                                 &amp;#43; " Please try again later.");<br />                  &amp;#125;<br />            &amp;#125;<br /><br />            catch (Exception e)<br />            &amp;#123;<br />                   // Add the appropriate logging and exception<br />                   // handling mechanisms. Consult the Exception<br />                   // Handling and Logging sections<br />                   out.println("We cannot handle your request at the moment."<br />                           &amp;#43; " Please try again later.");<br />            &amp;#125;<br /><br />            out.flush();<br /><br />            out.close(); <br />     &amp;#125;<br />&amp;#125;</pre>
-  </blockquote>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Java
+* JSP
+
+
+## Summary ##
+Avoid disclosing debug information to the client. Debug information may include sensitive information, such as call stack, fragments of the source code, and more. This information may aid an attacker by giving them inside information.
+
+
+## Solution Example ##
+
+JSP error pages provide an effective way of telling the user that something went wrong. The location of the appropriate error page is specified in your application's web deployment descriptor (e.g. web.xml) using the <location> tag.
+
+For example:
+
+~~~~
+<!-- Catch a system error using an HTML page -->
+<error-page>
+  <exception-type>java.lang.NullPointerException</exception-type>
+  <location>/NPEerror.html</location>
+</error-page>
+~~~~
+
+Ensure that there are error pages written for all specific exceptions that you need to handle, including one that covers java.lang.Throwable. This will catch all previously unhandled exceptions and redirect the user to the specified error page. In addition to handling exceptions, you should also handle HTTP error codes. An example is below.
+
+~~~~
+<ERROR-PAGE><ERROR-CODE><error-page>
+   <error-code>404</error-code>
+   <location>/error/error404.jsp</location>
+</error-page>   </ERROR-PAGE>
+~~~~
+
+The JSP error pages should begin with the <%@page %> tag.
+
+For example:
+
+~~~~
+<%@page isErrorPage="true" %>
+~~~~
+
+Creating error pages for specific exception types not only allows you to ensure sensitive data is not sent to the client, but it also improves the user experience. Design your error pages so they are useful for a typical user (not a developer), and you are unlikely to include any information that an attacker will find useful.
+]]></Data>
   </Content>
 </TeamMentor_Article>

@@ -7,7 +7,7 @@
     <Title>The Application Does Not Rely on Client-Side Validation</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Design</Phase>
-    <Technology>Java</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>The Application Does Not Rely on Client-Side Validation</DirectLink>
     <Tag />
@@ -46,17 +46,10 @@
     <li>
       <p>
         <strong>Identify validation routines. </strong>Each input source should have a server side validation routine associated with it. Ideally the validation will occur as soon as the input reaches your application. Shared validation routines are better than creating many throughout the code base and may be located in a single component.</p>
-      <p>Validation may be identified by any of the following:</p>
-      <ul>
-        <li>Custom Java Validator class </li>
-        <li>Regular expression use (<em>java.util.regex</em>) </li>
-        <li>Method names that contain <em>validate</em> or <em>validator</em></li>
-        <li>Client-side validation is often linked to events: <ul><li>onSubmit </li><li>onChange </li><li>onFocus </li><li>onBlur </li><li>onKeyDown/Press/Up</li></ul></li>
-      </ul>
     </li>
     <li>
-      <p>
-        <strong>Ensure validators run on the server. </strong>At a minimum, validation routines should run on the server. Server-side validation guarantees that malformed input will be caught and discarded regardless of the state that the client is in. As an optional feature, validation can also be implemented client side in order to improve application performance and user experience.<br /><br />Server-side validation is done within the application code. Ideally validation occurs immediately after canonicalization, and canonicalization should be done&amp;nbsp;as soon as the input reaches your application. In web applications, look for application-supplied validators, such as a Custom Java Validator, to validate and constrain input after it is received from an input source, such as a <em>GET</em> parameter. Check for the use of regular expressions and <em>java.util.regex</em>, or the use of a validator that checks numeric ranges.</p>Client-side Example: <pre>//The validation function is defined in JavaScript in the client-side form<br />&lt;script language="JavaScript"&gt; function validate()<br />{<br /> ...<br />}<br />&lt;/script&gt;<br />...<br />// The application uses validation in the client-side form to validate the input<br />&lt;form method="post"<br /> action="/myapp/aggregate"<br /> onsubmit="return validate()"&gt;</pre><p>Server-side Example:</p><pre>//The input "searchTerm" is received from a request<br />String searchTerm = request.getParameter("index");<br />...<br />// The application uses validation in the application code to validate the input<br />if (validateSearchTerm(searchTerm))<br />{<br />      ...<br />}</pre></li>
+      <p />
+      <strong>Ensure validators run on the server. </strong>At a minimum, validation routines should run on the server. Server-side validation guarantees that malformed input will be caught and discarded regardless of the state that the client is in. As an optional feature, validation can also be implemented client side in order to improve application performance and user experience. Server-side validation is done within the application code. Ideally validation occurs immediately after canonicalization, and canonicalization should be done&nbsp;as soon as the input reaches your application.</li>
   </ol>
   <h1>How to Fix</h1>
   <p>Client-side validation should only be used to improve user experience, never for security purposes. A client-side input validation check can improve application performance by catching malformed input on the client and, therefore, saving a roundtrip to the server. However, client side validation can be easily bypassed and should never be used for security purposes. Always use server-side validation to protect your application from malicious attacks.</p>
@@ -93,7 +86,7 @@
             <strong>Create a set of validators.</strong> Build a validator for each type of input. Place the set of validators on the server-side of your application. If there are validators on the client-side, make sure the same validators are implemented on the server-side as well.<br /></p>
         </li>
       </ul>
-      <p>Once developed, it is important to place the validation routines at your application's trust boundary. Because your application's trust boundary extends only to your application's process space, the user's browser should not be considered&amp;nbsp;a part of your application's trust boundary.</p>
+      <p>Once developed, it is important to place the validation routines at your application's trust boundary. Because your application's trust boundary extends only to your application's process space, the user's browser should not be considered&nbsp;a part of your application's trust boundary.</p>
     </li>
   </ol>]]></Data>
   </Content>

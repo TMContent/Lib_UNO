@@ -4,119 +4,33 @@
     <Id>b6795407-d01e-44ec-8aed-a440d388902b</Id>
     <Id_History>b6795407-d01e-44ec-8aed-a440d388902b,17e2f87d-6497-43bc-837d-c315774022f9,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Validate Input for Length, Range, Format, And Type</Title>
+    <Title>Scala Validate Input</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Validate Input for Length, Range, Format, And Type</DirectLink>
+    <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Applications written using Scala and Play Framework 2.1.0+</p>
-  <h1>What to Do</h1>
-  <p>Treat all input as untrusted data. Validate untrusted data using whitelist techniques to check against known good input.</p>
-  <h1>Why</h1>
-  <p>Unchecked malicious input may lead to integer overflows, injection based attacks, denial of service or information disclosure.</p>
-  <h1>When</h1>
-  <p>Always validate input. Do not assume that input is good based on origin.</p>
-  <h1>How</h1>
-  <p>Input can vary in length, data type, and contents. Verify that all input meets your application's expectations.</p>
-  <ol>
-    <li>
-      <p />
-      <strong>Validating length</strong>: Validate an input's length by checking a string's length or the number of bits in a numeric value. Checking the length can help prevent buffer overflows as well as integer overflows in numeric values. A simple way to validate the numeric value for forms is through the use of&nbsp;<i>minLength(length: Int)</i>&nbsp;and<i>&nbsp;maxLength(length: Int)</i>&nbsp;from the&nbsp;<i>play.api.data.validation</i>constraints object of Play Framework:<pre>object SignUp extends Controller {
-  
-  /**
-   * Sign Up Form definition.
-   */
-  val signupForm: Form[User] = Form(
-    
-    // Define a mapping that will handle User values
-    mapping(
-      "firstname" -&gt; text(maxLength = 20),
-      "lastname" -&gt; text(maxLength = 20),
-      "username" -&gt; text(minLength = 4),
-      "password" -&gt; text(minLength = 6),   
-      // Create a tuple mapping for the password/confirm
-      "password" -&gt; tuple(
-        "main" -&gt; text(minLength = 6),
-        "confirm" -&gt; text
-      ),
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
 
-    )
-  )
-  }</pre>Also, you can validate any numeric value through the use of BigInt/BigDecimal as follows:&nbsp;<pre>def productcheck = Action { implicit request =&gt;
-    prodForm.bindFromRequest.fold(
-      errors =&gt; BadRequest(views.html.index(errors, "There is some error")),
-      prodForm =&gt; {
+* Scala and Play Framework 2.1.0+
 
-        val proname = prodForm.pname
-        val prodprice = prodForm.price
-        if(prodprice.compare(BigInt(0)) &gt; -1
-          && prodprice.compare(BigInt(Integer.MAX_VALUE)) 
-        {
-          println("true")
-          ............ //code for true
-        }
-        else
-        {
-          println("false")
-          ............ // code for exception
-        }</pre></li>
-    <li>
-      <p />
-      <strong>Validating type</strong>: Validating the input's data type is important when your application expects a specific non-string parameter. Difference in data type can trigger unhandled exceptions that would throw your application into an unknown state. The following is an example for validating in forms:<pre>object ContactForm extends Controller {
-  
-  /**
-   * Contact Form definition.
-  */
-  val appointmentMapping = tuple(
-  "location" -&gt; text,
-  "start" -&gt; tuple(
-    "date" -&gt; date,
-    "time" -&gt; text),
-  "attendees" -&gt; list(mapping(
-    "name" -&gt; text,
-    "email" -&gt; email)
-)}
-</pre><div><br /></div></li>
-    <li>
-      <p />
-      <strong>Validating contents</strong>: Use whitelist and blacklist techniques to validate the input's contents. Choose the technique based on the constraints that are imposed on the input: If the input follows a tight structure and format, you can use whitelisting alone to weed out malicious input. If there are unknowns about the input, you'll need a combination of black and white listing. In general, use blacklisting as a backup to whitelisting, through a spiral-out approach: Use whitelisting for the initial validation. If whitelisting cannot validate the input, then fall back to blacklisting. If blacklisting cannot validate, then discard the input. The following is an example of implementing this technique using forms:<pre>object ValidateProduct extends Controller {
 
-  val productForm = Form(mapping(
-    "ean" -&gt; longNumber.verifying("This product already exists!", Product.findByEan(_).isEmpty),
-    "name" -&gt; nonEmptyText,
-    "description" -&gt; text,
-    "pieces" -&gt; number,
-    "active" -&gt; boolean)(Product.apply)(Product.unapply).verifying(
-      "Product can not be active if the description is empty", product =&gt;
-        !product.active || product.description.nonEmpty))
-}</pre><p>Using regular expressions, the fix would be as below:</p><p /><pre>val pid = ProductForm.productid
-val pname = ProductForm.productname
-val products = Product.findProduct(pid, pname)
-val whitelistPattern = "(\\w|\\d)+".r
-val issafe =whitelistPattern.pattern.matcher(pname).matches</pre><pre>if (issafe){</pre><pre>...... //Code for Action</pre><pre>}else{</pre><pre>...... //Code for Exception</pre><pre>}</pre><pre></pre><br />Examples of useful regular expressions:<p /><p /><table><tbody><tr><td>Use</td><td>Regular Expression</td><td>Scala String</td></tr><tr><td>Valid E-Mail Address</td><td>^\w+(\.|_|-){0,1}\w+@(\w+\.)*\w{3,1024}\.([a-zA-Z]{2}\.){0,1}[a-zA-Z]{2,4}$</td><td>^\\w+(\\.|_|-){0,1}\\w+@(\\w+\\.)*\\w{3,}\\.([a-zA-Z]{2}\\.){0,1}[a-zA-Z]{2,4}$</td></tr><tr><td>Alpha-numeric free text</td><td>(\w|\d|\s|;|\?|!|,|\.|-|:)+</td><td>(\\w|\\d|\\s|;|\\?|!|,|\\.|-|:)+</td></tr><tr><td>Word characters</td><td>\w+</td><td>\\w+</td></tr><tr><td>Numbers</td><td>\d+</td><td>\\d+</td></tr></tbody></table><p /><ul></ul></li>
-  </ol>
-  <h1>Problem Example</h1>
-  <p />
-  <p>
-    <font face="Arial" size="2">The following code shows how a user registers for an account. Post-registration, when the user logs in, the registered name is reflected back on the screen. Because it does not HTML encode the echoed input, the application is vulnerable to persistent cross-site scripting.</font>
-  </p>
-  <font face="Arial" size="2">
-  </font>
-  <p>
-    <font face="Arial" size="2">Code for the User creation model -- notice that the name is a String object with no validations and allows special characters:</font>
-  </p>
-  <p style="font-size: 10pt;" />
-  <pre>object User extends UserInfoService[String, User] {
+## Problem Example ##
+
+The following code shows how a user registers for an account. Post-registration, when the user logs in, the registered name is reflected back on the screen. Because it does not HTML encode the echoed input, the application is vulnerable to persistent cross-site scripting.
+
+Code for the User creation model -- notice that the name is a String object with no validations and allows special characters:
+
+~~~~
+object User extends UserInfoService[String, User] {
 
   val passwordService = MyPasswordService
-
   def register(email: String, name:String, password: String) : User = {
     val encryptedPassword = passwordService.encryptPassword(password)
     val user = User(email, name, encryptedPassword)
@@ -125,7 +39,7 @@ val issafe =whitelistPattern.pattern.matcher(pname).matches</pre><pre>if (issafe
 
 def create(user: User): User = {
     DB.withConnection {
-      implicit connection =&gt;
+      implicit connection =>
         SQL(
           """
           insert into user values (
@@ -133,80 +47,69 @@ def create(user: User): User = {
           )
           """
         ).on(
-          'email -&gt; user.email,
-          'name -&gt; user.name,
-          'password -&gt; user.password.underlying
+          'email -> user.email,
+          'name -> user.name,
+          'password -> user.password.underlying
         ).executeUpdate()
 
         user
     }
-  }</pre>
-  <pre>
-    <br />
-  </pre>
-  <pre>
-    <font face="Arial">
-      <span style="white-space: normal;">Code for the Signup Controller</span>:</font>
-  </pre>
-  <p />
-  <p />
-  <pre>  val signupForm = Form(
-    mapping(
-      "email" -&gt; email,
-      "fullName" -&gt; text,
-      "password" -&gt; weakPassword
-    )(SignupData.apply)(_ =&gt; None)
-  )
+  }
+~~~~    
 
-  case class SignupData(email: String, fullName: String, password: String)</pre>
-  <pre>
-    <br />
-  </pre>
-  <pre>
-    <font face="Arial">
-      <span style="white-space: normal;">Code for the HTML template where the user is redirected after successful login--notice that the name, which is not sanitized, is reflected back as raw HTML:</span>
-    </font>
-  </pre>
-  <pre>@()(implicit ctx: MyContext[_])
+Code for the Signup Controller:
+  
+~~~~
+val signupForm = Form(
+mapping(
+  "email" -> email,
+  "fullName" -> text,
+  "password" -> weakPassword
+)(SignupData.apply)(_ => None)
+)
+
+case class SignupData(email: String, fullName: String, password: String)
+~~~~
+
+
+Code for the HTML template where the user is redirected after successful login--notice that the name, which is not sanitized, is reflected back as raw HTML:
+    
+~~~~  
+@()(implicit ctx: MyContext[_])
 
 @base.layout() {
-  &lt;div class="container"&gt;
-    &lt;div class="row"&gt;
-      &lt;div class="span12"&gt;
-        &lt;div class="well" style="height: 600px"&gt;
-          &lt;h1 style="text-align: center"&gt;Main Page&lt;/h1&gt;
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <div class="well" style="height: 600px">
+          <h1 style="text-align: center">Main Page</h1>
 
-          &lt;p style="font-size: 20px; text-align: center; margin-top: 15px"&gt;
+          <p style="font-size: 20px; text-align: center; margin-top: 15px">
             @ctx.me match {
-              case None =&gt; {
+              case None => {
                 You are anonymous.
               }
-              case Some(user) =&gt; {
+              case Some(user) => {
                 You are currently logged in as @Html(user.name).
               }
             }
-          &lt;/p&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-}<font face="Arial, Verdana" size="3"></font></pre>
-  <div>
-    <br />
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
-  <p />
-  <h1>Solution Example</h1>
-  <p />
-  <p>
-    <font face="Arial" size="2">The following code shows how a user registers for an account, Again, post-registration, when the user logs in, the registered name is reflected back on the screen. But this time the play framework automatically performs HTML encoding of all the entries in the HTML template. This protects the application from XSS. Additionally, there should be regex validation on the Name<font face="Courier New"></font>&nbsp;parameter to make sure that the user is not able to enter malicious names into the application.</font>
-  </p>
-  <font face="Arial" size="2">
-  </font>
-  <p>
-    <font face="Arial" size="2">Regex validation for Name:</font>
-  </p>
-  <p />
-  <pre>val pid = SignupForm.empid
+}
+~~~~
+
+
+## Solution Example ##
+
+The following code shows how a user registers for an account, Again, post-registration, when the user logs in, the registered name is reflected back on the screen. But this time the play framework automatically performs HTML encoding of all the entries in the HTML template. This protects the application from XSS. Additionally, there should be regex validation on the Name parameter to make sure that the user is not able to enter malicious names into the application.
+
+Regex validation for Name:
+
+~~~~
+val pid = SignupForm.empid
 val name = SignupForm.productname
 val emp = Emp.findEmp(pid, name)
 val whitelistPattern = "(\\w|\\d)+".r
@@ -215,47 +118,38 @@ if (issafe){
 ...... //Code for Action
 }else{
 ...... //Code for Exception
-}</pre>
-  <p />
-  <p>
-    <font face="Arial" size="2">Code for HTML template:</font>
-  </p>
-  <p />
-  <pre>@()(implicit ctx: MyContext[_])
+}
+Code for HTML template:
+
+@()(implicit ctx: MyContext[_])
 
 @base.layout() {
-  &lt;div class="container"&gt;
-    &lt;div class="row"&gt;
-      &lt;div class="span12"&gt;
-        &lt;div class="well" style="height: 600px"&gt;
-          &lt;h1 style="text-align: center"&gt;Main Page&lt;/h1&gt;
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <div class="well" style="height: 600px">
+          <h1 style="text-align: center">Main Page</h1>
 
-          &lt;p style="font-size: 20px; text-align: center; margin-top: 15px"&gt;
+          <p style="font-size: 20px; text-align: center; margin-top: 15px">
             @ctx.me match {
-              case None =&gt; {
+              case None => {
                 You are anonymous.
               }
-              case Some(user) =&gt; {
+              case Some(user) => {
                 You are currently logged in as @user.name.
               }
             }
-          &lt;/p&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-}</pre>
-  <p />
-  <pre>
-    <br />
-  </pre>
-  <h1>Additional Resources</h1>
-  <ul>
-    <li>A tutorial on regular expressions is available at&nbsp;<a href="http://www.regular-expressions.info/">Regular-Expressions.info</a>.</li>
-    <li>For more information on using regular expression in Scala, see: Documentation for&nbsp;<a href="http://www.scala-lang.org/api/current/index.html#scala.util.matching.Regex">Regex Pattern</a>&nbsp;in Scala documentation.</li>
-  </ul>
-  <div>
-    <br />
-  </div>]]></Data>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+~~~~
+
+  
+## Guideline ##
+
+* [Validate All Input](11a15f3a-7fe8-4e4c-be5e-309ab7227b3d)]]></Data>
   </Content>
 </TeamMentor_Article>

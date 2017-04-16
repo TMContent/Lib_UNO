@@ -9,6 +9,7 @@
     <Technology>Technology Independent</Technology>
     <Type>Guideline</Type>
     <DirectLink />
+    <Tag />
     <Author />
     <Priority />
     <Status />
@@ -30,6 +31,20 @@ To use parameterized APIs to execute operating system commands:
 2. **Identify whether calling operating system commands is necessary.** With the spreadsheet of potentially dangerous code in hand, examine each piece of code that executes operating system commands and determine whether it is absolutely necessary to the application. If possible, rewrite that code to use only platform built-in functions, thus removing the possibility that it contains a command injection vulnerability.
 3. **Use parameterized APIs to execute operating system commands.** The key point is that the arguments passed to the program being executed are passed via a separate variable from the path of the program - this is the "parameterization" part. Because the arguments are passed in a separate variable, the arguments cannot be manipulated into causing the application to execute some other program in typical scenarios. It is possible to craft a scenario where parameterized APIs are used to execute a shell and pass it the name of some other command as the argument, but that is a crazy thing to do - don't do that.
 4. **Use parameterized APIs correctly.** The user should never be allowed to arbitrarily decide what program to run - that is the very definition of a command injection vulnerability. If it is absolutely necessary to choose what program to run based on user input, define a list of allowed and safe programs to run, place the paths to these programs in an array, and then choose the index of the array based on the user input to correspond to the program that needs to be executed based on the user's choice. One particular thing to watch out for is whether the external program can execute other programs based on the arguments that are sent to it - one obvious example would be passing arguments to a shell. For most practical scenarios, this should not be an issue, but it's something to be aware of.
-]]></Data>
+
+
+## Code Examples ##
+
+* [Python 2.7](6b418fb3-88fb-42e0-b32a-f44dc421aa63)
+* [Python 3](b99ab950-f74d-4b5c-b900-a874dd92b198)
+* [Ruby](c7224016-0591-4ff5-9d90-a45422c4fd0a)
+* [PHP](4b8969b1-057e-484d-ad24-7d030cd47e02)
+* [Java](00000000-0000-0000-0000-000000179eb6)
+* [.NET](00000000-0000-0000-0000-00000077e119)
+
+
+## Vulnerabilities ##
+
+* [Command Injection](94e52aca-06b6-4747-9bc9-f0149208f18c)]]></Data>
   </Content>
 </TeamMentor_Article>

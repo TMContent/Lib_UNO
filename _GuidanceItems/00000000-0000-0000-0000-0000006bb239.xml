@@ -7,7 +7,7 @@
     <Title>XML Data Is Validated Using a Schema</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>XML Data Is Validated Using a Schema</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
@@ -16,10 +16,7 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==Applies To==
-* ASP.NET
-
-==What to Check For==
+    <Data><![CDATA[==What to Check For==
 Ensure that all XML data is syntactically validated on the server by using an XML schema.
 
 ==Why==
@@ -32,52 +29,14 @@ To check for this problem, use the following steps:
 # **Ensure quality of XML schemas.** Ensure that the XML schemas tightly define the structure and format of the XML data by using built-in and custom defined element types such as //xs:date//.
 
 ==How To Fix==
-XML can be validated using the //System.Xml.XmlReader// and the //System.Xml.XmlReaderSettings// classes. Instantiate an //XmlReaderSettings// object and use the //XmlSchemaSetSchemas// property to add one or more XSD files. Then set the //ValidationType// property to //ValidationType.Schema//. Finally instantiate an //XmlReader// object using the //XmlReader.Create()// method which takes the XML Data and the //XmlReaderSettings// object.
 
-An example of validation using an XML Schema, XML validation errors will result in an //Exception//.
-{{{
-using System.Xml;
-using System.Xml.Schema;
-XmlReaderSettings xmlSettings = new XmlReaderSettings();
-xmlSettings.Schemas.Add("http://www.example.com/types", "types.xsd");
-xmlSettings.ValidationType = ValidationType.Schema;
-XmlReader xmlData = XmlReader.Create("data.xml", xmlSettings);
-}}}
+XML data can be validated with either an XSD or DTD. XSDs are more flexible and are generally favored over DTDs.
 
-An example of an XML Schema which describes a person and tightly defines four elements, name, dob, phone, and employmentStatus:
-{{{
-<!--?xml version="1.0"?-->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="person">
-    <xs:complextype>
-      <xs:sequence>
-        <xs:element name="name">
-          <xs:simpletype>
-            <xs:restriction base="xs:string">
-              <xs:pattern value="[a-zA-Z ]+"></xs:pattern>
-            </xs:restriction>
-          </xs:simpletype>
-        </xs:element>
-        <xs:element name="dob" type="xs:date"></xs:element>
-        <xs:element name="phone">
-          <xs:simpletype>
-            <xs:restriction base="xs:string">
-              <xs:pattern value="[0-9]{10}"></xs:pattern>
-            </xs:restriction>
-          </xs:simpletype>
-        </xs:element>
-        <xs:element name="employmentStatus">
-          <xs:simpletype>
-            <xs:restriction base="xs:string">
-              <xs:enumeration value="Unemployed"></xs:enumeration>
-              <xs:enumeration value="Employed"></xs:enumeration>
-            </xs:restriction>
-          </xs:simpletype>
-        </xs:element>
-      </xs:sequence>
-    </xs:complextype>
-  </xs:element>
-</xs:schema>
-}}}]]></Data>
+To solve using XSD use the following steps:
+
+# **Identify all areas where the application generates or consumes XML data.** Enumerate all areas where XML data is generated or parsed in your application.
+# **Define an XSD which describes the XML data.** Examine the XML data and define an XSD which tightly defines the structure of the XML data. An XML Schema can consist of a single file, multiple files, or in-line with the XML. If the XML is being generated dynamically via code, it is likely that an XSD can be outputted as well. Finally, the XSD should tightly constrain the XML data by using element types; for example defining a birthday element and assigning it the xs:date type.
+# **Validate the XML with the XSD.** XML can be validated using the XML parser provided by the platform.
+]]></Data>
   </Content>
 </TeamMentor_Article>

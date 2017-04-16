@@ -4,43 +4,40 @@
     <Id>05a2cfa6-d015-446b-8c25-3cb13f10d396</Id>
     <Id_History>05a2cfa6-d015-446b-8c25-3cb13f10d396,b5f4c1d9-7a0c-4c8c-83d4-c8608f48719f,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Invalidate Sessions When Users Log Out</Title>
+    <Title>Scala Invalidate Sessions When Users Log Out</Title>
     <Category>Session Management</Category>
     <Phase>Implementation</Phase>
     <Technology>Scala Play</Technology>
-    <Type>Guideline</Type>
+    <Type>Code Example</Type>
     <DirectLink>Invalidate Sessions When Users Log Out</DirectLink>
     <Tag />
     <Author />
     <Priority />
     <Status />
   </Metadata>
-  <Content Sanitized="false" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <p>Scala and Play Framework 2.1.0+<br /></p>
-  <h1>What to Do</h1>
-  <p>Invalidate sessions when users log out.</p>
-  <h1>Why</h1>
-  <p>Invalidating sessions when users log out makes it harder to hijack them.</p>
-  <h1>How</h1>
-  <p>To invalidate sessions when users log out:</p>
-  <ol>
-    <li>
-      <p>
-        <strong>Identify logout functionality.</strong>&amp;nbsp;Find code that is responsible for the logout functionality.</p>
-    </li>
-    <li>
-      <p>
-        <strong>Add code to invalidate sessions.</strong> The below function shows how the session should be invalidated on logout.</p>
-      <pre> def gotoLogoutSucceeded(implicit request: RequestHeader): Result = {
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Scala and Play Framework 2.1.0+
+
+## Summary ##
+
+Invalidate sessions when users log out. Invalidating sessions when users log out makes it harder to hijack them.
+
+
+## Solution Example ##
+
+The below function shows how the session should be invalidated on logout.
+
+~~~~
+ def gotoLogoutSucceeded(implicit request: RequestHeader): Result = {
     gotoLogoutSucceeded(logoutSucceeded(request))
   }
 
-  def gotoLogoutSucceeded(result: =&gt; Result)(implicit request: RequestHeader): Result = {
+  def gotoLogoutSucceeded(result: => Result)(implicit request: RequestHeader): Result = {
     request.cookies.get(cookieName) flatMap CookieUtil.verifyHmac foreach idContainer.remove
     result.discardingCookies(DiscardingCookie(cookieName))
-  }</pre>
-    </li>
-  </ol>]]></Data>
+  }
+~~~~]]></Data>
   </Content>
 </TeamMentor_Article>

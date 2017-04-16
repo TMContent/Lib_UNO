@@ -3,12 +3,12 @@
   <Metadata>
     <Id>17904435-b0f5-4a0d-927a-f6c3e8a9e03a</Id>
     <Id_History>17904435-b0f5-4a0d-927a-f6c3e8a9e03a,8ea18e44-aed5-4fa6-9aa0-5cb3ca415340,</Id_History>
-    <Library_Id>f215ceee-9a08-41d9-b2c1-bbcc058a8f32</Library_Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
     <Title>Validate Java Archive and Executable Files Before Use</Title>
     <Category>Code Integrity</Category>
     <Phase>Implementation</Phase>
     <Technology>Android</Technology>
-    <Type>Guideline</Type>
+    <Type>How To</Type>
     <DirectLink>Validate Java Archive and Executable Files Before Use</DirectLink>
     <Author />
     <Priority />
@@ -54,17 +54,17 @@ ACME updates their policies on the storage and communication of source code. In 
 {{{
 public class JarVerifier {
 public void load(String _jar) {
-  List<JarEntry> table = new ArrayList<JarEntry>();	
+  List<jarentry> table = new ArrayList<jarentry>();	
   try {
     JarFile jar = new JarFile(new File(ROOT_DIR + "/" + _jar));
     InputStream is = jar.getInputStream(jar.getEntry("META-INF/MANIFEST.MF"));
     Manifest man = new Manifest(is);	
     is.close();
-    Set<Map.Entry<String, Attributes>> manifestEntries =man.getEntries().entrySet();
-    For (Map.Entry<String, Attributes> entry: manifestEntries) {		
+    Set<map.entry<string, attributes="">&gt; manifestEntries =man.getEntries().entrySet();
+    For (Map.Entry<string, attributes=""> entry: manifestEntries) {		
       for (Object key: entry.getValue().keySet()) {
         String digest = entry.getValue().getValue(key.toString());
-        if (digest.length()<1) {
+        if (digest.length()&lt;1) {
           throw new SecurityException ("Jar not fully signed");
         }
         table.add(new JarEntry(key, entry.getValue().getValue(key.toString())));
@@ -94,6 +94,6 @@ class JarEntry {
 
 This class loads a JAR file into an input stream and inserts each key–value pair from the manifest into a list. After completing the file, the method checks to see if no key values were found or if they did not match the number expected. Unless each entry is found to have a signature, a //SecurityException// will be thrown. With signatures present in the JAR file, developers can match the actual digests to the expected values.
 
-]]></Data>
+</string,></map.entry<string,></jarentry></jarentry>]]></Data>
   </Content>
 </TeamMentor_Article>

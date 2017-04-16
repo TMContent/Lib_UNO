@@ -7,7 +7,7 @@
     <Title>All File Path and Name Input Is Canonicalized</Title>
     <Category>Canonicalization</Category>
     <Phase>Implementation</Phase>
-    <Technology>.NET</Technology>
+    <Technology>Technology Independent</Technology>
     <Type>Checklist Item</Type>
     <DirectLink>All File Path and Name Input Is Canonicalized</DirectLink>
     <Tag>ASP.NET,ASP.NET 4.0,ASP</Tag>
@@ -16,17 +16,13 @@
     <Status />
   </Metadata>
   <Content Sanitized="false" DataType="wikitext">
-    <Data><![CDATA[==Applies To==
-
-* ASP.NET
-
-==What to Check For==
+    <Data><![CDATA[==What to Check For==
 
 Verify that all file paths and names obtained as user input are canonicalized before making security decisions on access to resources..
 
 ==Why==
 
-When input validation is applied to file paths and names, it only works properly when file paths and names are canonicalized.  If file names and paths are not canonicalized	 before validation, a number of vulnerabilities may be introduced as a result. The possible vulnerabilities range from reading arbitrary files to uploading web shells.
+When input validation is applied to file paths and names, it only works properly when file paths and names are canonicalized.  If file names and paths are not canonicalized before validation, a number of vulnerabilities may be introduced as a result. The possible vulnerabilities range from reading arbitrary files to uploading web shells.
 
 ==How to Check==
 
@@ -35,7 +31,7 @@ To make sure that all file path and name input is canonicalized:
 # **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
 # **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
 # **Consider whether file name or path input is necessary.** Examine the code that accepts file name or path input from the user and consider other ways to do the same thing or removing this functionality altogether.
-# **Verify that file name and path input is canonicalized.** Examine each function that handles user supplied file names or paths. Make sure user supplied input is immediately canonicalized. Make sure you use //System.IO.Path.GetFullPath// to canonicalize file names and paths before validation. Use of standard canonicalization libraries yields in consistent results and ensures coverage of all cases.
+# **Verify that file name and path input is canonicalized.** Examine each function that handles user supplied file names or paths. Make sure user supplied input is immediately canonicalized. Use of standard canonicalization libraries yields in consistent results and ensures coverage of all cases.
 # **Verify that file name and path input is validated.** Examine each function that handles user supplied file names or paths. Make sure these functions use positive validation routines on file names and paths after canonicalization.
 
 ==How to Fix==
@@ -45,7 +41,7 @@ To canonicalize all file path and name input:
 # **Identify all file path and name input.** Examine the application and find all cases where the user may specify file names or paths.
 # **Find code that handles file path and name input.** Review application code and find all functions that handle user supplied file names or paths.
 # **Avoid file path and name input if possible.** If possible, remove or replace the code that allows users to enter file names or paths.
-# **Canonicalize file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use //System.IO.Path.GetFullPath// to canonicalize file names and paths.
+# **Canonicalize file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to canonicalize file names and paths.
 # **Validate file path and name input.** Examine each function that handles user supplied file names or paths. Re-write these functions as necessary to use positive validation on canonicalized file names and paths.]]></Data>
   </Content>
 </TeamMentor_Article>

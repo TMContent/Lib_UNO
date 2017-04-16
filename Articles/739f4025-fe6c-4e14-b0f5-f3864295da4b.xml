@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>739f4025-fe6c-4e14-b0f5-f3864295da4b</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Python 3 Create a Temporary Directory Safely</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Python</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Python 3
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env python3
+import os
+import stat
+import shutil
+import sys
+
+tmpdir = './mytmp'
+# Create secure temp directory on startup
+try:
+	os.mkdir(tmpdir)
+except OSError:
+	print("Temporary directory already exists.")
+	sys.exit()
+
+# Restrict access to directory making it a secure location for temp files
+os.chmod(tmpdir, stat.S_IRWXU)
+
+
+tmpfile = tmpdir + "/temporary_file"
+with open(tmpfile, 'w') as f:
+	f.write("Some temporary content here.")
+
+# Cleanup temporary file once done
+os.unlink(tmpfile)
+
+# Remove temp directory on exit
+shutil.rmtree(tmpdir)
+~~~~]]></Data>
+  </Content>
+</TeamMentor_Article>

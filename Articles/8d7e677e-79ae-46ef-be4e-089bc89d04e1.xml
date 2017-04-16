@@ -4,7 +4,7 @@
     <Id>8d7e677e-79ae-46ef-be4e-089bc89d04e1</Id>
     <Id_History>8d7e677e-79ae-46ef-be4e-089bc89d04e1,d724511c-646d-4c94-97ac-bd738fd11fd4,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Use Only Strong TLS Algorithms</Title>
+    <Title>Use Only Strong TLS Cipher Suites</Title>
     <Category>Communication Security</Category>
     <Phase>Implementation</Phase>
     <Technology>Technology Independent</Technology>
@@ -17,12 +17,11 @@
   <Content Sanitized="false" DataType="wikitext">
     <Data><![CDATA[==Applies To==
 
-* Web Applications
-* Apache
+* Application Using TLS
 
 ==What to Do==
 
-Configure Apache to use only strong TLS algorithms.
+Use only strong TLS cipher suites.
 
 ==Why==
 
@@ -30,28 +29,18 @@ Using strong encryption algorithms with TLS helps reduce the risk of successful 
 
 ==How==
 
-To use only strong TLS algorithms, edit the httpd.conf file to include the following settings:
+The current recommendation is to use TLS 1.2 and to drop support for earlier versions of TLS. Doing so can break compatibility with legacy systems. If you have to support some kind of legacy systems, you will have to research what secure cipher suites are supported by those systems and these cipher suites will probably not be the strongest available. This information will then dictate your choice of cipher suites, but it might turn out that there are no secure cipher suites supported by the legacy systems in question at all. In that case you will be forced to choose between breaking compatibility with those systems or using cipher suites with known vulnerabilities and using weak cipher suites is better than not using any encryption at all. It's a tough choice and we cannot make it for you. Our goal here is to recommend the cipher suites that are not affected by known vulnerabilities and work in practice with modern clients.
 
-{{{
+When choosing the handshake algorithm, you will have to determine whether you are interested in perfect forward secrecy. Perfect forward secrecy protects recorded sessions from being decrypted if the certificate is compromised in the future and is provided by choosing an ephemeral handshake algorithm. Forward secrecy can incur a significant performance toll for some algorithms.
 
-SSLProtocol -all +TLSv1
-SSLCipherSuite HIGH:!aNULL:!SSLv2:!MD5:@STRENGTH
-SSLHonorCipherOrder on
+Out of the ephemeral handshake algorithms, the Elliptic Curve Diffie–Hellman Ephemeral (ECDHE) implementation provides the best performance, especially when combined with the Elliptic Curve Digital Signature Algorithm (ECDSA) for authentication. In practice, many certificates are not signed using Elliptic Curve Digital Signatures, but are signed with RSA and when you use RSA signatures with ephemeral algorithms you take a major performance hit. If your certificates are not signed using Elliptic Curve signatures, you will have to consider whether performance or perfect forward secrecy are more important to you. It is difficult to quantify the performance overhead of ephemeral handshake algorithms in practical general terms, so it is best to benchmark it on real applications if numbers are important when making this decision. 
 
-}}}
+There are two main choices for authentication algorithms: Elliptic Curve Digital Signature Algorithm (ECDSA) and RSA. This choice is largely dictated by the Certificate Authority that issues the certificates. If your certificates are signed with RSA, as most of them are, then you will have to use RSA. ECDSA has better performance than RSA, especially when combined with an Elliptic Curve Diffie-Hellman Ephemeral handshake algorithm. You can enable them both, but ultimately the one that matches your certificates will be used.
 
-These settings enable only the TLS protocol and only the strong encryption cipher suites.
+The choice of encryption algorithms is simple and can be narrowed down to using flavors of the AES algorithm. The AES in Galois Counter Mode (AESGCM) is strongly recommended, but AES-256 and even AES-128 are currently acceptable. You don't have to choose just one, they are all acceptable and you can enable them all.
 
-It may also be a good idea to include the following line in case of old versions of apache/mod_ssl:
+The choice of hashing algorithms is also simple and the recommended algorithms are SHA256, SHA384, and SHA512. These are all solid options, so you can't choose wrong and you might as well enable all of them.
 
-{{{
-
-SSLInsecureRenegotiation off
-
-}}}
-
-==Additional Resources==
-
-* For more information about configuring TLS in Apache, please see http://httpd.apache.org/docs/2.0/ssl/ssl_howto.html]]></Data>
+]]></Data>
   </Content>
 </TeamMentor_Article>

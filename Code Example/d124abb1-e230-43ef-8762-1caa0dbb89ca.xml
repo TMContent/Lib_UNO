@@ -4,7 +4,7 @@
     <Id>d124abb1-e230-43ef-8762-1caa0dbb89ca</Id>
     <Id_History>d124abb1-e230-43ef-8762-1caa0dbb89ca,17fda79b-6b07-4ea0-9ba4-3efed3ebdc8f,</Id_History>
     <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
-    <Title>Input Validation Using Struts 1</Title>
+    <Title>Struts1 Validate Input</Title>
     <Category>Input and Data Validation</Category>
     <Phase>Implementation</Phase>
     <Technology>Java</Technology>
@@ -17,41 +17,113 @@
     <Status />
     <Source>SI</Source>
   </Metadata>
-  <Content Sanitized="true" DataType="html">
-    <Data><![CDATA[<h1>Applies to</h1>
-  <ul>
-    <li>JAVA <li>Struts 1</li></li>
-  </ul>
-  <h1>Summary</h1>
-  <p>Perform input validation using Struts 1 within an application.</p>
-  <h1>Objectives</h1>
-  <p>Strong input validation is a powerful control that can prevent various security issues within an application. This article will describe how to use the built-in mechanisms provided by Struts 1 to perform appropriate input validation.</p>
-  <h1>Solution Example</h1>
-  <p>There are 2 basic ways to perform input validation within Struts1: overriding the <em>validate()</em> method in the form bean and using the validator mechanism.</p>
-  <h3>1. Overriding the validate() method.</h3>
-  <p>If you use the <em>ActionForm</em> class (or some subclass) to handle your user input, you can simply override the validate method within your class and have the framework call this method in order to perform validation. Below is an example of a simple form bean</p>
-  <pre>public class MyForm extends ActionForm &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; private String title;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) &amp;#123; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //very important - call super first before any validations<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ActionErrors errors = super.validate(mapping,request);&amp;nbsp; </pre>
-  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (errors == null) errors = new ActionErrors();<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; <br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (title == null) &amp;#123;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; //"errors.required" message is defined in message bundle for app<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.required","Title"));<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; if (errors.empty()) return null;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; return errors;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;#125;<br />&amp;#125;</pre>
-  <p>The next step is to define the form bean as is typical for the application in the <em>struts-config.xml</em> file.</p>
-  <pre>&lt;form-bean name="myForm" type="com.myapp.struts.form.MyForm" /&gt;</pre>
-  <p>Finally (also in the <em>struts-config.xml</em> file) you need to define your action, and tell struts that validation should be enabled. This will cause the framework to validate your form when the action is submitted.</p>
-  <pre>&lt;action path="..." name="myForm" validate="true" ... /&gt;</pre>
-  <h3>2. Using the validator framework.</h3>
-  <p>Using the Struts validator framework involves including 2 additional files, the <em>validator-rules.xml</em> (the actual validations, many defaults provided for you) and <em>validation.xml</em> (ties validations to application forms) files.</p>
-  <p>You'll also need to tweak the <em>struts-config.xml</em> file by adding the configuration shown below:</p>
-  <pre>&lt;&amp;#33;--&amp;nbsp; Validator plugin --&gt;<br />&lt;plug-in className="org.apache.struts.validator.ValidatorPlugIn"&gt;<br />&amp;nbsp; &lt;set-property<br />&amp;nbsp; property="pathnames"<br />&amp;nbsp;&amp;nbsp; value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/&gt;<br />&lt;/plug-in&gt;</pre>
-  <p>You'll likely want to use the <em>DynaValidatorForm</em> or some subclass since it is very convenient to use when working with the validation framework. An example login form configured this way is shown here: </p>
-  <pre>&lt;form-beans&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form-bean name="LoginForm" type="org.apache.struts.validator.DynaValidatorForm"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form-property name="userName" type="java.lang.String" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form-property name="password" type="java.lang.String" /&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/form-bean&gt;<br />&lt;/form-beans&gt;</pre>
-  <p>Since the <em>validator-rules.xml</em> file covers many standard validations, you'll essentially need to alter the <em>validation.xml</em> file to account for your new form validations. Below is an example covering the login form.</p>
-  <pre>&lt;form-validation&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;formset&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;form name="LoginForm"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;field property="userName" depends="required"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;arg key="LoginForm.userName"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/field&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;field property="password" depends="required,minlength"&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;arg0 key="LoginForm.password"/&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;arg1 key="&amp;#36;&amp;#123;var:minlength&amp;#125;" name="minlength" resource="false"/&gt;</pre>
-  <pre>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;var&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;var-name&gt;minlength&lt;/var-name&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;var-value&gt;6&lt;/var-value&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/var&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/field&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/form&gt;<br />&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;/formset&gt;<br />&lt;/form-validation&gt;</pre>
-  <p>Now that these pieces are in place, you configure your standard action as shown below and ensure validation is enabled in order to perform validation. </p>
-  <pre>&lt;action path="..." name="LoginForm" validate="true" ... /&gt;</pre>
-  <p>Whether you choose to validate using the code-driven validate method or the configuration-driven validator framework, you can display errors to the user on the UI using the <em>ActionError</em> or <em>ActionErrors</em> tags provided by Struts. This will allow you to display the error messages directly to the user in a localized manner. </p>
-  <p>In conclusion, input validation can function as a strong security control if used properly and applied thoroughly throughout the application. The Struts framework provides 2 options for accomplishing this task. </p>
-  <h1>More Information</h1>
-  <ul>
-    <li>For Struts 1 documentation, please see <a href="http://struts.apache.org/1.x/">http://struts.apache.org/1.x/</a><li>For more information about Struts Validator, please see <a href="http://struts.apache.org/1.x/faqs/validator.html">http://struts.apache.org/1.x/faqs/validator.html</a><li>For more information about Struts Validator, please see <a href="http://struts.apache.org/1.2.4/userGuide/dev_validator.html">http://struts.apache.org/1.2.4/userGuide/dev_validator.html</a></li></li></li>
-  </ul>]]></Data>
+  <Content Sanitized="true" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* JAVA
+* Struts 1
+
+
+## Solution Example ##
+
+There are 2 basic ways to perform input validation within Struts1: overriding the validate() method in the form bean and using the validator mechanism.
+
+**1. Overriding the validate() method.**
+
+If you use the ActionForm class (or some subclass) to handle your user input, you can simply override the validate method within your class and have the framework call this method in order to perform validation. Below is an example of a simple form bean
+
+~~~~
+public class MyForm extends ActionForm {
+    private String title;
+    ...
+    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) { 
+        //very important - call super first before any validations
+        ActionErrors errors = super.validate(mapping,request);  
+        ...
+        if (errors == null) errors = new ActionErrors();
+        
+        if (title == null) {
+            //"errors.required" message is defined in message bundle for app
+            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.required","Title"));
+        }
+        ...
+        if (errors.empty()) return null;
+        return errors;
+    }
+}
+~~~~
+
+The next step is to define the form bean as is typical for the application in the struts-config.xml file.
+
+~~~~
+<form-bean name="myForm" type="com.myapp.struts.form.MyForm" />
+~~~~
+
+Finally (also in the struts-config.xml file) you need to define your action, and tell struts that validation should be enabled. This will cause the framework to validate your form when the action is submitted.
+
+~~~~
+<action path="..." name="myForm" validate="true" ... />
+~~~~
+
+**2. Using the validator framework.**
+
+Using the Struts validator framework involves including 2 additional files, the validator-rules.xml (the actual validations, many defaults provided for you) and validation.xml (ties validations to application forms) files.
+
+You'll also need to tweak the struts-config.xml file by adding the configuration shown below:
+
+~~~~
+<!--  Validator plugin -->
+<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+  <set-property
+  property="pathnames"
+   value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
+</plug-in>
+~~~~
+
+You'll likely want to use the DynaValidatorForm or some subclass since it is very convenient to use when working with the validation framework. An example login form configured this way is shown here:
+
+~~~~
+<form-beans>
+    <form-bean name="LoginForm" type="org.apache.struts.validator.DynaValidatorForm">
+        <form-property name="userName" type="java.lang.String" />
+        <form-property name="password" type="java.lang.String" />
+    </form-bean>
+</form-beans>
+~~~~
+
+Since the validator-rules.xml file covers many standard validations, you'll essentially need to alter the validation.xml file to account for your new form validations. Below is an example covering the login form.
+
+~~~~
+<form-validation>
+    <formset>
+        <form name="LoginForm">
+            <field property="userName" depends="required">
+                <arg key="LoginForm.userName"/>
+            </field>
+            <field property="password" depends="required,minlength">
+                <arg0 key="LoginForm.password"/>
+                <arg1 key="${var:minlength}" name="minlength" resource="false"/>
+                <var>
+                <var-name>minlength</var-name>
+                <var-value>6</var-value>
+                </var>
+            </field>
+        </form>
+    </formset>
+</form-validation>
+~~~~
+
+Now that these pieces are in place, you configure your standard action as shown below and ensure validation is enabled in order to perform validation.
+
+~~~~
+<action path="..." name="LoginForm" validate="true" ... />
+~~~~
+
+Whether you choose to validate using the code-driven validate method or the configuration-driven validator framework, you can display errors to the user on the UI using the ActionError or ActionErrors tags provided by Struts. This will allow you to display the error messages directly to the user in a localized manner.
+
+
+## Guideline ##
+
+* [Validate All Input](11a15f3a-7fe8-4e4c-be5e-309ab7227b3d)]]></Data>
   </Content>
 </TeamMentor_Article>

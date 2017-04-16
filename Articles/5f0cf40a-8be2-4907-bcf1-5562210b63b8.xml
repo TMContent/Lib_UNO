@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<TeamMentor_Article Metadata_Hash="0" Content_Hash="0">
+  <Metadata>
+    <Id>5f0cf40a-8be2-4907-bcf1-5562210b63b8</Id>
+    <Library_Id>be5273b1-d682-4361-99d9-6234f2d47eb7</Library_Id>
+    <Title>Ruby Separate Data from SQL Syntax</Title>
+    <Category />
+    <Phase>Implementation</Phase>
+    <Technology>Ruby</Technology>
+    <Type>Code Example</Type>
+    <DirectLink />
+    <Tag />
+    <Author />
+    <Priority />
+    <Status />
+  </Metadata>
+  <Content Sanitized="false" DataType="markdown">
+    <Data><![CDATA[## Applies To ##
+
+* Ruby
+
+
+## Problem Example ##
+
+~~~~
+#! /usr/bin/env ruby
+require 'mysql2'
+
+if ARGV.length == 0
+	puts "Usage: #{$0} [username]"
+	exit
+end
+
+
+client = Mysql2::Client.new(:host => "localhost", :username => "root", :database => 'application')
+username = ARGV[0]
+query = "SELECT id,username FROM users WHERE username='#{username}'"
+results = client.query(query)
+
+if results.count == 0
+	puts "Username not found."
+else
+	results.each do |row| 
+		puts "Username: #{row['username']}"
+		puts "ID: #{row['id']}"
+	end
+end
+~~~~
+
+
+## Solution Example ##
+
+~~~~
+#! /usr/bin/env ruby
+require 'mysql2'
+
+if ARGV.length == 0
+	puts "Usage: #{$0} [username]"
+	exit
+end
+
+
+client = Mysql2::Client.new(:host => "server", :username => "user", :password => 'password', :database => 'dbname')
+username = ARGV[0]
+query = client.prepare("SELECT id,username FROM users WHERE username=?")
+results = query.execute(username)
+
+if results.count == 0
+	puts "Username not found."
+else
+	results.each do |row| 
+		puts "Username: #{row['username']}"
+		puts "ID: #{row['id']}"
+	end
+end
+~~~~
+
+
+## Guideline ##
+
+* [Use Prepared Statements for SQL Queries](397488da-ce91-4768-9ad9-1e6928980d72)]]></Data>
+  </Content>
+</TeamMentor_Article>
